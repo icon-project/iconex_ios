@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="484-4j-b8D">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Test View Controller-->
+        <scene sceneID="WBH-QP-PFw">
+            <objects>
+                <viewController id="484-4j-b8D" customClass="TestViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RFR-fb-3du">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h2l-ad-78P">
+                                <rect key="frame" x="20" y="597" width="157.5" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="cNO-Qu-mZw"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="clickedCreateWallet:" destination="484-4j-b8D" eventType="touchUpInside" id="pAb-Yx-p58"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BXR-Rb-ko1">
+                                <rect key="frame" x="197.5" y="597" width="157.5" height="50"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="clickedManage:" destination="484-4j-b8D" eventType="touchUpInside" id="Mbj-QW-df4"/>
+                                </connections>
+                            </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="r7d-Zz-kQl">
+                                <rect key="frame" x="20" y="20" width="335" height="569"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="protoTest" id="b1x-Ad-qgN">
+                                        <rect key="frame" x="0.0" y="28" width="335" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="b1x-Ad-qgN" id="qfy-VK-muQ">
+                                            <rect key="frame" x="0.0" y="0.0" width="335" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="484-4j-b8D" id="fmW-md-RwK"/>
+                                    <outlet property="delegate" destination="484-4j-b8D" id="cUJ-d5-aNA"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="BLZ-fl-0vp" firstAttribute="bottom" secondItem="h2l-ad-78P" secondAttribute="bottom" constant="20" id="9j1-fK-gJO"/>
+                            <constraint firstItem="r7d-Zz-kQl" firstAttribute="leading" secondItem="BLZ-fl-0vp" secondAttribute="leading" constant="20" id="G8V-OB-Ipc"/>
+                            <constraint firstItem="h2l-ad-78P" firstAttribute="top" secondItem="r7d-Zz-kQl" secondAttribute="bottom" constant="8" id="Qn7-Ot-fCi"/>
+                            <constraint firstItem="BLZ-fl-0vp" firstAttribute="trailing" secondItem="BXR-Rb-ko1" secondAttribute="trailing" constant="20" id="QuV-K0-NYM"/>
+                            <constraint firstItem="r7d-Zz-kQl" firstAttribute="top" secondItem="BLZ-fl-0vp" secondAttribute="top" id="REg-kd-aJL"/>
+                            <constraint firstItem="BLZ-fl-0vp" firstAttribute="bottom" secondItem="BXR-Rb-ko1" secondAttribute="bottom" constant="20" id="Rc4-DB-7Sz"/>
+                            <constraint firstItem="h2l-ad-78P" firstAttribute="width" secondItem="BXR-Rb-ko1" secondAttribute="width" id="Zne-tL-Q6b"/>
+                            <constraint firstItem="BLZ-fl-0vp" firstAttribute="trailing" secondItem="r7d-Zz-kQl" secondAttribute="trailing" constant="20" id="ieA-0t-acv"/>
+                            <constraint firstItem="h2l-ad-78P" firstAttribute="leading" secondItem="BLZ-fl-0vp" secondAttribute="leading" constant="20" id="ip3-Mf-6e6"/>
+                            <constraint firstItem="BXR-Rb-ko1" firstAttribute="height" secondItem="h2l-ad-78P" secondAttribute="height" id="uBJ-Ju-Cbq"/>
+                            <constraint firstItem="BXR-Rb-ko1" firstAttribute="leading" secondItem="h2l-ad-78P" secondAttribute="trailing" constant="20" id="xbZ-yM-C0Q"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="BLZ-fl-0vp"/>
+                    </view>
+                    <connections>
+                        <outlet property="createWalletButton" destination="h2l-ad-78P" id="k0A-wm-EAx"/>
+                        <outlet property="manageButton" destination="BXR-Rb-ko1" id="eV0-x2-aYP"/>
+                        <outlet property="tableView" destination="r7d-Zz-kQl" id="ZfD-ue-1Lt"/>
+                        <segue destination="elk-Qi-HVY" kind="showDetail" identifier="showTestQR" id="zpG-MO-AHX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Qx-Mx-NvE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="201" y="52"/>
+        </scene>
+        <!--TestQR View Controller-->
+        <scene sceneID="t7P-e5-Zbs">
+            <objects>
+                <viewController id="elk-Qi-HVY" customClass="TestQRViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CA1-4r-iVH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JfU-Rw-A3k">
+                                <rect key="frame" x="299" y="24" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="clickedCancel:" destination="elk-Qi-HVY" eventType="touchUpInside" id="Apm-4i-iSF"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KeX-jR-Jk4">
+                                <rect key="frame" x="60" y="206" width="255" height="255"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="KeX-jR-Jk4" secondAttribute="height" multiplier="1:1" id="Zp2-je-Mrz"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="KeX-jR-Jk4" firstAttribute="leading" secondItem="Si3-4V-LB5" secondAttribute="leading" constant="60" id="I4B-Dy-qZT"/>
+                            <constraint firstItem="KeX-jR-Jk4" firstAttribute="centerY" secondItem="CA1-4r-iVH" secondAttribute="centerY" id="cZu-S8-t7v"/>
+                            <constraint firstItem="JfU-Rw-A3k" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="CA1-4r-iVH" secondAttribute="leading" constant="20" symbolic="YES" id="dS7-Zt-liy"/>
+                            <constraint firstItem="Si3-4V-LB5" firstAttribute="trailing" secondItem="KeX-jR-Jk4" secondAttribute="trailing" constant="60" id="eut-Vg-583"/>
+                            <constraint firstItem="KeX-jR-Jk4" firstAttribute="centerX" secondItem="CA1-4r-iVH" secondAttribute="centerX" id="kdt-7t-NNr"/>
+                            <constraint firstItem="JfU-Rw-A3k" firstAttribute="top" secondItem="Si3-4V-LB5" secondAttribute="top" constant="4" id="vVb-qR-DUp"/>
+                            <constraint firstItem="Si3-4V-LB5" firstAttribute="trailing" secondItem="JfU-Rw-A3k" secondAttribute="trailing" constant="28" id="xh3-Xi-EMY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Si3-4V-LB5"/>
+                    </view>
+                    <connections>
+                        <outlet property="qrCodeFrameView" destination="KeX-jR-Jk4" id="G8R-wF-C4n"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Otc-Eh-i6H" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1162" y="52"/>
+        </scene>
+    </scenes>
+</document>
