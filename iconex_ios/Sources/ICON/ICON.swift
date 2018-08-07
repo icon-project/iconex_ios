@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// ICON
+/// ICX Keystore struct
 public struct ICON {
     struct Keystore: Codable {
         let version: Int = 3
