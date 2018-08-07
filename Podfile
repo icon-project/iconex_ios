@@ -18,4 +18,3 @@ target 'iconex_ios' do
   pod 'web3swift'
   pod 'Toaster'
 end
-
