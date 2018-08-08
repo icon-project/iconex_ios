@@ -100,6 +100,7 @@
 		D4843E9B205B627100B14377 /* WalletPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4843E9A205B627100B14377 /* WalletPasswordViewController.swift */; };
 		D4843E9D205B95D100B14377 /* BasicActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4843E9C205B95D100B14377 /* BasicActionViewController.swift */; };
 		D4843E9F205B9D9900B14377 /* WalletPrivateInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4843E9E205B9D9900B14377 /* WalletPrivateInfoViewController.swift */; };
+		D487AA1F211ABEC3003B262D /* Credits.plist in Resources */ = {isa = PBXBuildFile; fileRef = D487AA1E211ABEC2003B262D /* Credits.plist */; };
 		D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49B92043E5DD0064CFF4 /* WalletBase.swift */; };
 		D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49BB2043E6030064CFF4 /* ICXWallet.swift */; };
 		D48E49C22043EF900064CFF4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49C12043EF900064CFF4 /* MainViewController.swift */; };
@@ -121,6 +122,8 @@
 		D4EBB844204FDB5A007B07FB /* SelectableActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBB843204FDB5A007B07FB /* SelectableActionController.swift */; };
 		D4EBB84720501B87007B07FB /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBB84520501B87007B07FB /* MainMenuViewController.swift */; };
 		D4EBB84A205024E2007B07FB /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EBB849205024E2007B07FB /* Menu.storyboard */; };
+		D4EF88F4211998BD000CA278 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */; };
+		D4EF88F821199924000CA278 /* OpensourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EF88F721199924000CA278 /* OpensourceViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -222,7 +225,7 @@
 		D47A03DF20A2E03B009A3A99 /* LockSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSettingViewController.swift; sourceTree = "<group>"; };
 		D47A03E320A2F311009A3A99 /* CreateLockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLockViewController.swift; sourceTree = "<group>"; };
 		D47A03E520A315A5009A3A99 /* BioAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioAuthViewController.swift; sourceTree = "<group>"; };
-		D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
+		D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DisclaimerViewController.swift; path = Alert/DisclaimerViewController.swift; sourceTree = "<group>"; };
 		D47E759C210FFBC400ABC61B /* ICON+Signer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICON+Signer.swift"; sourceTree = "<group>"; };
 		D47E759E21103BB300ABC61B /* ICON+Wallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICON+Wallet.swift"; sourceTree = "<group>"; };
 		D47F671321119A6B00EF9991 /* ICON+Connect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ICON+Connect.swift"; sourceTree = "<group>"; };
@@ -237,6 +240,7 @@
 		D4843E9A205B627100B14377 /* WalletPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPasswordViewController.swift; sourceTree = "<group>"; };
 		D4843E9C205B95D100B14377 /* BasicActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicActionViewController.swift; sourceTree = "<group>"; };
 		D4843E9E205B9D9900B14377 /* WalletPrivateInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPrivateInfoViewController.swift; sourceTree = "<group>"; };
+		D487AA1E211ABEC2003B262D /* Credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Credits.plist; sourceTree = "<group>"; };
 		D48E49B92043E5DD0064CFF4 /* WalletBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBase.swift; sourceTree = "<group>"; };
 		D48E49BB2043E6030064CFF4 /* ICXWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICXWallet.swift; sourceTree = "<group>"; };
 		D48E49C12043EF900064CFF4 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -258,6 +262,8 @@
 		D4EBB843204FDB5A007B07FB /* SelectableActionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableActionController.swift; sourceTree = "<group>"; };
 		D4EBB84520501B87007B07FB /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		D4EBB849205024E2007B07FB /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
+		D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
+		D4EF88F721199924000CA278 /* OpensourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpensourceViewController.swift; sourceTree = "<group>"; };
 		D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -315,6 +321,9 @@
 				D47A03DF20A2E03B009A3A99 /* LockSettingViewController.swift */,
 				D47A03E320A2F311009A3A99 /* CreateLockViewController.swift */,
 				D47A03E520A315A5009A3A99 /* BioAuthViewController.swift */,
+				D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */,
+				D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */,
+				D4EF88F721199924000CA278 /* OpensourceViewController.swift */,
 			);
 			name = Side;
 			sourceTree = "<group>";
@@ -381,7 +390,6 @@
 				D477CC2B205F554700797A82 /* ConfirmActionViewController.swift */,
 				D4843E9A205B627100B14377 /* WalletPasswordViewController.swift */,
 				D477CC2D205F778600797A82 /* SendConfirmViewController.swift */,
-				D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */,
 				D44B957D20B806D5009A74FC /* SwapConfirmViewController.swift */,
 			);
 			name = Alert;
@@ -416,6 +424,7 @@
 				D4728A102007040B00E0A899 /* Products */,
 				E625D6AEA7B504FDCBEB72E2 /* Pods */,
 				8D4DDEC28B4D9720DC645944 /* Frameworks */,
+				D487AA1E211ABEC2003B262D /* Credits.plist */,
 				D41B430E207B71C60011DDB9 /* Info.plist */,
 			);
 			sourceTree = "<group>";
@@ -617,6 +626,7 @@
 				D4728A0D2007040B00E0A899 /* Resources */,
 				8F4831E4B711B141BCFD46A5 /* [CP] Embed Pods Frameworks */,
 				D435E7972018736700F1E798 /* Embed Frameworks */,
+				D487AA1D211ABE0E003B262D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -635,7 +645,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0920;
-				ORGANIZATIONNAME = "theloop, Inc.";
+				ORGANIZATIONNAME = "ICON Foundation.";
 				TargetAttributes = {
 					D4728A0E2007040B00E0A899 = {
 						CreatedOnToolsVersion = 9.2;
@@ -683,6 +693,7 @@
 				D4EBB84A205024E2007B07FB /* Menu.storyboard in Resources */,
 				D435CDFE2056737600F0FDC6 /* Loading.storyboard in Resources */,
 				D481C4A2203EB0EC00A799D7 /* IXInputBox.xib in Resources */,
+				D487AA1F211ABEC3003B262D /* Credits.plist in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
 				D483EDFE2091A4AE0039BA36 /* IXIndicator.xib in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
@@ -731,6 +742,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous/Alamofire_Synchronous.framework",
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/LicensesViewController/LicensesViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/PromiseKit/PromiseKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
@@ -749,6 +761,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire_Synchronous.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LicensesViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PromiseKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
@@ -765,6 +778,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		D487AA1D211ABE0E003B262D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -803,6 +829,7 @@
 				D4BE74C72040035100638E2E /* PreventTextField.swift in Sources */,
 				D417360D203E6DF9008857A1 /* StepFourViewController.swift in Sources */,
 				D4402A922051258B001BD003 /* MainWalletCell.swift in Sources */,
+				D4EF88F4211998BD000CA278 /* AppInfoViewController.swift in Sources */,
 				D462C9AB203AABA800CF3BE1 /* PasscodeViewController.swift in Sources */,
 				D4EB066720C637EB005AF9F1 /* Tokens.swift in Sources */,
 				D44ED20620C4D78E00DE05BF /* ForgotViewController.swift in Sources */,
@@ -848,6 +875,7 @@
 				D47E759D210FFBC400ABC61B /* ICON+Signer.swift in Sources */,
 				D455C032204533140068165E /* MainWalletView.swift in Sources */,
 				D42A6D132057C52E00BC5039 /* AddressManageViewController.swift in Sources */,
+				D4EF88F821199924000CA278 /* OpensourceViewController.swift in Sources */,
 				D455C0362045952B0068165E /* IXScrollView.swift in Sources */,
 				D456AE8E205FF58300CB05D2 /* ChangePasswordViewController.swift in Sources */,
 				D492D06220897CA100D86402 /* WalletExportPasswordViewController.swift in Sources */,

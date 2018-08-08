@@ -1,21 +1,18 @@
 //
 //  DisclaimerViewController.swift
-//  ios-iCONex
+//  iconex_ios
 //
-//  Copyright © 2018 theloop, Inc. All rights reserved.
+//  Copyright © 2018 ICON Foundation. All rights reserved.
 //
 
 import UIKit
 import RxSwift
 import RxCocoa
 
-class DisclaimerViewController: UIViewController {
-    @IBOutlet weak var alertView: UIView!
-    @IBOutlet weak var alertTitle: UILabel!
-    @IBOutlet weak var disclaimerText: UITextView!
-    @IBOutlet weak var confirmButton: UIButton!
-    
-    private let disposeBag = DisposeBag()
+class DisclaimerViewController: BaseViewController {
+    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var navTitle: UILabel!
+    @IBOutlet weak var disclaimerText: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,34 +23,24 @@ class DisclaimerViewController: UIViewController {
     }
     
     func initialize() {
-        
+        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
     }
     
     func initializeUI() {
-        alertTitle.text = "Side.Disclaimer".localized
-        alertView.corner(12)
+        navTitle.text = "Side.Disclaimer".localized
+        
         let title = NSAttributedString(string: "Disclaimer.Title".localized, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
         let content = NSAttributedString(string: "Disclaimer.Content".localized, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular)])
         let text = NSMutableAttributedString(attributedString: title)
         text.append(content)
         disclaimerText.attributedText = text
         
-        confirmButton.styleDark()
-        confirmButton.setTitle("Common.Confirm".localized, for: .normal)
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
-            .subscribe(onNext: { [unowned self] in
-                self.dismiss(animated: true, completion: nil)
-            }).disposed(by: disposeBag)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        disclaimerText.setContentOffset(.zero, animated: false)
     }
 }

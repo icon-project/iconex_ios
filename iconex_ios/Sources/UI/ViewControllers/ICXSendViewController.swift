@@ -1,8 +1,8 @@
 //
 //  ICXSendViewController.swift
-//  ios-iCONex
+//  iconex_ios
 //
-//  Copyright © 2018 theloop, Inc. All rights reserved.
+//  Copyright © 2018 ICON Foundation. All rights reserved.
 //
 
 import UIKit
@@ -62,8 +62,6 @@ class ICXSendViewController: UIViewController {
     @IBOutlet weak var exchangedRemainLabel: UILabel!
     
     @IBOutlet weak var sendButton: UIButton!
-    
-    @IBOutlet weak var stackViewHeight: NSLayoutConstraint!
     
     var walletInfo: WalletInfo?
     var totalBalance: BigUInt!
@@ -335,14 +333,13 @@ class ICXSendViewController: UIViewController {
             .map { _ in
                 return self.validateAddress(false)
         }
-/*
+
         let observeLimit = limitInputBox.textField.rx.text
             .map { _ in
                 return self.validateLimit(false)
         }
- */
         
-        Observable.combineLatest([observeBalance, observeAddress/*, observeLimit*/]) { iterator -> Bool in
+        Observable.combineLatest([observeBalance, observeAddress, observeLimit]) { iterator -> Bool in
             return iterator.reduce(true, { $0 && $1 })
         }.bind(to: sendButton.rx.isEnabled).disposed(by: disposeBag)
     }
@@ -392,12 +389,8 @@ class ICXSendViewController: UIViewController {
         inputData = nil
         
         feeTitle.text = "Transfer.TxFee".localized + " (ICX)"
-        feeAmountLabel.text = "0.01"
-        if let fee = Tools.stringToBigUInt(inputText: "0.01") {
-            exchangedFeeLabel.text = (Tools.balanceToExchange(fee, from: "icx", to: "usd", belowDecimal: 2)?.currencySeparated() ?? "-") + " USD"
-        }
-//        feeAmountLabel.text = "-"
-//        exchangedFeeLabel.text = "- USD"
+        feeAmountLabel.text = "-"
+        exchangedFeeLabel.text = "- USD"
         
         remainTitle.text = "Transfer.AfterBalance".localized + " (ICX)"
         
@@ -405,10 +398,6 @@ class ICXSendViewController: UIViewController {
         sendButton.styleDark()
         sendButton.isEnabled = false
         sendButton.rounded()
-        
-        stackViewHeight.constant = 0
-        stepStack.isHidden = true
-        
     }
     
     @discardableResult

@@ -6,6 +6,7 @@ PODS:
     - SipHash (~> 1.2)
   - CryptoSwift (0.10.0)
   - libsodium (1.0.12)
+  - LicensesViewController (0.6.5)
   - PromiseKit (6.3.4):
     - PromiseKit/CorePromise (= 6.3.4)
     - PromiseKit/Foundation (= 6.3.4)
@@ -40,6 +41,7 @@ DEPENDENCIES:
   - Alamofire-Synchronous
   - BigInt
   - CryptoSwift
+  - LicensesViewController (~> 0.6.5)
   - RealmSwift
   - RxCocoa
   - RxSwift
@@ -53,6 +55,7 @@ SPEC REPOS:
     - BigInt
     - CryptoSwift
     - libsodium
+    - LicensesViewController
     - PromiseKit
     - Realm
     - RealmSwift
@@ -70,6 +73,7 @@ SPEC CHECKSUMS:
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: 6c778d69282bed3b4e975ff97a79d074f20bb011
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
+  LicensesViewController: 1f2982b1bab8402d3f88e23197957038e8abb907
   PromiseKit: e1425568123ec844a944c93f2bcb29d511d39cf5
   Realm: a469bb59e33f9926102ccaea4349822c53b9117e
   RealmSwift: a45861b21c180f5cf0f122144b9759fa8dde3e9e
@@ -81,6 +85,6 @@ SPEC CHECKSUMS:
   Toaster: a6c9532de1ded8105e77376f7dffeb2e12b46dbb
   web3swift: a1db39ac09f6538adb248e2011911348cc88c2c3
 
-PODFILE CHECKSUM: ae77d047f24d6f44baddf9738551a0d1546c12f8
+PODFILE CHECKSUM: 570b3a215378541642f62ad7b56f675d56de37b4
 
 COCOAPODS: 1.5.0

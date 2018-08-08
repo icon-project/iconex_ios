@@ -3,7 +3,7 @@
   ios-iCONex
 
   Created by Jeonghwan Ahn on 08/05/2018.
-  Copyright © 2018 theloop, Inc. All rights reserved.
+  Copyright © 2018 ICON Foundation. All rights reserved.
 */
 
 "Common.Yes" = "Yes";
@@ -216,7 +216,7 @@
 "Side.BundleExport" = "Export Wallet Bundle";
 "Side.ScreenLock" = "Screen Lock";
 "Side.Language" = "Language";
-"Side.Version" = "Version";
+"Side.Version" = "App Info";
 "Side.Disclaimer" = "ICONex Disclaimer";
 
 "BundleExport.Step1.NavTitle" = "Export Wallet Bundle";
@@ -264,11 +264,12 @@
 "Disclaimer.Content" = "1. The private key ICONex user creates in the process of using the ICONex service is stored in your mobile device, ICON Foundation does not store or/and manage the user's private key. The ICONex user is solely responsible for safekeeping and managing the private key created. In the case of the ICONex user not being able to use the private key due to computer virus, hacking activities, theft/loss, etc., ICON Foundation is not responsible for any loss.\n\n2. ICON Foundation does not guarantee the integrity, stability, accuracy and security of ICONex, but only provides the current version of ICONex “AS IS”. ICON Foundation is continuously running tests and making updates to provide a more stable and convenient service, however despite these efforts there is always the possibility of unexpected problems. ICON Foundation is not responsible for any unexpected problems, such as malfunction, hacking, loss and computer virus.\n\n3. ICON Foundation is not responsible for not being able to provide services due to natural disasters or any other force majeure.\n\n4. ICON Foundation is not responsible for any third-party transactions the ICONex user makes using ICONex as an intermediary.\n\n5. ICON Foundation is not responsible for any indirect, consequential, specific, punitive or any similar damages even though if ICONex is related with any torts, contract, guarantee, liability without fault and carelessness.\n\n6. ICONex supports Korean and English as the official languages. ICON Foundation is not responsible for any loss that comes from mis-translation into other languages than the official languages.\n\n※ All copyrights regarding ICONex is held by ICON Foundation.";
 
 
-"Version.Version" = "Version";
-"Version.Current" = "Current version";
-"Version.New" = "Updated version";
-"Version.Update" = "Update";
-"Version.Message" = "Please update to the latest version of ICONex.";
+"AppInfo.Title" = "App Info";
+"AppInfo.Version" = "Version";
+"AppInfo.Current" = "Current version";
+"AppInfo.Latest" = "Latest version";
+"AppInfo.Update" = "Update";
+"AppInfo.License" = "OpenSource License";
 
 "Retry.NoNetwork" = "No internet connection";
 "Retry.CheckConnectivity" = "Check your mobile data or Wi-Fi and try again";

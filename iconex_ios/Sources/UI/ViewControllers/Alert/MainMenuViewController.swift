@@ -1,8 +1,8 @@
 //
 //  MainMenuViewController.swift
-//  ios-iCONex
+//  iconex_ios
 //
-//  Copyright © 2018 theloop, Inc. All rights reserved.
+//  Copyright © 2018 ICON Foundation. All rights reserved.
 //
 
 import UIKit
@@ -15,6 +15,7 @@ public enum MainMenuItem {
     case exportWallet
     case lockScreen
     case language
+    case appInfo
     case terms
 }
 
@@ -36,9 +37,12 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var lockButton: UIButton!
     @IBOutlet weak var languageLabel: UILabel!
     @IBOutlet weak var languageButton: UIButton!
+    @IBOutlet weak var versionTitle: UILabel!
+    @IBOutlet weak var versionButton: UIButton!
+    @IBOutlet weak var newVersion: UIView!
+    @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var termsLabel: UILabel!
     @IBOutlet weak var termsButton: UIButton!
-    @IBOutlet weak var tempStateLabel: UILabel!
     
     @IBOutlet weak var leftConstraint: NSLayoutConstraint!
     
@@ -111,6 +115,15 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
+        versionButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+            self?.close {
+                guard let delegate = self?.delegate else {
+                    return
+                }
+                delegate.mainMenuSelected(selected: MainMenuItem.appInfo)
+            }
+        }).disposed(by: disposeBag)
+        
         termsButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
@@ -127,16 +140,19 @@ class MainMenuViewController: UIViewController {
         walletExportLabel.text = "Side.BundleExport".localized
         lockLabel.text = "Side.ScreenLock".localized
         languageLabel.text = "Side.Language".localized
+        versionTitle.text = "Side.Version".localized
         termsLabel.text = "Side.Disclaimer".localized
         
-        var text = "Connected: " + (Config.isDebug ? "TESTNET" : "MAINNET")
+        var text = ""
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             text += " \(version)"
         }
         if let buildVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
             text += ".\(buildVersion)"
         }
-        tempStateLabel.text = text
+        versionLabel.text = text
+        
+        newVersion.layer.cornerRadius = newVersion.frame.height / 2
     }
     
     @IBAction func tapGesture(_ sender: Any) {
@@ -155,6 +171,22 @@ extension MainMenuViewController {
             UIView.animate(withDuration: 0.15, animations: {
                 self.view.layoutIfNeeded()
             })
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        checkVersion()
+    }
+    
+    func checkVersion() {
+        let app = UIApplication.shared.delegate as! AppDelegate
+        if let version = app.all, let myVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String {
+            newVersion.isHidden = !(version > myVersion)
+            versionLabel.text = myVersion
+        } else {
+            newVersion.isHidden = true
         }
     }
     
@@ -191,36 +223,36 @@ extension MainMenuDelegate where Self: MainViewController {
             let createStep = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "CreateStepView") as! CreateStepViewController
             createStep.isLaunched = false
             self.present(createStep, animated: true, completion: nil)
-            break
             
         case .importWallet:
             let importStep = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "ImportStepView") as! ImportStepViewController
             self.present(importStep, animated: true, completion: nil)
-            break
             
         case .exportWallet:
             let export = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletExportView") as! WalletExportViewController
             let nav = UINavigationController(rootViewController: export)
             nav.isNavigationBarHidden = true
             self.present(nav, animated: true, completion: nil)
-            break
 
         case .lockScreen:
             let lock = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "LockSettingView")
             let nav = UINavigationController(rootViewController: lock)
             nav.isNavigationBarHidden = true
             self.present(nav, animated: true, completion: nil)
-            break
 
         case .language:
             let language = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "LanguageSelectView")
             self.present(language, animated: true, completion: nil)
-            break
+            
+        case .appInfo:
+            let appInfo = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "AppInfoView")
+            let nav = UINavigationController(rootViewController: appInfo)
+            nav.isNavigationBarHidden = true
+            self.present(nav, animated: true, completion: nil)
 
         case .terms:
-            let disclaimer = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "DisclaimerView")
+            let disclaimer = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "DisclaimerView")
             self.present(disclaimer, animated: true, completion: nil)
-            break
 
         }
     }

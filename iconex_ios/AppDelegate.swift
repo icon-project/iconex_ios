@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  ios-iCONex
+//  iconex_ios
 //
-//  Copyright © 2018 theloop, Inc. All rights reserved.
+//  Copyright © 2018 ICON Foundation. All rights reserved.
 //
 
 import UIKit
@@ -173,7 +173,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func retry() {
-            if let version = self.all {
+            if let version = self.necessary {
                 let myVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
                 
                 if version > myVersion {

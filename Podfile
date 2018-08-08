@@ -17,4 +17,5 @@ target 'iconex_ios' do
   pod 'BigInt'
   pod 'web3swift'
   pod 'Toaster'
+  pod 'LicensesViewController', '~> 0.6.5'
 end
