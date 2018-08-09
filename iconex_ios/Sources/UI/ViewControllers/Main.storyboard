@@ -43,7 +43,7 @@
         <!--Main View Controller-->
         <scene sceneID="4bf-pa-fB8">
             <objects>
-                <viewController id="C1n-nL-gyr" customClass="MainViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="C1n-nL-gyr" customClass="MainViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" opaque="NO" contentMode="scaleToFill" id="rqf-j8-a2j">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -234,7 +234,7 @@
                                             <constraint firstItem="h6i-d2-goO" firstAttribute="leading" secondItem="soP-lK-aJA" secondAttribute="leading" id="oLE-XD-Z91"/>
                                         </constraints>
                                     </view>
-                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlm-L9-3a5" customClass="IXScrollView" customModule="ios_iCONex" customModuleProvider="target">
+                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlm-L9-3a5" customClass="IXScrollView" customModule="iconex_ios" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="264" width="375" height="383"/>
                                     </scrollView>
                                 </subviews>
@@ -307,7 +307,7 @@
         <!--Wallet Address View Controller-->
         <scene sceneID="LYO-rB-cGs">
             <objects>
-                <viewController storyboardIdentifier="WalletAddressView" modalTransitionStyle="crossDissolve" modalPresentationStyle="overFullScreen" id="FHL-G6-RoT" customClass="WalletAddressViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WalletAddressView" modalTransitionStyle="crossDissolve" modalPresentationStyle="overFullScreen" id="FHL-G6-RoT" customClass="WalletAddressViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kBb-KP-SQH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -423,7 +423,7 @@
         <!--Wallet Export View Controller-->
         <scene sceneID="02X-mZ-MJt">
             <objects>
-                <viewController storyboardIdentifier="WalletExportView" id="bbv-dY-j6a" customClass="WalletExportViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WalletExportView" id="bbv-dY-j6a" customClass="WalletExportViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tvf-Zz-5iB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -577,7 +577,7 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletExportCell" id="AB0-jb-usJ" customClass="WalletExportCell" customModule="ios_iCONex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletExportCell" id="AB0-jb-usJ" customClass="WalletExportCell" customModule="iconex_ios" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="197" width="375" height="72"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AB0-jb-usJ" id="pka-tr-wTD">
@@ -692,7 +692,7 @@
         <!--Wallet Export Password View Controller-->
         <scene sceneID="vc3-IP-Dnw">
             <objects>
-                <viewController storyboardIdentifier="WalletExportPasswordView" id="D4t-Fv-FSg" customClass="WalletExportPasswordViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WalletExportPasswordView" id="D4t-Fv-FSg" customClass="WalletExportPasswordViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0WQ-Q1-JF1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -815,7 +815,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPu-AP-afw" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPu-AP-afw" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="183" width="327" height="67"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -825,7 +825,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="nibName" value="IXInputBox"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="odo-bC-ZWN" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="odo-bC-ZWN" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="258" width="327" height="67"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -915,7 +915,7 @@
         <!--Wallet Detail View Controller-->
         <scene sceneID="Sfd-dB-T33">
             <objects>
-                <viewController storyboardIdentifier="WalletDetailView" id="zAe-qG-IsE" customClass="WalletDetailViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WalletDetailView" id="zAe-qG-IsE" customClass="WalletDetailViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hcD-MH-v38">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1191,7 +1191,7 @@
                                                         <constraint firstItem="818-es-d00" firstAttribute="top" secondItem="bSl-pu-wtD" secondAttribute="top" id="xgK-Xu-LVi"/>
                                                     </constraints>
                                                 </view>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nBN-ns-n7T" customClass="IXIndicator" customModule="ios_iCONex" customModuleProvider="target">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nBN-ns-n7T" customClass="IXIndicator" customModule="iconex_ios" customModuleProvider="target">
                                                     <rect key="frame" x="167" y="75" width="40" height="40"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -1232,7 +1232,7 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletDetailCell" rowHeight="76" id="CjU-Zu-Sp9" customClass="WalletDetailCell" customModule="ios_iCONex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletDetailCell" rowHeight="76" id="CjU-Zu-Sp9" customClass="WalletDetailCell" customModule="iconex_ios" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="331" width="375" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CjU-Zu-Sp9" id="ey3-R7-QR1">
@@ -1290,7 +1290,7 @@
                                             <outlet property="typeLabel" destination="qt1-wp-iz0" id="oNZ-B5-0hU"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletDetailLoadCell" rowHeight="76" id="WZw-Lh-1WM" customClass="WalletDetailLoadCell" customModule="ios_iCONex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletDetailLoadCell" rowHeight="76" id="WZw-Lh-1WM" customClass="WalletDetailLoadCell" customModule="iconex_ios" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="407" width="375" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WZw-Lh-1WM" id="wps-ab-7d8">
@@ -1314,7 +1314,7 @@
                                             <outlet property="indicator" destination="vaX-xl-heZ" id="BDu-rq-TGE"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletDetailNoCell" id="ZHM-N1-o6j" customClass="WalletDetailNoCell" customModule="ios_iCONex" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="WalletDetailNoCell" id="ZHM-N1-o6j" customClass="WalletDetailNoCell" customModule="iconex_ios" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="483" width="375" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ZHM-N1-o6j" id="zKq-Y5-GOf">
@@ -1530,7 +1530,7 @@
         <!--Wallet Backup View Controller-->
         <scene sceneID="K2c-Ij-aAz">
             <objects>
-                <viewController storyboardIdentifier="WalletBackupView" id="iDd-lN-cua" customClass="WalletBackupViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WalletBackupView" id="iDd-lN-cua" customClass="WalletBackupViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5e9-fk-7n3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1884,7 +1884,7 @@
         <!--Change Password View Controller-->
         <scene sceneID="UC9-9l-Yji">
             <objects>
-                <viewController storyboardIdentifier="ChangePasswordView" id="350-ZA-2Di" customClass="ChangePasswordViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ChangePasswordView" id="350-ZA-2Di" customClass="ChangePasswordViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k8G-pG-Zsa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1969,7 +1969,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bxz-VM-34J" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bxz-VM-34J" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="134" width="327" height="67"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -1979,7 +1979,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="nibName" value="IXInputBox"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Bs-N3-oAu" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Bs-N3-oAu" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="209" width="327" height="67"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -1989,7 +1989,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="nibName" value="IXInputBox"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXK-AN-Kkg" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZXK-AN-Kkg" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                 <rect key="frame" x="24" y="285" width="327" height="67"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -2092,7 +2092,7 @@
         <!--Data Input View Controller-->
         <scene sceneID="RYf-jJ-t0v">
             <objects>
-                <viewController storyboardIdentifier="ICXDataInputView" id="qu5-Vw-Rql" customClass="ICXDataInputViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ICXDataInputView" id="qu5-Vw-Rql" customClass="ICXDataInputViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZdY-5z-JPO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2246,7 +2246,7 @@
         <!--Send View Controller-->
         <scene sceneID="VhQ-Mp-56G">
             <objects>
-                <viewController storyboardIdentifier="ICXSendView" id="BUq-rt-cps" customClass="ICXSendViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ICXSendView" id="BUq-rt-cps" customClass="ICXSendViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EId-H8-NnI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2378,7 +2378,7 @@
                                                                     <constraint firstAttribute="height" constant="30" id="ya5-AP-TL7"/>
                                                                 </constraints>
                                                             </stackView>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O6m-6F-o01" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O6m-6F-o01" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="73" width="327" height="67"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -2428,7 +2428,7 @@
                                                                     <constraint firstAttribute="height" constant="40" id="FkE-bT-GS4"/>
                                                                 </constraints>
                                                             </stackView>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8bX-Cz-kNA" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8bX-Cz-kNA" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="71" width="327" height="67"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -2489,7 +2489,7 @@
                                                                             <constraint firstItem="7nm-WL-43x" firstAttribute="top" secondItem="IEV-Ay-a9d" secondAttribute="top" constant="22" id="xsB-k6-V6b"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N3b-qK-jDB" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N3b-qK-jDB" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                         <rect key="frame" x="24" y="50" width="327" height="67"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
@@ -2820,7 +2820,7 @@
         <!--Send View Controller-->
         <scene sceneID="kBa-d4-EE8">
             <objects>
-                <viewController storyboardIdentifier="ETHSendView" id="NN9-gO-PpL" customClass="ETHSendViewController" customModule="ios_iCONex" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ETHSendView" id="NN9-gO-PpL" customClass="ETHSendViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VPw-E4-Ytm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2952,7 +2952,7 @@
                                                                     <constraint firstAttribute="height" constant="30" id="t8F-8Z-zbN"/>
                                                                 </constraints>
                                                             </stackView>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3zl-Ky-cOY" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3zl-Ky-cOY" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="73" width="327" height="67"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -3002,7 +3002,7 @@
                                                                     <constraint firstAttribute="height" constant="40" id="ptI-Tj-UeH"/>
                                                                 </constraints>
                                                             </stackView>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U9Z-R3-Usi" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U9Z-R3-Usi" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="71" width="327" height="67"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -3054,7 +3054,7 @@
                                                                 <rect key="frame" x="24" y="16.5" width="59" height="29"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             </button>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3tH-Be-ED8" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3tH-Be-ED8" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="49" width="327" height="62"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -3134,7 +3134,7 @@
                                                                 <color key="textColor" red="0.14901960780000001" green="0.14901960780000001" blue="0.14901960780000001" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vpg-Sb-F14" customClass="IXSlider" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Vpg-Sb-F14" customClass="IXSlider" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="32" y="104.5" width="311" height="31"/>
                                                             </slider>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="gmM-wI-fbw">
@@ -3245,7 +3245,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sqh-lO-kuO">
                                                                 <rect key="frame" x="323" y="15" width="32" height="32"/>
                                                             </button>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7g-dE-iub" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7g-dE-iub" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="49" width="327" height="62"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>

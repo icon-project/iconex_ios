@@ -18,10 +18,10 @@ You can also download from [AppStore](https://itunes.apple.com/app/iconex-icon-w
 $ sudo gem install cocoapods
 ```
 ### Try it yourself
-* ```git clone git@github.com:icon-project/iconex_ios.git```
-* ```cd iconex_ios```
-* ```pod install```
-* ```open ./iconex_ios.xcworspace```
+* ```$ git clone git@github.com:icon-project/iconex_ios.git```
+* ```$ cd iconex_ios```
+* ```$ pod install```
+* ```$ open ./iconex_ios.xcworspace```
 
 ## Communication
 * If you **found a bug**, [open an issue](https://github.com/icon-project/iconex_ios/issues/).

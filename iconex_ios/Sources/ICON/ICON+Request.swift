@@ -54,6 +54,7 @@ extension ICON {
     public struct V2 {}
 }
 
+@available(*, deprecated)
 extension ICON.V2 {
     static let TRACKER_VERSION: String = "v0"
     static let EXCHANGE_HEADER: String = "exchange"

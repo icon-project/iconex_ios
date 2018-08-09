@@ -12,7 +12,6 @@ class OpensourceViewController: BaseViewController {
 
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var navTitle: UILabel!
-    @IBOutlet weak var container: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
