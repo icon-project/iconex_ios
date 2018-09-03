@@ -401,7 +401,7 @@ struct Tools {
 struct Validator {
     static func validateCharacterSet(password: String) -> Bool {
         
-        let pattern = "^(?=.*?[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()_+|<>?:{}]).{8,}$"
+        let pattern = "^(?=.*?[A-Za-z])(?=.*?\\d)(?=.*?[~!@#$%^&*()_+|<>?:{}]).{8,}$"
         
         let result = NSPredicate(format: "SELF MATCHES %@", pattern)
         
