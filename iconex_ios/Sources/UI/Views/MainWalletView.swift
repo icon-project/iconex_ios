@@ -250,21 +250,17 @@ class MainWalletView: UIView, UIScrollViewDelegate {
             if let address = wallet.address, let value = WManager.walletBalanceList[address], let exchangedString = Tools.balanceToExchange(value, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4) {
                 indicator.isHidden = true
                 totalBalanceLabel.isHidden = false
-                if wallet.type == .eth {
-                    guard var dExchange = Double(exchangedString) else { return }
-                    
-                    let eth = wallet as! ETHWallet
-                    if let tokens = eth.tokens {
-                        for token in tokens {
-                            guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4), let excD = Double(exchanged) else { continue }
-                            dExchange += excD
-                        }
+                
+                guard var dExchange = Double(exchangedString) else { return }
+                
+                if let tokens = wallet.tokens {
+                    for token in tokens {
+                        guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4), let excD = Double(exchanged) else { continue }
+                        dExchange += excD
                     }
-                    let format = EManager.currentExchange == "usd" ? "%.2f" : "%.4f"
-                    totalBalanceLabel.text = String(format: format, dExchange).currencySeparated()
-                } else {
-                    totalBalanceLabel.text = exchangedString.currencySeparated()
                 }
+                let format = EManager.currentExchange == "usd" ? "%.2f" : "%.4f"
+                totalBalanceLabel.text = String(format: format, dExchange).currencySeparated()
             } else {
                 if WManager.isBalanceLoadCompleted {
                     indicator.isHidden = true

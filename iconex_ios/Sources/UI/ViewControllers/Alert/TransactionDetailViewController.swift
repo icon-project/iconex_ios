@@ -55,11 +55,22 @@ class TransactionDetailViewController: UIViewController {
         
         trackerButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: {
-                guard let target = URL(string: ICON.V2.TRACKER_HOST)?.appendingPathComponent("transaction").appendingPathComponent(self.txHash!) else {
-                    return
+                var tracker: Tracker {
+                    switch Config.host {
+                    case .main:
+                        return Tracker.main()
+                        
+                    case .dev:
+                        return Tracker.dev()
+                        
+                    case .local:
+                        return Tracker.local()
+                    }
                 }
                 
+                guard let target = URL(string: tracker.provider)?.appendingPathComponent("transaction").appendingPathComponent(self.txHash!) else { return }
                 UIApplication.shared.open(target, options: [:], completionHandler: nil)
+                
             }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControlEvents.touchUpInside)

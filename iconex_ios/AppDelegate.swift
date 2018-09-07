@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Alamofire
+import ICONKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         Config.isDebug = true
-        Config.isTestnet = true
+        Config.host = .local
         
         Configuration.setDebug()
         
@@ -119,7 +120,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func checkVersion() {
-        let versionURL = URL(string: ICON.V2.TRACKER_HOST)!.appendingPathComponent(ICON.V2.GET_VERSION_PATH)
+        var tracker: Tracker {
+            switch Config.host {
+            case .main:
+                return Tracker.main()
+                
+            case .dev:
+                return Tracker.dev()
+                
+            case .local:
+                return Tracker.local()
+            }
+        }
+        let versionURL = URL(string: tracker.provider)!.appendingPathComponent("app/ios.json")
         let request = URLRequest(url: versionURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
         Alamofire.request(request).responseJSON(queue: DispatchQueue.global(qos: .utility)) { (dataResponse) in
             
@@ -140,7 +153,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     self.retry()
                     
-                case .failure:
+                case .failure(let error):
+                    Log.Debug("Error \(error)")
                     let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
                     self.window?.rootViewController = retry
                     return

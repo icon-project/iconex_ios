@@ -53,7 +53,7 @@ class SwapStepFiveViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
         initializeUI()
         initialize()
@@ -246,7 +246,7 @@ class SwapStepFiveViewController: BaseViewController {
             self.transInputBox.setState(.error, "Error.Transfer.AboveMax".localized)
             self.doneButton.isEnabled = false
             return false
-        } else if icxValue == BigInt(0) {
+        } else if icxValue == BigUInt(0) {
             self.transInputBox.setState(.error, "Error.EnterSwapAmount".localized)
             self.doneButton.isEnabled = false
             return false
@@ -284,8 +284,8 @@ class SwapStepFiveViewController: BaseViewController {
         DispatchQueue.global().async {
             if var gasPrice = Ethereum.gasPrice {
 //            if let gasPrice = Web3.Utils.parseToBigUInt("21", units: .Gwei) {
-                gasPrice += 10
-                gasPrice = max(min(BigUInt(99), gasPrice), BigUInt(21))
+                gasPrice += Web3.Utils.parseToBigUInt("10", units: .Gwei)!
+                gasPrice = max(min((Web3.Utils.parseToBigUInt("99", units: .Gwei)!), gasPrice), Web3.Utils.parseToBigUInt("21", units: .Gwei)!)
                 Log.Debug("gas price \(gasPrice)")
                 self._gasPrice = gasPrice
                 if let gasResult = Ethereum.requestTokenEstimatedGas(value: icxValue, gasPrice: gasPrice, from: wallet.address!, to: self.burnAddress, tokenInfo: token) {
@@ -311,7 +311,7 @@ class SwapStepFiveViewController: BaseViewController {
                         }
                     }
                 }
-                let gasPriceString = String(gasPrice)
+                let gasPriceString = Web3.Utils.formatToEthereumUnits(gasPrice, toUnits: .Gwei, decimals: 18, decimalSeparator: ".")!
                 DispatchQueue.main.async {
                     isDone += 1
                     

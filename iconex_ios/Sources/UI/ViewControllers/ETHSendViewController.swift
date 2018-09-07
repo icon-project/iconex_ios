@@ -406,7 +406,7 @@ class ETHSendViewController: UIViewController {
         slow.text = "Transfer.Slow".localized
         fast.text = "Transfer.Fast".localized
         gasSlider.minimumValue = 1
-        gasSlider.maximumValue = 60
+        gasSlider.maximumValue = 99
         
         if let minimumImage = UIImage(color: UIColor.lightTheme.background.normal, width: 1, height: 10) {
             gasSlider.setMinimumTrackImage(minimumImage, for: .normal)
@@ -451,12 +451,12 @@ class ETHSendViewController: UIViewController {
         
         if let _ = self.token {
             gasLimitInputBox.textField.text = "55000"
-            gasValueLabel.text = "21 Gwei"
-            gasSlider.value = 21
+            gasValueLabel.text = "45 Gwei"
+            gasSlider.value = 45
         } else {
             gasLimitInputBox.textField.text = "21000"
-            gasValueLabel.text = "21 Gwei"
-            gasSlider.value = 21
+            gasValueLabel.text = "45 Gwei"
+            gasSlider.value = 45
         }
         
     }
@@ -493,7 +493,7 @@ class ETHSendViewController: UIViewController {
             if ethValue + feeValue > self.totalBalance {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
                 return false
-            } else if ethValue == BigInt(0) {
+            } else if ethValue == BigUInt(0) {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
                 return false
             }

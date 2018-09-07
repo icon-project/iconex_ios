@@ -46,7 +46,7 @@ struct ETH {
 }
 
 class ETHWallet: BaseWallet {
-    var keyStore: KeystoreParamsV3?
+    var keystore: ETH.KeyStore?
     
     override init() {
         super.init(type: .eth)
@@ -60,14 +60,21 @@ class ETHWallet: BaseWallet {
     convenience init(alias: String, from: Data) {
         self.init()
         self.alias = alias
-        __rawData = from
         
-        guard let generator = EthereumKeystoreV3(from) else {
-            return
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        
+        do {
+            var keystore = try decoder.decode(ETH.KeyStore.self, from: from)
+            keystore.address = keystore.address.add0xPrefix().lowercased()
+            self.keystore = keystore
+            self.address = keystore.address
+            
+            let encoded = try encoder.encode(keystore)
+            self.__rawData = encoded
+        } catch {
+            
         }
-        
-        self.keyStore = generator.keystoreParams
-        self.address = generator.getAddress()?.address
     }
     
     convenience init(keystore: ETH.KeyStore) {
@@ -76,25 +83,26 @@ class ETHWallet: BaseWallet {
         let encoder = JSONEncoder()
         __rawData = try! encoder.encode(keystore)
         
-        guard let generator = EthereumKeystoreV3(__rawData!) else {
-            return
-        }
-        
-        self.keyStore = generator.keystoreParams
-        self.address = generator.getAddress()?.address
+        self.address = keystore.address
     }
     
     convenience init(keystoreData: Data) {
         self.init()
         
-        __rawData = keystoreData
-        
-        guard let generator = EthereumKeystoreV3(__rawData!) else {
-            return
+        do {
+            let decoder = JSONDecoder()
+            let encoder = JSONEncoder()
+            
+            var keystore = try decoder.decode(ETH.KeyStore.self, from: keystoreData)
+            keystore.address = keystore.address.add0xPrefix().lowercased()
+            
+            self.keystore = keystore
+            let rawData = try encoder.encode(keystore)
+            self.__rawData = rawData
+            self.address = keystore.address
+        } catch {
+            
         }
-        
-        self.keyStore = generator.keystoreParams
-        self.address = generator.getAddress()?.address
     }
     
     func loadToken() {
@@ -109,12 +117,16 @@ class ETHWallet: BaseWallet {
     func generateETHKeyStore(password: String) throws {
         let generator = try EthereumKeystoreV3(password: password)
         
-        self.address = generator?.getAddress()?.address
-        self.keyStore = generator?.keystoreParams
+        self.address = generator?.getAddress()?.address.add0xPrefix().lowercased()
+        let params = generator?.keystoreParams
         
         let encoder = JSONEncoder()
-        let encoded = try encoder.encode(generator?.keystoreParams)
+        let encoded = try encoder.encode(params)
         self.__rawData = encoded
+        
+        let decoder = JSONDecoder()
+        let keystore = try decoder.decode(ETH.KeyStore.self, from: encoded)
+        self.keystore = keystore
     }
     
     func generateETHKeyStore(privateKey: String, password: String) throws {
@@ -125,11 +137,15 @@ class ETHWallet: BaseWallet {
         let generator = try EthereumKeystoreV3(privateKey: privateKeyData, password: password)
         
         self.address = generator?.getAddress()?.address
-        self.keyStore = generator?.keystoreParams
+        let params = generator?.keystoreParams
         
         let encoder = JSONEncoder()
-        let encoded = try encoder.encode(generator?.keystoreParams)
+        let encoded = try encoder.encode(params)
         self.__rawData = encoded
+        
+        let decoder = JSONDecoder()
+        let keystore = try decoder.decode(ETH.KeyStore.self, from: encoded)
+        self.keystore = keystore
     }
     
     func changePassword(oldPassword: String, newPassword: String) throws {
@@ -143,11 +159,15 @@ class ETHWallet: BaseWallet {
         
         try generator.regenerate(oldPassword: oldPassword, newPassword: newPassword)
         
-        self.keyStore = generator.keystoreParams
+        let params = generator.keystoreParams
         let encoder = JSONEncoder()
         
-        let encoded = try encoder.encode(keyStore)
+        let encoded = try encoder.encode(params)
         self.__rawData = encoded
+        
+        let decoder = JSONDecoder()
+        let keystore = try decoder.decode(ETH.KeyStore.self, from: encoded)
+        self.keystore = keystore
     }
     
     func saveETHWallet() throws {
@@ -170,7 +190,15 @@ class ETHWallet: BaseWallet {
             }
         }
         
-        let contract = Config.isTestnet ? "0x55116b9cf269E3f7E9183D35D65D6C310fcAcF05" : "0xb5A5F22694352C15B00323844aD545ABb2B11028"
+        var contract: String {
+            switch Config.host {
+            case .main:
+                return "0xb5A5F22694352C15B00323844aD545ABb2B11028"
+                
+            default:
+                return "0x55116b9cf269E3f7E9183D35D65D6C310fcAcF05"
+            }
+        }
         
         if canSaveToken(contractAddress: contract) {
             let icxInfo = TokenInfo(name: "ICON", defaultName: "ICON", symbol: "ICX", decimal: 18, defaultDecimal: 18, dependedAddress: self.address!, contractAddress: contract, parentType: "eth")
@@ -189,7 +217,7 @@ class ETHWallet: BaseWallet {
     
     func getBackupKeystoreFilepath() throws -> URL {
         let encoder = JSONEncoder()
-        let encoded = try encoder.encode(keyStore)
+        let encoded = try encoder.encode(keystore)
         Log.Debug("encoded: " + String(data: encoded, encoding: .utf8)!)
         
         let filename = "UTC--" + Date.currentZuluTime + "--" + self.address!

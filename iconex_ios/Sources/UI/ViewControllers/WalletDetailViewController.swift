@@ -80,8 +80,8 @@ class WalletDetailViewController: UIViewController {
     
     var walletInfo: WalletInfo?
     var token: TokenInfo?
-    var historyList = [TxHistoryResponse]()
-    var filteredList: [TxHistoryResponse]?
+    var historyList = [Tracker.TxList]()
+    var filteredList: [Tracker.TxList]?
     var holdList: [TransactionModel]?
     
     var step: Int = 1
@@ -366,14 +366,12 @@ class WalletDetailViewController: UIViewController {
                         let auth = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "WalletPasswordView") as! WalletPasswordViewController
                         auth.walletInfo = self.walletInfo!
                         auth.addConfirm(completion: { [unowned self] (isSuccess, privKey) in
-                            if self.walletInfo!.type == .icx {
-                                if isSuccess {
-                                    let backup = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletBackupView") as! WalletBackupViewController
-                                    backup.privKey = privKey
-                                    backup.walletInfo = self.walletInfo
-                                    
-                                    self.present(backup, animated: true, completion: nil)
-                                }
+                            if isSuccess {
+                                let backup = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletBackupView") as! WalletBackupViewController
+                                backup.privKey = privKey
+                                backup.walletInfo = self.walletInfo
+                                
+                                self.present(backup, animated: true, completion: nil)
                             }
                         })
                         self.present(auth, animated: true, completion: nil)
@@ -601,9 +599,9 @@ class WalletDetailViewController: UIViewController {
                     tableView.tableFooterView = cell
                 }
             } else if viewState.type == 1 {
-                filteredList = historyList.filter { $0.from == walletInfo!.address }
+                filteredList = historyList.filter { $0.fromAddr == walletInfo!.address }
             } else {
-                filteredList = historyList.filter { $0.from != walletInfo!.address }
+                filteredList = historyList.filter { $0.fromAddr != walletInfo!.address }
             }
         } else {
             
@@ -739,7 +737,7 @@ class WalletDetailViewController: UIViewController {
     
     func fetchRecentTransaction(_ reset: Bool = false) {
         guard let info = self.walletInfo else { return }
-        guard let wallet = WManager.loadWalletBy(info: info) else { return }
+        guard let wallet = WManager.loadWalletBy(info: info), let address = wallet.address else { return }
         guard wallet.type == .icx else { return }
         if !isLoaded { isLoaded = false }
         
@@ -749,41 +747,38 @@ class WalletDetailViewController: UIViewController {
         
         if reset { historyList.removeAll() }
         
-        let loopchain = ICXClient(wallet: wallet as! ICXWallet)
-        loopchain.requestTransactionHistory(next: self.step) { [unowned self] (response) in
-            self.isLoaded = true
-            if let value = response?.value {
-                if let data = value["data"] as? [String: Any] {
-                    if let walletTxs = data["walletTx"] as? [[String: Any]] {
-                        var lists = [TxHistoryResponse]()
-                        let decoder = JSONDecoder()
-                        do {
-                            for item in walletTxs {
-                                let data = try JSONSerialization.data(withJSONObject: item, options: .prettyPrinted)
-                                let txHistory = try decoder.decode(TxHistoryResponse.self, from: data)
-                                lists.append(txHistory)
-                                Transaction.updateTransactionCompleted(txHash: txHistory.txHash)
-                            }
-                        } catch {
-                            self.tableView.reloadData()
-                            return
-                        }
-                        self.historyList.append(contentsOf: lists)
-                    } else {
-                    }
-                }
+        var tracker: Tracker {
+            switch Config.host {
+            case .main:
+                return Tracker.main()
                 
-                Log.Debug("Value: \(value)")
+            case .dev:
+                return Tracker.dev()
                 
-                if let totalData = value["totalData"] as? String {
-                    guard let total = Int(totalData) else { return }
-                    self.totalData = total
-                }
+            case .local:
+                return Tracker.local()
+            }
+        }
+        
+        var type: Tracker.TXType {
+            return address.hasPrefix("hx") ? .icxTransfer : .tokenTransfer
+        }
+        
+        if let response = tracker.transactionList(address: address, page: self.step, txType: type) {
+            guard let listSize = response["listSize"] as? Int else { return }
+            guard let list = response["data"] as? [[String: Any]] else { return }
+            
+            for txDic in list {
+                let tx = Tracker.TxList(dic: txDic)
+                self.historyList.append(tx)
+                Transaction.updateTransactionCompleted(txHash: tx.txHash)
             }
             
-            self.loadData()
-            
-            }.fetch()
+            self.totalData = listSize
+        }
+        self.isLoaded = true
+        
+        self.loadData()
     }
     
     func loadExchanged() {
@@ -875,16 +870,19 @@ extension WalletDetailViewController: UITableViewDelegate, UITableViewDataSource
             
             cell.txTitleLabel.attributedText = attrString
             
-            if history.from == walletInfo!.address {
-                cell.amountLabel.text = "-" + history.amount
-                cell.amountLabel.textColor = UIColor(230, 92, 103)
-                cell.typeLabel.textColor = UIColor(230, 92, 103)
-                cell.txDateLabel.textColor = UIColor(230, 92, 103)
-            } else {
-                cell.amountLabel.text = "+" + history.amount
-                cell.amountLabel.textColor = UIColor(74, 144, 226)
-                cell.typeLabel.textColor = UIColor(74, 144, 226)
-                cell.txDateLabel.textColor = UIColor(74, 144, 226)
+            if history.txType == "0" {
+                
+                if history.fromAddr == walletInfo!.address {
+                    cell.amountLabel.text = "-" + history.amount
+                    cell.amountLabel.textColor = UIColor(230, 92, 103)
+                    cell.typeLabel.textColor = UIColor(230, 92, 103)
+                    cell.txDateLabel.textColor = UIColor(230, 92, 103)
+                } else {
+                    cell.amountLabel.text = "+" + history.amount
+                    cell.amountLabel.textColor = UIColor(74, 144, 226)
+                    cell.typeLabel.textColor = UIColor(74, 144, 226)
+                    cell.txDateLabel.textColor = UIColor(74, 144, 226)
+                }
             }
             cell.typeLabel.text = "ICX"
             

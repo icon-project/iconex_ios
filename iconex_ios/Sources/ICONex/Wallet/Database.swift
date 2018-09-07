@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import ICONKit
 
 class TokenModel: Object {
     @objc dynamic var id = 0
@@ -259,7 +260,7 @@ struct DB {
             guard let model = realm.objects(WalletModel.self).filter({ $0.type == type.rawValue.lowercased() && $0.address == address }).first else { return nil }
             
             if type == .icx {
-                let icx = ICXWallet(alias: model.name, from: model.rawData!)
+                guard let icx = ICXWallet(alias: model.name, from: model.rawData!) else { return nil }
                 icx.createdDate = model.createdDate
                 return icx
             } else {

@@ -20,7 +20,6 @@ class PreventTextField: UITextField {
      }
      */
     
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -31,37 +30,20 @@ class PreventTextField: UITextField {
             }
         }
     }
+    
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        return !isPreventPaste
+        switch action {
+        case #selector(UIResponderStandardEditActions.paste(_:)), #selector(UIResponderStandardEditActions.copy(_:)):
+            return !isPreventPaste
+        
+        default:
+            return false
+        }
     }
     
     override var canBecomeFirstResponder: Bool {
         return true
     }
-    
-//    @discardableResult override func becomeFirstResponder() -> Bool {
-//        self.layer.borderWidth = 1.0
-//        self.layer.customBorderColor = UIColor.buttonBorderC.selected
-//        self.superview?.bringSubview(toFront: self)
-//        
-//        return super.becomeFirstResponder()
-//    }
-//    
-//    @discardableResult override func resignFirstResponder() -> Bool {
-//        self.layer.borderWidth = 1.0
-//        self.layer.customBorderColor = UIColor.buttonBorderC.normal
-//        self.superview?.sendSubview(toBack: self)
-//        super.resignFirstResponder()
-//        return true
-//    }
-    
-//    override func textRect(forBounds bounds: CGRect) -> CGRect {
-//        return CGRect(x: bounds.origin.x + 15, y: bounds.origin.y + 2, width: bounds.size.width - 15, height: bounds.size.height - 2)
-//    }
-//
-//    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-//        return self.textRect(forBounds: bounds)
-//    }
 }
 
 extension CALayer {

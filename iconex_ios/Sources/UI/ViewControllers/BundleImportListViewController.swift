@@ -7,6 +7,7 @@
 
 import UIKit
 import BigInt
+import ICONKit
 
 class BundleImportCell: UITableViewCell {
     @IBOutlet weak var walletName: UILabel!
@@ -114,19 +115,46 @@ class BundleImportListViewController: BaseViewController {
             
             DispatchQueue.global(qos: .utility).async { [unowned self] in
                 if value.type.lowercased() == "icx" {
-                    let client = ICXClient(address: address)
-                    client.requestBalance { (response) in
-                        DispatchQueue.main.async {
-                            self._queue.remove(address)
-                            guard let value = response?.value else {
-                                self.tableView.reloadData()
-                                return
-                            }
-                            let balance = Tools.getICX(dic: value)
-                            self._balanceList[address] = balance
-                            self.tableView.reloadData()
+                    
+                    var service: ICONService {
+                        switch Config.host {
+                        case .main:
+                            return ICONService.main()
+                            
+                        case .dev:
+                            return ICONService.dev()
+                            
+                        case .local:
+                            return ICONService.local()
                         }
-                        }.fetch()
+                    }
+                    
+                    guard let hexBalance = service.getBalance(address: address) else {
+                        self._queue.remove(address)
+                        return
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self._queue.remove(address)
+                        if let balance = Tools.hexStringToBig(value: hexBalance) {
+                            self._balanceList[address] = balance
+                        }
+                        self.tableView.reloadData()
+                    }
+                    
+//                    let client = ICXClient(address: address)
+//                    client.requestBalance { (response) in
+//                        DispatchQueue.main.async {
+//                            self._queue.remove(address)
+//                            guard let value = response?.value else {
+//                                self.tableView.reloadData()
+//                                return
+//                            }
+//                            let balance = Tools.getICX(dic: value)
+//                            self._balanceList[address] = balance
+//                            self.tableView.reloadData()
+//                        }
+//                        }.fetch()
                 } else {
                     let client = EthereumClient(address: address)
                     

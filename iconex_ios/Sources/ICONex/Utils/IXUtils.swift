@@ -40,7 +40,6 @@ struct Tools {
     }
     
     static func bigToString(value bigInt: BigUInt, decimal: Int, _ below: Int = 0, _ remove: Bool = false, _ formatting: Bool = true) -> String {
-        
         let total = bigInt.quotientAndRemainder(dividingBy: BigUInt(10).power(decimal))
         let icx = String(total.quotient, radix: 10)
         var wei = String(total.remainder, radix: 10)
@@ -72,8 +71,12 @@ struct Tools {
     }
     
     static func hexStringToBig(value: String) -> BigUInt? {
+        var balance = value
+        if balance.hasPrefix("0x") {
+            balance = String(balance[balance.index(balance.startIndex, offsetBy: 2)..<balance.endIndex])
+        }
         
-        return BigUInt(value, radix: 16)
+        return BigUInt(balance, radix: 16)
     }
     
     static func getICXtoHEX(dic: [String: Any]) -> String {

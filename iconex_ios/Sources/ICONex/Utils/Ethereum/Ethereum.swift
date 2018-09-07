@@ -14,18 +14,22 @@ typealias ETHTokenResult = (name: String, symbol: String, decimal: Int)
 struct Ethereum {
     
     static var provider: URL {
-        if Config.isTestnet {
-            return URL(string: "https://api.myetherapi.com/rop")!
-        } else {
+        switch Config.host {
+        case .main:
             return URL(string: "https://api.myetherapi.com/eth")!
+            
+        case .dev, .local:
+            return URL(string: "https://api.myetherapi.com/rop")!
         }
     }
     
     static var etherScanURL: URL {
-        if Config.isTestnet {
-            return URL(string: "https://ropsten.etherscan.io/address")!
-        } else {
+        switch Config.host {
+        case .main:
             return URL(string: "https://etherscan.io/address")!
+            
+        case .dev, .local:
+            return URL(string: "https://ropsten.etherscan.io/address")!
         }
     }
     

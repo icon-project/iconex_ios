@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import Alamofire
+import ICONKit
 
 class ExchangeManager {
     static let sharedInstance = ExchangeManager()
@@ -18,36 +18,33 @@ class ExchangeManager {
     var currentExchange: String = "usd"
     
     func getExchangeList() {
-        
-        
-        
-        
-        
-        
-        let request = ICON.V2.ExchangeRequest(list: exchangeList)
-        
-        Alamofire.request(request).responseData { (response) in
-            switch response.result {
-            case .success:
-                guard let value = response.value else { return }
+        var tracker: Tracker {
+            switch Config.host {
+            case .main:
+                return Tracker.main()
                 
-                do {
-                    let decoder = JSONDecoder()
-                    let result = try decoder.decode(ExchangeResponse.self, from: value)
-                    
-                    for info in result.data {
-                        self.exchangeInfoList[info.tradeName] = info
-                    }
-//                    Log.Debug("exchange info : \(self.exchangeInfoList)")
-                } catch {
-                    Log.Debug("\(error)")
-                }
-                NotificationCenter.default.post(name: NSNotification.Name("kNotificationExchangeListDidChanged"), object: nil)
+            case .dev:
+                return Tracker.dev()
                 
-            default:
-                return
+            case .local:
+                return Tracker.local()
             }
         }
+        
+        guard let data = tracker.exchangeData(list: exchangeList) else { return }
+        
+        do {
+            let decoder = JSONDecoder()
+            let list = try decoder.decode([ExchangeInfo].self, from: data)
+            
+            for info in list {
+                self.exchangeInfoList[info.tradeName] = info
+            }
+        } catch {
+            
+        }
+        
+        NotificationCenter.default.post(name: NSNotification.Name("kNotificationExchangeListDidChanged"), object: nil)
     }
     
     func addToken(_ item: String) {

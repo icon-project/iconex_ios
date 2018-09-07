@@ -9,7 +9,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import BigInt
-import Alamofire
+import ICONKit
 
 class ICXSendViewController: UIViewController {
 
@@ -140,6 +140,8 @@ class ICXSendViewController: UIViewController {
             if self.validateBalance() {
                 
             }
+            
+            self.getStepPrice()
         }).disposed(by: disposeBag)
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
             guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
@@ -272,6 +274,7 @@ class ICXSendViewController: UIViewController {
             let value = self.sendInputBox.textField.text!
             let bigValue = Tools.stringToBigUInt(inputText: value)!
             let icxValue = Tools.bigToString(value: bigValue, decimal: 18, 18, false, true)
+            let limit = self.limitInputBox.textField.text!
             
             let to = self.addressInputBox.textField.text!
             
@@ -284,7 +287,38 @@ class ICXSendViewController: UIViewController {
             confirm.handler = {
                 
                 let withdraw = Tools.convertedHexString(value: value)!
+                let stepLimit = Tools.convertedHexString(value: limit)!
                 
+                var service: ICONService {
+                    switch Config.host {
+                    case .main:
+                        return ICONService.main()
+                        
+                    case .dev:
+                        return ICONService.dev()
+                        
+                    case .local:
+                        return ICONService.local()
+                    }
+                }
+                if let txHash = service.sendTransaction(privateKey: self.privateKey!, from: self.walletInfo!.address, to: to, value: withdraw, stepLimit: stepLimit) {
+                    
+                    Log.Debug("txHash: \(txHash)")
+                    
+                    confirm.dismiss(animated: true, completion: {
+                        Tools.toast(message: "Transfer.RequestComplete".localized)
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                } else {
+                    if let loadingView = confirm.cancelButton.viewWithTag(999) {
+                        loadingView.removeFromSuperview()
+                    }
+                    confirm.cancelButton.isEnabled = true
+                    confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
+                    Alert.Basic(message: "Common.CommonError").show(self)
+                }
+                
+                /*
                 let transaction = ICON.V2.SendTransactionRequest(id: getID(), from: self.walletInfo!.address, to: to, value: withdraw, nonce: "8367273", hexPrivateKey: self.privateKey!)
                 
                 self.sendInputBox.textField.text = nil
@@ -318,7 +352,7 @@ class ICXSendViewController: UIViewController {
                         return
                     }
                 })
-                
+                */
             }
             self.present(confirm, animated: true, completion: nil)
             
@@ -465,4 +499,30 @@ class ICXSendViewController: UIViewController {
 //        self.validateLimit()
     }
     
+    func getStepPrice() {
+        DispatchQueue.global().async {
+            
+            var icon: ICONService {
+                switch Config.host {
+                case .main:
+                    return ICONService.main()
+                    
+                case .dev:
+                    return ICONService.dev()
+                    
+                case .local:
+                    return ICONService.local()
+                }
+            }
+            
+            if let hexPrice = icon.getStepPrice() {
+                Log.Debug("Step Price = \(hexPrice)")
+                
+                DispatchQueue.main.async {
+                    guard let stepPrice = Tools.hexStringToBig(value: hexPrice) else { return }
+                    Log.Debug("gas price = \(stepPrice)")
+                }
+            }
+        }
+    }
 }

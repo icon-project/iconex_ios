@@ -9,6 +9,7 @@ import Foundation
 import BigInt
 import RealmSwift
 import web3swift
+import ICONKit
 
 typealias WalletBundleItem = (name: String, privKey: String, type: COINTYPE)
 
@@ -114,20 +115,29 @@ class WalletManager {
     }
     
     func getBalance(wallet: BaseWalletConvertible, completionHandler: @escaping (_ isSuccess: Bool) -> Void) {
+        var service: ICONService {
+            switch Config.host {
+            case .main:
+                return ICONService.main()
+                
+            case .dev:
+                return ICONService.dev()
+                
+            case .local:
+                return ICONService.local()
+            }
+        }
         
         if wallet.type == .icx {
-            let client = ICXClient(wallet: wallet as! ICXWallet)
-            
-            client.requestBalance { (response) in
-                guard let value = response?.value else {
-                    completionHandler(false)
-                    return
-                }
-                let balance = Tools.getICX(dic: value)
-                self.walletBalanceList[wallet.address!] = balance
+            if let address = wallet.address {
+                let optional = service.getBalance(address: address)
                 
-                completionHandler(true)
-            }.fetch()
+                if let hexBalance = optional, let balance = Tools.hexStringToBig(value: hexBalance) {
+                    self.walletBalanceList[wallet.address!] = balance
+                    
+                    completionHandler(true)
+                }
+            }
         } else if wallet.type == .eth {
             let client = EthereumClient(wallet: wallet as! ETHWallet)
             
@@ -144,27 +154,47 @@ class WalletManager {
     }
     
     func getWalletsBalance() {
+        var service: ICONService {
+            switch Config.host {
+            case .main:
+                return ICONService.main()
+                
+            case .dev:
+                return ICONService.dev()
+                
+            case .local:
+                return ICONService.local()
+            }
+        }
+        
+        let queue = DispatchQueue(label: "kICGetBalanceQueue", qos: .utility, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        
         for info in self.walletInfoList {
             guard let wallet = WManager.loadWalletBy(info: info), let address = wallet.address else { continue }
             if _queued.contains(address) { continue }
             
             _queued.insert(address)
             if info.type == .icx {
-                let client = ICXClient(wallet: wallet as! ICXWallet)
-                
-                client.requestBalance(completionHandler: { (response) in
-                    
-                    DispatchQueue.main.async {
-                        if response?.error == nil {
-                            let balance = Tools.getICX(dic: response!.value!)
-                            self.walletBalanceList[wallet.address!] = balance
+                queue.async {
+                    if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
+                        
+                        let optinal = service.getBalance(wallet: iconWallet)
+                        
+                        DispatchQueue.main.async {
+                            if let hexBalance = optinal, let balance = Tools.hexStringToBig(value: hexBalance) {
+                                
+                                self.walletBalanceList[wallet.address!] = balance
+                                Log.Debug("Balance: \(wallet.address!), \(balance)")
+                            }
+                            
+                            self._queued.remove(address)
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
                         }
                         
+                    } else {
                         self._queued.remove(address)
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
                     }
-                })
-                balanceOperation.loadQueue.addOperation(client)
+                }
             } else if info.type == .eth {
                 guard let wallet = WManager.loadWalletBy(info: info) else { continue }
                 let client = EthereumClient(wallet: wallet as! ETHWallet)
@@ -374,7 +404,7 @@ class WalletCreator {
         let data = bundle.priv.data(using: .utf8)!
         do {
             if bundle.type == "icx" {
-                let icx = ICXWallet(alias: "temp", from: data)
+                guard let icx = ICXWallet(alias: "temp", from: data) else { return false }
                 newPrivateKey = try icx.extractICXPrivateKey(password: password)
             } else if bundle.type == "eth" {
                 let eth = ETHWallet(alias: "temp", from: data)
@@ -411,7 +441,7 @@ class WalletCreator {
             do {
                 switch value.type {
                 case "icx":
-                    let icxWallet = ICXWallet(alias: value.name, from: data)
+                    guard let icxWallet = ICXWallet(alias: value.name, from: data) else { continue }
                     try icxWallet.saveICXWallet()
                     Log.Debug("Save ICX wallet which was named as \"\(value.name)\"")
                     
@@ -440,58 +470,17 @@ class WalletCreator {
         WManager.loadWalletList()
     }
     
-    func validateKeystore<T>(urlOfData: URL) throws -> (T, COINTYPE) {
-        
+    func validateKeystore(urlOfData: URL) throws -> (Codable, COINTYPE) {
         let content = try Data(contentsOf: urlOfData)
         
-        if let icxKeystore = validatePBKDF2Keystore(from: content) {
-            
-            let address = icxKeystore.address
-            
-            if address.hasPrefix("hx") && address.length == 42 {
-                if !WManager.canSaveWallet(address: icxKeystore.address) { throw IXError.duplicateAddress }
-                return (icxKeystore as! T, .icx)
-            } else if address.hasPrefix("0x") && address.length == 42 {
-                if !WManager.canSaveWallet(address: icxKeystore.address) { throw IXError.duplicateAddress }
-                
-                let ethWallet = ETHWallet(alias: "temp", from: content)
-                let ethKeystore = ethWallet.keyStore!
-                
-                return (ethKeystore as! T, .eth)
-            }
-        } else if let ethKeystore = validateSCRYPTKeystore(from: content) {
-            var address = ethKeystore.address
-            
-            if address.hasPrefix("0x") {
-                if !WManager.canSaveWallet(address: address) { throw IXError.duplicateAddress }
-                return (ethKeystore as! T, .eth)
-            } else {
-                address = address.add0xPrefix()
-                if !WManager.canSaveWallet(address: address) { throw IXError.duplicateAddress }
-                return (ethKeystore as! T, .eth)
-            }
-        }
+        let decoder = JSONDecoder()
         
-        throw IXError.invalidFiles
-    }
-    
-    func validatePBKDF2Keystore(from: Data) -> ICON.Keystore? {
-        let decoder = JSONDecoder()
-        do {
-            let decoded = try decoder.decode(ICON.Keystore.self, from: from)
-            return decoded
-        } catch {
-            return nil
-        }
-    }
-    
-    func validateSCRYPTKeystore(from: Data) -> ETH.KeyStore? {
-        let decoder = JSONDecoder()
-        do {
-            let decoded = try decoder.decode(ETH.KeyStore.self, from: from)
-            return decoded
-        } catch {
-            return nil
+        let keystore = try decoder.decode(ICON.Keystore.self, from: content)
+        
+        if keystore.coinType != nil || keystore.address.hasPrefix("hx") {
+            return (keystore, .icx)
+        } else {
+            return (keystore, .eth)
         }
     }
     
@@ -652,27 +641,27 @@ struct TokenExportBundle: Codable {
     var symbol: String
 }
 
-protocol BalanceInfoConvertible {
-    var walletType: COINTYPE { get set }
-    var address: String { get set }
-    var name: String { get set }
-    var value: String? { get set }
-    var resopnse: IXJSONResponse? { get set }
-}
-
-class BalanceInfo: BalanceInfoConvertible {
-    var walletType: COINTYPE
-    var address: String
-    var name: String
-    var value: String?
-    var resopnse: IXJSONResponse?
-    
-    init(type: COINTYPE, name: String, address: String) {
-        self.name = name
-        self.walletType = type
-        self.address = address
-    }
-}
+//protocol BalanceInfoConvertible {
+//    var walletType: COINTYPE { get set }
+//    var address: String { get set }
+//    var name: String { get set }
+//    var value: String? { get set }
+//    var resopnse: IXJSONResponse? { get set }
+//}
+//
+//class BalanceInfo: BalanceInfoConvertible {
+//    var walletType: COINTYPE
+//    var address: String
+//    var name: String
+//    var value: String?
+//    var resopnse: IXJSONResponse?
+//    
+//    init(type: COINTYPE, name: String, address: String) {
+//        self.name = name
+//        self.walletType = type
+//        self.address = address
+//    }
+//}
 
 class WalletBalanceOperation {
     lazy var loadQueue: OperationQueue = {

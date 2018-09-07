@@ -6,10 +6,10 @@
 //
 
 import Foundation
+import ICONKit
 
 class ICXWallet: BaseWallet {
-    
-    var keyStore: ICON.Keystore?
+    var keystore: ICON.Keystore?
     
     override init() {
         super.init(type: .icx)
@@ -20,24 +20,38 @@ class ICXWallet: BaseWallet {
         self.alias = alias
     }
     
-    convenience init(alias: String, from: Data) {
-        self.init()
-        self.alias = alias
-        __rawData = from
-        
-        let decoder = JSONDecoder()
-        self.keyStore = try! decoder.decode(ICON.Keystore.self, from: from)
-        self.address = keyStore?.address
+    convenience init?(alias: String, from: Data) {
+        do {
+            let decoder = JSONDecoder()
+            let keystore = try decoder.decode(ICON.Keystore.self, from: from)
+            
+            self.init()
+            self.alias = alias
+            self.__rawData = from
+            self.type = .icx
+            self.keystore = keystore
+            self.address = keystore.address
+        } catch {
+            return nil
+        }
     }
     
     convenience init(keystore: ICON.Keystore) {
         self.init()
-        
-        self.keyStore = keystore
-        
+
         let encoder = JSONEncoder()
         __rawData = try! encoder.encode(keystore)
         self.address = keystore.address
+    }
+    
+    convenience init(privateKey: String, password: String) {
+        self.init()
+        
+        do {
+            try generateICXKeyStore(privateKey: privateKey, password: password)
+        } catch {
+            return
+        }
     }
     
     func exportBundle() -> WalletExportBundle {
@@ -53,55 +67,44 @@ class ICXWallet: BaseWallet {
         
         let iconWallet = ICON.Wallet(privateKey: privateKey, password: password)
         
-        guard let keystore = iconWallet.keystore else { throw IXError.generateKey }
+        guard let rawData = iconWallet.rawData else { throw ICError.generateKey }
         
-        self.keyStore = keystore
-        
-        let encoder = JSONEncoder()
-        
-        let encoded = try encoder.encode(keystore)
-        self.__rawData = encoded
+        self.__rawData = rawData
+        self.address = iconWallet.address
         
         return true
     }
     
     func changePassword(old: String, new: String) throws {
-        guard let keystore = self.keyStore else { throw IXError.emptyWallet }
+        guard let rawData = self.__rawData else { throw ICError.empty }
         
-        let iconWallet = ICON.Wallet(keystore: keystore)
+        guard let iconWallet = ICON.Wallet(rawData: rawData) else { throw ICError.malformed }
         
-        guard iconWallet.changePassword(current: old, new: new) else { throw IXError.keyMalformed }
+        try iconWallet.changePassword(current: old, new: new)
         
-        let encoder = JSONEncoder()
-        
-        let encoded = try encoder.encode(iconWallet.keystore!)
-        self.__rawData = encoded
+        self.__rawData = iconWallet.rawData
     }
     
     func saveICXWallet() throws {
         
-        try DB.saveWallet(name: self.alias!, address: self.keyStore!.address, type: "icx", rawData: self.__rawData)
+        try DB.saveWallet(name: self.alias!, address: self.address!, type: "icx", rawData: self.__rawData)
         
     }
     
     func extractICXPrivateKey(password: String) throws -> String {
-        guard let keyStore = self.keyStore else {
-            throw IXError.emptyWallet
-        }
+        guard let rawData = self.__rawData else { throw ICError.empty }
         
-        let iconWallet = ICON.Wallet(keystore: keyStore)
+        guard let iconWallet = ICON.Wallet(rawData: rawData) else { throw ICError.malformed }
         
-        guard let privateKey = iconWallet.extractPrivateKey(password: password) else { throw IXError.keyMalformed }
+        let privateKey = try iconWallet.extractPrivateKey(password: password)
         
         return privateKey
     }
     
     func getBackupKeystoreFilepath() throws -> URL {
-        let encoder = JSONEncoder()
-        let encoded = try encoder.encode(keyStore)
-        Log.Debug("encoded: " + String(data: encoded, encoding: .utf8)!)
+        guard let rawData = __rawData else { throw ICError.empty }
         
-        let filename = "UTC--" + Date.currentZuluTime + "--" + keyStore!.address
+        let filename = "UTC--" + Date.currentZuluTime + "--" + self.address!
         
         let fm = FileManager.default
         
@@ -113,7 +116,7 @@ class ICXWallet: BaseWallet {
         }
         
         let filePath = path.appendingPathComponent(filename)
-        try encoded.write(to: filePath, options: .atomic)
+        try rawData.write(to: filePath, options: .atomic)
         
         return filePath
     }

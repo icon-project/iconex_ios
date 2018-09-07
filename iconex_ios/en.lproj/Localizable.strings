@@ -270,6 +270,8 @@
 "AppInfo.Latest" = "Latest version";
 "AppInfo.Update" = "Update";
 "AppInfo.License" = "OpenSource License";
+"Version.Update" = "Update";
+"Version.Message" = "Please update to the latest version of ICONex.";
 
 "Retry.NoNetwork" = "No internet connection";
 "Retry.CheckConnectivity" = "Check your mobile data or Wi-Fi and try again";

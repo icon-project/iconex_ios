@@ -8,6 +8,7 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import Toaster
 
 class StepTwoViewController: UIViewController {
     @IBOutlet weak var headerLabel1: UILabel!
@@ -170,11 +171,14 @@ class StepTwoViewController: UIViewController {
             let password = password1.textField.text!
             try WCreator.createWallet(alias: alias, password: password, completion: {
                 WManager.loadWalletList()
+                
+                delegate.nextStep(currentStep: .two)
             })
         } catch {
             Log.Error(error)
+            
+            Toast(text: "Error.Wallet.CreateFailed".localized).show()
         }
-        delegate.nextStep(currentStep: .two)
     }
     
     func allValidation() {

@@ -9,6 +9,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import MobileCoreServices
+import ICONKit
 
 class ImportTwoViewController: UIViewController {
 
@@ -72,20 +73,14 @@ class ImportTwoViewController: UIViewController {
         inputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.inputBox.setState(.normal, "")
         }).disposed(by: disposeBag)
-        inputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            self.nextButton.isEnabled = self.validation()
-        }).disposed(by: disposeBag)
-        inputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        inputBox.textField.rx.controlEvent([UIControlEvents.editingDidEndOnExit]).subscribe(onNext: { [unowned self] in
             self.nextButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         
         inputBox2.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.inputBox2.setState(.normal, "")
         }).disposed(by: disposeBag)
-        inputBox2.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            self.nextButton.isEnabled = self.validation()
-        }).disposed(by: disposeBag)
-        inputBox2.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        inputBox2.textField.rx.controlEvent([UIControlEvents.editingDidEndOnExit]).subscribe(onNext: { [unowned self] in
             self.nextButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         
@@ -302,7 +297,9 @@ class ImportTwoViewController: UIViewController {
                 }
                 
                 if item.1 == .icx {
-                    let icxKeystore = item.0 as! ICON.Keystore
+                    let keystore = item.0
+                    
+                    let icxKeystore = keystore as! ICON.Keystore
                     let icxWallet = ICXWallet(keystore: icxKeystore)
                     do {
                         let _ = try icxWallet.extractICXPrivateKey(password: inputBox.textField.text!)
@@ -318,6 +315,7 @@ class ImportTwoViewController: UIViewController {
                         inputBox.setState(.error, "Error.Password".localized)
                         nextButton.isEnabled = false
                     }
+                    
                 } else if item.1 == .eth {
                     let ethKeystore = item.0 as! ETH.KeyStore
                     let ethWallet = ETHWallet(keystore: ethKeystore)

@@ -272,6 +272,8 @@
 "AppInfo.Latest" = "최신 버전";
 "AppInfo.Update" = "업데이트";
 "AppInfo.License" = "오픈소스 라이센스";
+"Version.Update" = "업데이트";
+"Version.Message" = "ICONex 최신 버전으로 업데이트를 진행해 주세요.";
 
 "Retry.NoNetwork" = "네트워크에 접속 할 수 없습니다.";
 "Retry.CheckConnectivity" = "연결 상태 확인 후 다시 시도해주세요.";

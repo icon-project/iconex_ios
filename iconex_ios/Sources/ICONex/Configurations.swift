@@ -8,10 +8,17 @@
 import Foundation
 
 struct Configuration {
+    public enum HOST {
+        case main
+        case dev
+        case local
+    }
+    
+    
     static var general = Configuration()
     
     var isDebug: Bool = false
-    var isTestnet: Bool = false
+    var host: HOST = .main
     var faqLink: String {
         return "https://docs.google.com/spreadsheets/d/1HiT98wqEpFgF2d98eJefQfH7xK4KPPxNDiiXg3AcJ7w/edit#gid=0"
     }
