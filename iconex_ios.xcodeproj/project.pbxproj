@@ -1014,6 +1014,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = iconex_ios/iconex_ios.entitlements;
@@ -1026,9 +1027,53 @@
 					"$(inherited)",
 					"\"${SDKROOT}/usr/include/CommonCrypto\"",
 				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NSHC/**";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NSHC/**",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"Alamofire_Synchronous\"",
+					"-framework",
+					"\"BigInt\"",
+					"-framework",
+					"\"CryptoSwift\"",
+					"-framework",
+					"\"ICONKit\"",
+					"-framework",
+					"\"LicensesViewController\"",
+					"-framework",
+					"\"PromiseKit\"",
+					"-framework",
+					"\"Realm\"",
+					"-framework",
+					"\"RealmSwift\"",
+					"-framework",
+					"\"Result\"",
+					"-framework",
+					"\"RxCocoa\"",
+					"-framework",
+					"\"RxSwift\"",
+					"-framework",
+					"\"SipHash\"",
+					"-framework",
+					"\"Toaster\"",
+					"-framework",
+					"\"scrypt\"",
+					"-framework",
+					"\"secp256k1_ios\"",
+					"-framework",
+					"\"web3swift\"",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D NSHC";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1a0890d8-ae44-4ec0-b5a1-1707ed9d2ccc";
@@ -1038,6 +1083,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -1045,6 +1091,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = iconex_ios/iconex_ios.entitlements;
@@ -1057,9 +1104,53 @@
 					"$(inherited)",
 					"\"${SDKROOT}/usr/include/CommonCrypto\"",
 				);
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/NSHC/**";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/NSHC/**",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-framework",
+					"\"Alamofire\"",
+					"-framework",
+					"\"Alamofire_Synchronous\"",
+					"-framework",
+					"\"BigInt\"",
+					"-framework",
+					"\"CryptoSwift\"",
+					"-framework",
+					"\"ICONKit\"",
+					"-framework",
+					"\"LicensesViewController\"",
+					"-framework",
+					"\"PromiseKit\"",
+					"-framework",
+					"\"Realm\"",
+					"-framework",
+					"\"RealmSwift\"",
+					"-framework",
+					"\"Result\"",
+					"-framework",
+					"\"RxCocoa\"",
+					"-framework",
+					"\"RxSwift\"",
+					"-framework",
+					"\"SipHash\"",
+					"-framework",
+					"\"Toaster\"",
+					"-framework",
+					"\"scrypt\"",
+					"-framework",
+					"\"secp256k1_ios\"",
+					"-framework",
+					"\"web3swift\"",
+				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D NSHC";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "9206590a-1a5b-408a-8716-9326fa1813b6";
@@ -1068,6 +1159,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};

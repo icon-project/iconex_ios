@@ -6,6 +6,5 @@
 #import "NSBundle+Language.h"
 #import <CommonCrypto/CommonCrypto.h>
 
-#if NSHC
-#import "IXSWrapper.h"
-#endif
+//#import "IXSWrapper.h"
+
