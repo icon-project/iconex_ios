@@ -193,6 +193,8 @@
 "Transfer.EnterGasLimit" = "Enter gas limit (number)";
 "Transfer.GasPrice" = "Gas Price";
 "Transfer.Data" = "Data (Optional)";
+"Transfer.DataTitle" = "Data";
+"Transfer.InputType" = "Input Type";
 "Transfer.EnterData" = "Enter data";
 "Transfer.EstimatedFee" = "Estimated Maximum Fee";
 "Transfer.EstimatedBalance" = "Estimated Balance";

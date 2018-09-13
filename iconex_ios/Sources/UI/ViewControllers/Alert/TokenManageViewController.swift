@@ -196,7 +196,7 @@ class TokenManageViewController: UIViewController {
                         self.selectedToken?.name = self.tokenInputBox.textField.text!
                         self.selectedToken?.symbol = self.symbolInputBox.textField.text!
                         self.selectedToken?.decimal = Int(self.decimalInputBox.textField.text!)!
-                        try Ethereum.modifyToken(tokenInfo: self.selectedToken!)
+                        try DB.modifyToken(tokenInfo: self.selectedToken!)
                         self.navTitle.text = self.tokenInputBox.textField.text
                     } catch {
                         Log.Debug("\(error)")
@@ -214,7 +214,7 @@ class TokenManageViewController: UIViewController {
                 guard let token = self.selectedToken else { return }
                 Alert.Confirm(message: "\"" + token.name + "\"" + "Alert.Token.Remove".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
                     do {
-                        try Ethereum.removeToken(tokenInfo: self.selectedToken!)
+                        try DB.removeToken(tokenInfo: self.selectedToken!)
                         WManager.loadWalletList()
                         
                         self.dismiss(animated: true, completion: nil)
@@ -227,10 +227,11 @@ class TokenManageViewController: UIViewController {
             }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            guard let token = self.selectedToken else { return }
+            token.name = self.tokenInputBox.textField.text!
+            
             do {
-                guard let token = self.selectedToken else { return }
-                token.name = self.tokenInputBox.textField.text!
-                try Ethereum.addToken(tokenInfo: token)
+                try DB.addToken(tokenInfo: token)
                 EManager.addToken(token.symbol)
                 WManager.loadWalletList()
                 EManager.getExchangeList()
@@ -329,9 +330,14 @@ class TokenManageViewController: UIViewController {
             
             WManager.getIRCTokenInfo(walletAddress: self.walletInfo!.address, contractAddress: address, completion: { (tokenResult) in
                 if let tokenInfo = tokenResult {
+                    
+                    let decimal = String(BigUInt(tokenInfo.decimal.prefix0xRemoved(), radix: 16)!)
+                    
                     self.tokenInputBox.textField.text = tokenInfo.name
                     self.symbolInputBox.textField.text = tokenInfo.symbol
-                    self.decimalInputBox.textField.text = tokenInfo.decimal
+                    self.decimalInputBox.textField.text = decimal
+                    
+                    self.selectedToken = TokenInfo(name: tokenInfo.name, defaultName: tokenInfo.name, symbol: tokenInfo.symbol, decimal: Int(decimal)!, defaultDecimal: Int(decimal)!, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
                 } else {
                     Alert.Basic(message: "Error.Token.ConnectionRefused".localized).show(self)
                 }

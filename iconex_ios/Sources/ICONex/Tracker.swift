@@ -78,11 +78,12 @@ open class Tracker {
         
         switch result {
         case .success(let response):
-            guard let data = response["data"] as? [[String: String]] else { return nil }
+            guard let data = response["data"] as? [[String: String?]] else { return nil }
             return try? JSONSerialization.data(withJSONObject: data, options: [])
             
-        default:
-            break
+        case .failure(let error):
+            Log.Debug("exchange error - \(error)")
+            
         }
         return nil
     }

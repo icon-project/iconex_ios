@@ -72,7 +72,7 @@ class SwapStepThreeViewController: BaseViewController {
                 do {
                     if let token = self.token {
                         token.swapAddress = newWallet.address
-                        try Ethereum.modifyToken(tokenInfo: token)
+                        try DB.modifyToken(tokenInfo: token)
                     }
                     
                     try newWallet.saveICXWallet()

@@ -211,7 +211,7 @@ class ETHWallet: BaseWallet {
             }
             
             EManager.addToken(icxInfo.symbol)
-            try Ethereum.addToken(tokenInfo: icxInfo)
+            try DB.addToken(tokenInfo: icxInfo)
         }
     }
     

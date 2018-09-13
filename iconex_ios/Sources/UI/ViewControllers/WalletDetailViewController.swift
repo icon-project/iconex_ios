@@ -250,47 +250,22 @@ class WalletDetailViewController: UIViewController {
             if let value = WManager.walletBalanceList[wallet.address!] {
                 balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
             }
-            if Preference.shared.navSelected == 0 {
-                info.append((name: wallet.type == .eth ? "Ethereum" : "ICON", balance: balance, symbol: wallet.type.rawValue.uppercased()))
-                
-                if wallet.type == .eth {
-                    let eth = wallet as! ETHWallet
-                    
-                    if let tokenList = eth.tokens {
-                        for token in tokenList {
-                            var tokenBalance = "-"
-                            if let balances = WManager.tokenBalanceList[token.dependedAddress] {
-                                if let bigBalance = balances[token.contractAddress] {
-                                    tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
-                                }
-                            }
-                            
-                            info.append((name: token.name, balance: tokenBalance, symbol: token.symbol))
+            
+            info.append((name: wallet.type == .eth ? "Ethereum" : "ICON", balance: balance, symbol: wallet.type.rawValue.uppercased()))
+            
+            if let tokenList = wallet.tokens {
+                for token in tokenList {
+                    var tokenBalance = "-"
+                    if let balances = WManager.tokenBalanceList[token.dependedAddress] {
+                        if let bigBalance = balances[token.contractAddress] {
+                            tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
                         }
                     }
-                }
-                
-            } else {
-                if wallet.type == .eth {
-                    info.append((name: "Ethereum", balance: balance, symbol: "ETH"))
-                    let eth = wallet as! ETHWallet
                     
-                    if let tokenList = eth.tokens {
-                        for token in tokenList {
-                            var tokenBalance = "-"
-                            if let balances = WManager.tokenBalanceList[token.dependedAddress] {
-                                if let bigBalance = balances[token.contractAddress] {
-                                    tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
-                                }
-                            }
-                            info.append((name: token.name, balance: tokenBalance, symbol: token.symbol))
-                        }
-                    }
-                } else {
-                    info.append((name: "ICON", balance: balance, symbol: "ICX"))
+                    info.append((name: token.name, balance: tokenBalance, symbol: token.symbol))
                 }
             }
-            
+
             let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
             selectable.present(from: self, title: "Detail.SelectCoin".localized, info: info)
             selectable.handler = ({ [unowned self] selectedIndex in
@@ -298,8 +273,7 @@ class WalletDetailViewController: UIViewController {
                 if selectedIndex == 0 {
                     self.token = nil
                 } else {
-                    let eth = wallet as! ETHWallet
-                    let token = eth.tokens![selectedIndex - 1]
+                    let token = wallet.tokens![selectedIndex - 1]
                     self.token = token
                 }
                 self.initializeUI()
@@ -529,40 +503,44 @@ class WalletDetailViewController: UIViewController {
             if let token = self.token {
                 topSelectLabel.text = token.name
                 unitLabel.text = token.symbol
-                etherContainer.isHidden = false
                 
-                if wallet.type == .eth && token.symbol.lowercased() == "icx" {
-                    swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-                        if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) {
-                            
-                            let ethWallet = WManager.loadWalletBy(info: wallet) as! ETHWallet
-                            
-                            guard let walletBalance = ethWallet.balance, walletBalance != BigUInt(0) else {
-                                Alert.Basic(message: "Error.Swap.NoETH".localized).show(self)
-                                return
-                            }
-                            
-                            Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, privateKey) in
+                if wallet.type == .eth {
+                    if token.symbol.lowercased() == "icx" {
+                        etherContainer.isHidden = false
+                        swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+                            if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) {
                                 
-                                SwapManager.sharedInstance.walletInfo = self.walletInfo
-                                SwapManager.sharedInstance.privateKey = privateKey
+                                let ethWallet = WManager.loadWalletBy(info: wallet)!
                                 
-                                if let swapAddress = token.swapAddress, WManager.walletInfoList.filter({ $0.address == swapAddress }).first != nil {
-                                    let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
-                                    self.present(swap, animated: true, completion: nil)
-                                } else {
-                                    let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
-                                    self.present(swap, animated: true, completion: nil)
+                                guard let walletBalance = ethWallet.balance, walletBalance != BigUInt(0) else {
+                                    Alert.Basic(message: "Error.Swap.NoETH".localized).show(self)
+                                    return
                                 }
                                 
-                            }).show(self)
-                            
-                        } else {
-                            Alert.Basic(message: "Error.Swap.NoICX".localized).show(self)
-                        }
-                    }).disposed(by: disposeBag)
-                    
-                    self.swapButton.isHidden = false
+                                Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, privateKey) in
+                                    
+                                    SwapManager.sharedInstance.walletInfo = self.walletInfo
+                                    SwapManager.sharedInstance.privateKey = privateKey
+                                    
+                                    if let swapAddress = token.swapAddress, WManager.walletInfoList.filter({ $0.address == swapAddress }).first != nil {
+                                        let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
+                                        self.present(swap, animated: true, completion: nil)
+                                    } else {
+                                        let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
+                                        self.present(swap, animated: true, completion: nil)
+                                    }
+                                    
+                                }).show(self)
+                                
+                            } else {
+                                Alert.Basic(message: "Error.Swap.NoICX".localized).show(self)
+                            }
+                        }).disposed(by: disposeBag)
+                        
+                        self.swapButton.isHidden = false
+                    }
+                } else {
+                    etherContainer.isHidden = true
                 }
             } else {
                 if wallet.type == .icx {
@@ -783,7 +761,6 @@ class WalletDetailViewController: UIViewController {
     
     func loadExchanged() {
         exchangeSelectLabel.text = exchangeType.uppercased()
-        
         
         if let token = self.token {
             guard let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress] else {

@@ -2152,30 +2152,23 @@
                                                         <color key="textColor" red="0.65098039215686276" green="0.65098039215686276" blue="0.65098039215686276" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9AZ-U0-o56">
-                                                        <rect key="frame" x="0.0" y="0.0" width="76" height="30"/>
-                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.90196078431372551" green="0.90196078431372551" blue="0.90196078431372551" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="cOU-8H-r9V" secondAttribute="trailing" constant="20" id="1op-z6-wzv"/>
                                                     <constraint firstItem="cOU-8H-r9V" firstAttribute="leading" secondItem="azO-eo-O0b" secondAttribute="leading" constant="20" id="2lN-Ep-1IT"/>
-                                                    <constraint firstAttribute="trailing" secondItem="9AZ-U0-o56" secondAttribute="trailing" id="BXv-l7-U2I"/>
                                                     <constraint firstItem="cOU-8H-r9V" firstAttribute="centerY" secondItem="azO-eo-O0b" secondAttribute="centerY" id="NOu-aG-xl3"/>
                                                     <constraint firstAttribute="height" constant="30" id="VVe-iC-dhj"/>
-                                                    <constraint firstAttribute="bottom" secondItem="9AZ-U0-o56" secondAttribute="bottom" id="YKU-kt-bbF"/>
-                                                    <constraint firstItem="9AZ-U0-o56" firstAttribute="top" secondItem="azO-eo-O0b" secondAttribute="top" id="gqG-nQ-ZPh"/>
-                                                    <constraint firstItem="9AZ-U0-o56" firstAttribute="leading" secondItem="azO-eo-O0b" secondAttribute="leading" id="jZP-f1-l4S"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/500" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kp1-FM-0KS">
-                                                <rect key="frame" x="320" y="20.5" width="31" height="16"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/512KB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kp1-FM-0KS">
+                                                <rect key="frame" x="302.5" y="20.5" width="48.5" height="16"/>
                                                 <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="14"/>
                                                 <color key="textColor" red="0.5725490196078431" green="0.5725490196078431" blue="0.5725490196078431" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N3F-w5-cpZ">
-                                                <rect key="frame" x="311" y="21" width="9" height="15.5"/>
+                                                <rect key="frame" x="293.5" y="21" width="9" height="15.5"/>
                                                 <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -2229,14 +2222,14 @@
                         <viewLayoutGuide key="safeArea" id="Do7-kM-DqJ"/>
                     </view>
                     <connections>
+                        <outlet property="bottomConstraint" destination="HA0-S0-iNe" id="JSp-wH-am5"/>
                         <outlet property="closeButton" destination="ckF-Om-JBw" id="l5d-6z-xsI"/>
                         <outlet property="doneButton" destination="ih0-mv-55t" id="mNm-z3-eAQ"/>
                         <outlet property="lengthLabel" destination="N3F-w5-cpZ" id="Xf4-tk-5jl"/>
                         <outlet property="navTitle" destination="YPp-os-KCV" id="iRb-T1-sPz"/>
-                        <outlet property="stepButton" destination="9AZ-U0-o56" id="bc5-j6-Ahe"/>
-                        <outlet property="stepLabel" destination="cOU-8H-r9V" id="5dG-Gn-cAU"/>
                         <outlet property="stepView" destination="azO-eo-O0b" id="gEC-hb-zKl"/>
                         <outlet property="textView" destination="eWm-iP-Su3" id="XWg-tP-mLp"/>
+                        <outlet property="typeLabel" destination="cOU-8H-r9V" id="8nP-DN-p2u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zvZ-f3-UMx" userLabel="First Responder" sceneMemberID="firstResponder"/>

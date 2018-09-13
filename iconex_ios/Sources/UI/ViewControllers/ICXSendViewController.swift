@@ -84,6 +84,9 @@ class ICXSendViewController: UIViewController {
     var minLimit: BigUInt?
     var maxLimit: BigUInt?
     
+    var selectedDataType: Int = 0
+    var dataSource: String?
+    
     let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -185,7 +188,6 @@ class ICXSendViewController: UIViewController {
             self.view.endEditing(false)
         }).disposed(by: disposeBag)
         
-        
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.sendInputBox.setState(.focus)
         }).disposed(by: disposeBag)
@@ -265,10 +267,12 @@ class ICXSendViewController: UIViewController {
             self.addressInputBox.setState(.focus)
         }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            self.validateAddress()
+            let validate = self.validation()
+            self.sendButton.isEnabled = validate
         }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            self.validation()
+            let validate = self.validation()
+            self.sendButton.isEnabled = validate
         }).disposed(by: disposeBag)
         
         selectAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -276,9 +280,9 @@ class ICXSendViewController: UIViewController {
             addressManage.walletInfo = self.walletInfo
             addressManage.selectHandler = { (address) in
                 self.addressInputBox.textField.text = address
-                self.validateAddress()
+                self.sendButton.isEnabled = self.validation()
                 addressManage.dismiss(animated: true, completion: {
-                    self.addressInputBox.textField.becomeFirstResponder()
+                    
                 })
             }
             
@@ -322,11 +326,18 @@ class ICXSendViewController: UIViewController {
         }).disposed(by: disposeBag)
         
         dataInputControl.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            let dataInput = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXDataInputView") as! ICXDataInputViewController
-            dataInput.handler = { [unowned self] data in
-                Log.Debug("Input data: \(data)")
+            let selectData = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "DataInputSourceView") as! DataInputSourceViewController
+            selectData.handler = { [unowned self] selected in
+                self.selectedDataType = selected
+                let dataInput = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXDataInputView") as! ICXDataInputViewController
+                dataInput.type = selected
+                dataInput.handler = { [unowned self] data in
+                    Log.Debug("Input data: \(data)")
+                    self.dataSource = data
+                }
+                self.present(dataInput, animated: true, completion: nil)
             }
-            self.present(dataInput, animated: true, completion: nil)
+            selectData.present(from: self)
         }).disposed(by: disposeBag)
         
         keyboardHeight().observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] (height: CGFloat) in
@@ -384,7 +395,6 @@ class ICXSendViewController: UIViewController {
                     confirm.confirmButton.isEnabled = true
                     confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
                     Tools.toast(message: "Error.CommonError".localized)
-                    
                 }
             }
             self.present(confirm, animated: true, completion: nil)
@@ -567,10 +577,9 @@ class ICXSendViewController: UIViewController {
         return true
     }
     
-    func validation() {
-        self.validateBalance()
-        self.validateAddress()
-        self.validateLimit()
+    @discardableResult
+    func validation() -> Bool {
+        return self.validateBalance() && self.validateAddress() && self.validateLimit()
     }
     
     func getStepPrice() {

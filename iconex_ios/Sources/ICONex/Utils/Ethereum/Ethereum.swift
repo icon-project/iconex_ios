@@ -329,18 +329,6 @@ struct Ethereum {
             }
         }
     }
-    
-    static func addToken(tokenInfo: TokenInfo) throws {
-        try DB.addToken(tokenInfo: tokenInfo)
-    }
-    
-    static func modifyToken(tokenInfo: TokenInfo) throws {
-        try DB.modifyToken(tokenInfo: tokenInfo)
-    }
-    
-    static func removeToken(tokenInfo: TokenInfo) throws {
-        try DB.removeToken(tokenInfo: tokenInfo)
-    }
 }
 
 extension String {

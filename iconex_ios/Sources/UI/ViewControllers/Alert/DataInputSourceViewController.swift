@@ -13,11 +13,35 @@ class DataInputSourceViewController: BaseViewController {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var sheetTitle: UILabel!
     @IBOutlet weak var typeTitle: UILabel!
+    @IBOutlet weak var stackContainer: UIView!
     @IBOutlet weak var utf8Button: UIButton!
     @IBOutlet weak var hexButton: UIButton!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    var selected = 0
+    var selected = 0 {
+        willSet {
+            switch newValue {
+            case 0:
+                utf8Button.isSelected = true
+                utf8Button.backgroundColor = UIColor.black
+                utf8Button.setTitleColor(UIColor.white, for: .highlighted)
+                hexButton.isSelected = false
+                hexButton.backgroundColor = UIColor.white
+                hexButton.setTitleColor(UIColor.black, for: .highlighted)
+                
+            case 1:
+                utf8Button.isSelected = false
+                utf8Button.backgroundColor = UIColor.white
+                utf8Button.setTitleColor(UIColor.black, for: .highlighted)
+                hexButton.isSelected = true
+                hexButton.backgroundColor = UIColor.black
+                hexButton.setTitleColor(UIColor.white, for: .highlighted)
+                
+            default:
+                break
+            }
+        }
+    }
     
     var handler: ((Int) -> Void)?
     
@@ -40,16 +64,37 @@ class DataInputSourceViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.dismiss(animated: true, completion: {
+            self.close(completion: {
                 if let handler = self.handler {
                     handler(self.selected)
                 }
             })
         }).disposed(by: disposeBag)
+        
+        utf8Button.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            self.selected = 0
+        }).disposed(by: disposeBag)
+        
+        hexButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            self.selected = 1
+        }).disposed(by: disposeBag)
+        
+        self.selected = 0
     }
     
     func initializeUI() {
+        stackContainer.border(1.0, UIColor.black)
+        stackContainer.corner(4)
         
+        sheetTitle.text = "Transfer.DataTitle".localized
+        confirmButton.setTitle("Common.Confirm".localized, for: .normal)
+        typeTitle.text = "Transfer.InputType".localized
+        utf8Button.setTitle("UTF-8", for: .normal)
+        utf8Button.setTitleColor(UIColor.black, for: .normal)
+        utf8Button.setTitleColor(UIColor.white, for: .selected)
+        hexButton.setTitle("HEX", for: .normal)
+        hexButton.setTitleColor(UIColor.black, for: .normal)
+        hexButton.setTitleColor(UIColor.white, for: .selected)
     }
 }
 

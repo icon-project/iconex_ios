@@ -290,7 +290,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
             
             var existsList = [Double]()
             for walletInfo in wallets {
-                guard let eth = WManager.loadWalletBy(info: walletInfo) as? ETHWallet, let item = eth.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let excD = Double(exchanged) else { continue }
+                guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let excD = Double(exchanged) else { continue }
                 existsList.append(excD)
             }
             
@@ -448,17 +448,18 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 
             }).disposed(by: cell.disposeBag)
         } else {
-            if self.walletInfo!.type == .icx {
-                let icxWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ICXWallet
-                cell.coinNameLabel.text = "ICON"
-                cell.coinTypeLabel.text = "ICX"
-                if let value = WManager.walletBalanceList[icxWallet.address!] {
+            let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
+            
+            if indexPath.row == 0 {
+                cell.coinNameLabel.text = self.walletInfo!.type == .eth ? "Ethereum" : "ICON"
+                cell.coinTypeLabel.text = self.walletInfo!.type == .eth ? "ETH" : "ICX"
+                if let value = WManager.walletBalanceList[wallet.address!] {
                     let valueString = Tools.bigToString(value: value, decimal: 18, 4)
                     cell.coinValueLabel.text = valueString
                     
-                    let type = "icx"
+                    let type = self.walletInfo!.type == .eth ? "eth" : "icx"
                     
-                    guard let exchanged = Tools.balanceToExchange(value, from: type, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: icxWallet.decimal) else {
+                    guard let exchanged = Tools.balanceToExchange(value, from: type, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4) else {
                         cell.isLoading = !WManager.isBalanceLoadCompleted
                         Tools.rotateAnimation(inView: cell.indicator)
                         return cell
@@ -470,85 +471,60 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                     Tools.rotateAnimation(inView: cell.indicator)
                 }
                 
-            } else if self.walletInfo!.type == .eth {
-                let ethWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ETHWallet
+            } else {
+                let token = wallet.tokens![indexPath.row - 1]
+                cell.coinNameLabel.text = token.name
+                cell.coinTypeLabel.text = token.symbol
+                guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress] else {
+                    cell.isLoading = !WManager.isBalanceLoadCompleted
+                    Tools.rotateAnimation(inView: cell.indicator)
+                    return cell
+                }
+                guard let balance = tokenBalances[token.contractAddress] else {
+                    cell.isLoading = !WManager.isBalanceLoadCompleted
+                    Tools.rotateAnimation(inView: cell.indicator)
+                    return cell
+                }
                 
-                if indexPath.row == 0 {
-                    cell.coinNameLabel.text = "Ethereum"
-                    cell.coinTypeLabel.text = "ETH"
-                    if let value = WManager.walletBalanceList[ethWallet.address!] {
-                        let valueString = Tools.bigToString(value: value, decimal: 18, 4)
-                        cell.coinValueLabel.text = valueString
-                        
-                        let type = "eth"
-                        
-                        guard let exchanged = Tools.balanceToExchange(value, from: type, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4) else {
-                            cell.isLoading = !WManager.isBalanceLoadCompleted
-                            Tools.rotateAnimation(inView: cell.indicator)
-                            return cell
-                        }
-                        cell.exchangeValueLabel.text = exchanged.currencySeparated()
-                        cell.isLoading = false
-                    } else {
-                        cell.isLoading = !WManager.isBalanceLoadCompleted
-                        Tools.rotateAnimation(inView: cell.indicator)
+                cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4)
+                let tag = token.symbol.lowercased()
+                cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated()
+                cell.isLoading = false
+                cell.swapBack.isHidden = !token.needSwap
+                cell.swapLabel.text = "Swap.Swap".localized
+                cell.swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+                    let app = UIApplication.shared.delegate as! AppDelegate
+                    guard let root = app.window?.rootViewController else {
+                        return
                     }
                     
-                } else {
-                    let token = ethWallet.tokens![indexPath.row - 1]
-                    cell.coinNameLabel.text = token.name
-                    cell.coinTypeLabel.text = token.symbol
-                    guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress] else {
-                        cell.isLoading = !WManager.isBalanceLoadCompleted
-                        Tools.rotateAnimation(inView: cell.indicator)
-                        return cell
-                    }
-                    guard let balance = tokenBalances[token.contractAddress] else {
-                        cell.isLoading = !WManager.isBalanceLoadCompleted
-                        Tools.rotateAnimation(inView: cell.indicator)
-                        return cell
-                    }
-                    
-                    cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4)
-                    let tag = token.symbol.lowercased()
-                    cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated()
-                    cell.isLoading = false
-                    cell.swapBack.isHidden = !token.needSwap
-                    cell.swapLabel.text = "Swap.Swap".localized
-                    cell.swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-                        let app = UIApplication.shared.delegate as! AppDelegate
-                        guard let root = app.window?.rootViewController else {
+                    if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) {
+                        
+                        guard let walletBalance = wallet.balance, walletBalance != BigUInt(0) else {
+                            Alert.Basic(message: "Error.Swap.NoETH".localized).show(root)
                             return
                         }
                         
-                        if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) {
+                        Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, privateKey) in
                             
-                            guard let walletBalance = ethWallet.balance, walletBalance != BigUInt(0) else {
-                                Alert.Basic(message: "Error.Swap.NoETH".localized).show(root)
-                                return
+                            SwapManager.sharedInstance.walletInfo = self.walletInfo
+                            SwapManager.sharedInstance.privateKey = privateKey
+                            
+                            if let swapAddress = token.swapAddress, WManager.walletInfoList.filter({ $0.address.lowercased() == swapAddress.lowercased() }).first != nil {
+                                let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
+                                root.present(swap, animated: true, completion: nil)
+                            } else {
+                                let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
+                                root.present(swap, animated: true, completion: nil)
                             }
                             
-                            Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, privateKey) in
-                                
-                                SwapManager.sharedInstance.walletInfo = self.walletInfo
-                                SwapManager.sharedInstance.privateKey = privateKey
-                                
-                                if let swapAddress = token.swapAddress, WManager.walletInfoList.filter({ $0.address.lowercased() == swapAddress.lowercased() }).first != nil {
-                                    let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
-                                    root.present(swap, animated: true, completion: nil)
-                                } else {
-                                    let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
-                                    root.present(swap, animated: true, completion: nil)
-                                }
-                                
-                            }).show(root)
-                            
-                        } else {
-                            Alert.Basic(message: "Error.Swap.NoICX".localized).show(root)
-                        }
+                        }).show(root)
                         
-                    }).disposed(by: cell.disposeBag)
-                }
+                    } else {
+                        Alert.Basic(message: "Error.Swap.NoICX".localized).show(root)
+                    }
+                    
+                }).disposed(by: cell.disposeBag)
             }
         }
         
@@ -567,8 +543,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 if let walletInfo = self.walletInfo {
                     guard let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
                     
-                    let eth = wallet as! ETHWallet
-                    let token = eth.tokens![indexPath.row - 1]
+                    let token = wallet.tokens![indexPath.row - 1]
                     
                     let detail = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletDetailView") as! WalletDetailViewController
                     detail.walletInfo = walletInfo

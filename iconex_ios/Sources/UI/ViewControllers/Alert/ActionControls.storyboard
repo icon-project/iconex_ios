@@ -530,6 +530,7 @@
                         <outlet property="containerView" destination="DOD-y8-Sfh" id="bTB-nS-uzp"/>
                         <outlet property="hexButton" destination="FLd-W7-5XP" id="PG5-In-Hzz"/>
                         <outlet property="sheetTitle" destination="I5V-kO-m92" id="gtB-If-IpD"/>
+                        <outlet property="stackContainer" destination="n8O-zM-f20" id="eXb-fT-c0Q"/>
                         <outlet property="typeTitle" destination="Vef-0a-2mn" id="58P-MJ-RJT"/>
                         <outlet property="utf8Button" destination="N5f-ge-zyc" id="AU4-Dr-7ve"/>
                     </connections>
