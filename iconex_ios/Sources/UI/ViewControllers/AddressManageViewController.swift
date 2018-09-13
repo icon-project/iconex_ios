@@ -46,7 +46,6 @@ class AddressManageViewController: UIViewController {
     
     @IBOutlet weak var segmentView: UIView!
     @IBOutlet weak var segAddressButton: UIButton!
-    @IBOutlet weak var segRecentButton: UIButton!
     @IBOutlet weak var segWalletButton: UIButton!
     
     @IBOutlet weak var tableView: UITableView!
@@ -69,21 +68,12 @@ class AddressManageViewController: UIViewController {
             switch selectedIndex {
             case 0:
                 segAddressButton.isSelected = true
-                segRecentButton.isSelected = false
                 segWalletButton.isSelected = false
                 editButton.isHidden = false
                 addContainer.isHidden = false
                 
             case 1:
                 segAddressButton.isSelected = false
-                segRecentButton.isSelected = true
-                segWalletButton.isSelected = false
-                editButton.isHidden = true
-                addContainer.isHidden = true
-                
-            case 2:
-                segAddressButton.isSelected = false
-                segRecentButton.isSelected = false
                 segWalletButton.isSelected = true
                 editButton.isHidden = true
                 tableView.isEditing = false
@@ -101,9 +91,6 @@ class AddressManageViewController: UIViewController {
                 noItemContainer.isHidden = addressBookList.count != 0
                 noItemLabel.text = "AddressBook.Empty".localized
                 noItemLabel.textColor = UIColor(38, 38, 38, 0.5)
-            } else if selectedIndex == 1 {
-                noItemContainer.isHidden = recentList.count != 0
-                noItemLabel.text = "AddressBook.NoRecentHistory".localized
             } else {
                 noItemLabel.text = "AddressBook.NoWallets".localized
                 noItemContainer.isHidden = walletList.count != 0
@@ -138,15 +125,11 @@ class AddressManageViewController: UIViewController {
         
         let addressNormal = NSAttributedString(string: "AddressBook.AddressBook".localized, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.black])
         let addressSelected = NSAttributedString(string: "AddressBook.AddressBook".localized, attributes: [.font: UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.bold), .foregroundColor: UIColor.black])
-        let recentNormal = NSAttributedString(string: "AddressBook.Recent".localized, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.black])
-        let recentSelected = NSAttributedString(string: "AddressBook.Recent".localized, attributes: [.font: UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.bold), .foregroundColor: UIColor.black])
         let walletNormal = NSAttributedString(string: "AddressBook.MyWallet".localized, attributes: [.font: UIFont.systemFont(ofSize: 15), .foregroundColor: UIColor.black])
         let walletSelected = NSAttributedString(string: "AddressBook.MyWallet".localized, attributes: [.font: UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.bold), .foregroundColor: UIColor.black])
         
         segAddressButton.setAttributedTitle(addressNormal, for: .normal)
         segAddressButton.setAttributedTitle(addressSelected, for: .selected)
-        segRecentButton.setAttributedTitle(recentNormal, for: .normal)
-        segRecentButton.setAttributedTitle(recentSelected, for: .selected)
         segWalletButton.setAttributedTitle(walletNormal, for: .normal)
         segWalletButton.setAttributedTitle(walletSelected, for: .selected)
         
@@ -171,11 +154,8 @@ class AddressManageViewController: UIViewController {
         segAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedIndex = 0
         }).disposed(by: disposeBag)
-        segRecentButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.selectedIndex = 1
-        }).disposed(by: disposeBag)
         segWalletButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.selectedIndex = 2
+            self.selectedIndex = 1
         }).disposed(by: disposeBag)
         
         addButton.rx.controlEvent(UIControlEvents.touchUpInside)
@@ -197,7 +177,7 @@ class AddressManageViewController: UIViewController {
             view.removeFromSuperview()
         }
         
-        let width = segmentView.frame.size.width / 3
+        let width = segmentView.frame.size.width / 2
         let y = segmentView.frame.size.height - 4
         let underView = UIView(frame: CGRect(x: width * CGFloat(index), y: y, width: width, height: 4))
         underView.backgroundColor = UIColor.black
@@ -226,8 +206,6 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if selectedIndex == 0 {
             return addressBookList.count
-        } else if selectedIndex == 1 {
-            return recentList.count
         } else {
             return walletList.count
         }
@@ -252,30 +230,6 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
                     self.loadWalletList()
                 }).show(self)
             }).disposed(by: cell.disposeBag)
-            
-            return cell
-        } else if selectedIndex == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RecentAddressCell", for: indexPath) as! RecentAddressCell
-            
-            let info = recentList[indexPath.row]
-            
-            cell.addressTitle.text = info.name == "" ? "Error.NoName".localized : info.name
-            if let addressInfo = addressBookList.filter({ $0.address == info.address }).first {
-                cell.addressTitle.text = addressInfo.name
-            }
-            
-            cell.addressLabel.text = info.address
-            cell.addressLabel.textColor = UIColor(230, 92, 103)
-            cell.amountLabel.text = "-" + info.hexAmount
-            cell.amountLabel.textColor = UIColor(230, 92, 103)
-            cell.dateLabel.text = info.date.toString(format: "yyyy-MM-dd")
-            cell.dateLabel.textColor = UIColor(230, 92, 103)
-            cell.unitLabel.textColor = UIColor(230, 92, 103)
-            if let tokenSymbol = info.tokenSymbol {
-                cell.unitLabel.text = tokenSymbol.uppercased()
-            } else {
-                cell.unitLabel.text = self.walletInfo.type.rawValue.uppercased()
-            }
             
             return cell
         } else {
@@ -317,10 +271,6 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
             address = addressInfo.address
             
         case 1:
-            let recentInfo = recentList[indexPath.row]
-            address = recentInfo.address
-            
-        case 2:
             let wallet = walletList[indexPath.row]
             address = wallet.address
             

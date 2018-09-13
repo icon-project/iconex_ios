@@ -9,6 +9,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 import web3swift
+import ICONKit
+import BigInt
 
 enum ManageMode {
     case add, modify
@@ -274,7 +276,7 @@ class TokenManageViewController: UIViewController {
         if manageMode == .add {
             isChecked = true
             
-            if let tokenListInfo = Ethereum.tokenListInfo(contract: address) {
+            if let tokenListInfo = DB.findToken(address) {
                 self.symbolInputBox.textField.text = tokenListInfo.symbol
                 self.symbolInputBox.setState(.normal, "")
                 self.decimalInputBox.textField.text = String(tokenListInfo.decimal)
@@ -283,35 +285,59 @@ class TokenManageViewController: UIViewController {
                 self.actionButton.isEnabled = self.validation()
             } else {
                 addressInputBox.isLoading = true
-                Ethereum.requestTokenInformation(tokenContractAddress: address, myAddress: self.walletInfo!.address, completion: { [unowned self] result in
-                    self.addressInputBox.isLoading = false
-                    if let token = result {
-                        
-                        guard token.symbol != "" else {
+                
+                if self.walletInfo!.type == .eth {
+                    Ethereum.requestTokenInformation(tokenContractAddress: address, myAddress: self.walletInfo!.address, completion: { [unowned self] result in
+                        self.addressInputBox.isLoading = false
+                        if let token = result {
+                            
+                            guard token.symbol != "" else {
+                                self.isChecked = false
+                                Alert.Basic(message: "Error.Token.ConnectionRefused".localized).show(self)
+                                return
+                            }
+                            
+                            self.tokenInputBox.textField.text = token.name
+                            self.tokenInputBox.setState(.normal, nil)
+                            self.symbolInputBox.textField.text = token.symbol
+                            self.symbolInputBox.setState(.normal, nil)
+                            self.decimalInputBox.textField.text = String(token.decimal)
+                            
+                            self.defaultDecimal = token.decimal
+                            
+                            self.selectedToken = TokenInfo(name: token.name, defaultName: token.name, symbol: token.symbol, decimal: token.decimal, defaultDecimal: token.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
+                            
+                            self.actionButton.isEnabled = self.validation()
+                            
+                        } else {
                             self.isChecked = false
                             Alert.Basic(message: "Error.Token.ConnectionRefused".localized).show(self)
                             return
                         }
-                        
-                        self.tokenInputBox.textField.text = token.name
-                        self.tokenInputBox.setState(.normal, nil)
-                        self.symbolInputBox.textField.text = token.symbol
-                        self.symbolInputBox.setState(.normal, nil)
-                        self.decimalInputBox.textField.text = String(token.decimal)
-                        
-                        self.defaultDecimal = token.decimal
-                        
-                        self.selectedToken = TokenInfo(name: token.name, defaultName: token.name, symbol: token.symbol, decimal: token.decimal, defaultDecimal: token.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
-                        
-                        self.actionButton.isEnabled = self.validation()
-                        
-                    } else {
-                        self.isChecked = false
-                        Alert.Basic(message: "Error.Token.ConnectionRefused".localized).show(self)
-                        return
-                    }
-                })
+                    })
+                } else {
+                    
+                    getIRCTokenInfo(address: address)
+                }
             }
+        }
+    }
+    
+    func getIRCTokenInfo(address: String) {
+        DispatchQueue.global().async {
+            
+            
+            WManager.getIRCTokenInfo(walletAddress: self.walletInfo!.address, contractAddress: address, completion: { (tokenResult) in
+                if let tokenInfo = tokenResult {
+                    self.tokenInputBox.textField.text = tokenInfo.name
+                    self.symbolInputBox.textField.text = tokenInfo.symbol
+                    self.decimalInputBox.textField.text = tokenInfo.decimal
+                } else {
+                    Alert.Basic(message: "Error.Token.ConnectionRefused".localized).show(self)
+                }
+                self.addressInputBox.isLoading = false
+                self.isChecked = false
+            })
         }
     }
     
@@ -320,14 +346,28 @@ class TokenManageViewController: UIViewController {
             addressInputBox.setState(.error, "Error.Address".localized)
             return false
         }
-        guard Validator.validateETHAddress(address: address) else {
-            addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized)
-            return false
-        }
-        let parentWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ETHWallet
-        if !parentWallet.canSaveToken(contractAddress: address) {
-            addressInputBox.setState(.error, "Error.Token.Duplicated".localized)
-            return false
+        
+        guard let walletInfo = self.walletInfo else { return false }
+        if walletInfo.type == .eth {
+            guard Validator.validateETHAddress(address: address) else {
+                addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized)
+                return false
+            }
+            let parentWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ETHWallet
+            if !parentWallet.canSaveToken(contractAddress: address) {
+                addressInputBox.setState(.error, "Error.Token.Duplicated".localized)
+                return false
+            }
+        } else {
+            guard Validator.validateIRCAddress(address: address) else {
+                addressInputBox.setState(.error, "Error.Address.ICX.Invalid".localized)
+                return false
+            }
+            let parentWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ICXWallet
+            if !parentWallet.canSaveToken(contractAddress: address) {
+                addressInputBox.setState(.error, "Error.Token.Duplicated".localized)
+                return false
+            }
         }
         
         addressInputBox.setState(.normal, "")

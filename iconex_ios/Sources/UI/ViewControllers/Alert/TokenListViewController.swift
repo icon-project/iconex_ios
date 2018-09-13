@@ -39,7 +39,7 @@ class TokenListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let wallet = WManager.loadWalletBy(info: walletInfo!) as! ETHWallet
+        let wallet = WManager.loadWalletBy(info: walletInfo!)!
         noItemContainer.isHidden = wallet.tokens!.count != 0
         tableView.reloadData()
     }
@@ -74,14 +74,14 @@ extension TokenListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let wallet = WManager.loadWalletBy(info: self.walletInfo!) as? ETHWallet
+        let wallet = WManager.loadWalletBy(info: self.walletInfo!)
         return wallet!.tokens!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TokenListCell", for: indexPath) as! TokenListCell
         
-        let wallet = WManager.loadWalletBy(info: self.walletInfo!) as? ETHWallet
+        let wallet = WManager.loadWalletBy(info: self.walletInfo!)
         let tokenInfo = wallet!.tokens![indexPath.row]
         cell.tokenLabel.text = tokenInfo.name
         
@@ -93,7 +93,7 @@ extension TokenListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let wallet = WManager.loadWalletBy(info: self.walletInfo!) as? ETHWallet
+        let wallet = WManager.loadWalletBy(info: self.walletInfo!)
         
         guard let tokens = wallet?.tokens else {
             return

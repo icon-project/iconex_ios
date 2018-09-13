@@ -373,7 +373,7 @@ class ETHSendViewController: UIViewController {
     func initializeUI() {
         sendInputBox.setState(.normal)
         sendInputBox.setType(.numeric)
-        sendInputBox.textField.placeholder = "Transfer.TransferAmount".localized
+        sendInputBox.textField.placeholder = "Transfer.EnterAmount".localized
         sendInputBox.textField.keyboardType = .decimalPad
         
         add1.setTitle("+10", for: .normal)
@@ -572,7 +572,7 @@ class ETHSendViewController: UIViewController {
         
         let set = CharacterSet(charactersIn: "0123456789ABCDEF").inverted
         
-        guard dataText.uppercased().rangeOfCharacter(from: set) == nil else {
+        guard dataText.prefix0xRemoved().uppercased().rangeOfCharacter(from: set) == nil else {
             if showError { dataInputBox.setState(.error, "Error.InputData".localized) }
             
             return false

@@ -16,10 +16,10 @@ struct Ethereum {
     static var provider: URL {
         switch Config.host {
         case .main:
-            return URL(string: "https://api.myetherapi.com/eth")!
+            return URL(string: "https://eth.solidwallet.io/")!
             
         case .dev, .local:
-            return URL(string: "https://api.myetherapi.com/rop")!
+            return URL(string: "https://ropsten.infura.io")!
         }
     }
     
@@ -340,23 +340,6 @@ struct Ethereum {
     
     static func removeToken(tokenInfo: TokenInfo) throws {
         try DB.removeToken(tokenInfo: tokenInfo)
-    }
-    
-    static func tokenList(dependedAddress: String) throws -> [TokenInfo] {
-        
-        let modelList = try DB.tokenList(dependedAddress: dependedAddress)
-        
-        var infoList = [TokenInfo]()
-        for model in modelList {
-            let info = TokenInfo(token: model)
-            infoList.append(info)
-        }
-        
-        return infoList
-    }
-    
-    static func tokenListInfo(contract: String) -> TokenListInfo? {
-        return DB.findToken(contract)
     }
 }
 

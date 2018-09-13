@@ -169,10 +169,14 @@ class StepTwoViewController: UIViewController {
         do {
             let alias = walletNameBox.textField.text!
             let password = password1.textField.text!
-            try WCreator.createWallet(alias: alias, password: password, completion: {
+            try WCreator.createWallet(alias: alias, password: password, completion: { [unowned self] in
                 WManager.loadWalletList()
                 
                 delegate.nextStep(currentStep: .two)
+                
+                self.walletNameBox.textField.text = nil
+                self.password1.textField.text = nil
+                self.password2.textField.text = nil
             })
         } catch {
             Log.Error(error)

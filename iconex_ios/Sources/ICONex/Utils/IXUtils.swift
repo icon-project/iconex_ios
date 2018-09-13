@@ -436,6 +436,12 @@ struct Validator {
         return result.evaluate(with: address)
     }
     
+    static func validateIRCAddress(address: String) -> Bool {
+        let pattern = "^(cx[a-zA-Z0-9]{40})$"
+        let result = NSPredicate(format: "SELF MATCHES %@", pattern)
+        return result.evaluate(with: address)
+    }
+    
     static func validateETHAddress(address: String) -> Bool {
         let pattern = "^(0x[a-zA-Z0-9]{40})$"
         let result = NSPredicate(format: "SELF MATCHES %@", pattern)

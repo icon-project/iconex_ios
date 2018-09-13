@@ -22,6 +22,19 @@ class WalletManager {
     
     static let sharedInstance = WalletManager()
     
+    public var service: ICONService {
+        switch Config.host {
+        case .main:
+            return ICONService(provider: "http://13.209.103.183:9000", nid: "0x1")
+            
+        case .dev:
+            return ICONService(provider: "https://testwallet.icon.foundation", nid: "0x2")
+            
+        case .local:
+            return ICONService(provider: "https://wallet.icon.foundation", nid: "0x3")
+        }
+    }
+    
     private init () {
         loadWalletList()
         DB.importLocalTokenList()
@@ -115,28 +128,20 @@ class WalletManager {
     }
     
     func getBalance(wallet: BaseWalletConvertible, completionHandler: @escaping (_ isSuccess: Bool) -> Void) {
-        var service: ICONService {
-            switch Config.host {
-            case .main:
-                return ICONService.main()
-                
-            case .dev:
-                return ICONService.dev()
-                
-            case .local:
-                return ICONService.local()
-            }
-        }
         
         if wallet.type == .icx {
             if let address = wallet.address {
-                let optional = service.getBalance(address: address)
+                let result = service.getBalance(address: address)
                 
-                if let hexBalance = optional, let balance = Tools.hexStringToBig(value: hexBalance) {
+                switch result {
+                case .success(let balance):
                     self.walletBalanceList[wallet.address!] = balance
                     
-                    completionHandler(true)
+                case .failure(let error):
+                    Log.Debug("Error - \(error)")
                 }
+                
+                completionHandler(true)
             }
         } else if wallet.type == .eth {
             let client = EthereumClient(wallet: wallet as! ETHWallet)
@@ -154,19 +159,6 @@ class WalletManager {
     }
     
     func getWalletsBalance() {
-        var service: ICONService {
-            switch Config.host {
-            case .main:
-                return ICONService.main()
-                
-            case .dev:
-                return ICONService.dev()
-                
-            case .local:
-                return ICONService.local()
-            }
-        }
-        
         let queue = DispatchQueue(label: "kICGetBalanceQueue", qos: .utility, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         
         for info in self.walletInfoList {
@@ -178,13 +170,15 @@ class WalletManager {
                 queue.async {
                     if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
                         
-                        let optinal = service.getBalance(wallet: iconWallet)
+                        let result = WManager.service.getBalance(wallet: iconWallet)
                         
                         DispatchQueue.main.async {
-                            if let hexBalance = optinal, let balance = Tools.hexStringToBig(value: hexBalance) {
-                                
+                            switch result {
+                            case .success(let balance):
                                 self.walletBalanceList[wallet.address!] = balance
-                                Log.Debug("Balance: \(wallet.address!), \(balance)")
+                                
+                            case .failure(let error):
+                                Log.Debug("Error - \(error)")
                             }
                             
                             self._queued.remove(address)
@@ -277,6 +271,60 @@ class WalletManager {
     
     func coinInfoListBy(token: TokenInfo) -> CoinInfo? {
         return DB.walletListBy(token: token)
+    }
+}
+
+extension WalletManager {
+    public func getIRCTokenInfo(walletAddress: String, contractAddress: String, completion: @escaping (((name: String, symbol: String, decimal: String)?) -> ())) {
+        
+        DispatchQueue.global().async {
+            let result = self.service.getScoreAPI(address: contractAddress)
+            
+            if let api = result.value {
+                let list = api.result!
+                let hasName = list.filter { $0.type == "function" && $0.name == "name" }.first
+                let hasDecimal = list.filter { $0.type == "function" && $0.name == "decimals" }.first
+                let hastotalSupply = list.filter { $0.type == "function" && $0.name == "totalSupply" }.first
+                if (hasName != nil && hasDecimal != nil && hastotalSupply != nil) {
+                    let result = self.service.call(from: walletAddress, to: contractAddress, dataType: "call", method: "name")
+                    
+                    guard let name = result.value as? String else {
+                        DispatchQueue.main.async {
+                            completion(nil)
+                        }
+                        return
+                    }
+                    Log.Debug("name - \(name)")
+                    
+                    let decimals = self.service.call(from: walletAddress, to: contractAddress, dataType: "call", method: "decimals")
+                    guard let decimal = decimals.value as? String else {
+                        DispatchQueue.main.async {
+                            completion(nil)
+                        }
+                        return
+                    }
+                    Log.Debug("decimal - \(decimal)")
+                    
+                    let symbols = self.service.call(from: walletAddress, to: contractAddress, dataType: "call", method: "symbol")
+                    guard let symbol = symbols.value as? String else {
+                        DispatchQueue.main.async {
+                            completion(nil)
+                        }
+                        return
+                    }
+                    Log.Debug("symbol - \(symbol)")
+                    
+                    DispatchQueue.main.async {
+                        completion((name: name, symbol: symbol, decimal: decimal))
+                    }
+                    
+                } else {
+                    DispatchQueue.main.async {
+                        completion(nil)
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -257,17 +257,22 @@ struct DB {
         do {
             let realm = try Realm()
             
-            guard let model = realm.objects(WalletModel.self).filter({ $0.type == type.rawValue.lowercased() && $0.address == address }).first else { return nil }
+            guard let model = realm.objects(WalletModel.self).filter({ $0.type == type.rawValue.lowercased() && $0.address.lowercased() == address.lowercased() }).first else { return nil }
             
             if type == .icx {
                 guard let icx = ICXWallet(alias: model.name, from: model.rawData!) else { return nil }
                 icx.createdDate = model.createdDate
+                
+                let modelList = try DB.tokenList(dependedAddress: address)
+                
+                icx.tokens = modelList
+                
                 return icx
             } else {
                 let eth = ETHWallet(alias: model.name, from: model.rawData!)
                 eth.createdDate = model.createdDate
                 
-                let modelList = try Ethereum.tokenList(dependedAddress: eth.address!)
+                let modelList = try DB.tokenList(dependedAddress: address)
                 
                 eth.tokens = modelList
                 
@@ -414,12 +419,18 @@ struct DB {
         return Array(dic.values)
     }
     
-    static func tokenList(dependedAddress: String) throws -> [TokenModel] {
+    static func tokenList(dependedAddress: String) throws -> [TokenInfo] {
         let realm = try Realm()
         
-        let list = realm.objects(TokenModel.self).sorted(byKeyPath: "id").filter({ $0.dependedAddress == dependedAddress })
+        let list = realm.objects(TokenModel.self).sorted(byKeyPath: "id").filter({ $0.dependedAddress.lowercased() == dependedAddress.lowercased() })
         
-        return Array(list)
+        var infoList = [TokenInfo]()
+        for model in list {
+            let info = TokenInfo(token: model)
+            infoList.append(info)
+        }
+        
+        return infoList
     }
     
     static func tokenListBy(symbol: String) -> [TokenModel] {

@@ -61,11 +61,11 @@ class WalletDetailMenuController: UIViewController {
     func initializeUI() {
         titleLabel.text = "Main.Menu.WalletManage".localized
         let wallet = WManager.loadWalletBy(info: walletInfo)!
-        if walletInfo.type == .icx {
-            self.items = [(#imageLiteral(resourceName: "icEdit"), wallet.alias!, 0), (#imageLiteral(resourceName: "icBackup"), "Main.Menu.Backup".localized, 2), (#imageLiteral(resourceName: "icSideLock"), "Main.Menu.ChangePassword".localized, 3), (#imageLiteral(resourceName: "icDelete"), "Main.Menu.RemoveWallet".localized, 4)]
-        } else if walletInfo.type == .eth {
+//        if walletInfo.type == .icx {
+//            self.items = [(#imageLiteral(resourceName: "icEdit"), wallet.alias!, 0), (#imageLiteral(resourceName: "icBackup"), "Main.Menu.Backup".localized, 2), (#imageLiteral(resourceName: "icSideLock"), "Main.Menu.ChangePassword".localized, 3), (#imageLiteral(resourceName: "icDelete"), "Main.Menu.RemoveWallet".localized, 4)]
+//        } else if walletInfo.type == .eth {
             self.items = [(#imageLiteral(resourceName: "icEdit"), wallet.alias!, 0), (#imageLiteral(resourceName: "icSetting"), "Main.Menu.TokenManage".localized, 1), (#imageLiteral(resourceName: "icBackup"), "Wallet.Backup".localized, 2), (#imageLiteral(resourceName: "icSideLock"), "Main.Menu.ChangePassword".localized, 3), (#imageLiteral(resourceName: "icDelete"), "Main.Menu.RemoveWallet".localized, 4)]
-        }
+//        }
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 1))
         tableHeight.constant = CGFloat(self.items!.count * 60)// + CGFloat(46 + 16)
         

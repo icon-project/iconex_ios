@@ -62,6 +62,11 @@ class ICXWallet: BaseWallet {
         return export
     }
     
+    func canSaveToken(contractAddress: String) -> Bool {
+        guard let tokenList = tokens else { return true }
+        return tokenList.filter { $0.contractAddress == contractAddress }.count == 0
+    }
+    
     @discardableResult
     func generateICXKeyStore(privateKey: String, password: String) throws -> Bool {
         

@@ -113,49 +113,25 @@ class BundleImportListViewController: BaseViewController {
             
             self._queue.insert(address)
             
-            DispatchQueue.global(qos: .utility).async { [unowned self] in
-                if value.type.lowercased() == "icx" {
-                    
-                    var service: ICONService {
-                        switch Config.host {
-                        case .main:
-                            return ICONService.main()
-                            
-                        case .dev:
-                            return ICONService.dev()
-                            
-                        case .local:
-                            return ICONService.local()
-                        }
+            if value.type.lowercased() == "icx" {
+                let result = WManager.service.getBalance(address: address)
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let balance):
+                        self._balanceList[address] = balance
+                        
+                    case .failure(let error):
+                        Log.Debug("Error - \(error)")
                     }
                     
-                    guard let hexBalance = service.getBalance(address: address) else {
-                        self._queue.remove(address)
-                        return
-                    }
+                    self._queue.remove(address)
                     
-                    DispatchQueue.main.async {
-                        self._queue.remove(address)
-                        if let balance = Tools.hexStringToBig(value: hexBalance) {
-                            self._balanceList[address] = balance
-                        }
-                        self.tableView.reloadData()
-                    }
-                    
-//                    let client = ICXClient(address: address)
-//                    client.requestBalance { (response) in
-//                        DispatchQueue.main.async {
-//                            self._queue.remove(address)
-//                            guard let value = response?.value else {
-//                                self.tableView.reloadData()
-//                                return
-//                            }
-//                            let balance = Tools.getICX(dic: value)
-//                            self._balanceList[address] = balance
-//                            self.tableView.reloadData()
-//                        }
-//                        }.fetch()
-                } else {
+                    self.tableView.reloadData()
+                }
+                
+            } else {
+                
+                DispatchQueue.global(qos: .utility).async { [unowned self] in
                     let client = EthereumClient(address: address)
                     
                     client.requestBalance { (optionalValue, _) in

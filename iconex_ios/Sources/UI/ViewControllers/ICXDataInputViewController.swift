@@ -17,6 +17,8 @@ class ICXDataInputViewController: BaseViewController {
     @IBOutlet weak var stepButton: UIButton!
     @IBOutlet weak var lengthLabel: UILabel!
     
+    var handler: ((String) -> Void)?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,10 +33,20 @@ class ICXDataInputViewController: BaseViewController {
     }
     
     func initializeUI() {
-        
+        self.textView.text = nil
     }
     
     func initialize() {
+        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
         
+        doneButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            if let handler = self.handler, let text = self.textView.text {
+                handler(text)
+            }
+            
+            self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
     }
 }

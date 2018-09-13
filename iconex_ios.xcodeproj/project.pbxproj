@@ -10,6 +10,7 @@
 		A3E8F6903199357E7FC0119E /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D4053326206CD1700040BE89 /* TransactionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4053325206CD1700040BE89 /* TransactionDetailViewController.swift */; };
+		D40FA038214792BB00CB8E6E /* SECPWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA036214792BB00CB8E6E /* SECPWrapper.m */; };
 		D40FAF4B205FDC80008C2CDA /* WalletBackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40FAF4A205FDC80008C2CDA /* WalletBackupViewController.swift */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
 		D4173603203E5674008857A1 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4173602203E5674008857A1 /* WelcomeViewController.swift */; };
@@ -73,7 +74,6 @@
 		D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4728A122007040B00E0A899 /* AppDelegate.swift */; };
 		D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4728A192007040B00E0A899 /* Assets.xcassets */; };
 		D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */; };
-		D4728A2D20073BE000E0A899 /* SECPWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D4728A2C20073BE000E0A899 /* SECPWrapper.m */; };
 		D477CC2C205F554700797A82 /* ConfirmActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D477CC2B205F554700797A82 /* ConfirmActionViewController.swift */; };
 		D477CC2E205F778600797A82 /* SendConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D477CC2D205F778600797A82 /* SendConfirmViewController.swift */; };
 		D47A03DB20A2C533009A3A99 /* LanguageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A03DA20A2C532009A3A99 /* LanguageSelectViewController.swift */; };
@@ -106,6 +106,7 @@
 		D49605112063C20F0073C99F /* WalletExportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49605102063C20F0073C99F /* WalletExportViewController.swift */; };
 		D49605132063E6B80073C99F /* QRReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49605122063E6B80073C99F /* QRReaderViewController.swift */; };
 		D4A4E97D2015DA7900BE0F24 /* Alert.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4A4E97C2015DA7900BE0F24 /* Alert.storyboard */; };
+		D4A7841E2148EA49003A40C0 /* DataInputSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A7841D2148EA49003A40C0 /* DataInputSourceViewController.swift */; };
 		D4B178EB206E0A5800F8CC35 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B178EA206E0A5800F8CC35 /* Animator.swift */; };
 		D4BE74C72040035100638E2E /* PreventTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C62040035100638E2E /* PreventTextField.swift */; };
 		D4BE74C92040046C00638E2E /* IXUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* IXUtils.swift */; };
@@ -139,6 +140,8 @@
 		BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D4053325206CD1700040BE89 /* TransactionDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailViewController.swift; sourceTree = "<group>"; };
+		D40FA036214792BB00CB8E6E /* SECPWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SECPWrapper.m; sourceTree = "<group>"; };
+		D40FA037214792BB00CB8E6E /* SECPWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SECPWrapper.h; sourceTree = "<group>"; };
 		D40FAF4A205FDC80008C2CDA /* WalletBackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupViewController.swift; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D4173602203E5674008857A1 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -207,8 +210,6 @@
 		D4728A192007040B00E0A899 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D4728A1C2007040B00E0A899 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4728A2A20073BDF00E0A899 /* iconex_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iconex_ios-Bridging-Header.h"; sourceTree = "<group>"; };
-		D4728A2B20073BE000E0A899 /* SECPWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SECPWrapper.h; sourceTree = "<group>"; };
-		D4728A2C20073BE000E0A899 /* SECPWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SECPWrapper.m; sourceTree = "<group>"; };
 		D477CC2B205F554700797A82 /* ConfirmActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmActionViewController.swift; sourceTree = "<group>"; };
 		D477CC2D205F778600797A82 /* SendConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendConfirmViewController.swift; sourceTree = "<group>"; };
 		D47A03DA20A2C532009A3A99 /* LanguageSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageSelectViewController.swift; sourceTree = "<group>"; };
@@ -242,6 +243,7 @@
 		D49605102063C20F0073C99F /* WalletExportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletExportViewController.swift; sourceTree = "<group>"; };
 		D49605122063E6B80073C99F /* QRReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRReaderViewController.swift; sourceTree = "<group>"; };
 		D4A4E97C2015DA7900BE0F24 /* Alert.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Alert.storyboard; sourceTree = "<group>"; };
+		D4A7841D2148EA49003A40C0 /* DataInputSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataInputSourceViewController.swift; sourceTree = "<group>"; };
 		D4B178EA206E0A5800F8CC35 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		D4BE74C62040035100638E2E /* PreventTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreventTextField.swift; sourceTree = "<group>"; };
 		D4BE74C82040046C00638E2E /* IXUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXUtils.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				D4EBB841204FDB1B007B07FB /* ActionControls.storyboard */,
+				D4A7841D2148EA49003A40C0 /* DataInputSourceViewController.swift */,
 				D471F1FF205A4D4A00F565EF /* ViewOptionViewController.swift */,
 				D4EBB843204FDB5A007B07FB /* SelectableActionController.swift */,
 			);
@@ -480,8 +483,8 @@
 		D4728A2920073B9B00E0A899 /* Objc */ = {
 			isa = PBXGroup;
 			children = (
-				D4728A2B20073BE000E0A899 /* SECPWrapper.h */,
-				D4728A2C20073BE000E0A899 /* SECPWrapper.m */,
+				D40FA037214792BB00CB8E6E /* SECPWrapper.h */,
+				D40FA036214792BB00CB8E6E /* SECPWrapper.m */,
 				D4728A2A20073BDF00E0A899 /* iconex_ios-Bridging-Header.h */,
 				D47A03DC20A2CEF5009A3A99 /* NSBundle+Language.h */,
 				D47A03DD20A2CEF5009A3A99 /* NSBundle+Language.m */,
@@ -785,7 +788,7 @@
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D47A03E020A2E03B009A3A99 /* LockSettingViewController.swift in Sources */,
 				D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */,
-				D4728A2D20073BE000E0A899 /* SECPWrapper.m in Sources */,
+				D4A7841E2148EA49003A40C0 /* DataInputSourceViewController.swift in Sources */,
 				D477CC2E205F778600797A82 /* SendConfirmViewController.swift in Sources */,
 				D46AFE4720ABF6D200EB762E /* SwapStepFiveViewController.swift in Sources */,
 				D41C4EF920D25B320094E199 /* RetryViewController.swift in Sources */,
@@ -848,6 +851,7 @@
 				D48E49C22043EF900064CFF4 /* MainViewController.swift in Sources */,
 				D47A03E420A2F311009A3A99 /* CreateLockViewController.swift in Sources */,
 				D47A03E820A321BC009A3A99 /* DisclaimerViewController.swift in Sources */,
+				D40FA038214792BB00CB8E6E /* SECPWrapper.m in Sources */,
 				D421A2682068D10E00687431 /* EditingAddressViewController.swift in Sources */,
 				D481B0A220A958FF0016B0EE /* SwapStepView.swift in Sources */,
 				D455C032204533140068165E /* MainWalletView.swift in Sources */,

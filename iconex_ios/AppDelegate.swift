@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         Config.isDebug = true
-        Config.host = .local
+        Config.host = .dev
         
         Configuration.setDebug()
         

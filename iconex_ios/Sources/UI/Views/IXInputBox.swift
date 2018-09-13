@@ -124,6 +124,7 @@ enum IXTextFieldType {
             }
         }
     }
+    
     private var _fieldType: IXTextFieldType = .normal {
         willSet {
             plainHighlight.isHidden = true
@@ -240,16 +241,6 @@ enum IXTextFieldType {
         contentView?.prepareForInterfaceBuilder()
     }
     
-//    override var intrinsicContentSize: CGSize {
-//        var value = self.bounds.size
-//        if let text = textField.text as NSString? {
-//            let size = text.boundingRect(with: CGSize(width: value.width, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [.font: textField.font!], context: nil)
-//
-//            value.height = 40 + 1 + 6 + 2 + size.height
-//        }
-//        return value
-//    }
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if _fieldType == .numeric || _fieldType == .integer {
             switch string {
@@ -287,8 +278,4 @@ enum IXTextFieldType {
         
         return true
     }
-    
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        return true
-//    }
 }

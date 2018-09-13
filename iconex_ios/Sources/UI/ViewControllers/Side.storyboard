@@ -66,17 +66,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="327" height="54"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ntx-1w-Pbl">
-                                                        <rect key="frame" x="0.0" y="0.0" width="109" height="54"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                        <state key="normal">
-                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                        <state key="selected">
-                                                            <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                        </state>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5X-ms-Kl1">
-                                                        <rect key="frame" x="109" y="0.0" width="109" height="54"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="163.5" height="54"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <state key="normal">
                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -86,7 +76,7 @@
                                                         </state>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAy-WO-4ea">
-                                                        <rect key="frame" x="218" y="0.0" width="109" height="54"/>
+                                                        <rect key="frame" x="163.5" y="0.0" width="163.5" height="54"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                         <state key="normal">
                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -377,7 +367,6 @@
                         <outlet property="noItemContainer" destination="Xmn-Xs-EL0" id="TzD-p3-tVl"/>
                         <outlet property="noItemLabel" destination="uUt-GY-lE3" id="1jt-zM-2KB"/>
                         <outlet property="segAddressButton" destination="ntx-1w-Pbl" id="63q-58-6o4"/>
-                        <outlet property="segRecentButton" destination="g5X-ms-Kl1" id="Oid-ve-O2U"/>
                         <outlet property="segWalletButton" destination="xAy-WO-4ea" id="pTq-qv-SaL"/>
                         <outlet property="segmentView" destination="dLG-PL-0oO" id="6iE-yX-l3M"/>
                         <outlet property="tableView" destination="24v-jG-0Ah" id="foY-xn-A16"/>
@@ -1949,6 +1938,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Pnn-F3-1RW"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D8U-xj-L4o" userLabel="First Responder" sceneMemberID="firstResponder"/>
