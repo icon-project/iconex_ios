@@ -60,10 +60,12 @@ struct Configuration {
     }
     
     static func debuggerCheck() -> Bool {
-        #if NSHC
+        #if NSHC && !DEBUG
         let result = IXSWrapper.detectDebugger()
         
         return result != 1
+        #else
+        return true
         #endif
     }
     
