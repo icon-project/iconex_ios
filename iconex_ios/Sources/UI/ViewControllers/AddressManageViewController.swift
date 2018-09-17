@@ -59,7 +59,6 @@ class AddressManageViewController: UIViewController {
     var walletInfo: WalletInfo!
     var walletList: [WalletInfo]!
     var addressBookList = [AddressBookInfo]()
-    var recentList = [TransactionInfo]()
     
     var selectHandler: ((_ address: String) -> Void)?
     
@@ -188,7 +187,6 @@ class AddressManageViewController: UIViewController {
     func loadWalletList() {
         addressBookList = AddressBook.loadAddressBookList(by: self.walletInfo.type).filter { $0.address.lowercased() != self.walletInfo.address.lowercased() }
         walletList = WManager.walletInfoList.filter { $0.address.lowercased() != walletInfo.address.lowercased() && $0.type == walletInfo.type }
-        recentList = Transaction.recentTransactionList(type: self.walletInfo.type.rawValue, exclude: self.walletInfo.address)
         
         let value = selectedIndex
         selectedIndex = value

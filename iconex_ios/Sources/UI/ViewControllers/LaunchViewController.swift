@@ -32,18 +32,41 @@ class LaunchViewController: UIViewController {
             return 50.0
         }()
         
+        #if DEBUG
+        print("####### DEBUG #######")
+        #endif
         
-        if Config.isDebug {
-            Log.Debug("######### DEBUG #########")
-        }
         
-        guard Configuration.systemCheck(), Configuration.integrityCheck(), Configuration.debuggerCheck() else {
-
+        guard Configuration.systemCheck() else {
             guard let app = UIApplication.shared.delegate as? AppDelegate, let root = app.window?.rootViewController else {
                 exit(0)
             }
-
+            
             let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized)
+            halt.handler = {
+                exit(0)
+            }
+            root.present(halt, animated: false, completion: nil)
+            return
+        }
+        guard Configuration.integrityCheck() else {
+            guard let app = UIApplication.shared.delegate as? AppDelegate, let root = app.window?.rootViewController else {
+                exit(0)
+            }
+            
+            let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized + " (2)")
+            halt.handler = {
+                exit(0)
+            }
+            root.present(halt, animated: false, completion: nil)
+            return
+        }
+        guard Configuration.debuggerCheck() else {
+            guard let app = UIApplication.shared.delegate as? AppDelegate, let root = app.window?.rootViewController else {
+                exit(0)
+            }
+            
+            let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized + " (3)")
             halt.handler = {
                 exit(0)
             }

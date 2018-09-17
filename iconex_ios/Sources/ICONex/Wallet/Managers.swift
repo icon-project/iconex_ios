@@ -131,7 +131,8 @@ class WalletManager {
         
         if wallet.type == .icx {
             if let address = wallet.address {
-                let result = service.getBalance(address: address)
+
+                let result = self.service.getBalance(address: address)
                 
                 switch result {
                 case .success(let balance):
@@ -140,7 +141,6 @@ class WalletManager {
                 case .failure(let error):
                     Log.Debug("Error - \(error)")
                 }
-                
                 completionHandler(true)
             }
         } else if wallet.type == .eth {
@@ -159,35 +159,42 @@ class WalletManager {
     }
     
     func getWalletsBalance() {
-        let queue = DispatchQueue(label: "kICGetBalanceQueue", qos: .utility, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-        
         for info in self.walletInfoList {
             guard let wallet = WManager.loadWalletBy(info: info), let address = wallet.address else { continue }
             if _queued.contains(address) { continue }
             
             _queued.insert(address)
             if info.type == .icx {
-                queue.async {
-                    if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
+                
+                if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
+                    
+                    let result = WManager.service.getBalance(wallet: iconWallet)
+                    
+                    switch result {
+                    case .success(let balance):
+                        self.walletBalanceList[wallet.address!] = balance
                         
-                        let result = WManager.service.getBalance(wallet: iconWallet)
-                        
-                        DispatchQueue.main.async {
-                            switch result {
-                            case .success(let balance):
-                                self.walletBalanceList[wallet.address!] = balance
-                                
-                            case .failure(let error):
-                                Log.Debug("Error - \(error)")
-                            }
-                            
-                            self._queued.remove(address)
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
-                        }
-                        
-                    } else {
-                        self._queued.remove(address)
+                    case .failure(let error):
+                        Log.Debug("Error - \(error)")
                     }
+                    
+                    guard let tokens = wallet.tokens else { return }
+                    
+                    var tokenBalances = [String: BigUInt]()
+                    for token in tokens {
+                        let result = self.getIRCTokenBalance(tokenInfo: token)
+                        
+                        if let balance = result {
+                            tokenBalances[token.contractAddress] = balance
+                        }
+                    }
+                    self.tokenBalanceList[wallet.address!] = tokenBalances
+                    
+                    self._queued.remove(address)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
+                    
+                } else {
+                    self._queued.remove(address)
                 }
             } else if info.type == .eth {
                 guard let wallet = WManager.loadWalletBy(info: info) else { continue }
@@ -195,18 +202,16 @@ class WalletManager {
                 
                 client.requestBalance { (ethValue, tokenValues) in
                     
-                    DispatchQueue.main.async {
-                        if let value = ethValue {
-                            self.walletBalanceList[wallet.address!] = value
-                        }
-                        
-                        if let tokens = tokenValues {
-                            self.tokenBalanceList[wallet.address!] = tokens
-                        }
-                        
-                        self._queued.remove(address)
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
+                    if let value = ethValue {
+                        self.walletBalanceList[wallet.address!] = value
                     }
+                    
+                    if let tokens = tokenValues {
+                        self.tokenBalanceList[wallet.address!] = tokens
+                    }
+                    
+                    self._queued.remove(address)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
                 }
                 balanceOperation.loadQueue.addOperation(client)
             }
@@ -326,6 +331,25 @@ extension WalletManager {
             }
         }
     }
+    
+    public func getIRCTokenBalance(tokenInfo: TokenInfo) -> BigUInt? {
+        let service = WManager.service
+        
+        let result = service.call(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, dataType: "call", method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
+        
+        switch result {
+        case .success(let callResult):
+            guard let balance = callResult as? String else { return nil }
+            return BigUInt(balance.prefix0xRemoved(), radix: 16)
+            
+        case .failure(let error):
+            Log.Debug("error - \(error)")
+            
+        }
+        
+        return nil
+    }
+    
 }
 
 let WManager = WalletManager.sharedInstance
@@ -461,7 +485,7 @@ class WalletCreator {
             
             return true
         } catch {
-            Log.Debug(error)
+            Log.Debug("error - \(error)")
             
             return false
         }
@@ -518,9 +542,9 @@ class WalletCreator {
         WManager.loadWalletList()
     }
     
-    func validateKeystore(urlOfData: URL) throws -> (Codable, COINTYPE) {
+    func validateKeystore(urlOfData: URL) throws -> (ICON.Keystore, COINTYPE) {
         let content = try Data(contentsOf: urlOfData)
-        
+        Log.Debug("content - \(String(data: content, encoding: .utf8))")
         let decoder = JSONDecoder()
         
         let keystore = try decoder.decode(ICON.Keystore.self, from: content)

@@ -62,12 +62,15 @@ struct Tools {
 
         wei = under as String
 
-        let number = NSNumber(value: UInt64(total.quotient))
-        guard let sep = formatter.string(from: number), formatting else {
-            return wei == "" ? icx : icx + "." + wei
+        if formatting {
+            let split = String(icx.reversed()).split(by: 3)
+            let joined = split.joined(separator: ",")
+            let formatted = String(joined.reversed())
+            
+            return wei == "" ? formatted : formatted + "." + wei
         }
-        return wei == "" ? sep : sep + "." + wei
         
+        return wei == "" ? icx : icx + "." + wei
     }
     
     static func hexStringToBig(value: String) -> BigUInt? {

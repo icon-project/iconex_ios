@@ -33,7 +33,7 @@ class ImportTwoViewController: UIViewController {
     @IBOutlet weak var qrContainer: UIView!
     @IBOutlet weak var qrButton: UIButton!
     
-    var validatedData: (Codable, COINTYPE)?
+    var validatedData: (ICON.Keystore, COINTYPE)?
     
     private var typeList: [(name: String, type: COINTYPE)]!
     private var selectedIndex = 0
@@ -192,9 +192,10 @@ class ImportTwoViewController: UIViewController {
             if let item = validatedData {
                 // 일반 지갑 파일
                 
+                let keystore = item.0
+                
                 if item.1 == .icx {
-                    let icxKeystore = item.0 as! ICON.Keystore
-                    let icxWallet = ICXWallet(keystore: icxKeystore)
+                    let icxWallet = ICXWallet(keystore: keystore)
                     do {
                         let _ = try icxWallet.extractICXPrivateKey(password: password)
                         
@@ -210,13 +211,12 @@ class ImportTwoViewController: UIViewController {
                     self.view.endEditing(true)
                     return true
                 } else if item.1 == .eth {
-                    let ethKeystore = item.0 as! ETH.KeyStore
-                    let ethWallet = ETHWallet(keystore: ethKeystore)
+                    let ethWallet = ETHWallet(keystore: keystore)
                     do {
                         let _ = try ethWallet.extractETHPrivateKey(password: password)
                         WCreator.newWallet = ethWallet
                     } catch {
-                        Log.Debug(error)
+                        Log.Debug("error - \(error)")
                         
                         inputBox.setState(.error, "Error.Password.Wrong".localized)
                         return false
@@ -296,11 +296,11 @@ class ImportTwoViewController: UIViewController {
                     return
                 }
                 
+                let keystore = item.0
+                
                 if item.1 == .icx {
-                    let keystore = item.0
                     
-                    let icxKeystore = keystore as! ICON.Keystore
-                    let icxWallet = ICXWallet(keystore: icxKeystore)
+                    let icxWallet = ICXWallet(keystore: keystore)
                     do {
                         let _ = try icxWallet.extractICXPrivateKey(password: inputBox.textField.text!)
                         
@@ -317,8 +317,7 @@ class ImportTwoViewController: UIViewController {
                     }
                     
                 } else if item.1 == .eth {
-                    let ethKeystore = item.0 as! ETH.KeyStore
-                    let ethWallet = ETHWallet(keystore: ethKeystore)
+                    let ethWallet = ETHWallet(keystore: keystore)
                     do {
                         let _ = try ethWallet.extractETHPrivateKey(password: inputBox.textField.text!)
                         
@@ -484,7 +483,7 @@ extension ImportTwoViewController: UIDocumentPickerDelegate {
             animateItemLayer(show: true)
         } else {
             do {
-                let data: (Codable, COINTYPE) = try WCreator.validateKeystore(urlOfData: url)
+                let data: (ICON.Keystore, COINTYPE) = try WCreator.validateKeystore(urlOfData: url)
                 
                 Log.Debug(data.0)
                 validatedData = data

@@ -24,9 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ////////////////////////////////////
         // Define Connection Host
         ////////////////////////////////////
-        Config.isDebug = false
-        Config.host = .dev
         
+        Config.host = .dev
+        #if DEBUG
+            print(IXSWrapper.getVersion())
+        #endif
         Configuration.setDebug()
         
         ////////////////////////////////////
@@ -65,12 +67,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log.Debug(error)
         }
         
-        NSSetUncaughtExceptionHandler { (exception) in
-            Log.Error("CRASH =======================")
-            Log.Error(exception)
-            Log.Error("Stack trace ========================")
-            Log.Error(exception.callStackSymbols)
-        }
+//        NSSetUncaughtExceptionHandler { (exception) in
+//            Log.Error("CRASH =======================")
+//            Log.Error(exception)
+//            Log.Error("Stack trace ========================")
+//            Log.Error(exception.callStackSymbols)
+//        }
         return true
     }
 

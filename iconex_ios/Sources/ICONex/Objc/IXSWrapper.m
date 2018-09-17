@@ -68,4 +68,9 @@
     ix_set_debug();
 }
 
++ (NSString *)getVersion
+{
+    return [NSString stringWithCString:ix_getVersion() encoding:NSUTF8StringEncoding];
+}
+
 @end

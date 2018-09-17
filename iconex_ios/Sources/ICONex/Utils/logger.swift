@@ -58,7 +58,7 @@ struct Log {
     }
     
     static func logger<T>(_ category: LogLevel, _ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
-        if Config.isDebug {
+        #if DEBUG
             let value = object()
             var stringRepresentation: String = ""
             
@@ -69,18 +69,17 @@ struct Log {
             let fileURL = URL(fileURLWithPath: file).lastPathComponent
             let queue = Thread.isMainThread ? "UI" : "BG"
             print("\(category.rawValue): \(Date()) - <\(queue)> \(fileURL) \(function) [Line:\(line)] \n" + stringRepresentation)
-        }
+        #endif
     }
 }
 
 extension String {
     func log(_ category: LogLevel, _ file: String = #file, _ function: String = #function, line: Int = #line) {
-        if Config.isDebug {
-            
+        #if DEBUG
             let fileURL = URL(fileURLWithPath: file).lastPathComponent
             let queue = Thread.isMainThread ? "UI" : "BG"
             
             print("\(category.rawValue): \(Date()) - <\(queue)> \(fileURL) \(function) [Line:\(line)]\n" + self)
-        }
+        #endif
     }
 }

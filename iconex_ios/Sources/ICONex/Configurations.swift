@@ -17,49 +17,44 @@ struct Configuration {
     
     static var general = Configuration()
     
-    var isDebug: Bool = false
     var host: HOST = .main
     var faqLink: String {
         return "https://docs.google.com/spreadsheets/d/1HiT98wqEpFgF2d98eJefQfH7xK4KPPxNDiiXg3AcJ7w/edit#gid=0"
     }
     
     static func systemCheck() -> Bool {
-        if Config.isDebug { return true }
-        
         var error: NSError? = nil
         #if NSHC
-        IXSWrapper.systemCheck(&error)
+//        IXSWrapper.systemCheck(&error)
         #endif
         return error == nil
     }
     
     static func integrityCheck() -> Bool {
-        if Config.isDebug { return true }
-        
         var error: NSError? = nil
         #if NSHC
-        IXSWrapper.intigrityCheck(&error)
+//        IXSWrapper.intigrityCheck(&error)
+        Log.Debug("integrity - \(error?.domain)")
         #endif
         return error == nil
     }
     
     static func debuggerCheck() -> Bool {
-        if Config.isDebug { return true }
         #if NSHC
-        let result = IXSWrapper.detectDebugger()
+//        let result = IXSWrapper.detectDebugger()
         
-        return result != 1
-        #else
-        return true
+//        return result != 1
         #endif
+        
+        return true
     }
     
     static func setDebug() {
-        if Config.isDebug {
-            #if NSHC
-            IXSWrapper.setDebug()
-            #endif
-        }
+    #if DEBUG
+        #if NSHC
+        IXSWrapper.setDebug()
+        #endif
+    #endif
     }
 }
 

@@ -14,5 +14,6 @@
 + (int)detectDebugger;
 + (void)intigrityCheck: (NSError **)error;
 + (void)setDebug;
++ (NSString *)getVersion;
 
 @end
