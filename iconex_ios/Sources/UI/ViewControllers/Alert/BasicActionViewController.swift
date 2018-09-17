@@ -17,6 +17,7 @@ class BasicActionViewController: UIViewController {
     var handler: (() -> Void)?
     
     var message: String?
+    var attrMessage: NSAttributedString?
     
     let disposeBag = DisposeBag()
     
@@ -47,7 +48,12 @@ class BasicActionViewController: UIViewController {
                 })
             }).disposed(by: disposeBag)
         
-        messageLabel.text = message
+        if let attr = self.attrMessage {
+            messageLabel.attributedText = attr
+        } else {
+            messageLabel.text = message
+        }
+        
     }
 
 }

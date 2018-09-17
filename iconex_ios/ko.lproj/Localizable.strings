@@ -212,9 +212,13 @@
 "Transfer.Fast" = "빠름";
 "Transfer.RequestComplete" = "송금 요청이 완료되었습니다.";
 "Transfer.Step.Limit" = "Step 한도";
-"Transfer.Step.LimitInfo" = "스텝 한도는 Transaction 실행에 지불할 용의가 있는 스텝의 최대량을 의미합니다.\n스텝은 최소 4,000, 최대 990,000까지 입력 가능합니다. 스텝 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 스텝만 소진합니다. 즉, 스텝 한도는 최대치만 설정 가능하며 실제 소진되는 스텝량은 유동적입니다.";
+"Transfer.Step.LimitInfo.First" = "스텝 한도는 Transaction 실행에 지불할 용의가 있는 스텝의 최대량을 의미합니다.\n";
+"Transfer.Step.LimitInfo.Second" = "스텝 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 스텝만 소진합니다. 즉, 스텝 한도는 최대치만 설정 가능하며 실제 소진되는 스텝량은 유동적입니다.";
 "Transfer.Step.Price" = "Step 가격";
-"Transfer.Step.PriceInfo" = "1 loop = 0.000000000000000001 ICX 로 고정되어 있습니다.";
+"Transfer.Step.PriceInfo.First" = "Step 한 단위 당 지불하는 가격입니다.";
+"Transfer.Step.PriceInfo.Second" = "Step 가격은 loop로 지불하며 1 loop는 0.000000000000000001(";
+"Transfer.Step.PriceInfo.Third" = ") ICX로 고정되어 있습니다. ICON 거래 수수료는 스마트 컨트랙트 기능 사용 횟수, 블록체인 데이터베이스 사용량, 거래 데이터 크기 등에 따라 부과됩니다.";
+"Transfer.Step.PriceInfo.Superscript" = "10-18";
 "Transfer.Data.Title" = "데이터 (선택 입력)";
 "Transfer.Data.Info" = "사용자가 원하는 데이터를 입력하여 송금할 수 있습니다.\n입력한 데이터의 크기에 따라 수수료가 부과됩니다.";
 "Transfer.Data.Input" = "입력";

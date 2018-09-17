@@ -204,17 +204,22 @@
 "Transfer.Gas.Desc_4" = "If you do not enter the data when required, the transaction will fail.\nYou will still have to pay the transaction fees. You don't have to enter data if it is not required in the transaction.";
 "Transfer.TxFee" = "Estimated Maximum Fee";
 "Transfer.AfterBalance" = "Estimated Balace";
+"Transfer.EstimatedStep" = "Estimated Maximum Fee = Step price * Step limit";
 "Transfer.Slow" = "Slow";
 "Transfer.Fast" = "Fast";
 "Transfer.RequestComplete" = "Transfer request has been completed";
 "Transfer.Step.Limit" = "Step Limit";
-"Transfer.Step.LimitInfo" = "스텝 한도는 Transaction 실행에 지불할 용의가 있는 스텝의 최대량을 의미합니다.\n스텝은 최소 4,000, 최대 990,000까지 입력 가능합니다. 스텝 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 스텝만 소진합니다. 즉, 스텝 한도는 최대치만 설정 가능하며 실제 소진되는 스텝량은 유동적입니다.";
+"Transfer.Step.LimitInfo.First" = "Step limit is the amount of step to send with your transaction.\n";
+"Transfer.Step.LimitInfo.Second" = "Unnecessary step is refunded to you at the end of transaction. In other words, you can set the maximum amount of step but the actual step consumption is not fixed.";
 "Transfer.Step.Price" = "Step Price";
-"Transfer.Step.PriceInfo" = "1 loop = 0.000000000000000001 ICX 로 고정되어 있습니다.";
+"Transfer.Step.PriceInfo.First" = "Step price is the amount you pay per unit of step.";
+"Transfer.Step.PriceInfo.Second" = "Step price is paid in loop and 1 loop is fixed to 0.000000000000000001(";
+"Transfer.Step.PriceInfo.Third" = ") ICX. ICON transaction fee is imposed according to various factors such as the number of smart contract usage, the amount of blockchain database used and the size of transaction data, etc.";
+"Transfer.Step.PriceInfo.Superscript" = "10-18";
 "Transfer.Data.Title" = "Data (Optional)";
 "Transfer.Data.Info" = "You may enter data to send with the transaction.\nTransaction fee is imposed according to the size of data.";
-"Transfer.Data.Input" = "입력";
-"Transfer.Data.View" = "보기";
+"Transfer.Data.Input" = "Add";
+"Transfer.Data.View" = "View";
 
 "Side.Create" = "Create Wallet";
 "Side.Import" = "Load Wallet";

@@ -67,12 +67,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log.Debug(error)
         }
         
-//        NSSetUncaughtExceptionHandler { (exception) in
-//            Log.Error("CRASH =======================")
-//            Log.Error(exception)
-//            Log.Error("Stack trace ========================")
-//            Log.Error(exception.callStackSymbols)
-//        }
+        NSSetUncaughtExceptionHandler { (exception) in
+            Log.Error("CRASH =======================")
+            Log.Error(exception)
+            Log.Error("Stack trace ========================")
+            Log.Error(exception.callStackSymbols)
+        }
         return true
     }
 

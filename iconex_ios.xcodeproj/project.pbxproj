@@ -46,7 +46,6 @@
 		D43FB68D214B464B005360A8 /* libnSafer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FB683214B464A005360A8 /* libnSafer.a */; };
 		D43FB68E214B464B005360A8 /* libNSHCBasic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FB684214B464A005360A8 /* libNSHCBasic.a */; };
 		D43FB68F214B464B005360A8 /* san.dat in Resources */ = {isa = PBXBuildFile; fileRef = D43FB685214B464A005360A8 /* san.dat */; };
-		D43FB690214B464B005360A8 /* NSDataKNAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = D43FB686214B464A005360A8 /* NSDataKNAdditions.m */; };
 		D43FB691214B464B005360A8 /* lib_ixShield.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43FB687214B464A005360A8 /* lib_ixShield.a */; };
 		D43FB694214B485D005360A8 /* IXSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D43FB692214B485D005360A8 /* IXSWrapper.m */; };
 		D4402A8F205108A8001BD003 /* WalletAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4402A8E205108A8001BD003 /* WalletAddressViewController.swift */; };
@@ -267,13 +266,11 @@
 		D43FB67D214B464A005360A8 /* idea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = idea.h; sourceTree = "<group>"; };
 		D43FB67E214B464A005360A8 /* lhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lhash.h; sourceTree = "<group>"; };
 		D43FB67F214B464A005360A8 /* iX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iX.h; sourceTree = "<group>"; };
-		D43FB680214B464A005360A8 /* NSDataKNAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSDataKNAdditions.h; sourceTree = "<group>"; };
 		D43FB681214B464A005360A8 /* ixShield_icon.foundation.iconex_license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ixShield_icon.foundation.iconex_license.txt; sourceTree = "<group>"; };
 		D43FB682214B464A005360A8 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libssl.a; sourceTree = "<group>"; };
 		D43FB683214B464A005360A8 /* libnSafer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libnSafer.a; sourceTree = "<group>"; };
 		D43FB684214B464A005360A8 /* libNSHCBasic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libNSHCBasic.a; sourceTree = "<group>"; };
 		D43FB685214B464A005360A8 /* san.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = san.dat; sourceTree = "<group>"; };
-		D43FB686214B464A005360A8 /* NSDataKNAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSDataKNAdditions.m; sourceTree = "<group>"; };
 		D43FB687214B464A005360A8 /* lib_ixShield.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = lib_ixShield.a; sourceTree = "<group>"; };
 		D43FB692214B485D005360A8 /* IXSWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IXSWrapper.m; sourceTree = "<group>"; };
 		D43FB693214B485D005360A8 /* IXSWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IXSWrapper.h; sourceTree = "<group>"; };
@@ -481,13 +478,11 @@
 				D43FB62B214B464A005360A8 /* libnperm.a */,
 				D43FB62C214B464A005360A8 /* include */,
 				D43FB67F214B464A005360A8 /* iX.h */,
-				D43FB680214B464A005360A8 /* NSDataKNAdditions.h */,
 				D43FB681214B464A005360A8 /* ixShield_icon.foundation.iconex_license.txt */,
 				D43FB682214B464A005360A8 /* libssl.a */,
 				D43FB683214B464A005360A8 /* libnSafer.a */,
 				D43FB684214B464A005360A8 /* libNSHCBasic.a */,
 				D43FB685214B464A005360A8 /* san.dat */,
-				D43FB686214B464A005360A8 /* NSDataKNAdditions.m */,
 				D43FB687214B464A005360A8 /* lib_ixShield.a */,
 			);
 			path = NSHC;
@@ -1100,7 +1095,6 @@
 				D4843E9F205B9D9900B14377 /* WalletPrivateInfoViewController.swift in Sources */,
 				D46586CF20593A80004EE6DB /* Exchange.swift in Sources */,
 				D4143E042133BE79004212A9 /* Errors.swift in Sources */,
-				D43FB690214B464B005360A8 /* NSDataKNAdditions.m in Sources */,
 				D4944E71200C7FF0002D1870 /* extensions.swift in Sources */,
 				D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */,
 				D41A8CC6204EC62E009A0D6B /* ImportTwoViewController.swift in Sources */,

@@ -2241,7 +2241,7 @@
             <objects>
                 <viewController storyboardIdentifier="ICXSendView" id="BUq-rt-cps" customClass="ICXSendViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EId-H8-NnI">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="2000"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ufn-Uf-fdE">
@@ -2273,10 +2273,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VTv-uJ-ruQ">
-                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
+                                <rect key="frame" x="0.0" y="76" width="375" height="1924"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2oY-Go-ANi">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1924"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4jN-xT-di2">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="1052"/>
@@ -2591,7 +2591,7 @@
                                                         <rect key="frame" x="0.0" y="812" width="375" height="120"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ISV-Z0-eSZ">
-                                                                <rect key="frame" x="24" y="22" width="327" height="18"/>
+                                                                <rect key="frame" x="24" y="22" width="37.5" height="18"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -2615,15 +2615,24 @@
                                                                     <constraint firstAttribute="height" constant="1" id="n0W-Yj-NzC"/>
                                                                 </constraints>
                                                             </view>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="96N-wS-BvX">
+                                                                <rect key="frame" x="65.5" y="20" width="13" height="22"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="22" id="VWd-vi-hHU"/>
+                                                                    <constraint firstAttribute="width" constant="13" id="XRa-L2-qtu"/>
+                                                                </constraints>
+                                                                <state key="normal" image="iconInfoDarkgray"/>
+                                                            </button>
                                                         </subviews>
                                                         <color key="backgroundColor" red="0.92941176469999998" green="0.92941176469999998" blue="0.92941176469999998" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstItem="ISV-Z0-eSZ" firstAttribute="top" secondItem="4U7-Sg-2CC" secondAttribute="top" constant="22" id="2Dz-iM-JFe"/>
+                                                            <constraint firstItem="96N-wS-BvX" firstAttribute="leading" secondItem="ISV-Z0-eSZ" secondAttribute="trailing" constant="4" id="HDC-59-h8B"/>
                                                             <constraint firstAttribute="trailing" secondItem="Ewn-I3-h0D" secondAttribute="trailing" constant="24" id="HQs-7d-iEW"/>
                                                             <constraint firstAttribute="bottom" secondItem="2et-Uk-GKo" secondAttribute="bottom" id="JPW-ot-L3J"/>
                                                             <constraint firstAttribute="trailing" secondItem="6Qy-WH-qFC" secondAttribute="trailing" constant="24" id="Lvb-k9-5EI"/>
+                                                            <constraint firstItem="96N-wS-BvX" firstAttribute="centerY" secondItem="ISV-Z0-eSZ" secondAttribute="centerY" id="NJc-oJ-SCq"/>
                                                             <constraint firstAttribute="bottom" secondItem="Ewn-I3-h0D" secondAttribute="bottom" constant="38" id="RDa-dd-i4r"/>
-                                                            <constraint firstAttribute="trailing" secondItem="ISV-Z0-eSZ" secondAttribute="trailing" constant="24" id="VkS-4N-riZ"/>
                                                             <constraint firstAttribute="height" constant="120" id="WuS-le-BnI"/>
                                                             <constraint firstItem="6Qy-WH-qFC" firstAttribute="top" secondItem="Ewn-I3-h0D" secondAttribute="bottom" constant="6" id="aI4-r3-vzw"/>
                                                             <constraint firstItem="ISV-Z0-eSZ" firstAttribute="leading" secondItem="4U7-Sg-2CC" secondAttribute="leading" constant="24" id="aO0-AI-3m5"/>
@@ -2715,7 +2724,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ffA-MD-9H1">
-                                <rect key="frame" x="0.0" y="595" width="375" height="72"/>
+                                <rect key="frame" x="0.0" y="1928" width="375" height="72"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4R-eO-sK5">
                                         <rect key="frame" x="16" y="16" width="343" height="40"/>
@@ -2757,6 +2766,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vvn-Wo-0ul"/>
                     </view>
+                    <size key="freeformSize" width="375" height="2000"/>
                     <connections>
                         <outlet property="add1" destination="CCG-wz-YCH" id="ii9-xz-D7s"/>
                         <outlet property="add2" destination="dHX-Iq-dkK" id="WW7-Lp-108"/>
@@ -2773,6 +2783,7 @@
                         <outlet property="exchangedFeeLabel" destination="6Qy-WH-qFC" id="fkZ-uS-hga"/>
                         <outlet property="exchangedRemainLabel" destination="DUY-TG-LrH" id="oek-eT-g2j"/>
                         <outlet property="feeAmountLabel" destination="Ewn-I3-h0D" id="srP-T2-2LV"/>
+                        <outlet property="feeInfo" destination="96N-wS-BvX" id="haX-xv-66a"/>
                         <outlet property="feeTitle" destination="ISV-Z0-eSZ" id="GAn-Ha-CkI"/>
                         <outlet property="limitInputBox" destination="N3b-qK-jDB" id="oRr-48-Z6d"/>
                         <outlet property="remainBalance" destination="SBn-H9-CoI" id="0gN-I8-k8t"/>

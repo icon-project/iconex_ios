@@ -532,6 +532,13 @@ struct Alert {
         return basic
     }
     
+    static func Basic(attributed: NSAttributedString) -> BasicActionViewController {
+        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
+        basic.attrMessage = attributed
+        
+        return basic
+    }
+    
     static func Confirm(message: String, cancel: String? = "Common.Cancel".localized, confirm: String? = "Common.Confirm".localized, handler: (() -> Void)?, _ cancelHandler: (() -> Void)? = nil) -> ConfirmActionViewController {
         let confirmAction = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "ConfirmActionView") as! ConfirmActionViewController
         confirmAction.message = message

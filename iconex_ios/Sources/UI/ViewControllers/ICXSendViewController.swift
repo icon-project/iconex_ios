@@ -55,6 +55,7 @@ class ICXSendViewController: UIViewController {
     @IBOutlet weak var feeTitle: UILabel!
     @IBOutlet weak var feeAmountLabel: UILabel!
     @IBOutlet weak var exchangedFeeLabel: UILabel!
+    @IBOutlet weak var feeInfo: UIButton!
     
     @IBOutlet weak var remainTitle: UILabel!
     @IBOutlet weak var remainBalance: UILabel!
@@ -248,7 +249,6 @@ class ICXSendViewController: UIViewController {
             .subscribe(onNext: { [unowned self] in
                 guard let walletInfo = self.walletInfo else { return }
                 guard let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
-                guard let formerValue = wallet.balance else { return }
                 guard let stepPrice = self.stepPrice else { return }
                 
                 var tmpStepLimit = BigUInt(0)
@@ -304,7 +304,11 @@ class ICXSendViewController: UIViewController {
             }).disposed(by: disposeBag)
         
         stepLimitInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            Alert.Basic(message: "Transfer.Step.LimitInfo".localized).show(self)
+            let attr1 = NSAttributedString(string: "Transfer.Step.LimitInfo.First".localized, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
+            let attr2 = NSAttributedString(string: "Transfer.Step.LimitInfo.Second".localized)
+            let attr = NSMutableAttributedString(attributedString: attr1)
+            attr.append(attr2)
+            Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
         limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
@@ -318,11 +322,21 @@ class ICXSendViewController: UIViewController {
         }).disposed(by: disposeBag)
         
         stepPriceInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            Alert.Basic(message: "Transfer.Step.PriceInfo".localized).show(self)
+            let attr1 = NSAttributedString(string: "Transfer.Step.PriceInfo.First".localized + "\n", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
+            let attr2 = NSAttributedString(string: "Transfer.Step.PriceInfo.Second".localized)
+            let attr3 = NSAttributedString(string: "Transfer.Step.PriceInfo.Third".localized)
+            let superscript = NSMutableAttributedString(string: "Transfer.Step.PriceInfo.Superscript".localized)
+            superscript.setAttributes([NSAttributedStringKey.baselineOffset: 10, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 7)], range: NSRange(location: 2, length: 3))
+            
+            let attr = NSMutableAttributedString(attributedString: attr1)
+            attr.append(attr2)
+            attr.append(superscript)
+            attr.append(attr3)
+            Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
         dataInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {[ unowned self] in
-            Alert.Basic(message: "Transfer.Step.DataInfo".localized).show(self)
+            Alert.Basic(message: "Transfer.Data.Info".localized).show(self)
         }).disposed(by: disposeBag)
         
         dataInputControl.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -338,6 +352,10 @@ class ICXSendViewController: UIViewController {
                 self.present(dataInput, animated: true, completion: nil)
             }
             selectData.present(from: self)
+        }).disposed(by: disposeBag)
+        
+        feeInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            Alert.Basic(message: "Transfer.EstimatedStep".localized).show(self)
         }).disposed(by: disposeBag)
         
         keyboardHeight().observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] (height: CGFloat) in
