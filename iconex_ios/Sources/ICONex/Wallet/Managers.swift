@@ -25,13 +25,13 @@ class WalletManager {
     public var service: ICONService {
         switch Config.host {
         case .main:
-            return ICONService(provider: "http://13.209.103.183:9000", nid: "0x1")
+            return ICONService(provider: "https://wallet.icon.foundation", nid: "0x1")
             
         case .dev:
             return ICONService(provider: "https://testwallet.icon.foundation", nid: "0x2")
             
         case .local:
-            return ICONService(provider: "https://wallet.icon.foundation", nid: "0x3")
+            return ICONService(provider: "http://13.209.103.183:9000", nid: "0x3")
         }
     }
     

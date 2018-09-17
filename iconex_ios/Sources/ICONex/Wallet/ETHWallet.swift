@@ -185,6 +185,8 @@ class ETHWallet: BaseWallet {
     
     func getBackupKeystoreFilepath() throws -> URL {
         let encoder = JSONEncoder()
+        guard let keystore = self.keystore else { throw IXError.emptyWallet }
+        keystore.address = keystore.address.prefix0xRemoved()
         let encoded = try encoder.encode(keystore)
         Log.Debug("encoded: " + String(data: encoded, encoding: .utf8)!)
         
