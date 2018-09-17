@@ -193,12 +193,17 @@ class StepTwoViewController: UIViewController {
     
     @discardableResult
     func validateWalletName(_ showError: Bool = true) -> Bool {
-        if self.walletNameBox.textField.text == "" {
+        guard let walletName = self.walletNameBox.textField.text, walletName != "" else {
             if showError { self.walletNameBox.setState(.error, Localized(key: "Error.WalletName")) }
             return false
         }
         
-        if WManager.canSaveWallet(alias: self.walletNameBox.textField.text!) == false {
+        guard walletName.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+            if showError { self.walletNameBox.setState(.error, "Error.Password.Blank".localized) }
+            return false
+        }
+        
+        if WManager.canSaveWallet(alias: walletName) == false {
             if showError { self.walletNameBox.setState(.error, Localized(key: "Error.Wallet.Duplicated.Name")) }
             return false
         }

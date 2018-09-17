@@ -163,6 +163,11 @@ class SwapStepTwoViewController: BaseViewController {
             return false
         }
         
+        guard name.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+            if showError { self.nameInputBox.setState(.error, "Error.Password.Blank".localized) }
+            return false
+        }
+        
         guard WManager.canSaveWallet(alias: name) else {
             if showError { nameInputBox.setState(.error, "Error.Wallet.Duplicated.Name".localized) }
             return false

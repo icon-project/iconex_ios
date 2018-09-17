@@ -743,16 +743,15 @@ class WalletDetailViewController: UIViewController {
         }
         
         if let response = tracker.transactionList(address: address, page: self.step, txType: type) {
-            guard let listSize = response["listSize"] as? Int else { return }
-            guard let list = response["data"] as? [[String: Any]] else { return }
-            
-            for txDic in list {
-                let tx = Tracker.TxList(dic: txDic)
-                self.historyList.append(tx)
-                Transaction.updateTransactionCompleted(txHash: tx.txHash)
+            if let listSize = response["listSize"] as? Int, let list = response["data"] as? [[String: Any]] {
+                for txDic in list {
+                    let tx = Tracker.TxList(dic: txDic)
+                    self.historyList.append(tx)
+                    Transaction.updateTransactionCompleted(txHash: tx.txHash)
+                }
+                
+                self.totalData = listSize
             }
-            
-            self.totalData = listSize
         }
         self.isLoaded = true
         

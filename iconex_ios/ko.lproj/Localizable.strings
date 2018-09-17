@@ -413,7 +413,8 @@
 "Error.Address.ICX.Invalid" = "올바른 ICX 주소가 아닙니다.";
 "Error.Transfer.AboveMax" = "보유 수량보다 적게 입력해주세요.";
 "Error.Transfer.BelowZero" = "0 보다 큰 숫자를 입력해주세요.";
-"Error.Transfer.InsufficientFee" = "송금 수수료가 부족합니다.";
+"Error.Transfer.InsufficientFee.ETH" = "수수료를 지불할 ETH가 부족합니다.";
+"Error.Transfer.InsufficientFee.ICX" = "수수료를 지불할 ICX가 부족합니다.";
 "Error.Transfer.Data" = "데이터를 다시 확인해주세요.";
 "Error.QRReader.PrivateKey" = "개인 키를 확인해주세요.";
 "Error.NoName" = "이름 없음";

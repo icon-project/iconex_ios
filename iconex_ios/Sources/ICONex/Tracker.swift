@@ -46,7 +46,7 @@ open class Tracker {
     }
     
     enum Method: String {
-        case getTransactionByAddress = "address/txList"
+        case getTransactionByAddress = "address/txListForWallet"
         case getExchangeList = "exchange/currentExchangeList"
     }
     

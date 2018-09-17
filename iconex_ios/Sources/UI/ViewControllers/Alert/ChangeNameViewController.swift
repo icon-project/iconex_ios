@@ -86,8 +86,13 @@ class ChangeNameViewController: UIViewController {
     }
 
     private func validateName() -> Bool {
-        if nameInputBox.textField.text == "" {
+        guard let walletName = nameInputBox.textField.text, walletName != "" else {
             nameInputBox.setState(.error, "Error.WalletName".localized)
+            return false
+        }
+        
+        guard walletName.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+            self.nameInputBox.setState(.error, "Error.Password.Blank".localized)
             return false
         }
         

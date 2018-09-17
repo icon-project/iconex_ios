@@ -260,20 +260,23 @@ enum IXTextFieldType {
                 }
                 return false
             }
-        }
-        
-        if string == " " {
-            guard let text = textField.text, text != "", !text.hasSuffix(" ") else { return false }
-        }
-        
-        if _fieldType == .normal && string != "" && string != "\n" {
+        } else if _fieldType == .normal && string != "" && string != "\n" {
+            
+            if string == " " {
+                guard let text = textField.text, text != "", !text.hasSuffix(" ") else { return false }
+            }
+            
+            
             guard let former = textField.text as NSString? else { return true }
             let text = former.replacingCharacters(in: range, with: string)
+
             let length = text.unicodeScalars.compactMap({ $0.isASCII ? 1 : 2 }).reduce(0, +)
             
             if length > 16 {
                 return false
             }
+        } else if _fieldType == .password || _fieldType == .newPassword {
+            if string == " " { return false }
         }
         
         return true

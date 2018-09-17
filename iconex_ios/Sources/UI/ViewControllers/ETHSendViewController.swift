@@ -296,6 +296,11 @@ class ETHSendViewController: UIViewController {
                 } else {
                     let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
                     guard let formerValue = wallet.balance else { return }
+                    if formerValue < estimate {
+                        self.view.endEditing(true)
+                        self.validateBalance(true)
+                        return
+                    }
                     let result = (formerValue - estimate)
                     let stringValue = Tools.bigToString(value: result, decimal: wallet.decimal, wallet.decimal, true, false)
                     self.sendInputBox.textField.text = stringValue
@@ -490,15 +495,18 @@ class ETHSendViewController: UIViewController {
         } else {
             let ethValue = Tools.stringToBigUInt(inputText: sendText)!
             
+            let wallet = WManager.loadWalletBy(info: self.walletInfo!)
+            
             if ethValue + feeValue > self.totalBalance {
-                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+                let message = wallet!.type == .icx ? "Error.Transfer.InsufficientFee.ICX" : "Error.Transfer.InsufficientFee.ETH"
+                
+                if showError { self.sendInputBox.setState(.error, message.localized) }
                 return false
             } else if ethValue == BigUInt(0) {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
                 return false
             }
             
-            let wallet = WManager.loadWalletBy(info: self.walletInfo!)
             let remain = self.totalBalance - (ethValue + feeValue)
             self.remainBalance.text = Tools.bigToString(value: remain, decimal: wallet!.decimal, wallet!.decimal, true)
             if let excRemain = Tools.balanceToExchange(remain, from: "eth", to: "usd") {

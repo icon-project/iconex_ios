@@ -386,6 +386,12 @@ class TokenManageViewController: UIViewController {
             tokenInputBox.setState(.error, "Error.Token.InputName".localized)
             return false
         }
+        
+        guard name.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+            tokenInputBox.setState(.error, "Error.Password.Blank".localized)
+            return false
+        }
+        
         tokenInputBox.setState(.normal, "")
         return true
     }
