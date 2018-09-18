@@ -85,6 +85,8 @@ class ICXSendViewController: UIViewController {
     var minLimit: BigUInt?
     var maxLimit: BigUInt?
     
+    var dataValue: String?
+    
     var selectedDataType: Int = 0
     var dataSource: String?
     

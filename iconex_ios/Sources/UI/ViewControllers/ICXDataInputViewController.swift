@@ -46,10 +46,24 @@ class ICXDataInputViewController: BaseViewController {
     
     func initialize() {
         closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.dismiss(animated: true, completion: nil)
+            if let text = self.textView.text, text != "" {
+                Alert.Confirm(message: "Transfer.Data.Cancel".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: { [unowned self] in
+                    self.dismiss(animated: true, completion: nil)
+                }, nil).show(self)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+            
         }).disposed(by: disposeBag)
         
         doneButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            
+            guard let text = self.textView.text, text != "" else {
+                return
+            }
+            
+            
             if let handler = self.handler, let text = self.textView.text {
                 handler(text)
             }
@@ -65,10 +79,17 @@ class ICXDataInputViewController: BaseViewController {
             if let inputString = self.textView.text {
                 let length = Float(inputString.bytes.count) / 1024.0
                 Log.Debug("length - \(inputString.bytes.count)")
+                
+                self.lengthLabel.textColor = UIColor.black
+                
                 if length < 1.0 {
                     self.lengthLabel.text = String(format: "%d", inputString.bytes.count) + "B"
                 } else {
                     self.lengthLabel.text = String(format: "%.0f", length) + "KB"
+                    
+                    if length > 250 * 1024 {
+                        self.lengthLabel.textColor = UIColor.red
+                    }
                 }
             }
         }).disposed(by: disposeBag)
@@ -78,5 +99,16 @@ class ICXDataInputViewController: BaseViewController {
         super.viewDidAppear(animated)
         
         self.textView.becomeFirstResponder()
+    }
+}
+
+
+extension ICXDataInputViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        var charSet = CharacterSet.decimalDigits
+        charSet.insert(charactersIn: "abcdefABCDEF")
+        guard let former = textView.text as NSString? else { return true }
+        let value = former.replacingCharacters(in: range, with: text)
+        return true
     }
 }

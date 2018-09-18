@@ -10,12 +10,12 @@ target 'iconex_ios' do
   # Pods for iconex_ios
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'Alamofire'
-  pod 'Alamofire-Synchronous'
   pod 'RealmSwift'
-  pod 'web3swift', :git => 'https://github.com/a1ahn/web3swift.git', :branch => 'no-objc'
+  pod 'web3swift'
   pod 'Toaster'
   pod 'LicensesViewController', '~> 0.6.5'
+  pod 'scrypt', :path => '~/works/scrypt-cryptoswift'
+  pod 'Alamofire'
 
   pod 'ICONKit', :path => '~/works/ICONKit'
 #  pod 'web3swift', :path => '~/works/web3swift'

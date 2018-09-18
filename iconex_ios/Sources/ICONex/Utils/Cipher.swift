@@ -8,6 +8,8 @@
 import Foundation
 import Security
 import CryptoSwift
+import CommonCrypto
+import secp256k1_ios
 
 struct Cipher {
     static func pbkdf2SHA1(password: String, salt: Data, keyByteCount: Int, round: Int) -> Data? {
@@ -64,13 +66,24 @@ public struct ICONUtil {
     }
     
     static func createPublicKey(privateKey: String) -> String? {
-        guard let pubKey = SECPWrapper.ecdsa_create_publicKey(privateKey) else {
-            return nil
-        }
+        let flag = UInt32(SECP256K1_CONTEXT_SIGN)
+        guard let privData = privateKey.hexToData(), let ctx = secp256k1_context_create(flag) else { return nil }
+        var rawPubkey = secp256k1_pubkey()
         
-        Log.Info("seialized publickey : \(pubKey)")
+        guard secp256k1_ec_pubkey_create(ctx, &rawPubkey, privData.bytes) == 1 else { return nil }
         
-        return String(pubKey.suffix(pubKey.length - 2))
+        let serializedPubkey = UnsafeMutablePointer<UInt8>.allocate(capacity: 65)
+        var pubLen = 65
+        
+        guard secp256k1_ec_pubkey_serialize(ctx, serializedPubkey, &pubLen, &rawPubkey, UInt32(SECP256K1_EC_UNCOMPRESSED)) == 1 else {
+            secp256k1_context_destroy(ctx)
+            return nil }
+        
+        secp256k1_context_destroy(ctx)
+        
+        let publicKey = Data(bytes: serializedPubkey, count: 65).toHexString()
+        
+        return String(publicKey.suffix(publicKey.length - 2))
     }
     
     static func makeAddress(_ privateKey: String?, _ publicKey: String) -> String {
@@ -103,35 +116,61 @@ public struct ICONUtil {
     static func checkAddress(privateKey: String, address: String) -> Bool {
         let fixed = Date.timestampString.sha3(.sha256).hexToData()!
         
-        var rsig: NSData?
-        var ser_rsig: NSData?
-        var recid: NSString?
+        guard var rsign = ICONUtil.ecdsaRecoverSign(privateKey: privateKey, hashed: fixed) else { return false }
         
-        SECPWrapper.ecdsa_recoverable_sign(privateKey, hashedMessage: fixed, rsign: &rsig, ser_rsign: &ser_rsig, recid: &recid)
+        guard let vPub = verifyPublickey(hashedMessage: fixed, signature: &rsign), let hexPub = vPub.hexToData() else { return false }
         
-        guard case let rsign as Data = rsig else {
-            return false
-        }
-        
-        let vPub = SECPWrapper.ecdsa_verify_publickey(fixed, rsign: rsign.toHexString())
-        
-        let vaddr = ICONUtil.makeAddress(nil, vPub!)
+        let vaddr = makeAddress(nil, hexPub)
         
         return address == vaddr
     }
     
-    static func signECDSA(hashedMessage: Data, privateKey: String) throws -> (signature: Data?, recid: String?) {
+    static public func ecdsaRecoverSign(privateKey: String, hashed: Data) -> secp256k1_ecdsa_recoverable_signature? {
+        let flag = UInt32(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY)
         
-        var rsig: NSData?
-        var ser_rsig: NSData?
-        var recid: NSString?
-        SECPWrapper.ecdsa_recoverable_sign(privateKey, hashedMessage: hashedMessage, rsign: &rsig, ser_rsign: &ser_rsig, recid: &recid)
+        guard let ctx = secp256k1_context_create(flag), let privData = privateKey.hexToData() else { return nil }
+        var rsig = secp256k1_ecdsa_recoverable_signature()
         
-        guard let ser_rsign = ser_rsig, let recoveryID = recid else {
-            throw IXError.sign
+        guard secp256k1_ecdsa_sign_recoverable(ctx, &rsig, hashed.bytes, privData.bytes, nil, nil) == 1 else {
+            secp256k1_context_destroy(ctx)
+            return nil }
+        
+        return rsig
+    }
+    
+    ///
+    /// Reference from web3swift
+    /// https://github.com/BANKEX/web3swift
+    ///
+    static public func verifyPublickey(hashedMessage: Data, signature: inout secp256k1_ecdsa_recoverable_signature) -> String? {
+        let flag = UInt32(SECP256K1_CONTEXT_VERIFY)
+        
+        guard let ctx = secp256k1_context_create(flag) else { return nil }
+        
+        var pubkey = secp256k1_pubkey()
+        
+        let result = hashedMessage.withUnsafeBytes { (ptr: UnsafePointer<UInt8>) -> Int32 in
+            withUnsafePointer(to: &signature, { (sigPtr: UnsafePointer<secp256k1_ecdsa_recoverable_signature>) -> Int32 in
+                withUnsafeMutablePointer(to: &pubkey, { (pubPtr: UnsafeMutablePointer<secp256k1_pubkey>) -> Int32 in
+                    secp256k1_ecdsa_recover(ctx, pubPtr, sigPtr, ptr)
+                })
+            })
         }
         
-        return (ser_rsign as Data, recoveryID as String)
+        guard result == 1 else { return nil }
+        
+        let serializedPubkey = UnsafeMutablePointer<UInt8>.allocate(capacity: 65)
+        var pubLen = 65
+        
+        guard secp256k1_ec_pubkey_serialize(ctx, serializedPubkey, &pubLen, &pubkey, UInt32(SECP256K1_EC_UNCOMPRESSED)) == 1 else {
+            secp256k1_context_destroy(ctx)
+            return nil }
+        
+        secp256k1_context_destroy(ctx)
+        
+        let publicKey = Data(bytes: serializedPubkey, count: 65).toHexString()
+        
+        return publicKey
     }
     
     static func encrypt(devKey:Data, data: Data, salt: Data) throws -> (cipherText: String, mac: String, iv: String) {

@@ -10,7 +10,6 @@
 		A3E8F6903199357E7FC0119E /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D4053326206CD1700040BE89 /* TransactionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4053325206CD1700040BE89 /* TransactionDetailViewController.swift */; };
-		D40FA038214792BB00CB8E6E /* SECPWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D40FA036214792BB00CB8E6E /* SECPWrapper.m */; };
 		D40FAF4B205FDC80008C2CDA /* WalletBackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40FAF4A205FDC80008C2CDA /* WalletBackupViewController.swift */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
 		D4173603203E5674008857A1 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4173602203E5674008857A1 /* WelcomeViewController.swift */; };
@@ -150,8 +149,6 @@
 		BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D4053325206CD1700040BE89 /* TransactionDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailViewController.swift; sourceTree = "<group>"; };
-		D40FA036214792BB00CB8E6E /* SECPWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SECPWrapper.m; sourceTree = "<group>"; };
-		D40FA037214792BB00CB8E6E /* SECPWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SECPWrapper.h; sourceTree = "<group>"; };
 		D40FAF4A205FDC80008C2CDA /* WalletBackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBackupViewController.swift; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D4173602203E5674008857A1 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -703,8 +700,6 @@
 			children = (
 				D43FB693214B485D005360A8 /* IXSWrapper.h */,
 				D43FB692214B485D005360A8 /* IXSWrapper.m */,
-				D40FA037214792BB00CB8E6E /* SECPWrapper.h */,
-				D40FA036214792BB00CB8E6E /* SECPWrapper.m */,
 				D4728A2A20073BDF00E0A899 /* iconex_ios-Bridging-Header.h */,
 				D47A03DC20A2CEF5009A3A99 /* NSBundle+Language.h */,
 				D47A03DD20A2CEF5009A3A99 /* NSBundle+Language.m */,
@@ -945,7 +940,6 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous/Alamofire_Synchronous.framework",
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/ICONKit/ICONKit.framework",
@@ -965,7 +959,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire_Synchronous.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ICONKit.framework",
@@ -1075,7 +1068,6 @@
 				D48E49C22043EF900064CFF4 /* MainViewController.swift in Sources */,
 				D47A03E420A2F311009A3A99 /* CreateLockViewController.swift in Sources */,
 				D47A03E820A321BC009A3A99 /* DisclaimerViewController.swift in Sources */,
-				D40FA038214792BB00CB8E6E /* SECPWrapper.m in Sources */,
 				D421A2682068D10E00687431 /* EditingAddressViewController.swift in Sources */,
 				D481B0A220A958FF0016B0EE /* SwapStepView.swift in Sources */,
 				D455C032204533140068165E /* MainWalletView.swift in Sources */,
@@ -1265,8 +1257,6 @@
 					"-framework",
 					"\"Alamofire\"",
 					"-framework",
-					"\"Alamofire_Synchronous\"",
-					"-framework",
 					"\"BigInt\"",
 					"-framework",
 					"\"CryptoSwift\"",
@@ -1341,8 +1331,6 @@
 					"-ObjC",
 					"-framework",
 					"\"Alamofire\"",
-					"-framework",
-					"\"Alamofire_Synchronous\"",
 					"-framework",
 					"\"BigInt\"",
 					"-framework",

@@ -199,6 +199,7 @@
 "Transfer.DataTitle" = "데이터";
 "Transfer.InputType" = "입력 타입";
 "Transfer.EnterData" = "데이터 입력";
+"Transfer.Data.Cancel" = "데이터 입력을 취소하시겠습니까?";
 "Transfer.EstimatedFee" = "예상 최대 수수료";
 "Transfer.EstimatedBalance" = "송금 후 예상 잔액";
 "Transfer.Gas.Desc_1" = "가스 한도는 Transaction 실행에 지불할 용의가 있는 가스의 최대량을 의미합니다. 가스 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 가스만 소진합니다. 즉, 가스한도는 최대치만 설정 가능하며 실제 소진되는 가스량은 유동적입니다.";

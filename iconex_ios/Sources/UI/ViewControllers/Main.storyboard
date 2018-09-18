@@ -2161,7 +2161,7 @@
                                                     <constraint firstAttribute="height" constant="30" id="VVe-iC-dhj"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/512KB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kp1-FM-0KS">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/250KB" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kp1-FM-0KS">
                                                 <rect key="frame" x="302.5" y="20.5" width="48.5" height="16"/>
                                                 <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="14"/>
                                                 <color key="textColor" red="0.5725490196078431" green="0.5725490196078431" blue="0.5725490196078431" alpha="1" colorSpace="calibratedRGB"/>
@@ -2241,7 +2241,7 @@
             <objects>
                 <viewController storyboardIdentifier="ICXSendView" id="BUq-rt-cps" customClass="ICXSendViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EId-H8-NnI">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="2000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ufn-Uf-fdE">
@@ -2273,10 +2273,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VTv-uJ-ruQ">
-                                <rect key="frame" x="0.0" y="76" width="375" height="1924"/>
+                                <rect key="frame" x="0.0" y="76" width="375" height="591"/>
                                 <subviews>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2oY-Go-ANi">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1924"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4jN-xT-di2">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="1052"/>
@@ -2724,7 +2724,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ffA-MD-9H1">
-                                <rect key="frame" x="0.0" y="1928" width="375" height="72"/>
+                                <rect key="frame" x="0.0" y="595" width="375" height="72"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4R-eO-sK5">
                                         <rect key="frame" x="16" y="16" width="343" height="40"/>
@@ -2766,7 +2766,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Vvn-Wo-0ul"/>
                     </view>
-                    <size key="freeformSize" width="375" height="2000"/>
                     <connections>
                         <outlet property="add1" destination="CCG-wz-YCH" id="ii9-xz-D7s"/>
                         <outlet property="add2" destination="dHX-Iq-dkK" id="WW7-Lp-108"/>
