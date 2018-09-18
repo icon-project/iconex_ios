@@ -238,7 +238,7 @@ class StepTwoViewController: UIViewController {
     @discardableResult
     func validatePassword2(_ showError: Bool = true) -> Bool {
         if self.password2.textField.text! == "" {
-            if showError { self.password2.setState(.error, Localized(key: "Error.Password.Mismatch")) }
+            if showError { self.password2.setState(.error, "Error.Password".localized) }
             return false
         }
         
