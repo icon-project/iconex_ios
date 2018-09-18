@@ -163,7 +163,7 @@ class SwapStepTwoViewController: BaseViewController {
             return false
         }
         
-        guard name.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+        guard !name.hasPrefix(" ") && !name.hasSuffix(" ") else {
             if showError { self.nameInputBox.setState(.error, "Error.Password.Blank".localized) }
             return false
         }

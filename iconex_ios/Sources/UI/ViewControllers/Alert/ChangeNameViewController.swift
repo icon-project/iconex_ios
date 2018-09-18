@@ -96,7 +96,7 @@ class ChangeNameViewController: UIViewController {
             return false
         }
         
-        guard walletName.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+        guard !walletName.hasPrefix(" ") && !walletName.hasSuffix(" ") else {
             self.nameInputBox.setState(.error, "Error.Password.Blank".localized)
             return false
         }

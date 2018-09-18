@@ -198,7 +198,7 @@ class StepTwoViewController: UIViewController {
             return false
         }
         
-        guard walletName.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+        guard !walletName.hasPrefix(" ") && !walletName.hasSuffix(" ") else {
             if showError { self.walletNameBox.setState(.error, "Error.Password.Blank".localized) }
             return false
         }

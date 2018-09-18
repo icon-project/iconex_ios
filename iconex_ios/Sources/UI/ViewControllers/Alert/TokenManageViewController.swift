@@ -387,7 +387,7 @@ class TokenManageViewController: UIViewController {
             return false
         }
         
-        guard name.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines) == nil else {
+        guard !name.hasPrefix(" ") && !name.hasSuffix(" ") else {
             tokenInputBox.setState(.error, "Error.Password.Blank".localized)
             return false
         }
