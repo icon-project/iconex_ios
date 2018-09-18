@@ -39,7 +39,7 @@ class StepThreeViewController: UIViewController {
         firstDescription.text = Localized(key: "Create.Wallet.Step3.Desc.1_1")
         secondDescription.text = Localized(key: "Create.Wallet.Step3.Desc.1_2")
         walletDownloadHeader.text = Localized(key: "Create.Wallet.Step3.Header.2")
-        walletDownloadButton.setTitle(Localized(key: "Create.Wallet.Step3.Header.2"), for: .normal)
+        walletDownloadButton.setTitle(Localized(key: "Create.Wallet.Step3.Download"), for: .normal)
         walletDownloadButton.styleDark()
         walletDownloadButton.cornered()
         

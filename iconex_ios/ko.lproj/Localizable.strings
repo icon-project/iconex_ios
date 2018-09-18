@@ -78,9 +78,10 @@
 
 "Create.Wallet.Step3.StepTitle" = "백업 파일\n다운로드";
 "Create.Wallet.Step3.Header.1" = "지갑 백업 파일(Keystore 파일)은 개인 키(Private Key)를 암호화하여 저장한 파일이며, 사용을 위해서는 지정한 비밀번호를 입력해야 합니다.";
-"Create.Wallet.Step3.Desc.1_1" = "지갑이 삭제된 경우나 다른 PC및 모바일 디바이스 사용 시, 지갑 백업 파일을 이용하여 지갑을 실행할 수 있습니다.";
-"Create.Wallet.Step3.Desc.1_2" = "(안전한 저장 장소가 준비되지 않은 경우) 지금 즉시 다운로드 하지 않아도 되며, 다음에 '지갑 백업' 메뉴를 선택해 다운로드할 수 있습니다.";
-"Create.Wallet.Step3.Header.2" = "지갑 백업 파일 다운로드";
+"Create.Wallet.Step3.Desc.1_1" = "지갑 백업 파일과 비밀번호가 있으면 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 수 있습니다.";
+"Create.Wallet.Step3.Desc.1_2" = "지갑을 만든 후 ‘지갑 백업’에서도 다운로드할 수 있습니다.";
+"Create.Wallet.Step3.Header.2" = "지갑 백업 파일(Keystore 파일) 다운로드";
+"Create.Wallet.Step3.Download" = "지갑 백업 파일 다운로드";
 
 "Create.Wallet.Step4.StepTitle" = "개인 키\n저장";
 "Create.Wallet.Step4.Header.1" = "개인 키(Private Key)는 지갑의 고유 정보이며, 비밀번호가 설정되어 있지 않습니다.";
