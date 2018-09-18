@@ -35,7 +35,7 @@
 "Wallet.Address.CopyComplete" = "지갑 주소가 복사되었습니다.";
 
 "Placeholder.CurrentPassword" = "현재 비밀번호 입력";
-"Placeholder.InputWalletName" = "지갑 이름 입력";
+"Placeholder.InputWalletName" = "지갑 이름 입력 (8자)";
 "Placeholder.InputWalletPassword" = "비밀번호 입력";
 "Placeholder.InputNewPassword" = "새 비밀번호 입력";
 "Placeholder.ConfirmWalletPassword" = "비밀번호 확인";
@@ -95,7 +95,7 @@
 "Import.Step2.Button.Title" = "가져오기";
 
 "Import.Step3.Header_1" = "새 지갑의 이름을 입력하세요.";
-"Import.Step3.Placeholder_1" = "지갑 이름 입력";
+"Import.Step3.Placeholder_1" = "지갑 이름 입력 (8자)";
 
 "Import.Step2.Header_2_1" = "개인 키를 입력해주세요.";
 "Import.Step2.Desc_2_1" = "각 개인 키에 해당하는 코인을 선택해야만 보유한 코인 수량이 정상적으로 표시됩니다.";
