@@ -59,6 +59,10 @@ class ChangeNameViewController: UIViewController {
                 self.confirmButton.isEnabled = $0
             }).disposed(by: disposeBag)
         
+        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+            self.validateName()
+        }).disposed(by: disposeBag)
+        
         cancelButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.nameInputBox.textField.resignFirstResponder()
@@ -85,6 +89,7 @@ class ChangeNameViewController: UIViewController {
         }).disposed(by: disposeBag)
     }
 
+    @discardableResult
     private func validateName() -> Bool {
         guard let walletName = nameInputBox.textField.text, walletName != "" else {
             nameInputBox.setState(.error, "Error.WalletName".localized)
