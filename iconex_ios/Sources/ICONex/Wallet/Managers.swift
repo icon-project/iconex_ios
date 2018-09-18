@@ -544,14 +544,17 @@ class WalletCreator {
     
     func validateKeystore(urlOfData: URL) throws -> (ICON.Keystore, COINTYPE) {
         let content = try Data(contentsOf: urlOfData)
-        Log.Debug("content - \(String(data: content, encoding: .utf8))")
+        Log.Debug("content - \(String(describing: String(data: content, encoding: .utf8)))")
         let decoder = JSONDecoder()
         
         let keystore = try decoder.decode(ICON.Keystore.self, from: content)
         
         if keystore.coinType != nil || keystore.address.hasPrefix("hx") {
+            guard WManager.canSaveWallet(address: keystore.address.addHxPrefix()) else { throw IXError.duplicateAddress}
+            
             return (keystore, .icx)
         } else {
+            guard WManager.canSaveWallet(address: keystore.address.add0xPrefix()) else { throw IXError.duplicateAddress}
             return (keystore, .eth)
         }
     }
