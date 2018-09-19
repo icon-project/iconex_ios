@@ -8,6 +8,13 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import ICONKit
+import BigInt
+
+enum EncodeType {
+    case utf8
+    case hex
+}
 
 class ICXDataInputViewController: BaseViewController {
     @IBOutlet weak var closeButton: UIButton!
@@ -17,10 +24,15 @@ class ICXDataInputViewController: BaseViewController {
     @IBOutlet weak var stepView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
+    @IBOutlet weak var placeholder: UILabel!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
     var handler: ((String) -> Void)?
-    var type: Int = 0
+    var type: EncodeType = .utf8
+    var savedData: String? = nil
+    var costs: ICON.Response.StepCosts.CostResult?
+    var walletAmount: BigUInt?
+    var isModify: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,13 +47,34 @@ class ICXDataInputViewController: BaseViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        switch self.type {
+        case .utf8:
+            self.placeholder.text = "Hello, ICON!"
+            
+        case .hex:
+            self.placeholder.text = "0x1234"
+        }
+        if let saved = savedData {
+            textView.text = saved
+            textView.isEditable = false
+            self.doneButton.setTitle("Common.Modify".localized, for: .normal)
+        } else {
+            textView.isEditable = true
+            self.doneButton.setTitle("Common.Done".localized, for: .normal)
+        }
+    }
+    
     func initializeUI() {
         self.navTitle.text = "Transfer.DataTitle".localized
-        self.doneButton.setTitle("Common.Done".localized, for: .normal)
         self.lengthLabel.text = "0"
         self.textView.text = nil
-        
-        self.typeLabel.text = self.type == 0 ? "UTF-8" : "HEX"
+        self.textView.delegate = self
+        self.typeLabel.text = self.type == .utf8 ? "UTF-8" : "HEX"
+        self.doneButton.setTitleColor(UIColor.white, for: .normal)
+        self.doneButton.setTitleColor(UIColor(179, 179, 179), for: .disabled)
     }
     
     func initialize() {
@@ -58,11 +91,44 @@ class ICXDataInputViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         doneButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            if self.savedData != nil && self.isModify == false {
+                self.isModify = true
+                self.textView.isEditable = true
+                self.textView.becomeFirstResponder()
+                self.doneButton.setTitle("Common.Done".localized, for: .normal)
+                return
+            }
             
             guard let text = self.textView.text, text != "" else {
                 return
             }
             
+            if self.type == .hex {
+                let set = CharacterSet(charactersIn: "0123456789ABCDEF").inverted
+                
+                guard text.prefix0xRemoved().uppercased().rangeOfCharacter(from: set) == nil, text.prefix0xRemoved().hexToData() != nil else {
+                    Alert.Basic(message: "Error.InputData".localized).show(self)
+                    return
+                }
+            }
+            
+            let length = text.bytes.count
+            guard length <= 250 * 1024 else {
+                Alert.Basic(message: String(format: "Error.Data.Exceeded".localized, 250)).show(self)
+                return
+            }
+            
+            guard let costs = self.costs, let amount = self.walletAmount else { return }
+            
+            guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return }
+            let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(text.bytes.count)))
+            
+            if stepLimit > amount {
+                Alert.Basic(message: "Error.Transfer.InsufficientFee.ICX".localized).show(self)
+                return
+            }
+            
+            self.textView.resignFirstResponder()
             
             if let handler = self.handler, let text = self.textView.text {
                 handler(text)
@@ -72,14 +138,16 @@ class ICXDataInputViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         keyboardHeight().observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] (height: CGFloat) in
-            self.bottomConstraint.constant = height
+            var keyHeight: CGFloat = height
+            if #available(iOS 11.0, *) {
+                keyHeight = height - self.view.safeAreaInsets.bottom
+            }
+            self.bottomConstraint.constant = keyHeight
         }).disposed(by: disposeBag)
         
         textView.rx.didChange.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] in
             if let inputString = self.textView.text {
                 let length = Float(inputString.bytes.count) / 1024.0
-                Log.Debug("length - \(inputString.bytes.count)")
-                
                 self.lengthLabel.textColor = UIColor.black
                 
                 if length < 1.0 {
@@ -93,22 +161,33 @@ class ICXDataInputViewController: BaseViewController {
                 }
             }
         }).disposed(by: disposeBag)
+        
+        textView.rx.text.map { $0!.length > 0 }.subscribe(onNext: {
+            self.placeholder.isHidden = $0
+            self.doneButton.isEnabled = ($0 && self.costs != nil)
+        }).disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        self.textView.becomeFirstResponder()
+        if savedData == nil {
+            self.textView.becomeFirstResponder()
+        }
     }
 }
 
 
 extension ICXDataInputViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        var charSet = CharacterSet.decimalDigits
-        charSet.insert(charactersIn: "abcdefABCDEF")
-        guard let former = textView.text as NSString? else { return true }
+        guard let former = textView.text as NSString? else { return false }
         let value = former.replacingCharacters(in: range, with: text)
+        let count = value.bytes.count
+        if count > 250 * 1024 {
+            Alert.Basic(message: String(format: "Error.Data.Exceeded".localized, 250)).show(self)
+            return false
+        }
+        
+        
         return true
     }
 }

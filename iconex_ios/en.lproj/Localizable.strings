@@ -20,6 +20,7 @@
 "Common.Copied" = "Copied";
 "Common.Done" = "Complete";
 "Common.Remove" = "Delete";
+"Common.Modify" = "수정";
 
 
 "Wallet.Keystore" = "Keystore File";
@@ -441,4 +442,7 @@
 "Error.AddressBook.DuplicatedAddress" = "This account already exists.";
 "Error.Detail.InsufficientBalance" = "You have insufficient balance.";
 "Error.Transfer.AmountEmpty" = "Please enter the transfer amount.";
-"Error.Transfer.EmptyLimit" = "Step 한도를 입력해주세요.";
+"Error.Transfer.EmptyLimit" = "Please enter step limit.";
+"Error.Data.Exceeded" = "This exceeds input limit %dKB";
+"Error.Transfer.Limit.LessThen" = "Enter step limit less than %s";
+"Error.Transfer.Limit.MoreThen" = "Enter step limit more than %s";

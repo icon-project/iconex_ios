@@ -215,7 +215,10 @@ class ChangePasswordViewController: UIViewController {
     
     @discardableResult
     private func validatePassword1(_ showError: Bool = true) -> Bool {
-        let password = self.first.textField.text!
+        guard let password = self.first.textField.text, password != "" else {
+            if showError { self.first.setState(.error, "Error.Password".localized) }
+            return false
+        }
         
         if password.length < 8 {
             if showError { self.first.setState(.error, "Error.Password.Length".localized) }
@@ -236,7 +239,12 @@ class ChangePasswordViewController: UIViewController {
     
     @discardableResult
     func validatePassword2(_ showError: Bool = true) -> Bool {
-        guard let password = first.textField.text, let confirm = second.textField.text, password != "", password == confirm else {
+        guard let password = first.textField.text, let confirm = second.textField.text, confirm != "" else {
+            if showError { self.second.setState(.error, "Error.Password".localized) }
+            return false
+        }
+        
+        guard password == confirm else {
             if showError { self.second.setState(.error, "Error.Password.Mismatch".localized) }
             return false
         }

@@ -18,10 +18,10 @@ class DataInputSourceViewController: BaseViewController {
     @IBOutlet weak var hexButton: UIButton!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    var selected = 0 {
+    var selected: EncodeType = .utf8 {
         willSet {
             switch newValue {
-            case 0:
+            case .utf8:
                 utf8Button.isSelected = true
                 utf8Button.backgroundColor = UIColor.black
                 utf8Button.setTitleColor(UIColor.white, for: .highlighted)
@@ -29,21 +29,18 @@ class DataInputSourceViewController: BaseViewController {
                 hexButton.backgroundColor = UIColor.white
                 hexButton.setTitleColor(UIColor.black, for: .highlighted)
                 
-            case 1:
+            case .hex:
                 utf8Button.isSelected = false
                 utf8Button.backgroundColor = UIColor.white
                 utf8Button.setTitleColor(UIColor.black, for: .highlighted)
                 hexButton.isSelected = true
                 hexButton.backgroundColor = UIColor.black
                 hexButton.setTitleColor(UIColor.white, for: .highlighted)
-                
-            default:
-                break
             }
         }
     }
     
-    var handler: ((Int) -> Void)?
+    var handler: ((EncodeType) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,14 +69,14 @@ class DataInputSourceViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         utf8Button.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.selected = 0
+            self.selected = .utf8
         }).disposed(by: disposeBag)
         
         hexButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.selected = 1
+            self.selected = .hex
         }).disposed(by: disposeBag)
         
-        self.selected = 0
+        self.selected = .utf8
     }
     
     func initializeUI() {

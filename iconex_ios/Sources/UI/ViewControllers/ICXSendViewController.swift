@@ -67,7 +67,7 @@ class ICXSendViewController: UIViewController {
     var totalBalance: BigUInt!
     var privateKey: String?
     var stepPrice: BigUInt?
-    var inputData: String? {
+    var inputData: String? = nil {
         willSet {
             if newValue == nil {
                 dataInputControl.setTitle("Transfer.Data.Input".localized, for: .normal)
@@ -82,13 +82,11 @@ class ICXSendViewController: UIViewController {
     }
     
     var inputValue: BigUInt?
+    var costs: ICON.Response.StepCosts.CostResult?
     var minLimit: BigUInt?
     var maxLimit: BigUInt?
     
-    var dataValue: String?
-    
-    var selectedDataType: Int = 0
-    var dataSource: String?
+    var selectedDataType: EncodeType = .utf8
     
     let disposeBag = DisposeBag()
     
@@ -114,6 +112,7 @@ class ICXSendViewController: UIViewController {
             switch costs {
             case .success(let costResult):
                 if let cost = costResult.result {
+                    self.costs = cost
                     let minValue = cost.defaultValue.prefix0xRemoved()
                     let min = BigUInt(minValue, radix: 16)
                     self.minLimit = min
@@ -121,8 +120,7 @@ class ICXSendViewController: UIViewController {
                     self.inputValue = BigUInt(inputValue, radix: 16)
                     
                     DispatchQueue.main.async {
-                        guard let minimum = min else { return }
-                        self.limitInputBox.textField.text = String(minimum)
+                        self.calculateStepPrice()
                     }
                 }
                 
@@ -175,10 +173,17 @@ class ICXSendViewController: UIViewController {
                 remainBalance.text = printBalance
                 return
             }
-            guard let limit = BigUInt(stepLimit) else { return }
-            let remain = self.totalBalance - (stepPrice * limit)
-            self.remainBalance.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
-            self.exchangedRemainLabel.text = Tools.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)
+            self.validateLimit()
+//            guard let limit = BigUInt(stepLimit) else { return }
+//            Log.Debug("stepPrice - \(stepPrice), limit - \(limit), totalBalance - \(self.totalBalance)")
+//            let feeValue = (stepPrice * limit) / BigUInt(10).power(18)
+//            if feeValue > self.totalBalance {
+//                self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized)
+//                return
+//            }
+//            let remain = self.totalBalance - (stepPrice * limit)
+//            self.remainBalance.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
+//            self.exchangedRemainLabel.text = Tools.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)
         }
     }
     
@@ -252,17 +257,23 @@ class ICXSendViewController: UIViewController {
                 guard let walletInfo = self.walletInfo else { return }
                 guard let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
                 guard let stepPrice = self.stepPrice else { return }
-                
+
                 var tmpStepLimit = BigUInt(0)
                 if let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) {
                     tmpStepLimit = limit
                 }
-                
+                let feeValue = (stepPrice * tmpStepLimit) / BigUInt(10).power(18)
+                if feeValue > self.totalBalance {
+                    self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized)
+                    return
+                }
+
                 let sendValue = self.totalBalance - (stepPrice * tmpStepLimit)
                 
                 self.sendInputBox.textField.text = Tools.bigToString(value: sendValue, decimal: wallet.decimal, wallet.decimal, true, false)
                 self.sendInputBox.textField.becomeFirstResponder()
                 self.validateBalance()
+                self.validateLimit()
             }).disposed(by: disposeBag)
         
         addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
@@ -342,18 +353,35 @@ class ICXSendViewController: UIViewController {
         }).disposed(by: disposeBag)
         
         dataInputControl.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            let selectData = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "DataInputSourceView") as! DataInputSourceViewController
-            selectData.handler = { [unowned self] selected in
-                self.selectedDataType = selected
+            if let savedData = self.inputData {
                 let dataInput = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXDataInputView") as! ICXDataInputViewController
-                dataInput.type = selected
+                dataInput.type = self.selectedDataType
+                dataInput.savedData = savedData
+                dataInput.walletAmount = self.totalBalance
+                dataInput.costs = self.costs
                 dataInput.handler = { [unowned self] data in
-                    Log.Debug("Input data: \(data)")
-                    self.dataSource = data
+                    self.inputData = data
+                    self.calculateStepPrice()
                 }
                 self.present(dataInput, animated: true, completion: nil)
+            } else {
+                let selectData = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "DataInputSourceView") as! DataInputSourceViewController
+                selectData.handler = { [unowned self] selected in
+                    self.selectedDataType = selected
+                    let dataInput = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXDataInputView") as! ICXDataInputViewController
+                    dataInput.type = selected
+                    dataInput.savedData = nil
+                    dataInput.walletAmount = self.totalBalance
+                    dataInput.costs = self.costs
+                    dataInput.handler = { [unowned self] data in
+                        self.inputData = data
+                        self.calculateStepPrice()
+                    }
+                    self.present(dataInput, animated: true, completion: nil)
+                }
+                
+                selectData.present(from: self)
             }
-            selectData.present(from: self)
         }).disposed(by: disposeBag)
         
         feeInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -391,12 +419,12 @@ class ICXSendViewController: UIViewController {
             let estimatedStep = limit * stepPrice
             
             confirm.fee = Tools.bigToString(value: estimatedStep, decimal: 18, 18, false, false)
-            confirm.handler = {
+            confirm.handler = { [unowned self] in
                 
                 let withdraw = Tools.convertedHexString(value: value)!
                 
                 let limit = "0x" + String(limit, radix: 16)
-                let result = WManager.service.sendTransaction(privateKey: self.privateKey!, from: self.walletInfo!.address, to: to, value: withdraw, stepLimit: limit)
+                let result = WManager.service.sendICX(privateKey: self.privateKey!, from: self.walletInfo!.address, to: to, value: withdraw, stepLimit: limit, message: self.inputData)
                 
                 switch result {
                 case .success(let txHash):
@@ -499,7 +527,7 @@ class ICXSendViewController: UIViewController {
     
     @discardableResult
     func validateBalance(_ showError: Bool = true) -> Bool {
-        guard let sendText = self.sendInputBox.textField.text, let icxValue = Tools.stringToBigUInt(inputText: sendText), icxValue != BigUInt(0), let stepPrice = self.stepPrice else {
+        guard let sendText = self.sendInputBox.textField.text, let icxValue = Tools.stringToBigUInt(inputText: sendText), let stepPrice = self.stepPrice else {
             if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
             return false
         }
@@ -570,13 +598,13 @@ class ICXSendViewController: UIViewController {
         }
         
         if hexLimit < minLimit {
-            let message = "임시: \(minLimit) 보다 높은 스텝 한도를 입력해주세요."
+            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 18, 0, true, true))
             if showError { self.limitInputBox.setState(.error, message)}
             return false
         }
         
         if hexLimit > maxLimit {
-            let message = "임시: \(maxLimit) 보다 나은 스텝 한도를 입력해주세요."
+            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 18, 0, true, true))
             if showError { self.limitInputBox.setState(.error, message)}
             return false
         }
@@ -588,7 +616,12 @@ class ICXSendViewController: UIViewController {
             let estimated = limit * stepPrice
             self.feeAmountLabel.text = Tools.bigToString(value: estimated, decimal: 18, 18, false, true)
             self.exchangedFeeLabel.text = Tools.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 18, decimal: 18)
-            
+            Log.Debug("stepPrice - \(stepPrice), limit - \(limit), totalBalance - \(self.totalBalance)")
+            let feeValue = (stepPrice * limit) / BigUInt(10).power(18)
+            if feeValue > self.totalBalance {
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+                return false
+            }
             let remain = self.totalBalance - (stepPrice * limit)
             self.remainBalance.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
             self.exchangedRemainLabel.text = Tools.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)
@@ -625,6 +658,22 @@ class ICXSendViewController: UIViewController {
                     Log.Debug("Error - \(error)")
                 }
             }
+        }
+    }
+    
+    func calculateStepPrice() {
+        guard let costs = self.costs else { return }
+        
+        guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return }
+        
+        if let data = self.inputData {
+            
+            let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(data.bytes.count)))
+            
+            self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false, false)
+        } else {
+            guard let minimum = self.minLimit else { return }
+            self.limitInputBox.textField.text = String(minimum)
         }
     }
 }

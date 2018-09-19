@@ -20,6 +20,7 @@
 "Common.Copied" = "복사 완료";
 "Common.Done" = "완료";
 "Common.Remove" = "삭제";
+"Common.Modify" = "수정";
 
 
 "Wallet.Keystore" = "지갑 백업 파일(Keystore 파일)";
@@ -445,3 +446,6 @@
 "Error.Detail.InsufficientBalance" = "송금할 잔액이 부족합니다.";
 "Error.Transfer.AmountEmpty" = "송금할 수량을 입력해주세요.";
 "Error.Transfer.EmptyLimit" = "Step 한도를 입력해주세요.";
+"Error.Data.Exceeded" = "입력 한도 %dKB를 초과합니다.";
+"Error.Data.LessThen" = "%s 보다 낮은 Step 한도를 입력해 주세요.";
+"Error.Data.MoreThen" = "%s 보다 높은 Step 한도를 입력해 주세요.";
