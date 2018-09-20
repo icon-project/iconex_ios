@@ -40,8 +40,9 @@ class ICXWallet: BaseWallet {
         self.init()
 
         let encoder = JSONEncoder()
-        __rawData = try! encoder.encode(keystore)
+        __rawData = try? encoder.encode(keystore)
         self.address = keystore.address
+        self.keystore = keystore
     }
     
     convenience init(privateKey: String, password: String) {
@@ -76,7 +77,7 @@ class ICXWallet: BaseWallet {
         
         self.__rawData = rawData
         self.address = iconWallet.address
-        
+        self.keystore = iconWallet.keystore
         return true
     }
     
@@ -88,12 +89,18 @@ class ICXWallet: BaseWallet {
         try iconWallet.changePassword(current: old, new: new)
         
         self.__rawData = iconWallet.rawData
+        self.keystore = iconWallet.keystore
     }
     
     func saveICXWallet() throws {
         
         try DB.saveWallet(name: self.alias!, address: self.address!, type: "icx", rawData: self.__rawData)
         
+        if let tokens = self.tokens {
+            for tokenInfo in tokens {
+                try DB.addToken(tokenInfo: tokenInfo)
+            }
+        }
     }
     
     func extractICXPrivateKey(password: String) throws -> String {

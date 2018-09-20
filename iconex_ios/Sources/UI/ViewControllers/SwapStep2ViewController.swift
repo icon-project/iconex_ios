@@ -13,6 +13,8 @@ class SwapStep2ViewController: BaseViewController {
     @IBOutlet weak var stepView: SwapStepView2!
     @IBOutlet weak var scrollView: UIScrollView!
     
+    var walletName: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,6 +29,7 @@ class SwapStep2ViewController: BaseViewController {
     
     func initialize() {
         let step1 = childViewControllers[0] as! SwapStepOneViewController
+        step1.walletName = walletName
         step1.set2()
         step1.delegate = self
         let step5 = childViewControllers[1] as! SwapStepFiveViewController

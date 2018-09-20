@@ -72,7 +72,7 @@ class WalletExportViewController: UIViewController {
         content1.text = con1
         height = height + con1.boundingRect(size: CGSize(width: content1.frame.width, height: 999), font: content1.font).height
         
-        let con2 = "Backup.Desc1_2".localized
+        let con2 = "BundleExport.Step1.Desc_2".localized
         content2.text = con2
         height = height + con2.boundingRect(size: CGSize(width: content2.frame.width, height: 999), font: content2.font).height
         

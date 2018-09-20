@@ -234,6 +234,7 @@
 "BundleExport.Step1.NavTitle" = "Export Wallet Bundle";
 "BundleExport.Step1.Header" = "Select the wallets to bundle. Passwords are required.";
 "BundleExport.Step1.Desc_1" = "Wallet bundle backs up your wallets in one file. You can easily manage different wallets at once.";
+"BundleExport.Step1.Desc_2" = "You will need the password to load your wallet in other devices using the Keystore file or your private key.";
 "BundleExport.Step1.Selected" = " Selected Wallets";
 "BundleExport.BundlePassword" = "Wallet Bundle Password";
 
@@ -303,7 +304,8 @@
 
 "Swap.Swap" = "Swap";
 "Swap.Step1_1.Header1" = "ICX ERC20 tokens on the Ethereum network can now be swapped and transferred to ICON’s Mainnet.";
-"Swap.Step1_1.Desc1" = "Token swap will take place after generating your new ICX coin wallet.";
+"Swap.Step1_1.Desc1_1" = "Token swap will take place after generating your new ICX coin wallet.";
+"Swap.Step1_1.Desc1_2" = "이전에 스왑용으로 생성한 ICX 지갑이 있습니다. %s(으)로 토큰 스왑이 진행됩니다.";
 "Swap.Step1_1.Header2" = "Please refer to the following precautions";
 "Swap.Step1_1.Desc2_1" = "If you follow the instructions the ICX wallet for token swap will be created. (The private key of the ICX wallet for token swap will be identical to the private key of your previous Ethereum wallet.)";
 "Swap.Step1_1.Desc2_H" = "Please make sure that you name the wallet so that you can distinguish the wallet for token swap from other wallets.";

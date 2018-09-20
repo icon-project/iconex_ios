@@ -27,7 +27,8 @@ class SwapStepOneViewController: BaseViewController {
     @IBOutlet var nextButton: UIButton!
     
     @IBOutlet weak var buttonHeightConstraint: NSLayoutConstraint!
-    var isWalletExists: Bool = false
+
+    var walletName: String?
     
     var delegate: SwapStepDelegate?
     
@@ -102,7 +103,13 @@ class SwapStepOneViewController: BaseViewController {
         self.nextButton.isEnabled = false
         nextButton.styleDark()
         headerLabel1.text = "Swap.Step1_1.Header1".localized
-        descLabel1.text = "Swap.Step1_1.Desc1".localized
+        descLabel1.text = {
+            if let walletName = self.walletName {
+                return String(format: "Swap.Step1_1.Desc1_2".localized, walletName)
+            } else {
+                return "Swap.Step1_1.Desc1_1".localized
+            }
+        }()
         headerLabel2.text = "Swap.Step1_1.Header2".localized
         descLabel2_1.text = "Swap.Step1_1.Desc2_1".localized
         descLabel2_2.text = "Swap.Step1_1.Desc2_2".localized
@@ -121,7 +128,13 @@ class SwapStepOneViewController: BaseViewController {
         self.nextButton.isEnabled = false
         nextButton.styleLight()
         headerLabel1.text = "Swap.Step1_1.Header1".localized
-        descLabel1.text = "Swap.Step1_1.Desc1".localized
+        descLabel1.text = {
+            if let walletName = self.walletName {
+                return String(format: "Swap.Step1_1.Desc1_2".localized, walletName)
+            } else {
+                return "Swap.Step1_1.Desc1_1".localized
+            }
+        }()
         headerLabel2.text = "Swap.Step1_2.Header2".localized
         descLabel2_1.text = "Swap.Step1_2.Desc2_1".localized
         descLabel2_2.text = "Swap.Step1_2.Desc2_2".localized
