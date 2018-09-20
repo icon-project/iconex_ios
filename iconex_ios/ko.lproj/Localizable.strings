@@ -389,7 +389,7 @@
 "Alert.AddressBook.Remove" = "선택한 주소를 삭제하시겠습니까?";
 "Alert.Transfer.Title" = "수량과 주소를 한번 더 확인해주세요.";
 "Alert.Transfer.Amount" = "송금 수량";
-"Alert.Transfer.Fee" = "송금 수수료";
+"Alert.Transfer.Fee" = "예상 최대 수수료";
 "Alert.Transfer.EstimatedFee" = "예상 최대 수수료";
 "Alert.Transfer.Address" = "받는 주소";
 "Alert.Bio.Fingerprint.Empty" = "Touch ID가 설정되어 있지 않습니다.\n휴대폰의 설정화면에서 Touch ID를 설정 후 다시 시도해주세요.";
@@ -421,6 +421,7 @@
 "Error.Transfer.InsufficientFee" = "송금 수수료가 부족합니다.";
 "Error.Transfer.InsufficientFee.ETH" = "수수료를 지불할 ETH가 부족합니다.";
 "Error.Transfer.InsufficientFee.ICX" = "수수료를 지불할 ICX가 부족합니다.";
+"Error.Transfer.InputGasLimit" = "가스 한도를 입력해 주세요.";
 "Error.Transfer.Data" = "데이터를 다시 확인해주세요.";
 "Error.QRReader.PrivateKey" = "개인 키를 확인해주세요.";
 "Error.NoName" = "이름 없음";

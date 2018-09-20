@@ -419,6 +419,7 @@
 "Error.Transfer.InsufficientFee" = "Insufficient transaction fee.";
 "Error.Transfer.InsufficientFee.ETH" = "Insufficient ETH balance for transaction fee.";
 "Error.Transfer.InsufficientFee.ICX" = "Insufficient ICX balance for transaction fee.";
+"Error.Transfer.InputGasLimit" = "Please enter gas limit.";
 "Error.Transfer.Data" = "Incorrect data";
 "Error.QRReader.PrivateKey" = "Incorrect private key. Please check again.";
 "Error.NoName" = "No Name";

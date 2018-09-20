@@ -568,8 +568,13 @@ class ICXSendViewController: UIViewController {
             tmpStepLimit = limit
         }
         
+        guard icxValue <= self.totalBalance else {
+            if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+            return false
+        }
+        
         if icxValue + (stepPrice * tmpStepLimit) > self.totalBalance {
-            if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+            if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
             return false
         }
         
@@ -650,7 +655,7 @@ class ICXSendViewController: UIViewController {
             Log.Debug("stepPrice - \(stepPrice), limit - \(limit), totalBalance - \(self.totalBalance)")
             let feeValue = (stepPrice * limit) / BigUInt(10).power(18)
             if feeValue > self.totalBalance {
-                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
                 return false
             }
             let remain = self.totalBalance - (stepPrice * limit)

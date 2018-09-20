@@ -456,12 +456,12 @@ class ETHSendViewController: UIViewController {
         
         if let _ = self.token {
             gasLimitInputBox.textField.text = "55000"
-            gasValueLabel.text = "45 Gwei"
-            gasSlider.value = 45
+            gasValueLabel.text = "21 Gwei"
+            gasSlider.value = 21
         } else {
             gasLimitInputBox.textField.text = "21000"
-            gasValueLabel.text = "45 Gwei"
-            gasSlider.value = 45
+            gasValueLabel.text = "21 Gwei"
+            gasSlider.value = 21
         }
         
     }
@@ -480,7 +480,7 @@ class ETHSendViewController: UIViewController {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
                 return false
             }
-            Log.Debug("inputValue \(inputValue) , total \(self.totalBalance)")
+            
             guard inputValue <= self.totalBalance else {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                 return false
@@ -497,8 +497,13 @@ class ETHSendViewController: UIViewController {
             
             let wallet = WManager.loadWalletBy(info: self.walletInfo!)
             
+            guard ethValue <= self.totalBalance else {
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
+                return false
+            }
+            
             if ethValue + feeValue > self.totalBalance {
-                let message = "Error.Transfer.InsufficientFee".localized
+                let message = "Error.Transfer.InsufficientFee.ETH".localized
                 
                 if showError { self.sendInputBox.setState(.error, message.localized) }
                 return false
@@ -545,22 +550,22 @@ class ETHSendViewController: UIViewController {
     @discardableResult
     func validateEstimateGas(_ showError: Bool = true) -> Bool {
         guard let feeValue = estimateGas() else {
-            if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+            if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee.ETH".localized) }
             return false
         }
         guard let inputGas = self.gasLimitInputBox.textField.text, inputGas != "" else {
-            if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+            if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InputGasLimit".localized) }
             return false
         }
         
         let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
         guard let balance = wallet.balance, balance != BigUInt(0) else {
-            if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+            if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee.ETH".localized) }
             return false
         }
         if let _ = self.token {
             guard feeValue < balance else {
-                if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee".localized) }
+                if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee.ETH".localized) }
                 return false
             }
         } else {
@@ -697,7 +702,7 @@ class ETHSendViewController: UIViewController {
                         confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
                         if reason == -1 {
                             confirm.dismiss(animated: true, completion: {
-                                Alert.Basic(message: "Error.Transfer.InsufficientFee".localized).show(self)
+                                Alert.Basic(message: "Error.Transfer.InsufficientFee.ETH".localized).show(self)
                             })
                             
                         } else {
