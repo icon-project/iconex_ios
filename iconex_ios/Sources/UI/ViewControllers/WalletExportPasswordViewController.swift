@@ -141,8 +141,8 @@ class WalletExportPasswordViewController: UIViewController {
     }
     @discardableResult
     func validateConfirm(_ showError: Bool = true) -> Bool {
-        guard let confirm = confirmInputBox.textField.text else {
-            if showError { confirmInputBox.setState(.error, "Error.Password.Mismatch".localized) }
+        guard let confirm = confirmInputBox.textField.text, confirm != "" else {
+            if showError { confirmInputBox.setState(.error, "Error.Password".localized) }
             return false
         }
         guard let password = passwordInputBox.textField.text, password.length != 0 else {

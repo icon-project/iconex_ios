@@ -20,7 +20,7 @@
 "Common.Copied" = "Copied";
 "Common.Done" = "Complete";
 "Common.Remove" = "Delete";
-"Common.Modify" = "수정";
+"Common.Modify" = "Edit";
 
 
 "Wallet.Keystore" = "Keystore File";
@@ -43,7 +43,7 @@
 "Placeholder.ConfirmNewPassword" = "Confirm new password";
 "Placeholder.PrivateKey" = "Enter your private key";
 "Placeholder.SwapAmount" = "Enter swap amount";
-"Placeholder.StepLimit" = "Step 한도 입력";
+"Placeholder.StepLimit" = "Enter Step limit";
 
 ///////////////////////////
 
@@ -305,7 +305,7 @@
 "Swap.Swap" = "Swap";
 "Swap.Step1_1.Header1" = "ICX ERC20 tokens on the Ethereum network can now be swapped and transferred to ICON’s Mainnet.";
 "Swap.Step1_1.Desc1_1" = "Token swap will take place after generating your new ICX coin wallet.";
-"Swap.Step1_1.Desc1_2" = "이전에 스왑용으로 생성한 ICX 지갑이 있습니다. %s(으)로 토큰 스왑이 진행됩니다.";
+"Swap.Step1_1.Desc1_2" = "You have created the wallet for token swap before. Swapped ICX coins will be added to the %s";
 "Swap.Step1_1.Header2" = "Please refer to the following precautions";
 "Swap.Step1_1.Desc2_1" = "If you follow the instructions the ICX wallet for token swap will be created. (The private key of the ICX wallet for token swap will be identical to the private key of your previous Ethereum wallet.)";
 "Swap.Step1_1.Desc2_H" = "Please make sure that you name the wallet so that you can distinguish the wallet for token swap from other wallets.";
