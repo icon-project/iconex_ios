@@ -498,7 +498,7 @@ class ETHSendViewController: UIViewController {
             let wallet = WManager.loadWalletBy(info: self.walletInfo!)
             
             if ethValue + feeValue > self.totalBalance {
-                let message = wallet!.type == .icx ? "Error.Transfer.InsufficientFee.ICX" : "Error.Transfer.InsufficientFee.ETH"
+                let message = "Error.Transfer.InsufficientFee".localized
                 
                 if showError { self.sendInputBox.setState(.error, message.localized) }
                 return false

@@ -2783,6 +2783,7 @@
                         <outlet property="addressInputBox" destination="8bX-Cz-kNA" id="sGl-Yi-ygB"/>
                         <outlet property="balanceLabel" destination="BeV-GV-HKj" id="kKc-lC-ba2"/>
                         <outlet property="balanceTitle" destination="idO-QK-oEh" id="Ccm-Fz-FUU"/>
+                        <outlet property="dataHeightConstraint" destination="7aJ-6y-eAn" id="FQ2-7g-nR2"/>
                         <outlet property="dataInfo" destination="m3b-OE-pXB" id="dtn-ia-0v9"/>
                         <outlet property="dataInputControl" destination="UTl-8j-bLP" id="Ear-Oj-Ryk"/>
                         <outlet property="dataTitle" destination="tUL-yE-NXu" id="ptZ-5h-twP"/>

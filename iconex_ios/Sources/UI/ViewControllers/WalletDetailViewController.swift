@@ -191,6 +191,9 @@ class WalletDetailViewController: UIViewController {
                     if self.walletInfo!.type == .icx {
                         let sendView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXSendView") as! ICXSendViewController
                         sendView.walletInfo = self.walletInfo
+                        if let token = self.token {
+                            sendView.token = token
+                        }
                         sendView.privateKey = privKey
                         self.navigationController?.pushViewController(sendView, animated: true)
                     } else if self.walletInfo!.type == .eth {

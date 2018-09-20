@@ -414,6 +414,7 @@
 "Error.Address.ICX.Invalid" = "Incorrect ICX address.";
 "Error.Transfer.AboveMax" = "This exceeds your balance.";
 "Error.Transfer.BelowZero" = "Please enter amount above zero.";
+"Error.Transfer.InsufficientFee" = "Insufficient transaction fee.";
 "Error.Transfer.InsufficientFee.ETH" = "Insufficient ETH balance for transaction fee.";
 "Error.Transfer.InsufficientFee.ICX" = "Insufficient ICX balance for transaction fee.";
 "Error.Transfer.Data" = "Incorrect data";
