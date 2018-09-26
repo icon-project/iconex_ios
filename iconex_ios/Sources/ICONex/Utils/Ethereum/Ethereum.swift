@@ -253,7 +253,7 @@ struct Ethereum {
         }
         
         var options = Web3Options.defaultOptions()
-        let address = EthereumAddress(token.dependedAddress)
+        let address = EthereumAddress(token.dependedAddress.add0xPrefix())
         options.from = address
         guard let balance = contract.method("balanceOf", parameters: [address] as [AnyObject], options: options)?.call(options: nil) else {
             

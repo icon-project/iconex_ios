@@ -255,7 +255,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                 
                 if let tokens = wallet.tokens {
                     for token in tokens {
-                        guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4), let excD = Double(exchanged) else { continue }
+                        guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4), let excD = Double(exchanged) else { continue }
                         dExchange += excD
                     }
                 }
@@ -290,7 +290,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
             
             var existsList = [Double]()
             for walletInfo in wallets {
-                guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let excD = Double(exchanged) else { continue }
+                guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress.add0xPrefix()], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let excD = Double(exchanged) else { continue }
                 existsList.append(excD)
             }
             
@@ -416,7 +416,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             
             guard let wallet = WManager.loadWalletBy(info: walletInfo) else { return cell }
             guard let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first else { return cell }
-            guard let tokenBalances = WManager.tokenBalanceList[item.dependedAddress] else { return cell }
+            guard let tokenBalances = WManager.tokenBalanceList[item.dependedAddress.add0xPrefix()] else { return cell }
             guard let balance = tokenBalances[item.contractAddress] else {
                 cell.isLoading = !WManager.isBalanceLoadCompleted
                 Tools.rotateAnimation(inView: cell.indicator)
@@ -476,12 +476,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 let token = wallet.tokens![indexPath.row - 1]
                 cell.coinNameLabel.text = token.name
                 cell.coinTypeLabel.text = token.symbol
-                guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress] else {
-                    cell.isLoading = !WManager.isBalanceLoadCompleted
-                    Tools.rotateAnimation(inView: cell.indicator)
-                    return cell
-                }
-                guard let balance = tokenBalances[token.contractAddress] else {
+                guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress] else {
                     cell.isLoading = !WManager.isBalanceLoadCompleted
                     Tools.rotateAnimation(inView: cell.indicator)
                     return cell
@@ -499,7 +494,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                         return
                     }
                     
-                    if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) {
+                    if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) {
                         
                         guard let walletBalance = wallet.balance, walletBalance != BigUInt(0) else {
                             Alert.Basic(message: "Error.Swap.NoETH".localized).show(root)

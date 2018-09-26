@@ -451,9 +451,9 @@ struct DB {
         }
         
         token.name = tokenInfo.name
-        token.contractAddress = tokenInfo.contractAddress
+        token.contractAddress = tokenInfo.contractAddress.add0xPrefix()
         token.decimal = tokenInfo.decimal
-        token.dependedAddress = tokenInfo.dependedAddress
+        token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix()
         token.defaultDecimal = tokenInfo.defaultDecimal
         token.parentType = tokenInfo.parentType
         token.symbol = tokenInfo.symbol
@@ -480,9 +480,9 @@ struct DB {
         let token = TokenModel()
         token.id = model.id
         token.name = tokenInfo.name
-        token.contractAddress = tokenInfo.contractAddress
+        token.contractAddress = tokenInfo.contractAddress.add0xPrefix()
         token.decimal = tokenInfo.decimal
-        token.dependedAddress = tokenInfo.dependedAddress
+        token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix()
         token.defaultDecimal = tokenInfo.defaultDecimal
         token.parentType = tokenInfo.parentType
         token.symbol = tokenInfo.symbol
@@ -525,7 +525,7 @@ struct DB {
                 for token in list {
                     let model = TokenListModel()
                     model.id = id
-                    model.address = token.address
+                    model.address = token.address.add0xPrefix()
                     model.symbol = token.symbol
                     model.type = token.type
                     model.decimal = token.decimal

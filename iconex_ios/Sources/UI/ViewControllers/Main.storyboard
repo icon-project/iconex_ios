@@ -2591,9 +2591,6 @@
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="308" id="Ceu-BI-9WM"/>
-                                                        </constraints>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4U7-Sg-2CC">
                                                         <rect key="frame" x="0.0" y="812" width="375" height="120"/>
@@ -2783,7 +2780,7 @@
                         <outlet property="addressInputBox" destination="8bX-Cz-kNA" id="sGl-Yi-ygB"/>
                         <outlet property="balanceLabel" destination="BeV-GV-HKj" id="kKc-lC-ba2"/>
                         <outlet property="balanceTitle" destination="idO-QK-oEh" id="Ccm-Fz-FUU"/>
-                        <outlet property="dataHeightConstraint" destination="7aJ-6y-eAn" id="FQ2-7g-nR2"/>
+                        <outlet property="dataContainer" destination="wd7-8y-JSd" id="ecG-Io-fgf"/>
                         <outlet property="dataInfo" destination="m3b-OE-pXB" id="dtn-ia-0v9"/>
                         <outlet property="dataInputControl" destination="UTl-8j-bLP" id="Ear-Oj-Ryk"/>
                         <outlet property="dataTitle" destination="tUL-yE-NXu" id="ptZ-5h-twP"/>
@@ -3237,7 +3234,7 @@
                                                                 <rect key="frame" x="24" y="16.5" width="58.5" height="29"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             </button>
-                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowUp" translatesAutoresizingMaskIntoConstraints="NO" id="q2T-l1-Am5">
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowDown" translatesAutoresizingMaskIntoConstraints="NO" id="q2T-l1-Am5">
                                                                 <rect key="frame" x="327" y="19" width="24" height="24"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="24" id="Fv0-B6-39A"/>
@@ -3526,7 +3523,7 @@
         <image name="icAppbarClose" width="26" height="24"/>
         <image name="icAppbarMenu" width="24" height="24"/>
         <image name="icAppbarMoreVert" width="24" height="24"/>
-        <image name="icArrowUp" width="24" height="24"/>
+        <image name="icArrowDown" width="24" height="24"/>
         <image name="icDropdownColor" width="11" height="12"/>
         <image name="icDropdownDarkgray" width="12" height="13"/>
         <image name="icInfo" width="13" height="13"/>

@@ -107,7 +107,7 @@ class SwapStepFiveViewController: BaseViewController {
         
         let wallet = WManager.loadWalletBy(info: SwapManager.sharedInstance.walletInfo!) as! ETHWallet
         let token = wallet.tokens!.filter { $0.symbol.lowercased() == "icx" }.first!
-        if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress] {
+        if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] {
             totalBaseBalance = balance
             amntLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, false)
             remainLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, false)

@@ -71,7 +71,7 @@ class WalletManager {
                 let eth = wallet as! ETHWallet
                 guard let tokens = eth.tokens else { continue }
                 for token in tokens {
-                    guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress] else { continue }
+                    guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()] else { continue }
                     guard let balance = tokenBalances[token.contractAddress] else { continue }
                     guard let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal) else { continue }
                     guard let excD = Double(exchanged) else { continue }
@@ -111,13 +111,13 @@ class WalletManager {
     
     func loadWalletBy(info: WalletInfo) -> BaseWalletConvertible? {
         guard var wallet = DB.walletBy(info: info) else { return nil }
-        wallet.balance = WManager.walletBalanceList[info.address]
+        wallet.balance = WManager.walletBalanceList[info.type == .eth ? info.address.add0xPrefix() : info.address]
         return wallet
     }
     
     func loadWalletBy(address: String, type: COINTYPE) -> BaseWalletConvertible? {
         guard var wallet = DB.walletBy(address: address, type: type) else { return nil }
-        wallet.balance = WManager.walletBalanceList[address]
+        wallet.balance = WManager.walletBalanceList[type == .eth ? address.add0xPrefix() : address]
         return wallet
     }
     
@@ -130,13 +130,13 @@ class WalletManager {
     func getBalance(wallet: BaseWalletConvertible, completionHandler: @escaping (_ isSuccess: Bool) -> Void) {
         
         if wallet.type == .icx {
-            if let address = wallet.address {
+            if let address = wallet.address  {
 
                 let result = self.service.getBalance(address: address)
                 
                 switch result {
                 case .success(let balance):
-                    self.walletBalanceList[wallet.address!] = balance
+                    self.walletBalanceList[wallet.address!.add0xPrefix()] = balance
                     
                 case .failure(let error):
                     Log.Debug("Error - \(error)")
@@ -152,7 +152,7 @@ class WalletManager {
                     return
                 }
                 
-                self.walletBalanceList[wallet.address!] = value
+                self.walletBalanceList[wallet.address!.add0xPrefix()] = value
                 completionHandler(true)
             }.fetch()
         }
@@ -188,7 +188,7 @@ class WalletManager {
                             tokenBalances[token.contractAddress] = balance
                         }
                     }
-                    self.tokenBalanceList[wallet.address!] = tokenBalances
+                    self.tokenBalanceList[wallet.address!.add0xPrefix()] = tokenBalances
                     
                     self._queued.remove(address)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
@@ -207,7 +207,7 @@ class WalletManager {
                     }
                     
                     if let tokens = tokenValues {
-                        self.tokenBalanceList[wallet.address!] = tokens
+                        self.tokenBalanceList[wallet.address!.add0xPrefix()] = tokens
                     }
                     
                     self._queued.remove(address)

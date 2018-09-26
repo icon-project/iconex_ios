@@ -10,6 +10,7 @@ import RxSwift
 import RxCocoa
 import BigInt
 import web3swift
+import Result
 
 class WalletDetailCell: UITableViewCell {
     @IBOutlet weak var txTitleLabel: UILabel!
@@ -169,7 +170,7 @@ class WalletDetailViewController: UIViewController {
         outButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!) else { return }
             if let token = self.token {
-                guard let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
+                guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
                     let alert = UIStoryboard(name: "Alert", bundle: nil).instantiateInitialViewController() as! BasicActionViewController
                     alert.message = "Error.Detail.InsufficientBalance".localized
                     self.present(alert, animated: true, completion: nil)
@@ -177,7 +178,7 @@ class WalletDetailViewController: UIViewController {
                     return
                 }
             } else {
-                guard let balance = wallet.balance, balance != BigUInt(0) else {
+                guard let balance = WManager.walletBalanceList[wallet.address!], balance != BigUInt(0) else {
                     Alert.Basic(message: "Error.Detail.InsufficientBalance".localized).show(self)
                     return
                 }
@@ -259,7 +260,7 @@ class WalletDetailViewController: UIViewController {
             if let tokenList = wallet.tokens {
                 for token in tokenList {
                     var tokenBalance = "-"
-                    if let balances = WManager.tokenBalanceList[token.dependedAddress] {
+                    if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()] {
                         if let bigBalance = balances[token.contractAddress] {
                             tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
                         }
@@ -280,7 +281,9 @@ class WalletDetailViewController: UIViewController {
                     self.token = token
                 }
                 self.initializeUI()
+                self.requestBalance()
                 self.loadExchanged()
+                self.fetchRecentTransaction(true)
             })
             
         }).disposed(by: disposeBag)
@@ -511,7 +514,7 @@ class WalletDetailViewController: UIViewController {
                     if token.symbol.lowercased() == "icx" {
                         etherContainer.isHidden = false
                         swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-                            if let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress], balance != BigUInt(0) {
+                            if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) {
                                 
                                 let ethWallet = WManager.loadWalletBy(info: wallet)!
                                 
@@ -622,18 +625,25 @@ class WalletDetailViewController: UIViewController {
             if dragged {
                 
                 DispatchQueue.global(qos: .default).async {
-                    if let balance = Ethereum.requestTokenBalance(token: token) {
-                        DispatchQueue.main.async { [unowned self] in
-                            let balance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
-                            let attr = NSAttributedString(string: balance, attributes: [.kern: -2.0])
+                    
+                    var result: BigUInt?
+                    
+                    if wallet.type == .eth {
+                        result = Ethereum.requestTokenBalance(token: token)
+                    } else {
+                        result = WManager.getIRCTokenBalance(tokenInfo: token)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        if let balance = result {
+                            let stringBalance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
+                            let attr = NSAttributedString(string: stringBalance, attributes: [.kern: -2.0])
                             self.balanceLabel.attributedText = attr
                             self.loadExchanged()
                             self.refresh01.layer.removeAllAnimations()
                             self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
                             self.isDragTriggered = false
-                        }
-                    } else {
-                        DispatchQueue.main.async {
+                        } else {
                             self.balanceLabel.text = NSAttributedString(string: "-").string
                             self.refresh01.layer.removeAllAnimations()
                             self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
@@ -642,7 +652,7 @@ class WalletDetailViewController: UIViewController {
                     }
                 }
             } else {
-                if let balances = WManager.tokenBalanceList[wallet.address!], let balance = balances[token.contractAddress] {
+                if let balances = WManager.tokenBalanceList[wallet.address!.add0xPrefix()], let balance = balances[token.contractAddress] {
                     Log.Debug("balace \(balances)")
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
@@ -728,6 +738,13 @@ class WalletDetailViewController: UIViewController {
         
         if reset { historyList.removeAll() }
         
+        if self.token != nil {
+            // TODO: Token transaction list
+            self.isLoaded = true
+            self.loadData()
+            return
+        }
+        
         var tracker: Tracker {
             switch Config.host {
             case .main:
@@ -757,7 +774,6 @@ class WalletDetailViewController: UIViewController {
             }
         }
         self.isLoaded = true
-        
         self.loadData()
     }
     
@@ -765,7 +781,7 @@ class WalletDetailViewController: UIViewController {
         exchangeSelectLabel.text = exchangeType.uppercased()
         
         if let token = self.token {
-            guard let balances = WManager.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress] else {
+            guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] else {
                 return
             }
             

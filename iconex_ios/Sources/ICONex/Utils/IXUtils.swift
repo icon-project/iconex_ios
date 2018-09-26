@@ -446,9 +446,11 @@ struct Validator {
     }
     
     static func validateETHAddress(address: String) -> Bool {
+        let tempAddress = address.add0xPrefix()
+        guard tempAddress.length == 42 else { return false }
         let pattern = "^(0x[a-zA-Z0-9]{40})$"
         let result = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return result.evaluate(with: address)
+        return result.evaluate(with: tempAddress)
     }
 }
 
