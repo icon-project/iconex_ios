@@ -146,7 +146,7 @@ class ETHWallet: BaseWallet {
                     if let privateKey = WCreator.newPrivateKey {
                         if let publicKey = ICONUtil.createPublicKey(privateKey: privateKey) {
                             let address = ICONUtil.makeAddress(privateKey, publicKey)
-                            tokenInfo.swapAddress = address
+                            tokenInfo.swapAddress = address.lowercased()
                         }
                     }
                 }
@@ -169,12 +169,12 @@ class ETHWallet: BaseWallet {
         }
         
         if canSaveToken(contractAddress: mainCon) && canSaveToken(contractAddress: devCon) {
-            let icxInfo = TokenInfo(name: "ICON", defaultName: "ICON", symbol: "ICX", decimal: 18, defaultDecimal: 18, dependedAddress: self.address!, contractAddress: contract, parentType: "eth")
+            let icxInfo = TokenInfo(name: "ICON", defaultName: "ICON", symbol: "ICX", decimal: 18, defaultDecimal: 18, dependedAddress: self.address!.add0xPrefix(), contractAddress: contract, parentType: "eth")
             
             if let privateKey = WCreator.newPrivateKey {
                 if let publicKey = ICONUtil.createPublicKey(privateKey: privateKey) {
                     let address = ICONUtil.makeAddress(privateKey, publicKey)
-                    icxInfo.swapAddress = address
+                    icxInfo.swapAddress = address.lowercased()
                 }
             }
             

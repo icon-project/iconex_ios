@@ -163,12 +163,10 @@ struct DB {
             realm.delete(walletModel)
         }
         
-        let tokenList = realm.objects(TokenModel.self).filter({ $0.dependedAddress == wallet.address! })
+        let tokenList = try DB.tokenList(dependedAddress: (wallet.type == .eth ? wallet.address!.add0xPrefix() : wallet.address!))
         
         for token in tokenList {
-            try realm.write {
-                realm.delete(token)
-            }
+            try DB.removeToken(tokenInfo: token)
         }
         
         return true
@@ -451,9 +449,9 @@ struct DB {
         }
         
         token.name = tokenInfo.name
-        token.contractAddress = tokenInfo.contractAddress.add0xPrefix()
+        token.contractAddress = tokenInfo.dependedAddress.hasPrefix("hx") ? tokenInfo.contractAddress.lowercased() : tokenInfo.contractAddress.add0xPrefix().lowercased()
         token.decimal = tokenInfo.decimal
-        token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix()
+        token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix().lowercased()
         token.defaultDecimal = tokenInfo.defaultDecimal
         token.parentType = tokenInfo.parentType
         token.symbol = tokenInfo.symbol
@@ -469,20 +467,12 @@ struct DB {
         
         guard let model = realm.objects(TokenModel.self).filter( "contractAddress = %@ and dependedAddress = %@", tokenInfo.contractAddress, tokenInfo.dependedAddress).first else { throw IXError.invalidTokenInfo }
         
-//        Log.Debug("depended: \(tokenInfo.dependedAddress)")
-//        let list = Array(realm.objects(TokenModel.self))
-//        Log.Debug("origin: \(list)")
-//        let modelList = list.filter({ $0.dependedAddress == tokenInfo.dependedAddress && $0.contractAddress == tokenInfo.contractAddress })
-//        Log.Debug("filtered: \(modelList)")
-//        if modelList.count == 0 { throw IXError.invalidTokenInfo }
-//        let model = modelList[0]
-        
         let token = TokenModel()
         token.id = model.id
         token.name = tokenInfo.name
-        token.contractAddress = tokenInfo.contractAddress.add0xPrefix()
+        token.contractAddress = tokenInfo.dependedAddress.hasPrefix("hx") ? tokenInfo.contractAddress.lowercased() : tokenInfo.contractAddress.add0xPrefix().lowercased()
         token.decimal = tokenInfo.decimal
-        token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix()
+        token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix().lowercased()
         token.defaultDecimal = tokenInfo.defaultDecimal
         token.parentType = tokenInfo.parentType
         token.symbol = tokenInfo.symbol

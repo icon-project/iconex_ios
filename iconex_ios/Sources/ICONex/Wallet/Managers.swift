@@ -116,7 +116,7 @@ class WalletManager {
     }
     
     func loadWalletBy(address: String, type: COINTYPE) -> BaseWalletConvertible? {
-        guard var wallet = DB.walletBy(address: address, type: type) else { return nil }
+        guard var wallet = DB.walletBy(address: address.lowercased(), type: type) else { return nil }
         wallet.balance = WManager.walletBalanceList[type == .eth ? address.add0xPrefix() : address]
         return wallet
     }
@@ -136,7 +136,7 @@ class WalletManager {
                 
                 switch result {
                 case .success(let balance):
-                    self.walletBalanceList[wallet.address!.add0xPrefix()] = balance
+                    self.walletBalanceList[wallet.address!.add0xPrefix().lowercased()] = balance
                     
                 case .failure(let error):
                     Log.Debug("Error - \(error)")
@@ -152,7 +152,7 @@ class WalletManager {
                     return
                 }
                 
-                self.walletBalanceList[wallet.address!.add0xPrefix()] = value
+                self.walletBalanceList[wallet.address!.add0xPrefix().lowercased()] = value
                 completionHandler(true)
             }.fetch()
         }
@@ -172,7 +172,7 @@ class WalletManager {
                     
                     switch result {
                     case .success(let balance):
-                        self.walletBalanceList[wallet.address!] = balance
+                        self.walletBalanceList[wallet.address!.lowercased()] = balance
                         
                     case .failure(let error):
                         Log.Debug("Error - \(error)")
@@ -185,10 +185,10 @@ class WalletManager {
                         let result = self.getIRCTokenBalance(tokenInfo: token)
                         
                         if let balance = result {
-                            tokenBalances[token.contractAddress] = balance
+                            tokenBalances[token.contractAddress.lowercased()] = balance
                         }
                     }
-                    self.tokenBalanceList[wallet.address!.add0xPrefix()] = tokenBalances
+                    self.tokenBalanceList[wallet.address!.lowercased()] = tokenBalances
                     
                     self._queued.remove(address)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
@@ -203,11 +203,11 @@ class WalletManager {
                 client.requestBalance { (ethValue, tokenValues) in
                     
                     if let value = ethValue {
-                        self.walletBalanceList[wallet.address!] = value
+                        self.walletBalanceList[wallet.address!.lowercased()] = value
                     }
                     
                     if let tokens = tokenValues {
-                        self.tokenBalanceList[wallet.address!.add0xPrefix()] = tokens
+                        self.tokenBalanceList[wallet.address!.add0xPrefix().lowercased()] = tokens
                     }
                     
                     self._queued.remove(address)
@@ -253,6 +253,7 @@ class WalletManager {
     func deleteWallet(wallet: BaseWalletConvertible) -> Bool {
         do {
             let result = try DB.deleteWallet(wallet: wallet)
+            
             WManager.loadWalletList()
             
             return result
@@ -514,6 +515,14 @@ class WalletCreator {
                 switch value.type {
                 case "icx":
                     guard let icxWallet = ICXWallet(alias: value.name, from: data) else { continue }
+                    if let tokens = value.tokens {
+                        var tokenList = [TokenInfo]()
+                        for token in tokens {
+                            let tokenInfo = TokenInfo(name: token.name, defaultName: token.defaultName, symbol: token.symbol, decimal: token.decimals, defaultDecimal: token.defaultDecimals, dependedAddress: icxWallet.address!.addHxPrefix(), contractAddress: token.address, parentType: "icx")
+                            tokenList.append(tokenInfo)
+                        }
+                        icxWallet.tokens = tokenList.count > 0 ? tokenList : nil
+                    }
                     try icxWallet.saveICXWallet()
                     Log.Debug("Save ICX wallet which was named as \"\(value.name)\"")
                     
@@ -522,7 +531,7 @@ class WalletCreator {
                     if let tokens = value.tokens {
                         var tokenList = [TokenInfo]()
                         for token in tokens {
-                            let tokenInfo = TokenInfo(name: token.name, defaultName: token.defaultName, symbol: token.symbol, decimal: token.decimals, defaultDecimal: token.defaultDecimals, dependedAddress: ethWallet.address!, contractAddress: token.address, parentType: "eth")
+                            let tokenInfo = TokenInfo(name: token.name, defaultName: token.defaultName, symbol: token.symbol, decimal: token.decimals, defaultDecimal: token.defaultDecimals, dependedAddress: ethWallet.address!.add0xPrefix(), contractAddress: token.address, parentType: "eth")
                             tokenList.append(tokenInfo)
                         }
                         ethWallet.tokens = tokenList.count > 0 ? tokenList : nil
@@ -584,7 +593,7 @@ class WalletCreator {
             throw IXError.keyMalformed
         }
         
-        return WManager.canSaveWallet(address: address)
+        return WManager.canSaveWallet(address: address.add0xPrefix())
     }
     
     func saveWallet(alias: String) throws {

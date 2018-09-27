@@ -333,7 +333,7 @@ struct Ethereum {
 
 extension String {
     func add0xPrefix() -> String {
-        if self.hasPrefix("hx") && self.length == 42 { return self }
+        guard self.length == 40 else { return self }
         
         if !self.hasPrefix("0x") {
             return "0x" + self
@@ -343,7 +343,7 @@ extension String {
     }
     
     func addHxPrefix() -> String {
-        if self.hasPrefix("0x") && self.length == 42 { return self }
+        guard self.length == 40 else { return self }
         
         if !self.hasPrefix("hx") {
             return "hx" + self

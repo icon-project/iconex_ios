@@ -99,8 +99,8 @@ class TokenInfo {
         self.symbol = symbol
         self.decimal = decimal
         self.defaultDecimal = defaultDecimal
-        self.dependedAddress = dependedAddress
-        self.contractAddress = contractAddress
+        self.dependedAddress = dependedAddress.lowercased()
+        self.contractAddress = contractAddress.lowercased()
         self.parentType = parentType
         self.createDate = Date()
     }
@@ -108,6 +108,6 @@ class TokenInfo {
     convenience init(token: TokenModel) {
         self.init(name: token.name, defaultName: token.defaultName, symbol: token.symbol, decimal: token.decimal, defaultDecimal: token.defaultDecimal, dependedAddress: token.dependedAddress, contractAddress: token.contractAddress, parentType: token.parentType)
         self.createDate = token.createdDate
-        self.swapAddress = token.swapAddress
+        self.swapAddress = token.swapAddress?.lowercased()
     }
 }

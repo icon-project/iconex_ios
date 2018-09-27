@@ -476,7 +476,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 let token = wallet.tokens![indexPath.row - 1]
                 cell.coinNameLabel.text = token.name
                 cell.coinTypeLabel.text = token.symbol
-                guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress] else {
+                guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.lowercased().add0xPrefix()], let balance = tokenBalances[token.contractAddress.lowercased()] else {
                     cell.isLoading = !WManager.isBalanceLoadCompleted
                     Tools.rotateAnimation(inView: cell.indicator)
                     return cell
@@ -494,7 +494,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                         return
                     }
                     
-                    if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) {
+                    if let balances = WManager.tokenBalanceList[token.dependedAddress.lowercased().add0xPrefix()], let balance = balances[token.contractAddress.lowercased()], balance != BigUInt(0) {
                         
                         guard let walletBalance = wallet.balance, walletBalance != BigUInt(0) else {
                             Alert.Basic(message: "Error.Swap.NoETH".localized).show(root)
