@@ -10,17 +10,21 @@ import Result
 
 open class Tracker {
     public struct TxList {
+        var contractAddr: String
+        var symbol: String
         var txHash: String
         var height: String
         var createDate: String
         var fromAddr: String
         var toAddr: String
-        var txType: String
+        var txType: String?
         var dataType: String
         var amount: String
         var fee: String
         var state: Int
-        var targetContractAddr: String?
+        var targetContractAddr: String
+        var quantity: String
+        var age: String
         var id: String
         
         init(dic: [String: Any]) {
@@ -29,12 +33,16 @@ open class Tracker {
             self.createDate = dic["createDate"] as? String ?? ""
             self.fromAddr = dic["fromAddr"] as? String ?? ""
             self.toAddr = dic["toAddr"] as? String ?? ""
-            self.txType = dic["txType"] as? String ?? ""
+            self.txType = dic["txType"] as? String
             self.dataType = dic["dataType"] as? String ?? ""
             self.amount = dic["amount"] as? String ?? ""
             self.fee = dic["fee"] as? String ?? ""
             self.state = dic["state"] as? Int ?? 0
-            self.targetContractAddr = dic["targetContractAddr"] as? String
+            self.targetContractAddr = dic["targetContractAddr"] as? String ?? ""
+            self.contractAddr = dic["contractAddr"] as? String ?? ""
+            self.symbol = dic["symbol"] as? String ?? ""
+            self.quantity = dic["quantity"] as? String ?? ""
+            self.age = dic["age"] as? String ?? ""
             self.id = dic["id"] as? String ?? ""
         }
     }
@@ -48,6 +56,7 @@ open class Tracker {
     enum Method: String {
         case getTransactionByAddress = "address/txListForWallet"
         case getExchangeList = "exchange/currentExchangeList"
+        case getTokenTransactionList = "token/txList"
     }
     
     enum TXType: Int {
@@ -94,6 +103,20 @@ open class Tracker {
         switch result {
         case .success(let response):
             return response
+            
+        case .failure(let error):
+            Log.Debug("Error - \(error)")
+        }
+        
+        return nil
+    }
+    
+    func tokenTxList(address: String, contractAddress: String, page: Int) -> [String: Any]? {
+        let result = send(method: .getTokenTransactionList, params: ["tokenAddr": address, "contractAddr": contractAddress, "page": page])
+        
+        switch result {
+        case .success(let resopnse):
+            return resopnse
             
         case .failure(let error):
             Log.Debug("Error - \(error)")

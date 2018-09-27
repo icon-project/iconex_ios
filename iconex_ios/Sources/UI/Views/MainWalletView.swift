@@ -216,18 +216,18 @@ class MainWalletView: UIView, UIScrollViewDelegate {
         }).disposed(by: disposeBag)
         
         exchangeListDidChanged().observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] _ in
-                self.setWalletBalance()
+            .subscribe(onNext: { [weak self] _ in
+                self?.setWalletBalance()
             }).disposed(by: disposeBag)
         
         balanceListDidChanged().observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] _ in
-                self.setWalletBalance()
+            .subscribe(onNext: { [weak self] _ in
+                self?.setWalletBalance()
             }).disposed(by: disposeBag)
         
         exchangeIndicatorChanged().observeOn(MainScheduler.instance)
-            .subscribe(onNext: { [unowned self] _ in
-                self.setWalletBalance()
+            .subscribe(onNext: { [weak self] _ in
+                self?.setWalletBalance()
             }).disposed(by: disposeBag)
     }
     
@@ -496,7 +496,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                     
                     if let balances = WManager.tokenBalanceList[token.dependedAddress.lowercased().add0xPrefix()], let balance = balances[token.contractAddress.lowercased()], balance != BigUInt(0) {
                         
-                        guard let walletBalance = wallet.balance, walletBalance != BigUInt(0) else {
+                        guard let walletBalance = WManager.walletBalanceList[wallet.address!], walletBalance != BigUInt(0) else {
                             Alert.Basic(message: "Error.Swap.NoETH".localized).show(root)
                             return
                         }

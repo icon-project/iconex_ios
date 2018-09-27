@@ -237,7 +237,7 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
             let wallet = WManager.loadWalletBy(info: walletInfo)!
             cell.walletName.text = wallet.alias
             cell.addressLabel.text = wallet.address
-            if let balance = wallet.balance {
+            if let balance = WManager.walletBalanceList[wallet.address!] {
                 cell.amountLabel.text = Tools.bigToString(value: balance, decimal: wallet.decimal)
             } else if let balance = WManager.walletBalanceList[wallet.address!] {
                 cell.amountLabel.text = Tools.bigToString(value: balance, decimal: wallet.decimal)

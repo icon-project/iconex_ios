@@ -65,6 +65,8 @@ class ICXDataInputViewController: BaseViewController {
             textView.isEditable = true
             self.doneButton.setTitle("Common.Done".localized, for: .normal)
         }
+        
+        self.textChanged()
     }
     
     func initializeUI() {
@@ -146,26 +148,30 @@ class ICXDataInputViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         textView.rx.didChange.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] in
-            if let inputString = self.textView.text {
-                let length = Float(inputString.bytes.count) / 1024.0
-                self.lengthLabel.textColor = UIColor.black
-                
-                if length < 1.0 {
-                    self.lengthLabel.text = String(format: "%d", inputString.bytes.count) + "B"
-                } else {
-                    self.lengthLabel.text = String(format: "%.0f", length) + "KB"
-                    
-                    if length > 250 * 1024 {
-                        self.lengthLabel.textColor = UIColor.red
-                    }
-                }
-            }
+            self.textChanged()
         }).disposed(by: disposeBag)
         
         textView.rx.text.map { $0!.length > 0 }.subscribe(onNext: {
             self.placeholder.isHidden = $0
             self.doneButton.isEnabled = ($0 && self.costs != nil)
         }).disposed(by: disposeBag)
+    }
+    
+    func textChanged() {
+        if let inputString = self.textView.text {
+            let length = Float(inputString.bytes.count) / 1024.0
+            self.lengthLabel.textColor = UIColor.black
+            
+            if length < 1.0 {
+                self.lengthLabel.text = String(format: "%d", inputString.bytes.count) + "B"
+            } else {
+                self.lengthLabel.text = String(format: "%.0f", length) + "KB"
+                
+                if length > 250 * 1024 {
+                    self.lengthLabel.textColor = UIColor.red
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

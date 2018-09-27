@@ -200,7 +200,7 @@ class ICXSendViewController: UIViewController {
             self.sendInputBox.setState(.focus)
         }).disposed(by: disposeBag)
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            self.validateBalance()
+            self.sendButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
             guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
@@ -280,7 +280,7 @@ class ICXSendViewController: UIViewController {
                     guard let balance = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()]?[token.contractAddress] else { return }
                     self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true, false)
                 } else {
-                    guard let formerValue = wallet.balance else { return }
+                    guard let formerValue = WManager.walletBalanceList[wallet.address!] else { return }
                     var tmpStepLimit = BigUInt(0)
                     if let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) {
                         tmpStepLimit = limit
@@ -357,7 +357,7 @@ class ICXSendViewController: UIViewController {
             self.validateLimit()
         }).disposed(by: disposeBag)
         limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            self.validation()
+            self.sendButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         
         stepPriceInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -479,24 +479,24 @@ class ICXSendViewController: UIViewController {
             
         }).disposed(by: disposeBag)
         
-        let observeBalance = sendInputBox.textField.rx.text
-            .map { _ in
-                return self.validateBalance(false)
-        }
-        
-        let observeAddress = addressInputBox.textField.rx.text
-            .map { _ in
-                return self.validateAddress(false)
-        }
-
-        let observeLimit = limitInputBox.textField.rx.text
-            .map { _ in
-                return self.validateLimit(false)
-        }
-        
-        Observable.combineLatest([observeBalance, observeAddress, observeLimit]) { iterator -> Bool in
-            return iterator.reduce(true, { $0 && $1 })
-        }.bind(to: sendButton.rx.isEnabled).disposed(by: disposeBag)
+//        let observeBalance = sendInputBox.textField.rx.text
+//            .map { _ in
+//                return self.validateBalance(false)
+//        }
+//
+//        let observeAddress = addressInputBox.textField.rx.text
+//            .map { _ in
+//                return self.validateAddress(false)
+//        }
+//
+//        let observeLimit = limitInputBox.textField.rx.text
+//            .map { _ in
+//                return self.validateLimit(false)
+//        }
+//
+//        Observable.combineLatest([observeBalance, observeAddress, observeLimit]) { iterator -> Bool in
+//            return iterator.reduce(true, { $0 && $1 })
+//        }.bind(to: sendButton.rx.isEnabled).disposed(by: disposeBag)
     }
     
     func initializeUI() {

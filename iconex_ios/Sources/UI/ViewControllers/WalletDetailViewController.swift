@@ -518,7 +518,7 @@ class WalletDetailViewController: UIViewController {
                                 
                                 let ethWallet = WManager.loadWalletBy(info: wallet)!
                                 
-                                guard let walletBalance = ethWallet.balance, walletBalance != BigUInt(0) else {
+                                guard let walletBalance = WManager.walletBalanceList[ethWallet.address!], walletBalance != BigUInt(0) else {
                                     Alert.Basic(message: "Error.Swap.NoETH".localized).show(self)
                                     return
                                 }
@@ -732,17 +732,14 @@ class WalletDetailViewController: UIViewController {
         guard wallet.type == .icx else { return }
         if !isLoaded { isLoaded = false }
         
-        if totalData != 0 {
-            guard let list = filteredList, totalData > list.count else { return }
+        if reset {
+            historyList.removeAll()
+            filteredList = nil
+            self.totalData = 0
         }
         
-        if reset { historyList.removeAll() }
-        
-        if self.token != nil {
-            // TODO: Token transaction list
-            self.isLoaded = true
-            self.loadData()
-            return
+        if totalData != 0 {
+            guard let list = filteredList, totalData > list.count else { return }
         }
         
         var tracker: Tracker {
@@ -758,19 +755,30 @@ class WalletDetailViewController: UIViewController {
             }
         }
         
-        var type: Tracker.TXType {
-            return address.hasPrefix("hx") ? .icxTransfer : .tokenTransfer
-        }
         
-        if let response = tracker.transactionList(address: address, page: self.step, txType: type) {
-            if let listSize = response["listSize"] as? Int, let list = response["data"] as? [[String: Any]] {
-                for txDic in list {
-                    let tx = Tracker.TxList(dic: txDic)
-                    self.historyList.append(tx)
-                    Transaction.updateTransactionCompleted(txHash: tx.txHash)
+        if let token = self.token {
+            if let response = tracker.tokenTxList(address: address, contractAddress: token.contractAddress, page: self.step) {
+                if let listSize = response["listSize"] as? Int, let list = response["data"] as? [[String: Any]] {
+                    for txDic in list {
+                        let tx = Tracker.TxList(dic: txDic)
+                        self.historyList.append(tx)
+                        Transaction.updateTransactionCompleted(txHash: tx.txHash)
+                    }
+                    
+                    self.totalData = listSize
                 }
-                
-                self.totalData = listSize
+            }
+        } else {
+            if let response = tracker.transactionList(address: address, page: self.step, txType: .icxTransfer) {
+                if let listSize = response["listSize"] as? Int, let list = response["data"] as? [[String: Any]] {
+                    for txDic in list {
+                        let tx = Tracker.TxList(dic: txDic)
+                        self.historyList.append(tx)
+                        Transaction.updateTransactionCompleted(txHash: tx.txHash)
+                    }
+                    
+                    self.totalData = listSize
+                }
             }
         }
         self.isLoaded = true
@@ -791,7 +799,7 @@ class WalletDetailViewController: UIViewController {
             }
             exchangeLabel.text = exchanged.currencySeparated()
         } else {
-            guard let wallet = WManager.loadWalletBy(info: self.walletInfo!), let balance = wallet.balance else {
+            guard let wallet = WManager.loadWalletBy(info: self.walletInfo!), let balance = WManager.walletBalanceList[wallet.address!] else {
                 return
             }
             guard exchangeType != wallet.type.rawValue, let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue, to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: wallet.decimal) else {
@@ -865,32 +873,49 @@ extension WalletDetailViewController: UITableViewDelegate, UITableViewDataSource
             
             cell.txTitleLabel.attributedText = attrString
             
-            if history.txType == "0" {
+            if history.fromAddr == walletInfo!.address {
+                cell.amountLabel.textColor = UIColor(230, 92, 103)
+                cell.typeLabel.textColor = UIColor(230, 92, 103)
+                cell.txDateLabel.textColor = UIColor(230, 92, 103)
+            } else {
+                cell.amountLabel.textColor = UIColor(74, 144, 226)
+                cell.typeLabel.textColor = UIColor(74, 144, 226)
+                cell.txDateLabel.textColor = UIColor(74, 144, 226)
+            }
+            
+            if let token = self.token {
+                cell.amountLabel.text = (history.fromAddr == walletInfo!.address ? "-" : "+") + history.quantity
+                cell.typeLabel.text = token.symbol.uppercased()
                 
-                if history.fromAddr == walletInfo!.address {
-                    cell.amountLabel.text = "-" + history.amount
-                    cell.amountLabel.textColor = UIColor(230, 92, 103)
-                    cell.typeLabel.textColor = UIColor(230, 92, 103)
-                    cell.txDateLabel.textColor = UIColor(230, 92, 103)
-                } else {
-                    cell.amountLabel.text = "+" + history.amount
-                    cell.amountLabel.textColor = UIColor(74, 144, 226)
-                    cell.typeLabel.textColor = UIColor(74, 144, 226)
-                    cell.txDateLabel.textColor = UIColor(74, 144, 226)
+                
+                let array = history.age.components(separatedBy: ".")
+                let dateString = array[0].replacingOccurrences(of: "T", with: " ")
+                if array.count > 1 {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+                    let date = dateFormatter.date(from: dateString)
+                    
+                    cell.txDateLabel.text = date?.toString(format: "yyyy-MM-dd HH:mm:ss")
+                }
+            } else {
+                cell.amountLabel.text = (history.fromAddr == walletInfo!.address ? "-" : "+") + history.amount
+                cell.typeLabel.text = "ICX"
+                
+                
+                let array = history.createDate.components(separatedBy: ".")
+                let dateString = array[0].replacingOccurrences(of: "T", with: " ")
+                if array.count > 1 {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+                    let date = dateFormatter.date(from: dateString)
+                    
+                    cell.txDateLabel.text = date?.toString(format: "yyyy-MM-dd HH:mm:ss")
                 }
             }
-            cell.typeLabel.text = "ICX"
             
-            let array = history.createDate.components(separatedBy: ".")
-            let dateString = array[0].replacingOccurrences(of: "T", with: " ")
-            if array.count > 1 {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-                let date = dateFormatter.date(from: dateString)
-                
-                cell.txDateLabel.text = date?.toString(format: "yyyy-MM-dd HH:mm:ss")
-            }
+            
             return cell
         } else {
             guard let list = holdList, list.count != 0 else {

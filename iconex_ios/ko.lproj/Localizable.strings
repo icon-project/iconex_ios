@@ -78,7 +78,7 @@
 "Create.Wallet.Step2.Confirm.Placeholder" = "비밀번호 확인";
 
 "Create.Wallet.Step3.StepTitle" = "백업 파일\n다운로드";
-"Create.Wallet.Step3.Header.1" = "지갑 백업 파일(Keystore 파일)은 개인 키(Private Key)를 암호화하여 저장한 파일이며, 사용을 위해서는 지정한 비밀번호를 입력해야 합니다.";
+"Create.Wallet.Step3.Header.1" = "지갑 백업 파일(Keystore 파일)은 개인 키(Private Key)를 암호화하여 저장한 파일이며, 지갑 백업 파일에는 비밀번호가 설정되어 있습니다.";
 "Create.Wallet.Step3.Desc.1_1" = "지갑 백업 파일과 비밀번호가 있으면 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 수 있습니다.";
 "Create.Wallet.Step3.Desc.1_2" = "지갑을 만든 후 ‘지갑 백업’에서도 다운로드할 수 있습니다.";
 "Create.Wallet.Step3.Header.2" = "지갑 백업 파일(Keystore 파일) 다운로드";
@@ -236,14 +236,14 @@
 "Side.Disclaimer" = "ICONex 이용 면책 조항";
 
 "BundleExport.Step1.NavTitle" = "지갑 묶어서 내보내기";
-"BundleExport.Step1.Header" = "묶어서 백업할 지갑들을 선택해주세요. 선택한 지갑마다 지갑별 비밀번호 확인이 필요합니다.";
+"BundleExport.Step1.Header" = "묶어서 백업할 지갑들을 선택해주세요. 지갑마다 비밀번호 확인이 필요합니다.";
 "BundleExport.Step1.Desc_1" = "지갑 묶어서 내보내기는 선택한 지갑 파일들을 모두 묶어서 하나의 파일로 백업하는 기능입니다.";
-"BundleExport.Step1.Desc_2" = "지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 경우 지갑 백업파일이 필요합니다.";
+"BundleExport.Step1.Desc_2" = "지갑 백업 파일과 비밀번호가 있으면 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 수 있습니다.";
 "BundleExport.Step1.Selected" = " 개 지갑 선택";
 
 "BundleExport.Step2.Header" = "묶음 지갑의 비밀번호를 생성하고 묶음 지갑 백업 파일을 다운로드해주세요.";
 "BundleExport.Step2.Desc1" = "비밀번호의 관리는 사용자의 책임이며, 분실하면 다시 찾을 수 있는 방법이 없습니다.";
-"BundleExport.Step2.Desc2" = "지갑 백업 파일(Keystore 파일)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 사용을 위해서는 설정한 비밀번호를 입력해야 합니다.";
+"BundleExport.Step2.Desc2" = "지갑 백업 파일(Keystore 파일)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 지갑 백업 파일에는 비밀번호가 설정되어 있습니다.";
 "BundleExport.Step2.Download" = "묶음 지갑 백업 파일 다운로드";
 "BundleExport.BundlePassword" = "묶음 지갑 비밀번호";
 

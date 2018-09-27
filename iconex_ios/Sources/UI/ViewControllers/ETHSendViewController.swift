@@ -43,6 +43,7 @@ class ETHSendViewController: UIViewController {
     @IBOutlet weak var dataInfo: UIButton!
     @IBOutlet weak var dataTitleButton: UIButton!
     @IBOutlet weak var dataInputBox: IXInputBox!
+    @IBOutlet weak var dataContainer: UIView!
     @IBOutlet weak var dataContainerHeight: NSLayoutConstraint!
     
     @IBOutlet weak var feeTitle: UILabel!
@@ -87,7 +88,7 @@ class ETHSendViewController: UIViewController {
         navTitle.text = wallet.alias!
         
         if let token = self.token {
-            if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] {
+            if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix().lowercased()], let balance = balances[token.contractAddress] {
                 Log.Debug("token balance \(balance)")
                 let printBalance = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, false)
                 balanceLabel.text = printBalance
@@ -100,7 +101,7 @@ class ETHSendViewController: UIViewController {
             }
         } else {
         
-            if let balance = WManager.walletBalanceList[walletInfo.address.add0xPrefix()] {
+            if let balance = WManager.walletBalanceList[walletInfo.address.add0xPrefix().lowercased()] {
                 let printBalance = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
                 balanceLabel.text = printBalance
                 
@@ -297,7 +298,7 @@ class ETHSendViewController: UIViewController {
                     self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true, false)
                 } else {
                     let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
-                    guard let formerValue = wallet.balance else { return }
+                    guard let formerValue = WManager.walletBalanceList[wallet.address!] else { return }
                     if formerValue < estimate {
                         self.view.endEditing(true)
                         self.validateBalance(true)
@@ -431,6 +432,7 @@ class ETHSendViewController: UIViewController {
         plusButton.cornered()
         
         dataTitle.text = "Transfer.Data".localized
+        dataInputBox.textField.placeholder = "0x1234..."
         dataInputBox.setType(.normal)
         dataInputBox.setState(.normal, nil)
         
@@ -439,11 +441,13 @@ class ETHSendViewController: UIViewController {
             sendTitle.text = "Transfer.TransferAmount".localized + " (" + token.symbol.uppercased() + ")"
             remainTitle.text = "Transfer.EstimatedBalance".localized + " (" + token.symbol.uppercased() + ")"
             dataTitleButton.isEnabled = false
+            dataContainer.isHidden = true
         } else {
             balanceTitle.text = "Transfer.Balance".localized + " (ETH)"
             sendTitle.text = "Transfer.TransferAmount".localized + " (ETH)"
             remainTitle.text = "Transfer.EstimatedBalance".localized + " (ETH)"
             dataTitleButton.isEnabled = true
+            dataContainer.isHidden = false
         }
         
         feeTitle.text = "Transfer.EstimatedFee".localized + " (ETH)"
@@ -515,9 +519,6 @@ class ETHSendViewController: UIViewController {
                 
                 if showError { self.sendInputBox.setState(.error, message.localized) }
                 return false
-            } else if ethValue == BigUInt(0) {
-                if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
-                return false
             }
             
             let remain = self.totalBalance - (ethValue + feeValue)
@@ -565,7 +566,7 @@ class ETHSendViewController: UIViewController {
         }
         
         let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
-        guard let balance = wallet.balance, balance != BigUInt(0) else {
+        guard let balance = WManager.walletBalanceList[wallet.address!], balance != BigUInt(0) else {
             if showError { self.gasLimitInputBox.setState(.error, "Error.Transfer.InsufficientFee.ETH".localized) }
             return false
         }
@@ -594,11 +595,11 @@ class ETHSendViewController: UIViewController {
         
         guard dataText.prefix0xRemoved().uppercased().rangeOfCharacter(from: set) == nil else {
             if showError { dataInputBox.setState(.error, "Error.InputData".localized) }
-            
+            self.gasLimitInputBox.textField.text = "21000"
             return false
         }
-        if showError { dataInputBox.setState(.normal, "") }
-        
+        dataInputBox.setState(.normal, "")
+        self.gasLimitInputBox.textField.text = "55000"
         return true
     }
     

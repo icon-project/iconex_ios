@@ -2530,7 +2530,7 @@
                                                                         </constraints>
                                                                         <state key="normal" image="iconInfoDarkgray"/>
                                                                     </button>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LVQ-PL-4dG">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="LVQ-PL-4dG">
                                                                         <rect key="frame" x="305.5" y="21" width="45.5" height="20"/>
                                                                         <fontDescription key="fontDescription" name="NanumSquareB" family="NanumSquare" pointSize="18"/>
                                                                         <color key="textColor" red="0.1019607843" green="0.66666666669999997" blue="0.72941176470000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3477,6 +3477,7 @@
                         <outlet property="balanceTitle" destination="SiU-pI-DoA" id="FC4-R3-AXh"/>
                         <outlet property="bottomConstraint" destination="VRe-rG-dJf" id="cam-zf-TQm"/>
                         <outlet property="closeButton" destination="p93-XO-2Q3" id="YJ9-MA-0mn"/>
+                        <outlet property="dataContainer" destination="BXI-jT-5hA" id="ral-s2-m9d"/>
                         <outlet property="dataContainerHeight" destination="4Fh-oA-4xe" id="cKS-ys-yDc"/>
                         <outlet property="dataInfo" destination="UC1-pc-seU" id="U3x-B3-93A"/>
                         <outlet property="dataInputBox" destination="s7g-dE-iub" id="hs4-nz-p6V"/>

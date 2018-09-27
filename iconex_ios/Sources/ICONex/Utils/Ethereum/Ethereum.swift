@@ -123,7 +123,7 @@ struct Ethereum {
                 }
                 return
             }
-            
+            Log.Debug("estimated: \(estimated), gasLimit: \(gasLimit)")
             if estimated > gasLimit {
                 DispatchQueue.main.async {
                     completion(false, -1)
