@@ -92,8 +92,8 @@ class ETHSendViewController: UIViewController {
                 Log.Debug("token balance \(balance)")
                 let printBalance = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, false)
                 balanceLabel.text = printBalance
-                let type = token.parentType.lowercased()
-                let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", decimal: token.decimal)
+                let type = token.symbol.lowercased()
+                let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: token.decimal)
                 balanceExchangeLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
                 self.totalBalance = balance
                 remainBalance.text = printBalance
@@ -104,9 +104,8 @@ class ETHSendViewController: UIViewController {
             if let balance = WManager.walletBalanceList[walletInfo.address.add0xPrefix().lowercased()] {
                 let printBalance = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
                 balanceLabel.text = printBalance
-                
                 let type = self.walletInfo!.type.rawValue
-                let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd")
+                let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2)
                 balanceExchangeLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
                 self.totalBalance = balance
                 remainBalance.text = printBalance
@@ -152,7 +151,7 @@ class ETHSendViewController: UIViewController {
             self.calculateGas()
         }).disposed(by: disposeBag)
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
-            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
+            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "eth", to: "usd", belowDecimal: 2, decimal: 18) else {
                 return
             }
             self.sendInputBox.setState(.exchange, exchanged.currencySeparated() + " USD")
@@ -177,7 +176,7 @@ class ETHSendViewController: UIViewController {
             self.validateEstimateGas()
         }).disposed(by: disposeBag)
         gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
-            
+            self.calculateGas()
         }).disposed(by: disposeBag)
         
         dataInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
@@ -187,7 +186,7 @@ class ETHSendViewController: UIViewController {
             self.validateData()
         }).disposed(by: disposeBag)
         dataInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
-            
+            self.calculateGas()
         }).disposed(by: disposeBag)
         
         let observeBalance = sendInputBox.textField.rx.text
@@ -433,7 +432,7 @@ class ETHSendViewController: UIViewController {
         
         dataTitle.text = "Transfer.Data".localized
         dataInputBox.textField.placeholder = "0x1234..."
-        dataInputBox.setType(.normal)
+        dataInputBox.setType(.data)
         dataInputBox.setState(.normal, nil)
         
         if let token = self.token {
@@ -493,7 +492,7 @@ class ETHSendViewController: UIViewController {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                 return false
             }
-            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
+            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: token.symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: 18) else {
                 return false
             }
             self.sendInputBox.setState(.exchange, exchanged.currencySeparated() + " USD")
@@ -526,7 +525,7 @@ class ETHSendViewController: UIViewController {
             if let excRemain = Tools.balanceToExchange(remain, from: "eth", to: "usd") {
                 self.exchangedRemainLabel.text = excRemain.currencySeparated() + " USD"
             }
-            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
+            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "eth", to: "usd", belowDecimal: 2, decimal: 18) else {
                 return false
             }
             self.sendInputBox.setState(.exchange, exchanged.currencySeparated() + " USD")
@@ -691,7 +690,7 @@ class ETHSendViewController: UIViewController {
             } else {
                 var data = Data()
                 let dataString = self.dataInputBox.textField.text!
-                if let converted = dataString.hexToData() {
+                if let converted = dataString.prefix0xRemoved().hexToData() {
                     data = converted
                 }
                 

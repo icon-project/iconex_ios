@@ -154,7 +154,7 @@ class ICXSendViewController: UIViewController {
                 balanceLabel.text = printBalance
                 
                 let type = token.symbol
-                if let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd") {
+                if let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: token.decimal) {
                     exchangedBalanceLabel.text = exchanged.currencySeparated() + " USD"
                 } else {
                     exchangedBalanceLabel.text = "- USD"
@@ -163,6 +163,9 @@ class ICXSendViewController: UIViewController {
                 
                 guard let stepPrice = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, stepLimit != "" else {
                     remainBalance.text = printBalance
+                    if let exc = Tools.balanceToExchange(balance, from: token.symbol, to: "usd", belowDecimal: 2, decimal: token.decimal) {
+                        exchangedRemainLabel.text = exc.currencySeparated() + " USD"
+                    }
                     return
                 }
             }
@@ -173,12 +176,15 @@ class ICXSendViewController: UIViewController {
                 balanceLabel.text = printBalance
                 
                 let type = self.walletInfo!.type.rawValue
-                let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd")
+                let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: wallet.decimal)
                 exchangedBalanceLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
                 totalBalance = balance
                 
                 guard let stepPrice = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, stepLimit != "" else {
                     remainBalance.text = printBalance
+                    if let exc = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: wallet.decimal) {
+                        exchangedRemainLabel.text = exc.currencySeparated() + " USD"
+                    }
                     return
                 }
             }
@@ -285,14 +291,15 @@ class ICXSendViewController: UIViewController {
                     if let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) {
                         tmpStepLimit = limit
                     }
-                    let feeValue = (stepPrice * tmpStepLimit) / BigUInt(10).power(18)
+                    let feeValue = (stepPrice * tmpStepLimit)
+                    Log.Debug("feeValue - \(feeValue)")
                     if feeValue > totalBalance {
                         self.view.endEditing(true)
                         self.validateBalance(true)
                         return
                     }
                     
-                    let sendValue = totalBalance - (stepPrice * tmpStepLimit)
+                    let sendValue = totalBalance - feeValue
                     
                     self.sendInputBox.textField.text = Tools.bigToString(value: sendValue, decimal: wallet.decimal, wallet.decimal, true, false)
                     
@@ -445,34 +452,67 @@ class ICXSendViewController: UIViewController {
             confirm.address = self.addressInputBox.textField.text!
             
             guard let stepPrice = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) else { return }
-            
+            guard let prvKey = self.privateKey, let walletInfo = self.walletInfo else { return }
             let estimatedStep = limit * stepPrice
             
             confirm.fee = Tools.bigToString(value: estimatedStep, decimal: 18, 18, false, false)
-            confirm.handler = { [unowned self] in
+            confirm.handler = {
                 
                 let withdraw = Tools.convertedHexString(value: value)!
                 
                 let limit = "0x" + String(limit, radix: 16)
-                let result = WManager.service.sendICX(privateKey: self.privateKey!, from: self.walletInfo!.address, to: to, value: withdraw, stepLimit: limit, message: self.inputData)
-                
-                switch result {
-                case .success(let txHash):
-                    Log.Debug("txHash: \(txHash)")
+                if let token = self.token {
+                    let result = WManager.service.sendIRCToken(privateKey: prvKey, from: walletInfo.address, to: to, contractAddress: token.contractAddress, value: withdraw, stepLimit: limit)
                     
-                    confirm.dismiss(animated: true, completion: {
-                        Tools.toast(message: "Transfer.RequestComplete".localized)
-                        self.navigationController?.popViewController(animated: true)
-                    })
-                    
-                case .failure(let error):
-                    Log.Debug("Error - \(error)")
-                    if let loadingView = confirm.confirmButton.viewWithTag(999) {
-                        loadingView.removeFromSuperview()
+                    switch result {
+                    case .success(let txHash):
+                        Log.Debug("txHash: \(txHash)")
+                        
+                        confirm.dismiss(animated: true, completion: {
+                            Tools.toast(message: "Transfer.RequestComplete".localized)
+                            self.navigationController?.popViewController(animated: true)
+                        })
+                        
+                    case .failure(let error):
+                        Log.Debug("Error - \(error)")
+                        if let loadingView = confirm.confirmButton.viewWithTag(999) {
+                            loadingView.removeFromSuperview()
+                        }
+                        confirm.confirmButton.isEnabled = true
+                        confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
+                        Tools.toast(message: "Error.CommonError".localized)
                     }
-                    confirm.confirmButton.isEnabled = true
-                    confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
-                    Tools.toast(message: "Error.CommonError".localized)
+                } else {
+                    var data: String? = nil
+                    if let message = self.inputData {
+                        if self.selectedDataType == .utf8 {
+                            if let tData = message.data(using: .utf8) {
+                                data = "0x" + tData.toHexString()
+                            }
+                        } else {
+                            data = message
+                        }
+                    }
+                    let result = WManager.service.sendICX(privateKey: self.privateKey!, from: self.walletInfo!.address, to: to, value: withdraw, stepLimit: limit, message: data)
+                    
+                    switch result {
+                    case .success(let txHash):
+                        Log.Debug("txHash: \(txHash)")
+                        
+                        confirm.dismiss(animated: true, completion: {
+                            Tools.toast(message: "Transfer.RequestComplete".localized)
+                            self.navigationController?.popViewController(animated: true)
+                        })
+                        
+                    case .failure(let error):
+                        Log.Debug("Error - \(error)")
+                        if let loadingView = confirm.confirmButton.viewWithTag(999) {
+                            loadingView.removeFromSuperview()
+                        }
+                        confirm.confirmButton.isEnabled = true
+                        confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
+                        Tools.toast(message: "Error.CommonError".localized)
+                    }
                 }
             }
             self.present(confirm, animated: true, completion: nil)
@@ -565,7 +605,7 @@ class ICXSendViewController: UIViewController {
     @discardableResult
     func validateBalance(_ showError: Bool = true) -> Bool {
         guard let totalBalance = self.totalBalance else { return false }
-        guard let sendText = self.sendInputBox.textField.text, sendText != "", let icxValue = Tools.stringToBigUInt(inputText: sendText), let stepPrice = self.stepPrice else {
+        guard let sendText = self.sendInputBox.textField.text, sendText != "", let inputValue = Tools.stringToBigUInt(inputText: sendText), let stepPrice = self.stepPrice else {
             if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
             return false
         }
@@ -575,22 +615,42 @@ class ICXSendViewController: UIViewController {
             tmpStepLimit = limit
         }
         
-        guard icxValue <= totalBalance else {
-            if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
-            return false
-        }
-        
-        if icxValue + (stepPrice * tmpStepLimit) > totalBalance {
-            if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
-            return false
-        }
-        
-        let sendValue = totalBalance - (icxValue + (stepPrice * tmpStepLimit))
-        
-        let wallet = WManager.loadWalletBy(info: self.walletInfo!)
-        self.remainBalance.text = Tools.bigToString(value: sendValue, decimal: wallet!.decimal, wallet!.decimal, false).currencySeparated() + " ICX"
-        if let exchanged = Tools.balanceToExchange(sendValue, from: wallet!.type.rawValue.lowercased(), to: "usd", belowDecimal: 2, decimal: wallet!.decimal) {
-            self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
+        if let token = self.token {
+            guard let balance = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix().lowercased()]?[token.contractAddress.lowercased()], let minimum = self.calculateStepPrice() else { return false }
+            guard inputValue <= balance else {
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
+                return false
+            }
+            
+            if minimum > totalBalance {
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+                return false
+            }
+            
+//            let remainValue = balance - inputValue
+//            Log.Debug("remain 1- \(remainValue)")
+//            self.remainBalance.text = Tools.bigToString(value: remainValue, decimal: token.decimal, token.decimal, false).currencySeparated()
+//            if let exchanged = Tools.balanceToExchange(remainValue, from: token.symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: token.decimal) {
+//                self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
+//            }
+        } else {
+            guard inputValue <= totalBalance else {
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+                return false
+            }
+            
+            if inputValue + (stepPrice * tmpStepLimit) > totalBalance {
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+                return false
+            }
+            
+            let remainValue = totalBalance - (inputValue + (stepPrice * tmpStepLimit))
+            
+            let wallet = WManager.loadWalletBy(info: self.walletInfo!)
+            self.remainBalance.text = Tools.bigToString(value: remainValue, decimal: wallet!.decimal, wallet!.decimal, false).currencySeparated()
+            if let exchanged = Tools.balanceToExchange(remainValue, from: wallet!.type.rawValue.lowercased(), to: "usd", belowDecimal: 2, decimal: wallet!.decimal) {
+                self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
+            }
         }
         
         if showError {
@@ -630,7 +690,13 @@ class ICXSendViewController: UIViewController {
             symbol = token.symbol
         }
         
-        guard let totalBalance = self.totalBalance else { return false }
+        var totalBalance: BigUInt
+        if let token = self.token {
+            guard let balance = WManager.tokenBalanceList[token.dependedAddress]?[token.contractAddress] else { return false }
+            totalBalance = balance
+        } else {
+            totalBalance = self.totalBalance!
+        }
         guard let limitString = self.limitInputBox.textField.text , limitString != "", let limit = BigUInt(limitString) else {
             if showError { self.limitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)}
             let limit = BigUInt(0)
@@ -672,18 +738,21 @@ class ICXSendViewController: UIViewController {
             let estimated = limit * stepPrice
             self.feeAmountLabel.text = Tools.bigToString(value: estimated, decimal: 18, 18, false, true)
             self.exchangedFeeLabel.text = Tools.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
-            Log.Debug("stepPrice - \(stepPrice), limit - \(limit), totalBalance - \(totalBalance)")
-            let feeValue = (stepPrice * limit) / BigUInt(10).power(18)
-            if feeValue > totalBalance {
-                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
-                return false
-            }
-            let remain = totalBalance - (stepPrice * limit)
-            self.remainBalance.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
-            if let exchanged = Tools.balanceToExchange(remain, from: symbol, to: "usd", belowDecimal: 2, decimal: 18) {
-                self.exchangedRemainLabel.text = exchanged + " USD"
-            } else {
-                self.exchangedRemainLabel.text = "- USD"
+            Log.Debug("stepPrice - \(stepPrice), limit - \(limit), totalBalance - \(totalBalance), estimated - \(estimated)")
+            
+            if let sendText = self.sendInputBox.textField.text, sendText != "", let inputValue = Tools.stringToBigUInt(inputText: sendText) {
+                if (self.token != nil ? inputValue : estimated + inputValue) > totalBalance {
+                    if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
+                    return false
+                }
+                let remain = self.token != nil ? totalBalance - inputValue : totalBalance - (estimated + inputValue)
+                Log.Debug("remain 2 - \(remain)")
+                self.remainBalance.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
+                if let exchanged = Tools.balanceToExchange(remain, from: symbol, to: "usd", belowDecimal: 2, decimal: 18) {
+                    self.exchangedRemainLabel.text = exchanged + " USD"
+                } else {
+                    self.exchangedRemainLabel.text = "- USD"
+                }
             }
         }
         
@@ -709,7 +778,7 @@ class ICXSendViewController: UIViewController {
                     
                     self.stepPriceLabel.text = priceICX + " ICX" + " (" + priceGloop + " Gloop)"
                     if let exchangedPrice = Tools.balanceToExchange(stepPrice, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
-                        self.stepExchangedLabel.text = exchangedPrice + "USD"
+                        self.stepExchangedLabel.text = exchangedPrice + " USD"
                     }
                     self.stepPrice = stepPrice
                     
@@ -720,19 +789,31 @@ class ICXSendViewController: UIViewController {
         }
     }
     
-    func calculateStepPrice() {
-        guard let costs = self.costs else { return }
+    @discardableResult
+    func calculateStepPrice() -> BigUInt? {
+        guard let costs = self.costs else { return nil }
         
-        guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return }
+        guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
         
-        if let data = self.inputData {
-            
+        if self.token != nil {
+            guard let text = sendInputBox.textField.text, let dataText = text.data(using: .utf8) else { return nil }
+            let hexValue = "0x" + dataText.hexEncodedString()
+            let data = "{method.transfer.params.{to.hx00000000000000000000000000000000.value.\(hexValue)}}"
             let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(data.bytes.count)))
             
             self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false, false)
+            return stepLimit
         } else {
-            guard let minimum = self.minLimit else { return }
-            self.limitInputBox.textField.text = String(minimum)
+            if let data = self.inputData {
+                let stepLimit = stepDefault + (input * BigUInt(data.bytes.count))
+                
+                self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false, false)
+                return stepLimit
+            } else {
+                guard let minimum = self.minLimit else { return nil }
+                self.limitInputBox.textField.text = String(minimum)
+                return minimum
+            }
         }
     }
 }

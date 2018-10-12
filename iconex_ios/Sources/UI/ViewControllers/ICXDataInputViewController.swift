@@ -105,6 +105,8 @@ class ICXDataInputViewController: BaseViewController {
                 return
             }
             
+            var encoded = text
+            
             if self.type == .hex {
                 let set = CharacterSet(charactersIn: "0123456789ABCDEF").inverted
                 
@@ -112,9 +114,15 @@ class ICXDataInputViewController: BaseViewController {
                     Alert.Basic(message: "Error.InputData".localized).show(self)
                     return
                 }
+            } else {
+                guard let hexData = text.data(using: .utf8) else {
+                    Alert.Basic(message: "Error.InputData".localized).show(self)
+                    return
+                }
+                encoded = hexData.hexEncodedString()
             }
             
-            let length = text.bytes.count
+            let length = encoded.bytes.count
             guard length <= 250 * 1024 else {
                 Alert.Basic(message: String(format: "Error.Data.Exceeded".localized, 250)).show(self)
                 return
@@ -123,7 +131,7 @@ class ICXDataInputViewController: BaseViewController {
             guard let costs = self.costs, let amount = self.walletAmount else { return }
             
             guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return }
-            let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(text.bytes.count)))
+            let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(encoded.bytes.count)))
             
             if stepLimit > amount {
                 Alert.Basic(message: "Error.Transfer.InsufficientFee.ICX".localized).show(self)
@@ -132,7 +140,7 @@ class ICXDataInputViewController: BaseViewController {
             
             self.textView.resignFirstResponder()
             
-            if let handler = self.handler, let text = self.textView.text {
+            if let handler = self.handler{
                 handler(text)
             }
             
@@ -187,7 +195,9 @@ extension ICXDataInputViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         guard let former = textView.text as NSString? else { return false }
         let value = former.replacingCharacters(in: range, with: text)
-        let count = value.bytes.count
+        guard let hexData = value.data(using: .utf8) else { return false }
+        let hexEncoded = hexData.hexEncodedString()
+        let count = hexEncoded.bytes.count
         if count > 250 * 1024 {
             Alert.Basic(message: String(format: "Error.Data.Exceeded".localized, 250)).show(self)
             return false

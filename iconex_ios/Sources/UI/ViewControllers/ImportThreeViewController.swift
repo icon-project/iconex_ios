@@ -138,7 +138,6 @@ class ImportThreeViewController: UIViewController {
         doneButton.setTitle("Common.Complete".localized, for: .normal)
         doneButton.rounded()
         doneButton.isEnabled = false
-        
     }
     
     @discardableResult

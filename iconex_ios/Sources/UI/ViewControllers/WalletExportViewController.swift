@@ -168,7 +168,7 @@ extension WalletExportViewController: UITableViewDelegate {
         Alert.checkPassword(walletInfo: info) { [unowned self] (isSuccess, privKey) in
             if isSuccess {
                 let wallet = WManager.loadWalletBy(info: info)!
-                self.selectedWallet[indexPath] = (wallet.alias!, privKey, info.type)
+                self.selectedWallet[indexPath] = (wallet.alias!, privKey, wallet.address!, info.type)
             } else {
                 self.selectedWallet.removeValue(forKey: indexPath)
                 tableView.deselectRow(at: indexPath, animated: true)

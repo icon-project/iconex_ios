@@ -101,7 +101,7 @@ class ETHWallet: BaseWallet {
         
         let generator = try EthereumKeystoreV3(privateKey: privateKeyData, password: password, aesMode: "aes-128-ctr")
         
-        self.address = generator?.getAddress()?.address
+        self.address = generator?.getAddress()?.address.add0xPrefix().lowercased()
         let params = generator?.keystoreParams
         
         let encoder = JSONEncoder()
@@ -137,7 +137,7 @@ class ETHWallet: BaseWallet {
     
     func saveETHWallet() throws {
         
-        try DB.saveWallet(name: self.alias!, address: self.address!, type: "eth", rawData: self.__rawData)
+        try DB.saveWallet(name: self.alias!, address: self.address!.add0xPrefix().lowercased(), type: "eth", rawData: self.__rawData)
         
         if let tokens = self.tokens {
             for tokenInfo in tokens {
@@ -155,8 +155,8 @@ class ETHWallet: BaseWallet {
             }
         }
         
-        let mainCon = "0xb5A5F22694352C15B00323844aD545ABb2B11028"
-        let devCon = "0x55116b9cf269E3f7E9183D35D65D6C310fcAcF05"
+        let mainCon = "0xb5A5F22694352C15B00323844aD545ABb2B11028".lowercased()
+        let devCon = "0x55116b9cf269E3f7E9183D35D65D6C310fcAcF05".lowercased()
         
         var contract: String {
             switch Config.host {
@@ -169,7 +169,7 @@ class ETHWallet: BaseWallet {
         }
         
         if canSaveToken(contractAddress: mainCon) && canSaveToken(contractAddress: devCon) {
-            let icxInfo = TokenInfo(name: "ICON", defaultName: "ICON", symbol: "ICX", decimal: 18, defaultDecimal: 18, dependedAddress: self.address!.add0xPrefix(), contractAddress: contract, parentType: "eth")
+            let icxInfo = TokenInfo(name: "ICON", defaultName: "ICON", symbol: "ICX", decimal: 18, defaultDecimal: 18, dependedAddress: self.address!.add0xPrefix().lowercased(), contractAddress: contract, parentType: "eth")
             
             if let privateKey = WCreator.newPrivateKey {
                 if let publicKey = ICONUtil.createPublicKey(privateKey: privateKey) {
@@ -231,18 +231,23 @@ class ETHWallet: BaseWallet {
     }
     
     func exportBundle() -> WalletExportBundle {
-        let priv = String(data: __rawData!, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
+        let encoder = JSONEncoder()
+        let keystore = self.keystore!
+        keystore.address = keystore.address.prefix0xRemoved()
+        let encoded = try! encoder.encode(keystore)
+        let priv = String(data: encoded, encoding: .utf8)!
         
-        var export = WalletExportBundle(name: self.alias!, type: "eth", priv: priv, tokens: nil)
+        var export = WalletExportBundle(name: self.alias!, type: "eth", priv: priv, tokens: nil, createdAt: self.createdDate!.millieTimestamp, coinType: nil)
         
+        var datas = [TokenExportBundle]()
         if let tokens = self.tokens {
             var datas = [TokenExportBundle]()
             for token in tokens {
                 let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
                 datas.append(exportToken)
             }
-            export.tokens = datas
         }
+        export.tokens = datas
         
         return export
     }

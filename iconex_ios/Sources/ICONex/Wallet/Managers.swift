@@ -11,7 +11,7 @@ import RealmSwift
 import web3swift
 import ICONKit
 
-typealias WalletBundleItem = (name: String, privKey: String, type: COINTYPE)
+typealias WalletBundleItem = (name: String, privKey: String, address: String, type: COINTYPE)
 
 enum HandlerStatus {
     case progressing
@@ -632,9 +632,9 @@ class WalletCreator {
 let WCreator = WalletCreator.sharedInstance
 
 class BundleCreator {
-    private var items: [(name: String, privKey: String, type: COINTYPE)]
+    private var items: [WalletBundleItem]
     
-    init(items: [(name: String, privKey: String, type: COINTYPE)]) {
+    init(items: [WalletBundleItem]) {
         self.items = items
     }
     
@@ -645,6 +645,8 @@ class BundleCreator {
                 if item.type == .icx {
                     
                     let wallet = ICXWallet(alias: item.name)
+                    let origin = WManager.loadWalletBy(address: item.address, type: item.type)
+                    wallet.createdDate = origin?.createdDate
                     do {
                         try wallet.generateICXKeyStore(privateKey: item.privKey, password: newPassword)
                         let export = wallet.exportBundle()
@@ -661,6 +663,8 @@ class BundleCreator {
                 } else if item.type == .eth {
                     
                     let wallet = ETHWallet(alias: item.name)
+                    let origin = WManager.loadWalletBy(address: item.address, type: item.type)
+                    wallet.createdDate = origin?.createdDate
                     do {
                         try wallet.generateETHKeyStore(privateKey: item.privKey, password: newPassword)
                         let export = wallet.exportBundle()
@@ -712,6 +716,8 @@ struct WalletExportBundle: Codable {
     var type: String
     var priv: String
     var tokens: [TokenExportBundle]?
+    var createdAt: String?
+    var coinType: String?
 }
 
 struct TokenExportBundle: Codable {

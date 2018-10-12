@@ -513,14 +513,18 @@ extension String {
     func currencySeparated() -> String {
         let comp = self.components(separatedBy: ".")
         
-        guard let upper = comp.first, let Int_upper = Int64(upper), let separated = Int_upper.currencyFormatted else {
+        guard let upper = comp.first else {
             return self
         }
         
         guard let below = comp.last, below != "" else {
-            return separated
+            return upper
         }
         
-        return separated + "." + below
+        let split = String(upper.reversed()).split(by: 3)
+        let joined = split.joined(separator: ",")
+        let formatted = String(joined.reversed())
+        
+        return formatted + "." + below
     }
 }

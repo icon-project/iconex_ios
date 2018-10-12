@@ -197,9 +197,10 @@ class ImportTwoViewController: UIViewController {
                 if item.1 == .icx {
                     let icxWallet = ICXWallet(keystore: keystore)
                     do {
-                        let _ = try icxWallet.extractICXPrivateKey(password: password)
+                        let privateKey = try icxWallet.extractICXPrivateKey(password: password)
                         
                         WCreator.newWallet = icxWallet
+                        WCreator.newPrivateKey = privateKey
                     } catch {
                         Log.Debug(error)
                         
@@ -213,8 +214,9 @@ class ImportTwoViewController: UIViewController {
                 } else if item.1 == .eth {
                     let ethWallet = ETHWallet(keystore: keystore)
                     do {
-                        let _ = try ethWallet.extractETHPrivateKey(password: password)
+                        let privateKey = try ethWallet.extractETHPrivateKey(password: password)
                         WCreator.newWallet = ethWallet
+                        WCreator.newPrivateKey = privateKey
                     } catch {
                         Log.Debug("error - \(error)")
                         
@@ -302,10 +304,10 @@ class ImportTwoViewController: UIViewController {
                     
                     let icxWallet = ICXWallet(keystore: keystore)
                     do {
-                        let _ = try icxWallet.extractICXPrivateKey(password: inputBox.textField.text!)
+                        let privateKey = try icxWallet.extractICXPrivateKey(password: inputBox.textField.text!)
                         
                         WCreator.newWallet = icxWallet
-                        
+                        WCreator.newPrivateKey = privateKey
                         inputBox.setState(.normal, nil)
                         inputBox.textField.resignFirstResponder()
                         nextButton.isEnabled = true
@@ -319,10 +321,10 @@ class ImportTwoViewController: UIViewController {
                 } else if item.1 == .eth {
                     let ethWallet = ETHWallet(keystore: keystore)
                     do {
-                        let _ = try ethWallet.extractETHPrivateKey(password: inputBox.textField.text!)
+                        let privateKey = try ethWallet.extractETHPrivateKey(password: inputBox.textField.text!)
                         
                         WCreator.newWallet = ethWallet
-                        
+                        WCreator.newPrivateKey = privateKey
                         inputBox.setState(.normal, nil)
                         inputBox.textField.resignFirstResponder()
                         nextButton.isEnabled = true

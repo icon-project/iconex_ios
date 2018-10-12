@@ -267,6 +267,12 @@ class SwapStepFiveViewController: BaseViewController {
     }
     
     func fetchETHPrices() {
+        self.add1.isEnabled = false
+        self.add2.isEnabled = false
+        self.add3.isEnabled = false
+        self.add4.isEnabled = false
+        self.transInputBox.textField.isEnabled = false
+        
         let wallet = WManager.loadWalletBy(info: SwapManager.sharedInstance.walletInfo!) as! ETHWallet
         let token = wallet.tokens!.filter { $0.symbol.lowercased() == "icx" }.first!
         let sendText = self.transInputBox.textField.text!
@@ -308,6 +314,11 @@ class SwapStepFiveViewController: BaseViewController {
                             image?.removeFromSuperview()
                             
                             self.doneButton.setTitle("Common.Done".localized, for: .normal)
+                            self.add1.isEnabled = true
+                            self.add2.isEnabled = true
+                            self.add3.isEnabled = true
+                            self.add4.isEnabled = true
+                            self.transInputBox.textField.isEnabled = true
                         }
                     }
                 }
@@ -318,7 +329,6 @@ class SwapStepFiveViewController: BaseViewController {
                     self.gasPriceLabel.text = gasPriceString + " Gwei"
                     if self._gasLimit != nil && self._gasPrice != nil {
                         self.doneButton.isEnabled = true
-                        
                     } else { self.doneButton.isEnabled = false }
                     
                     if isDone == 2 {
@@ -326,6 +336,11 @@ class SwapStepFiveViewController: BaseViewController {
                         image?.removeFromSuperview()
                         
                         self.doneButton.setTitle("Common.Done".localized, for: .normal)
+                        self.add1.isEnabled = true
+                        self.add2.isEnabled = true
+                        self.add3.isEnabled = true
+                        self.add4.isEnabled = true
+                        self.transInputBox.textField.isEnabled = true
                     }
                 }
             }

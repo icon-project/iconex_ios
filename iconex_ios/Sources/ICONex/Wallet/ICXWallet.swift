@@ -58,7 +58,16 @@ class ICXWallet: BaseWallet {
     func exportBundle() -> WalletExportBundle {
         let priv = String(data: __rawData!, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
         
-        let export = WalletExportBundle(name: self.alias!, type: "icx", priv: priv, tokens: nil)
+        var export = WalletExportBundle(name: self.alias!, type: "icx", priv: priv, tokens: nil, createdAt: self.createdDate!.millieTimestamp, coinType: "icx")
+        
+        var datas = [TokenExportBundle]()
+        if let tokens = self.tokens {
+            for token in tokens {
+                let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
+                datas.append(exportToken)
+            }
+        }
+        export.tokens = datas
         
         return export
     }

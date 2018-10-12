@@ -794,7 +794,7 @@ class WalletDetailViewController: UIViewController {
             }
             
             guard token.symbol.lowercased() != exchangeType, let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: token.decimal) else {
-                exchangeLabel.text = Tools.bigToString(value: balance, decimal: token.defaultDecimal, exchangeType == "usd" ? 2 : 4).currencySeparated()
+                exchangeLabel.text = "-"
                 return
             }
             exchangeLabel.text = exchanged.currencySeparated()
@@ -803,10 +803,9 @@ class WalletDetailViewController: UIViewController {
                 return
             }
             guard exchangeType != wallet.type.rawValue, let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue, to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: wallet.decimal) else {
-                exchangeLabel.text = Tools.bigToString(value: balance, decimal: wallet.decimal, exchangeType == "usd" ? 2 : 4).currencySeparated()
+                exchangeLabel.text = "-"
                 return
             }
-            
             exchangeLabel.text = exchanged.currencySeparated()
         }
     }

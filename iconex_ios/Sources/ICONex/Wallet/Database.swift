@@ -488,9 +488,7 @@ struct DB {
     static func removeToken(tokenInfo: TokenInfo) throws {
         let realm = try Realm()
         
-        guard let token = realm.objects(TokenModel.self).filter({ $0.name == tokenInfo.name }).first else {
-            return
-        }
+        let token = realm.objects(TokenModel.self).filter({ $0.dependedAddress == tokenInfo.dependedAddress && $0.contractAddress == tokenInfo.contractAddress })
         
         try realm.write {
             realm.delete(token)

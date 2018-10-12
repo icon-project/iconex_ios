@@ -600,6 +600,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                     return
                 }
                 let walletInfo = wallets[indexPath.row]
+                token.dependedAddress = walletInfo.address.add0xPrefix().lowercased()
                 detail.walletInfo = walletInfo
                 detail.token = token
             }

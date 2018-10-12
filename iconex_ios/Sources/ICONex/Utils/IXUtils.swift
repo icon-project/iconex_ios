@@ -167,7 +167,7 @@ struct Tools {
     }
     
     static func balanceToExchange(_ value: BigUInt, from: String, to: String, belowDecimal: Int = 4, decimal: Int = 18) -> String? {
-        guard let rateString = EManager.exchangeInfoList[from + to] else {
+        guard let rateString = EManager.exchangeInfoList[from + to], rateString.createDate != nil else {
             return nil
         }
         
