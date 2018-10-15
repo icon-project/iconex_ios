@@ -18,5 +18,4 @@ target 'iconex_ios' do
   pod 'Alamofire'
 
   pod 'ICONKit', :path => '~/works/ICONKit'
-#  pod 'web3swift', :path => '~/works/web3swift'
 end
