@@ -801,18 +801,20 @@ class ICXSendViewController: UIViewController {
     func calculateStepPrice() -> BigUInt? {
         guard let costs = self.costs else { return nil }
         
-        guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16) else { return nil } //, let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
         
         if self.token != nil {
-            guard let text = sendInputBox.textField.text, let dataText = text.data(using: .utf8) else { return nil }
-            let hexValue = "0x" + dataText.hexEncodedString()
-            let data = "{method.transfer.params.{to.hx00000000000000000000000000000000.value.\(hexValue)}}"
-            let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(data.bytes.count)))
+//            guard let text = sendInputBox.textField.text, let hexValue = Tools.convertedHexString(value: text, decimal: 18) else { return nil }
+//            let data = "{\"method\":\"transfer\",\"params\":{\"_to\":\"hx0000000000000000000000000000000000000000\",\"_value\":\"\(hexValue)\"}}"
+//            Log.Debug("default - \(stepDefault) , contractCall - \(contractCall) , input - \(input) , data - \(data) , length - \(data.bytes.count)")
+//            let stepLimit = (stepDefault + contractCall + (input * BigUInt(data.bytes.count) * 2))
+            let stepLimit = 2 * stepDefault
             
             self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false, false)
             return stepLimit
         } else {
             if let data = self.inputData {
+                guard let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
                 let stepLimit = stepDefault + (input * BigUInt(data.bytes.count))
                 
                 self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false, false)
