@@ -159,61 +159,66 @@ class WalletManager {
     }
     
     func getWalletsBalance() {
-        for info in self.walletInfoList {
-            guard let wallet = WManager.loadWalletBy(info: info), let address = wallet.address else { continue }
-            if _queued.contains(address) { continue }
-            
-            _queued.insert(address)
-            if info.type == .icx {
+        DispatchQueue.global().async {
+            for info in self.walletInfoList {
+                guard let wallet = WManager.loadWalletBy(info: info), let address = wallet.address else { continue }
+                if self._queued.contains(address) { continue }
                 
-                if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
+                self._queued.insert(address)
+                if info.type == .icx {
                     
-                    let result = WManager.service.getBalance(wallet: iconWallet)
-                    
-                    switch result {
-                    case .success(let balance):
-                        self.walletBalanceList[wallet.address!.lowercased()] = balance
+                    if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
                         
-                    case .failure(let error):
-                        Log.Debug("Error - \(error)")
+                        let result = WManager.service.getBalance(wallet: iconWallet)
+                        
+                        switch result {
+                        case .success(let balance):
+                            self.walletBalanceList[wallet.address!.lowercased()] = balance
+                            
+                        case .failure(let error):
+                            Log.Debug("Error - \(error)")
+                        }
+                        
+                        guard let tokens = wallet.tokens else { return }
+                        
+                        var tokenBalances = [String: BigUInt]()
+                        for token in tokens {
+                            let result = self.getIRCTokenBalance(tokenInfo: token)
+                            
+                            if let balance = result {
+                                tokenBalances[token.contractAddress.lowercased()] = balance
+                            }
+                        }
+                        self.tokenBalanceList[wallet.address!.lowercased()] = tokenBalances
+                        
+                        self._queued.remove(address)
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
+                        }
+                    } else {
+                        self._queued.remove(address)
                     }
+                } else if info.type == .eth {
+                    guard let wallet = WManager.loadWalletBy(info: info) else { continue }
+                    let client = EthereumClient(wallet: wallet as! ETHWallet)
                     
-                    guard let tokens = wallet.tokens else { return }
-                    
-                    var tokenBalances = [String: BigUInt]()
-                    for token in tokens {
-                        let result = self.getIRCTokenBalance(tokenInfo: token)
+                    client.requestBalance { (ethValue, tokenValues) in
                         
-                        if let balance = result {
-                            tokenBalances[token.contractAddress.lowercased()] = balance
+                        if let value = ethValue {
+                            self.walletBalanceList[wallet.address!.lowercased()] = value
+                        }
+                        
+                        if let tokens = tokenValues {
+                            self.tokenBalanceList[wallet.address!.add0xPrefix().lowercased()] = tokens
+                        }
+                        
+                        self._queued.remove(address)
+                        DispatchQueue.main.async {
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
                         }
                     }
-                    self.tokenBalanceList[wallet.address!.lowercased()] = tokenBalances
-                    
-                    self._queued.remove(address)
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
-                    
-                } else {
-                    self._queued.remove(address)
+                    self.balanceOperation.loadQueue.addOperation(client)
                 }
-            } else if info.type == .eth {
-                guard let wallet = WManager.loadWalletBy(info: info) else { continue }
-                let client = EthereumClient(wallet: wallet as! ETHWallet)
-                
-                client.requestBalance { (ethValue, tokenValues) in
-                    
-                    if let value = ethValue {
-                        self.walletBalanceList[wallet.address!.lowercased()] = value
-                    }
-                    
-                    if let tokens = tokenValues {
-                        self.tokenBalanceList[wallet.address!.add0xPrefix().lowercased()] = tokens
-                    }
-                    
-                    self._queued.remove(address)
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationBalanceListDidChanged"), object: nil, userInfo: nil)
-                }
-                balanceOperation.loadQueue.addOperation(client)
             }
         }
     }
@@ -646,6 +651,7 @@ class BundleCreator {
                     
                     let wallet = ICXWallet(alias: item.name)
                     let origin = WManager.loadWalletBy(address: item.address, type: item.type)
+                    wallet.tokens = origin?.tokens
                     wallet.createdDate = origin?.createdDate
                     do {
                         try wallet.generateICXKeyStore(privateKey: item.privKey, password: newPassword)
@@ -664,6 +670,7 @@ class BundleCreator {
                     
                     let wallet = ETHWallet(alias: item.name)
                     let origin = WManager.loadWalletBy(address: item.address, type: item.type)
+                    wallet.tokens = origin?.tokens
                     wallet.createdDate = origin?.createdDate
                     do {
                         try wallet.generateETHKeyStore(privateKey: item.privKey, password: newPassword)

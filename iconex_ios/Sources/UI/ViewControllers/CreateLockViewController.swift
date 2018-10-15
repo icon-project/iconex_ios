@@ -119,65 +119,70 @@ class CreateLockViewController: UIViewController {
         if __passcode.length < 6 {
             __passcode = __passcode + "\(sender.tag)"
             
+            self.refresh()
+            
             if __passcode.length == 6 {
                 // 6 자리 입력 완료
-                if mode! == .create || mode! == .recreate {
-                    if let firstCode = __firstCode {
-                        if firstCode == __passcode {
-                            if Tools.createPasscode(code: firstCode) {
-                                
-                            }
-                            if mode! == .recreate {
-                                let app = UIApplication.shared.delegate as! AppDelegate
-                                let root = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() as? UINavigationController
-                                app.window?.rootViewController = root
-                                let main = root?.viewControllers[0] as! MainViewController
-                                let lock = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "LockSettingView")
-                                let nav = UINavigationController(rootViewController: lock)
-                                nav.isNavigationBarHidden = true
-                                main.present(nav, animated: true, completion: nil)
-                                self.navigationController?.dismiss(animated: false, completion: {
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    if self.mode! == .create || self.mode! == .recreate {
+                        if let firstCode = self.__firstCode {
+                            if firstCode == self.__passcode {
+                                if Tools.createPasscode(code: firstCode) {
                                     
-                                })
-                                
+                                }
+                                if self.mode! == .recreate {
+                                    let app = UIApplication.shared.delegate as! AppDelegate
+                                    let root = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() as? UINavigationController
+                                    app.window?.rootViewController = root
+                                    let main = root?.viewControllers[0] as! MainViewController
+                                    let lock = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "LockSettingView")
+                                    let nav = UINavigationController(rootViewController: lock)
+                                    nav.isNavigationBarHidden = true
+                                    main.present(nav, animated: true, completion: nil)
+                                    self.navigationController?.dismiss(animated: false, completion: {
+                                        
+                                    })
+                                    
+                                } else {
+                                    self.navigationController?.popViewController(animated: true)
+                                }
                             } else {
-                                self.navigationController?.popViewController(animated: true)
+                                self.__passcode = ""
+                                self.__firstCode = nil
+                                self.lockHeader.text = "LockScreen.Setting.Passcode.Change.Error".localized
                             }
                         } else {
-                            __passcode = ""
-                            __firstCode = nil
-                            lockHeader.text = "LockScreen.Setting.Passcode.Change.Error".localized
+                            self.lockHeader.text = "LockScreen.Setting.Passcode.Header_2".localized
+                            self.__firstCode = self.__passcode
+                            self.__passcode = ""
+                        }
+                    } else if self.mode! == .change {
+                        if self.__firstCode == nil {
+                            if Tools.verifyPasscode(code: self.__passcode) {
+                                self.lockHeader.text = "LockScreen.Setting.Passcode.Change.New".localized
+                                self.__passcode = ""
+                                self.mode = .create
+                            } else {
+                                self.lockHeader.text = "LockScreen.Setting.Passcode.Header_Error".localized
+                                self.__passcode = ""
+                            }
                         }
                     } else {
-                        lockHeader.text = "LockScreen.Setting.Passcode.Header_2".localized
-                        __firstCode = __passcode
-                        __passcode = ""
-                    }
-                } else if mode! == .change {
-                    if __firstCode == nil {
-                        if Tools.verifyPasscode(code: __passcode) {
-                            lockHeader.text = "LockScreen.Setting.Passcode.Change.New".localized
-                            __passcode = ""
-                            self.mode = .create
+                        if Tools.verifyPasscode(code: self.__passcode) {
+                            Tools.removePasscode()
+                            Tools.removeTouchID()
+                            self.navigationController?.popViewController(animated: true)
                         } else {
-                            lockHeader.text = "LockScreen.Setting.Passcode.Header_Error".localized
-                            __passcode = ""
+                            self.lockHeader.text = "LockScreen.Setting.Passcode.Header_Error".localized
+                            self.__passcode = ""
                         }
                     }
-                } else {
-                    if Tools.verifyPasscode(code: __passcode) {
-                        Tools.removePasscode()
-                        Tools.removeTouchID()
-                        self.navigationController?.popViewController(animated: true)
-                    } else {
-                        lockHeader.text = "LockScreen.Setting.Passcode.Header_Error".localized
-                        __passcode = ""
-                    }
+                    
+                    self.refresh()
                 }
             }
         }
-        
-        self.refresh()
     }
     
     @objc func clickedDelete(_ sender: UIButton) {

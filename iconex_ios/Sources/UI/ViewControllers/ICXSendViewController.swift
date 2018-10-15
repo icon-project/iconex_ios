@@ -165,6 +165,8 @@ class ICXSendViewController: UIViewController {
                     remainBalance.text = printBalance
                     if let exc = Tools.balanceToExchange(balance, from: token.symbol, to: "usd", belowDecimal: 2, decimal: token.decimal) {
                         exchangedRemainLabel.text = exc.currencySeparated() + " USD"
+                    } else {
+                        exchangedRemainLabel.text = "- USD"
                     }
                     return
                 }
@@ -184,6 +186,8 @@ class ICXSendViewController: UIViewController {
                     remainBalance.text = printBalance
                     if let exc = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: wallet.decimal) {
                         exchangedRemainLabel.text = exc.currencySeparated() + " USD"
+                    } else {
+                        exchangedRemainLabel.text = "- USD"
                     }
                     return
                 }
@@ -650,6 +654,8 @@ class ICXSendViewController: UIViewController {
             self.remainBalance.text = Tools.bigToString(value: remainValue, decimal: wallet!.decimal, wallet!.decimal, false).currencySeparated()
             if let exchanged = Tools.balanceToExchange(remainValue, from: wallet!.type.rawValue.lowercased(), to: "usd", belowDecimal: 2, decimal: wallet!.decimal) {
                 self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
+            } else {
+                self.exchangedRemainLabel.text = "- USD"
             }
         }
         
@@ -779,6 +785,8 @@ class ICXSendViewController: UIViewController {
                     self.stepPriceLabel.text = priceICX + " ICX" + " (" + priceGloop + " Gloop)"
                     if let exchangedPrice = Tools.balanceToExchange(stepPrice, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
                         self.stepExchangedLabel.text = exchangedPrice + " USD"
+                    } else {
+                        self.stepExchangedLabel.text = "- USD"
                     }
                     self.stepPrice = stepPrice
                     

@@ -106,19 +106,21 @@ class PasscodeViewController: UIViewController {
         if __passcode.length < 6 {
             __passcode = __passcode + "\(sender.tag)"
             
-            if __passcode.length == 6 {
-                if Tools.verifyPasscode(code: __passcode) {
-                    let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-                    let app = UIApplication.shared.delegate as! AppDelegate
-                    app.window?.rootViewController = main
-                } else {
-                    headerLabel.text = "Passcode.Code.Retry".localized
-                    __passcode = ""
+            self.refresh()
+            if self.__passcode.length == 6 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    if Tools.verifyPasscode(code: self.__passcode) {
+                        let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+                        let app = UIApplication.shared.delegate as! AppDelegate
+                        app.window?.rootViewController = main
+                    } else {
+                        self.headerLabel.text = "Passcode.Code.Retry".localized
+                        self.__passcode = ""
+                        self.refresh()
+                    }
                 }
             }
         }
-        
-        self.refresh()
     }
     
     @objc func clickedDelete(_ sender: UIButton) {

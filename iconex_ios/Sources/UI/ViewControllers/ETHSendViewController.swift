@@ -94,10 +94,10 @@ class ETHSendViewController: UIViewController {
                 balanceLabel.text = printBalance
                 let type = token.symbol.lowercased()
                 let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: token.decimal)
-                balanceExchangeLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
+                balanceExchangeLabel.text = exchanged == nil ? "- USD" : exchanged!.currencySeparated() + " USD"
                 self.totalBalance = balance
                 remainBalance.text = printBalance
-                self.exchangedRemainLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
+                self.exchangedRemainLabel.text = exchanged == nil ? "- USD" : exchanged!.currencySeparated() + " USD"
             }
         } else {
         
@@ -106,10 +106,10 @@ class ETHSendViewController: UIViewController {
                 balanceLabel.text = printBalance
                 let type = self.walletInfo!.type.rawValue
                 let exchanged = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2)
-                balanceExchangeLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
+                balanceExchangeLabel.text = exchanged == nil ? "- USD" : exchanged!.currencySeparated() + " USD"
                 self.totalBalance = balance
                 remainBalance.text = printBalance
-                self.exchangedRemainLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
+                self.exchangedRemainLabel.text = exchanged == nil ? "- USD" : exchanged!.currencySeparated() + " USD"
             }
         }
     }
@@ -146,10 +146,6 @@ class ETHSendViewController: UIViewController {
             self.validateBalance()
             self.calculateGas()
         }).disposed(by: disposeBag)
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
-            self.validateBalance()
-            self.calculateGas()
-        }).disposed(by: disposeBag)
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
             guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "eth", to: "usd", belowDecimal: 2, decimal: 18) else {
                 return
@@ -165,17 +161,12 @@ class ETHSendViewController: UIViewController {
             self.validateAddress()
             self.calculateGas()
         }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            self.gasLimitInputBox.textField.becomeFirstResponder()
-        }).disposed(by: disposeBag)
         
         gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.gasLimitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
         gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateEstimateGas()
-        }).disposed(by: disposeBag)
-        gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
             self.calculateGas()
         }).disposed(by: disposeBag)
         
@@ -184,8 +175,6 @@ class ETHSendViewController: UIViewController {
         }).disposed(by: disposeBag)
         dataInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateData()
-        }).disposed(by: disposeBag)
-        dataInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
             self.calculateGas()
         }).disposed(by: disposeBag)
         
@@ -499,8 +488,10 @@ class ETHSendViewController: UIViewController {
             
             let remain = self.totalBalance - send
             self.remainBalance.text = Tools.bigToString(value: remain, decimal: token.decimal, token.decimal, true)
-            if let excRemain = Tools.balanceToExchange(remain, from: token.symbol, to: "usd") {
+            if let excRemain = Tools.balanceToExchange(remain, from: token.symbol, to: "usd", belowDecimal: 2, decimal: token.decimal) {
                 self.exchangedRemainLabel.text = excRemain.currencySeparated() + " USD"
+            } else {
+                self.exchangedRemainLabel.text = "- USD"
             }
             return true
         } else {
@@ -522,8 +513,10 @@ class ETHSendViewController: UIViewController {
             
             let remain = self.totalBalance - (ethValue + feeValue)
             self.remainBalance.text = Tools.bigToString(value: remain, decimal: wallet!.decimal, wallet!.decimal, true)
-            if let excRemain = Tools.balanceToExchange(remain, from: "eth", to: "usd") {
+            if let excRemain = Tools.balanceToExchange(remain, from: "eth", to: "usd", belowDecimal: 2, decimal: wallet!.decimal) {
                 self.exchangedRemainLabel.text = excRemain.currencySeparated() + " USD"
+            } else {
+                self.exchangedRemainLabel.text = "- USD"
             }
             guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "eth", to: "usd", belowDecimal: 2, decimal: 18) else {
                 return false
@@ -637,10 +630,10 @@ class ETHSendViewController: UIViewController {
         }
         let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
         self.feeAmountLabel.text = Tools.bigToString(value: gwei, decimal: wallet.decimal, wallet.decimal, true)
-        if let exchangeFee = Tools.balanceToExchange(gwei, from: "eth", to: "usd") {
+        if let exchangeFee = Tools.balanceToExchange(gwei, from: "eth", to: "usd", belowDecimal: 2, decimal: wallet.decimal) {
             self.exchangedFeeLabel.text = exchangeFee.currencySeparated() + " USD"
         } else {
-            self.exchangedFeeLabel.text = "-"
+            self.exchangedFeeLabel.text = "- USD"
         }
     }
     
