@@ -213,6 +213,7 @@ enum IXTextFieldType {
                     self.textField.selectedTextRange = selectedRange
                 }
             }).disposed(by: disposeBag)
+        warnLabel.text = " "
     }
     
     func loadViewFromNib() -> UIView? {

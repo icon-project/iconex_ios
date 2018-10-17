@@ -305,7 +305,7 @@
 "Swap.Swap" = "Swap";
 "Swap.Step1_1.Header1" = "ICX ERC20 tokens on the Ethereum network can now be swapped and transferred to ICON’s Mainnet.";
 "Swap.Step1_1.Desc1_1" = "Token swap will take place after generating your new ICX coin wallet.";
-"Swap.Step1_1.Desc1_2" = "You have created the wallet for token swap before. Swapped ICX coins will be added to the %s";
+"Swap.Step1_1.Desc1_2" = "You have created the wallet for token swap before. Swapped ICX coins will be added to the %@";
 "Swap.Step1_1.Header2" = "Please refer to the following precautions";
 "Swap.Step1_1.Desc2_1" = "If you follow the instructions the ICX wallet for token swap will be created. (The private key of the ICX wallet for token swap will be identical to the private key of your previous Ethereum wallet.)";
 "Swap.Step1_1.Desc2_H" = "Please make sure that you name the wallet so that you can distinguish the wallet for token swap from other wallets.";
@@ -391,6 +391,7 @@
 "Alert.Transfer.Fee" = "Transaction Fee";
 "Alert.Transfer.EstimatedFee" = "Estimated Maximum Fee";
 "Alert.Transfer.Address" = "Receiving Address ";
+"Alert.Transfer.Data.Delete" = "Are you sure you want to delete data?";
 "Alert.Bio.Fingerprint.Empty" = "Unable to identify your Touch ID. Please try again after registering on mobile settings.";
 "Alert.Wallet.Import.Cancel" = "Are you sure you want to cancel?";
 "Alert.Wallet.RequestPassword" = "Enter Wallet Password";
@@ -402,7 +403,7 @@
 "Error.WalletName" = "Enter wallet name";
 "Error.Password" = "Enter password";
 "Error.Password.Length" = "Password must contain at least 8 characters.";
-"Error.Password.CharacterSet" = "Password must contain a combination of letters, numbers, and special characters.";
+"Error.Password.CharacterSet" = "Password must contain a combination of letters, numbers, and special characters. ( ? ! : . , % + - / * < > { } ( ) [ ] ` ” ‘ ~ _ ^ \ | @ # $ & )";
 "Error.Password.Serialize" = "Password must not have more than 2 consecutive identical characters.";
 "Error.Password.Blank" = "Please do not leave blank.";
 "Error.Password.Wrong" = "Please check your password.";
@@ -448,5 +449,5 @@
 "Error.Transfer.AmountEmpty" = "Please enter the transfer amount.";
 "Error.Transfer.EmptyLimit" = "Please enter step limit.";
 "Error.Data.Exceeded" = "This exceeds input limit %dKB";
-"Error.Transfer.Limit.LessThen" = "Enter step limit less than %s";
-"Error.Transfer.Limit.MoreThen" = "Enter step limit more than %s";
+"Error.Transfer.Limit.LessThen" = "Enter step limit less than %@";
+"Error.Transfer.Limit.MoreThen" = "Enter step limit more than %@";

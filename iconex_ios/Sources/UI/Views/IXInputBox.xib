@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IXInputBox" customModule="ios_iCONex" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
             <connections>
                 <outlet property="eyeButton" destination="Jve-Iq-KWC" id="ZUx-Ty-bgT"/>
                 <outlet property="highlightLine" destination="rDo-nc-XIC" id="Ze6-47-a7c"/>
@@ -35,20 +35,20 @@
                         <constraint firstAttribute="height" constant="1" id="ABe-7h-qzL"/>
                     </constraints>
                 </view>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Az3-Fb-5Ev" customClass="IXTextField" customModule="ios_iCONex" customModuleProvider="target">
-                    <rect key="frame" x="10" y="16" width="321" height="19"/>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="12" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Az3-Fb-5Ev" customClass="IXTextField" customModule="iconex_ios" customModuleProvider="target">
+                    <rect key="frame" x="10" y="10" width="321" height="25"/>
                     <nil key="textColor"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                 </textField>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGh-P8-E9T">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TGh-P8-E9T">
                     <rect key="frame" x="10" y="46.5" width="355" height="13.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jve-Iq-KWC">
-                    <rect key="frame" x="341" y="14" width="24" height="24"/>
+                    <rect key="frame" x="341" y="10.5" width="24" height="24"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="24" id="ACK-2a-V06"/>
                         <constraint firstAttribute="height" constant="24" id="Xgb-GJ-Fk4"/>
@@ -57,7 +57,7 @@
                     <state key="selected" image="icInputEyeOff"/>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZC3-cx-Xpv" userLabel="line">
-                    <rect key="frame" x="335" y="16" width="1" height="20"/>
+                    <rect key="frame" x="335" y="12.5" width="1" height="20"/>
                     <color key="backgroundColor" red="0.84705882352941175" green="0.84705882352941175" blue="0.84705882352941175" alpha="0.5" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="JBK-ET-K7S"/>
@@ -78,15 +78,16 @@
                     </constraints>
                 </view>
                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ciA-iR-0fQ">
-                    <rect key="frame" x="343" y="16" width="20" height="20"/>
+                    <rect key="frame" x="343" y="12.5" width="20" height="20"/>
                 </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="Az3-Fb-5Ev" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="2F7-ef-5hk"/>
+                <constraint firstItem="Az3-Fb-5Ev" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="2F7-ef-5hk"/>
                 <constraint firstItem="07n-LJ-rx8" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="6" id="A92-6i-WD6"/>
                 <constraint firstItem="Jve-Iq-KWC" firstAttribute="centerY" secondItem="Az3-Fb-5Ev" secondAttribute="centerY" id="DfW-Nz-EEz"/>
                 <constraint firstAttribute="bottom" secondItem="TGh-P8-E9T" secondAttribute="bottom" constant="2" id="E4o-pe-IpE"/>
+                <constraint firstItem="rDo-nc-XIC" firstAttribute="top" secondItem="Az3-Fb-5Ev" secondAttribute="bottom" constant="4.5" id="EfE-dg-H0p"/>
                 <constraint firstItem="ZC3-cx-Xpv" firstAttribute="centerY" secondItem="Jve-Iq-KWC" secondAttribute="centerY" id="GPx-n6-6CR"/>
                 <constraint firstItem="yIg-cZ-zQq" firstAttribute="top" secondItem="07n-LJ-rx8" secondAttribute="bottom" constant="6" id="HJT-yi-e36"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Jve-Iq-KWC" secondAttribute="trailing" constant="10" id="R6G-gs-z5h"/>
@@ -96,7 +97,6 @@
                 <constraint firstItem="07n-LJ-rx8" firstAttribute="trailing" secondItem="Az3-Fb-5Ev" secondAttribute="trailing" id="b3s-uz-Gmj"/>
                 <constraint firstItem="Az3-Fb-5Ev" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="irW-Fu-7gb"/>
                 <constraint firstAttribute="trailing" secondItem="yIg-cZ-zQq" secondAttribute="trailing" id="mll-SS-61Y"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="rDo-nc-XIC" secondAttribute="bottom" constant="21.5" id="p05-WV-ZGE"/>
                 <constraint firstItem="07n-LJ-rx8" firstAttribute="leading" secondItem="Az3-Fb-5Ev" secondAttribute="leading" id="pWe-xE-Bnc"/>
                 <constraint firstItem="ciA-iR-0fQ" firstAttribute="centerX" secondItem="Jve-Iq-KWC" secondAttribute="centerX" id="r0v-Cq-L4s"/>
                 <constraint firstItem="TGh-P8-E9T" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="rLn-eJ-U2U"/>

@@ -528,8 +528,9 @@ class WalletDetailViewController: UIViewController {
                                     SwapManager.sharedInstance.walletInfo = self.walletInfo
                                     SwapManager.sharedInstance.privateKey = privateKey
                                     
-                                    if let swapAddress = token.swapAddress, WManager.walletInfoList.filter({ $0.address == swapAddress }).first != nil {
+                                    if let swapAddress = token.swapAddress, let existWallet = WManager.walletInfoList.filter({ $0.address == swapAddress }).first {
                                         let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
+                                        swap.walletName = existWallet.name
                                         self.present(swap, animated: true, completion: nil)
                                     } else {
                                         let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController

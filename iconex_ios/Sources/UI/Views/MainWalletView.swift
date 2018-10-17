@@ -423,7 +423,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 return cell
             }
             cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4)
-            cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated()
+            cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
             
             cell.swapBack.isHidden = !token.needSwap
             cell.swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
@@ -484,7 +484,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 
                 cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4)
                 let tag = token.symbol.lowercased()
-                cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated()
+                cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
                 cell.isLoading = false
                 cell.swapBack.isHidden = !token.needSwap
                 cell.swapLabel.text = "Swap.Swap".localized
@@ -506,8 +506,9 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                             SwapManager.sharedInstance.walletInfo = self.walletInfo
                             SwapManager.sharedInstance.privateKey = privateKey
                             
-                            if let swapAddress = token.swapAddress, WManager.walletInfoList.filter({ $0.address.lowercased() == swapAddress.lowercased() }).first != nil {
+                            if let swapAddress = token.swapAddress, let existWallet = WManager.walletInfoList.filter({ $0.address == swapAddress }).first {
                                 let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
+                                swap.walletName = existWallet.name
                                 root.present(swap, animated: true, completion: nil)
                             } else {
                                 let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController

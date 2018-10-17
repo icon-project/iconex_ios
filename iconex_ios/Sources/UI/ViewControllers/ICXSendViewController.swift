@@ -727,13 +727,13 @@ class ICXSendViewController: UIViewController {
         }
         
         if limit < minLimit {
-            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 18, 0, true, true))
+            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 0, 0, true, true))
             if showError { self.limitInputBox.setState(.error, message)}
             return false
         }
         
         if limit > maxLimit {
-            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 18, 0, true, true))
+            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 0, 0, true, true))
             if showError { self.limitInputBox.setState(.error, message)}
             return false
         }
