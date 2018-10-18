@@ -12,7 +12,7 @@ class ExchangeManager {
     static let sharedInstance = ExchangeManager()
     private init() {}
     
-    var exchangeList = "icxeth,icxbtc,icxusd,ethusd,ethbtc,etheth"
+    var exchangeList = "icxeth,icxbtc,icxusd,ethusd,ethbtc,etheth,btcicx,ethicx,icxicx"
     
     var exchangeInfoList = [String: ExchangeInfo]()
     var currentExchange: String = "usd"

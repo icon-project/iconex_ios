@@ -87,6 +87,13 @@ class WalletDetailViewController: UIViewController {
     
     var step: Int = 1
     private var totalData: Int = 0
+    private var exchangeItem: [String] {
+        if self.walletInfo?.type == .icx {
+            return ["USD", "BTC", "ETH"]
+        } else {
+            return ["USD", "BTC", "ICX"]
+        }
+    }
     var isLoaded: Bool = false {
         willSet {
             if !newValue {
@@ -228,21 +235,9 @@ class WalletDetailViewController: UIViewController {
         
         exchangeSelectButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
-            selectable.present(from: self, title: "Detail.Select.Unit".localized, items: ["USD", "BTC", "ETH"])
+            selectable.present(from: self, title: "Detail.Select.Unit".localized, items: self.exchangeItem)
             selectable.handler = ({ [unowned self] (selectedIndex) in
-                switch selectedIndex {
-                case 0:
-                    self.exchangeType = "usd"
-                    
-                case 1:
-                    self.exchangeType = "btc"
-                    
-                case 2:
-                    self.exchangeType = "eth"
-                    
-                default:
-                    self.exchangeType = "usd"
-                }
+                self.exchangeType = self.exchangeItem[selectedIndex].lowercased()
             })
         }).disposed(by: disposeBag)
         
@@ -312,6 +307,7 @@ class WalletDetailViewController: UIViewController {
                     case 0:
                         // 지갑 이름 변경
                         let change = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "ChangeNameView") as! ChangeNameViewController
+                        change.formerName = wallet.alias!
                         change.completionHandler = { [unowned self] (newName) in
                             do {
                                 let result = try WManager.changeWalletName(former: wallet.alias!, newName: newName)

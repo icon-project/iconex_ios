@@ -406,12 +406,20 @@ struct Tools {
 
 struct Validator {
     static func validateCharacterSet(password: String) -> Bool {
+        var charSet = CharacterSet.lowercaseLetters
+        let digitSet = CharacterSet.decimalDigits
+        let specialSet = CharacterSet(charactersIn: "?!:.,%+-/*<>{}()[]`\"'~_^\\|@#$&")
+        let letterSet = charSet.union(CharacterSet.uppercaseLetters)
+
+        charSet = letterSet.union(digitSet)
+        charSet = charSet.union(specialSet)
         
-        let pattern = "^(?=.*\\d)(?=.*[a-zA-Z])(?=.*[?!:.,%+\\-/*<>{}()\\[\\]`\"'~_^\\|@#$&]).{8,}$"
+        let notAllowed = password.unicodeScalars.filter { charSet.inverted.contains($0) }
+        let hasLetters = password.unicodeScalars.filter { letterSet.contains($0) }
+        let hasDigits = password.unicodeScalars.filter { digitSet.contains($0) }
+        let hasSpecial = password.unicodeScalars.filter { specialSet.contains($0) }
         
-        let result = NSPredicate(format: "SELF MATCHES %@", pattern)
-        
-        return result.evaluate(with: password)
+        return notAllowed.count == 0 && hasLetters.count > 0 && hasDigits.count > 0 && hasSpecial.count > 0
     }
     
     static func validateSequenceNumber(password: String) -> Bool {

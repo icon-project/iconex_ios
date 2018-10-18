@@ -387,10 +387,8 @@ class TokenManageViewController: UIViewController {
             return false
         }
         
-        guard !name.hasPrefix(" ") && !name.hasSuffix(" ") else {
-            tokenInputBox.setState(.error, "Error.Password.Blank".localized)
-            return false
-        }
+        let stripName = name.removeContinuosSuffix(string: " ")
+        self.tokenInputBox.textField.text = stripName
         
         tokenInputBox.setState(.normal, "")
         return true

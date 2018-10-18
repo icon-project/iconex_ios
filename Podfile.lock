@@ -2,7 +2,7 @@ PODS:
   - Alamofire (4.7.3)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.11.0)
+  - CryptoSwift (0.12.0)
   - ICONKit (0.0.1):
     - BigInt
     - CryptoSwift
@@ -10,24 +10,24 @@ PODS:
     - scrypt
     - secp256k1_ios
   - LicensesViewController (0.6.5)
-  - PromiseKit (6.4.0):
-    - PromiseKit/CorePromise (= 6.4.0)
-    - PromiseKit/Foundation (= 6.4.0)
-    - PromiseKit/UIKit (= 6.4.0)
-  - PromiseKit/CorePromise (6.4.0)
-  - PromiseKit/Foundation (6.4.0):
+  - PromiseKit (6.5.2):
+    - PromiseKit/CorePromise (= 6.5.2)
+    - PromiseKit/Foundation (= 6.5.2)
+    - PromiseKit/UIKit (= 6.5.2)
+  - PromiseKit/CorePromise (6.5.2)
+  - PromiseKit/Foundation (6.5.2):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.4.0):
+  - PromiseKit/UIKit (6.5.2):
     - PromiseKit/CorePromise
-  - Realm (3.9.0):
-    - Realm/Headers (= 3.9.0)
-  - Realm/Headers (3.9.0)
-  - RealmSwift (3.9.0):
-    - Realm (= 3.9.0)
-  - Result (3.0.0)
-  - RxCocoa (4.3.0):
+  - Realm (3.11.0):
+    - Realm/Headers (= 3.11.0)
+  - Realm/Headers (3.11.0)
+  - RealmSwift (3.11.0):
+    - Realm (= 3.11.0)
+  - Result (3.2.4)
+  - RxCocoa (4.3.1):
     - RxSwift (~> 4.0)
-  - RxSwift (4.3.0)
+  - RxSwift (4.3.1)
   - scrypt (1.8.1):
     - CryptoSwift (~> 0.11)
   - secp256k1_ios (0.1.3)
@@ -78,21 +78,21 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
-  CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
+  CryptoSwift: 1c07ca50843dd48bc54e6ea53d7a4dba3b645716
   ICONKit: bb67fbc6f1d3f24db1f30902d9a1a8380fce01c3
   LicensesViewController: 1f2982b1bab8402d3f88e23197957038e8abb907
-  PromiseKit: ae3616f45d7bb9bf4ff1e91abc9b7a8c48a340e0
-  Realm: 3d36f208bf3aff8335dc3298742140182bde4edb
-  RealmSwift: aa4d11917bfcfaa3ed51f219102a487ecd895447
-  Result: 1b3e431f37cbcd3ad89c6aa9ab0ae55515fae3b6
-  RxCocoa: 71b9cce833fbcb89a8eec11816dd225830c2bd3c
-  RxSwift: a9717a34df3179fe63563f76e046ad345078dd3a
+  PromiseKit: 27c1601bfb73405871b805bcb8cf7e55c4dad3db
+  Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
+  RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
+  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
+  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
   scrypt: 3beeb8ea85274ad01f6953ff9672802aeeffacd8
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   Toaster: a6c9532de1ded8105e77376f7dffeb2e12b46dbb
   web3swift: e39ddb21627fcc6b47881b49583f589cae128902
 
-PODFILE CHECKSUM: cc501be58df42575156088860217bf60114f134e
+PODFILE CHECKSUM: 91c8a05e30ad502521cc5336e6b2c22729397556
 
 COCOAPODS: 1.5.0

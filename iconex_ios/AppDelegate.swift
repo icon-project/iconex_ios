@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         
-        Config.host = .main
+        Config.host = .dev
         #if DEBUG
             print(IXSWrapper.getVersion())
         #endif

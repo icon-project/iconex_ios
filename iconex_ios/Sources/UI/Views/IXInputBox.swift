@@ -24,6 +24,7 @@ enum IXTextFieldState {
 
 enum IXTextFieldType {
     case normal
+    case name
     case password
     case newPassword
     case numeric
@@ -40,11 +41,9 @@ enum IXTextFieldType {
     @IBOutlet var textField: IXTextField!
     @IBOutlet private var highlightLine: UIView!
     @IBOutlet private var warnLabel: UILabel!
-    @IBOutlet weak var eyeButton: UIButton!
     @IBOutlet weak var plainLabel: UILabel!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     @IBOutlet weak var trailConstraint: NSLayoutConstraint!
-    @IBOutlet weak var separator: UIView!
     @IBOutlet weak var plainHighlight: UIView!
     
     private let disposeBag = DisposeBag()
@@ -69,19 +68,17 @@ enum IXTextFieldType {
     var isLoading: Bool = false {
         willSet {
             if newValue {
-                eyeButton.isHidden = true
                 indicator.isHidden = false
-                trailConstraint.constant = 10
+                trailConstraint.constant = 44
                 UIView.animate(withDuration: 0.2) {
                     self.layoutIfNeeded()
                 }
             } else {
                 indicator.isHidden = true
-                trailConstraint.constant = -24
+                trailConstraint.constant = 10
                 UIView.animate(withDuration: 0.2, animations: {
                     self.layoutIfNeeded()
                 }) { (isCompleted) in
-                    self.eyeButton.isHidden = false
                 }
             }
         }
@@ -132,20 +129,26 @@ enum IXTextFieldType {
             highlightLine.isHidden = false
             
             switch newValue {
+            case .name:
+                textField.isSecureTextEntry = false
+                textField.keyboardType = .default
+                textField.isPreventPaste = true
+                trailConstraint.constant = 10
+                textField.isHidden = false
+                plainLabel.isHidden = true
+                
             case .normal, .address, .data:
                 textField.isSecureTextEntry = false
                 textField.keyboardType = .default
                 textField.isPreventPaste = false
-                trailConstraint.constant = -24
-                separator.isHidden = true
+                trailConstraint.constant = 10
                 textField.isHidden = false
                 plainLabel.isHidden = true
                 
             case .password:
                 textField.isSecureTextEntry = true
                 textField.isPreventPaste = true
-                trailConstraint.constant = -24
-                separator.isHidden = true
+                trailConstraint.constant = 10
                 textField.isHidden = false
                 plainLabel.isHidden = true
                 
@@ -153,35 +156,31 @@ enum IXTextFieldType {
                 textField.isSecureTextEntry = true
                 textField.isPreventPaste = true
                 trailConstraint.constant = 10
-                separator.isHidden = false
                 textField.isHidden = false
                 plainLabel.isHidden = true
                 
             case .numeric:
-                textField.isPreventPaste = false
                 textField.keyboardType = .decimalPad
+                textField.isPreventPaste = true
                 textField.isSecureTextEntry = false
-                trailConstraint.constant = -24
-                separator.isHidden = true
+                trailConstraint.constant = 10
                 textField.isHidden = false
                 plainLabel.isHidden = true
                 
             case .plain:
-                textField.isPreventPaste = false
                 textField.isSecureTextEntry = false
-                trailConstraint.constant = -24
-                separator.isHidden = true
+                textField.isPreventPaste = false
+                trailConstraint.constant = 10
                 textField.isHidden = true
                 plainLabel.isHidden = false
                 plainHighlight.isHidden = false
                 highlightLine.isHidden = true
                 
             case .integer:
-                textField.isPreventPaste = false
                 textField.keyboardType = .decimalPad
+                textField.isPreventPaste = true
                 textField.isSecureTextEntry = false
-                trailConstraint.constant = -24
-                separator.isHidden = true
+                trailConstraint.constant = 10
                 textField.isHidden = false
                 plainLabel.isHidden = true
             }
@@ -204,16 +203,7 @@ enum IXTextFieldType {
         textField.returnKeyType = .done
         textField.delegate = self
         plainHighlight.backgroundColor = UIColor.lightTheme.background.disabled
-        eyeButton.rx.controlEvent(UIControlEvents.touchUpInside)
-            .subscribe(onNext: { [unowned self] in
-                self.eyeButton.isSelected = !self.eyeButton.isSelected
-                self.textField.isSecureTextEntry = !self.eyeButton.isSelected
-                if let selectedRange = self.textField.selectedTextRange {
-                    self.textField.selectedTextRange = nil
-                    self.textField.selectedTextRange = selectedRange
-                }
-            }).disposed(by: disposeBag)
-        warnLabel.text = " "
+        warnLabel.text = ""
     }
     
     func loadViewFromNib() -> UIView? {
@@ -262,10 +252,10 @@ enum IXTextFieldType {
                 }
                 return false
             }
-        } else if (_fieldType == .normal || _fieldType == .data) && string != "" && string != "\n" {
+        } else if (_fieldType == .normal || _fieldType == .data || _fieldType == .name) && string != "" && string != "\n" {
             
             if string == " " {
-                guard let text = textField.text, text != "", !text.hasSuffix(" ") else { return false }
+                guard let text = textField.text, text != "", !text.hasPrefix(" ") else { return false }
             }
             
             
@@ -274,10 +264,10 @@ enum IXTextFieldType {
 
             let length = text.unicodeScalars.compactMap({ $0.isASCII ? 1 : 2 }).reduce(0, +)
             
-            if length > 16 && _fieldType == .normal {
+            if length > 16 && (_fieldType == .normal || _fieldType == .name) {
                 return false
             }
-        } else if _fieldType == .password || _fieldType == .newPassword {
+        } else if _fieldType == .password || _fieldType == .newPassword || _fieldType == .address {
             if string == " " { return false }
         }
         

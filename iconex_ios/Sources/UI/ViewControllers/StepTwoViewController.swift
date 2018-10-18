@@ -50,7 +50,7 @@ class StepTwoViewController: UIViewController {
         nextButton.styleLight()
         nextButton.rounded()
         
-        walletNameBox.setType()
+        walletNameBox.setType(.normal)
         walletNameBox.setState()
         walletNameBox.textField.returnKeyType = .next
         walletNameBox.textField.placeholder = Localized(key: "Placeholder.InputWalletName")
@@ -198,17 +198,15 @@ class StepTwoViewController: UIViewController {
             return false
         }
         
-        guard !walletName.hasPrefix(" ") && !walletName.hasSuffix(" ") else {
-            if showError { self.walletNameBox.setState(.error, "Error.Password.Blank".localized) }
-            return false
-        }
+        let stripName = walletName.removeContinuosSuffix(string: " ")
+        self.walletNameBox.textField.text = stripName
         
         if WManager.canSaveWallet(alias: walletName) == false {
             if showError { self.walletNameBox.setState(.error, Localized(key: "Error.Wallet.Duplicated.Name")) }
             return false
         }
         
-        if showError { self.walletNameBox.setState(.normal) }
+        if showError { self.walletNameBox.setState(.normal, "") }
         return true
     }
     @discardableResult
@@ -232,7 +230,7 @@ class StepTwoViewController: UIViewController {
             return false
         }
         
-        if showError { self.password1.setState(.normal) }
+        if showError { self.password1.setState(.normal, "") }
         return true
     }
     @discardableResult
@@ -247,7 +245,7 @@ class StepTwoViewController: UIViewController {
             return false
         }
         
-        if showError { self.password2.setState(.normal) }
+        if showError { self.password2.setState(.normal, "") }
         return true
     }
 }

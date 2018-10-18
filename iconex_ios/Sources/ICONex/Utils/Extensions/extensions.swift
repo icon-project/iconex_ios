@@ -72,6 +72,16 @@ extension String {
     }
 }
 
+extension String {
+    func removeContinuosSuffix(string: String) -> String {
+        var conv = self as NSString
+        while conv.hasSuffix(string) {
+            conv = conv.substring(to: conv.length - 1) as NSString
+        }
+        return String(conv)
+    }
+}
+
 // MARK: Chracter
 extension Character {
     var asciiValue: Int {

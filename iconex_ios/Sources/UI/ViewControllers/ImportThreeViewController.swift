@@ -115,7 +115,7 @@ class ImportThreeViewController: UIViewController {
     func initializeUI() {
         headerTitleLabel.text = "Import.Step3.Header_1".localized
         
-        inputBox.setType(.normal)
+        inputBox.setType(.name)
         inputBox.setState(.normal, nil)
         inputBox.textField.placeholder = "Import.Step3.Placeholder_1".localized
         
@@ -124,7 +124,7 @@ class ImportThreeViewController: UIViewController {
         privContent2.text = "Import.Step3.Desc_2_2".localized
         
         privNameBox.setState(.normal, nil)
-        privNameBox.setType(.normal)
+        privNameBox.setType(.name)
         privNameBox.textField.returnKeyType = .next
         privNameBox.textField.placeholder = "Import.Step3.Placeholder_1".localized
         privPassword1.setState(.normal, nil)

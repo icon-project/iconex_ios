@@ -69,7 +69,7 @@ class EditingAddressViewController: UIViewController {
         }
         
         nameInputBox.setState(.normal, nil)
-        nameInputBox.setType(.normal)
+        nameInputBox.setType(.name)
         nameInputBox.textField.placeholder = "AddressBook.InputName".localized
         addressInputBox.setType(.address)
         addressInputBox.textField.placeholder = type == .icx ? "Alert.AddressBook.ICX".localized : "Alert.AddressBook.ETH".localized

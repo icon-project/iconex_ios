@@ -46,7 +46,7 @@ class ChangeNameViewController: UIViewController {
         titleLabel.text = "Alert.Wallet.EditName".localized
         nameInputBox.textField.placeholder = "Placeholder.InputWalletName".localized
         nameInputBox.setState(.normal, "")
-        nameInputBox.setType(.normal)
+        nameInputBox.setType(.name)
         nameInputBox.textField.text = formerName
         
         cancelButton.styleDark()
@@ -96,12 +96,10 @@ class ChangeNameViewController: UIViewController {
             return false
         }
         
-        guard !walletName.hasPrefix(" ") && !walletName.hasSuffix(" ") else {
-            self.nameInputBox.setState(.error, "Error.Password.Blank".localized)
-            return false
-        }
+        let stripName = walletName.removeContinuosSuffix(string: " ")
+        self.nameInputBox.textField.text = stripName
         
-        if WManager.canSaveWallet(alias: nameInputBox.textField.text!) == false {
+        if WManager.canSaveWallet(alias: stripName) == false {
             nameInputBox.setState(.error, "Error.Wallet.Duplicated.Name".localized)
             return false
         }

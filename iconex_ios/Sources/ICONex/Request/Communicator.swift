@@ -13,7 +13,6 @@ enum ClientState {
     case new, doing, done, failed
 }
 
-@available(*, deprecated)
 class EthereumClient: Operation {
     
     var wallet: ETHWallet?

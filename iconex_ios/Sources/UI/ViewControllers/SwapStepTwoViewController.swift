@@ -132,7 +132,7 @@ class SwapStepTwoViewController: BaseViewController {
         step2Desc.text = "Swap.Step2.Desc1".localized
         step2Header2.text = "Swap.Step2.Header2".localized
         nameInputBox.setState(.normal, nil)
-        nameInputBox.setType(.normal)
+        nameInputBox.setType(.name)
         nameInputBox.textField.returnKeyType = .next
         nameInputBox.textField.placeholder = "Placeholder.InputWalletName".localized
         firstInputBox.setState(.normal, nil)
@@ -163,10 +163,8 @@ class SwapStepTwoViewController: BaseViewController {
             return false
         }
         
-        guard !name.hasPrefix(" ") && !name.hasSuffix(" ") else {
-            if showError { self.nameInputBox.setState(.error, "Error.Password.Blank".localized) }
-            return false
-        }
+        let stripName = name.removeContinuosSuffix(string: " ")
+        self.nameInputBox.textField.text = stripName
         
         guard WManager.canSaveWallet(alias: name) else {
             if showError { nameInputBox.setState(.error, "Error.Wallet.Duplicated.Name".localized) }
