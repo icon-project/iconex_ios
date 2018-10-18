@@ -320,10 +320,6 @@ class ICXSendViewController: UIViewController {
             let validate = self.validation()
             self.sendButton.isEnabled = validate
         }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            let validate = self.validation()
-            self.sendButton.isEnabled = validate
-        }).disposed(by: disposeBag)
         
         selectAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             let addressManage = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "AddressManageView") as! AddressManageViewController
@@ -365,9 +361,6 @@ class ICXSendViewController: UIViewController {
             self.limitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
         limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            self.validateLimit()
-        }).disposed(by: disposeBag)
-        limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.sendButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         
