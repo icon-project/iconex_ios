@@ -395,6 +395,11 @@ class ICXSendViewController: UIViewController {
                 dataInput.type = self.selectedDataType
                 dataInput.savedData = savedData
                 dataInput.walletAmount = self.totalBalance
+                dataInput.stepPrice = self.stepPrice
+                let value = self.sendInputBox.textField.text!
+                if let sendValue = Tools.stringToBigUInt(inputText: value) {
+                    dataInput.sendAmount = sendValue
+                }
                 dataInput.costs = self.costs
                 dataInput.handler = { [unowned self] data in
                     self.inputData = data
@@ -409,6 +414,11 @@ class ICXSendViewController: UIViewController {
                     dataInput.type = selected
                     dataInput.savedData = nil
                     dataInput.walletAmount = self.totalBalance
+                    dataInput.stepPrice = self.stepPrice
+                    let value = self.sendInputBox.textField.text!
+                    if let sendValue = Tools.stringToBigUInt(inputText: value) {
+                        dataInput.sendAmount = sendValue
+                    }
                     dataInput.costs = self.costs
                     dataInput.handler = { [unowned self] data in
                         self.inputData = data

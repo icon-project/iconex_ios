@@ -30,8 +30,10 @@ class ICXDataInputViewController: BaseViewController {
     var handler: ((String) -> Void)?
     var type: EncodeType = .utf8
     var savedData: String? = nil
+    var stepPrice: BigUInt?
     var costs: ICON.Response.StepCosts.CostResult?
     var walletAmount: BigUInt?
+    var sendAmount: BigUInt?
     var isModify: Bool = false
     
     override func viewDidLoad() {
@@ -128,12 +130,16 @@ class ICXDataInputViewController: BaseViewController {
                 return
             }
             
-            guard let costs = self.costs, let amount = self.walletAmount else { return }
+            guard let costs = self.costs, let amount = self.walletAmount, let stepPrice = self.stepPrice else { return }
+            guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16) else { return }
+            let stepLimit = 2 * stepDefault * stepPrice
             
-            guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16), let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return }
-            let stepLimit = 2 * (stepDefault + contractCall + (input * BigUInt(encoded.bytes.count)))
-            
-            if stepLimit > amount {
+            var sendValue = BigUInt(0)
+            if let send = self.sendAmount {
+                sendValue = send
+            }
+            Log.Debug("amount - \(amount) , stepLimit - \(stepLimit) , sendValue - \(sendValue)")
+            if amount > sendValue, stepLimit > (amount - sendValue) {
                 Alert.Basic(message: "Error.Transfer.InsufficientFee.ICX".localized).show(self)
                 return
             }

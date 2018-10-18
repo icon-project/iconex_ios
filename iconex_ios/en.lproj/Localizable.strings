@@ -376,7 +376,7 @@
 "Alert.Transaction.IDCopy" = "Copy";
 "Alert.Transaction.IDCopied" = "Transaction ID is copied.";
 "Alert.Transaction.History" = "Check Tx";
-"Alert.ICX.Transfer.Info" = "ICX transfer transactions not proceeded within 2 minutes will be cancelled automatically, restoring any transfer amount and transaction fees.";
+"Alert.ICX.Transfer.Info" = "ICX transfer transactions not proceeded will be cancelled automatically, restoring any transfer amount and transaction fees.";
 "Alert.Token.Remove" = "\nDo you want to remove your token?";
 "Alert.Token.Edit.Cancel" = "Are you sure you want to cancel?";
 "Alert.Token.Add.Cancel" = "Are you sure you want to cancel?";
