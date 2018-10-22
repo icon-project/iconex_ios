@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +20,7 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H2m-C0-vCt">
-                        <rect key="frame" x="254" y="0.0" width="66" height="86"/>
+                        <rect key="frame" x="254" y="0.0" width="66" height="85.5"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowRight" translatesAutoresizingMaskIntoConstraints="NO" id="1Gw-wY-4y5">
                                 <rect key="frame" x="28" y="11" width="24" height="24"/>
@@ -30,13 +30,13 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O63-AS-NEg">
-                                <rect key="frame" x="0.0" y="43" width="42" height="13.5"/>
+                                <rect key="frame" x="0.0" y="42.5" width="42" height="13.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ASf-10-Nka">
-                                <rect key="frame" x="0.0" y="62.5" width="42" height="13.5"/>
+                                <rect key="frame" x="0.0" y="62" width="42" height="13.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="11"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -81,38 +81,11 @@
                             <constraint firstAttribute="width" constant="40" id="VBq-rV-SRZ"/>
                         </constraints>
                     </view>
-                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dVU-CT-UXj">
-                        <rect key="frame" x="66" y="11" width="47.5" height="18.5"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJD-Ag-3cG">
-                                <rect key="frame" x="8" y="1.5" width="31.5" height="14.5"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6k-Cm-pbt">
-                                <rect key="frame" x="0.0" y="0.0" width="47.5" height="30"/>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="pJD-Ag-3cG" secondAttribute="bottom" constant="2" id="1Dq-XS-ld0"/>
-                            <constraint firstItem="pJD-Ag-3cG" firstAttribute="top" secondItem="dVU-CT-UXj" secondAttribute="top" constant="2" id="6hQ-TZ-59K"/>
-                            <constraint firstItem="h6k-Cm-pbt" firstAttribute="leading" secondItem="dVU-CT-UXj" secondAttribute="leading" id="IcG-bt-30Z"/>
-                            <constraint firstItem="pJD-Ag-3cG" firstAttribute="leading" secondItem="dVU-CT-UXj" secondAttribute="leading" constant="8" id="PpX-7N-T1l"/>
-                            <constraint firstAttribute="trailing" secondItem="pJD-Ag-3cG" secondAttribute="trailing" constant="8" id="Q9v-3S-43j"/>
-                            <constraint firstAttribute="bottom" secondItem="h6k-Cm-pbt" secondAttribute="bottom" priority="250" id="T4R-DP-tp9"/>
-                            <constraint firstItem="h6k-Cm-pbt" firstAttribute="top" secondItem="dVU-CT-UXj" secondAttribute="top" priority="750" id="pXn-PD-4J2"/>
-                            <constraint firstAttribute="trailing" secondItem="h6k-Cm-pbt" secondAttribute="trailing" id="v9c-XE-qoh"/>
-                        </constraints>
-                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="d9U-TB-sbi" secondAttribute="bottom" constant="10" id="5w2-48-isc"/>
-                    <constraint firstItem="dVU-CT-UXj" firstAttribute="centerY" secondItem="1iK-xm-Wiz" secondAttribute="centerY" id="79k-yb-BLF"/>
                     <constraint firstItem="fyS-lq-Mci" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="38" id="GBl-01-C38"/>
                     <constraint firstItem="fyS-lq-Mci" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="60" id="QGM-6J-NJw"/>
-                    <constraint firstItem="dVU-CT-UXj" firstAttribute="leading" secondItem="1iK-xm-Wiz" secondAttribute="trailing" constant="8" id="Rke-Kl-c2k"/>
                     <constraint firstItem="H2m-C0-vCt" firstAttribute="leading" secondItem="d9U-TB-sbi" secondAttribute="trailing" id="SQU-Kh-hMN"/>
                     <constraint firstItem="HEv-Pk-u5c" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Tg0-in-OlB"/>
                     <constraint firstAttribute="trailing" secondItem="H2m-C0-vCt" secondAttribute="trailing" id="WcQ-1T-5Hx"/>
@@ -134,9 +107,6 @@
                 <outlet property="exchangeValueLabel" destination="d9U-TB-sbi" id="JSC-pO-1xA"/>
                 <outlet property="indicator" destination="HEv-Pk-u5c" id="KSc-ad-zuc"/>
                 <outlet property="rearContainer" destination="H2m-C0-vCt" id="G7I-lS-RMC"/>
-                <outlet property="swapBack" destination="dVU-CT-UXj" id="gho-I4-SB9"/>
-                <outlet property="swapButton" destination="h6k-Cm-pbt" id="Rmw-5Z-vrw"/>
-                <outlet property="swapLabel" destination="pJD-Ag-3cG" id="QdH-fD-p56"/>
             </connections>
         </tableViewCell>
     </objects>

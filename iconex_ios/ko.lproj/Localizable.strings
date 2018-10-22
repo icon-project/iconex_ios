@@ -398,7 +398,6 @@
 "Alert.Wallet.RequestPassword" = "지갑 비밀번호 입력";
 "Alert.Wallet.Remove.UnknownBalance" = "지갑의 보유금액을 확인 할 수 없습니다.\n정말 삭제하시겠습니까?";
 
-
 "Error.Swap.NoICX" = "스왑 가능한 ICX 토큰이 없습니다.";
 "Error.Swap.NoETH" = "스왑 수수료 지불을 위한 ETH 잔액이 없습니다. 입금 후 진행해 주세요.";
 "Error.CommonError" = "오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.";

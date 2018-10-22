@@ -55,7 +55,6 @@ class WalletDetailViewController: UIViewController {
     @IBOutlet weak var exchangeSelectButton: UIButton!
     
     @IBOutlet weak var stackContainer: UIStackView!
-    @IBOutlet weak var swapButton: UIButton!
     @IBOutlet weak var outButton: UIButton!
     @IBOutlet weak var inButton: UIButton!
     
@@ -176,17 +175,23 @@ class WalletDetailViewController: UIViewController {
         
         outButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!) else { return }
+            let errMsg = wallet.type == .icx ? "Error.Transfer.InsufficientFee.ICX".localized : "Error.Transfer.InsufficientFee.ETH".localized
             if let token = self.token {
                 guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
                     let alert = UIStoryboard(name: "Alert", bundle: nil).instantiateInitialViewController() as! BasicActionViewController
-                    alert.message = "Error.Detail.InsufficientBalance".localized
+                    alert.message = errMsg
                     self.present(alert, animated: true, completion: nil)
                     
                     return
                 }
+                
+                guard let walletBalance = WManager.walletBalanceList[wallet.address!], walletBalance != BigUInt(0) else {
+                    Alert.Basic(message: errMsg).show(self)
+                    return
+                }
             } else {
                 guard let balance = WManager.walletBalanceList[wallet.address!], balance != BigUInt(0) else {
-                    Alert.Basic(message: "Error.Detail.InsufficientBalance".localized).show(self)
+                    Alert.Basic(message: errMsg).show(self)
                     return
                 }
             }
@@ -481,7 +486,6 @@ class WalletDetailViewController: UIViewController {
     
     func initializeUI() {
         fullLoaderContainer.isHidden = true
-        swapButton.isHidden = true
         
         navBar.layer.shadowOffset = CGSize(width: 0, height: 2)
         navBar.layer.shadowRadius = 6 / 2
@@ -491,7 +495,6 @@ class WalletDetailViewController: UIViewController {
         topSelectContainer.corner(topSelectContainer.frame.height / 2)
         exchangeSelectContainer.corner(exchangeSelectContainer.frame.height / 2)
         
-        swapButton.setTitle("Swap.Swap".localized, for: .normal)
         outButton.setTitle("Detail.Filter.Transfer".localized, for: .normal)
         inButton.setTitle("Detail.Filter.Deposit".localized, for: .normal)
         
@@ -509,38 +512,6 @@ class WalletDetailViewController: UIViewController {
                 if wallet.type == .eth {
                     if token.symbol.lowercased() == "icx" {
                         etherContainer.isHidden = false
-                        swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-                            if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) {
-                                
-                                let ethWallet = WManager.loadWalletBy(info: wallet)!
-                                
-                                guard let walletBalance = WManager.walletBalanceList[ethWallet.address!], walletBalance != BigUInt(0) else {
-                                    Alert.Basic(message: "Error.Swap.NoETH".localized).show(self)
-                                    return
-                                }
-                                
-                                Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, privateKey) in
-                                    
-                                    SwapManager.sharedInstance.walletInfo = self.walletInfo
-                                    SwapManager.sharedInstance.privateKey = privateKey
-                                    
-                                    if let swapAddress = token.swapAddress, let existWallet = WManager.walletInfoList.filter({ $0.address == swapAddress }).first {
-                                        let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
-                                        swap.walletName = existWallet.name
-                                        self.present(swap, animated: true, completion: nil)
-                                    } else {
-                                        let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
-                                        self.present(swap, animated: true, completion: nil)
-                                    }
-                                    
-                                }).show(self)
-                                
-                            } else {
-                                Alert.Basic(message: "Error.Swap.NoICX".localized).show(self)
-                            }
-                        }).disposed(by: disposeBag)
-                        
-                        self.swapButton.isHidden = false
                     }
                 } else {
                     etherContainer.isHidden = true

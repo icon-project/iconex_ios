@@ -18,9 +18,6 @@ class MainWalletCell: UITableViewCell {
     @IBOutlet weak var exchangeTypeLabel: UILabel!
     @IBOutlet weak var rearContainer: UIView!
     @IBOutlet weak var indicator: IXIndicator!
-    @IBOutlet weak var swapBack: UIView!
-    @IBOutlet weak var swapLabel: UILabel!
-    @IBOutlet weak var swapButton: UIButton!
     
     let disposeBag = DisposeBag()
     
@@ -49,11 +46,6 @@ class MainWalletCell: UITableViewCell {
         exchangeTypeLabel.textColor = UIColor.lightTheme.background.normal
         exchangeValueLabel.textColor = UIColor.lightTheme.background.normal
         isLoading = false
-        swapBack.layer.masksToBounds = true
-        swapBack.layer.cornerRadius = swapBack.frame.height / 2
-        swapLabel.text = "Swap.Swap".localized
-        swapLabel.textColor = UIColor.white
-        swapLabel.backgroundColor = UIColor.black
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

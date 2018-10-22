@@ -642,7 +642,7 @@ class ICXSendViewController: UIViewController {
 //            }
         } else {
             guard inputValue <= totalBalance else {
-                if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+                if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                 return false
             }
             

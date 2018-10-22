@@ -228,7 +228,9 @@ class TokenManageViewController: UIViewController {
         
         confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let token = self.selectedToken else { return }
-            token.name = self.tokenInputBox.textField.text!
+            let name = self.tokenInputBox.textField.text!
+            let stripName = name.removeContinuosSuffix(string: " ")
+            token.name = stripName
             
             do {
                 try DB.addToken(tokenInfo: token)
@@ -388,7 +390,6 @@ class TokenManageViewController: UIViewController {
         }
         
         let stripName = name.removeContinuosSuffix(string: " ")
-        self.tokenInputBox.textField.text = stripName
         
         tokenInputBox.setState(.normal, "")
         return true

@@ -34,6 +34,10 @@ class AppInfoViewController: BaseViewController {
             let opensource = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "OpenLicenseView")
             self.navigationController?.pushViewController(opensource, animated: true)
         }).disposed(by: disposeBag)
+        
+        updateButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+            UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: nil)
+        }).disposed(by: disposeBag)
     }
     
     func initializeUI() {

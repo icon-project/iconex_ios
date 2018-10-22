@@ -66,16 +66,10 @@
 		D45F40982060B28F001A2BA5 /* ChangeNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F40972060B28F001A2BA5 /* ChangeNameViewController.swift */; };
 		D460386F20CA4A490076EDF9 /* SwapStepView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D460386E20CA4A490076EDF9 /* SwapStepView2.swift */; };
 		D460387120CA4A730076EDF9 /* SwapStepView2.xib in Resources */ = {isa = PBXBuildFile; fileRef = D460387020CA4A730076EDF9 /* SwapStepView2.xib */; };
-		D460387320CA4FA10076EDF9 /* SwapStep2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D460387220CA4FA10076EDF9 /* SwapStep2ViewController.swift */; };
 		D462C9AB203AABA800CF3BE1 /* PasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462C9AA203AABA800CF3BE1 /* PasscodeViewController.swift */; };
 		D462C9AD203AAE1B00CF3BE1 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D462C9AC203AAE1B00CF3BE1 /* LaunchViewController.swift */; };
 		D46586CF20593A80004EE6DB /* Exchange.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46586CE20593A80004EE6DB /* Exchange.swift */; };
-		D468D72E20AABDB4005CC724 /* SwapStepOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468D72D20AABDB4005CC724 /* SwapStepOneViewController.swift */; };
-		D468D73020AACFA5005CC724 /* SwapStepTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468D72F20AACFA5005CC724 /* SwapStepTwoViewController.swift */; };
 		D469647020A2BA7A0064BFE0 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D469646F20A2BA7A0064BFE0 /* BaseViewController.swift */; };
-		D46AFE4320ABF52200EB762E /* SwapStepThreeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46AFE4220ABF52200EB762E /* SwapStepThreeViewController.swift */; };
-		D46AFE4520ABF52D00EB762E /* SwapStepFourViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46AFE4420ABF52D00EB762E /* SwapStepFourViewController.swift */; };
-		D46AFE4720ABF6D200EB762E /* SwapStepFiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46AFE4620ABF6D200EB762E /* SwapStepFiveViewController.swift */; };
 		D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D46DB4D620A1903500B632D9 /* Localizable.strings */; };
 		D4719B22200F2796005F6BDA /* logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4719B21200F2796005F6BDA /* logger.swift */; };
 		D471F200205A4D4A00F565EF /* ViewOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D471F1FF205A4D4A00F565EF /* ViewOptionViewController.swift */; };
@@ -91,8 +85,6 @@
 		D47A03E420A2F311009A3A99 /* CreateLockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A03E320A2F311009A3A99 /* CreateLockViewController.swift */; };
 		D47A03E620A315A5009A3A99 /* BioAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A03E520A315A5009A3A99 /* BioAuthViewController.swift */; };
 		D47A03E820A321BC009A3A99 /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */; };
-		D481B09E20A936C50016B0EE /* SwapStepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D481B09D20A936C50016B0EE /* SwapStepViewController.swift */; };
-		D481B0A020A936EB0016B0EE /* Swap.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D481B09F20A936EB0016B0EE /* Swap.storyboard */; };
 		D481B0A220A958FF0016B0EE /* SwapStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D481B0A120A958FF0016B0EE /* SwapStepView.swift */; };
 		D481B0A420A959120016B0EE /* SwapStepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D481B0A320A959120016B0EE /* SwapStepView.xib */; };
 		D481C4A0203EB0DE00A799D7 /* IXInputBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D481C49F203EB0DE00A799D7 /* IXInputBox.swift */; };
@@ -290,17 +282,11 @@
 		D45F40972060B28F001A2BA5 /* ChangeNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNameViewController.swift; sourceTree = "<group>"; };
 		D460386E20CA4A490076EDF9 /* SwapStepView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepView2.swift; sourceTree = "<group>"; };
 		D460387020CA4A730076EDF9 /* SwapStepView2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwapStepView2.xib; sourceTree = "<group>"; };
-		D460387220CA4FA10076EDF9 /* SwapStep2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStep2ViewController.swift; sourceTree = "<group>"; };
 		D462C9AA203AABA800CF3BE1 /* PasscodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeViewController.swift; sourceTree = "<group>"; };
 		D462C9AC203AAE1B00CF3BE1 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		D46586CE20593A80004EE6DB /* Exchange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exchange.swift; sourceTree = "<group>"; };
 		D468298C206251AA00ECF68F /* iconex_ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iconex_ios.entitlements; sourceTree = "<group>"; };
-		D468D72D20AABDB4005CC724 /* SwapStepOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepOneViewController.swift; sourceTree = "<group>"; };
-		D468D72F20AACFA5005CC724 /* SwapStepTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepTwoViewController.swift; sourceTree = "<group>"; };
 		D469646F20A2BA7A0064BFE0 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
-		D46AFE4220ABF52200EB762E /* SwapStepThreeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepThreeViewController.swift; sourceTree = "<group>"; };
-		D46AFE4420ABF52D00EB762E /* SwapStepFourViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepFourViewController.swift; sourceTree = "<group>"; };
-		D46AFE4620ABF6D200EB762E /* SwapStepFiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepFiveViewController.swift; sourceTree = "<group>"; };
 		D46DB4D520A1903500B632D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D46DB4D720A1903800B632D9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4719B21200F2796005F6BDA /* logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logger.swift; sourceTree = "<group>"; };
@@ -320,8 +306,6 @@
 		D47A03E320A2F311009A3A99 /* CreateLockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLockViewController.swift; sourceTree = "<group>"; };
 		D47A03E520A315A5009A3A99 /* BioAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioAuthViewController.swift; sourceTree = "<group>"; };
 		D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DisclaimerViewController.swift; path = Alert/DisclaimerViewController.swift; sourceTree = "<group>"; };
-		D481B09D20A936C50016B0EE /* SwapStepViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepViewController.swift; sourceTree = "<group>"; };
-		D481B09F20A936EB0016B0EE /* Swap.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Swap.storyboard; sourceTree = "<group>"; };
 		D481B0A120A958FF0016B0EE /* SwapStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapStepView.swift; sourceTree = "<group>"; };
 		D481B0A320A959120016B0EE /* SwapStepView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwapStepView.xib; sourceTree = "<group>"; };
 		D481C49F203EB0DE00A799D7 /* IXInputBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXInputBox.swift; sourceTree = "<group>"; };
@@ -685,7 +669,6 @@
 		D4728A2820070CFC00E0A899 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				D4CB6C1620A9366E008768AB /* Swap */,
 				D48E49C02043EF800064CFF4 /* Main */,
 				D42A6D0F2057B27700BC5039 /* Side */,
 				D43A9AFC203D4D2500790F32 /* Loading */,
@@ -787,21 +770,6 @@
 			path = Ethereum;
 			sourceTree = "<group>";
 		};
-		D4CB6C1620A9366E008768AB /* Swap */ = {
-			isa = PBXGroup;
-			children = (
-				D481B09F20A936EB0016B0EE /* Swap.storyboard */,
-				D481B09D20A936C50016B0EE /* SwapStepViewController.swift */,
-				D468D72D20AABDB4005CC724 /* SwapStepOneViewController.swift */,
-				D468D72F20AACFA5005CC724 /* SwapStepTwoViewController.swift */,
-				D46AFE4220ABF52200EB762E /* SwapStepThreeViewController.swift */,
-				D46AFE4420ABF52D00EB762E /* SwapStepFourViewController.swift */,
-				D46AFE4620ABF6D200EB762E /* SwapStepFiveViewController.swift */,
-				D460387220CA4FA10076EDF9 /* SwapStep2ViewController.swift */,
-			);
-			name = Swap;
-			sourceTree = "<group>";
-		};
 		E625D6AEA7B504FDCBEB72E2 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -887,7 +855,6 @@
 				D43FB68F214B464B005360A8 /* san.dat in Resources */,
 				D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */,
 				D4D33837203C205D001FD669 /* WalletCreateStepView.xib in Resources */,
-				D481B0A020A936EB0016B0EE /* Swap.storyboard in Resources */,
 				D4EBB842204FDB1B007B07FB /* ActionControls.storyboard in Resources */,
 				D43FB689214B464B005360A8 /* updateinfo.dat in Resources */,
 				D4EBB84A205024E2007B07FB /* Menu.storyboard in Resources */,
@@ -1006,22 +973,18 @@
 				D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */,
 				D4A7841E2148EA49003A40C0 /* DataInputSourceViewController.swift in Sources */,
 				D477CC2E205F778600797A82 /* SendConfirmViewController.swift in Sources */,
-				D46AFE4720ABF6D200EB762E /* SwapStepFiveViewController.swift in Sources */,
 				D41C4EF920D25B320094E199 /* RetryViewController.swift in Sources */,
 				D4402A95205139AA001BD003 /* WalletDetailMenuController.swift in Sources */,
 				D435E7912018244400F1E798 /* Managers.swift in Sources */,
 				D49605132063E6B80073C99F /* QRReaderViewController.swift in Sources */,
-				D481B09E20A936C50016B0EE /* SwapStepViewController.swift in Sources */,
 				D47A03E620A315A5009A3A99 /* BioAuthViewController.swift in Sources */,
 				D44B957E20B806D5009A74FC /* SwapConfirmViewController.swift in Sources */,
 				D47A03DB20A2C533009A3A99 /* LanguageSelectViewController.swift in Sources */,
 				D48D18182133E74B00BEAA2F /* Communicator.swift in Sources */,
 				D40FAF4B205FDC80008C2CDA /* WalletBackupViewController.swift in Sources */,
 				D457147B20EEFE32000C073D /* BundleImportListViewController.swift in Sources */,
-				D468D73020AACFA5005CC724 /* SwapStepTwoViewController.swift in Sources */,
 				D42ED584207751B4007E6DF8 /* TokenManageViewController.swift in Sources */,
 				D4D33836203C205D001FD669 /* WalletCreateStepView.swift in Sources */,
-				D460387320CA4FA10076EDF9 /* SwapStep2ViewController.swift in Sources */,
 				D492D7F82068EB2E007D8B33 /* InfoStructs.swift in Sources */,
 				D44A94892019CA0100F60614 /* Cipher.swift in Sources */,
 				D44F9BC42071D912002F2A20 /* ETHSendViewController.swift in Sources */,
@@ -1051,7 +1014,6 @@
 				D44D18B720D3AC1D00332E6B /* SwapSendConfirmViewController.swift in Sources */,
 				D4EBB84720501B87007B07FB /* MainMenuViewController.swift in Sources */,
 				D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */,
-				D46AFE4520ABF52D00EB762E /* SwapStepFourViewController.swift in Sources */,
 				D435CE0120567F7B00F0FDC6 /* ICXSendViewController.swift in Sources */,
 				D4173603203E5674008857A1 /* WelcomeViewController.swift in Sources */,
 				D4843E9D205B95D100B14377 /* BasicActionViewController.swift in Sources */,
@@ -1059,7 +1021,6 @@
 				D43FB694214B485D005360A8 /* IXSWrapper.m in Sources */,
 				D481C4A0203EB0DE00A799D7 /* IXInputBox.swift in Sources */,
 				D477CC2C205F554700797A82 /* ConfirmActionViewController.swift in Sources */,
-				D468D72E20AABDB4005CC724 /* SwapStepOneViewController.swift in Sources */,
 				D4053326206CD1700040BE89 /* TransactionDetailViewController.swift in Sources */,
 				D4843E9B205B627100B14377 /* WalletPasswordViewController.swift in Sources */,
 				D471F202205A755C00F565EF /* Database.swift in Sources */,
@@ -1076,7 +1037,6 @@
 				D455C0362045952B0068165E /* IXScrollView.swift in Sources */,
 				D456AE8E205FF58300CB05D2 /* ChangePasswordViewController.swift in Sources */,
 				D492D06220897CA100D86402 /* WalletExportPasswordViewController.swift in Sources */,
-				D46AFE4320ABF52200EB762E /* SwapStepThreeViewController.swift in Sources */,
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
 				D4402A8F205108A8001BD003 /* WalletAddressViewController.swift in Sources */,
 				D41A8CC2204EC279009A0D6B /* ImportStepViewController.swift in Sources */,

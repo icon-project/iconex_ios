@@ -75,7 +75,9 @@ class ChangeNameViewController: UIViewController {
                     self.nameInputBox.textField.resignFirstResponder()
                     self.dismiss(animated: true, completion: {
                         if let handler = self.completionHandler {
-                            handler(self.nameInputBox.textField.text!)
+                            let name = self.nameInputBox.textField.text!
+                            let stripName = name.removeContinuosSuffix(string: " ")
+                            handler(stripName)
                         }
                     })
                 }
@@ -97,7 +99,6 @@ class ChangeNameViewController: UIViewController {
         }
         
         let stripName = walletName.removeContinuosSuffix(string: " ")
-        self.nameInputBox.textField.text = stripName
         
         if WManager.canSaveWallet(alias: stripName) == false {
             nameInputBox.setState(.error, "Error.Wallet.Duplicated.Name".localized)

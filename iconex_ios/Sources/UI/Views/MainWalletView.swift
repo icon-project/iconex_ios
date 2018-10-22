@@ -425,29 +425,6 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4)
             cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
             
-            cell.swapBack.isHidden = !token.needSwap
-            cell.swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
-                let app = UIApplication.shared.delegate as! AppDelegate
-                guard let root = app.window?.rootViewController else {
-                    return
-                }
-                Alert.checkPassword(walletInfo: walletInfo, action: { (isSuccess, privateKey) in
-                    
-                    SwapManager.sharedInstance.walletInfo = walletInfo
-                    SwapManager.sharedInstance.privateKey = privateKey
-                    
-                    if let swapAddress = token.swapAddress, let existWallet = WManager.walletInfoList.filter({ $0.address == swapAddress }).first {
-                        let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
-                        swap.walletName = existWallet.name
-                        root.present(swap, animated: true, completion: nil)
-                    } else {
-                        let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
-                        root.present(swap, animated: true, completion: nil)
-                    }
-                    
-                }).show(root)
-                
-            }).disposed(by: cell.disposeBag)
         } else {
             let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
             
@@ -486,42 +463,6 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 let tag = token.symbol.lowercased()
                 cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
                 cell.isLoading = false
-                cell.swapBack.isHidden = !token.needSwap
-                cell.swapLabel.text = "Swap.Swap".localized
-                cell.swapButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-                    let app = UIApplication.shared.delegate as! AppDelegate
-                    guard let root = app.window?.rootViewController else {
-                        return
-                    }
-                    
-                    if let balances = WManager.tokenBalanceList[token.dependedAddress.lowercased().add0xPrefix()], let balance = balances[token.contractAddress.lowercased()], balance != BigUInt(0) {
-                        
-                        guard let walletBalance = WManager.walletBalanceList[wallet.address!], walletBalance != BigUInt(0) else {
-                            Alert.Basic(message: "Error.Swap.NoETH".localized).show(root)
-                            return
-                        }
-                        
-                        Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, privateKey) in
-                            
-                            SwapManager.sharedInstance.walletInfo = self.walletInfo
-                            SwapManager.sharedInstance.privateKey = privateKey
-                            
-                            if let swapAddress = token.swapAddress, let existWallet = WManager.walletInfoList.filter({ $0.address == swapAddress }).first {
-                                let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateViewController(withIdentifier: "SwapStep2") as! SwapStep2ViewController
-                                swap.walletName = existWallet.name
-                                root.present(swap, animated: true, completion: nil)
-                            } else {
-                                let swap = UIStoryboard(name: "Swap", bundle: nil).instantiateInitialViewController() as! SwapStepViewController
-                                root.present(swap, animated: true, completion: nil)
-                            }
-                            
-                        }).show(root)
-                        
-                    } else {
-                        Alert.Basic(message: "Error.Swap.NoICX".localized).show(root)
-                    }
-                    
-                }).disposed(by: cell.disposeBag)
             }
         }
         

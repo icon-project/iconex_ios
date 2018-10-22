@@ -411,7 +411,7 @@
 "Error.Wallet.Duplicated.Name" = "This wallet name already exists.";
 "Error.Wallet.Duplicated.Address" = "This wallet account already exists.";
 "Error.PrivateKey" = "Incorrect private key. Please check again.";
-"Error.Address" = "Incorrect address. Please check again.";
+"Error.Address" = "Please confirm receiving address.";
 "Error.Letters&NumbersOnly" = "Please enter letters or numbers.";
 "Error.Address.ETH.Invalid" = "Incorrect ETH address.";
 "Error.Address.ICX.Invalid" = "Incorrect ICX address.";

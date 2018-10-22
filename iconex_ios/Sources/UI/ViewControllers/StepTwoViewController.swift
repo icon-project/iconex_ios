@@ -168,8 +168,9 @@ class StepTwoViewController: UIViewController {
         nextButton.isEnabled = false
         do {
             let alias = walletNameBox.textField.text!
+            let stripName = alias.removeContinuosSuffix(string: " ")
             let password = password1.textField.text!
-            try WCreator.createWallet(alias: alias, password: password, completion: { [unowned self] in
+            try WCreator.createWallet(alias: stripName, password: password, completion: { [unowned self] in
                 WManager.loadWalletList()
                 
                 delegate.nextStep(currentStep: .two)
@@ -199,9 +200,8 @@ class StepTwoViewController: UIViewController {
         }
         
         let stripName = walletName.removeContinuosSuffix(string: " ")
-        self.walletNameBox.textField.text = stripName
         
-        if WManager.canSaveWallet(alias: walletName) == false {
+        if WManager.canSaveWallet(alias: stripName) == false {
             if showError { self.walletNameBox.setState(.error, Localized(key: "Error.Wallet.Duplicated.Name")) }
             return false
         }

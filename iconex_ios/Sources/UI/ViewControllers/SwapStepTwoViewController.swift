@@ -80,12 +80,13 @@ class SwapStepTwoViewController: BaseViewController {
             guard let delegate = self.delegate else { return }
             
             guard let name = self.nameInputBox.textField.text else { return }
+            let stripName = name.removeContinuosSuffix(string: " ")
             guard let password = self.firstInputBox.textField.text else { return }
             
             WCreator.newType = .icx
             do {
                 let privKey = SwapManager.sharedInstance.privateKey!
-                try WCreator.createSwapWallet(alias: name, password: password, privateKey: privKey)
+                try WCreator.createSwapWallet(alias: stripName, password: password, privateKey: privKey)
                 WManager.loadWalletList()
             } catch {
                 Log.Error("\(error)")
@@ -164,9 +165,8 @@ class SwapStepTwoViewController: BaseViewController {
         }
         
         let stripName = name.removeContinuosSuffix(string: " ")
-        self.nameInputBox.textField.text = stripName
         
-        guard WManager.canSaveWallet(alias: name) else {
+        guard WManager.canSaveWallet(alias: stripName) else {
             if showError { nameInputBox.setState(.error, "Error.Wallet.Duplicated.Name".localized) }
             return false
         }
