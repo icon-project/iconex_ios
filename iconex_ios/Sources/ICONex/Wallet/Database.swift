@@ -464,13 +464,17 @@ struct DB {
     
     static func modifyToken(tokenInfo: TokenInfo) throws {
         let realm = try Realm()
+        Log.Debug("token - \(tokenInfo.contractAddress) , \(tokenInfo.dependedAddress)")
+        let contract = tokenInfo.dependedAddress.hasPrefix("hx") ? tokenInfo.contractAddress.lowercased() : tokenInfo.contractAddress.add0xPrefix().lowercased()
         
-        guard let model = realm.objects(TokenModel.self).filter( "contractAddress = %@ and dependedAddress = %@", tokenInfo.contractAddress, tokenInfo.dependedAddress).first else { throw IXError.invalidTokenInfo }
+        guard let model = realm.objects(TokenModel.self).filter( "contractAddress = %@ and dependedAddress = %@", contract, tokenInfo.dependedAddress).first else {
+            Log.Debug("contract - \(contract) , depeded - \(tokenInfo.dependedAddress)")
+            throw IXError.invalidTokenInfo }
         
         let token = TokenModel()
         token.id = model.id
         token.name = tokenInfo.name
-        token.contractAddress = tokenInfo.dependedAddress.hasPrefix("hx") ? tokenInfo.contractAddress.lowercased() : tokenInfo.contractAddress.add0xPrefix().lowercased()
+        token.contractAddress = contract
         token.decimal = tokenInfo.decimal
         token.dependedAddress = tokenInfo.dependedAddress.add0xPrefix().lowercased()
         token.defaultDecimal = tokenInfo.defaultDecimal

@@ -151,6 +151,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                     guard let root = app.window?.rootViewController as? UINavigationController, let main = root.viewControllers[0] as? MainViewController else {
                                         return
                                     }
+                                    main.currentIndex = 0
                                     main.loadWallets()
                                 }
                                 
@@ -175,6 +176,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                 guard let root = app.window?.rootViewController as? UINavigationController, let main = root.viewControllers[0] as? MainViewController else {
                                     return
                                 }
+                                main.currentIndex = 0
                                 main.loadWallets()
                             }
                         }).show(root)
@@ -197,6 +199,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                         guard let root = app.window?.rootViewController as? UINavigationController, let main = root.viewControllers[0] as? MainViewController else {
                                             return
                                         }
+                                        main.currentIndex = 0
                                         main.loadWallets()
                                     }
                                 }
@@ -209,9 +212,6 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                 default:
                     break
                 }
-                
-                
-                
             }
         }).disposed(by: disposeBag)
         
@@ -365,7 +365,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             guard let walletInfo = self.walletInfo else {
                 return 0
             }
-            guard let wallet = WManager.loadWalletBy(info: walletInfo), let tokens = wallet.tokens else {
+            guard let wallet = WManager.loadWalletBy(info: walletInfo), let tokens = wallet.tokens, tokens.count > 0 else {
                 return 1
             }
             

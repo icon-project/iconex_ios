@@ -211,10 +211,10 @@
 "Transfer.Fast" = "Fast";
 "Transfer.RequestComplete" = "Transfer request has been completed";
 "Transfer.Step.Limit" = "Step Limit";
-"Transfer.Step.LimitInfo.First" = "Step limit is the amount of step to send with your transaction.\n";
-"Transfer.Step.LimitInfo.Second" = "Unnecessary step is refunded to you at the end of transaction. In other words, you can set the maximum amount of step but the actual step consumption is not fixed.";
+"Transfer.Step.LimitInfo.First" = "Step limit is the amount of Step to send with your transaction.\n";
+"Transfer.Step.LimitInfo.Second" = "Unnecessary Step is refunded to you at the end of transaction. In other words, you can set the maximum amount of Step but the actual Step consumption is not fixed.";
 "Transfer.Step.Price" = "Step Price";
-"Transfer.Step.PriceInfo.First" = "Step price is the amount you pay per unit of step.";
+"Transfer.Step.PriceInfo.First" = "Step price is the amount you pay per unit of Step.";
 "Transfer.Step.PriceInfo.Second" = "Step price is paid in loop and 1 loop is fixed to 0.000000000000000001(";
 "Transfer.Step.PriceInfo.Third" = ") ICX. ICON transaction fee is imposed according to various factors such as the number of smart contract usage, the amount of blockchain database used and the size of transaction data, etc.";
 "Transfer.Step.PriceInfo.Superscript" = "10-18";
@@ -371,13 +371,13 @@
 "Alert.Bundle.Export.Instruction" = "If you back up your wallets using the ‘Wallet bundle’ function, the password of each wallet will be changed into the wallet bundle password. \nAre you sure you want to proceed?";
 "Alert.Wallet.EditName" = "Change Wallet Name";
 "Alert.Wallet.Remove" = "Are you sure you want to remove your wallet?";
-"Alert.Wallet.RemainBalance" = "You must backup to reload this wallet. Please download the Keystore file or save your private key from the 'Backup wallet' menu.\nAre you sure you want to delete?";
+"Alert.Wallet.RemainBalance" = "You still have balance in your wallet. If you do not backup this wallet, you may not be able to restore your balance. Are you sure you want to delete?";
 "Alert.Transaction.ID" = "Transaction ID";
 "Alert.Transaction.IDCopy" = "Copy";
 "Alert.Transaction.IDCopied" = "Transaction ID is copied.";
 "Alert.Transaction.History" = "Check Tx";
 "Alert.ICX.Transfer.Info" = "ICX transfer transactions not proceeded will be cancelled automatically, restoring any transfer amount and transaction fees.";
-"Alert.Token.Remove" = "\nDo you want to remove your token?";
+"Alert.Token.Remove" = "\nAre you sure you want to delete this token?";
 "Alert.Token.Edit.Cancel" = "Are you sure you want to cancel?";
 "Alert.Token.Add.Cancel" = "Are you sure you want to cancel?";
 "Alert.Password.Changed" = "Wallet password has been changed.";
@@ -386,9 +386,9 @@
 "Alert.AddressBook.ICX" = "Enter ICX address.";
 "Alert.AddressBook.Edit" = "Edit Address Book";
 "Alert.AddressBook.Remove" = "Would you like to remove the address(es) you have selected?";
-"Alert.Transfer.Title" = "Please check the amount and the receiving address once again.";
+"Alert.Transfer.Title" = "Check the amount and the receiving address once again.";
 "Alert.Transfer.Amount" = "Transfer Amount ";
-"Alert.Transfer.Fee" = "Transaction Fee";
+"Alert.Transfer.Fee" = "Max Fee";
 "Alert.Transfer.EstimatedFee" = "Estimated Maximum Fee";
 "Alert.Transfer.Address" = "Receiving Address ";
 "Alert.Transfer.Data.Delete" = "Are you sure you want to delete data?";
@@ -396,6 +396,7 @@
 "Alert.Wallet.Import.Cancel" = "Are you sure you want to cancel?";
 "Alert.Wallet.RequestPassword" = "Enter Wallet Password";
 "Alert.Wallet.Remove.UnknownBalance" = "Unable to check the balance.\nAre you sure you want to delete?";
+"Alert.Permission.Camera" = "If camera is not authorized, QR code scan function cannot be activated.\n(Camera can be authorized via App settings.)";
 
 "Error.Swap.NoICX" = "You have 0 ICX tokens available for token swap.\nPlease check your balance.";
 "Error.Swap.NoETH" = "Please check your ETH balance. ETH is needed for token swap transaction fee.";
@@ -445,7 +446,7 @@
 "Error.AddressBook.InputName" = "Please enter address name.";
 "Error.AddressBook.DuplicatedName" = "This address name already exists.";
 "Error.AddressBook.DuplicatedAddress" = "This account already exists.";
-"Error.Detail.InsufficientBalance" = "You have insufficient balance.";
+"Error.Detail.InsufficientBalance" = "You have 0 balance. Please deposit and transfer.";
 "Error.Transfer.AmountEmpty" = "Please enter the transfer amount.";
 "Error.Transfer.EmptyLimit" = "Please enter step limit.";
 "Error.Data.Exceeded" = "This exceeds input limit %dKB";

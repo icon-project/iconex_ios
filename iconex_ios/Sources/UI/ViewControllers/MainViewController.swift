@@ -38,7 +38,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     var startPoint: CGFloat = 0
     var lastOffset: CGFloat = 0
     var fixedHeight: CGFloat = 0
-    private var isLoaded: Bool = false
+    var currentIndex: Int = 0
     private var navSelected: Int = 0 {
         willSet {
             if newValue == 0 {
@@ -110,21 +110,14 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        if !isLoaded {
-//            loadWallets()
-//        }
-        
         WManager.getWalletsBalance()
+        loadWallets()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         fixedHeight = heightConstraint.constant
-        if !isLoaded {
-            isLoaded = true
-            loadWallets()
-            walletDetailScroll.loadWallets(self.navSelected)
-        }
+        
         if WManager.isBalanceLoadCompleted {
             self.totalLoader.isHidden = true
             self.totalBalanceLabel.isHidden = false
@@ -149,7 +142,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         navSelector1.rx.controlEvent(UIControlEvents.touchDown).subscribe(onNext: { [unowned self] in
             self.navSelector1.cancelTracking(with: nil)
             self.navSelected = 0
-            
+            self.currentIndex = 0
             self.loadWallets()
             
         }).disposed(by: disposeBag)
@@ -157,7 +150,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         navSelector2.rx.controlEvent(UIControlEvents.touchDown).subscribe(onNext: { [unowned self] in
             self.navSelector2.cancelTracking(with: nil)
             self.navSelected = 1
-            
+            self.currentIndex = 0
             self.loadWallets()
             
         }).disposed(by: disposeBag)
@@ -264,6 +257,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         
         self.navSelected = 0
         self.selectedExchange = 0
+        self.currentIndex = 0
     }
     
     func loadWallets() {
@@ -350,11 +344,12 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
             
             walletScroll.contentSize = CGSize(width: x, height: walletScroll.frame.size.height)
         }
-        scrollWallet(to: walletDetailScroll.currentIndex)
-        
         // 임시 방편
         walletDetailScroll.loadWallets(navSelected)
         walletDetailScroll.topChanged(value: topConstraint.constant)
+        
+        scrollWallet(to: self.currentIndex)
+        walletDetailScroll.setContentOffset(CGPoint(x: CGFloat(self.currentIndex) * UIScreen.main.bounds.width, y: 0), animated: true)
     }
     
     func makeShortCut(frame: CGRect, tag: Int, title: String) -> UIButton {
@@ -429,6 +424,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     @objc func clickedWalletItem(_ sender: UIButton) {
         scrollWallet(to: sender.tag)
+        self.currentIndex = sender.tag
         walletDetailScroll.setContentOffset(CGPoint(x: CGFloat(sender.tag) * UIScreen.main.bounds.width, y: 0), animated: true)
     }
     
@@ -446,11 +442,13 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     func indexChanged(index: Int) {
         scrollWallet(to: index)
+        self.currentIndex = index
     }
     
     func changingOffset(x: CGFloat) {
-        let index = x / UIScreen.main.bounds.width
-        scrollWallet(to: Int(index))
+        let index = Int(x / UIScreen.main.bounds.width)
+        scrollWallet(to: index)
+        self.currentIndex = index
     }
     
     func indexForMainWallet() -> Int {

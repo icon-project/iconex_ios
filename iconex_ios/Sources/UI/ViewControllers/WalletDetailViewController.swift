@@ -175,23 +175,24 @@ class WalletDetailViewController: UIViewController {
         
         outButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!) else { return }
-            let errMsg = wallet.type == .icx ? "Error.Transfer.InsufficientFee.ICX".localized : "Error.Transfer.InsufficientFee.ETH".localized
             if let token = self.token {
                 guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
+                    
                     let alert = UIStoryboard(name: "Alert", bundle: nil).instantiateInitialViewController() as! BasicActionViewController
-                    alert.message = errMsg
+                    alert.message = "Error.Detail.InsufficientBalance".localized
                     self.present(alert, animated: true, completion: nil)
                     
                     return
                 }
                 
                 guard let walletBalance = WManager.walletBalanceList[wallet.address!], walletBalance != BigUInt(0) else {
+                    let errMsg = wallet.type == .icx ? "Error.Transfer.InsufficientFee.ICX".localized : "Error.Transfer.InsufficientFee.ETH".localized
                     Alert.Basic(message: errMsg).show(self)
                     return
                 }
             } else {
                 guard let balance = WManager.walletBalanceList[wallet.address!], balance != BigUInt(0) else {
-                    Alert.Basic(message: errMsg).show(self)
+                    Alert.Basic(message: "Error.Detail.InsufficientBalance".localized).show(self)
                     return
                 }
             }
@@ -328,7 +329,6 @@ class WalletDetailViewController: UIViewController {
                                     self.present(basic, animated: true, completion: nil)
                                 }
                             } catch {
-                                Log.Debug("error: \(error)")
                                 let message = "Error.CommonError".localized
                                 let basic = Alert.Basic(message: message)
                                 self.present(basic, animated: true, completion: nil)
@@ -376,6 +376,7 @@ class WalletDetailViewController: UIViewController {
                                         let app = UIApplication.shared.delegate as! AppDelegate
                                         let nav = app.window!.rootViewController as! UINavigationController
                                         let main = nav.viewControllers[0] as! MainViewController
+                                        main.currentIndex = 0
                                         main.loadWallets()
                                         self.navigationController?.popToRootViewController(animated: true)
                                     }
@@ -392,6 +393,7 @@ class WalletDetailViewController: UIViewController {
                                     let app = UIApplication.shared.delegate as! AppDelegate
                                     let nav = app.window!.rootViewController as! UINavigationController
                                     let main = nav.viewControllers[0] as! MainViewController
+                                    main.currentIndex = 0
                                     main.loadWallets()
                                     self.navigationController?.popToRootViewController(animated: true)
                                 }
@@ -407,6 +409,7 @@ class WalletDetailViewController: UIViewController {
                                             let app = UIApplication.shared.delegate as! AppDelegate
                                             let nav = app.window!.rootViewController as! UINavigationController
                                             let main = nav.viewControllers[0] as! MainViewController
+                                            main.currentIndex = 0
                                             main.loadWallets()
                                             self.navigationController?.popToRootViewController(animated: true)
                                         }

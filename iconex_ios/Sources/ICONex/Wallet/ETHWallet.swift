@@ -141,45 +141,8 @@ class ETHWallet: BaseWallet {
         
         if let tokens = self.tokens {
             for tokenInfo in tokens {
-                
-                if tokenInfo.symbol.lowercased() == "icx" {
-                    if let privateKey = WCreator.newPrivateKey {
-                        if let publicKey = ICONUtil.createPublicKey(privateKey: privateKey) {
-                            let address = ICONUtil.makeAddress(privateKey, publicKey)
-                            tokenInfo.swapAddress = address.lowercased()
-                        }
-                    }
-                }
-                
                 try DB.addToken(tokenInfo: tokenInfo)
             }
-        }
-        
-        let mainCon = "0xb5A5F22694352C15B00323844aD545ABb2B11028".lowercased()
-        let devCon = "0x55116b9cf269E3f7E9183D35D65D6C310fcAcF05".lowercased()
-        
-        var contract: String {
-            switch Config.host {
-            case .main:
-                return mainCon
-                
-            default:
-                return devCon
-            }
-        }
-        
-        if canSaveToken(contractAddress: mainCon) && canSaveToken(contractAddress: devCon) {
-            let icxInfo = TokenInfo(name: "ICON", defaultName: "ICON", symbol: "ICX", decimal: 18, defaultDecimal: 18, dependedAddress: self.address!.add0xPrefix().lowercased(), contractAddress: contract, parentType: "eth")
-            
-            if let privateKey = WCreator.newPrivateKey {
-                if let publicKey = ICONUtil.createPublicKey(privateKey: privateKey) {
-                    let address = ICONUtil.makeAddress(privateKey, publicKey)
-                    icxInfo.swapAddress = address.lowercased()
-                }
-            }
-            
-            EManager.addToken(icxInfo.symbol)
-            try DB.addToken(tokenInfo: icxInfo)
         }
     }
     
@@ -241,7 +204,6 @@ class ETHWallet: BaseWallet {
         
         var datas = [TokenExportBundle]()
         if let tokens = self.tokens {
-            var datas = [TokenExportBundle]()
             for token in tokens {
                 let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
                 datas.append(exportToken)

@@ -98,7 +98,7 @@ class WalletPrivateInfoViewController: UIViewController {
         
         scrollView.rx.didEndDecelerating.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
             if !self.isShowed && self.scrollView.contentOffset.x == self.scrollView.frame.width {
-                Alert.Basic(message: "Create.Wallet.Step4.Desc.1_1".localized).show(self)
+                Alert.Basic(message: "Alert.PrivateKey".localized).show(self)
                 self.isShowed = true
             }
         }).disposed(by: disposeBag)

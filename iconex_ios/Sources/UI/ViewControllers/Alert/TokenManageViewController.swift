@@ -124,6 +124,7 @@ class TokenManageViewController: UIViewController {
             actionButton.styleDark()
             addressInputBox.setType(.plain)
             addressInputBox.plainLabel.text = selectedToken?.contractAddress
+            addressInputBox.textField.text = selectedToken?.contractAddress
             tokenInputBox.textField.text = selectedToken?.name
             symbolInputBox.textField.text = selectedToken?.symbol
             decimalInputBox.textField.text = String(selectedToken!.decimal)
@@ -155,19 +156,15 @@ class TokenManageViewController: UIViewController {
             self.tokenInputBox.setState(.focus, nil)
         }).disposed(by: disposeBag)
         tokenInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            if !self.editMode && !self.isChecked {
-                guard self.validateName() else { return }
-                guard self.validateAddres() else { return }
-                self.fetchTokenInfo()
+            if !self.editMode {
+                self.confirmButton.isEnabled = self.validation()
             } else {
                 self.editButton.isEnabled = self.validateName()
             }
         }).disposed(by: disposeBag)
         tokenInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            if !self.editMode && !self.isChecked {
-                guard self.validateName() else { return }
-                guard self.validateAddres() else { return }
-                self.fetchTokenInfo()
+            if !self.editMode {
+                self.confirmButton.isEnabled = self.validation()
             } else {
                 self.editButton.isEnabled = self.validateName()
             }
@@ -194,8 +191,6 @@ class TokenManageViewController: UIViewController {
                     
                     do {
                         self.selectedToken?.name = self.tokenInputBox.textField.text!
-                        self.selectedToken?.symbol = self.symbolInputBox.textField.text!
-                        self.selectedToken?.decimal = Int(self.decimalInputBox.textField.text!)!
                         try DB.modifyToken(tokenInfo: self.selectedToken!)
                         self.navTitle.text = self.tokenInputBox.textField.text
                     } catch {
@@ -285,7 +280,9 @@ class TokenManageViewController: UIViewController {
                 self.decimalInputBox.textField.text = String(tokenListInfo.decimal)
                 self.decimalInputBox.setState(.normal, "")
                 
-                self.actionButton.isEnabled = self.validation()
+                self.selectedToken = TokenInfo(name: "", defaultName: "", symbol: tokenListInfo.symbol, decimal: tokenListInfo.decimal, defaultDecimal: tokenListInfo.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
+                
+                self.confirmButton.isEnabled = self.validation()
             } else {
                 addressInputBox.isLoading = true
                 
@@ -310,7 +307,7 @@ class TokenManageViewController: UIViewController {
                             
                             self.selectedToken = TokenInfo(name: token.name, defaultName: token.name, symbol: token.symbol, decimal: token.decimal, defaultDecimal: token.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
                             
-                            self.actionButton.isEnabled = self.validation()
+                            self.confirmButton.isEnabled = self.validation()
                             
                         } else {
                             self.isChecked = false
@@ -389,7 +386,9 @@ class TokenManageViewController: UIViewController {
             return false
         }
         
-        let stripName = name.removeContinuosSuffix(string: " ")
+        if let tokenInfo = self.selectedToken {
+            self.selectedToken = TokenInfo(name: name, defaultName: tokenInfo.name, symbol: tokenInfo.symbol, decimal: tokenInfo.decimal, defaultDecimal: tokenInfo.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
+        }
         
         tokenInputBox.setState(.normal, "")
         return true

@@ -48,6 +48,8 @@ class QRReaderViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        setCaptureSession()
+        
         captureSession.startRunning()
     }
     
@@ -64,8 +66,6 @@ class QRReaderViewController: UIViewController {
         indicatorView.corner(4)
         indicatorLabel.text = ""
         indicatorView.isHidden = true
-        
-        setCaptureSession()
         
         closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: { [weak self] in
@@ -97,6 +97,11 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
         } catch {
+            let alert = Alert.Basic(message: "Alert.Permission.Camera".localized)
+            alert.handler = {
+                self.dismiss(animated: true, completion: nil)
+            }
+            alert.show(self)
             Log.Error("\(error)")
             return
         }

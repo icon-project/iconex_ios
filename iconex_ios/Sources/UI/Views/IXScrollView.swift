@@ -16,7 +16,6 @@ protocol ICXItemChangeDelegate {
 class IXScrollView: UIScrollView, UIScrollViewDelegate {
 
     var changeDelegate: ICXItemChangeDelegate?
-    var currentIndex: Int = 0
     
     var navSelected: Int = 0
     

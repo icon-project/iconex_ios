@@ -549,7 +549,7 @@ struct Alert {
         return basic
     }
     
-    static func Confirm(message: String, cancel: String? = "Common.Cancel".localized, confirm: String? = "Common.Confirm".localized, handler: (() -> Void)?, _ cancelHandler: (() -> Void)? = nil) -> ConfirmActionViewController {
+    static func Confirm(message: String, cancel: String? = "Common.No".localized, confirm: String? = "Common.Yes".localized, handler: (() -> Void)?, _ cancelHandler: (() -> Void)? = nil) -> ConfirmActionViewController {
         let confirmAction = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "ConfirmActionView") as! ConfirmActionViewController
         confirmAction.message = message
         confirmAction.addConfirm(action: handler)

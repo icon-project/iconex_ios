@@ -50,7 +50,7 @@ class StepTwoViewController: UIViewController {
         nextButton.styleLight()
         nextButton.rounded()
         
-        walletNameBox.setType(.normal)
+        walletNameBox.setType(.name)
         walletNameBox.setState()
         walletNameBox.textField.returnKeyType = .next
         walletNameBox.textField.placeholder = Localized(key: "Placeholder.InputWalletName")

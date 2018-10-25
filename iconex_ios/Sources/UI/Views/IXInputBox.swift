@@ -255,7 +255,7 @@ enum IXTextFieldType {
         } else if (_fieldType == .normal || _fieldType == .data || _fieldType == .name) && string != "" && string != "\n" {
             
             if string == " " {
-                guard let text = textField.text, text != "", !text.hasPrefix(" ") else { return false }
+                guard let text = textField.text, text != "", !text.hasPrefix(" "), range.location != 0 else { return false }
             }
             
             

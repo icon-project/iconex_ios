@@ -239,6 +239,7 @@ class ImportThreeViewController: UIViewController {
                 let app = UIApplication.shared.delegate as! AppDelegate
                 if let nav = app.window?.rootViewController as? UINavigationController {
                     let main = nav.viewControllers[0] as! MainViewController
+                    main.currentIndex = 0
                     main.loadWallets()
                     self.dismiss(animated: true, completion: nil)
                 } else {
@@ -256,6 +257,7 @@ class ImportThreeViewController: UIViewController {
                     let app = UIApplication.shared.delegate as! AppDelegate
                     if let nav = app.window?.rootViewController as? UINavigationController {
                         let main = nav.viewControllers[0] as! MainViewController
+                        main.currentIndex = 0
                         main.loadWallets()
                         self.dismiss(animated: true, completion: nil)
                     } else {

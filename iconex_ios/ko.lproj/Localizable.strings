@@ -86,7 +86,7 @@
 
 "Create.Wallet.Step4.StepTitle" = "개인 키\n저장";
 "Create.Wallet.Step4.Header.1" = "개인 키(Private Key)는 지갑의 고유 정보이며, 비밀번호가 설정되어 있지 않습니다.";
-"Create.Wallet.Step4.Desc.1_1" = "개인 키만 보유하면 지갑 실행 및 송금이 가능하니, 누구에게도 노출되지 않도록 각별한 관리가 필요합니다.";
+"Create.Wallet.Step4.Desc.1_1" = "개인 키만 알고 있으면 지갑 실행 및 복구가 가능하므로 타인에게 노출되지 않도록 각별한 관리가 필요합니다.";
 "Create.Wallet.Step4.Desc.1_2" = "지갑을 만든 후 ‘지갑 백업’에서도 확인할 수 있습니다.";
 
 "Import.Step1.Header" = "지갑을 가져올 방법을 선택하세요.";
@@ -210,13 +210,13 @@
 "Transfer.Gas.Desc_4" = "수신자로부터 Data 입력을 요청 받지 않은 경우에는 입력하지 않고 송금할 수 있습니다.\nData를 입력해야만 거래가 실행되도록 설계되어 있는 경우, Data를 입력하지 않으면 송금이 불가하며 수수료만 차감될 수 있습니다.";
 "Transfer.TxFee" = "예상 최대 수수료";
 "Transfer.AfterBalance" = "송금 후 예상 잔액";
-"Transfer.EstimatedStep" = "Transaction 실행 시 발생할 수 있는 최대 수수료로서, 스텝 한도와 스텝 가격을 곱한 값입니다.";
+"Transfer.EstimatedStep" = "Transaction 실행 시 발생할 수 있는 최대 수수료로서, Step 한도와 Step 가격을 곱한 값입니다.";
 "Transfer.Slow" = "느림";
 "Transfer.Fast" = "빠름";
 "Transfer.RequestComplete" = "송금 요청이 완료되었습니다.";
 "Transfer.Step.Limit" = "Step 한도";
-"Transfer.Step.LimitInfo.First" = "스텝 한도는 Transaction 실행에 지불할 용의가 있는 스텝의 최대량을 의미합니다.\n";
-"Transfer.Step.LimitInfo.Second" = "스텝 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 스텝만 소진합니다. 즉, 스텝 한도는 최대치만 설정 가능하며 실제 소진되는 스텝량은 유동적입니다.";
+"Transfer.Step.LimitInfo.First" = "Step 한도는 Transaction 실행에 지불할 용의가 있는 Step의 최대량을 의미합니다.\n";
+"Transfer.Step.LimitInfo.Second" = "Step 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 Step만 소진합니다. 즉, Step 한도는 최대치만 설정 가능하며 실제 소진되는 Step량은 유동적입니다.";
 "Transfer.Step.Price" = "Step 가격";
 "Transfer.Step.PriceInfo.First" = "Step 한 단위 당 지불하는 가격입니다.";
 "Transfer.Step.PriceInfo.Second" = "Step 가격은 loop로 지불하며 1 loop는 0.000000000000000001(";
@@ -236,8 +236,8 @@
 "Side.Disclaimer" = "ICONex 이용 면책 조항";
 
 "BundleExport.Step1.NavTitle" = "지갑 묶어서 내보내기";
-"BundleExport.Step1.Header" = "묶어서 백업할 지갑들을 선택해주세요. 지갑마다 비밀번호 확인이 필요합니다.";
-"BundleExport.Step1.Desc_1" = "지갑 묶어서 내보내기는 선택한 지갑 파일을 묶어서 하나의 파일로 백업하는 기능입니다.";
+"BundleExport.Step1.Header" = "묶어서 내보낼 지갑들을 선택해주세요. 선택한 지갑마다 비밀번호 확인이 필요합니다.";
+"BundleExport.Step1.Desc_1" = "지갑 묶어서 내보내기는 선택한 지갑 파일들을 모두 묶어서 하나의 파일로 백업하는 기능입니다.";
 "BundleExport.Step1.Desc_2" = "지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 경우 지갑 백업 파일이 필요합니다.";
 "BundleExport.Step1.Selected" = " 개 지갑 선택";
 
@@ -365,14 +365,14 @@
 "Alert.CreateCancel" = "지갑 만들기를 취소하시겠습니까?";
 "Alert.DownloadKeystore" = "지갑 백업 파일은 어떠한 경우에도 외부에 공유 되어서는 안됩니다.\n\n\"나의 iPhone\"에 저장한 파일은 앱 삭제 시 함께 삭제될 수 있으므로, 반드시 안전한 저장 장소에 보관해주세요.";
 "Alert.SkipDownload" = "지갑 백업 파일을 다운로드하지 않고 다음 단계로 진행하시겠습니까?";
-"Alert.PrivateKey" = "개인 키만 보유하면 지갑 실행 및 송금이 가능하니, 누구에게도 노출되지 않도록 각별한 관리가 필요합니다.";
+"Alert.PrivateKey" = "개인 키 만으로 지갑 실행, 송금이 가능하므로 어떠한 경우에도 외부 공유가 되어서는 안됩니다.";
 "Alert.Bundle.Import" = "묶음 지갑을 가져오는 경우, 이미 등록된 지갑은 제외하고 지갑들이 추가됩니다.\n묶음 지갑을 가져오시겠습니까?";
-"Alert.TotalAssetInfo" = "전체 자산 평가금액은 Coinmarketcap 기준으로 표시되며 USD 환산금액이 표시되지 않은 토큰은 전체 자산 평가금액에서 제외됩니다.";
+"Alert.TotalAssetInfo" = "USD 환산금액이 표시되지 않은 토큰은 전체 자산 평가금액에서 제외됩니다. 평가금액은 참고용으로만 활용해주세요.";
 "Alert.Bundle.Import.Success" = "묶음 지갑을 가져왔습니다. 각 지갑들의 비밀번호는 묶음지갑의 비밀번호와 동일하며, 지갑 메뉴에서 변경 가능합니다.";
 "Alert.Bundle.Export.Instruction" = "묶어서 내보낼 때, 묶음 지갑 비밀번호를 새로 만들어야 합니다.\n기존 지갑들의 비밀번호는 묶음 지갑의 비밀번호로 바뀝니다.\n계속 진행하시겠습니까?";
 "Alert.Wallet.EditName" = "지갑 이름 변경";
 "Alert.Wallet.Remove" = "지갑을 삭제하시겠습니까?";
-"Alert.Wallet.RemainBalance" = "나중에 이 지갑을 다시 사용하기 위해서는 지갑 백업이 되어 있어야 합니다. 지갑 백업 메뉴에서 Keystore 파일을 다운받거나 개인 키를 저장해주세요.\n정말 삭제하시겠습니까?";
+"Alert.Wallet.RemainBalance" = "삭제하시려는 지갑에 잔액이 남아있습니다. 지갑 백업이 되어있지 않으면 잔액 복구가 불가능합니다.\n그래도 삭제하시겠습니까?";
 "Alert.Transaction.ID" = "거래 ID";
 "Alert.Transaction.IDCopy" = "복사";
 "Alert.Transaction.IDCopied" = "거래 ID가 복사되었습니다.";
@@ -397,6 +397,7 @@
 "Alert.Wallet.Import.Cancel" = "지갑 가져오기를 취소하시겠습니까?";
 "Alert.Wallet.RequestPassword" = "지갑 비밀번호 입력";
 "Alert.Wallet.Remove.UnknownBalance" = "지갑의 보유금액을 확인 할 수 없습니다.\n정말 삭제하시겠습니까?";
+"Alert.Permission.Camera" = "카메라에 대한 권한을 허용하지 않으면 QR코드 스캔을 사용할 수 없습니다.\n(휴대폰의 설정>앱 권한 설정에서 카메라 권한을 허용할 수 있습니다.)";
 
 "Error.Swap.NoICX" = "스왑 가능한 ICX 토큰이 없습니다.";
 "Error.Swap.NoETH" = "스왑 수수료 지불을 위한 ETH 잔액이 없습니다. 입금 후 진행해 주세요.";
@@ -447,7 +448,7 @@
 "Error.AddressBook.InputName" = "주소록 이름을 입력해 주세요.";
 "Error.AddressBook.DuplicatedName" = "같은 이름의 주소록이 이미 존재합니다.";
 "Error.AddressBook.DuplicatedAddress" = "같은 주소가 이미 존재합니다.";
-"Error.Detail.InsufficientBalance" = "송금할 잔액이 부족합니다.";
+"Error.Detail.InsufficientBalance" = "코인 보유량이 없습니다. 입금 후 송금해 주세요.";
 "Error.Transfer.AmountEmpty" = "송금할 수량을 입력해주세요.";
 "Error.Transfer.EmptyLimit" = "Step 한도를 입력해주세요.";
 "Error.Data.Exceeded" = "입력 한도 %dKB를 초과합니다.";

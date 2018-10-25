@@ -107,6 +107,7 @@ class StepFourViewController: UIViewController {
         WManager.loadWalletList()
         if let nav = self.navigationController {
             let main = nav.viewControllers[0] as! MainViewController
+            main.currentIndex = 0
             main.loadWallets()
             nav.popToRootViewController(animated: true)
         } else {
