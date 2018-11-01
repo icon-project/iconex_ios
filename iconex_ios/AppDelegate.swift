@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         
-        Config.host = .main
+        Config.host = .dev
         #if DEBUG
             print(IXSWrapper.getVersion())
         #endif
@@ -69,9 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NSSetUncaughtExceptionHandler { (exception) in
             Log.Error("CRASH =======================")
-            Log.Error(exception)
+            Log.Error("\(exception)")
             Log.Error("Stack trace ========================")
-            Log.Error(exception.callStackSymbols)
+            Log.Error("\(exception.callStackSymbols)")
         }
         return true
     }

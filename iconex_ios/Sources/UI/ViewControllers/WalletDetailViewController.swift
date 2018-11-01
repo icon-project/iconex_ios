@@ -168,7 +168,6 @@ class WalletDetailViewController: UIViewController {
     }
     
     func initialize() {
-        
         closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
             self?.navigationController?.popViewController(animated: true)
         }).disposed(by: disposeBag)
@@ -562,16 +561,16 @@ class WalletDetailViewController: UIViewController {
             
             switch viewState.type {
             case 0:
-                holdList = Transaction.transactionList(address: walletInfo!.address)
+                holdList = Transactions.transactionList(address: walletInfo!.address)
                 
             case 1:
-                holdList = Transaction.transactionList(address: walletInfo!.address)?.filter({ $0.from == walletInfo!.address })
+                holdList = Transactions.transactionList(address: walletInfo!.address)?.filter({ $0.from == walletInfo!.address })
                 
             case 2:
-                holdList = Transaction.transactionList(address: walletInfo!.address)?.filter({ $0.from != walletInfo!.address })
+                holdList = Transactions.transactionList(address: walletInfo!.address)?.filter({ $0.from != walletInfo!.address })
                 
             default:
-                holdList = Transaction.transactionList(address: walletInfo!.address)
+                holdList = Transactions.transactionList(address: walletInfo!.address)
                 
             }
         }
@@ -733,7 +732,7 @@ class WalletDetailViewController: UIViewController {
                     for txDic in list {
                         let tx = Tracker.TxList(dic: txDic)
                         self.historyList.append(tx)
-                        Transaction.updateTransactionCompleted(txHash: tx.txHash)
+                        Transactions.updateTransactionCompleted(txHash: tx.txHash)
                     }
                     
                     self.totalData = listSize
@@ -745,7 +744,7 @@ class WalletDetailViewController: UIViewController {
                     for txDic in list {
                         let tx = Tracker.TxList(dic: txDic)
                         self.historyList.append(tx)
-                        Transaction.updateTransactionCompleted(txHash: tx.txHash)
+                        Transactions.updateTransactionCompleted(txHash: tx.txHash)
                     }
                     
                     self.totalData = listSize

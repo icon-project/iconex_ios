@@ -31,7 +31,7 @@ class ICXDataInputViewController: BaseViewController {
     var type: EncodeType = .utf8
     var savedData: String? = nil
     var stepPrice: BigUInt?
-    var costs: ICON.Response.StepCosts.CostResult?
+    var costs: Response.StepCosts?
     var walletAmount: BigUInt?
     var sendAmount: BigUInt?
     var isModify: Bool = false

@@ -83,7 +83,7 @@ class ICXSendViewController: UIViewController {
         }
     }
     
-    var costs: ICON.Response.StepCosts.CostResult?
+    var costs: Response.StepCosts?
     var minLimit: BigUInt?
     var maxLimit: BigUInt?
     
@@ -108,29 +108,13 @@ class ICXSendViewController: UIViewController {
         super.viewWillAppear(animated)
         
         DispatchQueue.global(qos: .utility).async {
-            let costs = WManager.service.getStepCosts()
-            
-            switch costs {
-            case .success(let costResult):
-                if let cost = costResult.result {
-                    self.costs = cost
-                    let minValue = cost.defaultValue.prefix0xRemoved()
-                    let min = BigUInt(minValue, radix: 16)
-                    self.minLimit = min
-                }
-                
-            default:
-                break
+            if let cost = WManager.getStepCosts() {
+                self.costs = cost
+                self.minLimit = BigUInt(cost.defaultValue.prefix0xRemoved(), radix: 16)
             }
             
-            let maxResult = WManager.service.getMaxStepLimit()
-            
-            switch maxResult {
-            case .success(let maxValue):
-                self.maxLimit = maxValue
-                
-            default:
-                break
+            if let maxLimit = WManager.getMaxStepLimit() {
+                self.maxLimit = maxLimit
             }
             
             DispatchQueue.main.async {
@@ -456,7 +440,7 @@ class ICXSendViewController: UIViewController {
             }
             confirm.feeType = self.walletInfo!.type.rawValue
             confirm.value = icxValue
-            confirm.address = self.addressInputBox.textField.text!
+            confirm.address = to
             
             guard let stepPrice = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) else { return }
             guard let prvKey = self.privateKey, let walletInfo = self.walletInfo else { return }
@@ -465,21 +449,18 @@ class ICXSendViewController: UIViewController {
             confirm.fee = Tools.bigToString(value: estimatedStep, decimal: 18, 18, false, false)
             confirm.handler = {
                 
-                let withdraw = Tools.convertedHexString(value: value)!
-                
-                let limit = "0x" + String(limit, radix: 16)
                 if let token = self.token {
-                    let result = WManager.service.sendIRCToken(privateKey: prvKey, from: walletInfo.address, to: to, contractAddress: token.contractAddress, value: withdraw, stepLimit: limit)
-                    
+                    let result = WManager.sendIRCToken(privateKey: prvKey, from: walletInfo.address, to: to, contractAddress: token.contractAddress, value: bigValue, stepLimit: limit)
+
                     switch result {
                     case .success(let txHash):
                         Log.Debug("txHash: \(txHash)")
-                        
+
                         confirm.dismiss(animated: true, completion: {
                             Tools.toast(message: "Transfer.RequestComplete".localized)
                             self.navigationController?.popViewController(animated: true)
                         })
-                        
+
                     case .failure(let error):
                         Log.Debug("Error - \(error)")
                         if let loadingView = confirm.confirmButton.viewWithTag(999) {
@@ -500,17 +481,18 @@ class ICXSendViewController: UIViewController {
                             data = message
                         }
                     }
-                    let result = WManager.service.sendICX(privateKey: self.privateKey!, from: self.walletInfo!.address, to: to, value: withdraw, stepLimit: limit, message: data)
-                    
+
+                    let result = WManager.sendICX(privateKey: prvKey, from: self.walletInfo!.address, to: to, value: bigValue, stepLimit: limit, message: data)
+
                     switch result {
                     case .success(let txHash):
                         Log.Debug("txHash: \(txHash)")
-                        
+
                         confirm.dismiss(animated: true, completion: {
                             Tools.toast(message: "Transfer.RequestComplete".localized)
                             self.navigationController?.popViewController(animated: true)
                         })
-                        
+
                     case .failure(let error):
                         Log.Debug("Error - \(error)")
                         if let loadingView = confirm.confirmButton.viewWithTag(999) {
@@ -633,13 +615,6 @@ class ICXSendViewController: UIViewController {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
                 return false
             }
-            
-//            let remainValue = balance - inputValue
-//            Log.Debug("remain 1- \(remainValue)")
-//            self.remainBalance.text = Tools.bigToString(value: remainValue, decimal: token.decimal, token.decimal, false).currencySeparated()
-//            if let exchanged = Tools.balanceToExchange(remainValue, from: token.symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: token.decimal) {
-//                self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
-//            }
         } else {
             guard inputValue <= totalBalance else {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
@@ -775,12 +750,8 @@ class ICXSendViewController: UIViewController {
     
     func getStepPrice() {
         DispatchQueue.global().async {
-            let result = WManager.service.getStepPrice()
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let stepPrice):
-                    Log.Debug("step price = \(stepPrice)")
+            if let stepPrice = WManager.getStepPrice() {
+                DispatchQueue.main.async {
                     let powered = stepPrice * BigUInt(10).power(9)
                     let priceGloop = Tools.bigToString(value: powered, decimal: 18, 18, true, true)
                     let priceICX = Tools.bigToString(value: stepPrice, decimal: 18, 18, true, true)
@@ -793,8 +764,6 @@ class ICXSendViewController: UIViewController {
                     }
                     self.stepPrice = stepPrice
                     
-                case .failure(let error):
-                    Log.Debug("Error - \(error)")
                 }
             }
         }
@@ -807,10 +776,6 @@ class ICXSendViewController: UIViewController {
         guard let stepDefault = BigUInt(costs.defaultValue.prefix0xRemoved(), radix: 16) else { return nil } //, let contractCall = BigUInt(costs.contractCall.prefix0xRemoved(), radix: 16), let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
         
         if self.token != nil {
-//            guard let text = sendInputBox.textField.text, let hexValue = Tools.convertedHexString(value: text, decimal: 18) else { return nil }
-//            let data = "{\"method\":\"transfer\",\"params\":{\"_to\":\"hx0000000000000000000000000000000000000000\",\"_value\":\"\(hexValue)\"}}"
-//            Log.Debug("default - \(stepDefault) , contractCall - \(contractCall) , input - \(input) , data - \(data) , length - \(data.bytes.count)")
-//            let stepLimit = (stepDefault + contractCall + (input * BigUInt(data.bytes.count) * 2))
             let stepLimit = 2 * stepDefault
             
             self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false, false)

@@ -10,6 +10,7 @@ import BigInt
 import RealmSwift
 import web3swift
 import ICONKit
+import Result
 
 typealias WalletBundleItem = (name: String, privKey: String, address: String, type: COINTYPE)
 
@@ -34,6 +35,8 @@ class WalletManager {
             return ICONService(provider: "http://13.209.103.183:9000", nid: "0x3")
         }
     }
+    
+    private var govnAddress = "cx0000000000000000000000000000000000000001"
     
     private init () {
         loadWalletList()
@@ -132,11 +135,11 @@ class WalletManager {
         if wallet.type == .icx {
             if let address = wallet.address  {
 
-                let result = self.service.getBalance(address: address)
-                
+                let request = self.service.getBalance(address: address)
+                let result = request.execute()
                 switch result {
                 case .success(let balance):
-                    self.walletBalanceList[wallet.address!.add0xPrefix().lowercased()] = balance
+                    self.walletBalanceList[wallet.address!.add0xPrefix().lowercased()] = balance.value
                     
                 case .failure(let error):
                     Log.Debug("Error - \(error)")
@@ -167,13 +170,13 @@ class WalletManager {
                 self._queued.insert(address)
                 if info.type == .icx {
                     
-                    if let data = wallet.__rawData, let iconWallet = ICON.Wallet(rawData: data) {
+                    if let data = wallet.__rawData {
                         
-                        let result = WManager.service.getBalance(wallet: iconWallet)
+                        let result = WManager.service.getBalance(address: address).execute()
                         
                         switch result {
                         case .success(let balance):
-                            self.walletBalanceList[wallet.address!.lowercased()] = balance
+                            self.walletBalanceList[wallet.address!.lowercased()] = balance.value
                             
                         case .failure(let error):
                             Log.Debug("Error - \(error)")
@@ -221,6 +224,44 @@ class WalletManager {
                 }
             }
         }
+    }
+    
+    func getStepCosts() -> ICONKit.Response.StepCosts? {
+        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepCosts", params: nil)
+        let result: Result<ICONKit.Response.Call<ICONKit.Response.StepCosts>, ICONResult> = self.service.call(call).execute()
+        
+        guard let value = result.value, let cost = value.result else {
+            Log.Debug("error - \(result.error)")
+            return nil }
+        Log.Debug("cost - \(cost)")
+        return cost
+    }
+    
+    func getMaxStepLimit() -> BigUInt? {
+        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMaxStepLimit", params: ["contextType": "invoke"])
+        let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(call).execute()
+        
+        guard let value = result.value, let max = value.result, let maxLimit = BigUInt(max.prefix0xRemoved(), radix: 16) else { return nil }
+        Log.Debug("max - \(maxLimit)")
+        return maxLimit
+    }
+    
+    func getMinStepLimit() -> BigUInt? {
+        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMinStepLimit", params: nil)
+        let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(call).execute()
+        
+        guard let value = result.value, let min = value.result, let minLimit = BigUInt(min.prefix0xRemoved(), radix: 16) else { return nil }
+        Log.Debug("min - \(minLimit)")
+        return minLimit
+    }
+    
+    func getStepPrice() -> BigUInt? {
+        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepPrice", params: nil)
+        let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(call).execute()
+        
+        guard let value = result.value, let stringPrice = value.result, let stepPrice = BigUInt(stringPrice.prefix0xRemoved(), radix: 16) else { return nil }
+        Log.Debug("stepPrice - \(stepPrice)")
+        return stepPrice
     }
     
     func canSaveWallet(alias: String) -> Bool {
@@ -286,10 +327,46 @@ class WalletManager {
 }
 
 extension WalletManager {
+    public func sendICX(privateKey: String, from: String, to: String, value: BigUInt, stepLimit: BigUInt, message: String? = nil) -> Result<ICONKit.Response.TxHash, ICONResult> {
+        let transaction = Transaction()
+        transaction.from(from)
+            .to(to)
+            .value(value)
+            .stepLimit(stepLimit)
+            .nonce("0x1")
+            .nid(self.service.nid)
+        
+        if let msg = message {
+            transaction.message(msg)
+        }
+        
+        guard let signedTransaction = try? SignedTransaction(transaction: transaction, privateKey: privateKey) else {
+            return .failure(ICONResult.sign)
+        }
+        
+        return self.service.sendTransaction(signedTransaction: signedTransaction).execute()
+    }
+    
+    public func sendIRCToken(privateKey: String, from: String, to: String, contractAddress: String, value: BigUInt, stepLimit: BigUInt) -> Result<ICONKit.Response.TxHash, ICONResult> {
+        let transaction = Transaction()
+        transaction.from(from)
+            .to(contractAddress)
+            .stepLimit(stepLimit)
+            .nid(self.service.nid)
+            .nonce("0x1")
+            .call("transfer")
+            .params(["_to": to, "_value": "0x" + String(value, radix: 16)])
+        
+        guard let signed = try? SignedTransaction(transaction: transaction, privateKey: privateKey) else {
+            return .failure(ICONResult.sign)
+        }
+        return self.service.sendTransaction(signedTransaction: signed).execute()
+    }
+    
     public func getIRCTokenInfo(walletAddress: String, contractAddress: String, completion: @escaping (((name: String, symbol: String, decimal: String)?) -> ())) {
         
         DispatchQueue.global().async {
-            let result = self.service.getScoreAPI(address: contractAddress)
+            let result = self.service.getScoreAPI(scoreAddress: contractAddress).execute()
             
             if let api = result.value {
                 let list = api.result!
@@ -297,9 +374,10 @@ extension WalletManager {
                 let hasDecimal = list.filter { $0.type == "function" && $0.name == "decimals" }.first
                 let hastotalSupply = list.filter { $0.type == "function" && $0.name == "totalSupply" }.first
                 if (hasName != nil && hasDecimal != nil && hastotalSupply != nil) {
-                    let result = self.service.call(from: walletAddress, to: contractAddress, dataType: "call", method: "name")
+                    let nameCall = Call(from: walletAddress, to: contractAddress, method: "name", params: nil)
+                    let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(nameCall).execute()
                     
-                    guard let name = result.value as? String else {
+                    guard let nameResponse = result.value, let name = nameResponse.result else {
                         DispatchQueue.main.async {
                             completion(nil)
                         }
@@ -307,8 +385,10 @@ extension WalletManager {
                     }
                     Log.Debug("name - \(name)")
                     
-                    let decimals = self.service.call(from: walletAddress, to: contractAddress, dataType: "call", method: "decimals")
-                    guard let decimal = decimals.value as? String else {
+                    let decimalCall = Call(from: walletAddress, to: contractAddress, method: "decimals", params: nil)
+                    let decResult: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(decimalCall).execute()
+                    
+                    guard let decResponse = decResult.value, let decimal = decResponse.result else {
                         DispatchQueue.main.async {
                             completion(nil)
                         }
@@ -316,8 +396,10 @@ extension WalletManager {
                     }
                     Log.Debug("decimal - \(decimal)")
                     
-                    let symbols = self.service.call(from: walletAddress, to: contractAddress, dataType: "call", method: "symbol")
-                    guard let symbol = symbols.value as? String else {
+                    let symCall = Call(from: walletAddress, to: contractAddress, method: "symbol", params: nil)
+                    let symResult: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(symCall).execute()
+                    
+                    guard let symResponse = symResult.value, let symbol = symResponse.result else {
                         DispatchQueue.main.async {
                             completion(nil)
                         }
@@ -341,19 +423,12 @@ extension WalletManager {
     public func getIRCTokenBalance(tokenInfo: TokenInfo) -> BigUInt? {
         let service = WManager.service
         
-        let result = service.call(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, dataType: "call", method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
+        let call = Call(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
+        let result: Result<ICONKit.Response.Call<String>, ICONResult> = service.call(call).execute()
         
-        switch result {
-        case .success(let callResult):
-            guard let balance = callResult as? String else { return nil }
-            return BigUInt(balance.prefix0xRemoved(), radix: 16)
-            
-        case .failure(let error):
-            Log.Debug("error - \(error)")
-            
-        }
+        guard let value = result.value, let balance = value.result else { return nil }
         
-        return nil
+        return BigUInt(balance.prefix0xRemoved(), radix: 16)
     }
     
 }
@@ -839,7 +914,7 @@ struct AddressBook {
 }
 
 
-struct Transaction {
+struct Transactions {
     
     static func saveTransaction(from: String, to: String, txHash: String, value: String, type: String, tokenSymbol: String? = nil) throws {
         

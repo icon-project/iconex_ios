@@ -114,11 +114,13 @@ class BundleImportListViewController: BaseViewController {
             self._queue.insert(address)
             
             if value.type.lowercased() == "icx" {
-                let result = WManager.service.getBalance(address: address)
+                let request = WManager.service.getBalance(address: address)
                 DispatchQueue.main.async {
+                    let result = request.execute()
+                    
                     switch result {
-                    case .success(let balance):
-                        self._balanceList[address] = balance
+                    case .success(let value):
+                        self._balanceList[address] = value.value
                         
                     case .failure(let error):
                         Log.Debug("Error - \(error)")

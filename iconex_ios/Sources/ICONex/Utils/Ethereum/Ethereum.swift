@@ -146,7 +146,7 @@ struct Ethereum {
                     if let txResult = result.value {
                         if let txHash = txResult.transaction.txhash {
                             do {
-                                try Transaction.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: "eth")
+                                try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: "eth")
                             } catch {
                                 Log.Debug("\(error)")
                             }
@@ -309,7 +309,7 @@ struct Ethereum {
                     if let txResult = result.value {
                         if let txHash = txResult.transaction.txhash {
                             do {
-                                try Transaction.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
+                                try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
                             } catch {
                                 Log.Debug("\(error)")
                             }
