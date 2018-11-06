@@ -242,9 +242,15 @@ class TokenManageViewController: UIViewController {
         
         qrButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: { [unowned self] in
+                guard let info = self.walletInfo else { return }
+                
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
                 reader.mode = .address
-                reader.type = .eth
+                if info.type == .icx {
+                    reader.type = .irc
+                } else {
+                    reader.type = .eth
+                }
                 reader.handler = { code in
                     self.addressInputBox.textField.text = code
                     self.addressInputBox.textField.becomeFirstResponder()

@@ -11,6 +11,7 @@ import BigInt
 enum COINTYPE: String {
     case icx = "icx"
     case eth = "eth"
+    case irc = "irc"
     case unknown = "unknown"
 }
 

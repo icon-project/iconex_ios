@@ -7,7 +7,12 @@
 
 import Foundation
 
-class ICONConnect {
+enum ConnectError {
+//    case <#case#>
+}
+
+
+class Connect {
     var source: String
     
     init(source: String) {
@@ -15,6 +20,10 @@ class ICONConnect {
     }
     
     func translate() {
+        
+    }
+    
+    func callback() {
         
     }
 }

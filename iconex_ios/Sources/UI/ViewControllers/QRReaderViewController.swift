@@ -162,6 +162,21 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                             completions(code)
                         }
                         dismiss(animated: true, completion: nil)
+                    } else if self.type == .irc {
+                        guard Validator.validateIRCAddress(address: code) else {
+                            captureView.border(2, UIColor.red)
+                            indicatorView.isHidden = false
+                            indicatorLabel.text = "Error.Address.IRC.Invalid".localized
+                            return
+                        }
+                        captureSession.stopRunning()
+                        
+                        captureView.border(2, UIColor.green)
+                        indicatorView.isHidden = true
+                        if let completions = self.handler {
+                            completions(code)
+                        }
+                        dismiss(animated: true, completion: nil)
                     }
                 } else if self.mode == .privateKey {
                     if code.hexToData() != nil && code.length == 64 {

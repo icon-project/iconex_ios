@@ -416,6 +416,7 @@
 "Error.Letters&NumbersOnly" = "Please enter letters or numbers.";
 "Error.Address.ETH.Invalid" = "Incorrect ETH address.";
 "Error.Address.ICX.Invalid" = "Incorrect ICX address.";
+"Error.Address.IRC.Invalid" = "Incorrect address.";
 "Error.Transfer.AboveMax" = "This exceeds your balance.";
 "Error.Transfer.BelowZero" = "Please enter amount above zero.";
 "Error.Transfer.InsufficientFee" = "Insufficient transaction fee.";
