@@ -8,14 +8,14 @@ target 'iconex_ios' do
   use_frameworks!
 
   # Pods for iconex_ios
-  pod 'RxSwift'
-  pod 'RxCocoa'
-  pod 'RealmSwift'
-  pod 'web3swift'
-  pod 'Toaster'
-  pod 'LicensesViewController', '~> 0.6.5'
+  pod 'RxCocoa', '4.3.1'
+  pod 'RxSwift', '4.3.1'
+  pod 'RealmSwift', '3.11.0'
+  pod 'web3swift', '1.1.7'
+  pod 'Toaster', '~> 2.1.1'
+  pod 'LicensesViewController', '0.6.5'
   pod 'scrypt', :path => '~/works/scrypt-cryptoswift'
   pod 'Alamofire'
-
   pod 'ICONKit', :path => '~/works/ICONKit'
+
 end

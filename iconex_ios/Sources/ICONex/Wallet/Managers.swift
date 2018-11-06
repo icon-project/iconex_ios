@@ -227,8 +227,8 @@ class WalletManager {
     }
     
     func getStepCosts() -> ICONKit.Response.StepCosts? {
-        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepCosts", params: nil)
-        let result: Result<ICONKit.Response.Call<ICONKit.Response.StepCosts>, ICONResult> = self.service.call(call).execute()
+        let call = Call<ICONKit.Response.Call<ICONKit.Response.StepCosts>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepCosts", params: nil)
+        let result = self.service.call(call).execute()
         
         guard let value = result.value, let cost = value.result else {
             Log.Debug("error - \(result.error)")
@@ -238,8 +238,8 @@ class WalletManager {
     }
     
     func getMaxStepLimit() -> BigUInt? {
-        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMaxStepLimit", params: ["contextType": "invoke"])
-        let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(call).execute()
+        let call = Call<ICONKit.Response.Call<String>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMaxStepLimit", params: ["contextType": "invoke"])
+        let result: Result = self.service.call(call).execute()
         
         guard let value = result.value, let max = value.result, let maxLimit = BigUInt(max.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("max - \(maxLimit)")
@@ -247,8 +247,8 @@ class WalletManager {
     }
     
     func getMinStepLimit() -> BigUInt? {
-        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMinStepLimit", params: nil)
-        let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(call).execute()
+        let call = Call<ICONKit.Response.Call<String>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMinStepLimit", params: nil)
+        let result = self.service.call(call).execute()
         
         guard let value = result.value, let min = value.result, let minLimit = BigUInt(min.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("min - \(minLimit)")
@@ -256,8 +256,8 @@ class WalletManager {
     }
     
     func getStepPrice() -> BigUInt? {
-        let call = Call(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepPrice", params: nil)
-        let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(call).execute()
+        let call = Call<ICONKit.Response.Call<String>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepPrice", params: nil)
+        let result = self.service.call(call).execute()
         
         guard let value = result.value, let stringPrice = value.result, let stepPrice = BigUInt(stringPrice.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("stepPrice - \(stepPrice)")
@@ -329,7 +329,7 @@ class WalletManager {
 extension WalletManager {
     public func sendICX(privateKey: String, from: String, to: String, value: BigUInt, stepLimit: BigUInt, message: String? = nil) -> Result<ICONKit.Response.TxHash, ICONResult> {
         let transaction = Transaction()
-        transaction.from(from)
+            .from(from)
             .to(to)
             .value(value)
             .stepLimit(stepLimit)
@@ -366,56 +366,41 @@ extension WalletManager {
     public func getIRCTokenInfo(walletAddress: String, contractAddress: String, completion: @escaping (((name: String, symbol: String, decimal: String)?) -> ())) {
         
         DispatchQueue.global().async {
-            let result = self.service.getScoreAPI(scoreAddress: contractAddress).execute()
+            let nameCall = Call<ICONKit.Response.Call<String>>(from: walletAddress, to: contractAddress, method: "name", params: nil)
+            let result = self.service.call(nameCall).execute()
             
-            if let api = result.value {
-                let list = api.result!
-                let hasName = list.filter { $0.type == "function" && $0.name == "name" }.first
-                let hasDecimal = list.filter { $0.type == "function" && $0.name == "decimals" }.first
-                let hastotalSupply = list.filter { $0.type == "function" && $0.name == "totalSupply" }.first
-                if (hasName != nil && hasDecimal != nil && hastotalSupply != nil) {
-                    let nameCall = Call(from: walletAddress, to: contractAddress, method: "name", params: nil)
-                    let result: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(nameCall).execute()
-                    
-                    guard let nameResponse = result.value, let name = nameResponse.result else {
-                        DispatchQueue.main.async {
-                            completion(nil)
-                        }
-                        return
-                    }
-                    Log.Debug("name - \(name)")
-                    
-                    let decimalCall = Call(from: walletAddress, to: contractAddress, method: "decimals", params: nil)
-                    let decResult: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(decimalCall).execute()
-                    
-                    guard let decResponse = decResult.value, let decimal = decResponse.result else {
-                        DispatchQueue.main.async {
-                            completion(nil)
-                        }
-                        return
-                    }
-                    Log.Debug("decimal - \(decimal)")
-                    
-                    let symCall = Call(from: walletAddress, to: contractAddress, method: "symbol", params: nil)
-                    let symResult: Result<ICONKit.Response.Call<String>, ICONResult> = self.service.call(symCall).execute()
-                    
-                    guard let symResponse = symResult.value, let symbol = symResponse.result else {
-                        DispatchQueue.main.async {
-                            completion(nil)
-                        }
-                        return
-                    }
-                    Log.Debug("symbol - \(symbol)")
-                    
-                    DispatchQueue.main.async {
-                        completion((name: name, symbol: symbol, decimal: decimal))
-                    }
-                    
-                } else {
-                    DispatchQueue.main.async {
-                        completion(nil)
-                    }
+            guard let nameResponse = result.value, let name = nameResponse.result else {
+                DispatchQueue.main.async {
+                    completion(nil)
                 }
+                return
+            }
+            Log.Debug("name - \(name)")
+            
+            let decimalCall = Call<ICONKit.Response.Call<String>>(from: walletAddress, to: contractAddress, method: "decimals", params: nil)
+            let decResult = self.service.call(decimalCall).execute()
+            
+            guard let decResponse = decResult.value, let decimal = decResponse.result else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+            Log.Debug("decimal - \(decimal)")
+            
+            let symCall = Call<ICONKit.Response.Call<String>>(from: walletAddress, to: contractAddress, method: "symbol", params: nil)
+            let symResult = self.service.call(symCall).execute()
+            
+            guard let symResponse = symResult.value, let symbol = symResponse.result else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+            Log.Debug("symbol - \(symbol)")
+            
+            DispatchQueue.main.async {
+                completion((name: name, symbol: symbol, decimal: decimal))
             }
         }
     }
@@ -423,8 +408,8 @@ extension WalletManager {
     public func getIRCTokenBalance(tokenInfo: TokenInfo) -> BigUInt? {
         let service = WManager.service
         
-        let call = Call(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
-        let result: Result<ICONKit.Response.Call<String>, ICONResult> = service.call(call).execute()
+        let call = Call<ICONKit.Response.Call<String>>(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
+        let result = service.call(call).execute()
         
         guard let value = result.value, let balance = value.result else { return nil }
         

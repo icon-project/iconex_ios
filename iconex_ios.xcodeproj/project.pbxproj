@@ -114,6 +114,7 @@
 		D4C074272073599F0004551B /* Ethereum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C074262073599F0004551B /* Ethereum.swift */; };
 		D4D33836203C205D001FD669 /* WalletCreateStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D33834203C205D001FD669 /* WalletCreateStepView.swift */; };
 		D4D33837203C205D001FD669 /* WalletCreateStepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4D33835203C205D001FD669 /* WalletCreateStepView.xib */; };
+		D4E3E0E321916B170026FEDC /* ICONConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E3E0E221916B170026FEDC /* ICONConnect.swift */; };
 		D4EB066520C63730005AF9F1 /* ethToken.json in Resources */ = {isa = PBXBuildFile; fileRef = D4EB066420C63730005AF9F1 /* ethToken.json */; };
 		D4EB066720C637EB005AF9F1 /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EB066620C637EB005AF9F1 /* Tokens.swift */; };
 		D4EBB842204FDB1B007B07FB /* ActionControls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EBB841204FDB1B007B07FB /* ActionControls.storyboard */; };
@@ -335,6 +336,7 @@
 		D4C074262073599F0004551B /* Ethereum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ethereum.swift; sourceTree = "<group>"; };
 		D4D33834203C205D001FD669 /* WalletCreateStepView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletCreateStepView.swift; sourceTree = "<group>"; };
 		D4D33835203C205D001FD669 /* WalletCreateStepView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WalletCreateStepView.xib; sourceTree = "<group>"; };
+		D4E3E0E221916B170026FEDC /* ICONConnect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICONConnect.swift; sourceTree = "<group>"; };
 		D4EB066420C63730005AF9F1 /* ethToken.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ethToken.json; sourceTree = "<group>"; };
 		D4EB066620C637EB005AF9F1 /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
 		D4EBB841204FDB1B007B07FB /* ActionControls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ActionControls.storyboard; sourceTree = "<group>"; };
@@ -693,6 +695,7 @@
 		D47E75A021104F7300ABC61B /* ICONex */ = {
 			isa = PBXGroup;
 			children = (
+				D4E3E0E121916AFE0026FEDC /* Module */,
 				D428A53D20201B2F005B14D8 /* Configurations.swift */,
 				D4728A2920073B9B00E0A899 /* Objc */,
 				D435E78F2018243400F1E798 /* Wallet */,
@@ -768,6 +771,14 @@
 				D4C074262073599F0004551B /* Ethereum.swift */,
 			);
 			path = Ethereum;
+			sourceTree = "<group>";
+		};
+		D4E3E0E121916AFE0026FEDC /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				D4E3E0E221916B170026FEDC /* ICONConnect.swift */,
+			);
+			path = Module;
 			sourceTree = "<group>";
 		};
 		E625D6AEA7B504FDCBEB72E2 /* Pods */ = {
@@ -1018,6 +1029,7 @@
 				D4173603203E5674008857A1 /* WelcomeViewController.swift in Sources */,
 				D4843E9D205B95D100B14377 /* BasicActionViewController.swift in Sources */,
 				D4719B22200F2796005F6BDA /* logger.swift in Sources */,
+				D4E3E0E321916B170026FEDC /* ICONConnect.swift in Sources */,
 				D43FB694214B485D005360A8 /* IXSWrapper.m in Sources */,
 				D481C4A0203EB0DE00A799D7 /* IXInputBox.swift in Sources */,
 				D477CC2C205F554700797A82 /* ConfirmActionViewController.swift in Sources */,
@@ -1078,6 +1090,7 @@
 /* Begin XCBuildConfiguration section */
 		D4728A1F2007040B00E0A899 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -1085,7 +1098,6 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1126,7 +1138,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1137,6 +1149,7 @@
 		};
 		D4728A202007040B00E0A899 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -1144,7 +1157,6 @@
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -1178,7 +1190,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1202,7 +1214,10 @@
 					"$(SRCROOT)",
 					"$(inherited)",
 				);
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/NSHC/**";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/NSHC/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1213,7 +1228,6 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-ObjC",
 					"-framework",
 					"\"Alamofire\"",
 					"-framework",
@@ -1257,7 +1271,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Debug;
 		};
@@ -1277,7 +1291,10 @@
 					"$(SRCROOT)",
 					"$(inherited)",
 				);
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/NSHC/**";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/NSHC/**",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1288,7 +1305,6 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-ObjC",
 					"-framework",
 					"\"Alamofire\"",
 					"-framework",
@@ -1331,7 +1347,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				USER_HEADER_SEARCH_PATHS = "";
+				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
 			name = Release;
 		};
