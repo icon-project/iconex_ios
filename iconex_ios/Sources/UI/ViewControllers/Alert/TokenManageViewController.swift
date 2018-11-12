@@ -245,7 +245,7 @@ class TokenManageViewController: UIViewController {
                 guard let info = self.walletInfo else { return }
                 
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
-                reader.mode = .address
+                reader.mode = .address(.add)
                 if info.type == .icx {
                     reader.type = .irc
                 } else {

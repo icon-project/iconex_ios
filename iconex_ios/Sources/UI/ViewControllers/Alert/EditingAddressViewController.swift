@@ -84,7 +84,7 @@ class EditingAddressViewController: UIViewController {
         qrButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
-                reader.mode = .address
+                reader.mode = .address(.add)
                 reader.type = self.type
                 reader.handler = { code in
                     self.addressInputBox.textField.text = code

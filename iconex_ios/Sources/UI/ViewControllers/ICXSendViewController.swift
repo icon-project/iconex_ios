@@ -322,7 +322,7 @@ class ICXSendViewController: UIViewController {
         scanButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
-                reader.mode = .address
+                reader.mode = .address(.send)
                 reader.type = .icx
                 reader.handler = { code in
                     self.addressInputBox.textField.text = code
@@ -654,7 +654,7 @@ class ICXSendViewController: UIViewController {
             return false
         }
         
-        guard Validator.validateICXAddress(address: toAddress) else {
+        guard Validator.validateICXAddress(address: toAddress) || Validator.validateIRCAddress(address: toAddress) else {
             if showError { self.addressInputBox.setState(.error, "Error.Address.ICX.Invalid".localized) }
             return false
         }

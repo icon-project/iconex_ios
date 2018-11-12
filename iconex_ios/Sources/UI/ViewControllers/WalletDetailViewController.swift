@@ -842,14 +842,20 @@ extension WalletDetailViewController: UITableViewDelegate, UITableViewDataSource
             
             cell.txTitleLabel.attributedText = attrString
             
-            if history.fromAddr == walletInfo!.address {
-                cell.amountLabel.textColor = UIColor(230, 92, 103)
-                cell.typeLabel.textColor = UIColor(230, 92, 103)
-                cell.txDateLabel.textColor = UIColor(230, 92, 103)
+            if history.state == 1 {
+                if history.fromAddr == walletInfo!.address {
+                    cell.amountLabel.textColor = UIColor(230, 92, 103)
+                    cell.typeLabel.textColor = UIColor(230, 92, 103)
+                    cell.txDateLabel.textColor = UIColor(230, 92, 103)
+                } else {
+                    cell.amountLabel.textColor = UIColor(74, 144, 226)
+                    cell.typeLabel.textColor = UIColor(74, 144, 226)
+                    cell.txDateLabel.textColor = UIColor(74, 144, 226)
+                }
             } else {
-                cell.amountLabel.textColor = UIColor(74, 144, 226)
-                cell.typeLabel.textColor = UIColor(74, 144, 226)
-                cell.txDateLabel.textColor = UIColor(74, 144, 226)
+                cell.amountLabel.textColor = UIColor.lightTheme.text.disabled
+                cell.typeLabel.textColor = UIColor.lightTheme.text.disabled
+                cell.txDateLabel.textColor = UIColor.lightTheme.text.disabled
             }
             
             if let token = self.token {

@@ -11,8 +11,13 @@ import RxSwift
 import RxCocoa
 
 enum ReaderMode {
-    case address
+    case address(ActionMode)
     case privateKey
+    
+    enum ActionMode {
+        case add
+        case send
+    }
 }
 
 class QRReaderViewController: UIViewController {
@@ -23,7 +28,7 @@ class QRReaderViewController: UIViewController {
     @IBOutlet weak var indicatorView: UIView!
     @IBOutlet weak var indicatorLabel: UILabel!
     
-    var mode: ReaderMode = .address
+    var mode: ReaderMode = .address(.add)
     var type: COINTYPE = .icx
     
     var handler: ((String) -> Void)?
@@ -131,54 +136,107 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     return
                 }
                 
-                if self.mode == .address {
-                    if self.type == .icx {
-                        guard Validator.validateICXAddress(address: code) else {
-                            captureView.border(2, UIColor.red)
-                            indicatorView.isHidden = false
-                            indicatorLabel.text = "Error.Address.ICX.Invalid".localized
-                            return
+                switch self.mode {
+                case .address(let action):
+                    switch action {
+                    case .add:
+                        if self.type == .icx {
+                            guard Validator.validateICXAddress(address: code) else {
+                                captureView.border(2, UIColor.red)
+                                indicatorView.isHidden = false
+                                indicatorLabel.text = "Error.Address.ICX.Invalid".localized
+                                return
+                            }
+                            captureSession.stopRunning()
+                            
+                            captureView.border(2, UIColor.green)
+                            indicatorView.isHidden = true
+                            if let completions = self.handler {
+                                completions(code)
+                            }
+                            dismiss(animated: true, completion: nil)
+                        } else if self.type == .eth {
+                            guard Validator.validateETHAddress(address: code) else {
+                                captureView.border(2, UIColor.red)
+                                indicatorView.isHidden = false
+                                indicatorLabel.text = "Error.Address.ETH.Invalid".localized
+                                return
+                            }
+                            captureSession.stopRunning()
+                            
+                            captureView.border(2, UIColor.green)
+                            indicatorView.isHidden = true
+                            if let completions = self.handler {
+                                completions(code)
+                            }
+                            dismiss(animated: true, completion: nil)
+                        } else if self.type == .irc {
+                            guard Validator.validateIRCAddress(address: code) else {
+                                captureView.border(2, UIColor.red)
+                                indicatorView.isHidden = false
+                                indicatorLabel.text = "Error.Address.IRC.Invalid".localized
+                                return
+                            }
+                            captureSession.stopRunning()
+                            
+                            captureView.border(2, UIColor.green)
+                            indicatorView.isHidden = true
+                            if let completions = self.handler {
+                                completions(code)
+                            }
+                            dismiss(animated: true, completion: nil)
                         }
-                        captureSession.stopRunning()
                         
-                        captureView.border(2, UIColor.green)
-                        indicatorView.isHidden = true
-                        if let completions = self.handler {
-                            completions(code)
+                    case .send:
+                        if self.type == .icx {
+                            guard Validator.validateICXAddress(address: code) || Validator.validateIRCAddress(address: code) else {
+                                captureView.border(2, UIColor.red)
+                                indicatorView.isHidden = false
+                                indicatorLabel.text = "Error.Address.ICX.Invalid".localized
+                                return
+                            }
+                            captureSession.stopRunning()
+                            
+                            captureView.border(2, UIColor.green)
+                            indicatorView.isHidden = true
+                            if let completions = self.handler {
+                                completions(code)
+                            }
+                            dismiss(animated: true, completion: nil)
+                        } else if self.type == .eth {
+                            guard Validator.validateETHAddress(address: code) else {
+                                captureView.border(2, UIColor.red)
+                                indicatorView.isHidden = false
+                                indicatorLabel.text = "Error.Address.ETH.Invalid".localized
+                                return
+                            }
+                            captureSession.stopRunning()
+                            
+                            captureView.border(2, UIColor.green)
+                            indicatorView.isHidden = true
+                            if let completions = self.handler {
+                                completions(code)
+                            }
+                            dismiss(animated: true, completion: nil)
+                        } else if self.type == .irc {
+                            guard Validator.validateIRCAddress(address: code) else {
+                                captureView.border(2, UIColor.red)
+                                indicatorView.isHidden = false
+                                indicatorLabel.text = "Error.Address.IRC.Invalid".localized
+                                return
+                            }
+                            captureSession.stopRunning()
+                            
+                            captureView.border(2, UIColor.green)
+                            indicatorView.isHidden = true
+                            if let completions = self.handler {
+                                completions(code)
+                            }
+                            dismiss(animated: true, completion: nil)
                         }
-                        dismiss(animated: true, completion: nil)
-                    } else if self.type == .eth {
-                        guard Validator.validateETHAddress(address: code) else {
-                            captureView.border(2, UIColor.red)
-                            indicatorView.isHidden = false
-                            indicatorLabel.text = "Error.Address.ETH.Invalid".localized
-                            return
-                        }
-                        captureSession.stopRunning()
-                        
-                        captureView.border(2, UIColor.green)
-                        indicatorView.isHidden = true
-                        if let completions = self.handler {
-                            completions(code)
-                        }
-                        dismiss(animated: true, completion: nil)
-                    } else if self.type == .irc {
-                        guard Validator.validateIRCAddress(address: code) else {
-                            captureView.border(2, UIColor.red)
-                            indicatorView.isHidden = false
-                            indicatorLabel.text = "Error.Address.IRC.Invalid".localized
-                            return
-                        }
-                        captureSession.stopRunning()
-                        
-                        captureView.border(2, UIColor.green)
-                        indicatorView.isHidden = true
-                        if let completions = self.handler {
-                            completions(code)
-                        }
-                        dismiss(animated: true, completion: nil)
                     }
-                } else if self.mode == .privateKey {
+                    
+                case .privateKey:
                     if code.hexToData() != nil && code.length == 64 {
                         captureSession.stopRunning()
                         
