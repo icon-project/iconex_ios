@@ -270,6 +270,8 @@
 "LockScreen.Setting.Passcode.Change.Renew" = "Confirm screen lock passcode";
 "LockScreen.Setting.Passcode.Change.Error" = "Passcodes do not match.\nPlease check again.";
 
+"Connect.Select.Title" = "Select Wallet";
+
 "Language.Korean" = "한국어";
 "Language.English" = "English";
 
@@ -397,6 +399,9 @@
 "Alert.Wallet.RequestPassword" = "Enter Wallet Password";
 "Alert.Wallet.Remove.UnknownBalance" = "Unable to check the balance.\nAre you sure you want to delete?";
 "Alert.Permission.Camera" = "If camera is not authorized, QR code scan function cannot be activated.\n(Camera can be authorized via App settings.)";
+"Alert.Connect.Select.Cancel" = "Cancel select wallet?\nYou will return to previous app.";
+"Alert.Connect.Password.Cancel" = "Cancel enter password?\nYou will return to previous app.";
+"Alert.Connect.Send.Cancel" = "Cancel transfer?\nYou will return to previous app.";
 
 "Error.Swap.NoICX" = "You have 0 ICX tokens available for token swap.\nPlease check your balance.";
 "Error.Swap.NoETH" = "Please check your ETH balance. ETH is needed for token swap transaction fee.";

@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var all: String?
     var necessary: String?
     
+    var connect: Connect?
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -111,6 +113,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        if let comp = URLComponents(url: url, resolvingAgainstBaseURL: true),
+            let items = comp.queryItems,
+            let dataQuery = items.filter({ $0.name == "data" }).first,
+            let base64encoded = dataQuery.value
+            {
+                if let data = Data(base64Encoded: base64encoded) {
+                    self.connect = Connect(source: data)
+                    return true
+                }
+        }
+        
+        return false
+    }
+    
+    
+    
+    
+    
+    
 
     func changeLanguage(language: String) {
 //        UserDefaults.standard.set([language], forKey: "AppleLanguages")
