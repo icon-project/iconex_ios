@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var all: String?
     var necessary: String?
     
-//    var connect: Connect?
+    var connect: Connect?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -115,18 +115,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-//        if let comp = URLComponents(url: url, resolvingAgainstBaseURL: true),
-//            let items = comp.queryItems,
-//            let dataQuery = items.filter({ $0.name == "data" }).first,
-//            let base64encoded = dataQuery.value
-//            {
-//                if let data = Data(base64Encoded: base64encoded) {
-//                    self.connect = Connect(source: data)
-//                    return true
-//                }
-//        }
+        self.connect = Connect(source: url)
         
-        return false
+        return true
     }
     
     

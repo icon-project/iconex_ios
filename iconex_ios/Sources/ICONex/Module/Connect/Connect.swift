@@ -10,7 +10,7 @@ import UIKit
 
 enum ConnectError: Error {
     case userCancel
-    case invalidMethod
+    case invalidRequest
     case invalidJSON
     case walletEmpty
     case notFound(DetailError)
@@ -22,7 +22,7 @@ enum ConnectError: Error {
         case wallet
         case id
         case method
-        case origin
+        case from
         case version
         case to
         case value
@@ -52,7 +52,7 @@ extension ConnectError {
         case .invalidJSON, .decode:
             return -1001
             
-        case .invalidMethod:
+        case .invalidRequest:
             return -1003
             
         case .walletEmpty:
@@ -76,14 +76,11 @@ extension ConnectError {
     }
 }
 
-protocol ConnectDelegate {
-    func connect()
-}
-
 class Connect {
     var source: URL?
+    
+    var from: String?
     var received: ConnectFormat?
-    var delegate: ConnectDelegate?
     
     init(source: URL) {
         self.source = source
@@ -92,10 +89,30 @@ class Connect {
     public func translate() throws {
         guard let source = self.source else { return }
         
+        guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false), let queries = components.queryItems else {
+            self.source = nil
+            throw ConnectError.invalidRequest
+        }
+        
+        guard let fromQuery = queries.filter({ $0.name == "from" }).first, let from = fromQuery.value else {
+            self.source = nil
+            throw ConnectError.notFound(.from)
+        }
+        self.from = from
+        
+        guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
+            self.source = nil
+            throw ConnectError.notFound(.data)
+        }
+        
+        guard let data = Data(base64Encoded: dataParam) else {
+            self.source = nil
+            throw ConnectError.decode
+        }
+        
         let decoder = JSONDecoder()
         
-        let received = try decoder.decode(ConnectFormat.self, from: source)
-        self.source = nil
+        let received = try decoder.decode(ConnectFormat.self, from: data)
         
         if received.method == "bind" {
             self.bind()
@@ -106,14 +123,14 @@ class Connect {
         } else if received.method == "sendToken" {
             
         } else {
-            throw ConnectError.invalidMethod
+            throw ConnectError.notFound(.method)
         }            
     }
     
     public func callback(response: ConnectResponse) {
         let encoder = JSONEncoder()
         
-        guard let encoded = try? encoder.encode(response), let received = self.received, var component = URLComponents(string: received.origin) else {
+        guard let encoded = try? encoder.encode(response), let from = self.from, var component = URLComponents(string: from) else {
             
             return
         }

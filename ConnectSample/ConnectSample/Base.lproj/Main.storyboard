@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ConnectSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2gB-5f-XOB">
+                                <rect key="frame" x="30" y="40" width="315" height="224"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-7E-dmc">
+                                        <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Zq4-ft-V7f"/>
+                                        </constraints>
+                                        <state key="normal" title="Bind"/>
+                                        <connections>
+                                            <action selector="bind:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FIg-AL-mg5"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2OE-jK-ktb">
+                                        <rect key="frame" x="0.0" y="58" width="315" height="50"/>
+                                        <state key="normal" title="Sign"/>
+                                        <connections>
+                                            <action selector="sign:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8vB-K0-6qj"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mPg-AB-oZv">
+                                        <rect key="frame" x="0.0" y="116" width="315" height="50"/>
+                                        <state key="normal" title="Send ICX"/>
+                                        <connections>
+                                            <action selector="sendICX:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1fG-1C-sMu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SPv-oZ-4OD">
+                                        <rect key="frame" x="0.0" y="174" width="315" height="50"/>
+                                        <state key="normal" title="Send Token"/>
+                                        <connections>
+                                            <action selector="sendToken:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tkf-k0-foC"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="2gB-5f-XOB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="CLm-XY-3e3"/>
+                            <constraint firstItem="2gB-5f-XOB" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="RxP-sA-lMd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2gB-5f-XOB" secondAttribute="trailing" constant="30" id="yfr-0o-sCv"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="bind" destination="EbP-7E-dmc" id="9Bw-hf-4Ef"/>
+                        <outlet property="sendICX" destination="mPg-AB-oZv" id="jyR-1C-OOz"/>
+                        <outlet property="sendToken" destination="SPv-oZ-4OD" id="gF7-Bn-vqj"/>
+                        <outlet property="sign" destination="2OE-jK-ktb" id="V8O-0s-OAb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
+    </scenes>
+</document>

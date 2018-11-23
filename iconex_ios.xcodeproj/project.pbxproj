@@ -114,6 +114,9 @@
 		D4C074272073599F0004551B /* Ethereum.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C074262073599F0004551B /* Ethereum.swift */; };
 		D4D33836203C205D001FD669 /* WalletCreateStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D33834203C205D001FD669 /* WalletCreateStepView.swift */; };
 		D4D33837203C205D001FD669 /* WalletCreateStepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4D33835203C205D001FD669 /* WalletCreateStepView.xib */; };
+		D4EAE92421993E5800E6B5EF /* Connect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EAE92121993E5800E6B5EF /* Connect.storyboard */; };
+		D4EAE92521993E5800E6B5EF /* Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EAE92221993E5800E6B5EF /* Connect.swift */; };
+		D4EAE92621993E5800E6B5EF /* BindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EAE92321993E5800E6B5EF /* BindViewController.swift */; };
 		D4EB066520C63730005AF9F1 /* ethToken.json in Resources */ = {isa = PBXBuildFile; fileRef = D4EB066420C63730005AF9F1 /* ethToken.json */; };
 		D4EB066720C637EB005AF9F1 /* Tokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EB066620C637EB005AF9F1 /* Tokens.swift */; };
 		D4EBB842204FDB1B007B07FB /* ActionControls.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EBB841204FDB1B007B07FB /* ActionControls.storyboard */; };
@@ -335,6 +338,9 @@
 		D4C074262073599F0004551B /* Ethereum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ethereum.swift; sourceTree = "<group>"; };
 		D4D33834203C205D001FD669 /* WalletCreateStepView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletCreateStepView.swift; sourceTree = "<group>"; };
 		D4D33835203C205D001FD669 /* WalletCreateStepView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WalletCreateStepView.xib; sourceTree = "<group>"; };
+		D4EAE92121993E5800E6B5EF /* Connect.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Connect.storyboard; sourceTree = "<group>"; };
+		D4EAE92221993E5800E6B5EF /* Connect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connect.swift; sourceTree = "<group>"; };
+		D4EAE92321993E5800E6B5EF /* BindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindViewController.swift; sourceTree = "<group>"; };
 		D4EB066420C63730005AF9F1 /* ethToken.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ethToken.json; sourceTree = "<group>"; };
 		D4EB066620C637EB005AF9F1 /* Tokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tokens.swift; sourceTree = "<group>"; };
 		D4EBB841204FDB1B007B07FB /* ActionControls.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ActionControls.storyboard; sourceTree = "<group>"; };
@@ -774,8 +780,19 @@
 		D4E3E0E121916AFE0026FEDC /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				D4EAE92021993E5800E6B5EF /* Connect */,
 			);
 			path = Module;
+			sourceTree = "<group>";
+		};
+		D4EAE92021993E5800E6B5EF /* Connect */ = {
+			isa = PBXGroup;
+			children = (
+				D4EAE92121993E5800E6B5EF /* Connect.storyboard */,
+				D4EAE92221993E5800E6B5EF /* Connect.swift */,
+				D4EAE92321993E5800E6B5EF /* BindViewController.swift */,
+			);
+			path = Connect;
 			sourceTree = "<group>";
 		};
 		E625D6AEA7B504FDCBEB72E2 /* Pods */ = {
@@ -863,6 +880,7 @@
 				D43FB68F214B464B005360A8 /* san.dat in Resources */,
 				D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */,
 				D4D33837203C205D001FD669 /* WalletCreateStepView.xib in Resources */,
+				D4EAE92421993E5800E6B5EF /* Connect.storyboard in Resources */,
 				D4EBB842204FDB1B007B07FB /* ActionControls.storyboard in Resources */,
 				D43FB689214B464B005360A8 /* updateinfo.dat in Resources */,
 				D4EBB84A205024E2007B07FB /* Menu.storyboard in Resources */,
@@ -1043,12 +1061,14 @@
 				D42A6D132057C52E00BC5039 /* AddressManageViewController.swift in Sources */,
 				D4EF88F821199924000CA278 /* OpensourceViewController.swift in Sources */,
 				D455C0362045952B0068165E /* IXScrollView.swift in Sources */,
+				D4EAE92621993E5800E6B5EF /* BindViewController.swift in Sources */,
 				D456AE8E205FF58300CB05D2 /* ChangePasswordViewController.swift in Sources */,
 				D492D06220897CA100D86402 /* WalletExportPasswordViewController.swift in Sources */,
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
 				D4402A8F205108A8001BD003 /* WalletAddressViewController.swift in Sources */,
 				D41A8CC2204EC279009A0D6B /* ImportStepViewController.swift in Sources */,
 				D41A8CC8204EC637009A0D6B /* ImportThreeViewController.swift in Sources */,
+				D4EAE92521993E5800E6B5EF /* Connect.swift in Sources */,
 				D4EBB844204FDB5A007B07FB /* SelectableActionController.swift in Sources */,
 				D417360B203E6DF3008857A1 /* StepThreeViewController.swift in Sources */,
 				D41A8CC4204EC627009A0D6B /* ImportOneViewController.swift in Sources */,
