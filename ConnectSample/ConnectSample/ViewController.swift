@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var sign: UIButton!
     @IBOutlet weak var sendICX: UIButton!
     @IBOutlet weak var sendToken: UIButton!
+    @IBOutlet weak var developer: UIButton!
     
     var bindAddress: String? {
         willSet {
@@ -186,6 +187,14 @@ class ViewController: UIViewController {
         }))
         self.present(alert, animated: true, completion: nil)
     }
+    
+    @IBAction func activateDeveloper(_ sender: Any) {
+        let url = URL(string: "iconex://developer")!
+        UIApplication.shared.open(url, options: [:]) { (result) in
+            print("Request developer mode : \(result)")
+        }
+    }
+    
     
     func send(params: [String: Any]) {
         

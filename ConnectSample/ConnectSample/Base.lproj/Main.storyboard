@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2gB-5f-XOB">
-                                <rect key="frame" x="30" y="40" width="315" height="224"/>
+                                <rect key="frame" x="30" y="40" width="315" height="282"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-7E-dmc">
                                         <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
@@ -52,6 +52,13 @@
                                             <action selector="sendToken:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tkf-k0-foC"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRJ-Og-3pl">
+                                        <rect key="frame" x="0.0" y="232" width="315" height="50"/>
+                                        <state key="normal" title="Activate Developer Mode"/>
+                                        <connections>
+                                            <action selector="activateDeveloper:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pln-0g-pyR"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -65,6 +72,7 @@
                     </view>
                     <connections>
                         <outlet property="bind" destination="EbP-7E-dmc" id="9Bw-hf-4Ef"/>
+                        <outlet property="developer" destination="vRJ-Og-3pl" id="Ns5-yh-OY8"/>
                         <outlet property="sendICX" destination="mPg-AB-oZv" id="jyR-1C-OOz"/>
                         <outlet property="sendToken" destination="SPv-oZ-4OD" id="gF7-Bn-vqj"/>
                         <outlet property="sign" destination="2OE-jK-ktb" id="V8O-0s-OAb"/>
