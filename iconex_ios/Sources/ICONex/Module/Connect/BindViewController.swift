@@ -22,18 +22,52 @@ class BindViewController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var confirmButton: UIButton!
     
-    var selectedIndex: IndexPath?
+    var walletList: [WalletInfo]?
+    
+    var selectedIndex: IndexPath? {
+        didSet {
+            self.confirmButton.isEnabled = self.selectedIndex != nil
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         initializeUI()
+        
+        loadWallet()
     }
 
     func initializeUI() {
         navTitle.text = "Connect.Select.Title".localized
         
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 1))
+        
+        self.confirmButton.styleDark()
+        self.confirmButton.rounded()
+        self.confirmButton.setTitle("Common.Confirm".localized, for: .normal)
+        self.confirmButton.isEnabled = false
+        
+        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+            Alert.Confirm(message: "Alert.Connect.Select.Cancel".localized, handler: {
+                self.dismiss(animated: true, completion: nil)
+                Conn.sendError(error: ConnectError.userCancel)
+                
+            }).show(self)
+        }).disposed(by: disposeBag)
+        
+        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+            guard let list = self.walletList, let path = self.selectedIndex else { return }
+            let info = list[path.row]
+            let address = info.address
+            self.dismiss(animated: true, completion: nil)
+            Conn.sendBind(address: address)
+        }).disposed(by: disposeBag)
+    }
+    
+    func loadWallet() {
+        self.walletList = WManager.walletInfoList.filter({ $0.type == .icx })
         self.tableView.reloadData()
     }
 }
@@ -44,7 +78,7 @@ extension BindViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let infoList = WManager.walletInfoList
+        guard let infoList = self.walletList else { return 0 }
         
         return infoList.count
     }
@@ -56,7 +90,7 @@ extension BindViewController: UITableViewDataSource {
         cell.address.text = "-"
         cell.amount.text = "-"
         
-        let info = WManager.walletInfoList[indexPath.row]
+        let info = self.walletList![indexPath.row]
         if let wallet = WManager.loadWalletBy(info: info) {
             cell.name.text = wallet.alias
             cell.address.text = wallet.address
@@ -78,6 +112,8 @@ extension BindViewController: UITableViewDataSource {
 
 extension BindViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.selectedIndex = indexPath
         
+        tableView.reloadData()
     }
 }

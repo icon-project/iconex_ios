@@ -267,7 +267,7 @@ enum IXTextFieldType {
             if length > 16 && (_fieldType == .normal || _fieldType == .name) {
                 return false
             }
-        } else if _fieldType == .password || _fieldType == .newPassword || _fieldType == .address {
+        } else if _fieldType == .newPassword || _fieldType == .address {
             if string == " " { return false }
         }
         

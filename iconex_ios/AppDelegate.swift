@@ -14,11 +14,11 @@ import ICONKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    var connect: UIViewController?
 
     var all: String?
     var necessary: String?
-    
-    var connect: Connect?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         
-        Config.host = .main
+        Config.host = .dev
         #if DEBUG
             print(IXSWrapper.getVersion())
         #endif
@@ -69,6 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log.Debug(error)
         }
         
+        if let options = launchOptions, let url = options[.url] as? URL {
+            Conn.setMessage(source: url)
+        }
+        
         NSSetUncaughtExceptionHandler { (exception) in
             Log.Error("CRASH =======================")
             Log.Error("\(exception)")
@@ -108,6 +112,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             return
         }
+        
+        if Conn.needTranslate {
+            toConnect()
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -115,16 +123,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        self.connect = Connect(source: url)
-        
+        Conn.setMessage(source: url)
+//        toConnect()
         return true
     }
-    
-    
-    
-    
-    
-    
 
     func changeLanguage(language: String) {
 //        UserDefaults.standard.set([language], forKey: "AppleLanguages")
@@ -216,7 +218,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         exit(0)
                     }).show(self.window!.rootViewController!)
                 } else {
-                    self.go()
+                    
+                    go()
+                    
                 }
             } else {
                 
@@ -257,6 +261,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return topViewController(controller: presented)
         }
         return controller
+    }
+    
+    func toMain() {
+        dismissHierachy(controller: self.connect, completion: {
+            if let connect = self.connect {
+                if let nav = connect.presentingViewController as? UINavigationController {
+                    nav.viewControllers[0].dismiss(animated: false, completion: {
+                        self.connect = nil
+                    })
+                } else {
+                    connect.presentingViewController?.dismiss(animated: false, completion: {
+                        self.connect = nil
+                    })
+                }
+            }
+        })
+    }
+    
+    func toConnect() {
+        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
+        
+        self.connect = connect
+        if let top = self.topViewController() {
+            Log.Debug("Present - \(top)")
+            top.present(connect!, animated: true, completion: nil)
+        }
+    }
+    
+    func dismissHierachy(controller: UIViewController?, completion: (() -> Void)?) {
+        if let presented = controller?.presentedViewController {
+            dismissHierachy(controller: presented, completion: completion)
+        }
+        controller?.dismiss(animated: false, completion: completion)
     }
 }
 

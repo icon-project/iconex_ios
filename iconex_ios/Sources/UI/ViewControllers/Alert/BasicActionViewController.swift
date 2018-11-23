@@ -18,6 +18,7 @@ class BasicActionViewController: UIViewController {
     
     var message: String?
     var attrMessage: NSAttributedString?
+    var alignment: NSTextAlignment = .center
     
     let disposeBag = DisposeBag()
     
@@ -54,6 +55,11 @@ class BasicActionViewController: UIViewController {
             messageLabel.text = message
         }
         
+        messageLabel.textAlignment = alignment
+    }
+    
+    func setAlignment(_ alignment: NSTextAlignment) {
+        self.alignment = alignment
     }
 
 }

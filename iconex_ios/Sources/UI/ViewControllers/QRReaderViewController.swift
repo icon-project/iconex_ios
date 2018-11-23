@@ -141,7 +141,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     switch action {
                     case .add:
                         if self.type == .icx {
-                            guard Validator.validateICXAddress(address: code) else {
+                            guard Validator.validateICXAddress(address: code) || Validator.validateIRCAddress(address: code) else {
                                 captureView.border(2, UIColor.red)
                                 indicatorView.isHidden = false
                                 indicatorLabel.text = "Error.Address.ICX.Invalid".localized

@@ -121,6 +121,7 @@ class BundleImportListViewController: BaseViewController {
                     switch result {
                     case .success(let value):
                         self._balanceList[address] = value.value
+                        WManager.walletBalanceList[address] = value.value
                         
                     case .failure(let error):
                         Log.Debug("Error - \(error)")
@@ -145,6 +146,7 @@ class BundleImportListViewController: BaseViewController {
                             }
                             
                             self._balanceList[address] = value
+                            WManager.walletBalanceList[address.add0xPrefix()] = value
                             self.tableView.reloadData()
                         }
                         }.fetch()

@@ -273,8 +273,14 @@
 "LockScreen.Setting.Passcode.Change.New" = "새로 변경할 잠금 번호 6자리를 입력해주세요.";
 "LockScreen.Setting.Passcode.Change.Renew" = "다시 한 번 잠금 번호를 입력해주세요.";
 "LockScreen.Setting.Passcode.Change.Error" = "잠금 번호가 일치하지 않습니다.\n설정할 잠금 번호 입력부터 다시 시도해주세요.";
-
+ 
 "Connect.Select.Title" = "지갑 선택";
+"Connect.Send.Amount" = "송금할 코인 수량";
+"Connect.Send.to" = "송금 받는 주소";
+"Connect.Send.StepLimit" = "Step 한도";
+"Connect.Send.StepPrice" = "Step 가격";
+"Connect.Send.EstimatedFee" = "예상 최대 수수료";
+"Connect.Send.EstimatedRemain" = "송금 후 예상 잔액";
 
 "Language.Korean" = "한국어";
 "Language.English" = "English";
@@ -403,6 +409,7 @@
 "Alert.Connect.Select.Cancel" = "지갑 선택을 취소하시겠습니까?\n이용 중이던 앱으로 돌아갑니다.";
 "Alert.Connect.Password.Cancel" = "지갑 비밀번호 입력을 취소하시겠습니까?\n이용 중이던 앱으로 돌아갑니다.";
 "Alert.Connect.Send.Cancel" = "송금을 취소하시겠습니까?\n이용 중이던 앱으로 돌아갑니다.";
+"Alert.Connect.Send.Completed" = "송금 요청이 완료되었습니다.\n거래내역은 내 지갑 상세페이지 또는 ICON Tracker에서 조회 가능합니다.";
 
 "Error.Swap.NoICX" = "스왑 가능한 ICX 토큰이 없습니다.";
 "Error.Swap.NoETH" = "스왑 수수료 지불을 위한 ETH 잔액이 없습니다. 입금 후 진행해 주세요.";
@@ -460,3 +467,4 @@
 "Error.Data.Exceeded" = "입력 한도 %dKB를 초과합니다.";
 "Error.Transfer.Limit.LessThen" = "%@ 보다 낮은 Step 한도를 입력해 주세요.";
 "Error.Transfer.Limit.MoreThen" = "%@ 보다 높은 Step 한도를 입력해 주세요.";
+"Error.Connect.Send.InsufficientFee" = "ICX 보유 수량이 부족합니다.";

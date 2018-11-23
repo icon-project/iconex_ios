@@ -198,6 +198,17 @@ struct Tools {
         inView.layer.add(animation, forKey: "rotation")
     }
     
+    static func rotateReverseAnimation(inView: UIView) {
+        let animation = CABasicAnimation(keyPath: "transform.rotation")
+        animation.fromValue = CGFloat(.pi * 2.0)
+        animation.toValue = 0.0
+        animation.duration = 1.0
+        animation.repeatCount = Float.greatestFiniteMagnitude
+        animation.isRemovedOnCompletion = false
+        
+        inView.layer.add(animation, forKey: "rotation")
+    }
+    
     static func isPasscode() -> Bool {
         guard (UserDefaults.standard.string(forKey: "u8djdnuEe2xIddfkD") != nil) else { return false }
         guard (UserDefaults.standard.string(forKey: "aExd73E0dxvdQrx") != nil) else { return false }
@@ -535,10 +546,10 @@ struct Alert {
         case add, edit
     }
     
-    static func Basic(message: String) -> BasicActionViewController {
+    static func Basic(message: String, alignment: NSTextAlignment = .center) -> BasicActionViewController {
         let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
         basic.message = message
-        
+        basic.setAlignment(alignment)
         return basic
     }
     

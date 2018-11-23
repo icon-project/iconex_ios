@@ -416,6 +416,15 @@ extension WalletManager {
         return BigUInt(balance.prefix0xRemoved(), radix: 16)
     }
     
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<ICONKit.Response.Call<String>, ICONResult> {
+        let service = WManager.service
+        
+        let call = Call<ICONKit.Response.Call<String>>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
+        let result = service.call(call).execute()
+        
+        return result
+    }
+    
 }
 
 let WManager = WalletManager.sharedInstance

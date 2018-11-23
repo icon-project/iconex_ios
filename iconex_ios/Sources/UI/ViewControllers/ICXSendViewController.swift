@@ -11,7 +11,7 @@ import RxSwift
 import BigInt
 import ICONKit
 
-class ICXSendViewController: UIViewController {
+class ICXSendViewController: BaseViewController {
 
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -88,8 +88,6 @@ class ICXSendViewController: UIViewController {
     var maxLimit: BigUInt?
     
     var selectedDataType: EncodeType = .utf8
-    
-    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()

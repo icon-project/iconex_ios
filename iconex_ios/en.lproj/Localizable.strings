@@ -271,6 +271,12 @@
 "LockScreen.Setting.Passcode.Change.Error" = "Passcodes do not match.\nPlease check again.";
 
 "Connect.Select.Title" = "Select Wallet";
+"Connect.Send.Amount" = "Transfer Amount";
+"Connect.Send.to" = "Receiving Address";
+"Connect.Send.StepLimit" = "Step Limit";
+"Connect.Send.StepPrice" = "Step Price";
+"Connect.Send.EstimatedFee" = "Estimated Maximum Fee";
+"Connect.Send.EstimatedRemain" = "Estimated Balance";
 
 "Language.Korean" = "한국어";
 "Language.English" = "English";
@@ -402,6 +408,7 @@
 "Alert.Connect.Select.Cancel" = "Cancel select wallet?\nYou will return to previous app.";
 "Alert.Connect.Password.Cancel" = "Cancel enter password?\nYou will return to previous app.";
 "Alert.Connect.Send.Cancel" = "Cancel transfer?\nYou will return to previous app.";
+"Alert.Connect.Send.Completed" = "Transfer Request Complete.\nYou can check the transaction history on ICON Tracker";
 
 "Error.Swap.NoICX" = "You have 0 ICX tokens available for token swap.\nPlease check your balance.";
 "Error.Swap.NoETH" = "Please check your ETH balance. ETH is needed for token swap transaction fee.";
@@ -458,3 +465,4 @@
 "Error.Data.Exceeded" = "This exceeds input limit %dKB";
 "Error.Transfer.Limit.LessThen" = "Enter step limit less than %@";
 "Error.Transfer.Limit.MoreThen" = "Enter step limit more than %@";
+"Error.Connect.Send.InsufficientFee" = "This exceeds your balances";

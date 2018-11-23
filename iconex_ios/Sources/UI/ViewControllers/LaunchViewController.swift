@@ -80,6 +80,9 @@ class LaunchViewController: UIViewController {
             EManager.addToken(token.symbol)
         }
         
+        WManager.getWalletsBalance()
+        EManager.getExchangeList()
+        
         let app = UIApplication.shared.delegate as! AppDelegate
         app.checkVersion()
     }
