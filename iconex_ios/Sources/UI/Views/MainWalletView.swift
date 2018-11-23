@@ -244,23 +244,23 @@ class MainWalletView: UIView, UIScrollViewDelegate {
     func setWalletBalance() {
         self.indexLabel.text = EManager.currentExchange.uppercased()
         
+        let below = EManager.currentExchange == "usd" ? 2 : 4
+        
         if let walletInfo = self.walletInfo {
             guard let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
             
-            if let address = wallet.address, let value = WManager.walletBalanceList[address], let exchangedString = Tools.balanceToExchange(value, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4) {
+            if let address = wallet.address, let value = WManager.walletBalanceList[address], let vExchanged = Tools.balanceToExchange(value, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: below, decimal: wallet.decimal) {
                 indicator.isHidden = true
                 totalBalanceLabel.isHidden = false
                 
-                guard var dExchange = Double(exchangedString) else { return }
-                
+                var total = Tools.stringToBigUInt(inputText: vExchanged, decimal: wallet.decimal)!
                 if let tokens = wallet.tokens {
                     for token in tokens {
-                        guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4), let excD = Double(exchanged) else { continue }
-                        dExchange += excD
+                        guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: below, decimal: token.decimal) else { continue }
+                        total += Tools.stringToBigUInt(inputText: exchanged, decimal: token.decimal)!
                     }
                 }
-                let format = EManager.currentExchange == "usd" ? "%.2f" : "%.4f"
-                totalBalanceLabel.text = String(format: format, dExchange).currencySeparated()
+                totalBalanceLabel.text = Tools.bigToString(value: total, decimal: wallet.decimal, EManager.currentExchange == "usd" ? 2 : 4, false, true)
             } else {
                 if WManager.isBalanceLoadCompleted {
                     indicator.isHidden = true
@@ -270,35 +270,79 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                     totalBalanceLabel.isHidden = true
                 }
             }
+            
+//            if let address = wallet.address, let value = WManager.walletBalanceList[address], let exchangedString = Tools.balanceToExchange(value, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4) {
+//                indicator.isHidden = true
+//                totalBalanceLabel.isHidden = false
+//
+//                guard var dExchange = Double(exchangedString) else { return }
+//
+//                if let tokens = wallet.tokens {
+//                    for token in tokens {
+//                        guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4), let excD = Double(exchanged) else { continue }
+//                        dExchange += excD
+//                    }
+//                }
+//                let format = EManager.currentExchange == "usd" ? "%.2f" : "%.4f"
+//                totalBalanceLabel.text = String(format: format, dExchange).currencySeparated()
+//            } else {
+//                if WManager.isBalanceLoadCompleted {
+//                    indicator.isHidden = true
+//                    totalBalanceLabel.isHidden = false
+//                } else {
+//                    indicator.isHidden = false
+//                    totalBalanceLabel.isHidden = true
+//                }
+//            }
         } else if let coin = self.coin {
             guard let wallets = coin.wallets else { return }
-            var existsList = [Double]()
-            for walletInfo in wallets {
-                guard let wallet = WManager.loadWalletBy(info: walletInfo), let balance = WManager.walletBalanceList[walletInfo.address], let exchangedString = Tools.balanceToExchange(balance, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: wallet.decimal), let excD = Double(exchangedString) else { continue }
-                existsList.append(excD)
-            }
             
-            if existsList.count > 0 {
-                totalBalanceLabel.text = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", existsList.reduce(0, +)).currencySeparated()
-            } else {
-                totalBalanceLabel.text = "-"
+            var total = BigUInt(0)
+            var decimal = 0
+            for walletInfo in wallets {
+                guard let wallet = WManager.loadWalletBy(info: walletInfo), let balance = WManager.walletBalanceList[walletInfo.address], let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: below, decimal: wallet.decimal) else  { continue }
+                total += Tools.stringToBigUInt(inputText: exchanged, decimal: wallet.decimal)!
+                decimal = wallet.decimal
             }
+            let exchanged = Tools.bigToString(value: total, decimal: decimal, below, false, true)
+            totalBalanceLabel.text = exchanged
+            
+//            var existsList = [Double]()
+//            for walletInfo in wallets {
+//                guard let wallet = WManager.loadWalletBy(info: walletInfo), let balance = WManager.walletBalanceList[walletInfo.address], let exchangedString = Tools.balanceToExchange(balance, from: wallet.type.rawValue.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: wallet.decimal), let excD = Double(exchangedString) else { continue }
+//                existsList.append(excD)
+//            }
+//
+//            if existsList.count > 0 {
+//                totalBalanceLabel.text = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", existsList.reduce(0, +)).currencySeparated()
+//            } else {
+//                totalBalanceLabel.text = "-"
+//            }
         } else if let token = self.token {
             
             guard let info = WManager.coinInfoListBy(token: token) else { return }
             guard let wallets = info.wallets else { return }
             
-            var existsList = [Double]()
+            var total = BigUInt(0)
             for walletInfo in wallets {
-                guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress.add0xPrefix()], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let excD = Double(exchanged) else { continue }
-                existsList.append(excD)
+                guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress.add0xPrefix()], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: below, decimal: token.decimal) else { continue }
+                total += Tools.stringToBigUInt(inputText: exchanged, decimal: token.decimal)!
             }
+            let exchanged = Tools.bigToString(value: total, decimal: token.decimal, below, false, true)
+            totalBalanceLabel.text = exchanged
             
-            if existsList.count > 0 {
-                totalBalanceLabel.text = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", existsList.reduce(0, +)).currencySeparated()
-            } else {
-                totalBalanceLabel.text = "-"
-            }
+            
+//            var existsList = [Double]()
+//            for walletInfo in wallets {
+//                guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress.add0xPrefix()], let balance = tokenBalances[item.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let excD = Double(exchanged) else { continue }
+//                existsList.append(excD)
+//            }
+//
+//            if existsList.count > 0 {
+//                totalBalanceLabel.text = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", existsList.reduce(0, +)).currencySeparated()
+//            } else {
+//                totalBalanceLabel.text = "-"
+//            }
         }
         
         tableView.reloadData()

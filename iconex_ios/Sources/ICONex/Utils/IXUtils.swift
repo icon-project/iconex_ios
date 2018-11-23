@@ -55,10 +55,6 @@ struct Tools {
         while remove && under.hasSuffix("0") {
             under = under.substring(to: under.length - 1) as NSString
         }
-        
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "en_US")
 
         wei = under as String
 
@@ -106,17 +102,6 @@ struct Tools {
         response = String(response[response.index(response.startIndex, offsetBy: 2)..<response.endIndex])
         
         return hexStringToBig(value: response)
-    }
-    
-    static func icxToHexString(value: String) throws -> String {
-        guard var icx = BigUInt(value) else {
-            throw IXError.convertBInt
-        }
-        
-        icx = icx * BigUInt(10).power(18)
-        Log.Debug("BInt ICX: \(icx)")
-        let result = String(icx, radix: 16)
-        return "0x" + result
     }
     
     static func stringToBigUInt(inputText: String, decimal: Int = 18) -> BigUInt? {
@@ -167,24 +152,36 @@ struct Tools {
     }
     
     static func balanceToExchange(_ value: BigUInt, from: String, to: String, belowDecimal: Int = 4, decimal: Int = 18) -> String? {
-        guard let rateString = EManager.exchangeInfoList[from + to], rateString.createDate != nil else {
+//        guard let rateString = EManager.exchangeInfoList[from + to], rateString.createDate != nil else {
+//            return nil
+//        }
+//
+//        var stringValue = bigToString(value: value, decimal: decimal, decimal)
+//        stringValue = stringValue.replacingOccurrences(of: ",", with: "")
+//
+//        guard let dValue = Double(stringValue) else {
+//            return nil
+//        }
+//
+//        guard let ratePrice = Double(rateString.price) else {
+//            return nil
+//        }
+//
+//        let result = String(format: "%.\(belowDecimal)f", ratePrice * dValue)
+        
+        guard let exchanged = balanceToExchangeBigInt(value, from: from, to: to, decimal: decimal) else { return nil }
+        
+        return bigToString(value: exchanged, decimal: decimal, belowDecimal, false, false)
+    }
+    
+    static func balanceToExchangeBigInt(_ value: BigUInt, from: String, to: String, decimal: Int = 18) -> BigUInt? {
+        guard let rateString = EManager.exchangeInfoList[from+to], rateString.createDate != nil, let rate = Tools.stringToBigUInt(inputText: rateString.price, decimal: decimal) else {
             return nil
         }
         
-        var stringValue = bigToString(value: value, decimal: decimal, decimal)
-        stringValue = stringValue.replacingOccurrences(of: ",", with: "")
+        let exchanged = value * rate / BigUInt(10).power(decimal)
         
-        guard let dValue = Double(stringValue) else {
-            return nil
-        }
-
-        guard let ratePrice = Double(rateString.price) else {
-            return nil
-        }
-        
-        let result = String(format: "%.\(belowDecimal)f", ratePrice * dValue)
-        
-        return result
+        return exchanged
     }
     
     static func rotateAnimation(inView: UIView) {
