@@ -291,6 +291,8 @@
 "AppInfo.Latest" = "Latest version";
 "AppInfo.Update" = "Update";
 "AppInfo.License" = "OpenSource License";
+"AppInfo.DeveloperMode" = "Developer Mode";
+"AppInfo.SelectNetwork" = "Select Network Provider";
 "Version.Update" = "Update";
 "Version.Message" = "Please update to the latest version of ICONex.";
 

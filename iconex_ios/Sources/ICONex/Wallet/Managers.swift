@@ -31,8 +31,8 @@ class WalletManager {
         case .dev:
             return ICONService(provider: "https://testwallet.icon.foundation", nid: "0x2")
             
-        case .local:
-            return ICONService(provider: "http://13.209.103.183:9000", nid: "0x3")
+        case .yeouido:
+            return ICONService(provider: "https://bicon.net.solidwallet.io", nid: "0x3")
         }
     }
     

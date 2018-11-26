@@ -188,7 +188,7 @@ class EditingAddressViewController: UIViewController {
         }
         
         if self.type == .icx {
-            if !Validator.validateICXAddress(address: address) || !Validator.validateIRCAddress(address: address) {
+            if !Validator.validateICXAddress(address: address) && !Validator.validateIRCAddress(address: address) {
                 self.addressInputBox.setState(.error, "Error.Address.IRC.Invalid".localized)
                 return false
             }

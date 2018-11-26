@@ -294,6 +294,8 @@
 "AppInfo.Latest" = "최신 버전";
 "AppInfo.Update" = "업데이트";
 "AppInfo.License" = "오픈소스 라이센스";
+"AppInfo.DeveloperMode" = "개발자 모드";
+"AppInfo.SelectNetwork" = "네트워크 선택";
 "Version.Update" = "업데이트";
 "Version.Message" = "ICONex 최신 버전으로 업데이트를 진행해 주세요.";
 

@@ -40,7 +40,13 @@ class ConnectViewController: BaseViewController {
                 proceed()
             } catch let e as ConnectError {
                 Log.Debug("ConnectError - \(e)")
-                Conn.sendError(error: e)
+                
+                if e.code == ConnectError.activateDeveloper.code {
+                    Tools.toast(message: e.errorDescription!)
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    Conn.sendError(error: e)
+                }
             } catch {
                 Log.Debug("error - \(error)")
                 Conn.sendError(error: .invalidRequest)

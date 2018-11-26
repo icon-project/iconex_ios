@@ -618,4 +618,17 @@ struct Alert {
         
         return confirm
     }
+    
+    static func NetworkProvider(source: UIViewController, completion: (() -> Void)?) {
+        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
+        selectable.handler = { index in
+            UserDefaults.standard.set(index, forKey: "Provider")
+            UserDefaults.standard.synchronize()
+            
+            if let compl = completion {
+                compl()
+            }
+        }
+        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
+    }
 }

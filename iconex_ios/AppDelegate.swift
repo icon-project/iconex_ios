@@ -27,7 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         
-        Config.host = .dev
         #if DEBUG
             print(IXSWrapper.getVersion())
         #endif
@@ -146,7 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .dev:
                 return Tracker.dev()
                 
-            case .local:
+            case .yeouido:
                 return Tracker.local()
             }
         }

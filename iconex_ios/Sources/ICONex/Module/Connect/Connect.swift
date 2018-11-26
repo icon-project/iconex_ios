@@ -21,6 +21,7 @@ enum ConnectError: Error {
     case sign
     case insufficient(InsufficientError)
     case network(Any)
+    case activateDeveloper
     
     enum ParameterKey {
         case caller
@@ -97,6 +98,9 @@ extension ConnectError: LocalizedError {
             
         case .network(let message):
             return "Somethings wrong with network. ('\(message)')"
+            
+        case .activateDeveloper:
+            return "Developer mode activated."
         }
     }
 }
@@ -151,6 +155,9 @@ extension ConnectError {
             
         case .network:
             return -9999
+            
+        case .activateDeveloper:
+            return 9
         }
     }
 }
@@ -183,7 +190,24 @@ class Connect {
         guard let source = self.source else { return }
         guard isTranslated == false else { return }
         isTranslated = true
-        guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false), let queries = components.queryItems else {
+        
+        // Check request for developer mode
+        guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
+            self.source = nil
+            throw ConnectError.invalidRequest }
+        
+        if let host = components.host, host.lowercased() == "developer" {
+            // Activating developer mode
+            UserDefaults.standard.set(true, forKey: "Developer")
+            UserDefaults.standard.synchronize()
+            
+            
+            self.reset()
+            throw ConnectError.activateDeveloper
+        }
+        
+        
+        guard let queries = components.queryItems else {
             self.source = nil
             throw ConnectError.invalidRequest
         }

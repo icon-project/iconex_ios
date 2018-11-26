@@ -17,6 +17,9 @@ class AppInfoViewController: BaseViewController {
     @IBOutlet weak var updateButton: UIButton!
     @IBOutlet weak var openTitle: UILabel!
     @IBOutlet weak var openButton: UIButton!
+    @IBOutlet weak var developer: UIView!
+    @IBOutlet weak var developerTitle: UILabel!
+    @IBOutlet weak var developerButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,6 +36,11 @@ class AppInfoViewController: BaseViewController {
         openButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             let opensource = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "OpenLicenseView")
             self.navigationController?.pushViewController(opensource, animated: true)
+        }).disposed(by: disposeBag)
+        
+        developerButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            let developer = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "DeveloperView")
+            self.navigationController?.pushViewController(developer, animated: true)
         }).disposed(by: disposeBag)
         
         updateButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
@@ -52,8 +60,15 @@ class AppInfoViewController: BaseViewController {
         updateButton.cornered()
         updateButton.setTitle("AppInfo.Update".localized, for: .normal)
         openTitle.text = "AppInfo.License".localized
+        developerTitle.text = "AppInfo.DeveloperMode".localized
         
         updateButton.isHidden = !(latest > version)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        developer.isHidden = UserDefaults.standard.object(forKey: "Developer") == nil
     }
 
     override func didReceiveMemoryWarning() {

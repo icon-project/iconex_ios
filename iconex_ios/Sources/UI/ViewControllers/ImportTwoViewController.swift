@@ -440,8 +440,8 @@ class ImportTwoViewController: UIViewController {
         selectable.present(from: self, title: "Create.Wallet.Step1.StepTitle".localized, items: ["ICON (ICX)", "Ethereum(ETH)"])
         selectable.handler = ({ [unowned self] selectedIndex in
             self.selectedIndex = selectedIndex
-            
             self.refreshItem()
+            self.nextButton.isEnabled = self.validation()
         })
     }
     

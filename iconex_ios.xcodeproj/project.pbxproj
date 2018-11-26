@@ -128,6 +128,7 @@
 		D4EBB84A205024E2007B07FB /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EBB849205024E2007B07FB /* Menu.storyboard */; };
 		D4EF88F4211998BD000CA278 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */; };
 		D4EF88F821199924000CA278 /* OpensourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EF88F721199924000CA278 /* OpensourceViewController.swift */; };
+		D4F8E25F21A7E1BA001BE2FA /* DeveloperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F8E25E21A7E1BA001BE2FA /* DeveloperViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -355,6 +356,7 @@
 		D4EBB849205024E2007B07FB /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		D4EF88F721199924000CA278 /* OpensourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpensourceViewController.swift; sourceTree = "<group>"; };
+		D4F8E25E21A7E1BA001BE2FA /* DeveloperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperViewController.swift; sourceTree = "<group>"; };
 		D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -419,6 +421,7 @@
 				D47A03E320A2F311009A3A99 /* CreateLockViewController.swift */,
 				D47A03E520A315A5009A3A99 /* BioAuthViewController.swift */,
 				D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */,
+				D4F8E25E21A7E1BA001BE2FA /* DeveloperViewController.swift */,
 				D47A03E720A321BC009A3A99 /* DisclaimerViewController.swift */,
 				D4EF88F721199924000CA278 /* OpensourceViewController.swift */,
 			);
@@ -1060,6 +1063,7 @@
 				D481C4A0203EB0DE00A799D7 /* IXInputBox.swift in Sources */,
 				D477CC2C205F554700797A82 /* ConfirmActionViewController.swift in Sources */,
 				D4053326206CD1700040BE89 /* TransactionDetailViewController.swift in Sources */,
+				D4F8E25F21A7E1BA001BE2FA /* DeveloperViewController.swift in Sources */,
 				D4843E9B205B627100B14377 /* WalletPasswordViewController.swift in Sources */,
 				D471F202205A755C00F565EF /* Database.swift in Sources */,
 				D417360F203E6EC7008857A1 /* CreateStepViewController.swift in Sources */,

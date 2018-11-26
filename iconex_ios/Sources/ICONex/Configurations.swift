@@ -8,16 +8,23 @@
 import Foundation
 
 struct Configuration {
-    public enum HOST {
-        case main
-        case dev
-        case local
+    public enum HOST: Int {
+        case main = 0
+        case dev = 1
+        case yeouido = 2
     }
     
     
     static var general = Configuration()
     
-    var host: HOST = .main
+    var host: HOST {
+        let save = UserDefaults.standard.integer(forKey: "Provider")
+        if let provider = HOST(rawValue: save) {
+            return provider
+        } else {
+            return .main
+        }
+    }
     var faqLink: String {
         return "https://docs.google.com/spreadsheets/d/1HiT98wqEpFgF2d98eJefQfH7xK4KPPxNDiiXg3AcJ7w/edit#gid=0"
     }
@@ -79,3 +86,19 @@ struct Configuration {
 }
 
 var Config = Configuration.general
+
+
+extension Configuration.HOST {
+    var name: String {
+        switch self {
+        case .main:
+            return "Mainnet"
+            
+        case .dev:
+            return "Testnet"
+            
+        case .yeouido:
+            return "Yeouido (여의도)"
+        }
+    }
+}

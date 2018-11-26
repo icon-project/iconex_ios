@@ -63,7 +63,7 @@ class TransactionDetailViewController: UIViewController {
                     case .dev:
                         return Tracker.dev()
                         
-                    case .local:
+                    case .yeouido:
                         return Tracker.local()
                     }
                 }

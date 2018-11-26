@@ -18,7 +18,7 @@ struct Ethereum {
         case .main:
             return URL(string: "https://eth.solidwallet.io/")!
             
-        case .dev, .local:
+        case .dev, .yeouido:
             return URL(string: "https://ropsten.infura.io")!
         }
     }
@@ -28,7 +28,7 @@ struct Ethereum {
         case .main:
             return URL(string: "https://etherscan.io/address")!
             
-        case .dev, .local:
+        case .dev, .yeouido:
             return URL(string: "https://ropsten.etherscan.io/address")!
         }
     }
