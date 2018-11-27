@@ -179,6 +179,11 @@ class Connect {
         return received?.method
     }
     
+    
+    var tokenDecimal: Int?
+    var tokenSymbol: String?
+    
+    
     private init() {}
     
     public func setMessage(source: URL) {
@@ -319,6 +324,8 @@ class Connect {
         self.source = nil
         self.caller = nil
         self.received = nil
+        self.tokenDecimal = nil
+        self.tokenSymbol = nil
         isTranslated = false
     }
 }

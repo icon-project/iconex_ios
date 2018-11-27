@@ -14,8 +14,9 @@ target 'iconex_ios' do
   pod 'web3swift', '1.1.7'
   pod 'Toaster', '~> 2.1.1'
   pod 'LicensesViewController', '0.6.5'
-  pod 'scrypt', :path => '~/works/scrypt-cryptoswift'
+  pod 'scrypt', :git => 'https://github.com/a1ahn/scrypt-cryptoswift.git'
   pod 'Alamofire'
-  pod 'ICONKit', :path => '~/works/ICONKit'
+#  pod 'ICONKit', '~> 0.2.0'
+  pod 'ICONKit', :path => '~/works/ICONKit/'
 
 end

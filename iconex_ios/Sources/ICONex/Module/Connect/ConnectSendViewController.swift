@@ -73,6 +73,10 @@ class ConnectSendViewController: BaseViewController {
         }).disposed(by: disposeBag)
         stepLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
+        scrollView.rx.didEndScrollingAnimation.subscribe(onNext: {
+            self.view.endEditing(true)
+        }).disposed(by: disposeBag)
+        
         viewData.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
             self.viewImage.isHighlighted = !self.viewImage.isHighlighted
             self.dataView.isHidden = !self.viewImage.isHighlighted
@@ -90,60 +94,111 @@ class ConnectSendViewController: BaseViewController {
         
         sendButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
             guard let received = Conn.received else { return }
-            guard let from = Conn.received?.params?["from"] as? String else { return }
+            guard let from = received.params?["from"] as? String else { return }
             guard let to = received.params?["to"] as? String else { return }
             guard let valueString = received.params?["value"] as? String, let value = BigUInt(valueString.prefix0xRemoved(), radix: 16), let stepPrice = self.stepPrice else { return }
             guard let key = self.privateKey else { return }
             
+            guard let balance = WManager.walletBalanceList[from] else { return }
+            guard let limit = BigUInt(self.stepLimitInputBox.textField.text!.prefix0xRemoved()) else { return }
+            
+            let estimated = stepPrice * limit
+            
+            if value + estimated > balance {
+                Tools.toast(message: "Error.Connect.Send.InsufficientFee".localized)
+                return
+            }
+            
             let confirm = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "SendConfirmView") as! SendConfirmViewController
+            confirm.feeType = "icx"
+            confirm.fee = Tools.bigToString(value: estimated, decimal: 18, 18, false, false)
+            confirm.address = to
+            
+            let transaction = Transaction()
+            transaction
+                .from(from)
+                .value(value)
+                .nid(WManager.service.nid)
+                .nonce("0x1")
+                .stepLimit(limit)
             
             if received.method == "sendICX" {
-                guard let balance = WManager.walletBalanceList[from] else { return }
-                guard let limit = BigUInt(self.stepLimitInputBox.textField.text!.prefix0xRemoved()) else { return }
+                transaction
+                    .to(to)
                 
-                let estimated = stepPrice * limit
-                
-                if value + estimated > balance {
-                    Tools.toast(message: "Error.Connect.Send.InsufficientFee".localized)
-                } else {
-                    confirm.type = "icx"
-                    confirm.feeType = "icx"
-                    confirm.value = Tools.bigToString(value: value, decimal: 18, 18, false, true)
-                    confirm.address = to
-                    confirm.fee = Tools.bigToString(value: estimated, decimal: 18, 18, false, false)
-                    confirm.handler = {
-                        let transaction = Transaction()
-                            .from(from)
-                            .to(to)
-                            .value(value)
-                            .nid(WManager.service.nid)
-                            .nonce("0x1")
-                            .stepLimit(limit)
-                        
-                        if let signed = try? SignedTransaction(transaction: transaction, privateKey: key) {
-                            let result = WManager.service.sendTransaction(signedTransaction: signed).execute()
-                            confirm.dismiss(animated: true, completion: {
-                                if let error = result.error {
-                                    Log.Debug("Error - \(error)")
-                                    Tools.toast(message: "Error.CommonError".localized)
-                                } else if let hash = result.value {
-                                    let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
-                                    complete.handler = {
-                                         Conn.sendICXHash(txHash: hash.value)
-                                    }
-                                    complete.show(self)
+                confirm.value = Tools.bigToString(value: value, decimal: 18, 18, false, true)
+                confirm.type = "icx"
+                confirm.handler = {
+                    
+                    if let signed = try? SignedTransaction(transaction: transaction, privateKey: key) {
+                        let result = WManager.service.sendTransaction(signedTransaction: signed).execute()
+                        confirm.dismiss(animated: true, completion: {
+                            if let error = result.error {
+                                Log.Debug("Error - \(error)")
+                                Tools.toast(message: "Error.CommonError".localized)
+                            } else if let hash = result.value {
+                                let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
+                                complete.handler = {
+                                    Conn.sendICXHash(txHash: hash.value)
                                 }
-                            })
-                            
-                        } else {
-                            Conn.sendError(error: ConnectError.sign)
-                        }
+                                complete.show(self)
+                            }
+                        })
+                        
+                    } else {
+                        Conn.sendError(error: ConnectError.sign)
                     }
-                    confirm.show(self)
                 }
             } else if received.method == "sendToken" {
+                guard let contract = received.params?["contractAddress"] as? String else { return }
                 
+                transaction.to(contract)
+                .call("transfer")
+                .params(["_to": to, "_value": "0x" + String(value, radix: 16)])
+                
+                guard let decimals = Conn.tokenDecimal else { return }
+                
+                confirm.value = Tools.bigToString(value: value, decimal: decimals, decimals, false, true)
+                confirm.type = Conn.tokenSymbol!.uppercased()
+                
+                confirm.handler = {
+                    
+                    if let signed = try? SignedTransaction(transaction: transaction, privateKey: key) {
+                        let result = WManager.service.sendTransaction(signedTransaction: signed).execute()
+                        confirm.dismiss(animated: true, completion: {
+                            if let error = result.error {
+                                Log.Debug("Error - \(error)")
+                                var msg = ""
+                                switch error {
+                                case .httpError(let httpMessage):
+                                    if let message = httpMessage {
+                                        msg = "\n" + message
+                                    }
+                                    
+                                default:
+                                    break
+                                }
+                                
+                                Tools.toast(message: "Error.CommonError".localized + msg)
+                            } else if let hash = result.value {
+                                let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
+                                complete.handler = {
+                                    Conn.sendTokenHash(txHash: hash.value)
+                                }
+                                complete.show(self)
+                            }
+                        })
+                        
+                    } else {
+                        Conn.sendError(error: ConnectError.sign)
+                    }
+                }
             }
+            
+            
+            
+            confirm.show(self)
+            
         }).disposed(by: disposeBag)
     }
     
@@ -154,7 +209,7 @@ class ConnectSendViewController: BaseViewController {
         navTitle.text = wallet.alias
         
         developer.isHidden = true
-        amountTitle.text = "Connect.Send.Amount".localized + (from.hasPrefix("hx") ? " (ICX)" : " (Token)")
+        amountTitle.text = "Connect.Send.Amount".localized + (Conn.tokenSymbol != nil ? " (\(Conn.tokenSymbol!))" : " (ICX)")
         amount.text = "-"
         exchangeAmount.text = "- USD"
         toTitle.text = "Connect.Send.to".localized
@@ -224,11 +279,21 @@ class ConnectSendViewController: BaseViewController {
     
     func setting() {
         guard let valueString = Conn.received?.params?["value"] as? String, let value = BigUInt(valueString.prefix0xRemoved(), radix: 16) else { return }
-        amount.text = Tools.bigToString(value: value, decimal: 18, 18, false, true)
-        if let exchange = Tools.balanceToExchange(value, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
-            exchangeAmount.text = exchange + " USD"
+        
+        if let decimal = Conn.tokenDecimal, let symbol = Conn.tokenSymbol {
+            amount.text = Tools.bigToString(value: value, decimal: decimal, decimal, false, true)
+            if let exchange = Tools.balanceToExchange(value, from: symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: decimal) {
+                exchangeAmount.text = exchange + " USD"
+            } else {
+                exchangeAmount.text = "- USD"
+            }
         } else {
-            exchangeAmount.text = "- USD"
+            amount.text = Tools.bigToString(value: value, decimal: 18, 18, false, true)
+            if let exchange = Tools.balanceToExchange(value, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
+                exchangeAmount.text = exchange + " USD"
+            } else {
+                exchangeAmount.text = "- USD"
+            }
         }
         
         guard let data = Conn.received?.params?["data"], let dataType = Conn.received?.params?["dataType"] else { return }
@@ -263,20 +328,19 @@ class ConnectSendViewController: BaseViewController {
     func validateLimit(_ showError: Bool = true) -> Bool {
         guard let from = Conn.received?.params?["from"] as? String else { return false }
 //        guard let wallet = WManager.loadWalletBy(address: from, type: .icx) else { return false }
-        let symbol = "icx"
-//        if let token = self.token {
-//            symbol = token.symbol
-//        }
+        var symbol = "icx"
+        if let tokenSymbol = Conn.tokenSymbol {
+            symbol = tokenSymbol
+        }
         
         var totalBalance: BigUInt
-//        if let token = self.token {
-//            guard let balance = WManager.tokenBalanceList[token.dependedAddress]?[token.contractAddress] else { return false }
-//            totalBalance = balance
-//        } else {
-//            totalBalance = self.totalBalance!
-        guard let balance = WManager.walletBalanceList[from] else { return false }
-        totalBalance = balance
-//        }
+        if let contractAddress = Conn.received?.params?["contractAddress"] as? String {
+            guard let balance = WManager.tokenBalanceList[from]?[contractAddress] else { return false }
+            totalBalance = balance
+        } else {
+            guard let balance = WManager.walletBalanceList[from] else { return false }
+            totalBalance = balance
+        }
         guard let limitString = self.stepLimitInputBox.textField.text , limitString != "", let limit = BigUInt(limitString) else {
             if showError { self.stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)}
             let limit = BigUInt(0)

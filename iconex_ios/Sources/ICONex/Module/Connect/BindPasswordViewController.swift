@@ -97,7 +97,7 @@ class BindPasswordViewController: BaseViewController {
             } else if method == "sendICX" {
                 self.showSendICX()
             } else if method == "sendToken" {
-                
+                self.showSendICX()
             }
         }).disposed(by: disposeBag)
     }

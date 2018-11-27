@@ -3,7 +3,7 @@ PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.11.0)
-  - ICONKit (0.1.2):
+  - ICONKit (0.2.0):
     - BigInt
     - CryptoSwift (= 0.11.0)
     - Result
@@ -43,12 +43,12 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - ICONKit (from `~/works/ICONKit`)
+  - ICONKit (from `~/works/ICONKit/`)
   - LicensesViewController (= 0.6.5)
   - RealmSwift (= 3.11.0)
   - RxCocoa (= 4.3.1)
   - RxSwift (= 4.3.1)
-  - scrypt (from `~/works/scrypt-cryptoswift`)
+  - scrypt (from `https://github.com/a1ahn/scrypt-cryptoswift.git`)
   - Toaster (~> 2.1.1)
   - web3swift (= 1.1.7)
 
@@ -71,15 +71,20 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   ICONKit:
-    :path: "~/works/ICONKit"
+    :path: "~/works/ICONKit/"
   scrypt:
-    :path: "~/works/scrypt-cryptoswift"
+    :git: https://github.com/a1ahn/scrypt-cryptoswift.git
+
+CHECKOUT OPTIONS:
+  scrypt:
+    :commit: 2ced9c58054328c723135a16717dd3ff0fcf6e57
+    :git: https://github.com/a1ahn/scrypt-cryptoswift.git
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
-  ICONKit: 04229eed92c9d71052d1394456759525850ae07b
+  ICONKit: 3bc50a3263d57e88009f091d6fae4bb22f680f13
   LicensesViewController: 1f2982b1bab8402d3f88e23197957038e8abb907
   PromiseKit: 27c1601bfb73405871b805bcb8cf7e55c4dad3db
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
@@ -87,12 +92,12 @@ SPEC CHECKSUMS:
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
   RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
-  scrypt: 3beeb8ea85274ad01f6953ff9672802aeeffacd8
+  scrypt: 3f6c9e7597091c0e79c4516870b9989064ceee5d
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   Toaster: a6c9532de1ded8105e77376f7dffeb2e12b46dbb
   web3swift: e39ddb21627fcc6b47881b49583f589cae128902
 
-PODFILE CHECKSUM: 2e2536bc946e2f7d3ef04c78b6f9921b721e2380
+PODFILE CHECKSUM: b4ce16f278b6a255acc734e110bef5672d4bdb3c
 
 COCOAPODS: 1.5.0

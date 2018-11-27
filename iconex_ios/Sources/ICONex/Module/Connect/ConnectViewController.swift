@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import BigInt
+import ICONKit
 
 class ConnectViewController: BaseViewController {
     @IBOutlet weak var refresh01: UIImageView!
@@ -106,10 +107,32 @@ class ConnectViewController: BaseViewController {
                 return false
             }
         } else if Conn.action == "sendToken" {
-            guard let contract = Conn.received?.params?["contract"] as? String else {
+            guard let contract = Conn.received?.params?["contractAddress"] as? String else {
                 Conn.sendError(error: ConnectError.notFound(.contractAddress))
                 return false
             }
+            
+            let nameCall = Call<ICONKit.Response.Call<String>>(from: from, to: contract, method: "symbol", params: nil)
+            let symbolResult = WManager.service.call(nameCall).execute()
+            
+            guard let symbolValue = symbolResult.value, let symbol = symbolValue.result else {
+                if let error = symbolResult.error {
+                    Conn.sendError(error: .network(error))
+                }
+                return false }
+            Conn.tokenSymbol = symbol
+            
+            
+            let decimalCall = Call<ICONKit.Response.Call<String>>(from: from, to: contract, method: "decimals", params: nil)
+            let decimalResult = WManager.service.call(decimalCall).execute()
+            
+            guard let decimalValue = decimalResult.value, let decimal = decimalValue.result else {
+                if let error = decimalResult.error {
+                    Conn.sendError(error: .network(error))
+                }
+                return false }
+            Conn.tokenDecimal = Int(decimal.prefix0xRemoved(), radix: 16)
+
             
             let balanceResult = WManager.getIRCTokenBalance(dependedAddress: from, contractAddress: contract)
             
@@ -123,7 +146,7 @@ class ConnectViewController: BaseViewController {
                     Conn.sendError(error: ConnectError.network("Could not fetch balance."))
                     return false
                 }
-                
+                WManager.tokenBalanceList[from] = [contract: tokenBalance]
                 if tokenBalance < converted {
                     Conn.sendError(error: ConnectError.insufficient(.balance))
                     return false
@@ -150,13 +173,10 @@ class ConnectViewController: BaseViewController {
                 }
                 
                 switch Conn.action {
-                case "sign", "sendICX":
+                case "sign", "sendICX", "sendToken":
                     let sign = storyboard.instantiateViewController(withIdentifier: "BindPasswordView") as! BindPasswordViewController
                     sign.selectedWallet = info
                     self.present(sign, animated: true, completion: nil)
-                    
-                case "sendToken":
-                    break
                     
                 default:
                     Conn.sendError(error: ConnectError.notFound(.method))
