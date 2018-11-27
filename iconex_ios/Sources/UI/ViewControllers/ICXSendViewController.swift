@@ -143,7 +143,7 @@ class ICXSendViewController: BaseViewController {
                 }
                 totalBalance = balance
                 
-                guard let stepPrice = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, stepLimit != "" else {
+                guard let _ = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, stepLimit != "" else {
                     remainBalance.text = printBalance
                     if let exc = Tools.balanceToExchange(balance, from: token.symbol, to: "usd", belowDecimal: 2, decimal: token.decimal) {
                         exchangedRemainLabel.text = exc.currencySeparated() + " USD"
@@ -164,7 +164,7 @@ class ICXSendViewController: BaseViewController {
                 exchangedBalanceLabel.text = exchanged == nil ? "0.0 USD" : exchanged!.currencySeparated() + " USD"
                 totalBalance = balance
                 
-                guard let stepPrice = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, stepLimit != "" else {
+                guard let _ = self.stepPrice, let stepLimit = self.limitInputBox.textField.text, stepLimit != "" else {
                     remainBalance.text = printBalance
                     if let exc = Tools.balanceToExchange(balance, from: type, to: "usd", belowDecimal: 2, decimal: wallet.decimal) {
                         exchangedRemainLabel.text = exc.currencySeparated() + " USD"
@@ -185,7 +185,7 @@ class ICXSendViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         scrollView.rx.didEndDragging.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in
-            self.view.endEditing(false)
+            self.view.endEditing(true)
         }).disposed(by: disposeBag)
         
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
@@ -195,10 +195,24 @@ class ICXSendViewController: BaseViewController {
             self.sendButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
-            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
+            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue) else {
                 return
             }
-            self.sendInputBox.setState(.exchange, exchanged.currencySeparated() + " USD")
+            
+            var exchanged: String? = nil
+            
+            if let token = self.token {
+                exchanged = Tools.balanceToExchange(send, from: token.symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: token.decimal)
+            } else {
+                exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)
+            }
+            
+            if let exx = exchanged {
+                self.sendInputBox.setState(.exchange, exx.currencySeparated() + " USD")
+            } else {
+                self.sendInputBox.setState(.exchange, "- USD")
+            }
+            
         }).disposed(by: disposeBag)
         
         add1.rx.controlEvent(UIControlEvents.touchUpInside)
@@ -272,7 +286,7 @@ class ICXSendViewController: BaseViewController {
                     guard let balance = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()]?[token.contractAddress] else { return }
                     self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true, false)
                 } else {
-                    guard let formerValue = WManager.walletBalanceList[wallet.address!] else { return }
+                    guard let _ = WManager.walletBalanceList[wallet.address!] else { return }
                     var tmpStepLimit = BigUInt(0)
                     if let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) {
                         tmpStepLimit = limit
@@ -299,8 +313,9 @@ class ICXSendViewController: BaseViewController {
             self.addressInputBox.setState(.focus)
         }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            let validate = self.validation()
-            self.sendButton.isEnabled = validate
+            if self.validateAddress() {
+                self.sendButton.isEnabled = self.validation()
+            }
         }).disposed(by: disposeBag)
         
         selectAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -343,7 +358,9 @@ class ICXSendViewController: BaseViewController {
             self.limitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
         limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
-            self.sendButton.isEnabled = self.validation()
+            if self.validateLimit() {
+                self.sendButton.isEnabled = self.validation()
+            }
         }).disposed(by: disposeBag)
         
         stepPriceInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -516,25 +533,6 @@ class ICXSendViewController: BaseViewController {
             self.present(confirm, animated: true, completion: nil)
             
         }).disposed(by: disposeBag)
-        
-//        let observeBalance = sendInputBox.textField.rx.text
-//            .map { _ in
-//                return self.validateBalance(false)
-//        }
-//
-//        let observeAddress = addressInputBox.textField.rx.text
-//            .map { _ in
-//                return self.validateAddress(false)
-//        }
-//
-//        let observeLimit = limitInputBox.textField.rx.text
-//            .map { _ in
-//                return self.validateLimit(false)
-//        }
-//
-//        Observable.combineLatest([observeBalance, observeAddress, observeLimit]) { iterator -> Bool in
-//            return iterator.reduce(true, { $0 && $1 })
-//        }.bind(to: sendButton.rx.isEnabled).disposed(by: disposeBag)
     }
     
     func initializeUI() {
@@ -647,10 +645,23 @@ class ICXSendViewController: BaseViewController {
         }
         
         if showError {
-            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) else {
+            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue) else {
                 return false
             }
-            self.sendInputBox.setState(.exchange, exchanged.currencySeparated() + " USD")
+            
+            var exchanged: String? = nil
+            
+            if let token = self.token {
+                exchanged = Tools.balanceToExchange(send, from: token.symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: token.decimal)
+            } else {
+                exchanged = Tools.balanceToExchange(send, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)
+            }
+            
+            if let exx = exchanged {
+                self.sendInputBox.setState(.exchange, exx.currencySeparated() + " USD")
+            } else {
+                self.sendInputBox.setState(.exchange, "- USD")
+            }
         }
         
         return true
@@ -658,10 +669,12 @@ class ICXSendViewController: BaseViewController {
     
     @discardableResult
     func validateAddress(_ showError: Bool = true) -> Bool {
-        guard let toAddress = self.addressInputBox.textField.text, toAddress != "" else {
+        guard let toAddress = self.addressInputBox.textField.text else {
             if showError { self.addressInputBox.setState(.error, "Error.InputAddress".localized) }
             return false
         }
+        
+        guard toAddress != "" else { return false }
         
         guard Validator.validateICXAddress(address: toAddress) || Validator.validateIRCAddress(address: toAddress) else {
             if showError { self.addressInputBox.setState(.error, "Error.Address.ICX.Invalid".localized) }

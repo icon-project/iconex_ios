@@ -231,6 +231,7 @@ class TokenManageViewController: UIViewController {
                 try DB.addToken(tokenInfo: token)
                 EManager.addToken(token.symbol)
                 WManager.loadWalletList()
+                WManager.getWalletsBalance()
                 EManager.getExchangeList()
                 
                 self.dismiss(animated: true, completion: nil)
