@@ -86,6 +86,7 @@ class ConnectSendViewController: BaseViewController {
                 let lf = text.enumerated().filter({ $0.element == "\n" })
                 let size = text.boundingRect(size: CGSize(width: self.dataLabel.frame.width, height: .greatestFiniteMagnitude), font: self.dataLabel.font)
                 self.dataViewHeight.constant = size.height + 14.0 * CGFloat(lf.count)
+                self.view.layoutIfNeeded()
                 self.scrollView.setContentOffset(CGPoint(x: 0, y: self.scrollView.contentSize.height - self.scrollView.bounds.height + self.scrollView.contentInset.bottom), animated: true)
             } else {
                 self.dataViewHeight.constant = 0
@@ -117,13 +118,13 @@ class ConnectSendViewController: BaseViewController {
             let transaction = Transaction()
             transaction
                 .from(from)
-                .value(value)
                 .nid(WManager.service.nid)
                 .nonce("0x1")
                 .stepLimit(limit)
             
             if received.method == "sendICX" {
                 transaction
+                    .value(value)
                     .to(to)
                 
                 confirm.value = Tools.bigToString(value: value, decimal: 18, 18, false, true)
