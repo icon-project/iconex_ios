@@ -7,6 +7,8 @@ ICONex Connect is a simple protocol for supporting 3rd party applications who wa
 * Request send ICX or IRC Token.
 
 ## Basic Transmission Protocol
+* Request
+
 | Key | Type | Description |
 | --- | ---- | ----------- |
 | data | String | Base64 encoded string of JSON Object |
@@ -26,6 +28,9 @@ component.queryItems = items
 
 UIApplication.shared.open(component.url!, options: [:], completionHandler: nil)
 ```
+
+* Response
+`my-app-scheme://?data=Base64EncodedString`
 
 ## JSON Speicifications
 * [Value Types](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md#value-types)
