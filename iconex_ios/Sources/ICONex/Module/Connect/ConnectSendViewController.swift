@@ -387,7 +387,7 @@ class ConnectSendViewController: BaseViewController {
             if let sendText = Conn.received?.params?["value"] as? String, let inputValue = BigUInt(sendText.prefix0xRemoved(), radix: 16) {
                 
                 if  totalBalance >= estimated + inputValue {
-                    let remain =/* self.token != nil ? totalBalance - inputValue :*/ totalBalance - (estimated + inputValue)
+                    let remain = Conn.action! == "sendToken" ? totalBalance - inputValue : totalBalance - (estimated + inputValue)
                     Log.Debug("remain 2 - \(remain)")
                     self.remain.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
                     if let exchanged = Tools.balanceToExchange(remain, from: symbol, to: "usd", belowDecimal: 2, decimal: 18) {

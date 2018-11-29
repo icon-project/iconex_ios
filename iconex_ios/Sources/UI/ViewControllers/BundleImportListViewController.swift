@@ -167,14 +167,14 @@ class BundleImportListViewController: BaseViewController {
             
             WCreator.saveBundle()
             let app = UIApplication.shared.delegate as! AppDelegate
-            if let root = app.window?.rootViewController, let main = root as? MainViewController {
-                main.currentIndex = 0
-                main.loadWallets()
-            } else {
-                let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-                app.window?.rootViewController = main
-            }
-            app.window?.rootViewController?.dismiss(animated: true, completion: {
+            app.window?.rootViewController?.dismiss(animated: false, completion: {
+                if let root = app.window?.rootViewController, let main = root as? MainViewController {
+                    main.currentIndex = 0
+                    main.loadWallets()
+                } else {
+                    let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+                    app.window?.rootViewController = main
+                }
                 let app = UIApplication.shared.delegate as! AppDelegate
                 let root = app.window!.rootViewController!
                 Alert.Basic(message: "Alert.Bundle.Import.Success".localized).show(root)

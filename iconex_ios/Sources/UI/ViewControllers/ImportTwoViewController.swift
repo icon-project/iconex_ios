@@ -173,6 +173,7 @@ class ImportTwoViewController: UIViewController {
         self.selectedCoinLabel.text = item.name
         
         self.validatedData = nil
+        WCreator.newBundle = nil
         animateItemLayer(show: false)
         fileErrorLabel.text = ""
         inputBox.setState(.normal, nil)
@@ -286,122 +287,6 @@ class ImportTwoViewController: UIViewController {
         }
     }
     
-    // import from keystore file
-    @objc func clickedImport(_ sender: UIButton) {
-        
-        if mode == 0 {
-            // Keystore 파일
-            if let item = validatedData {
-                // 일반 지갑 파일
-                if inputBox.textField.text!.length < 1 {
-                    inputBox.setState(.error, "Error.Password".localized)
-                    return
-                }
-                
-                let keystore = item.0
-                
-                if item.1 == .icx {
-                    
-                    let icxWallet = ICXWallet(keystore: keystore)
-                    do {
-                        let privateKey = try icxWallet.extractICXPrivateKey(password: inputBox.textField.text!)
-                        
-                        WCreator.newWallet = icxWallet
-                        WCreator.newPrivateKey = privateKey
-                        inputBox.setState(.normal, nil)
-                        inputBox.textField.resignFirstResponder()
-                        nextButton.isEnabled = true
-                    } catch {
-                        Log.Debug(error)
-                        
-                        inputBox.setState(.error, "Error.Password".localized)
-                        nextButton.isEnabled = false
-                    }
-                    
-                } else if item.1 == .eth {
-                    let ethWallet = ETHWallet(keystore: keystore)
-                    do {
-                        let privateKey = try ethWallet.extractETHPrivateKey(password: inputBox.textField.text!)
-                        
-                        WCreator.newWallet = ethWallet
-                        WCreator.newPrivateKey = privateKey
-                        inputBox.setState(.normal, nil)
-                        inputBox.textField.resignFirstResponder()
-                        nextButton.isEnabled = true
-                    } catch {
-                        Log.Debug(error)
-                        
-                        inputBox.setState(.error, "Error.Password".localized)
-                        nextButton.isEnabled = false
-                    }
-                }
-            } else if WCreator.newBundle != nil {
-                // 지갑 번들 파일
-                if inputBox.textField.text!.length < 1 {
-                    inputBox.setState(.error, "Error.Password".localized)
-                    return
-                }
-                
-                if !WCreator.validateBundlePassword(password: inputBox.textField.text!) {
-                    inputBox.setState(.error, "Error.Password".localized)
-                    return
-                }
-
-                inputBox.setState(.normal, nil)
-                inputBox.textField.resignFirstResponder()
-                nextButton.isEnabled = true
-            }
-        } else {
-            // 개인키
-            let code = inputBox2.textField.text!
-            if code.hexToData() != nil && code.length == 64 {
-                WCreator.newPrivateKey = code
-                
-                do {
-                    let type = typeList[selectedIndex].type
-                    if type == .icx {
-                        let canSave = try WCreator.validateICXPrivateKey()
-                        
-                        if canSave {
-                            
-                            nextButton.isEnabled = true
-                            inputBox2.textField.resignFirstResponder()
-                            
-                            return
-                        } else {
-                            nextButton.isEnabled = false
-                            Alert.Basic(message: "Error.Wallet.Duplicated.Address".localized).show(self)
-                        }
-                    } else {
-                        let canSave = try WCreator.validateETHPrivateKey()
-                        
-                        if canSave {
-                            
-                            nextButton.isEnabled = true
-                            inputBox2.textField.resignFirstResponder()
-                            
-                            return
-                        } else {
-                            nextButton.isEnabled = false
-                            Alert.Basic(message: "Error.Wallet.Duplicated.Address".localized).show(self)
-                        }
-                    }
-                } catch {
-                    Log.Debug("\(error)")
-                    nextButton.isEnabled = false
-                    Alert.Basic(message: "Error.PrivateKey".localized).show(self)
-                }
-                
-                
-            } else {
-                nextButton.isEnabled = false
-                self.inputBox2.setState(.error, "Error.PrivateKey".localized)
-            }
-        }
-        
-        
-    }
-    
     @IBAction func clickedSelect(_ sender: Any) {
         refreshItem()
         let document = UIDocumentPickerViewController(documentTypes: ["public.text", "public.data", String(kUTTypePlainText), String(kUTTypeItem)], in: UIDocumentPickerMode.import)
@@ -412,6 +297,7 @@ class ImportTwoViewController: UIViewController {
     @IBAction func clickedDelete(_ sender: Any) {
         animateItemLayer(show: false)
         validatedData = nil
+        WCreator.newBundle = nil
     }
     
     func animateItemLayer(show: Bool) {
@@ -467,14 +353,6 @@ class ImportTwoViewController: UIViewController {
     }
 }
 
-//extension ImportTwoViewController: SelectableActionDelegate {
-//    func selectableAction(selectedIndex: Int) {
-//        self.selectedIndex = selectedIndex
-//
-//        refreshItem()
-//    }
-//}
-
 extension ImportTwoViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
         Log.Debug(url.lastPathComponent)
@@ -483,15 +361,24 @@ extension ImportTwoViewController: UIDocumentPickerDelegate {
             
             self.fileNameLabel.text = url.lastPathComponent
             animateItemLayer(show: true)
+            
+            if let password = inputBox.textField.text, password != "" {
+                self.nextButton.isEnabled = self.validation()
+            }
         } else {
             do {
                 let data: (ICON.Keystore, COINTYPE) = try WCreator.validateKeystore(urlOfData: url)
                 
                 Log.Debug(data.0)
                 validatedData = data
+                WCreator.newBundle = nil
                 
                 self.fileNameLabel.text = url.lastPathComponent
                 animateItemLayer(show: true)
+                
+                if let password = inputBox.textField.text, password != "" {
+                    self.nextButton.isEnabled = self.validation()
+                }
             } catch (let error as IXError) {
                 switch error {
                 case .duplicateAddress:

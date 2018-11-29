@@ -179,7 +179,11 @@ class ChangePasswordViewController: UIViewController {
             return
         }
         
-        self.dismiss(animated: true, completion: nil)
+        let done = Alert.Basic(message: "Alert.Password.Changed".localized)
+        done.handler = {
+            self.dismiss(animated: true, completion: nil)
+        }
+        done.show(self)
     }
     
     private func validation() {

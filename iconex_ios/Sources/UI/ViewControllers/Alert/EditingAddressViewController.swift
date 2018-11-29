@@ -107,20 +107,34 @@ class EditingAddressViewController: UIViewController {
         
         nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
-                self.validateNameField()
+                self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
             }).disposed(by: disposeBag)
         nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+            .subscribe(onNext: {
+            }).disposed(by: disposeBag)
+        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged)
             .subscribe(onNext: { [unowned self] in
-                self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
+                self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
+            }).disposed(by: disposeBag)
+        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin)
+            .subscribe(onNext: { [unowned self] in
+                self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
             }).disposed(by: disposeBag)
         
         addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
-                self.validateAddressField()
+                self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
             }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+            .subscribe(onNext: {
+            }).disposed(by: disposeBag)
+        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged)
             .subscribe(onNext: { [unowned self] in
-                self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
+                self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
+            }).disposed(by: disposeBag)
+        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin)
+            .subscribe(onNext: { [unowned self] in
+                self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
             }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
@@ -159,14 +173,16 @@ class EditingAddressViewController: UIViewController {
     }
     
     @discardableResult
-    func validateNameField() -> Bool {
+    func validateNameField(_ show: Bool = true) -> Bool {
         guard let name = self.nameInputBox.textField.text else {
-            self.nameInputBox.setState(.error, "Error.AddressBook.InputName".localized)
+            if show { self.nameInputBox.setState(.error, "Error.AddressBook.InputName".localized) }
             return false
         }
         
+        guard name != "" else { return false }
+        
         if !AddressBook.canSaveAddressBook(name: name) && self.mode == .add {
-            self.nameInputBox.setState(.error, "Error.AddressBook.DuplicatedName".localized)
+            if show { self.nameInputBox.setState(.error, "Error.AddressBook.DuplicatedName".localized) }
             return false
         }
         
@@ -174,31 +190,33 @@ class EditingAddressViewController: UIViewController {
     }
     
     @discardableResult
-    func validateAddressField() -> Bool {
+    func validateAddressField(_ show: Bool = true) -> Bool {
         if mode == .edit { return true }
         
         guard let address = self.addressInputBox.textField.text else {
-            self.addressInputBox.setState(.error, "Error.Address".localized)
+            if show { self.addressInputBox.setState(.error, "Error.Address".localized) }
             return false
         }
         
+        guard address != "" else { return false }
+        
         if !AddressBook.canSaveAddressBook(address: address) {
-            self.addressInputBox.setState(.error, "Error.AddressBook.DuplicatedAddress".localized)
+            if show { self.addressInputBox.setState(.error, "Error.AddressBook.DuplicatedAddress".localized) }
             return false
         }
         
         if self.type == .icx {
             if !Validator.validateICXAddress(address: address) && !Validator.validateIRCAddress(address: address) {
-                self.addressInputBox.setState(.error, "Error.Address.IRC.Invalid".localized)
+                if show { self.addressInputBox.setState(.error, "Error.Address.IRC.Invalid".localized) }
                 return false
             }
             self.addressInputBox.setState(.normal, nil)
         } else if self.type == .eth {
             if !Validator.validateETHAddress(address: address) {
-                self.addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized)
+                if show { self.addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized) }
                 return false
             }
-            self.addressInputBox.setState(.normal, nil)
+            if show { self.addressInputBox.setState(.normal, nil) }
         }
         
         return true

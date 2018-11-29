@@ -68,7 +68,7 @@ class AddressManageViewController: UIViewController {
             case 0:
                 segAddressButton.isSelected = true
                 segWalletButton.isSelected = false
-                editButton.isHidden = false
+                editButton.isHidden = addressBookList.count == 0
                 addContainer.isHidden = false
                 
             case 1:

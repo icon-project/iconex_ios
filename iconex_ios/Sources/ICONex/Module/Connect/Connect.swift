@@ -241,9 +241,11 @@ class Connect {
         if Conn.action == "bind" {
             
         } else {
-            guard Conn.received?.params?["from"] != nil else { throw ConnectError.notFound(.from) }
-            guard Conn.received?.params?["to"] != nil else { throw ConnectError.notFound(.to) }
+            guard let from = Conn.received?.params?["from"] as? String else { throw ConnectError.notFound(.from) }
+            guard let to = Conn.received?.params?["to"] as? String else { throw ConnectError.notFound(.to) }
             guard Conn.received?.params?["value"] != nil else { throw ConnectError.notFound(.value) }
+            
+            guard from != to else { throw ConnectError.sameAddress}
             
             switch Conn.action {
             case "sign":

@@ -44,6 +44,7 @@ class ETHSendViewController: UIViewController {
     @IBOutlet weak var dataTitleButton: UIButton!
     @IBOutlet weak var dataInputBox: IXInputBox!
     @IBOutlet weak var dataContainer: UIView!
+    @IBOutlet weak var dataArrow: UIImageView!
     @IBOutlet weak var dataContainerHeight: NSLayoutConstraint!
     
     @IBOutlet weak var feeTitle: UILabel!
@@ -335,11 +336,13 @@ class ETHSendViewController: UIViewController {
                 let height = self.dataTitleButton.frame.height + (self.dataTitleButton.frame.origin.y * 2)
                 if self.dataContainerHeight.constant == height {
                     self.dataContainerHeight.constant = 136
+                    self.dataArrow.isHighlighted = true
                     UIView.animate(withDuration: 0.25, animations: {
                         self.view.layoutIfNeeded()
                     })
                 } else {
                     self.dataContainerHeight.constant = height
+                    self.dataArrow.isHighlighted = false
                     UIView.animate(withDuration: 0.25, animations: {
                         self.view.layoutIfNeeded()
                     })
