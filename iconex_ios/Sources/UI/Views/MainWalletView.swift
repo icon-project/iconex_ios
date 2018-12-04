@@ -10,6 +10,10 @@ import RxSwift
 import RxCocoa
 import BigInt
 
+protocol MainWalletDelegate {
+    func showWalletDetail(info: WalletInfo, snapshot: UIImage, view: UIView)
+}
+
 class MainWalletView: UIView, UIScrollViewDelegate {
 
     @IBOutlet weak var headerContainer: UIView!
@@ -32,6 +36,8 @@ class MainWalletView: UIView, UIScrollViewDelegate {
     
     @IBOutlet weak var indicator: IXIndicator!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    
+    var delegate: MainWalletDelegate?
     
     private var walletInfo: WalletInfo?
     private var coin: CoinInfo?
@@ -62,16 +68,10 @@ class MainWalletView: UIView, UIScrollViewDelegate {
         tableView.isScrollEnabled = false
         
         addressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            let app = UIApplication.shared.delegate as! AppDelegate
-            guard let root = app.window?.rootViewController else {
-                return
-            }
+            guard let delegate = self.delegate, let info = self.walletInfo else { return }
             
-            let address = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletAddressView") as! WalletAddressViewController
-            let wallet = WManager.loadWalletBy(info: self.walletInfo!)
-            address.currentWallet = wallet!
-            address.show(root)
-            
+            let image = self.containerView.asImage()
+            delegate.showWalletDetail(info: info,snapshot: image, view: self.containerView)
         }).disposed(by: disposeBag)
         
         detailButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in

@@ -32,6 +32,7 @@ struct Transition {
             
             containerView.addSubview(toVC.view)
             containerView.addSubview(snapShot)
+            containerView.backgroundColor = UIColor.clear
             toVC.view.isHidden = true
             
             AnimationHelper.perspectiveTransformForContainerView(containerView)
@@ -59,8 +60,6 @@ struct Transition {
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
             }
         }
-        
-        
     }
 }
 

@@ -347,6 +347,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
             for info in list {
                 let walletView = Bundle.main.loadNibNamed("MainWalletView", owner: nil, options: nil)![0] as! MainWalletView
                 walletView.setWalletInfo(walletInfo: info)
+                walletView.delegate = self
                 walletView.translatesAutoresizingMaskIntoConstraints = false
                 walletView.addConstraints([
                     NSLayoutConstraint(item: walletView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
@@ -497,3 +498,18 @@ extension MainViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+extension MainViewController: MainWalletDelegate {
+    func showWalletDetail(info: WalletInfo, snapshot: UIImage, view: UIView) {
+        let address = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletAddressView") as! WalletAddressViewController
+        guard let wallet = WManager.loadWalletBy(info: info) else { return }
+        address.currentWallet = wallet
+        address.snap = snapshot
+        address.startY = topConstraint.constant
+        address.closeHandler = {
+            view.alpha = 1.0
+        }
+        self.present(address, animated: false, completion: {
+            view.alpha = 0
+        })
+    }
+}
