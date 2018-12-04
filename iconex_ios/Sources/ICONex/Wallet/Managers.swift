@@ -48,27 +48,27 @@ class WalletManager {
     var isBalanceLoadCompleted: Bool {
         return _queued.count == 0
     }
+    var isBalanceEmpty: Bool {
+        return walletBalanceList.count == 0
+    }
+    
     var walletInfoList = [WalletInfo]()
     var walletBalanceList = [String: BigUInt]()
     var tokenBalanceList = [String: [String: BigUInt]]()
     
-    func getTotalBalances() -> Double {
-        var totalBalances = [Double]()
+    func getTotalBalances() -> BigUInt? {
+        var totalBalances = [BigUInt]()
         for walletInfo in walletInfoList {
             let wallet = WManager.loadWalletBy(info: walletInfo)!
             guard let balance = WManager.walletBalanceList[wallet.address!] else {
                 continue
             }
             
-            guard let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: wallet.decimal) else {
+            guard let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: wallet.decimal), let exc = Tools.stringToBigUInt(inputText: exchanged) else {
                 continue
             }
             
-            guard let dValue = Double(exchanged) else {
-                continue
-            }
-            
-            totalBalances.append(dValue)
+            totalBalances.append(exc)
             
             if wallet.type == .eth {
                 let eth = wallet as! ETHWallet
@@ -76,9 +76,8 @@ class WalletManager {
                 for token in tokens {
                     guard let tokenBalances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()] else { continue }
                     guard let balance = tokenBalances[token.contractAddress] else { continue }
-                    guard let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal) else { continue }
-                    guard let excD = Double(exchanged) else { continue }
-                    totalBalances.append(excD)
+                    guard let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal), let exc = Tools.stringToBigUInt(inputText: exchanged) else { continue }
+                    totalBalances.append(exc)
                 }
             }
         }
@@ -162,6 +161,8 @@ class WalletManager {
     }
     
     func getWalletsBalance() {
+        guard self._queued.isEmpty, isBalanceLoadCompleted == true else { return }
+        
         DispatchQueue.global().async {
             for info in self.walletInfoList {
                 guard let wallet = WManager.loadWalletBy(info: info), let address = wallet.address else { continue }
@@ -170,7 +171,7 @@ class WalletManager {
                 self._queued.insert(address)
                 if info.type == .icx {
                     
-                    if let data = wallet.__rawData {
+                    if wallet.__rawData != nil {
                         
                         let result = WManager.service.getBalance(address: address).execute()
                         

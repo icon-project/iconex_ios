@@ -18,7 +18,7 @@ enum SwipeDirection {
 class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate {
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
-    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var loadHeight: NSLayoutConstraint!
     
     @IBOutlet weak var topInfoButton: UIButton!
     @IBOutlet weak var menuButton: UIButton!
@@ -36,9 +36,11 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     @IBOutlet weak var walletScroll: UIScrollView!
     @IBOutlet weak var walletStack: UIStackView!
     
+    @IBOutlet weak var pullLoader1: UIImageView!
+    @IBOutlet weak var pullLoader2: UIImageView!
+    
     var startPoint: CGFloat = 0
     var lastOffset: CGFloat = 0
-    var fixedHeight: CGFloat = 0
     var currentIndex: Int = 0
     private var navSelected: Int = 0 {
         willSet {
@@ -78,21 +80,26 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 break
             }
             
-            if WManager.isBalanceLoadCompleted {
-                self.totalLoader.isHidden = true
-                self.totalBalanceLabel.isHidden = false
-                let exchanged = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", WManager.getTotalBalances())
-                let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
-                self.totalBalanceLabel.attributedText = attr
-            } else {
-                self.totalLoader.isHidden = false
-                self.totalBalanceLabel.isHidden = true
-                Tools.rotateAnimation(inView: self.totalLoader)
-            }
+            showBalance()
         }
         
         didSet {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "kNotificationExchangeIndicatorChanged"), object: nil)
+        }
+    }
+    
+    func showBalance() {
+//        if let excBalances = WManager.getTotalBalances() {
+        if WManager.isBalanceLoadCompleted, let excBalances = WManager.getTotalBalances() {
+            self.totalLoader.isHidden = true
+            self.totalBalanceLabel.isHidden = false
+            let exchanged = Tools.bigToString(value: excBalances, decimal: 18, EManager.currentExchange == "usd" ? 2 : 4, false, true)
+            let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
+            self.totalBalanceLabel.attributedText = attr
+        } else {
+            self.totalLoader.isHidden = false
+            self.totalBalanceLabel.isHidden = true
+            Tools.rotateAnimation(inView: self.totalLoader)
         }
     }
     
@@ -117,19 +124,9 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        fixedHeight = heightConstraint.constant
+        loadHeight.constant = 0
         
-        if WManager.isBalanceLoadCompleted {
-            self.totalLoader.isHidden = true
-            self.totalBalanceLabel.isHidden = false
-            let exchanged = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", WManager.getTotalBalances())
-            let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
-            self.totalBalanceLabel.attributedText = attr
-        } else {
-            self.totalLoader.isHidden = false
-            self.totalBalanceLabel.isHidden = true
-            Tools.rotateAnimation(inView: self.totalLoader)
-        }
+        showBalance()
     }
     
     func initialize() {
@@ -181,32 +178,13 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         
         exchangeListDidChanged().observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
-                if WManager.isBalanceLoadCompleted {
-                    self.totalLoader.isHidden = true
-                    self.totalBalanceLabel.isHidden = false
-                    let exchanged = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", WManager.getTotalBalances())
-                    let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
-                    self.totalBalanceLabel.attributedText = attr
-                } else {
-                    self.totalLoader.isHidden = false
-                    self.totalBalanceLabel.isHidden = true
-                    Tools.rotateAnimation(inView: self.totalLoader)
-                }
+                self.showBalance()
             }).disposed(by: disposeBag)
         
         balanceListDidChanged().observeOn(MainScheduler.instance)
             .subscribe(onNext: { [unowned self] _ in
-                if WManager.isBalanceLoadCompleted {
-                    self.totalLoader.isHidden = true
-                    self.totalBalanceLabel.isHidden = false
-                    let exchanged = String(format: EManager.currentExchange == "usd" ? "%.2f" : "%.4f", WManager.getTotalBalances())
-                    let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
-                    self.totalBalanceLabel.attributedText = attr
-                } else {
-                    self.totalLoader.isHidden = false
-                    self.totalBalanceLabel.isHidden = true
-                    Tools.rotateAnimation(inView: self.totalLoader)
-                }
+                self.showBalance()
+                self.checkPullLoader()
             }).disposed(by: disposeBag)
     }
     
@@ -215,7 +193,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         balanceInfoLabel.text = "Main.TotalAssets".localized
         totalBalanceLabel.attributedText = NSAttributedString(string: "-")
         
-        fixedHeight = heightConstraint.constant
+        loadHeight.constant = 0
         
         navSelectorContainer.corner(navSelectorContainer.frame.height / 2)
         navSelectorContainer.border(1, UIColor.white)
@@ -439,35 +417,60 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         walletScroll.scrollRectToVisible(CGRect(x: CGFloat(to) * walletScroll.frame.width, y: 0, width: walletScroll.frame.width, height: walletScroll.frame.height), animated: true)
     }
     
+    func checkPullLoader() {
+        if WManager.isBalanceLoadCompleted {
+            pullLoader1.stopAnimating()
+            pullLoader2.stopAnimating()
+            
+            loadHeight.constant = 0
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+    }
+    
     @IBAction func gesture(_ recognizer: UIPanGestureRecognizer) {
         let point = recognizer.location(in: view)
         
         switch recognizer.state {
         case .began:
-            startPoint = point.y - topConstraint.constant
+            startPoint = point.y - loadHeight.constant - topConstraint.constant
             
         case .changed:
             let value = point.y - startPoint
             if value > 0 {
-                heightConstraint.constant = fixedHeight + min(value, fixedHeight) / 2
+                loadHeight.constant = min(value, 150.0)
                 topConstraint.constant = 0
+                
+                let rate = min(value, 100.0) / 100.0
+                
+                pullLoader1.transform = CGAffineTransform(rotationAngle: .pi * 2.0 * rate)
+                pullLoader2.transform = CGAffineTransform(rotationAngle: -(.pi * 2.0 * rate))
+                
             } else {
                 let value = min(0, max(value, -228 + 20))
                 topConstraint.constant = value
+                loadHeight.constant = 0
             }
             
         default:
             var value = point.y - startPoint
             
-            if value > 0 {
-                heightConstraint.constant = fixedHeight
-            } else {
+            loadHeight.constant = 0
+            if value < 0 {
                 if value > -120 {
                     value = 0
                 } else {
                     value = -228 + 20
                 }
                 topConstraint.constant = value
+            } else if value >= 100 {
+                loadHeight.constant = 100.0
+                Tools.rotateAnimation(inView: pullLoader1)
+                Tools.rotateReverseAnimation(inView: pullLoader2)
+                if WManager.isBalanceLoadCompleted {
+                    WManager.getWalletsBalance()
+                }
             }
 
             UIView.animate(withDuration: 0.25, animations: {
