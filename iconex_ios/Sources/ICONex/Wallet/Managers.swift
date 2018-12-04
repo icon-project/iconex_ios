@@ -807,28 +807,6 @@ struct TokenExportBundle: Codable {
     var symbol: String
 }
 
-//protocol BalanceInfoConvertible {
-//    var walletType: COINTYPE { get set }
-//    var address: String { get set }
-//    var name: String { get set }
-//    var value: String? { get set }
-//    var resopnse: IXJSONResponse? { get set }
-//}
-//
-//class BalanceInfo: BalanceInfoConvertible {
-//    var walletType: COINTYPE
-//    var address: String
-//    var name: String
-//    var value: String?
-//    var resopnse: IXJSONResponse?
-//    
-//    init(type: COINTYPE, name: String, address: String) {
-//        self.name = name
-//        self.walletType = type
-//        self.address = address
-//    }
-//}
-
 class WalletBalanceOperation {
     lazy var loadQueue: OperationQueue = {
         var queue = OperationQueue()

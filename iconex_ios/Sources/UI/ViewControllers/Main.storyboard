@@ -233,8 +233,20 @@
                                             <constraint firstItem="h6i-d2-goO" firstAttribute="leading" secondItem="soP-lK-aJA" secondAttribute="leading" id="oLE-XD-Z91"/>
                                         </constraints>
                                     </view>
-                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlm-L9-3a5" customClass="IXScrollView" customModule="iconex_ios" customModuleProvider="target">
+                                    <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hlm-L9-3a5">
                                         <rect key="frame" x="0.0" y="264" width="375" height="383"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="A2v-Xo-2w8">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="383"/>
+                                            </stackView>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstItem="A2v-Xo-2w8" firstAttribute="leading" secondItem="Hlm-L9-3a5" secondAttribute="leading" id="5u0-YH-lRR"/>
+                                            <constraint firstItem="A2v-Xo-2w8" firstAttribute="top" secondItem="Hlm-L9-3a5" secondAttribute="top" id="BuD-aa-wTz"/>
+                                            <constraint firstAttribute="trailing" secondItem="A2v-Xo-2w8" secondAttribute="trailing" id="NDY-qf-4cG"/>
+                                            <constraint firstItem="A2v-Xo-2w8" firstAttribute="height" secondItem="Hlm-L9-3a5" secondAttribute="height" id="PMY-Bg-ExN"/>
+                                            <constraint firstAttribute="bottom" secondItem="A2v-Xo-2w8" secondAttribute="bottom" id="kPK-qW-aeo"/>
+                                        </constraints>
                                     </scrollView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.1019607843" green="0.66666666669999997" blue="0.72941176470000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -290,8 +302,9 @@
                         <outlet property="totalBalanceLabel" destination="CCy-NY-3cJ" id="9RO-TE-QHz"/>
                         <outlet property="totalLoader" destination="jJ1-0l-TdE" id="Wq7-P5-TfZ"/>
                         <outlet property="usdButton" destination="9UC-e2-UZP" id="YPb-1s-g3b"/>
-                        <outlet property="walletDetailScroll" destination="Hlm-L9-3a5" id="6CV-VV-gMD"/>
-                        <outlet property="walletScroll" destination="h6i-d2-goO" id="e5F-2a-lJv"/>
+                        <outlet property="walletScroll" destination="Hlm-L9-3a5" id="81R-JB-Da2"/>
+                        <outlet property="walletStack" destination="A2v-Xo-2w8" id="9wu-bX-rKx"/>
+                        <outlet property="walletTagScroll" destination="h6i-d2-goO" id="e5F-2a-lJv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gEe-e8-Bt3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -2943,7 +2956,7 @@
                                                                     <constraint firstAttribute="height" constant="30" id="t8F-8Z-zbN"/>
                                                                 </constraints>
                                                             </stackView>
-                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3zl-Ky-cOY" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3zl-Ky-cOY" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="78" width="327" height="62"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -2994,7 +3007,7 @@
                                                                 </constraints>
                                                             </stackView>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U9Z-R3-Usi" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
-                                                                <rect key="frame" x="24" y="71" width="327" height="67"/>
+                                                                <rect key="frame" x="24" y="76" width="327" height="62"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="62" id="gFt-lN-gDT"/>
@@ -3004,7 +3017,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhP-I2-uQn">
-                                                                <rect key="frame" x="24" y="43" width="327" height="18"/>
+                                                                <rect key="frame" x="24" y="43" width="327" height="23"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                 <nil key="textColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -3045,7 +3058,7 @@
                                                                 <rect key="frame" x="24" y="16.5" width="58.5" height="29"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             </button>
-                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3tH-Be-ED8" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3tH-Be-ED8" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="49" width="327" height="62"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
@@ -3236,7 +3249,7 @@
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sqh-lO-kuO">
                                                                 <rect key="frame" x="323" y="15" width="32" height="32"/>
                                                             </button>
-                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s7g-dE-iub" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7g-dE-iub" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                                 <rect key="frame" x="24" y="49" width="327" height="62"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>

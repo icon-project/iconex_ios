@@ -15,7 +15,7 @@ enum SwipeDirection {
     case center
 }
 
-class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate, ICXItemChangeDelegate {
+class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScrollViewDelegate {
 
     @IBOutlet weak var topConstraint: NSLayoutConstraint!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
@@ -32,8 +32,9 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     @IBOutlet weak var btcButton: UIButton!
     @IBOutlet weak var ethButton: UIButton!
     
+    @IBOutlet weak var walletTagScroll: UIScrollView!
     @IBOutlet weak var walletScroll: UIScrollView!
-    @IBOutlet weak var walletDetailScroll: IXScrollView!
+    @IBOutlet weak var walletStack: UIStackView!
     
     var startPoint: CGFloat = 0
     var lastOffset: CGFloat = 0
@@ -132,8 +133,6 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     }
     
     func initialize() {
-        walletDetailScroll.changeDelegate = self
-        
         topInfoButton.rx.controlEvent(UIControlEvents.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Alert.Basic(message: "Alert.TotalAssetInfo".localized).show(self)
@@ -165,6 +164,12 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         
         ethButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedExchange = 2
+        }).disposed(by: disposeBag)
+        
+        walletScroll.rx.didEndDecelerating.observeOn(MainScheduler.instance).subscribe(onNext: {
+            let index = Int(self.walletScroll.contentOffset.x / UIScreen.main.bounds.width)
+            self.scrollWallet(to: index)
+            self.currentIndex = index
         }).disposed(by: disposeBag)
         
         
@@ -261,13 +266,19 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     }
     
     func loadWallets() {
+        setWalletTag()
+        setWallet()
         
+        scrollWallet(to: self.currentIndex)
+    }
+    
+    func setWalletTag() {
         let leading: CGFloat = 16
         let margin: CGFloat = 4
         
         var x: CGFloat = leading
         
-        for view in walletScroll.subviews {
+        for view in walletTagScroll.subviews {
             view.removeFromSuperview()
         }
         
@@ -288,7 +299,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 
                 let button = makeShortCut(frame: CGRect(x: x, y: CGFloat(15.0), width: expectedSize.width, height: CGFloat(26)), tag: i, title: coinName)
                 
-                walletScroll.addSubview(button)
+                walletTagScroll.addSubview(button)
                 
                 x = x + expectedSize.width + margin
             }
@@ -306,13 +317,13 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 
                 let button = makeShortCut(frame: CGRect(x: x, y: CGFloat(15.0), width: expectedSize.width, height: CGFloat(26)), tag: count + i, title: walletName)
                 
-                walletScroll.addSubview(button)
+                walletTagScroll.addSubview(button)
                 
                 x = x + expectedSize.width + margin
             }
             x = x + margin
             
-            walletScroll.contentSize = CGSize(width: x, height: walletScroll.frame.size.height)
+            walletTagScroll.contentSize = CGSize(width: x, height: walletTagScroll.frame.size.height)
         } else {
             
             let lists = WManager.walletInfoList
@@ -335,21 +346,64 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 
                 let button = makeShortCut(frame: CGRect(x: x, y: CGFloat(15.0), width: expectedSize.width, height: CGFloat(26)), tag: i, title: walletName)
                 
-                walletScroll.addSubview(button)
+                walletTagScroll.addSubview(button)
                 
                 x = x + expectedSize.width + margin
                 
             }
             x = x + margin
             
-            walletScroll.contentSize = CGSize(width: x, height: walletScroll.frame.size.height)
+            walletTagScroll.contentSize = CGSize(width: x, height: walletTagScroll.frame.size.height)
         }
-        // 임시 방편
-        walletDetailScroll.loadWallets(navSelected)
-        walletDetailScroll.topChanged(value: topConstraint.constant)
-        
-        scrollWallet(to: self.currentIndex)
-        walletDetailScroll.setContentOffset(CGPoint(x: CGFloat(self.currentIndex) * UIScreen.main.bounds.width, y: 0), animated: true)
+    }
+    
+    func setWallet() {
+        let width = walletScroll.frame.width
+        for view in walletStack.subviews {
+            view.removeFromSuperview()
+        }
+        if navSelected == 0 {
+            let list = WManager.walletInfoList
+            
+            var count: CGFloat = 0
+            for info in list {
+                let walletView = Bundle.main.loadNibNamed("MainWalletView", owner: nil, options: nil)![0] as! MainWalletView
+                walletView.setWalletInfo(walletInfo: info)
+                walletView.translatesAutoresizingMaskIntoConstraints = false
+                walletView.addConstraints([
+                    NSLayoutConstraint(item: walletView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
+                    ])
+                walletStack.addArrangedSubview(walletView)
+                count += 1
+            }
+        } else {
+            let list = WManager.walletTypes()
+            var count: CGFloat = 0
+            for type in list {
+                let walletView = Bundle.main.loadNibNamed("MainWalletView", owner: nil, options: nil)![0] as! MainWalletView
+                guard let info = WManager.coinInfoListBy(coin: COINTYPE(rawValue: type)!) else {
+                    continue
+                }
+                walletView.setWalletInfo(coin: info)
+                walletView.translatesAutoresizingMaskIntoConstraints = false
+                walletView.addConstraints([
+                    NSLayoutConstraint(item: walletView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
+                    ])
+                walletStack.addArrangedSubview(walletView)
+                count += 1
+            }
+            let tokens = WManager.tokenTypes()
+            for token in tokens {
+                let walletView = Bundle.main.loadNibNamed("MainWalletView", owner: nil, options: nil)![0] as! MainWalletView
+                walletView.setWalletInfo(token: token)
+                walletView.translatesAutoresizingMaskIntoConstraints = false
+                walletView.addConstraints([
+                    NSLayoutConstraint(item: walletView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
+                    ])
+                walletStack.addArrangedSubview(walletView)
+                count += 1
+            }
+        }
     }
     
     func makeShortCut(frame: CGRect, tag: Int, title: String) -> UIButton {
@@ -369,7 +423,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     func scrollWallet(to: Int) {
         var rect: CGRect = .zero
-        for sub in walletScroll.subviews {
+        for sub in walletTagScroll.subviews {
             let button = sub as! UIButton
             if button.tag == to {
                 button.isSelected = true
@@ -380,7 +434,9 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         }
 
         let visible = CGRect(x: rect.origin.x - rect.size.width / 2, y: 0, width: rect.size.width * 2, height: rect.size.height)
-        walletScroll.scrollRectToVisible(visible, animated: true)
+        walletTagScroll.scrollRectToVisible(visible, animated: true)
+        
+        walletScroll.scrollRectToVisible(CGRect(x: CGFloat(to) * walletScroll.frame.width, y: 0, width: walletScroll.frame.width, height: walletScroll.frame.height), animated: true)
     }
     
     @IBAction func gesture(_ recognizer: UIPanGestureRecognizer) {
@@ -413,8 +469,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 }
                 topConstraint.constant = value
             }
-            walletDetailScroll.topChanged(value: value)
-            
+
             UIView.animate(withDuration: 0.25, animations: {
                 self.view.layoutIfNeeded()
             })
@@ -425,38 +480,10 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     @objc func clickedWalletItem(_ sender: UIButton) {
         scrollWallet(to: sender.tag)
         self.currentIndex = sender.tag
-        walletDetailScroll.setContentOffset(CGPoint(x: CGFloat(sender.tag) * UIScreen.main.bounds.width, y: 0), animated: true)
     }
-    
-//    @objc func flicked(_ gesture: UISwipeGestureRecognizer) {
-//        if gesture.direction == .left {
-//            walletDetailScroll.flip(to: .right)
-//        } else if gesture.direction == .right {
-//            walletDetailScroll.flip(to: .left)
-//        }
-//    }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
-    }
-    
-    func indexChanged(index: Int) {
-        scrollWallet(to: index)
-        self.currentIndex = index
-    }
-    
-    func changingOffset(x: CGFloat) {
-        let index = Int(x / UIScreen.main.bounds.width)
-        scrollWallet(to: index)
-        self.currentIndex = index
-    }
-    
-    func indexForMainWallet() -> Int {
-        return self.navSelected
-    }
-    
-    func currentContraint() -> CGFloat {
-        return topConstraint.constant
     }
     
 }

@@ -60,7 +60,6 @@
 		D44F9BC42071D912002F2A20 /* ETHSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44F9BC32071D912002F2A20 /* ETHSendViewController.swift */; };
 		D455C032204533140068165E /* MainWalletView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D455C031204533140068165E /* MainWalletView.swift */; };
 		D455C034204533200068165E /* MainWalletView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D455C033204533200068165E /* MainWalletView.xib */; };
-		D455C0362045952B0068165E /* IXScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D455C0352045952B0068165E /* IXScrollView.swift */; };
 		D456AE8E205FF58300CB05D2 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D456AE8D205FF58300CB05D2 /* ChangePasswordViewController.swift */; };
 		D457147B20EEFE32000C073D /* BundleImportListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D457147A20EEFE32000C073D /* BundleImportListViewController.swift */; };
 		D45F40982060B28F001A2BA5 /* ChangeNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F40972060B28F001A2BA5 /* ChangeNameViewController.swift */; };
@@ -283,7 +282,6 @@
 		D44F9BC32071D912002F2A20 /* ETHSendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHSendViewController.swift; sourceTree = "<group>"; };
 		D455C031204533140068165E /* MainWalletView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWalletView.swift; sourceTree = "<group>"; };
 		D455C033204533200068165E /* MainWalletView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWalletView.xib; sourceTree = "<group>"; };
-		D455C0352045952B0068165E /* IXScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXScrollView.swift; sourceTree = "<group>"; };
 		D456AE8D205FF58300CB05D2 /* ChangePasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordViewController.swift; sourceTree = "<group>"; };
 		D457147A20EEFE32000C073D /* BundleImportListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleImportListViewController.swift; sourceTree = "<group>"; };
 		D45F40972060B28F001A2BA5 /* ChangeNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNameViewController.swift; sourceTree = "<group>"; };
@@ -769,7 +767,6 @@
 				D481C4A1203EB0EC00A799D7 /* IXInputBox.xib */,
 				D455C031204533140068165E /* MainWalletView.swift */,
 				D455C033204533200068165E /* MainWalletView.xib */,
-				D455C0352045952B0068165E /* IXScrollView.swift */,
 				D4402A902051258B001BD003 /* MainWalletCell.swift */,
 				D4402A912051258B001BD003 /* MainWalletCell.xib */,
 				D483EDFB2091A4A40039BA36 /* IXIndicator.swift */,
@@ -1076,7 +1073,6 @@
 				D455C032204533140068165E /* MainWalletView.swift in Sources */,
 				D42A6D132057C52E00BC5039 /* AddressManageViewController.swift in Sources */,
 				D4EF88F821199924000CA278 /* OpensourceViewController.swift in Sources */,
-				D455C0362045952B0068165E /* IXScrollView.swift in Sources */,
 				D4EAE92621993E5800E6B5EF /* BindViewController.swift in Sources */,
 				D456AE8E205FF58300CB05D2 /* ChangePasswordViewController.swift in Sources */,
 				D492D06220897CA100D86402 /* WalletExportPasswordViewController.swift in Sources */,
