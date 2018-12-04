@@ -419,8 +419,8 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     func checkPullLoader() {
         if WManager.isBalanceLoadCompleted {
-            pullLoader1.stopAnimating()
-            pullLoader2.stopAnimating()
+            pullLoader1.layer.removeAllAnimations()
+            pullLoader2.layer.removeAllAnimations()
             
             loadHeight.constant = 0
             UIView.animate(withDuration: 0.25, animations: {
