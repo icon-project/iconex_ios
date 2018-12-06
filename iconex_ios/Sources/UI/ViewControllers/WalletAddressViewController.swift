@@ -111,7 +111,6 @@ extension WalletAddressViewController {
         UIView.animate(withDuration: 0.25, animations: {
             self.view.layoutIfNeeded()
         }) { _ in
-            self.closeButton.isHidden = false
         }
         
         mainContainer.layer.transform = AnimationHelper.yRotation(.pi / 2)
@@ -128,7 +127,7 @@ extension WalletAddressViewController {
                 self.mainContainer.alpha = 1.0
             })
         }) { _ in
-            
+            self.closeButton.isHidden = false
         }
     }
     

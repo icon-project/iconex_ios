@@ -231,7 +231,7 @@ class ETHSendViewController: UIViewController {
                 }
                 let result = formerValue + BigUInt(10).power(decimal + 1)
                 Log.Debug(result)
-                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true, false)
+                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true)
                 self.sendInputBox.textField.text = stringValue
                 self.sendInputBox.textField.becomeFirstResponder()
                 let _ = self.validateBalance()
@@ -251,7 +251,7 @@ class ETHSendViewController: UIViewController {
                     decimal = wallet.decimal
                 }
                 let result = formerValue + BigUInt(10).power(decimal + 2)
-                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true, false)
+                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true)
                 self.sendInputBox.textField.text = stringValue
                 self.sendInputBox.textField.becomeFirstResponder()
                 let _ = self.validateBalance()
@@ -271,7 +271,7 @@ class ETHSendViewController: UIViewController {
                     decimal = wallet.decimal
                 }
                 let result = formerValue + BigUInt(10).power(decimal + 3)
-                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true, false)
+                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true)
                 self.sendInputBox.textField.text = stringValue
                 self.sendInputBox.textField.becomeFirstResponder()
                 let _ = self.validateBalance()
@@ -284,7 +284,7 @@ class ETHSendViewController: UIViewController {
                 
                 if let token = self.token {
                     guard let balance = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()]![token.contractAddress] else { return }
-                    self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true, false)
+                    self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true)
                 } else {
                     let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
                     guard let formerValue = WManager.walletBalanceList[wallet.address!] else { return }
@@ -294,7 +294,7 @@ class ETHSendViewController: UIViewController {
                         return
                     }
                     let result = (formerValue - estimate)
-                    let stringValue = Tools.bigToString(value: result, decimal: wallet.decimal, wallet.decimal, true, false)
+                    let stringValue = Tools.bigToString(value: result, decimal: wallet.decimal, wallet.decimal, true)
                     self.sendInputBox.textField.text = stringValue
                 }
                 self.sendInputBox.textField.becomeFirstResponder()
@@ -662,7 +662,7 @@ class ETHSendViewController: UIViewController {
         
         let ethValue = Tools.stringToBigUInt(inputText: sendInputBox.textField.text!)!
         
-        confirm.value = Tools.bigToString(value: ethValue, decimal: 18, 18, false, true)
+        confirm.value = Tools.bigToString(value: ethValue, decimal: 18, 18, false)
         confirm.address = self.addressInputBox.textField.text!
         confirm.fee = estimateGas
         confirm.handler = { [unowned self] in

@@ -269,7 +269,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                         total += Tools.stringToBigUInt(inputText: exchanged, decimal: token.decimal)!
                     }
                 }
-                totalBalanceLabel.text = Tools.bigToString(value: total, decimal: wallet.decimal, EManager.currentExchange == "usd" ? 2 : 4, false, true)
+                totalBalanceLabel.text = Tools.bigToString(value: total, decimal: wallet.decimal, EManager.currentExchange == "usd" ? 2 : 4, false).currencySeparated()
             } else {
                 if WManager.isBalanceLoadCompleted {
                     indicator.isHidden = true
@@ -290,7 +290,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                 guard let wallet = WManager.loadWalletBy(info: walletInfo), let balance = WManager.walletBalanceList[walletInfo.address] else  { continue }
                 decimal = wallet.decimal
                 
-                let trimming = Tools.bigToString(value: balance, decimal: decimal, 4, false, true)
+                let trimming = Tools.bigToString(value: balance, decimal: decimal, 4, false).currencySeparated()
                 let trimmed = Tools.stringToBigUInt(inputText: trimming, decimal: decimal)!
                 total += trimmed
                 
@@ -301,9 +301,9 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                     exchangeTotal = exc
                 }
             }
-            coinsTotalBalance.text = Tools.bigToString(value: total, decimal: decimal, 4, false, true)
+            coinsTotalBalance.text = Tools.bigToString(value: total, decimal: decimal, 4, false).currencySeparated()
             if let value = exchangeTotal {
-                coinsTotalExchange.text = Tools.bigToString(value: value, decimal: decimal, below, false, true)
+                coinsTotalExchange.text = Tools.bigToString(value: value, decimal: decimal, below, false).currencySeparated()
             } else {
                 coinsTotalExchange.text = "-"
             }
@@ -320,7 +320,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
             var exchangeTotal: BigUInt? = nil
             for walletInfo in wallets {
                 guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = WManager.tokenBalanceList[item.dependedAddress.add0xPrefix()], let balance = tokenBalances[item.contractAddress] else { continue }
-                let trimming = Tools.bigToString(value: balance, decimal: token.decimal, 4, false, true)
+                let trimming = Tools.bigToString(value: balance, decimal: token.decimal, 4, false)
                 let trimmed = Tools.stringToBigUInt(inputText: trimming, decimal: token.decimal)!
                 
                 total += trimmed
@@ -332,9 +332,9 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                     exchangeTotal = exc
                 }
             }
-            coinsTotalBalance.text = Tools.bigToString(value: total, decimal: token.decimal, 4, false, true)
+            coinsTotalBalance.text = Tools.bigToString(value: total, decimal: token.decimal, 4, false).currencySeparated()
             if let value = exchangeTotal {
-                coinsTotalExchange.text = Tools.bigToString(value: value, decimal: token.decimal, below, false, true)
+                coinsTotalExchange.text = Tools.bigToString(value: value, decimal: token.decimal, below, false).currencySeparated()
             } else {
                 coinsTotalExchange.text = "-"
             }
@@ -431,7 +431,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             cell.coinNameLabel.text = walletInfo.name
             if let value = WManager.walletBalanceList[walletInfo.address], let wallet = WManager.loadWalletBy(info: walletInfo) {
                 let valueString = Tools.bigToString(value: value, decimal: 18, 4)
-                cell.coinValueLabel.text = valueString
+                cell.coinValueLabel.text = valueString.currencySeparated()
                 
                 let trimmed = Tools.stringToBigUInt(inputText: valueString, decimal: wallet.decimal)!
                 
@@ -467,7 +467,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 return cell
             }
             let trimming = Tools.bigToString(value: balance, decimal: token.decimal, 4)
-            cell.coinValueLabel.text = trimming
+            cell.coinValueLabel.text = trimming.currencySeparated()
             let trimmed = Tools.stringToBigUInt(inputText: trimming, decimal: token.decimal)!
             cell.exchangeValueLabel.text = Tools.balanceToExchange(trimmed, from: token.symbol.lowercased(), to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
             
@@ -479,7 +479,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 cell.coinTypeLabel.text = self.walletInfo!.type == .eth ? "ETH" : "ICX"
                 if let value = WManager.walletBalanceList[wallet.address!] {
                     let valueString = Tools.bigToString(value: value, decimal: 18, 4)
-                    cell.coinValueLabel.text = valueString
+                    cell.coinValueLabel.text = valueString.currencySeparated()
                     
                     let type = self.walletInfo!.type == .eth ? "eth" : "icx"
                     
@@ -505,7 +505,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                     return cell
                 }
                 
-                cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4)
+                cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4).currencySeparated()
                 let tag = token.symbol.lowercased()
                 cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: EManager.currentExchange, belowDecimal: EManager.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
                 cell.isLoading = false

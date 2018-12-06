@@ -253,7 +253,7 @@ extension BundleImportListViewController: UITableViewDataSource {
             cell.unitLabel.text = value.type.uppercased()
             if let balance = _balanceList[address] {
                 cell.isLoading = false
-                cell.balanceLabel.text = Tools.bigToString(value: balance, decimal: 18, 18, true, true)
+                cell.balanceLabel.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
             } else if _queue.contains(address) {
                 cell.isLoading = true
             } else {

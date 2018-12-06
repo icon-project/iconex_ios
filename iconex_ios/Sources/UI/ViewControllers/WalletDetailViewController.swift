@@ -607,7 +607,7 @@ class WalletDetailViewController: UIViewController {
                     DispatchQueue.main.async {
                         if let balance = result {
                             let stringBalance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
-                            let attr = NSAttributedString(string: stringBalance, attributes: [.kern: -2.0])
+                            let attr = NSAttributedString(string: stringBalance.currencySeparated(), attributes: [.kern: -2.0])
                             self.balanceLabel.attributedText = attr
                             self.loadExchanged()
                             self.refresh01.layer.removeAllAnimations()
@@ -627,7 +627,7 @@ class WalletDetailViewController: UIViewController {
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
                     let balance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
-                    let attr = NSAttributedString(string: balance, attributes: [.kern: -2.0])
+                    let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                     self.balanceLabel.attributedText = attr
                 } else {
                     self.headerLoading.isHidden = false
@@ -639,7 +639,7 @@ class WalletDetailViewController: UIViewController {
                                 self.headerLoading.isHidden = true
                                 self.balanceLabel.isHidden = false
                                 let balance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
-                                let attr = NSAttributedString(string: balance, attributes: [.kern: -2.0])
+                                let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                                 self.balanceLabel.attributedText = attr
                                 self.loadExchanged()
                             }
@@ -658,7 +658,7 @@ class WalletDetailViewController: UIViewController {
                 WManager.getBalance(wallet: wallet) { [weak self] (isSuccess) in
                     if let value = WManager.walletBalanceList[wallet.address!] {
                         let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
-                        let attr = NSAttributedString(string: balance, attributes: [.kern: -2.0])
+                        let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                         self?.balanceLabel.attributedText = attr
                         self?.loadExchanged()
                     } else {
@@ -673,7 +673,7 @@ class WalletDetailViewController: UIViewController {
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
                     let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
-                    let attr = NSAttributedString(string: balance, attributes: [.kern: -2.0])
+                    let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                     self.balanceLabel.attributedText = attr
                     self.loadExchanged()
                 } else {
@@ -684,7 +684,7 @@ class WalletDetailViewController: UIViewController {
                         self?.balanceLabel.isHidden = false
                         if let value = WManager.walletBalanceList[wallet.address!] {
                             let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
-                            let attr = NSAttributedString(string: balance, attributes: [.kern: -2.0])
+                            let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                             self?.balanceLabel.attributedText = attr
                             self?.loadExchanged()
                         } else {

@@ -95,7 +95,7 @@ extension BindViewController: UITableViewDataSource {
             cell.name.text = wallet.alias
             cell.address.text = wallet.address
             if let balance = wallet.balance {
-                cell.amount.text = Tools.bigToString(value: balance, decimal: wallet.decimal, 4, false, true)
+                cell.amount.text = Tools.bigToString(value: balance, decimal: wallet.decimal, 4, false).currencySeparated()
             }
         }
         

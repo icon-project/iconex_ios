@@ -93,7 +93,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         if WManager.isBalanceLoadCompleted, let excBalances = WManager.getTotalBalances() {
             self.totalLoader.isHidden = true
             self.totalBalanceLabel.isHidden = false
-            let exchanged = Tools.bigToString(value: excBalances, decimal: 18, EManager.currentExchange == "usd" ? 2 : 4, false, true)
+            let exchanged = Tools.bigToString(value: excBalances, decimal: 18, EManager.currentExchange == "usd" ? 2 : 4, false)
             let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
             self.totalBalanceLabel.attributedText = attr
         } else {
@@ -337,9 +337,12 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     func setWallet() {
         let width = walletScroll.frame.width
-        for view in walletStack.subviews {
+        for view in walletStack.arrangedSubviews {
+            NSLayoutConstraint.deactivate(view.constraints)
+            walletStack.removeArrangedSubview(view)
             view.removeFromSuperview()
         }
+        view.layoutIfNeeded()
         if navSelected == 0 {
             let list = WManager.walletInfoList
             

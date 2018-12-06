@@ -483,7 +483,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ese-fb-Qt4">
                                                         <rect key="frame" x="57" y="295" width="260" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="V2P-Ou-cHx"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="V2P-Ou-cHx"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                         <nil key="textColor"/>
@@ -533,7 +533,7 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="VvA-ls-T1H">
                                                         <rect key="frame" x="55" y="295" width="265" height="40"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="iEZ-Xe-Wdf"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="iEZ-Xe-Wdf"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                         <nil key="textColor"/>

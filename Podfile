@@ -16,6 +16,6 @@ target 'iconex_ios' do
   pod 'LicensesViewController', '0.6.5'
   pod 'scrypt', :git => 'https://github.com/a1ahn/scrypt-cryptoswift.git'
   pod 'Alamofire'
-  pod 'ICONKit', '~> 0.2.1'
+  pod 'ICONKit', '~> 0.2.2'
 
 end

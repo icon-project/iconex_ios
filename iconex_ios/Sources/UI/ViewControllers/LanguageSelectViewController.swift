@@ -77,7 +77,7 @@ extension LanguageSelectViewController: UITableViewDataSource {
             
         case 1:
             cell.cellTitle.text = "Language.English".localized
-            cell.radio.isHighlighted = language == "en"
+            cell.radio.isHighlighted = language != "ko"
             
         default:
             break

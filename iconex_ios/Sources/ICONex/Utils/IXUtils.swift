@@ -39,7 +39,7 @@ struct Tools {
         return bigToString(value: bigInt, decimal: decimal)
     }
     
-    static func bigToString(value bigInt: BigUInt, decimal: Int, _ below: Int = 0, _ remove: Bool = false, _ formatting: Bool = true) -> String {
+    static func bigToString(value bigInt: BigUInt, decimal: Int, _ below: Int = 0, _ remove: Bool = false) -> String {
         let total = bigInt.quotientAndRemainder(dividingBy: BigUInt(10).power(decimal))
         let icx = String(total.quotient, radix: 10)
         var wei = String(total.remainder, radix: 10)
@@ -57,14 +57,6 @@ struct Tools {
         }
 
         wei = under as String
-
-        if formatting {
-            let split = String(icx.reversed()).split(by: 3)
-            let joined = split.joined(separator: ",")
-            let formatted = String(joined.reversed())
-            
-            return wei == "" ? formatted : formatted + "." + wei
-        }
         
         return wei == "" ? icx : icx + "." + wei
     }
@@ -171,7 +163,7 @@ struct Tools {
         
         guard let exchanged = balanceToExchangeBigInt(value, from: from, to: to, decimal: decimal) else { return nil }
         
-        return bigToString(value: exchanged, decimal: decimal, belowDecimal, false, false)
+        return bigToString(value: exchanged, decimal: decimal, belowDecimal, false)
     }
     
     static func balanceToExchangeBigInt(_ value: BigUInt, from: String, to: String, decimal: Int = 18) -> BigUInt? {
