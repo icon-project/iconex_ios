@@ -336,7 +336,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     }
     
     func setWallet() {
-        let width = walletScroll.frame.width
+        let width = UIScreen.main.bounds.width
         for view in walletStack.arrangedSubviews {
             NSLayoutConstraint.deactivate(view.constraints)
             walletStack.removeArrangedSubview(view)

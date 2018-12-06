@@ -134,20 +134,20 @@ class BundleImportListViewController: BaseViewController {
                 
             } else {
                 
-                DispatchQueue.global(qos: .utility).async { [unowned self] in
+                DispatchQueue.global(qos: .utility).async { [weak self] in
                     let client = EthereumClient(address: address)
                     
                     client.requestBalance { (optionalValue, _) in
                         DispatchQueue.main.async {
-                            self._queue.remove(address)
+                            self?._queue.remove(address)
                             guard let value = optionalValue else {
-                                self.tableView.reloadData()
+                                self?.tableView.reloadData()
                                 return
                             }
                             
-                            self._balanceList[address] = value
+                            self?._balanceList[address] = value
                             WManager.walletBalanceList[address.add0xPrefix()] = value
-                            self.tableView.reloadData()
+                            self?.tableView.reloadData()
                         }
                         }.fetch()
                 }
@@ -162,8 +162,8 @@ class BundleImportListViewController: BaseViewController {
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        importButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
-            
+        importButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            self._queue.removeAll()
             
             WCreator.saveBundle()
             let app = UIApplication.shared.delegate as! AppDelegate
