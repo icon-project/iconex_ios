@@ -43,7 +43,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - ICONKit (~> 0.2.2)
+  - ICONKit (from `~/works/ICONKit`)
   - LicensesViewController (= 0.6.5)
   - RealmSwift (= 3.11.0)
   - RxCocoa (= 4.3.1)
@@ -57,7 +57,6 @@ SPEC REPOS:
     - Alamofire
     - BigInt
     - CryptoSwift
-    - ICONKit
     - LicensesViewController
     - PromiseKit
     - Realm
@@ -71,6 +70,8 @@ SPEC REPOS:
     - web3swift
 
 EXTERNAL SOURCES:
+  ICONKit:
+    :path: "~/works/ICONKit"
   scrypt:
     :git: https://github.com/a1ahn/scrypt-cryptoswift.git
 
@@ -83,7 +84,7 @@ SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
-  ICONKit: 497a95df34e2784a137b57cd6ef1238e418abd5f
+  ICONKit: b40389ed1b7c9898bd1b8a40ff2fde6b76b6ef1d
   LicensesViewController: 1f2982b1bab8402d3f88e23197957038e8abb907
   PromiseKit: 453ddcc947fe7b302f3ef41882b81d31c554df7f
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
@@ -97,6 +98,6 @@ SPEC CHECKSUMS:
   Toaster: a6c9532de1ded8105e77376f7dffeb2e12b46dbb
   web3swift: e39ddb21627fcc6b47881b49583f589cae128902
 
-PODFILE CHECKSUM: 9a7a4cd93fb816033ddce70514e2deb1290fa03b
+PODFILE CHECKSUM: bb7a5c15910e970caed97fa3b6f382edbec2d28b
 
 COCOAPODS: 1.5.0

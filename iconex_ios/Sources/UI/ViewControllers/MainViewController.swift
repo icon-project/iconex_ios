@@ -109,6 +109,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         // Do any additional setup after loading the view.
         initialize()
         languageChanged()
+        loadWallets()
     }
 
     override func didReceiveMemoryWarning() {
@@ -119,7 +120,6 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         WManager.getWalletsBalance()
-        loadWallets()
     }
     
     override func viewDidAppear(_ animated: Bool) {

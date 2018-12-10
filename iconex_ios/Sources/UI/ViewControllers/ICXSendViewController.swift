@@ -524,9 +524,19 @@ class ICXSendViewController: BaseViewController {
                         if let loadingView = confirm.confirmButton.viewWithTag(999) {
                             loadingView.removeFromSuperview()
                         }
+                        var message = ""
+                        switch error {
+                        case .httpError(let msg):
+                            if let http = msg {
+                                message = "\n" + http
+                            }
+                            
+                        default:
+                            break
+                        }
                         confirm.confirmButton.isEnabled = true
                         confirm.confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
-                        Tools.toast(message: "Error.CommonError".localized)
+                        Tools.toast(message: "Error.CommonError".localized + message)
                     }
                 }
             }
