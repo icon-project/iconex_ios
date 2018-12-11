@@ -43,20 +43,20 @@ class CreateStepViewController: UIViewController, UIScrollViewDelegate, CreateSt
     }
     
     func initialize() {
-        if let stepOne = childViewControllers[0] as? StepOneViewController {
+        if let stepOne = children[0] as? StepOneViewController {
             stepOne.delegate = self
         }
         
-        if let stepTwo = childViewControllers[1] as? StepTwoViewController {
+        if let stepTwo = children[1] as? StepTwoViewController {
             stepTwo.delegate = self
             stepTwoController = stepTwo
         }
         
-        if let stepThree = childViewControllers[2] as? StepThreeViewController {
+        if let stepThree = children[2] as? StepThreeViewController {
             stepThree.delegate = self
         }
         
-        if let stepFour = childViewControllers[3] as? StepFourViewController {
+        if let stepFour = children[3] as? StepFourViewController {
             stepFourController = stepFour
         }
         self.currentStep = .one

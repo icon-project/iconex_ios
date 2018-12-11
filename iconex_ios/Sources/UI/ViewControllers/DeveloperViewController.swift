@@ -27,11 +27,11 @@ class DeveloperViewController: BaseViewController {
     }
     
     func initialize() {
-        back.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        back.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             self.navigationController?.popViewController(animated: true)
         }).disposed(by: disposeBag)
         
-        modeSwitch.rx.controlEvent(UIControlEvents.valueChanged).subscribe(onNext: {
+        modeSwitch.rx.controlEvent(UIControl.Event.valueChanged).subscribe(onNext: {
             if self.modeSwitch.isOn {
                 UserDefaults.standard.set(true, forKey: "Developer")
             } else {
@@ -43,7 +43,7 @@ class DeveloperViewController: BaseViewController {
             self.refresh()
         }).disposed(by: disposeBag)
         
-        chooseNetwork.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        chooseNetwork.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             Alert.NetworkProvider(source: self, completion: {
                 self.refresh()
             })

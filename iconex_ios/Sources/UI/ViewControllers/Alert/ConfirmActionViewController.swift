@@ -46,7 +46,7 @@ class ConfirmActionViewController: UIViewController {
         confirmButton.styleLight()
         confirmButton.setTitle(confirmTitle ?? "Common.Confirm".localized, for: .normal)
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 if let cancel = self?.cancel {
                     cancel()
@@ -54,7 +54,7 @@ class ConfirmActionViewController: UIViewController {
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true, completion: {
                     if let completion = self?.handler {

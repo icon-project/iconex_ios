@@ -60,7 +60,7 @@ class BindPasswordViewController: BaseViewController {
                 }
             }).disposed(by: disposeBag)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             Alert.Confirm(message: "Alert.Connect.Password.Cancel".localized, handler: {
 //                self.dismiss(animated: true, completion: nil)
                 Conn.sendError(error: ConnectError.userCancel)
@@ -71,7 +71,7 @@ class BindPasswordViewController: BaseViewController {
             self.view.endEditing(true)
         }).disposed(by: disposeBag)
         
-        dataButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        dataButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard let received = Conn.received else { return }
             guard let params = received.params, let jsonData = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted), let json = String(data: jsonData, encoding: .utf8) else { return }
             let alert = Alert.Basic(message: json)
@@ -79,17 +79,17 @@ class BindPasswordViewController: BaseViewController {
             alert.show(self)
         }).disposed(by: disposeBag)
         
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: {
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
             self.passwordInputBox.setState(.focus, "")
         }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: {
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
             self.confirmButton.isEnabled = self.validatePassword()
         }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
             
         }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard let received = Conn.received else { return }
             let method = received.method
             if method == "sign" {
@@ -106,7 +106,7 @@ class BindPasswordViewController: BaseViewController {
         hashSection.isHidden = true
         navTitle.text = "Alert.Wallet.RequestPassword".localized
         
-        let attr = NSAttributedString(string: "Data", attributes: [NSAttributedStringKey.underlineStyle: NSUnderlineStyle.styleSingle.rawValue, NSAttributedStringKey.foregroundColor: UIColor(128, 128, 128)])
+        let attr = NSAttributedString(string: "Data", attributes: [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue, NSAttributedString.Key.foregroundColor: UIColor(128, 128, 128)])
         dataButton.setAttributedTitle(attr, for: .normal)
         
         passwordInputBox.setType(.password)

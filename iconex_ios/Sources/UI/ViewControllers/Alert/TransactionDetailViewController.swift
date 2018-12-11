@@ -47,13 +47,13 @@ class TransactionDetailViewController: UIViewController {
         closeButton.styleDark()
         closeButton.setTitle("Common.Close".localized, for: .normal)
         
-        copyButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        copyButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: {[unowned self] in
                 copyString(message: self.txHash!)
                 Tools.toast(message: "Alert.Transaction.IDCopied".localized)
             }).disposed(by: disposeBag)
         
-        trackerButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        trackerButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: {
                 var tracker: Tracker {
                     switch Config.host {
@@ -73,7 +73,7 @@ class TransactionDetailViewController: UIViewController {
                 
             }).disposed(by: disposeBag)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: {[weak self] in
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)

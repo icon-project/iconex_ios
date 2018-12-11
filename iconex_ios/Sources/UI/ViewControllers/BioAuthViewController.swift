@@ -28,12 +28,12 @@ class BioAuthViewController: UIViewController {
     }
 
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.navigationController?.popViewController(animated: true)
             }).disposed(by: disposeBag)
         
-        useButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        useButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Tools.touchIDVerification(message: "", completion: { (state) in
                     switch state {

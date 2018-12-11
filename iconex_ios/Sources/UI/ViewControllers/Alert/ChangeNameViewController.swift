@@ -59,17 +59,17 @@ class ChangeNameViewController: UIViewController {
                 self.confirmButton.isEnabled = $0
             }).disposed(by: disposeBag)
         
-        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        nameInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.validateName()
         }).disposed(by: disposeBag)
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.nameInputBox.textField.resignFirstResponder()
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if self.validateName() {
                     self.nameInputBox.textField.resignFirstResponder()

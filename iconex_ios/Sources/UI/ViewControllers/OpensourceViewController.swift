@@ -22,7 +22,7 @@ class OpensourceViewController: BaseViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.navigationController?.popViewController(animated: true)
         }).disposed(by: disposeBag)
         
@@ -30,7 +30,7 @@ class OpensourceViewController: BaseViewController {
         let path = Bundle.main.path(forResource: "Credits", ofType: "plist")!
         let data = NSDictionary(contentsOfFile: path)!
         
-        let license = childViewControllers[0] as! LicensesViewController
+        let license = children[0] as! LicensesViewController
         license.loadPlist(data)
     }
     

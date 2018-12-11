@@ -3,13 +3,13 @@ PODS:
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.11.0)
-  - ICONKit (0.2.2):
+  - ICONKit (0.2.3):
     - BigInt
     - CryptoSwift (= 0.11.0)
     - Result
     - scrypt
     - secp256k1_ios (~> 0.1.3)
-  - LicensesViewController (0.6.5)
+  - LicensesViewController (0.7.0)
   - PromiseKit (6.7.0):
     - PromiseKit/CorePromise (= 6.7.0)
     - PromiseKit/Foundation (= 6.7.0)
@@ -32,7 +32,7 @@ PODS:
     - CryptoSwift (~> 0.11)
   - secp256k1_ios (0.1.3)
   - SipHash (1.2.2)
-  - Toaster (2.1.1)
+  - Toast-Swift (4.0.1)
   - web3swift (1.1.7):
     - BigInt (~> 3.1)
     - CryptoSwift (~> 0.11)
@@ -44,13 +44,13 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - ICONKit (from `~/works/ICONKit`)
-  - LicensesViewController (= 0.6.5)
+  - LicensesViewController
   - RealmSwift (= 3.11.0)
   - RxCocoa (= 4.3.1)
   - RxSwift (= 4.3.1)
   - scrypt (from `https://github.com/a1ahn/scrypt-cryptoswift.git`)
-  - Toaster (~> 2.1.1)
-  - web3swift (= 1.1.7)
+  - Toast-Swift (~> 4.0.0)
+  - web3swift
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
@@ -66,7 +66,7 @@ SPEC REPOS:
     - RxSwift
     - secp256k1_ios
     - SipHash
-    - Toaster
+    - Toast-Swift
     - web3swift
 
 EXTERNAL SOURCES:
@@ -84,8 +84,8 @@ SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
-  ICONKit: b40389ed1b7c9898bd1b8a40ff2fde6b76b6ef1d
-  LicensesViewController: 1f2982b1bab8402d3f88e23197957038e8abb907
+  ICONKit: fdbc68520fc9fbb74079959d7c5553f6981be491
+  LicensesViewController: 2f7bba13b3cec7516d4990e41df297720fdbaaab
   PromiseKit: 453ddcc947fe7b302f3ef41882b81d31c554df7f
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
   RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
@@ -95,9 +95,9 @@ SPEC CHECKSUMS:
   scrypt: 3f6c9e7597091c0e79c4516870b9989064ceee5d
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
-  Toaster: a6c9532de1ded8105e77376f7dffeb2e12b46dbb
+  Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
   web3swift: e39ddb21627fcc6b47881b49583f589cae128902
 
-PODFILE CHECKSUM: bb7a5c15910e970caed97fa3b6f382edbec2d28b
+PODFILE CHECKSUM: 017b6a8a80bb574dfc24aef4b88d7ebc62f22983
 
 COCOAPODS: 1.5.0

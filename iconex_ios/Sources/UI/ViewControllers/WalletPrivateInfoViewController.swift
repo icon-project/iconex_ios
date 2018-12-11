@@ -79,18 +79,18 @@ class WalletPrivateInfoViewController: UIViewController {
             typeLabel.text = "Ethereum(ETH)"
         }
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        addressCopy.rx.controlEvent(UIControlEvents.touchUpInside)
+        addressCopy.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 copyString(message: self.wallet.address!)
                 Tools.toast(message: "Wallet.Address.CopyComplete".localized)
             }).disposed(by: disposeBag)
         
-        keyCopy.rx.controlEvent(UIControlEvents.touchUpInside)
+        keyCopy.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 copyString(message: self.privKey!)
                 Tools.toast(message: "Wallet.PrivateKey.Copy.Message".localized)

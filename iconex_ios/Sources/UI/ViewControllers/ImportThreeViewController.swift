@@ -57,29 +57,29 @@ class ImportThreeViewController: UIViewController {
     }
     
     func initialize() {
-        inputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        inputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.inputBox.textField.resignFirstResponder()
             self.doneButton.isEnabled = self.validateWalletName()
         }).disposed(by: disposeBag)
         
-        privNameBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        privNameBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateWalletName()
         }).disposed(by: disposeBag)
-        privNameBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
+        privNameBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
             self.privPassword1.textField.becomeFirstResponder()
         }).disposed(by: disposeBag)
         
-        privPassword1.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: {[unowned self] in
+        privPassword1.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {[unowned self] in
             self.validatePassword()
         }).disposed(by: disposeBag)
-        privPassword1.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
+        privPassword1.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
             self.privPassword2.textField.becomeFirstResponder()
         }).disposed(by: disposeBag)
         
-        privPassword2.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: {[unowned self] in
+        privPassword2.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {[unowned self] in
             self.validateConfirmPassword()
         }).disposed(by: disposeBag)
-        privPassword2.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: {
+        privPassword2.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
             
         }).disposed(by: disposeBag)
         

@@ -8,7 +8,6 @@
 import UIKit
 import RxCocoa
 import RxSwift
-import Toaster
 
 class StepTwoViewController: UIViewController {
     @IBOutlet weak var headerLabel1: UILabel!
@@ -67,33 +66,33 @@ class StepTwoViewController: UIViewController {
         
         nextButton.isEnabled = false
         
-        walletNameBox.textField.rx.controlEvent([UIControlEvents.editingDidBegin]).subscribe(onNext: { [unowned self] in
+        walletNameBox.textField.rx.controlEvent([UIControl.Event.editingDidBegin]).subscribe(onNext: { [unowned self] in
             self.walletNameBox.setState(.focus)
         }).disposed(by: disposeBag)
-        walletNameBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        walletNameBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateWalletName()
         }).disposed(by: disposeBag)
-        walletNameBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        walletNameBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.password1.textField.becomeFirstResponder()
         }).disposed(by: disposeBag)
 
-        password1.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        password1.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.password1.setState(.focus)
         }).disposed(by: disposeBag)
-        password1.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        password1.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validatePassword1()
         }).disposed(by: disposeBag)
-        password1.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        password1.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.password2.textField.becomeFirstResponder()
         }).disposed(by: disposeBag)
 
-        password2.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        password2.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.password2.setState(.focus)
         }).disposed(by: disposeBag)
-        password2.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        password2.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validatePassword2()
         }).disposed(by: disposeBag)
-        password2.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        password2.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.allValidation()
         }).disposed(by: disposeBag)
         
@@ -182,7 +181,7 @@ class StepTwoViewController: UIViewController {
         } catch {
             Log.Error(error)
             
-            Toast(text: "Error.Wallet.CreateFailed".localized).show()
+            Tools.toast(message: "Error.Wallet.CreateFailed".localized)
         }
     }
     

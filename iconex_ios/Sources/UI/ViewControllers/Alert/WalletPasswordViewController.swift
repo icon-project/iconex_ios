@@ -55,12 +55,12 @@ class WalletPasswordViewController: UIViewController {
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
         confirmButton.isEnabled = false
         
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             guard let password = self.passwordInputBox.textField.text, password == "" else { return }
             self.passwordInputBox.setState(.error, "Error.Password".localized)
         }).disposed(by: disposeBag)
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.passwordInputBox.textField.resignFirstResponder()
                 if let handler = self.confirmHandler {
@@ -71,7 +71,7 @@ class WalletPasswordViewController: UIViewController {
                 })
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 
                 do {

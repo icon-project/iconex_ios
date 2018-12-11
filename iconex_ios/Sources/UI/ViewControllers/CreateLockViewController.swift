@@ -39,7 +39,7 @@ class CreateLockViewController: UIViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if self.mode == .recreate {
                     self.navigationController?.dismiss(animated: true, completion: nil)

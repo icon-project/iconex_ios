@@ -81,7 +81,7 @@ class EditingAddressViewController: UIViewController {
         
         qrButton.cornered()
         
-        qrButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        qrButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
                 reader.mode = .address(.add)
@@ -99,45 +99,45 @@ class EditingAddressViewController: UIViewController {
                 self.bottomConstraint.constant = height
             }).disposed(by: disposeBag)
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
                 self.view.endEditing(true)
             }).disposed(by: disposeBag)
         
-        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
+        nameInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
                 self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
             }).disposed(by: disposeBag)
-        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+        nameInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: {
             }).disposed(by: disposeBag)
-        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged)
+        nameInputBox.textField.rx.controlEvent(UIControl.Event.editingChanged)
             .subscribe(onNext: { [unowned self] in
                 self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
             }).disposed(by: disposeBag)
-        nameInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin)
+        nameInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin)
             .subscribe(onNext: { [unowned self] in
                 self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
             }).disposed(by: disposeBag)
         
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
                 self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
             }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: {
             }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged)
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingChanged)
             .subscribe(onNext: { [unowned self] in
                 self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
             }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin)
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin)
             .subscribe(onNext: { [unowned self] in
                 self.confirmButton.isEnabled = self.validateNameField(false) && self.validateAddressField(false)
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if self.validateNameField() && self.validateAddressField() {
                     do {

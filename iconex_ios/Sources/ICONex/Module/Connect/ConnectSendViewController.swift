@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 import ICONKit
 import BigInt
-import Toaster
+import Toast_Swift
 
 class ConnectSendViewController: BaseViewController {
     @IBOutlet weak var navTitle: UILabel!
@@ -59,25 +59,25 @@ class ConnectSendViewController: BaseViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             Alert.Confirm(message: "Alert.Connect.Send.Cancel".localized, handler: {
                 Conn.sendError(error: ConnectError.userCancel)
             }).show(self)
         }).disposed(by: disposeBag)
         
-        stepLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: {
+        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
             self.stepLimitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: {
+        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
             self.sendButton.isEnabled = self.validateLimit()
         }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
+        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
         scrollView.rx.didEndScrollingAnimation.subscribe(onNext: {
             self.view.endEditing(true)
         }).disposed(by: disposeBag)
         
-        viewData.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        viewData.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             self.viewImage.isHighlighted = !self.viewImage.isHighlighted
             self.dataView.isHidden = !self.viewImage.isHighlighted
             
@@ -93,7 +93,7 @@ class ConnectSendViewController: BaseViewController {
             }
         }).disposed(by: disposeBag)
         
-        sendButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        sendButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard let received = Conn.received else { return }
             guard let from = received.params?["from"] as? String else { return }
             guard let to = received.params?["to"] as? String else { return }

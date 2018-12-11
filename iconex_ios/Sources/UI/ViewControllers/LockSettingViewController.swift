@@ -46,7 +46,7 @@ class LockSettingViewController: UIViewController {
     func initialize() {
         tableView.isScrollEnabled = false
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
@@ -100,7 +100,7 @@ extension LockSettingViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "LockSettingRadioCell", for: indexPath) as! LockSettingRadioCell
             cell.cellTitle.text = "LockScreen.Setting.useFunction".localized
             cell.radio.isOn = UserDefaults.standard.bool(forKey: "useLock")
-            cell.radio.rx.controlEvent(UIControlEvents.valueChanged)
+            cell.radio.rx.controlEvent(UIControl.Event.valueChanged)
                 .subscribe(onNext: {
                     let createLock = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "CreateLockView") as! CreateLockViewController
                     if cell.radio.isOn {
@@ -130,7 +130,7 @@ extension LockSettingViewController: UITableViewDataSource {
                 break
             }
             cell.radio.isOn = UserDefaults.standard.bool(forKey: "useBio")
-            cell.radio.rx.controlEvent(UIControlEvents.valueChanged)
+            cell.radio.rx.controlEvent(UIControl.Event.valueChanged)
                 .subscribe(onNext: { [unowned self] in
                     if cell.radio.isOn {
                         let status = Tools.canVerificateTouchID()

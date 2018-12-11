@@ -53,7 +53,7 @@ class TokenListViewController: UIViewController {
         
         tableView.tableFooterView = UIView()
         
-        addButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        addButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let manage = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenManageView") as! TokenManageViewController
                 manage.walletInfo = self.walletInfo
@@ -61,7 +61,7 @@ class TokenListViewController: UIViewController {
                 self.navigationController?.pushViewController(manage, animated: true)
             }).disposed(by: disposeBag)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)

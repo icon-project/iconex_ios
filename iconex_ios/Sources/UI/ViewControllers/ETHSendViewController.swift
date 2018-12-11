@@ -117,7 +117,7 @@ class ETHSendViewController: UIViewController {
     
     func initialize() {
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.navigationController?.popViewController(animated: true)
             }).disposed(by: disposeBag)
@@ -126,7 +126,7 @@ class ETHSendViewController: UIViewController {
             self.view.endEditing(false)
         }).disposed(by: disposeBag)
         
-        selectAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        selectAddressButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let addressManage = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "AddressManageView") as! AddressManageViewController
             addressManage.walletInfo = self.walletInfo
             addressManage.selectHandler = { (address) in
@@ -140,41 +140,41 @@ class ETHSendViewController: UIViewController {
             self.present(addressManage, animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        sendInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.sendInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        sendInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateBalance()
             self.calculateGas()
         }).disposed(by: disposeBag)
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
+        sendInputBox.textField.rx.controlEvent(UIControl.Event.editingChanged).subscribe(onNext: { [unowned self] in
             guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue), let exchanged = Tools.balanceToExchange(send, from: "eth", to: "usd", belowDecimal: 2, decimal: 18) else {
                 return
             }
             self.sendInputBox.setState(.exchange, exchanged.currencySeparated() + " USD")
         }).disposed(by: disposeBag)
         
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.addressInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateBalance()
             self.validateAddress()
             self.calculateGas()
         }).disposed(by: disposeBag)
         
-        gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        gasLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.gasLimitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        gasLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateEstimateGas()
             self.calculateGas()
         }).disposed(by: disposeBag)
         
-        dataInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        dataInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.dataInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        dataInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        dataInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateData()
             self.calculateGas()
         }).disposed(by: disposeBag)
@@ -203,7 +203,7 @@ class ETHSendViewController: UIViewController {
             return iterator.reduce(true, { $0 && $1 })
             }.bind(to: sendButton.rx.isEnabled).disposed(by: disposeBag)
         
-        qrButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        qrButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
                 reader.mode = .address(.send)
@@ -217,7 +217,7 @@ class ETHSendViewController: UIViewController {
                 reader.show(self)
             }).disposed(by: disposeBag)
         
-        add1.rx.controlEvent(UIControlEvents.touchUpInside)
+        add1.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
                     return
@@ -238,7 +238,7 @@ class ETHSendViewController: UIViewController {
                 self.calculateGas()
             }).disposed(by: disposeBag)
         
-        add2.rx.controlEvent(UIControlEvents.touchUpInside)
+        add2.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
                     return
@@ -258,7 +258,7 @@ class ETHSendViewController: UIViewController {
                 self.calculateGas()
             }).disposed(by: disposeBag)
         
-        add3.rx.controlEvent(UIControlEvents.touchUpInside)
+        add3.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
                     return
@@ -278,7 +278,7 @@ class ETHSendViewController: UIViewController {
                 self.calculateGas()
             }).disposed(by: disposeBag)
         
-        add4.rx.controlEvent(UIControlEvents.touchUpInside)
+        add4.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let estimate = self.estimateGas() else { return }
                 
@@ -302,36 +302,36 @@ class ETHSendViewController: UIViewController {
                 self.calculateGas()
             }).disposed(by: disposeBag)
         
-        limitInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        limitInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             Alert.Basic(message: "Transfer.Gas.Desc_1".localized).show(self)
         }).disposed(by: disposeBag)
-        gasLimitInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged)
+        gasLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingChanged)
             .subscribe(onNext: { [unowned self] in
                 self.calculateGas()
                 let _ = self.validateBalance()
             }).disposed(by: disposeBag)
-        gasInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        gasInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             Alert.Basic(message: "Transfer.Gas.Desc_2".localized).show(self)
         }).disposed(by: disposeBag)
         
-        minusButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        minusButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.gasSlider.value -= 1
                 self.gasValueLabel.text = "\(Int(self.gasSlider.value))" + " Gwei"
                 self.calculateGas()
             }).disposed(by: disposeBag)
         
-        plusButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        plusButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.gasSlider.value += 1
                 self.gasValueLabel.text = "\(Int(self.gasSlider.value))" + " Gwei"
                 self.calculateGas()
             }).disposed(by: disposeBag)
         
-        dataInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        dataInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             Alert.Basic(message: "Transfer.Gas.Desc_4".localized).show(self)
         }).disposed(by: disposeBag)
-        dataTitleButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        dataTitleButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let height = self.dataTitleButton.frame.height + (self.dataTitleButton.frame.origin.y * 2)
                 if self.dataContainerHeight.constant == height {
@@ -354,7 +354,7 @@ class ETHSendViewController: UIViewController {
             self.calculateGas()
         }).disposed(by: disposeBag)
         
-        feeInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        feeInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             Alert.Basic(message: "Transfer.Gas.Desc_3".localized).show(self)
         }).disposed(by: disposeBag)
         
@@ -362,7 +362,7 @@ class ETHSendViewController: UIViewController {
             self.bottomConstraint.constant = height == 0 ? height + 72 : height
         }).disposed(by: disposeBag)
         
-        sendButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        sendButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.sendTransaction()
             }).disposed(by: disposeBag)

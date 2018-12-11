@@ -66,11 +66,11 @@ class MainMenuViewController: UIViewController {
     func initialize() {
         self.modalPresentationStyle = .overFullScreen
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close()
         }).disposed(by: disposeBag)
         
-        walletMakeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        walletMakeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return
@@ -79,7 +79,7 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        walletImportButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        walletImportButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return
@@ -88,7 +88,7 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        walletExportButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        walletExportButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return
@@ -97,7 +97,7 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        lockButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        lockButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return
@@ -106,7 +106,7 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        languageButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        languageButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return
@@ -115,7 +115,7 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        versionButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        versionButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return
@@ -124,7 +124,7 @@ class MainMenuViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        termsButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        termsButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close {
                 guard let delegate = self?.delegate else {
                     return

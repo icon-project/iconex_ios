@@ -112,7 +112,7 @@ class ViewOptionViewController: UIViewController {
         
         self.view.alpha = 0.0
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close()
         }).disposed(by: disposeBag)
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
@@ -140,24 +140,24 @@ class ViewOptionViewController: UIViewController {
         typeDepositButton.setTitleColor(UIColor.black, for: .normal)
         typeDepositButton.setTitleColor(UIColor.white, for: .selected)
         
-        stateAllButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        stateAllButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.state = 0
         }).disposed(by: disposeBag)
-        stateHoldButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        stateHoldButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.state = 1
         }).disposed(by: disposeBag)
         
-        typeAllButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        typeAllButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.type = 0
         }).disposed(by: disposeBag)
-        typeWithdrawButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        typeWithdrawButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.type = 1
         }).disposed(by: disposeBag)
-        typeDepositButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        typeDepositButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.type = 2
         }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
 
             self.close(completion: {
                 guard let delegate = self.delegate else {

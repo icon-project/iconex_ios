@@ -13,7 +13,7 @@ import BigInt
 import web3swift
 import LocalAuthentication
 import CryptoSwift
-import Toaster
+import Toast_Swift
 
 struct Tools {
     public enum LAStatus {
@@ -399,7 +399,9 @@ struct Tools {
     }
     
     static func toast(message: String) {
-        Toast(text: message, duration: Delay.short).show()
+        guard let window = UIApplication.shared.keyWindow, let root = window.rootViewController, let view = root.view else { return }
+        
+        view.makeToast(message)
     }
 }
 
@@ -472,11 +474,11 @@ func scaleQRCode(origin: CIImage) -> UIImage {
 func keyboardHeight() -> Observable<CGFloat> {
     return Observable
         .from([
-            NotificationCenter.default.rx.notification(NSNotification.Name.UIKeyboardWillShow)
+            NotificationCenter.default.rx.notification(UIResponder.keyboardWillShowNotification)
                 .map { notification -> CGFloat in
-                    (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height ?? 0
+                    (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue.height ?? 0
             },
-            NotificationCenter.default.rx.notification(NSNotification.Name.UIKeyboardWillHide)
+            NotificationCenter.default.rx.notification(UIResponder.keyboardWillHideNotification)
                 .map { _ -> CGFloat in
                     0
             }

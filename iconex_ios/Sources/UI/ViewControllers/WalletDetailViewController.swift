@@ -168,11 +168,11 @@ class WalletDetailViewController: UIViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.navigationController?.popViewController(animated: true)
         }).disposed(by: disposeBag)
         
-        outButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        outButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!) else { return }
             if let token = self.token {
                 guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
@@ -227,18 +227,18 @@ class WalletDetailViewController: UIViewController {
             self.present(pwdAlert, animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        inButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        inButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: {[unowned self] in
                 Alert.PrivateInfo(walletInfo: self.walletInfo!).show(self)
             }).disposed(by: disposeBag)
         
-        filterButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        filterButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let viewOption = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "ViewOption") as! ViewOptionViewController
             viewOption.present(from: self, title: "Detail.ViewOption".localized, state: self.viewState)
             viewOption.delegate = self
         }).disposed(by: disposeBag)
         
-        exchangeSelectButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        exchangeSelectButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
             selectable.present(from: self, title: "Detail.Select.Unit".localized, items: self.exchangeItem)
             selectable.handler = ({ [unowned self] (selectedIndex) in
@@ -246,7 +246,7 @@ class WalletDetailViewController: UIViewController {
             })
         }).disposed(by: disposeBag)
         
-        topSelectButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        topSelectButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!) else { return }
             var info = [(name: String, balance: String, symbol: String)]()
             
@@ -288,7 +288,7 @@ class WalletDetailViewController: UIViewController {
             
         }).disposed(by: disposeBag)
         
-        etherButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        etherButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let address = self.walletInfo?.address else {
                     return
@@ -301,7 +301,7 @@ class WalletDetailViewController: UIViewController {
         exchangeType = "usd"
         viewState = (0, 0)
         
-        moreButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        moreButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 
                 let detail = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "WalletDetailMenu") as! WalletDetailMenuController
@@ -425,7 +425,7 @@ class WalletDetailViewController: UIViewController {
                 
             }).disposed(by: disposeBag)
         
-        infoButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        infoButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Alert.Basic(message: "Alert.ICX.Transfer.Info".localized).show(self)
             }).disposed(by: disposeBag)
@@ -435,7 +435,7 @@ class WalletDetailViewController: UIViewController {
             let height = self.tableView.contentSize.height
             let offset = self.tableView.contentOffset.y
             if offset + self.tableView.frame.height >= height && self.totalData >= self.step * 10 {
-                self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+                self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 self.step += 1
                 self.fetchRecentTransaction()
             } else {
@@ -444,11 +444,11 @@ class WalletDetailViewController: UIViewController {
                     self.tableView.contentInset = .zero
                     return
                 }
-                self.tableView.contentInset = UIEdgeInsetsMake(0, 0, -76, 0)
+                self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -76, right: 0)
                 
                 if offset < -self.MAX_LIMIT {
                     self.isDragTriggered = true
-                    self.tableView.contentInset = UIEdgeInsetsMake(78, 0, 0, 0)
+                    self.tableView.contentInset = UIEdgeInsets(top: 78, left: 0, bottom: 0, right: 0)
                     self.refresh01.transform = CGAffineTransform.identity
                     Tools.rotateAnimation(inView: self.refresh01)
                     
@@ -503,7 +503,7 @@ class WalletDetailViewController: UIViewController {
         infoLabel.text = "Detail.TxHistory".localized
         
         etherTransLabel.text = "Detail.ETHTransactions".localized
-        let attr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .regular), .underlineStyle: NSUnderlineStyle.styleSingle.rawValue])
+        let attr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .regular), .underlineStyle: NSUnderlineStyle.single.rawValue])
         etherScan.attributedText = attr
         
         if let wallet = self.walletInfo {
@@ -541,7 +541,7 @@ class WalletDetailViewController: UIViewController {
     func loadData() {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
         if viewState.state == 0 {
-            tableView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0)
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             
             if viewState.type == 0 {
                 filteredList = historyList
@@ -838,7 +838,7 @@ extension WalletDetailViewController: UITableViewDelegate, UITableViewDataSource
             let cell = tableView.dequeueReusableCell(withIdentifier: "WalletDetailCell", for: indexPath) as! WalletDetailCell
             let history = list[indexPath.row]
             
-            let attrString = NSAttributedString(string: history.txHash, attributes: [.underlineStyle: NSUnderlineStyle.styleSingle.rawValue])
+            let attrString = NSAttributedString(string: history.txHash, attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue])
             
             cell.txTitleLabel.attributedText = attrString
             
@@ -903,7 +903,7 @@ extension WalletDetailViewController: UITableViewDelegate, UITableViewDataSource
             let cell = tableView.dequeueReusableCell(withIdentifier: "WalletDetailCell", for: indexPath) as! WalletDetailCell
             let transaction = list[indexPath.row]
             
-            let attrString = NSAttributedString(string: transaction.txHash, attributes: [.underlineStyle: NSUnderlineStyle.styleSingle.rawValue])
+            let attrString = NSAttributedString(string: transaction.txHash, attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue])
             
             cell.txTitleLabel.attributedText = attrString
             

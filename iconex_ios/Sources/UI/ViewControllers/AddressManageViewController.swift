@@ -140,24 +140,24 @@ class AddressManageViewController: UIViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.view.endEditing(true)
             self?.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        editButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        editButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.tableView.setEditing(!self.tableView.isEditing, animated: true)
             self.tableView.isEditing ? self.editButton.setTitle("Common.Done".localized, for: .normal) : self.editButton.setTitle("Common.Edit".localized, for: .normal)
         }).disposed(by: disposeBag)
         
-        segAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        segAddressButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedIndex = 0
         }).disposed(by: disposeBag)
-        segWalletButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        segWalletButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedIndex = 1
         }).disposed(by: disposeBag)
         
-        addButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        addButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Alert.editingAddress(mode: .add, type: self.walletInfo.type, handler: {
                     
@@ -222,7 +222,7 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
             cell.addressTitle.text = info.name
             cell.addressLabel.text = info.address
             cell.editButton.isHidden = !tableView.isEditing
-            cell.editButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            cell.editButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
                 let info = self.addressBookList[indexPath.row]
                 Alert.editingAddress(name: info.name, address: info.address, mode: .edit, type: self.walletInfo.type, handler: {
                     self.loadWalletList()

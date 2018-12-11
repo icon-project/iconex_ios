@@ -61,11 +61,11 @@ class SwapSendConfirmViewController: BaseViewController {
         receivingLabel.text = ""
         receivingLabel.attributedText = attr
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.sendToken()
         }).disposed(by: disposeBag)
     }

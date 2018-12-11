@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Toaster
 
 class LaunchViewController: UIViewController {
 
@@ -24,13 +23,13 @@ class LaunchViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let appearance = ToastView.appearance()
-        appearance.bottomOffsetPortrait = {
-            if #available(iOS 11.0, *) {
-                return 50 + view.safeAreaInsets.bottom
-            }
-            return 50.0
-        }()
+//        let appearance = ToastView.appearance()
+//        appearance.bottomOffsetPortrait = {
+//            if #available(iOS 11.0, *) {
+//                return 50 + view.safeAreaInsets.bottom
+//            }
+//            return 50.0
+//        }()
         
         #if DEBUG
         print("####### DEBUG #######")

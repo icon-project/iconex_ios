@@ -130,12 +130,12 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     }
     
     func initialize() {
-        topInfoButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        topInfoButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Alert.Basic(message: "Alert.TotalAssetInfo".localized).show(self)
             }).disposed(by: disposeBag)
         
-        navSelector1.rx.controlEvent(UIControlEvents.touchDown).subscribe(onNext: { [unowned self] in
+        navSelector1.rx.controlEvent(UIControl.Event.touchDown).subscribe(onNext: { [unowned self] in
             self.navSelector1.cancelTracking(with: nil)
             self.navSelected = 0
             self.currentIndex = 0
@@ -143,7 +143,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
             
         }).disposed(by: disposeBag)
         
-        navSelector2.rx.controlEvent(UIControlEvents.touchDown).subscribe(onNext: { [unowned self] in
+        navSelector2.rx.controlEvent(UIControl.Event.touchDown).subscribe(onNext: { [unowned self] in
             self.navSelector2.cancelTracking(with: nil)
             self.navSelected = 1
             self.currentIndex = 0
@@ -151,15 +151,15 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
             
         }).disposed(by: disposeBag)
         
-        usdButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        usdButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedExchange = 0
         }).disposed(by: disposeBag)
         
-        btcButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        btcButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedExchange = 1
         }).disposed(by: disposeBag)
         
-        ethButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        ethButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.selectedExchange = 2
         }).disposed(by: disposeBag)
         
@@ -170,7 +170,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         }).disposed(by: disposeBag)
         
         
-        menuButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { 
+        menuButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { 
             let menu = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "MainMenu") as! MainMenuViewController
             menu.delegate = self
             menu.present(from: self, delegate: nil)

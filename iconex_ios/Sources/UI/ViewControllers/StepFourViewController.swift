@@ -79,7 +79,7 @@ class StepFourViewController: UIViewController {
         privateContainer.backgroundColor = UIColor(237, 237, 237)
         privateContainer.corner(4)
         
-        walletInfoButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        walletInfoButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let info = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "WalletPrivateInfo") as! WalletPrivateInfoViewController
                 info.wallet = WCreator.newWallet
@@ -87,7 +87,7 @@ class StepFourViewController: UIViewController {
                 self.present(info, animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        prvCopyButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        prvCopyButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let prv = self.newPrivateKey else {
                     return

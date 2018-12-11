@@ -70,21 +70,21 @@ class ImportTwoViewController: UIViewController {
     func initialize() {
         self.typeList = [("ICON", .icx), ("Ethereum", .eth)]
         
-        inputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        inputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.inputBox.setState(.normal, "")
         }).disposed(by: disposeBag)
-        inputBox.textField.rx.controlEvent([UIControlEvents.editingDidEndOnExit]).subscribe(onNext: { [unowned self] in
+        inputBox.textField.rx.controlEvent([UIControl.Event.editingDidEndOnExit]).subscribe(onNext: { [unowned self] in
             self.nextButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         
-        inputBox2.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        inputBox2.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.inputBox2.setState(.normal, "")
         }).disposed(by: disposeBag)
-        inputBox2.textField.rx.controlEvent([UIControlEvents.editingDidEndOnExit]).subscribe(onNext: { [unowned self] in
+        inputBox2.textField.rx.controlEvent([UIControl.Event.editingDidEndOnExit]).subscribe(onNext: { [unowned self] in
             self.nextButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
         
-        qrButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        qrButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let type = self.typeList[self.selectedIndex].1
             
             let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
@@ -105,8 +105,8 @@ class ImportTwoViewController: UIViewController {
         keyboardHeight().observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] (height: CGFloat) in
             let keyHeight = (height == 0 ? 0 : height - 72)
             UIView.animate(withDuration: 0.25, animations: {
-                self.container1.contentInset = UIEdgeInsetsMake(0, 0, keyHeight, 0)
-                self.container2.contentInset = UIEdgeInsetsMake(0, 0, keyHeight, 0)
+                self.container1.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyHeight, right: 0)
+                self.container2.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyHeight, right: 0)
             })
             
         }).disposed(by: disposeBag)

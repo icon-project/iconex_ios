@@ -23,16 +23,16 @@ class SwapConfirmViewController: BaseViewController {
     func initialize() {
         alertView.corner(12)
         messageLabel.text = "Alert.Swap.Completed".localized
-        let attr = NSAttributedString(string: "Alert.Swap.Policy".localized, attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor(68, 136, 230), .underlineStyle: NSUnderlineStyle.styleSingle.rawValue])
+        let attr = NSAttributedString(string: "Alert.Swap.Policy".localized, attributes: [.font: UIFont.systemFont(ofSize: 15, weight: .bold), .foregroundColor: UIColor(68, 136, 230), .underlineStyle: NSUnderlineStyle.single.rawValue])
         detailButton.setAttributedTitle(attr, for: .normal)
-        detailButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        detailButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard let faqURL = URL(string: Config.faqLink) else { return }
             UIApplication.shared.open(faqURL, options: [:], completionHandler: nil)
         }).disposed(by: disposeBag)
         
         confirmButton.styleDark()
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
     }

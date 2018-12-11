@@ -31,7 +31,7 @@ class ForgotViewController: BaseViewController {
     func initialize() {
         tableView.tableFooterView = UIView()
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
     }

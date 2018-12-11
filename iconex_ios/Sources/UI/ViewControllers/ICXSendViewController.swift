@@ -180,7 +180,7 @@ class ICXSendViewController: BaseViewController {
     }
     
     func initialize() {
-        topCloseButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        topCloseButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.navigationController?.popViewController(animated: true)
         }).disposed(by: disposeBag)
         
@@ -188,13 +188,13 @@ class ICXSendViewController: BaseViewController {
             self.view.endEditing(true)
         }).disposed(by: disposeBag)
         
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        sendInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.sendInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        sendInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.sendButton.isEnabled = self.validation()
         }).disposed(by: disposeBag)
-        sendInputBox.textField.rx.controlEvent(UIControlEvents.editingChanged).subscribe(onNext: { [unowned self] in
+        sendInputBox.textField.rx.controlEvent(UIControl.Event.editingChanged).subscribe(onNext: { [unowned self] in
             guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue) else {
                 return
             }
@@ -215,7 +215,7 @@ class ICXSendViewController: BaseViewController {
             
         }).disposed(by: disposeBag)
         
-        add1.rx.controlEvent(UIControlEvents.touchUpInside)
+        add1.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
                     return
@@ -235,7 +235,7 @@ class ICXSendViewController: BaseViewController {
                 self.validateBalance()
             }).disposed(by: disposeBag)
         
-        add2.rx.controlEvent(UIControlEvents.touchUpInside)
+        add2.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
                     return
@@ -255,7 +255,7 @@ class ICXSendViewController: BaseViewController {
                 self.validateBalance()
             }).disposed(by: disposeBag)
         
-        add3.rx.controlEvent(UIControlEvents.touchUpInside)
+        add3.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
                     return
@@ -275,7 +275,7 @@ class ICXSendViewController: BaseViewController {
                 self.validateBalance()
             }).disposed(by: disposeBag)
         
-        add4.rx.controlEvent(UIControlEvents.touchUpInside)
+        add4.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let totalBalance = self.totalBalance else { return }
                 guard let walletInfo = self.walletInfo else { return }
@@ -309,16 +309,16 @@ class ICXSendViewController: BaseViewController {
                 self.validateLimit()
             }).disposed(by: disposeBag)
         
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.addressInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             if self.validateAddress() {
                 self.sendButton.isEnabled = self.validation()
             }
         }).disposed(by: disposeBag)
         
-        selectAddressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        selectAddressButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let addressManage = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "AddressManageView") as! AddressManageViewController
             addressManage.walletInfo = self.walletInfo
             addressManage.selectHandler = { (address) in
@@ -332,7 +332,7 @@ class ICXSendViewController: BaseViewController {
             self.present(addressManage, animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        scanButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        scanButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let reader = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "QRReaderView") as! QRReaderViewController
                 reader.mode = .address(.send)
@@ -346,29 +346,29 @@ class ICXSendViewController: BaseViewController {
                 reader.show(self)
             }).disposed(by: disposeBag)
         
-        stepLimitInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            let attr1 = NSAttributedString(string: "Transfer.Step.LimitInfo.First".localized, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
+        stepLimitInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
+            let attr1 = NSAttributedString(string: "Transfer.Step.LimitInfo.First".localized, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
             let attr2 = NSAttributedString(string: "Transfer.Step.LimitInfo.Second".localized)
             let attr = NSMutableAttributedString(attributedString: attr1)
             attr.append(attr2)
             Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
-        limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        limitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.limitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        limitInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        limitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             if self.validateLimit() {
                 self.sendButton.isEnabled = self.validation()
             }
         }).disposed(by: disposeBag)
         
-        stepPriceInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
-            let attr1 = NSAttributedString(string: "Transfer.Step.PriceInfo.First".localized + "\n", attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
+        stepPriceInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
+            let attr1 = NSAttributedString(string: "Transfer.Step.PriceInfo.First".localized + "\n", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
             let attr2 = NSAttributedString(string: "Transfer.Step.PriceInfo.Second".localized)
             let attr3 = NSAttributedString(string: "Transfer.Step.PriceInfo.Third".localized)
             let superscript = NSMutableAttributedString(string: "Transfer.Step.PriceInfo.Superscript".localized)
-            superscript.setAttributes([NSAttributedStringKey.baselineOffset: 10, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 7)], range: NSRange(location: 2, length: 3))
+            superscript.setAttributes([NSAttributedString.Key.baselineOffset: 10, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 7)], range: NSRange(location: 2, length: 3))
             
             let attr = NSMutableAttributedString(attributedString: attr1)
             attr.append(attr2)
@@ -377,11 +377,11 @@ class ICXSendViewController: BaseViewController {
             Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
-        dataInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {[ unowned self] in
+        dataInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {[ unowned self] in
             Alert.Basic(message: "Transfer.Data.Info".localized).show(self)
         }).disposed(by: disposeBag)
         
-        dataInputControl.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        dataInputControl.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             if let savedData = self.inputData {
                 let dataInput = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXDataInputView") as! ICXDataInputViewController
                 dataInput.type = self.selectedDataType
@@ -423,7 +423,7 @@ class ICXSendViewController: BaseViewController {
             }
         }).disposed(by: disposeBag)
         
-        feeInfo.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        feeInfo.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             Alert.Basic(message: "Transfer.EstimatedStep".localized).show(self)
         }).disposed(by: disposeBag)
         
@@ -439,7 +439,7 @@ class ICXSendViewController: BaseViewController {
             }
         }).disposed(by: disposeBag)
         
-        sendButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        sendButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             
             let value = self.sendInputBox.textField.text!
             let bigValue = Tools.stringToBigUInt(inputText: value)!

@@ -65,12 +65,12 @@ class WalletBackupViewController: UIViewController {
         
         privkeyLabel.text = String(repeating: "•", count: 62)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        backupButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        backupButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let confirmAction = Alert.Confirm(message: "Alert.DownloadKeystore".localized, cancel: "Common.Cancel".localized, confirm: "Common.Confirm".localized, handler: {
                     
@@ -105,7 +105,7 @@ class WalletBackupViewController: UIViewController {
                 self.present(confirmAction, animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        copyButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        copyButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let prvKey = self.privKey else {
                     return
@@ -114,7 +114,7 @@ class WalletBackupViewController: UIViewController {
                 Tools.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }).disposed(by: disposeBag)
         
-        eyeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        eyeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.eyeButton.isSelected = !self.eyeButton.isSelected
                 if self.eyeButton.isSelected {
@@ -124,7 +124,7 @@ class WalletBackupViewController: UIViewController {
                 }
             }).disposed(by: disposeBag)
         
-        walletButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        walletButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 let info = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "WalletPrivateInfo") as! WalletPrivateInfoViewController
                 let wallet = WManager.loadWalletBy(info: self.walletInfo!)

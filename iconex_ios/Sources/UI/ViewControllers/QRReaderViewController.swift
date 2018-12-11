@@ -72,7 +72,7 @@ class QRReaderViewController: UIViewController {
         indicatorLabel.text = ""
         indicatorView.isHidden = true
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
@@ -116,7 +116,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
         previewLayer?.frame = view.layer.bounds
         videoView.layer.addSublayer(previewLayer!)
         
-        view.bringSubview(toFront: captureView)
+        view.bringSubviewToFront(captureView)
         
     }
     

@@ -57,7 +57,7 @@ class WalletAddressViewController: UIViewController {
         snapshotView.corner(4)
         closeButton.isHidden = true
         
-        copyButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        copyButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             guard let address = self?.currentWallet.address else {
                 return
             }
@@ -65,7 +65,7 @@ class WalletAddressViewController: UIViewController {
             Tools.toast(message: "Wallet.Address.CopyComplete".localized)
         }).disposed(by: disposeBag)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.flipDown()
         }).disposed(by: disposeBag)
     }

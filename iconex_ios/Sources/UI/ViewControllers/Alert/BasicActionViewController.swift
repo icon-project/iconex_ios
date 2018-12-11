@@ -40,7 +40,7 @@ class BasicActionViewController: UIViewController {
         confirmButton.styleDark()
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true, completion: {
                     if let completion = self?.handler {

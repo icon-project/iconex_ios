@@ -76,6 +76,7 @@
 		D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4728A122007040B00E0A899 /* AppDelegate.swift */; };
 		D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4728A192007040B00E0A899 /* Assets.xcassets */; };
 		D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */; };
+		D4776D4921BE696C00A48472 /* Credits.plist in Resources */ = {isa = PBXBuildFile; fileRef = D4776D4821BE696C00A48472 /* Credits.plist */; };
 		D477CC2C205F554700797A82 /* ConfirmActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D477CC2B205F554700797A82 /* ConfirmActionViewController.swift */; };
 		D477CC2E205F778600797A82 /* SendConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D477CC2D205F778600797A82 /* SendConfirmViewController.swift */; };
 		D47A03DB20A2C533009A3A99 /* LanguageSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A03DA20A2C532009A3A99 /* LanguageSelectViewController.swift */; };
@@ -93,7 +94,6 @@
 		D4843E9B205B627100B14377 /* WalletPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4843E9A205B627100B14377 /* WalletPasswordViewController.swift */; };
 		D4843E9D205B95D100B14377 /* BasicActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4843E9C205B95D100B14377 /* BasicActionViewController.swift */; };
 		D4843E9F205B9D9900B14377 /* WalletPrivateInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4843E9E205B9D9900B14377 /* WalletPrivateInfoViewController.swift */; };
-		D487AA1F211ABEC3003B262D /* Credits.plist in Resources */ = {isa = PBXBuildFile; fileRef = D487AA1E211ABEC2003B262D /* Credits.plist */; };
 		D48D18182133E74B00BEAA2F /* Communicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48D18172133E74B00BEAA2F /* Communicator.swift */; };
 		D48D181A2133E75E00BEAA2F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48D18192133E75E00BEAA2F /* Response.swift */; };
 		D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49B92043E5DD0064CFF4 /* WalletBase.swift */; };
@@ -141,9 +141,22 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D4A8C09221BE437500B41B36 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43894C361053A2695BBD24DA /* Pods_ICONex_Today.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ICONex_Today.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9170E3A828192EA10BAB8568 /* Pods-ICONex-Today.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ICONex-Today.release.xcconfig"; path = "Pods/Target Support Files/Pods-ICONex-Today/Pods-ICONex-Today.release.xcconfig"; sourceTree = "<group>"; };
+		AA912E9857C76ABB008EA2F5 /* Pods-ICONex-Today.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ICONex-Today.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ICONex-Today/Pods-ICONex-Today.debug.xcconfig"; sourceTree = "<group>"; };
 		BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D4053325206CD1700040BE89 /* TransactionDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailViewController.swift; sourceTree = "<group>"; };
@@ -302,6 +315,7 @@
 		D4728A192007040B00E0A899 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D4728A1C2007040B00E0A899 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4728A2A20073BDF00E0A899 /* iconex_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iconex_ios-Bridging-Header.h"; sourceTree = "<group>"; };
+		D4776D4821BE696C00A48472 /* Credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Credits.plist; sourceTree = "<group>"; };
 		D477CC2B205F554700797A82 /* ConfirmActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmActionViewController.swift; sourceTree = "<group>"; };
 		D477CC2D205F778600797A82 /* SendConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendConfirmViewController.swift; sourceTree = "<group>"; };
 		D47A03DA20A2C532009A3A99 /* LanguageSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LanguageSelectViewController.swift; sourceTree = "<group>"; };
@@ -320,7 +334,6 @@
 		D4843E9A205B627100B14377 /* WalletPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPasswordViewController.swift; sourceTree = "<group>"; };
 		D4843E9C205B95D100B14377 /* BasicActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicActionViewController.swift; sourceTree = "<group>"; };
 		D4843E9E205B9D9900B14377 /* WalletPrivateInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletPrivateInfoViewController.swift; sourceTree = "<group>"; };
-		D487AA1E211ABEC2003B262D /* Credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Credits.plist; sourceTree = "<group>"; };
 		D48D18172133E74B00BEAA2F /* Communicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Communicator.swift; sourceTree = "<group>"; };
 		D48D18192133E75E00BEAA2F /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		D48E49B92043E5DD0064CFF4 /* WalletBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletBase.swift; sourceTree = "<group>"; };
@@ -334,6 +347,7 @@
 		D49605122063E6B80073C99F /* QRReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRReaderViewController.swift; sourceTree = "<group>"; };
 		D4A4E97C2015DA7900BE0F24 /* Alert.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Alert.storyboard; sourceTree = "<group>"; };
 		D4A7841D2148EA49003A40C0 /* DataInputSourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataInputSourceViewController.swift; sourceTree = "<group>"; };
+		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		D4B178EA206E0A5800F8CC35 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		D4BE74C62040035100638E2E /* PreventTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreventTextField.swift; sourceTree = "<group>"; };
 		D4BE74C82040046C00638E2E /* IXUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXUtils.swift; sourceTree = "<group>"; };
@@ -385,6 +399,8 @@
 				D43150652100839A00D30E8E /* CloudKit.framework */,
 				D44A948A2019CB0D00F60614 /* Security.framework */,
 				BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */,
+				D4A8C08321BE437500B41B36 /* NotificationCenter.framework */,
+				43894C361053A2695BBD24DA /* Pods_ICONex_Today.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -619,7 +635,7 @@
 				D4728A102007040B00E0A899 /* Products */,
 				E625D6AEA7B504FDCBEB72E2 /* Pods */,
 				8D4DDEC28B4D9720DC645944 /* Frameworks */,
-				D487AA1E211ABEC2003B262D /* Credits.plist */,
+				D4776D4821BE696C00A48472 /* Credits.plist */,
 				D41B430E207B71C60011DDB9 /* Info.plist */,
 			);
 			sourceTree = "<group>";
@@ -809,6 +825,8 @@
 			children = (
 				F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */,
 				D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */,
+				AA912E9857C76ABB008EA2F5 /* Pods-ICONex-Today.debug.xcconfig */,
+				9170E3A828192EA10BAB8568 /* Pods-ICONex-Today.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -827,6 +845,7 @@
 				8F4831E4B711B141BCFD46A5 /* [CP] Embed Pods Frameworks */,
 				D487AA1D211ABE0E003B262D /* ShellScript */,
 				D4653B56213CE0090059C042 /* Embed Frameworks */,
+				D4A8C09221BE437500B41B36 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
@@ -843,7 +862,7 @@
 		D4728A072007040B00E0A899 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 0920;
 				ORGANIZATIONNAME = "ICON Foundation.";
 				TargetAttributes = {
@@ -896,10 +915,10 @@
 				D435CDFE2056737600F0FDC6 /* Loading.storyboard in Resources */,
 				D481C4A2203EB0EC00A799D7 /* IXInputBox.xib in Resources */,
 				D43FB68B214B464B005360A8 /* ixShield_icon.foundation.iconex_license.txt in Resources */,
-				D487AA1F211ABEC3003B262D /* Credits.plist in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
 				D483EDFE2091A4AE0039BA36 /* IXIndicator.xib in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
+				D4776D4921BE696C00A48472 /* Credits.plist in Resources */,
 				D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */,
 				D460387120CA4A730076EDF9 /* SwapStepView2.xib in Resources */,
 				D435CDFF2056737600F0FDC6 /* Main.storyboard in Resources */,
@@ -953,7 +972,7 @@
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
-				"${BUILT_PRODUCTS_DIR}/Toaster/Toaster.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/scrypt/scrypt.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1_ios/secp256k1_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/web3swift/web3swift.framework",
@@ -972,7 +991,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toaster.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scrypt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/web3swift.framework",
@@ -993,7 +1012,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n./credits.py -s \"$SRCROOT\" -o \"$SRCROOT/Credits.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1230,6 +1249,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1254,41 +1274,6 @@
 					"$(PROJECT_DIR)/NSHC/**",
 					"$(PROJECT_DIR)/NSHC",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					"\"Alamofire\"",
-					"-framework",
-					"\"BigInt\"",
-					"-framework",
-					"\"CryptoSwift\"",
-					"-framework",
-					"\"ICONKit\"",
-					"-framework",
-					"\"LicensesViewController\"",
-					"-framework",
-					"\"PromiseKit\"",
-					"-framework",
-					"\"Realm\"",
-					"-framework",
-					"\"RealmSwift\"",
-					"-framework",
-					"\"Result\"",
-					"-framework",
-					"\"RxCocoa\"",
-					"-framework",
-					"\"RxSwift\"",
-					"-framework",
-					"\"SipHash\"",
-					"-framework",
-					"\"Toaster\"",
-					"-framework",
-					"\"scrypt\"",
-					"-framework",
-					"\"secp256k1_ios\"",
-					"-framework",
-					"\"web3swift\"",
-				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D NSHC";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1297,7 +1282,7 @@
 				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};
@@ -1307,6 +1292,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1331,41 +1317,6 @@
 					"$(PROJECT_DIR)/NSHC/**",
 					"$(PROJECT_DIR)/NSHC",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-framework",
-					"\"Alamofire\"",
-					"-framework",
-					"\"BigInt\"",
-					"-framework",
-					"\"CryptoSwift\"",
-					"-framework",
-					"\"ICONKit\"",
-					"-framework",
-					"\"LicensesViewController\"",
-					"-framework",
-					"\"PromiseKit\"",
-					"-framework",
-					"\"Realm\"",
-					"-framework",
-					"\"RealmSwift\"",
-					"-framework",
-					"\"Result\"",
-					"-framework",
-					"\"RxCocoa\"",
-					"-framework",
-					"\"RxSwift\"",
-					"-framework",
-					"\"SipHash\"",
-					"-framework",
-					"\"Toaster\"",
-					"-framework",
-					"\"scrypt\"",
-					"-framework",
-					"\"secp256k1_ios\"",
-					"-framework",
-					"\"web3swift\"",
-				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D NSHC";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1373,7 +1324,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "ICONex AppStore";
 				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(PODS_ROOT)/**";
 			};

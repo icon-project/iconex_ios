@@ -49,7 +49,7 @@ class BindViewController: BaseViewController {
         self.confirmButton.setTitle("Common.Confirm".localized, for: .normal)
         self.confirmButton.isEnabled = false
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             Alert.Confirm(message: "Alert.Connect.Select.Cancel".localized, handler: {
                 self.dismiss(animated: true, completion: nil)
                 Conn.sendError(error: ConnectError.userCancel)
@@ -57,7 +57,7 @@ class BindViewController: BaseViewController {
             }).show(self)
         }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard let list = self.walletList, let path = self.selectedIndex else { return }
             let info = list[path.row]
             let address = info.address

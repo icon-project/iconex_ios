@@ -54,23 +54,23 @@ class WalletExportPasswordViewController: UIViewController {
         makeButton.styleDark()
         makeButton.rounded()
         
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.passwordInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validatePassword()
         }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             self.confirmInputBox.textField.becomeFirstResponder()
         }).disposed(by: disposeBag)
         
-        confirmInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        confirmInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.confirmInputBox.setState(.focus)
         }).disposed(by: disposeBag)
-        confirmInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        confirmInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateConfirm()
         }).disposed(by: disposeBag)
-        confirmInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        confirmInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             
         }).disposed(by: disposeBag)
         
@@ -88,12 +88,12 @@ class WalletExportPasswordViewController: UIViewController {
             return iterator.reduce(true, { $0 && $1 })
         }.bind(to: makeButton.rx.isEnabled).disposed(by: disposeBag)
         
-        backButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        backButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        makeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        makeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Alert.Confirm(message: "Alert.DownloadKeystore".localized, cancel: "Common.Cancel".localized, confirm: "Common.Confirm".localized, handler: {
                     self.createBundleList()

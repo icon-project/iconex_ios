@@ -35,15 +35,15 @@ class ImportStepViewController: UIViewController, ImportStepDelegate {
     }
     
     func initialize() {
-        let stepOne = childViewControllers[0] as! ImportOneViewController
+        let stepOne = children[0] as! ImportOneViewController
         stepOne.delegate = self
         self.importOne = stepOne
         
-        let stepTwo = childViewControllers[1] as! ImportTwoViewController
+        let stepTwo = children[1] as! ImportTwoViewController
         stepTwo.delegate = self
         self.importTwo = stepTwo
         
-        let stepThree = childViewControllers[2] as! ImportThreeViewController
+        let stepThree = children[2] as! ImportThreeViewController
         stepThree.delegate = self
         self.importThree = stepThree
     }

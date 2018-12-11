@@ -67,14 +67,14 @@ class MainWalletView: UIView, UIScrollViewDelegate {
         tableView.register(UINib(nibName: "MainWalletCell", bundle: nil), forCellReuseIdentifier: "MainWalletCell")
         tableView.isScrollEnabled = false
         
-        addressButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        addressButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let delegate = self.delegate, let info = self.walletInfo else { return }
             
             let image = self.containerView.asImage()
             delegate.showWalletDetail(info: info,snapshot: image, view: self.containerView)
         }).disposed(by: disposeBag)
         
-        detailButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        detailButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let app = UIApplication.shared.delegate as! AppDelegate
             guard let root = app.window?.rootViewController as? UINavigationController, let main = root.viewControllers[0] as? MainViewController else {
                 return

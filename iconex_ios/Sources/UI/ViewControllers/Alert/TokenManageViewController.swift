@@ -138,31 +138,31 @@ class TokenManageViewController: UIViewController {
             editMode = false
         }
         
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.addressInputBox.setState(.focus, nil)
         }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             if self.validateAddres() && !self.editMode && !self.isChecked {
                 self.fetchTokenInfo()
             }
         }).disposed(by: disposeBag)
-        addressInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             if self.validateAddres() && !self.editMode && !self.isChecked {
                 self.fetchTokenInfo()
             }
         }).disposed(by: disposeBag)
         
-        tokenInputBox.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        tokenInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.tokenInputBox.setState(.focus, nil)
         }).disposed(by: disposeBag)
-        tokenInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEnd).subscribe(onNext: { [unowned self] in
+        tokenInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             if !self.editMode {
                 self.confirmButton.isEnabled = self.validation()
             } else {
                 self.editButton.isEnabled = self.validateName()
             }
         }).disposed(by: disposeBag)
-        tokenInputBox.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        tokenInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             if !self.editMode {
                 self.confirmButton.isEnabled = self.validation()
             } else {
@@ -170,7 +170,7 @@ class TokenManageViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if self.editMode {
                     Alert.Confirm(message: "Alert.Token.Edit.Cancel".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
@@ -181,7 +181,7 @@ class TokenManageViewController: UIViewController {
                 }
             }).disposed(by: disposeBag)
         
-        editButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        editButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if self.editMode == true {
                     guard self.validateName() else { return }
@@ -204,7 +204,7 @@ class TokenManageViewController: UIViewController {
                 self.editMode = !self.editMode
             }).disposed(by: disposeBag)
         
-        actionButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        actionButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let token = self.selectedToken else { return }
                 Alert.Confirm(message: "\"" + token.name + "\"" + "Alert.Token.Remove".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
@@ -221,7 +221,7 @@ class TokenManageViewController: UIViewController {
                 }).show(self)
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let token = self.selectedToken else { return }
             let name = self.tokenInputBox.textField.text!
             let stripName = name.removeContinuosSuffix(string: " ")
@@ -241,7 +241,7 @@ class TokenManageViewController: UIViewController {
             }
         }).disposed(by: disposeBag)
         
-        qrButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        qrButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 guard let info = self.walletInfo else { return }
                 

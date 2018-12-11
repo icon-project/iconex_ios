@@ -232,7 +232,7 @@ class WalletManager {
         let result = self.service.call(call).execute()
         
         guard let value = result.value, let cost = value.result else {
-            Log.Debug("error - \(result.error)")
+            Log.Debug("error - \(String(describing: result.error))")
             return nil }
         Log.Debug("cost - \(cost)")
         return cost

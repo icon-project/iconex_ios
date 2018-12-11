@@ -305,7 +305,7 @@ struct Ethereum {
             case .success(_):
                 
                 DispatchQueue.main.async {
-                Log.Debug("success: \(result.value)")
+                    Log.Debug("success: \(String(describing: result.value))")
                     if let txResult = result.value {
                         if let txHash = txResult.transaction.txhash {
                             do {

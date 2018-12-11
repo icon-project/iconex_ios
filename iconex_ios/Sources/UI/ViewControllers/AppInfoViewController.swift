@@ -29,21 +29,21 @@ class AppInfoViewController: BaseViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        openButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        openButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let opensource = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "OpenLicenseView")
             self.navigationController?.pushViewController(opensource, animated: true)
         }).disposed(by: disposeBag)
         
-        developerButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        developerButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             let developer = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "DeveloperView")
             self.navigationController?.pushViewController(developer, animated: true)
         }).disposed(by: disposeBag)
         
-        updateButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: {
+        updateButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: nil)
         }).disposed(by: disposeBag)
     }

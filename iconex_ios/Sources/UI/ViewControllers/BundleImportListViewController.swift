@@ -158,11 +158,11 @@ class BundleImportListViewController: BaseViewController {
     
     func initialize() {
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        importButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        importButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self._queue.removeAll()
             
             WCreator.saveBundle()

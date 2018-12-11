@@ -66,48 +66,48 @@ class ChangePasswordViewController: UIViewController {
         confirmButton.setTitle("Common.Change".localized, for: .normal)
         confirmButton.isEnabled = false
         
-        current.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        current.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.current.setState(.focus)
         }).disposed(by: disposeBag)
-        current.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
+        current.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
                 self.validateCurrent()
             }).disposed(by: disposeBag)
-        current.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+        current.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: { [unowned self] in
                 self.first.textField.becomeFirstResponder()
             }).disposed(by: disposeBag)
         
-        first.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        first.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.first.setState(.focus)
         }).disposed(by: disposeBag)
-        first.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
+        first.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
                 self.validatePassword1()
             }).disposed(by: disposeBag)
-        first.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+        first.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: { [unowned self] in
                 self.second.textField.becomeFirstResponder()
             }).disposed(by: disposeBag)
         
-        second.textField.rx.controlEvent(UIControlEvents.editingDidBegin).subscribe(onNext: { [unowned self] in
+        second.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
             self.second.setState(.focus)
         }).disposed(by: disposeBag)
-        second.textField.rx.controlEvent(UIControlEvents.editingDidEnd)
+        second.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
                 self.validatePassword2()
             }).disposed(by: disposeBag)
-        second.textField.rx.controlEvent(UIControlEvents.editingDidEndOnExit)
+        second.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: { [unowned self] in
                 self.validation()
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 self.changePassword()
             }).disposed(by: disposeBag)
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.view.endEditing(true)
                 self?.dismiss(animated: true, completion: nil)

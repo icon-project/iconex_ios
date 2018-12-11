@@ -47,7 +47,7 @@ class WalletDetailMenuController: UIViewController {
     func initialize() {
         view.alpha = 0.0
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [weak self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in
             self?.close(handler: nil)
         }).disposed(by: disposeBag)
         

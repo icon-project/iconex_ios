@@ -23,7 +23,7 @@ class DisclaimerViewController: BaseViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
     }
@@ -31,8 +31,8 @@ class DisclaimerViewController: BaseViewController {
     func initializeUI() {
         navTitle.text = "Side.Disclaimer".localized
         
-        let title = NSAttributedString(string: "Disclaimer.Title".localized, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
-        let content = NSAttributedString(string: "Disclaimer.Content".localized, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15, weight: .regular)])
+        let title = NSAttributedString(string: "Disclaimer.Title".localized, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .bold)])
+        let content = NSAttributedString(string: "Disclaimer.Content".localized, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15, weight: .regular)])
         let text = NSMutableAttributedString(attributedString: title)
         text.append(content)
         disclaimerText.attributedText = text

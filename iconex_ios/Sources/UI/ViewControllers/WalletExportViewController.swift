@@ -48,7 +48,7 @@ class WalletExportViewController: UIViewController {
         super.viewDidLayoutSubviews()
         
         if let headerView = tableView.tableHeaderView {
-            let height = headerView.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            let height = headerView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
             var headerFrame = headerView.frame
             
             if height != headerFrame.height {
@@ -86,12 +86,12 @@ class WalletExportViewController: UIViewController {
         
         tableView.tableFooterView = UIView()
         
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        nextButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        nextButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 Alert.Confirm(message: "Alert.Bundle.Export.Instruction".localized, handler: {
                     let password = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "WalletExportPasswordView") as! WalletExportPasswordViewController
@@ -107,11 +107,11 @@ class WalletExportViewController: UIViewController {
         refreshSelection()
         
         if #available(iOS 11, *) {
-            tableView.contentInset = UIEdgeInsetsMake(0, 0, (72 + view.safeAreaInsets.bottom), 0)
-            tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, (72 + view.safeAreaInsets.bottom), 0)
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: (72 + view.safeAreaInsets.bottom), right: 0)
+            tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: (72 + view.safeAreaInsets.bottom), right: 0)
         } else {
-            tableView.contentInset = UIEdgeInsetsMake(0, 0, 72, 0)
-            tableView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 0, 72, 0)
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 72, right: 0)
+            tableView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 72, right: 0)
         }
     }
 

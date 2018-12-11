@@ -60,12 +60,12 @@ class SendConfirmViewController: UIViewController {
         confirmButton.setTitle("Transfer.Transfer".localized, for: .normal)
         confirmButton.styleLight()
         
-        cancelButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        cancelButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [weak self] in
                 self?.dismiss(animated: true, completion: nil)
             }).disposed(by: disposeBag)
         
-        confirmButton.rx.controlEvent(UIControlEvents.touchUpInside)
+        confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if let completion = self.handler {
                     self.confirmButton.isEnabled = false

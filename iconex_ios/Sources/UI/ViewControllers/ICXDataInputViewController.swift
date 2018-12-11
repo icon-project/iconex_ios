@@ -82,7 +82,7 @@ class ICXDataInputViewController: BaseViewController {
     }
     
     func initialize() {
-        closeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             if let text = self.textView.text, text != "" {
                 Alert.Confirm(message: "Transfer.Data.Cancel".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: { [unowned self] in
                     self.dismiss(animated: true, completion: nil)
@@ -94,7 +94,7 @@ class ICXDataInputViewController: BaseViewController {
             
         }).disposed(by: disposeBag)
         
-        doneButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        doneButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             if self.savedData != nil && self.isModify == false {
                 self.isModify = true
                 self.textView.isEditable = true

@@ -70,15 +70,15 @@ open class Tracker {
         self.provider = provider.rawValue
     }
     
-    open static func main() -> Tracker {
+    public static func main() -> Tracker {
         return Tracker(.main)
     }
     
-    open static func dev() -> Tracker {
+    public static func dev() -> Tracker {
         return Tracker(.dev)
     }
     
-    open static func local() -> Tracker {
+    public static func local() -> Tracker {
         return Tracker(.local)
     }
     
