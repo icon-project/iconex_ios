@@ -161,6 +161,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                     }
                                     main.currentIndex = 0
                                     main.loadWallets()
+                                    main.showBalance()
                                 }
                                 
                             }).show(root)
@@ -186,6 +187,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                 }
                                 main.currentIndex = 0
                                 main.loadWallets()
+                                main.showBalance()
                             }
                         }).show(root)
                         return
@@ -209,6 +211,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                         }
                                         main.currentIndex = 0
                                         main.loadWallets()
+                                        main.showBalance()
                                     }
                                 }
                             }).show(root)

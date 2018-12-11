@@ -70,7 +70,7 @@ class WalletExportPasswordViewController: UIViewController {
         confirmInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             self.validateConfirm()
         }).disposed(by: disposeBag)
-        confirmInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
+        confirmInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { _ in
             
         }).disposed(by: disposeBag)
         

@@ -26,6 +26,31 @@ struct Tools {
         case userFallback
     }
     
+    static var decimalSeparator: String {
+        var separator = "."
+        let formatter = NumberFormatter()
+        guard let id = Locale.current.collatorIdentifier else { return "." }
+        formatter.locale = Locale(identifier: id)
+        
+        if let localizedSeparator = formatter.decimalSeparator {
+            separator = localizedSeparator
+        }
+        
+        return separator
+    }
+    
+    static var groupingSeparator: String {
+        var separator = ","
+        let formatter = NumberFormatter()
+        guard let id = Locale.current.collatorIdentifier else { return "." }
+        formatter.locale = Locale(identifier: id)
+        
+        if let localizedSeparator = formatter.groupingSeparator {
+            separator = localizedSeparator
+        }
+        
+        return separator
+    }
     
     static func hexStringToBalanceString(hexString: String, decimal: Int) -> String? {
         var stringValue = hexString as NSString
@@ -58,7 +83,7 @@ struct Tools {
 
         wei = under as String
         
-        return wei == "" ? icx : icx + "." + wei
+        return wei == "" ? icx : icx + Tools.decimalSeparator + wei
     }
     
     static func hexStringToBig(value: String) -> BigUInt? {
@@ -96,9 +121,17 @@ struct Tools {
         return hexStringToBig(value: response)
     }
     
-    static func stringToBigUInt(inputText: String, decimal: Int = 18) -> BigUInt? {
-        let strip = inputText.replacingOccurrences(of: ",", with: "")
-        let comp = strip.components(separatedBy: ".")
+    static func stringToBigUInt(inputText: String, decimal: Int = 18, fixed: Bool = false) -> BigUInt? {
+        var groupingSeparator = Tools.groupingSeparator
+        var decimalSeparator = Tools.decimalSeparator
+        
+        if fixed {
+            groupingSeparator = ","
+            decimalSeparator = "."
+        }
+        
+        let strip = inputText.replacingOccurrences(of: groupingSeparator, with: "")
+        let comp = strip.components(separatedBy: decimalSeparator)
         
         var result: BigUInt?
         if comp.count < 2 {
@@ -120,7 +153,7 @@ struct Tools {
     }
     
     static func convertedHexString(value: String, decimal: Int = 18) -> String? {
-        let comp = value.components(separatedBy: ".")
+        let comp = value.components(separatedBy: Tools.decimalSeparator)
         
         var converted: BigUInt?
         if comp.count < 2 {
@@ -144,30 +177,13 @@ struct Tools {
     }
     
     static func balanceToExchange(_ value: BigUInt, from: String, to: String, belowDecimal: Int = 4, decimal: Int = 18) -> String? {
-//        guard let rateString = EManager.exchangeInfoList[from + to], rateString.createDate != nil else {
-//            return nil
-//        }
-//
-//        var stringValue = bigToString(value: value, decimal: decimal, decimal)
-//        stringValue = stringValue.replacingOccurrences(of: ",", with: "")
-//
-//        guard let dValue = Double(stringValue) else {
-//            return nil
-//        }
-//
-//        guard let ratePrice = Double(rateString.price) else {
-//            return nil
-//        }
-//
-//        let result = String(format: "%.\(belowDecimal)f", ratePrice * dValue)
-        
         guard let exchanged = balanceToExchangeBigInt(value, from: from, to: to, decimal: decimal) else { return nil }
         
         return bigToString(value: exchanged, decimal: decimal, belowDecimal, false)
     }
     
     static func balanceToExchangeBigInt(_ value: BigUInt, from: String, to: String, decimal: Int = 18) -> BigUInt? {
-        guard let rateString = EManager.exchangeInfoList[from+to], rateString.createDate != nil, let rate = Tools.stringToBigUInt(inputText: rateString.price, decimal: decimal) else {
+        guard let rateString = EManager.exchangeInfoList[from+to], rateString.createDate != nil, let rate = Tools.stringToBigUInt(inputText: rateString.price, decimal: decimal, fixed: true) else {
             return nil
         }
         

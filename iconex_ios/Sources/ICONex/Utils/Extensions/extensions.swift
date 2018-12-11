@@ -515,39 +515,22 @@ public extension UIDevice {
     }
 }
 
-extension Formatter {
-    static let withSeparator: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.groupingSeparator = ","
-        formatter.numberStyle = .decimal
-        
-        return formatter
-    }()
-}
-
-extension BinaryInteger {
-    var currencyFormatted: String? {
-        return Formatter.withSeparator.string(for: self)
-    }
-}
-
 extension String {
     func currencySeparated() -> String {
-        let comp = self.components(separatedBy: ".")
-        
+        let comp = self.components(separatedBy: Tools.decimalSeparator)
+
         guard let upper = comp.first else {
             return self
         }
-        
+
         guard let below = comp.last, below != "" else {
             return upper
         }
         
         let split = String(upper.reversed()).split(by: 3)
-        let joined = split.joined(separator: ",")
+        let joined = split.joined(separator: Tools.groupingSeparator)
         let formatted = String(joined.reversed())
-        
-        return formatted + "." + below
+        return formatted + Tools.decimalSeparator + below
     }
 }
 
