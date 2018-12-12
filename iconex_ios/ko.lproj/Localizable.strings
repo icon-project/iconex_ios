@@ -290,7 +290,7 @@
 
 "AppInfo.Title" = "앱 정보";
 "AppInfo.Version" = "버전 정보";
-"AppInfo.Current" = "현재 정보";
+"AppInfo.Current" = "현재 버전";
 "AppInfo.Latest" = "최신 버전";
 "AppInfo.Update" = "업데이트";
 "AppInfo.License" = "오픈소스 라이센스";
