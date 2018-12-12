@@ -439,11 +439,6 @@ class WalletDetailViewController: UIViewController {
                 self.step += 1
                 self.fetchRecentTransaction()
             } else {
-                Log.Debug("\(self.totalData), \(self.historyList.count)")
-                guard self.totalData != self.historyList.count else {
-                    self.tableView.contentInset = .zero
-                    return
-                }
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -76, right: 0)
                 
                 if offset < -self.MAX_LIMIT {
@@ -541,7 +536,7 @@ class WalletDetailViewController: UIViewController {
     func loadData() {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
         if viewState.state == 0 {
-            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             
             if viewState.type == 0 {
                 filteredList = historyList
@@ -703,7 +698,6 @@ class WalletDetailViewController: UIViewController {
         if !isLoaded { isLoaded = false }
         
         if reset {
-            historyList.removeAll()
             filteredList = nil
             self.totalData = 0
         }
@@ -725,13 +719,13 @@ class WalletDetailViewController: UIViewController {
             }
         }
         
-        
+        var txList = Set(historyList)
         if let token = self.token {
             if let response = tracker.tokenTxList(address: address, contractAddress: token.contractAddress, page: self.step) {
                 if let listSize = response["listSize"] as? Int, let list = response["data"] as? [[String: Any]] {
                     for txDic in list {
                         let tx = Tracker.TxList(dic: txDic)
-                        self.historyList.append(tx)
+                        txList.insert(tx)
                         Transactions.updateTransactionCompleted(txHash: tx.txHash)
                     }
                     
@@ -743,7 +737,7 @@ class WalletDetailViewController: UIViewController {
                 if let listSize = response["listSize"] as? Int, let list = response["data"] as? [[String: Any]] {
                     for txDic in list {
                         let tx = Tracker.TxList(dic: txDic)
-                        self.historyList.append(tx)
+                        txList.insert(tx)
                         Transactions.updateTransactionCompleted(txHash: tx.txHash)
                     }
                     
@@ -751,6 +745,12 @@ class WalletDetailViewController: UIViewController {
                 }
             }
         }
+        self.historyList.removeAll()
+        
+        let list = Array(txList).sorted { $0.createDate > $1.createDate }
+        
+        self.historyList.append(contentsOf: list)
+        
         self.isLoaded = true
         self.loadData()
     }

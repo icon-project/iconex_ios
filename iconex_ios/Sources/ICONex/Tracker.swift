@@ -9,7 +9,7 @@ import Foundation
 import Result
 
 open class Tracker {
-    public struct TxList {
+    public struct TxList: Hashable {
         var contractAddr: String
         var symbol: String
         var txHash: String
@@ -44,6 +44,10 @@ open class Tracker {
             self.quantity = dic["quantity"] as? String ?? ""
             self.age = dic["age"] as? String ?? ""
             self.id = dic["id"] as? String ?? ""
+        }
+        
+        public static func == (lhs: TxList, rhs: TxList) -> Bool {
+            return lhs.txHash == rhs.txHash
         }
     }
     
