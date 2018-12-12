@@ -148,6 +148,7 @@ class AddressManageViewController: UIViewController {
         editButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             self.tableView.setEditing(!self.tableView.isEditing, animated: true)
             self.tableView.isEditing ? self.editButton.setTitle("Common.Done".localized, for: .normal) : self.editButton.setTitle("Common.Edit".localized, for: .normal)
+            self.tableView.reloadData()
         }).disposed(by: disposeBag)
         
         segAddressButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -224,7 +225,7 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
             cell.editButton.isHidden = !tableView.isEditing
             cell.editButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
                 let info = self.addressBookList[indexPath.row]
-                Alert.editingAddress(name: info.name, address: info.address, mode: .edit, type: self.walletInfo.type, handler: {
+                Alert.editingAddress(name: nil, address: info.address, mode: .edit, type: self.walletInfo.type, handler: {
                     self.loadWalletList()
                 }).show(self)
             }).disposed(by: cell.disposeBag)

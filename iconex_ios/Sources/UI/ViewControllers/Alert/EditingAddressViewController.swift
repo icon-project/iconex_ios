@@ -181,7 +181,7 @@ class EditingAddressViewController: UIViewController {
         
         guard name != "" else { return false }
         
-        if !AddressBook.canSaveAddressBook(name: name) && self.mode == .add {
+        if !AddressBook.canSaveAddressBook(name: name) {
             if show { self.nameInputBox.setState(.error, "Error.AddressBook.DuplicatedName".localized) }
             return false
         }
