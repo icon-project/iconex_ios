@@ -85,7 +85,7 @@ class TokenManageViewController: UIViewController {
         addressInputBox.setState(.normal, nil)
         addressInputBox.textField.placeholder = "Token.EnterAddress".localized
         tokenInputBox.setState(.normal, nil)
-        tokenInputBox.setType(.normal)
+        tokenInputBox.setType(.tokenName)
         tokenInputBox.textField.placeholder = "Token.EnterName".localized
         symbolInputBox.setState(.normal, nil)
         symbolInputBox.setType(.normal)

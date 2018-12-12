@@ -32,6 +32,7 @@ enum IXTextFieldType {
     case integer
     case address
     case data
+    case tokenName
 }
 
 @IBDesignable class IXInputBox: UIView, UITextFieldDelegate {
@@ -129,7 +130,7 @@ enum IXTextFieldType {
             highlightLine.isHidden = false
             
             switch newValue {
-            case .name:
+            case .name, .tokenName:
                 textField.isSecureTextEntry = false
                 textField.keyboardType = .default
                 textField.isPreventPaste = true
@@ -252,7 +253,7 @@ enum IXTextFieldType {
                 }
                 return false
             }
-        } else if (_fieldType == .normal || _fieldType == .data || _fieldType == .name) && string != "" && string != "\n" {
+        } else if (_fieldType == .normal || _fieldType == .data || _fieldType == .name || _fieldType == .tokenName) && string != "" && string != "\n" {
             
             if string == " " {
                 guard let text = textField.text, text != "", !text.hasPrefix(" "), range.location != 0 else { return false }
