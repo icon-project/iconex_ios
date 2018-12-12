@@ -383,7 +383,7 @@ class WalletDetailViewController: UIViewController {
                             }).show(self)
                             return
                         }
-                        if balance == BigUInt(0) {
+                        if balance == BigUInt(0) && WManager.tokenBalanceList[self.walletInfo!.address]?.filter({ $0.value != BigUInt(0) }).first == nil {
                             
                             Alert.Confirm(message: "Alert.Wallet.Remove".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
                                 if !WManager.deleteWallet(wallet: wallet) {
