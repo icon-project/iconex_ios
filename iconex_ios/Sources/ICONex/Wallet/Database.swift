@@ -82,9 +82,23 @@ struct DB {
     static func walletTypes() -> [String] {
         let realm = try! Realm()
         
-        let list = realm.objects(WalletModel.self).value(forKeyPath: "@distinctUnionOfObjects.type") as! [String]
+        var sorted = [String]()
         
-        return list
+        var list = realm.objects(WalletModel.self).value(forKeyPath: "@distinctUnionOfObjects.type") as! [String]
+        
+        if let icx = list.enumerated().filter({ $0.element.lowercased() == "icx" }).first {
+            sorted.append(icx.element)
+            list.remove(at: icx.offset)
+        }
+        
+        if let eth = list.enumerated().filter({ $0.element.lowercased() == "eth" }).first {
+            sorted.append(eth.element)
+            list.remove(at: eth.offset)
+        }
+        
+        sorted.append(contentsOf: list)
+        
+        return sorted
     }
     
     static func saveWallet(name: String, address: String, type: String, rawData: Data?) throws {
