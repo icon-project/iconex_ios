@@ -198,6 +198,7 @@
 "Transfer.DataTitle" = "Data";
 "Transfer.InputType" = "Input Type";
 "Transfer.EnterData" = "Enter data";
+"Transfer.Data.Cancel" = "Are you sure you want to cancel?";
 "Transfer.EstimatedFee" = "Estimated Maximum Fee";
 "Transfer.EstimatedBalance" = "Estimated Balance";
 "Transfer.Gas.Desc_1" = "Gas limit is the amount of gas to send with your transaction.\nUnnecessary gas is refunded to you at the end of transaction. In other words, you can set the maximum amount of gas but the actual gas consumption is not fixed.";
