@@ -19,15 +19,18 @@ enum EncodeType {
 class ICXDataInputViewController: BaseViewController {
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var navTitle: UILabel!
+    @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var stepContainer: UIView!
+    @IBOutlet weak var removeContainer: UIView!
     @IBOutlet weak var stepView: UIView!
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var lengthLabel: UILabel!
     @IBOutlet weak var placeholder: UILabel!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     
-    var handler: ((String) -> Void)?
+    var handler: ((String?) -> Void)?
     var type: EncodeType = .utf8
     var savedData: String? = nil
     var stepPrice: BigUInt?
@@ -62,9 +65,13 @@ class ICXDataInputViewController: BaseViewController {
         if let saved = savedData {
             textView.text = saved
             textView.isEditable = false
+            stepContainer.isHidden = true
+            removeContainer.isHidden = false
             self.doneButton.setTitle("Common.Modify".localized, for: .normal)
         } else {
             textView.isEditable = true
+            stepContainer.isHidden = false
+            removeContainer.isHidden = true
             self.doneButton.setTitle("Common.Done".localized, for: .normal)
         }
         
@@ -79,6 +86,9 @@ class ICXDataInputViewController: BaseViewController {
         self.typeLabel.text = self.type == .utf8 ? "UTF-8" : "HEX"
         self.doneButton.setTitleColor(UIColor.white, for: .normal)
         self.doneButton.setTitleColor(UIColor(179, 179, 179), for: .disabled)
+        self.removeButton.styleDark()
+        self.removeButton.setTitle("Common.Remove".localized, for: .normal)
+        self.removeButton.cornered()
     }
     
     func initialize() {
@@ -151,6 +161,17 @@ class ICXDataInputViewController: BaseViewController {
             }
             
             self.dismiss(animated: true, completion: nil)
+        }).disposed(by: disposeBag)
+        
+        removeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+            let alert = Alert.Confirm(message: "Alert.Transfer.Data.Delete".localized, handler: {
+                if let handler = self.handler {
+                    handler(nil)
+                }
+                
+                self.dismiss(animated: true, completion: nil)
+            })
+            alert.show(self)
         }).disposed(by: disposeBag)
         
         keyboardHeight().observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] (height: CGFloat) in

@@ -165,7 +165,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         
         walletScroll.rx.didEndDecelerating.observeOn(MainScheduler.instance).subscribe(onNext: {
             let index = Int(self.walletScroll.contentOffset.x / UIScreen.main.bounds.width)
-            self.scrollWallet(to: index)
+            self.scrollWallet(to: index, animate: true)
             self.currentIndex = index
         }).disposed(by: disposeBag)
         
@@ -243,11 +243,11 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         self.currentIndex = 0
     }
     
-    func loadWallets() {
+    func loadWallets(animate: Bool = true) {
         setWalletTag()
         setWallet()
         
-        scrollWallet(to: self.currentIndex)
+        scrollWallet(to: self.currentIndex, animate: animate)
     }
     
     func setWalletTag() {
@@ -386,6 +386,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 count += 1
             }
         }
+        view.layoutIfNeeded()
     }
     
     func makeShortCut(frame: CGRect, tag: Int, title: String) -> UIButton {
@@ -403,7 +404,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         return button
     }
     
-    func scrollWallet(to: Int) {
+    func scrollWallet(to: Int, animate: Bool) {
         var rect: CGRect = .zero
         for sub in walletTagScroll.subviews {
             let button = sub as! UIButton
@@ -416,9 +417,9 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         }
 
         let visible = CGRect(x: rect.origin.x - rect.size.width / 2, y: 0, width: rect.size.width * 2, height: rect.size.height)
-        walletTagScroll.scrollRectToVisible(visible, animated: true)
+        walletTagScroll.scrollRectToVisible(visible, animated: animate)
         
-        walletScroll.scrollRectToVisible(CGRect(x: CGFloat(to) * walletScroll.frame.width, y: 0, width: walletScroll.frame.width, height: walletScroll.frame.height), animated: true)
+        walletScroll.scrollRectToVisible(CGRect(x: CGFloat(to) * walletScroll.frame.width, y: 0, width: walletScroll.frame.width, height: walletScroll.frame.height), animated: animate)
     }
     
     func checkPullLoader() {
@@ -485,7 +486,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     }
     
     @objc func clickedWalletItem(_ sender: UIButton) {
-        scrollWallet(to: sender.tag)
+        scrollWallet(to: sender.tag, animate: true)
         self.currentIndex = sender.tag
     }
     

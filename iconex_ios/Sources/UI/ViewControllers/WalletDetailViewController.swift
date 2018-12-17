@@ -323,6 +323,8 @@ class WalletDetailViewController: UIViewController {
                                         return
                                     }
                                     main.loadWallets()
+                                    
+                                    self.titleLabel.text = newName
                                 } else {
                                     let basic = Alert.Basic(message: "Error.CommonError".localized)
                                     self.present(basic, animated: true, completion: nil)

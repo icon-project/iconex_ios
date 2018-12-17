@@ -57,7 +57,7 @@ class DataInputSourceViewController: BaseViewController {
     
     func initialize() {
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
-            self.dismiss(animated: true, completion: nil)
+            self.close()
         }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in

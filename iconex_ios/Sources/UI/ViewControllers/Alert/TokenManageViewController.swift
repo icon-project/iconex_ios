@@ -211,8 +211,13 @@ class TokenManageViewController: UIViewController {
                     do {
                         try DB.removeToken(tokenInfo: self.selectedToken!)
                         WManager.loadWalletList()
+                        let app = UIApplication.shared.delegate as! AppDelegate
+                        guard let root = app.window?.rootViewController as? UINavigationController, let main = root.viewControllers[0] as? MainViewController else {
+                            return
+                        }
+                        main.loadWallets()
                         
-                        self.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     } catch {
                         Log.Debug("\(error)")
                         Alert.Basic(message: "Error.Token.Remove".localized).show(self)
@@ -234,7 +239,7 @@ class TokenManageViewController: UIViewController {
                 WManager.getWalletsBalance()
                 EManager.getExchangeList()
                 
-                self.dismiss(animated: true, completion: nil)
+                self.navigationController?.popViewController(animated: true)
             } catch {
                 Log.Debug("\(error)")
                 Alert.Basic(message: "Error.Token.Add".localized).show(self)

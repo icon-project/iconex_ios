@@ -97,7 +97,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                             
                             if result {
                                 WManager.loadWalletList()
-                                main.loadWallets()
+                                main.loadWallets(animate: false)
                             } else {
                                 let basic = Alert.Basic(message: "Error.CommonError".localized)
                                 root.present(basic, animated: true, completion: nil)
