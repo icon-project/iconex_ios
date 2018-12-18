@@ -152,7 +152,7 @@ class ImportTwoViewController: UIViewController {
         
         headerTitleLabel2.text = "Import.Step2.Header_2_1".localized
         headerDescLabel2.text = "Import.Step2.Desc_2_1".localized
-        coinSelectLabel.text = "Import.Step2.Header_2_2".localized
+        coinSelectLabel.text = "Create.Wallet.Step1.StepTitle".localized
         keyTitleLabel.text = "Import.Step2.Desc_2_2".localized
         inputBox2.setType(.address)
         inputBox2.setState(.normal, nil)
