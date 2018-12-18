@@ -185,7 +185,6 @@ class ImportTwoViewController: UIViewController {
         if mode == 0 {
             // Load from Keystore File
             guard let password = inputBox.textField.text, password != "" else {
-                inputBox.setState(.error, "Error.Password".localized)
                 return false
             }
             fileErrorLabel.text = ""
@@ -247,10 +246,12 @@ class ImportTwoViewController: UIViewController {
             }
         } else {
             // Load from Private Key
-            guard let privKey = self.inputBox2.textField.text, privKey != "", privKey.hexToData() != nil, privKey.length == 64 else {
+            guard let privKey = self.inputBox2.textField.text, privKey.hexToData() != nil, privKey.length == 64 else {
                 self.inputBox2.setState(.error, "Error.PrivateKey".localized)
                 return false
             }
+            
+            guard privKey != "" else { return false }
             
             WCreator.newPrivateKey = privKey
             

@@ -536,7 +536,7 @@ class ETHSendViewController: UIViewController {
             return false
         }
         guard Validator.validateETHAddress(address: toAddress) else {
-            if showError { self.addressInputBox.setState(.error, "Error.Address".localized) }
+            if showError { self.addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized) }
             return false
         }
         
