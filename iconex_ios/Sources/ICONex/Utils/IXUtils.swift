@@ -415,7 +415,9 @@ struct Tools {
     }
     
     static func toast(message: String) {
-        guard let window = UIApplication.shared.keyWindow, let root = window.rootViewController, let view = root.view else { return }
+        guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        guard let top = app.topViewController(), let view = top.view else { return }
         
         view.makeToast(message)
     }
