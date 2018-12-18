@@ -457,7 +457,9 @@ class WalletDetailViewController: UIViewController {
             if offset + self.tableView.frame.height >= height && self.totalData >= self.step * 10 {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 self.step += 1
-                self.fetchRecentTransaction()
+                Observable<Int>.timer(0.5, scheduler: MainScheduler.instance).debug("timer").subscribe(onNext: { _ in
+                    self.fetchRecentTransaction(true)
+                }).disposed(by: self.disposeBag)
             } else {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -76, right: 0)
                 
@@ -475,6 +477,8 @@ class WalletDetailViewController: UIViewController {
                     }).disposed(by: self.disposeBag)
                     
                     Log.Debug("Now Load!!")
+                } else if self.totalData < self.step * 10 {
+                    self.tableView.contentInset = UIEdgeInsets.zero
                 }
             }
         }).disposed(by: disposeBag)
@@ -556,7 +560,6 @@ class WalletDetailViewController: UIViewController {
     func loadData() {
         tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 1))
         if viewState.state == 0 {
-//            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             
             if viewState.type == 0 {
                 filteredList = historyList
