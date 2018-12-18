@@ -327,7 +327,6 @@ class ImportTwoViewController: UIViewController {
         selectable.handler = ({ [unowned self] selectedIndex in
             self.selectedIndex = selectedIndex
             self.refreshItem()
-            self.nextButton.isEnabled = self.validation()
         })
     }
     

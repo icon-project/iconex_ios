@@ -62,7 +62,7 @@ class AppInfoViewController: BaseViewController {
         openTitle.text = "AppInfo.License".localized
         developerTitle.text = "AppInfo.DeveloperMode".localized
         
-        updateButton.isHidden = !(latest > version)
+        updateButton.isEnabled = (latest > version)
     }
     
     override func viewWillAppear(_ animated: Bool) {

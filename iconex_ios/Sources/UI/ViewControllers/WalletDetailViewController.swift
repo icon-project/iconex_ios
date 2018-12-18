@@ -376,10 +376,16 @@ class WalletDetailViewController: UIViewController {
                                     } else {
                                         let app = UIApplication.shared.delegate as! AppDelegate
                                         let nav = app.window!.rootViewController as! UINavigationController
-                                        let main = nav.viewControllers[0] as! MainViewController
-                                        main.currentIndex = 0
-                                        main.loadWallets()
-                                        self.navigationController?.popToRootViewController(animated: true)
+                                        
+                                        if WManager.walletInfoList.count == 0 {
+                                            let welcome = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "WelcomeView")
+                                            app.window?.rootViewController = welcome
+                                        } else {
+                                            let main = nav.viewControllers[0] as! MainViewController
+                                            main.currentIndex = 0
+                                            main.loadWallets()
+                                            self.navigationController?.popToRootViewController(animated: true)
+                                        }
                                     }
                                 }).show(self)
                             }).show(self)
@@ -393,10 +399,16 @@ class WalletDetailViewController: UIViewController {
                                 } else {
                                     let app = UIApplication.shared.delegate as! AppDelegate
                                     let nav = app.window!.rootViewController as! UINavigationController
-                                    let main = nav.viewControllers[0] as! MainViewController
-                                    main.currentIndex = 0
-                                    main.loadWallets()
-                                    self.navigationController?.popToRootViewController(animated: true)
+                                    
+                                    if WManager.walletInfoList.count == 0 {
+                                        let welcome = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "WelcomeView")
+                                        app.window?.rootViewController = welcome
+                                    } else {
+                                        let main = nav.viewControllers[0] as! MainViewController
+                                        main.currentIndex = 0
+                                        main.loadWallets()
+                                        self.navigationController?.popToRootViewController(animated: true)
+                                    }
                                 }
                             }).show(self)
                             return
@@ -409,10 +421,16 @@ class WalletDetailViewController: UIViewController {
                                         } else {
                                             let app = UIApplication.shared.delegate as! AppDelegate
                                             let nav = app.window!.rootViewController as! UINavigationController
-                                            let main = nav.viewControllers[0] as! MainViewController
-                                            main.currentIndex = 0
-                                            main.loadWallets()
-                                            self.navigationController?.popToRootViewController(animated: true)
+                                            
+                                            if WManager.walletInfoList.count == 0 {
+                                                let welcome = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "WelcomeView")
+                                                app.window?.rootViewController = welcome
+                                            } else {
+                                                let main = nav.viewControllers[0] as! MainViewController
+                                                main.currentIndex = 0
+                                                main.loadWallets()
+                                                self.navigationController?.popToRootViewController(animated: true)
+                                            }
                                         }
                                     }
                                 }).show(self)
