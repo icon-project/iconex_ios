@@ -56,8 +56,7 @@ class WalletPasswordViewController: UIViewController {
         confirmButton.isEnabled = false
         
         passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            guard let password = self.passwordInputBox.textField.text, password == "" else { return }
-            self.passwordInputBox.setState(.error, "Error.Password".localized)
+            
         }).disposed(by: disposeBag)
         
         cancelButton.rx.controlEvent(UIControl.Event.touchUpInside)
@@ -73,17 +72,18 @@ class WalletPasswordViewController: UIViewController {
         
         confirmButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
-                
                 do {
+                    guard let password = self.passwordInputBox.textField.text, password != "" else { return }
+                    
                     var privKey: String = ""
                     if self.walletInfo!.type == .icx {
                         let icx = WManager.loadWalletBy(info: self.walletInfo!) as! ICXWallet
-                        privKey = try icx.extractICXPrivateKey(password: self.passwordInputBox.textField.text!)
+                        privKey = try icx.extractICXPrivateKey(password: password)
                         
                         self.passwordInputBox.textField.resignFirstResponder()
                     } else if self.walletInfo!.type == .eth {
                         let eth = WManager.loadWalletBy(info: self.walletInfo!) as! ETHWallet
-                        privKey = try eth.extractETHPrivateKey(password: self.passwordInputBox.textField.text!)
+                        privKey = try eth.extractETHPrivateKey(password: password)
                     }
                     
                     self.dismiss(animated: true, completion: {
