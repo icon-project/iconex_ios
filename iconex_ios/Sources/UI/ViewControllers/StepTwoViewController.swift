@@ -83,7 +83,7 @@ class StepTwoViewController: UIViewController {
             self.validatePassword1()
         }).disposed(by: disposeBag)
         password1.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            self.password2.textField.becomeFirstResponder()
+            self.validatePassword1()
         }).disposed(by: disposeBag)
 
         password2.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
@@ -138,9 +138,6 @@ class StepTwoViewController: UIViewController {
     }
     
     func resignAllResponder() {
-//        walletNameBox.textField.resignFirstResponder()
-//        password1.textField.resignFirstResponder()
-//        password2.textField.resignFirstResponder()
         self.view.endEditing(true)
     }
     
@@ -193,10 +190,12 @@ class StepTwoViewController: UIViewController {
     
     @discardableResult
     func validateWalletName(_ showError: Bool = true) -> Bool {
-        guard let walletName = self.walletNameBox.textField.text, walletName != "" else {
+        guard let walletName = self.walletNameBox.textField.text else {
             if showError { self.walletNameBox.setState(.error, Localized(key: "Error.WalletName")) }
             return false
         }
+        
+        guard walletName != "" else { return false }
         
         let stripName = walletName.removeContinuosSuffix(string: " ")
         
@@ -210,10 +209,12 @@ class StepTwoViewController: UIViewController {
     }
     @discardableResult
     func validatePassword1(_ showError: Bool = true) -> Bool {
-        guard let password = self.password1.textField.text, password != "" else {
+        guard let password = self.password1.textField.text else {
             if showError { self.password1.setState(.error, "Error.Password".localized) }
             return false
         }
+        
+        guard password != "" else { return false }
         
         if password.length < 8 {
             if showError { self.password1.setState(.error, Localized(key: "Error.Password.Length")) }
@@ -235,7 +236,6 @@ class StepTwoViewController: UIViewController {
     @discardableResult
     func validatePassword2(_ showError: Bool = true) -> Bool {
         if self.password2.textField.text! == "" {
-            if showError { self.password2.setState(.error, "Error.Password".localized) }
             return false
         }
         

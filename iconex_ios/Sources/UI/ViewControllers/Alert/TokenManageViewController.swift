@@ -101,6 +101,8 @@ class TokenManageViewController: UIViewController {
         confirmButton.setTitle("Common.Add".localized, for: .normal)
         actionButton.setTitle("Token.RemoveToken".localized, for: .normal)
         
+        confirmButton.isEnabled = false
+        
         if manageMode == .add {
             navTitle.text = "Token.Add".localized
             confirmButton.isHidden = false
@@ -142,14 +144,13 @@ class TokenManageViewController: UIViewController {
             self.addressInputBox.setState(.focus, nil)
         }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
-            if self.validateAddres() && !self.editMode && !self.isChecked {
+            if self.validateAddres(show: true) && !self.editMode && !self.isChecked {
                 self.fetchTokenInfo()
             }
+            self.confirmButton.isEnabled = self.validation(show: false)
         }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
-            if self.validateAddres() && !self.editMode && !self.isChecked {
-                self.fetchTokenInfo()
-            }
+            
         }).disposed(by: disposeBag)
         
         tokenInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: { [unowned self] in
@@ -157,16 +158,16 @@ class TokenManageViewController: UIViewController {
         }).disposed(by: disposeBag)
         tokenInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             if !self.editMode {
-                self.confirmButton.isEnabled = self.validation()
+                self.confirmButton.isEnabled = self.validation(show: true)
             } else {
-                self.editButton.isEnabled = self.validateName()
+                self.editButton.isEnabled = self.validateName(show: true)
             }
         }).disposed(by: disposeBag)
         tokenInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { [unowned self] in
             if !self.editMode {
-                self.confirmButton.isEnabled = self.validation()
+                self.confirmButton.isEnabled = self.validation(show: true)
             } else {
-                self.editButton.isEnabled = self.validateName()
+                self.editButton.isEnabled = self.validateName(show: true)
             }
         }).disposed(by: disposeBag)
         
@@ -184,7 +185,7 @@ class TokenManageViewController: UIViewController {
         editButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 if self.editMode == true {
-                    guard self.validateName() else { return }
+                    guard self.validateName(show: true) else { return }
                     self.tokenInputBox.isEnable = false
                     self.symbolInputBox.isEnable = false
                     self.decimalInputBox.isEnable = false
@@ -354,35 +355,36 @@ class TokenManageViewController: UIViewController {
                 }
                 self.addressInputBox.isLoading = false
                 self.isChecked = false
+                self.confirmButton.isEnabled = self.validation()
             })
         }
     }
     
-    func validateAddres() -> Bool {
+    func validateAddres(show: Bool) -> Bool {
         guard let address = addressInputBox.textField.text, address != "" else {
-            addressInputBox.setState(.error, "Error.Address".localized)
+            if show { addressInputBox.setState(.error, "Error.Address".localized) }
             return false
         }
         
         guard let walletInfo = self.walletInfo else { return false }
         if walletInfo.type == .eth {
             guard Validator.validateETHAddress(address: address) else {
-                addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized)
+                if show { addressInputBox.setState(.error, "Error.Address.ETH.Invalid".localized) }
                 return false
             }
             let parentWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ETHWallet
             if !parentWallet.canSaveToken(contractAddress: address) {
-                addressInputBox.setState(.error, "Error.Token.Duplicated".localized)
+                if show { addressInputBox.setState(.error, "Error.Token.Duplicated".localized) }
                 return false
             }
         } else {
             guard Validator.validateIRCAddress(address: address) else {
-                addressInputBox.setState(.error, "Error.Address.ICX.Invalid".localized)
+                if show { addressInputBox.setState(.error, "Error.Address.ICX.Invalid".localized) }
                 return false
             }
             let parentWallet = WManager.loadWalletBy(info: self.walletInfo!) as! ICXWallet
             if !parentWallet.canSaveToken(contractAddress: address) {
-                addressInputBox.setState(.error, "Error.Token.Duplicated".localized)
+                if show { addressInputBox.setState(.error, "Error.Token.Duplicated".localized) }
                 return false
             }
         }
@@ -392,9 +394,9 @@ class TokenManageViewController: UIViewController {
         return true
     }
     
-    func validateName() -> Bool {
+    func validateName(show: Bool) -> Bool {
         guard let name = tokenInputBox.textField.text, name != "" else {
-            tokenInputBox.setState(.error, "Error.Token.InputName".localized)
+            if show { tokenInputBox.setState(.error, "Error.Token.InputName".localized) }
             return false
         }
         
@@ -406,9 +408,9 @@ class TokenManageViewController: UIViewController {
         return true
     }
     
-    func validation() -> Bool {
-        guard validateAddres() else { return false }
-        guard validateName() else { return false }
+    func validation(show: Bool = true) -> Bool {
+        guard validateAddres(show: show) else { return false }
+        guard validateName(show: show) else { return false }
         return true
     }
 }
