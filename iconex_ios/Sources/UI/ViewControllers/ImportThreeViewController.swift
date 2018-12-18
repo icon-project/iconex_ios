@@ -144,7 +144,7 @@ class ImportThreeViewController: UIViewController {
     func validateWalletName(_ showError: Bool = true) -> Bool {
         
         if mode == 0 {
-            let name = self.inputBox.textField.text!
+            let name = self.inputBox.textField.text!.removeContinuosSuffix(string: " ")
             
             if name == "" {
                 self.inputBox.setState(.error, "Error.WalletName".localized)
@@ -157,7 +157,7 @@ class ImportThreeViewController: UIViewController {
             }
             self.inputBox.setState(.normal, nil)
         } else {
-            let name = self.privNameBox.textField.text!
+            let name = self.privNameBox.textField.text!.removeContinuosSuffix(string: " ")
             
             if name == "" {
                 if showError { self.privNameBox.setState(.error, "Error.WalletName".localized) }
@@ -233,7 +233,9 @@ class ImportThreeViewController: UIViewController {
     @IBAction func clickedDone(_ sender: Any) {
         if mode == 0 {
             do {
-                try WCreator.saveWallet(alias: self.inputBox.textField.text!)
+                guard let name = self.inputBox.textField.text else { return }
+                
+                try WCreator.saveWallet(alias: name.removeContinuosSuffix(string: " "))
                 
                 WManager.loadWalletList()
                 let app = UIApplication.shared.delegate as! AppDelegate
@@ -252,7 +254,8 @@ class ImportThreeViewController: UIViewController {
             }
         } else {
             do {
-                try WCreator.importWallet(alias: privNameBox.textField.text!, password: privPassword1.textField.text!, completion: {
+                guard let name = privNameBox.textField.text else { return }
+                try WCreator.importWallet(alias: name.removeContinuosSuffix(string: " "), password: privPassword1.textField.text!, completion: {
                     WManager.loadWalletList()
                     let app = UIApplication.shared.delegate as! AppDelegate
                     if let nav = app.window?.rootViewController as? UINavigationController {
