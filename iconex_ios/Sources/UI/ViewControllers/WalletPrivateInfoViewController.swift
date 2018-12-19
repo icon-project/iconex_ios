@@ -65,12 +65,12 @@ class WalletPrivateInfoViewController: UIViewController {
         qrAddressImage.image = generateQRCode(value: wallet.address!)
         addressLabel.text = wallet.address!
         
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
         if let createdDate = wallet.createdDate {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
             dateLabel.text = formatter.string(from: createdDate)
         } else {
-            dateLabel.text = ""
+            dateLabel.text = formatter.string(from: Date())
         }
         
         if wallet.type == .icx {
