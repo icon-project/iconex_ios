@@ -147,7 +147,6 @@ class ImportThreeViewController: UIViewController {
             let name = self.inputBox.textField.text!.removeContinuosSuffix(string: " ")
             
             if name == "" {
-                self.inputBox.setState(.error, "Error.WalletName".localized)
                 return false
             }
             
@@ -160,7 +159,6 @@ class ImportThreeViewController: UIViewController {
             let name = self.privNameBox.textField.text!.removeContinuosSuffix(string: " ")
             
             if name == "" {
-                if showError { self.privNameBox.setState(.error, "Error.WalletName".localized) }
                 return false
             }
             
@@ -178,7 +176,6 @@ class ImportThreeViewController: UIViewController {
     func validatePassword(_ showError: Bool = true) -> Bool {
         
         guard let password = self.privPassword1.textField.text, password != "" else {
-            if showError { self.privPassword1.setState(.error, "Error.Password".localized) }
             return false
         }
         
