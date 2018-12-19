@@ -481,6 +481,10 @@ class ETHSendViewController: UIViewController {
             }
             
             guard inputValue <= self.totalBalance else {
+                self.remainBalance.text = "-" + Tools.bigToString(value: (inputValue) - self.totalBalance, decimal: token.decimal, token.decimal, false)
+                self.exchangedRemainLabel.text = "- USD"
+                
+                
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                 return false
             }
@@ -508,8 +512,10 @@ class ETHSendViewController: UIViewController {
             }
             
             if ethValue + feeValue > self.totalBalance {
-                let message = "Error.Transfer.InsufficientFee.ETH".localized
+                self.remainBalance.text = "-" + Tools.bigToString(value: (ethValue + feeValue) - self.totalBalance, decimal: wallet!.decimal, wallet!.decimal, false)
+                self.exchangedRemainLabel.text = "- USD"
                 
+                let message = "Error.Transfer.InsufficientFee.ETH".localized
                 if showError { self.sendInputBox.setState(.error, message.localized) }
                 return false
             }

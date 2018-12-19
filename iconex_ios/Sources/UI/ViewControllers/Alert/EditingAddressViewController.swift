@@ -107,7 +107,9 @@ class EditingAddressViewController: UIViewController {
         
         nameInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
-                self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
+                if self.validateNameField() {
+                    self.confirmButton.isEnabled = self.validateAddressField(false)
+                }
             }).disposed(by: disposeBag)
         nameInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: {
@@ -123,7 +125,9 @@ class EditingAddressViewController: UIViewController {
         
         addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd)
             .subscribe(onNext: { [unowned self] in
-                self.confirmButton.isEnabled = self.validateNameField() && self.validateAddressField()
+                if self.validateAddressField() {
+                    self.confirmButton.isEnabled = self.validateNameField(false)
+                }
             }).disposed(by: disposeBag)
         addressInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit)
             .subscribe(onNext: {

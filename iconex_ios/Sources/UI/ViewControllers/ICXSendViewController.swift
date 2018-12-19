@@ -325,7 +325,7 @@ class ICXSendViewController: BaseViewController {
                 self.addressInputBox.textField.text = address
                 self.sendButton.isEnabled = self.validation()
                 addressManage.dismiss(animated: true, completion: {
-                    
+                    self.validateAddress()
                 })
             }
             
@@ -638,14 +638,17 @@ class ICXSendViewController: BaseViewController {
                 return false
             }
             
+            let wallet = WManager.loadWalletBy(info: self.walletInfo!)
+            
             if inputValue + (stepPrice * tmpStepLimit) > totalBalance {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
+                self.remainBalance.text = "-" + Tools.bigToString(value: (inputValue + stepPrice * tmpStepLimit) - totalBalance, decimal: wallet!.decimal, wallet!.decimal, false)
+                self.exchangedRemainLabel.text = "- USD"
                 return false
             }
             
             let remainValue = totalBalance - (inputValue + (stepPrice * tmpStepLimit))
             
-            let wallet = WManager.loadWalletBy(info: self.walletInfo!)
             self.remainBalance.text = Tools.bigToString(value: remainValue, decimal: wallet!.decimal, wallet!.decimal, false)
             if let exchanged = Tools.balanceToExchange(remainValue, from: wallet!.type.rawValue.lowercased(), to: "usd", belowDecimal: 2, decimal: wallet!.decimal) {
                 self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
@@ -695,7 +698,7 @@ class ICXSendViewController: BaseViewController {
             if showError { self.addressInputBox.setState(.error, "Error.Transfer.SameAddress".localized) }
             return false
         }
-        if showError { self.addressInputBox.setState(.normal, nil) }
+        if showError { self.addressInputBox.setState(.normal, "") }
         return true
     }
     
