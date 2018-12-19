@@ -195,7 +195,7 @@ class ChangePasswordViewController: UIViewController {
     @discardableResult
     private func validateCurrent(_ showError: Bool = true) -> Bool {
         guard let current = self.current.textField.text, current != "" else {
-            if showError { self.current.setState(.error, "Error.Password".localized) }
+            
             return false
         }
         
@@ -220,7 +220,7 @@ class ChangePasswordViewController: UIViewController {
     @discardableResult
     private func validatePassword1(_ showError: Bool = true) -> Bool {
         guard let password = self.first.textField.text, password != "" else {
-            if showError { self.first.setState(.error, "Error.Password".localized) }
+            
             return false
         }
         
@@ -244,7 +244,7 @@ class ChangePasswordViewController: UIViewController {
     @discardableResult
     func validatePassword2(_ showError: Bool = true) -> Bool {
         guard let password = first.textField.text, let confirm = second.textField.text, confirm != "" else {
-            if showError { self.second.setState(.error, "Error.Password".localized) }
+            
             return false
         }
         

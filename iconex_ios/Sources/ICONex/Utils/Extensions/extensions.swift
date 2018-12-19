@@ -523,14 +523,15 @@ extension String {
             return self
         }
 
-        guard let below = comp.last, below != "" else {
-            return upper
+        var below = ""
+        if comp.count == 2, let last = comp.last, last != "" {
+            below = last
         }
         
         let split = String(upper.reversed()).split(by: 3)
         let joined = split.joined(separator: Tools.groupingSeparator)
         let formatted = String(joined.reversed())
-        return formatted + Tools.decimalSeparator + below
+        return below == "" ? formatted : formatted + Tools.decimalSeparator + below
     }
 }
 
