@@ -205,7 +205,7 @@ class EditingAddressViewController: UIViewController {
         guard address != "" else { return false }
         
         if !AddressBook.canSaveAddressBook(address: address) {
-            if show { self.addressInputBox.setState(.error, "Error.AddressBook.DuplicatedAddress".localized) }
+            if show { self.addressInputBox.setState(.error, String(format: "Error.AddressBook.DuplicatedAddress".localized, type == .icx ? "ICX" : "ETH")) }
             return false
         }
         
