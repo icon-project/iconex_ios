@@ -221,7 +221,7 @@ struct DB {
         
         for model in list {
             var wallet = WalletInfo(name: model.name, address: model.address, type: coin)
-            wallet.value = WManager.walletBalanceList[model.address]
+            wallet.value = Balance.walletBalanceList[model.address]
             walletList.append(wallet)
         }
         

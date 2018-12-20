@@ -183,7 +183,7 @@ struct Tools {
     }
     
     static func balanceToExchangeBigInt(_ value: BigUInt, from: String, to: String, decimal: Int = 18) -> BigUInt? {
-        guard let rateString = EManager.exchangeInfoList[from+to], rateString.createDate != nil, let rate = Tools.stringToBigUInt(inputText: rateString.price, decimal: decimal, fixed: true) else {
+        guard let rateString = Exchange.exchangeInfoList[from+to], rateString.createDate != nil, let rate = Tools.stringToBigUInt(inputText: rateString.price, decimal: decimal, fixed: true) else {
             return nil
         }
         
@@ -623,12 +623,6 @@ struct Alert {
         info.wallet = WManager.loadWalletBy(info: walletInfo)
         
         return info
-    }
-    
-    static func SwapConfirm() -> SwapConfirmViewController {
-        let confirm = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "SwapConfirmView") as! SwapConfirmViewController
-        
-        return confirm
     }
     
     static func NetworkProvider(source: UIViewController, completion: (() -> Void)?) {

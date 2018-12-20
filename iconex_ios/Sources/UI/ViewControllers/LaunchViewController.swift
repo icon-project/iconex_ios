@@ -76,11 +76,11 @@ class LaunchViewController: UIViewController {
         
         
         for token in WManager.tokenTypes() {
-            EManager.addToken(token.symbol)
+            Exchange.addToken(token.symbol)
         }
         
-        WManager.getWalletsBalance()
-        EManager.getExchangeList()
+        Balance.getWalletsBalance()
+        Exchange.getExchangeList()
         
         let app = UIApplication.shared.delegate as! AppDelegate
         app.checkVersion()

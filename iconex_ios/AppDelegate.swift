@@ -182,8 +182,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func go() {
-        EManager.getExchangeList()
-        WManager.getWalletsBalance()
+        Exchange.getExchangeList()
+        Balance.getWalletsBalance()
         
         let list = WManager.walletInfoList
         

@@ -175,7 +175,7 @@ class WalletDetailViewController: UIViewController {
         outButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!) else { return }
             if let token = self.token {
-                guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
+                guard let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress], balance != BigUInt(0) else  {
                     
                     let alert = UIStoryboard(name: "Alert", bundle: nil).instantiateInitialViewController() as! BasicActionViewController
                     alert.message = "Error.Detail.InsufficientBalance".localized
@@ -184,13 +184,13 @@ class WalletDetailViewController: UIViewController {
                     return
                 }
                 
-                guard let walletBalance = WManager.walletBalanceList[wallet.address!], walletBalance != BigUInt(0) else {
+                guard let walletBalance = Balance.walletBalanceList[wallet.address!], walletBalance != BigUInt(0) else {
                     let errMsg = wallet.type == .icx ? "Error.Transfer.InsufficientFee.ICX".localized : "Error.Transfer.InsufficientFee.ETH".localized
                     Alert.Basic(message: errMsg).show(self)
                     return
                 }
             } else {
-                guard let balance = WManager.walletBalanceList[wallet.address!], balance != BigUInt(0) else {
+                guard let balance = Balance.walletBalanceList[wallet.address!], balance != BigUInt(0) else {
                     Alert.Basic(message: "Error.Detail.InsufficientBalance".localized).show(self)
                     return
                 }
@@ -251,7 +251,7 @@ class WalletDetailViewController: UIViewController {
             var info = [(name: String, balance: String, symbol: String)]()
             
             var balance = "-"
-            if let value = WManager.walletBalanceList[wallet.address!] {
+            if let value = Balance.walletBalanceList[wallet.address!] {
                 balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
             }
             
@@ -260,7 +260,7 @@ class WalletDetailViewController: UIViewController {
             if let tokenList = wallet.tokens {
                 for token in tokenList {
                     var tokenBalance = "-"
-                    if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()] {
+                    if let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()] {
                         if let bigBalance = balances[token.contractAddress] {
                             tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
                         }
@@ -368,7 +368,7 @@ class WalletDetailViewController: UIViewController {
                     case 4:
                         // 지갑 삭제
                         let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
-                        guard let balance = WManager.walletBalanceList[self.walletInfo!.address] else {
+                        guard let balance = Balance.walletBalanceList[self.walletInfo!.address] else {
                             Alert.Confirm(message: "Alert.Wallet.Remove.UnknownBalance".localized, cancel: "Common.No", confirm: "Common.Yes", handler: {
                                 Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, _) in
                                     if !WManager.deleteWallet(wallet: wallet) {
@@ -391,7 +391,7 @@ class WalletDetailViewController: UIViewController {
                             }).show(self)
                             return
                         }
-                        if balance == BigUInt(0) && WManager.tokenBalanceList[self.walletInfo!.address]?.filter({ $0.value != BigUInt(0) }).first == nil {
+                        if balance == BigUInt(0) && Balance.tokenBalanceList[self.walletInfo!.address]?.filter({ $0.value != BigUInt(0) }).first == nil {
                             
                             Alert.Confirm(message: "Alert.Wallet.Remove".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
                                 if !WManager.deleteWallet(wallet: wallet) {
@@ -640,7 +640,7 @@ class WalletDetailViewController: UIViewController {
                     }
                 }
             } else {
-                if let balances = WManager.tokenBalanceList[wallet.address!.add0xPrefix()], let balance = balances[token.contractAddress] {
+                if let balances = Balance.tokenBalanceList[wallet.address!.add0xPrefix()], let balance = balances[token.contractAddress] {
                     Log.Debug("balace \(balances)")
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
@@ -673,8 +673,8 @@ class WalletDetailViewController: UIViewController {
             }
         } else {
             if dragged {
-                WManager.getBalance(wallet: wallet) { [weak self] (isSuccess) in
-                    if let value = WManager.walletBalanceList[wallet.address!] {
+                Balance.getBalance(wallet: wallet) { [weak self] (isSuccess) in
+                    if let value = Balance.walletBalanceList[wallet.address!] {
                         let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
                         let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                         self?.balanceLabel.attributedText = attr
@@ -687,7 +687,7 @@ class WalletDetailViewController: UIViewController {
                     self?.isDragTriggered = false
                 }
             } else {
-                if let value = WManager.walletBalanceList[wallet.address!] {
+                if let value = Balance.walletBalanceList[wallet.address!] {
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
                     let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
@@ -697,10 +697,10 @@ class WalletDetailViewController: UIViewController {
                 } else {
                     headerLoading.isHidden = false
                     balanceLabel.isHidden = true
-                    WManager.getBalance(wallet: wallet) { [weak self] (isSuccess) in
+                    Balance.getBalance(wallet: wallet) { [weak self] (isSuccess) in
                         self?.headerLoading.isHidden = true
                         self?.balanceLabel.isHidden = false
-                        if let value = WManager.walletBalanceList[wallet.address!] {
+                        if let value = Balance.walletBalanceList[wallet.address!] {
                             let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
                             let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                             self?.balanceLabel.attributedText = attr
@@ -782,7 +782,7 @@ class WalletDetailViewController: UIViewController {
         exchangeSelectLabel.text = exchangeType.uppercased()
         
         if let token = self.token {
-            guard let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] else {
+            guard let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] else {
                 return
             }
             
@@ -792,7 +792,7 @@ class WalletDetailViewController: UIViewController {
             }
             exchangeLabel.text = exchanged.currencySeparated()
         } else {
-            guard let wallet = WManager.loadWalletBy(info: self.walletInfo!), let balance = WManager.walletBalanceList[wallet.address!] else {
+            guard let wallet = WManager.loadWalletBy(info: self.walletInfo!), let balance = Balance.walletBalanceList[wallet.address!] else {
                 return
             }
             guard exchangeType != wallet.type.rawValue, let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue, to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: wallet.decimal) else {

@@ -1,5 +1,5 @@
 //
-//  Exchange.swift
+//  ExchangeManager.swift
 //  iconex_ios
 //
 //  Copyright © 2018 ICON Foundation. All rights reserved.
@@ -64,4 +64,4 @@ class ExchangeManager {
     }
 }
 
-let EManager = ExchangeManager.sharedInstance
+let Exchange = ExchangeManager.sharedInstance

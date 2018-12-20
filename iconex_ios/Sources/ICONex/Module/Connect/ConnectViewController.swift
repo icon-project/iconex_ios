@@ -95,12 +95,12 @@ class ConnectViewController: BaseViewController {
         
         
         if Conn.action == "sendICX" {
-            if let balance = WManager.walletBalanceList[info.address] {
+            if let balance = Balance.walletBalanceList[info.address] {
                 if balance == 0 || balance < converted {
                     Conn.sendError(error: ConnectError.insufficient(.balance))
                     return false
                 }
-            } else if !WManager.isBalanceLoadCompleted {
+            } else if !Balance.isBalanceLoadCompleted {
                 return false
             } else {
                 Conn.sendError(error: ConnectError.network("Could not fetch balance."))
@@ -146,7 +146,7 @@ class ConnectViewController: BaseViewController {
                     Conn.sendError(error: ConnectError.network("Could not fetch balance."))
                     return false
                 }
-                WManager.tokenBalanceList[from] = [contract: tokenBalance]
+                Balance.tokenBalanceList[from] = [contract: tokenBalance]
                 if tokenBalance < converted {
                     Conn.sendError(error: ConnectError.insufficient(.balance))
                     return false

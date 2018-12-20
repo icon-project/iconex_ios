@@ -132,7 +132,7 @@ class BindPasswordViewController: BaseViewController {
         
         if let balance = wallet.balance {
             self.walletAmount.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
-        } else if let balance = WManager.walletBalanceList[wallet.address!] {
+        } else if let balance = Balance.walletBalanceList[wallet.address!] {
             self.walletAmount.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
         }
         

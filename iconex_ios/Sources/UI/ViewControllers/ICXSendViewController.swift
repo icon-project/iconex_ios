@@ -131,7 +131,7 @@ class ICXSendViewController: BaseViewController {
         
         if let token = self.token {
             self.dataContainer.isHidden = true
-            if let balances = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] {
+            if let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] {
                 let printBalance = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
                 balanceLabel.text = printBalance
                 
@@ -155,7 +155,7 @@ class ICXSendViewController: BaseViewController {
             }
         } else {
             self.dataContainer.isHidden = false
-            if let balance = WManager.walletBalanceList[wallet.address!] {
+            if let balance = Balance.walletBalanceList[wallet.address!] {
                 let printBalance = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
                 balanceLabel.text = printBalance
                 
@@ -283,10 +283,10 @@ class ICXSendViewController: BaseViewController {
                 guard let stepPrice = self.stepPrice else { return }
 
                 if let token = self.token {
-                    guard let balance = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix()]?[token.contractAddress] else { return }
+                    guard let balance = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()]?[token.contractAddress] else { return }
                     self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true)
                 } else {
-                    guard let _ = WManager.walletBalanceList[wallet.address!] else { return }
+                    guard let _ = Balance.walletBalanceList[wallet.address!] else { return }
                     var tmpStepLimit = BigUInt(0)
                     if let stepLimit = self.limitInputBox.textField.text, let limit = BigUInt(stepLimit) {
                         tmpStepLimit = limit
@@ -622,7 +622,7 @@ class ICXSendViewController: BaseViewController {
         }
         
         if let token = self.token {
-            guard let balance = WManager.tokenBalanceList[token.dependedAddress.add0xPrefix().lowercased()]?[token.contractAddress.lowercased()], let minimum = self.calculateStepPrice() else { return false }
+            guard let balance = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix().lowercased()]?[token.contractAddress.lowercased()], let minimum = self.calculateStepPrice() else { return false }
             guard inputValue <= balance else {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                 return false
@@ -711,7 +711,7 @@ class ICXSendViewController: BaseViewController {
         
         var totalBalance: BigUInt
         if let token = self.token {
-            guard let balance = WManager.tokenBalanceList[token.dependedAddress]?[token.contractAddress] else { return false }
+            guard let balance = Balance.tokenBalanceList[token.dependedAddress]?[token.contractAddress] else { return false }
             totalBalance = balance
         } else {
             totalBalance = self.totalBalance!

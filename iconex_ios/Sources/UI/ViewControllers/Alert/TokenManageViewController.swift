@@ -235,10 +235,10 @@ class TokenManageViewController: UIViewController {
             
             do {
                 try DB.addToken(tokenInfo: token)
-                EManager.addToken(token.symbol)
+                Exchange.addToken(token.symbol)
                 WManager.loadWalletList()
-                WManager.getWalletsBalance()
-                EManager.getExchangeList()
+                Balance.getWalletsBalance()
+                Exchange.getExchangeList()
                 
                 self.navigationController?.popViewController(animated: true)
             } catch {

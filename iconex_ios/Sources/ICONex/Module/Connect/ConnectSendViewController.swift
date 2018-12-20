@@ -100,7 +100,7 @@ class ConnectSendViewController: BaseViewController {
             guard let valueString = received.params?["value"] as? String, let value = BigUInt(valueString.prefix0xRemoved(), radix: 16), let stepPrice = self.stepPrice else { return }
             guard let key = self.privateKey else { return }
             
-            guard let balance = WManager.walletBalanceList[from] else { return }
+            guard let balance = Balance.walletBalanceList[from] else { return }
             guard let limit = BigUInt(self.stepLimitInputBox.textField.text!.prefix0xRemoved()) else { return }
             
             let estimated = stepPrice * limit
@@ -336,10 +336,10 @@ class ConnectSendViewController: BaseViewController {
         
         var totalBalance: BigUInt
         if let contractAddress = Conn.received?.params?["contractAddress"] as? String {
-            guard let balance = WManager.tokenBalanceList[from]?[contractAddress] else { return false }
+            guard let balance = Balance.tokenBalanceList[from]?[contractAddress] else { return false }
             totalBalance = balance
         } else {
-            guard let balance = WManager.walletBalanceList[from] else { return false }
+            guard let balance = Balance.walletBalanceList[from] else { return false }
             totalBalance = balance
         }
         guard let limitString = self.stepLimitInputBox.textField.text , limitString != "", let limit = BigUInt(limitString) else {

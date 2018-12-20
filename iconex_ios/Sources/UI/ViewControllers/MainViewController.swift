@@ -62,19 +62,19 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 usdButton.isSelected = true
                 btcButton.isSelected = false
                 ethButton.isSelected = false
-                EManager.currentExchange = "usd"
+                Exchange.currentExchange = "usd"
                 
             case 1:
                 usdButton.isSelected = false
                 btcButton.isSelected = true
                 ethButton.isSelected = false
-                EManager.currentExchange = "btc"
+                Exchange.currentExchange = "btc"
                 
             case 2:
                 usdButton.isSelected = false
                 btcButton.isSelected = false
                 ethButton.isSelected = true
-                EManager.currentExchange = "eth"
+                Exchange.currentExchange = "eth"
                 
             default:
                 break
@@ -90,10 +90,10 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     func showBalance() {
 //        if let excBalances = WManager.getTotalBalances() {
-        if WManager.isBalanceLoadCompleted, let excBalances = WManager.getTotalBalances() {
+        if Balance.isBalanceLoadCompleted, let excBalances = Balance.getTotalBalances() {
             self.totalLoader.isHidden = true
             self.totalBalanceLabel.isHidden = false
-            let exchanged = Tools.bigToString(value: excBalances, decimal: 18, EManager.currentExchange == "usd" ? 2 : 4, false)
+            let exchanged = Tools.bigToString(value: excBalances, decimal: 18, Exchange.currentExchange == "usd" ? 2 : 4, false)
             let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
             self.totalBalanceLabel.attributedText = attr
         } else {
@@ -119,7 +119,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        WManager.getWalletsBalance()
+        Balance.getWalletsBalance()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -423,7 +423,7 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
     }
     
     func checkPullLoader() {
-        if WManager.isBalanceLoadCompleted {
+        if Balance.isBalanceLoadCompleted {
             pullLoader1.layer.removeAllAnimations()
             pullLoader2.layer.removeAllAnimations()
             
@@ -473,8 +473,8 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 loadHeight.constant = 100.0
                 Tools.rotateAnimation(inView: pullLoader1)
                 Tools.rotateReverseAnimation(inView: pullLoader2)
-                if WManager.isBalanceLoadCompleted {
-                    WManager.getWalletsBalance()
+                if Balance.isBalanceLoadCompleted {
+                    Balance.getWalletsBalance()
                 }
             }
 
