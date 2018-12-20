@@ -447,8 +447,8 @@
 "Error.NoBackupFile" = "지갑 백업 파일을 선택해주세요.";
 "Error.TouchID.Locked" = "Touch ID가 잠겨있습니다. 휴대폰의 잠금해제 화면에서 암호 입력으로 활성화 할 수 있습니다.";
 "Error.FaceID.Locked" = "Face ID가 잠겨있습니다. 휴대폰의 잠금해제 화면에서 암호 입력으로 활성화 할 수 있습니다.";
-"Error.TouchID.NotEnrolled" = "Touch ID가 등록되어 있지 않습니다.\n휴대폰의 설정화면에서 등록 후 다시 시도해주세요.";
-"Error.FaceID.NotEnrolled" = "Face ID가 등록되어 있지 않습니다.\n휴대폰의 설정화면에서 등록 후 다시 시도해주세요.";
+"Error.TouchID.NotEnrolled" = "Touch ID가 등록되어 있지 않습니다.\n휴대폰의 설정화면에서 Touch ID 등록 후 다시 시도해주세요.";
+"Error.FaceID.NotEnrolled" = "Face ID가 등록되어 있지 않습니다.\n휴대폰의 설정화면에서 Face ID 등록 후 다시 시도해주세요.";
 "Error.SystemCheck.Failed" = "무결성 검증에 실패했습니다.\n(Jailbreak / Debugger 탐지)";
 "Error.Transfer.SameAddress" = "같은 주소로 송금할 수 없습니다.";
 "Error.Wallet.Create" = "백업 파일 생성에 실패했습니다.";
@@ -461,12 +461,12 @@
 "Error.Token.InputName" = "토큰 이름을 입력해주세요.";
 "Error.Token.InputSymbol" = "토큰 기호를 입력해주세요.";
 "Error.AddressBook.InputName" = "주소록 이름을 입력해 주세요.";
-"Error.AddressBook.DuplicatedName" = "같은 이름의 주소록이 이미 존재합니다.";
-"Error.AddressBook.DuplicatedAddress" = "같은 주소가 이미 존재합니다.";
+"Error.AddressBook.DuplicatedName" = "같은 이름의 주소가 이미 존재합니다.";
+"Error.AddressBook.DuplicatedAddress" = "같은 %@ 주소가 이미 존재합니다.";
 "Error.Detail.InsufficientBalance" = "코인 보유량이 없습니다. 입금 후 송금해 주세요.";
 "Error.Transfer.AmountEmpty" = "송금할 수량을 입력해주세요.";
 "Error.Transfer.EmptyLimit" = "Step 한도를 입력해주세요.";
 "Error.Data.Exceeded" = "입력 한도 %dKB를 초과합니다.";
-"Error.Transfer.Limit.LessThen" = "%@ 보다 낮은 Step 한도를 입력해 주세요.";
-"Error.Transfer.Limit.MoreThen" = "%@ 보다 높은 Step 한도를 입력해 주세요.";
+"Error.Transfer.Limit.LessThen" = "%@ 이하로 입력해주세요.";
+"Error.Transfer.Limit.MoreThen" = "%@ 이상으로 입력해주세요.";
 "Error.Connect.Send.InsufficientFee" = "ICX 보유 수량이 부족합니다.";

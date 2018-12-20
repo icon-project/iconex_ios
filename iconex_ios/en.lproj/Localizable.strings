@@ -461,7 +461,7 @@
 "Error.Transfer.SameAddress" = "Sending and receiving address are the same.";
 "Error.AddressBook.InputName" = "Please enter address name.";
 "Error.AddressBook.DuplicatedName" = "This address name already exists.";
-"Error.AddressBook.DuplicatedAddress" = "This account already exists.";
+"Error.AddressBook.DuplicatedAddress" = "This %@ account already exists.";
 "Error.Detail.InsufficientBalance" = "You have 0 balance. Please deposit and transfer.";
 "Error.Transfer.AmountEmpty" = "Please enter the transfer amount.";
 "Error.Transfer.EmptyLimit" = "Please enter step limit.";
