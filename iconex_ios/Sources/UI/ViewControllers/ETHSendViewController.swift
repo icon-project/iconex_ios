@@ -587,6 +587,8 @@ class ETHSendViewController: UIViewController {
     
     @discardableResult
     func validateData(_ showError: Bool = true) -> Bool {
+        guard token == nil else { return true }
+        
         guard let dataText = dataInputBox.textField.text, dataText != "" else {
             dataInputBox.setState(.normal, "")
             self.gasLimitInputBox.textField.text = "21000"
