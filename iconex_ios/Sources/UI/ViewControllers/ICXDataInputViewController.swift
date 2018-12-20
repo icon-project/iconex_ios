@@ -57,10 +57,10 @@ class ICXDataInputViewController: BaseViewController {
         
         switch self.type {
         case .utf8:
-            self.placeholder.text = "Hello, ICON!"
+            self.placeholder.text = "Hello, ICON"
             
         case .hex:
-            self.placeholder.text = "0x1234"
+            self.placeholder.text = "0x1234..."
         }
         if let saved = savedData {
             textView.text = saved
