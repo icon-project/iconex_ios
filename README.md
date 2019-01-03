@@ -31,7 +31,7 @@ ICONex for iOS supports developer mode since version 1.5.0
 ### How to
 * 3rd party apps or Web pages required.
 * Using Apple's Custom URL Scheme Inter-App Communication protocol.
-* Call ICONex for activate developer mode with `iconex://developer`
+* Call ICONex to activate developer mode with `iconex://developer`
 * When activated, users can choose ICON Service provider via App Info menu.
 * [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
 * **It won't be changed until user deactivates mode.**
