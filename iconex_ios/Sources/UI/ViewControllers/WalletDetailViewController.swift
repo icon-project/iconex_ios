@@ -726,7 +726,7 @@ class WalletDetailViewController: UIViewController {
         }
         
         if totalData != 0 {
-            guard let list = filteredList, totalData > list.count else { return }
+            guard let filtered = filteredList, totalData > filtered.count else { return }
         }
         
         var tracker: Tracker {
@@ -770,7 +770,7 @@ class WalletDetailViewController: UIViewController {
         }
         self.historyList.removeAll()
         
-        let list = Array(txList).sorted { $0.createDate > $1.createDate }
+        let list = Array(txList).sorted { $0.age > $1.age }
         
         self.historyList.append(contentsOf: list)
         

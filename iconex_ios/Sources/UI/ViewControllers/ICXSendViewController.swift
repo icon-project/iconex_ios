@@ -116,7 +116,9 @@ class ICXSendViewController: BaseViewController {
             }
             
             DispatchQueue.main.async {
-                self.calculateStepPrice()
+                if let limit = self.calculateStepPrice(), self.limitInputBox.textField.text! == "" {
+                    self.limitInputBox.textField.text = Tools.bigToString(value: limit, decimal: 0, 0, false)
+                }
                 self.validateLimit(false)
             }
         }
@@ -395,7 +397,9 @@ class ICXSendViewController: BaseViewController {
                 dataInput.costs = self.costs
                 dataInput.handler = { [unowned self] data in
                     self.inputData = data
-                    self.calculateStepPrice()
+                    if let limit = self.calculateStepPrice() {
+                        self.limitInputBox.textField.text = Tools.bigToString(value: limit, decimal: 0, 0, false)
+                    }
                 }
                 self.present(dataInput, animated: true, completion: nil)
             } else {
@@ -414,7 +418,9 @@ class ICXSendViewController: BaseViewController {
                     dataInput.costs = self.costs
                     dataInput.handler = { [unowned self] data in
                         self.inputData = data
-                        self.calculateStepPrice()
+                        if let limit = self.calculateStepPrice() {
+                            self.limitInputBox.textField.text = Tools.bigToString(value: limit, decimal: 0, 0, false)
+                        }
                     }
                     self.present(dataInput, animated: true, completion: nil)
                 }
@@ -813,18 +819,15 @@ class ICXSendViewController: BaseViewController {
         if self.token != nil {
             let stepLimit = 2 * stepDefault
             
-            self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false)
             return stepLimit
         } else {
             if let data = self.inputData {
                 guard let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
                 let stepLimit = stepDefault + (input * BigUInt(data.bytes.count))
                 
-                self.limitInputBox.textField.text = Tools.bigToString(value: stepLimit, decimal: 0, 0, false)
                 return stepLimit
             } else {
                 guard let minimum = self.minLimit else { return nil }
-                self.limitInputBox.textField.text = String(minimum)
                 return minimum
             }
         }
