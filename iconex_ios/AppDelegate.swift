@@ -45,13 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Realm.Configuration.defaultConfiguration = config
         
-        ////////////////////////////////////
-        // Localization
-        ////////////////////////////////////
-        if let selected = UserDefaults.standard.string(forKey: "selectedLanguage") {
-            Bundle.setLanguage(selected)
-        }
-        
         var path = URL(fileURLWithPath: NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])
         path = path.appendingPathComponent("ICONex")
         do {
