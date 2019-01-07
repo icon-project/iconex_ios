@@ -1,0 +1,470 @@
+/* 
+  Localizable.strings
+  ios-iCONex
+
+  Copyright © 2018 ICON Foundation. All rights reserved.
+*/
+
+"Common.Yes" = "Yes";
+"Common.No" = "No";
+"Common.Confirm" = "Confirm";
+"Common.Cancel" = "Cancel";
+"Common.Back" = "Back";
+"Common.Next" = "Next";
+"Common.Complete" = "Complete";
+"Common.Edit" = "Edit";
+"Common.Add" = "Add";
+"Common.Change" = "Change";
+"Common.Close" = "Close";
+"Common.Copied" = "Copied";
+"Common.Done" = "Complete";
+"Common.Remove" = "Delete";
+"Common.Modify" = "Edit";
+
+
+"Wallet.Keystore" = "Keystore File";
+"Wallet.Address" = "Wallet Address";
+"Wallet.Address.Copy" = "Copy Address";
+"Wallet.PrivateKey" = "Private Key";
+"Wallet.PrivateKey.Copy" = "Copy Private Key";
+"Wallet.PrivateKey.Copy.Message" = "Private key is copied.";
+"Wallet.ViewInfo" = "View Wallet Info.";
+"Wallet.Create" = "Create a Wallet";
+"Wallet.Load" = "Load Wallet";
+"Wallet.Backup" = "Backup Wallet";
+"Wallet.Address.CopyComplete" = "Address is copied.";
+
+"Placeholder.CurrentPassword" = "Enter current password";
+"Placeholder.InputWalletName" = "Enter wallet name";
+"Placeholder.InputWalletPassword" = "Enter wallet password";
+"Placeholder.InputNewPassword" = "Enter new password";
+"Placeholder.ConfirmWalletPassword" = "Confirm password";
+"Placeholder.ConfirmNewPassword" = "Confirm new password";
+"Placeholder.PrivateKey" = "Enter your private key";
+"Placeholder.SwapAmount" = "Enter swap amount";
+"Placeholder.StepLimit" = "Enter Step limit";
+
+///////////////////////////
+
+"Welcome.Instruction.1" = "ICONex enables users to create and manage wallets for various cryptocurrencies that are connected to ICON Network including ICX and ETH.";
+"Welcome.Instruction.2" = "Convenient storage and transfer of ICX and other various cryptocurrencies connected with ICON are possible based on the Reserved Balance.";
+
+"Passcode.Fingerprint.Instruction" = "Place your finger on the sensor to unlock the screen.";
+"Passcode.Unlock.Code" = "Unlock the screen lock with the passcode.";
+
+"Passcode.Code.Enter" = "Enter Passcode";
+"Passcode.Code.Retry" = "Please Try Again";
+"Passcode.Code.Forgot" = "Forgot your passcode?";
+
+"Passcode.Reset" = "Reset Screen Lock Passcode";
+"Passcode.Reset.withWallet" = "You can reset your passcode using your wallet password.";
+"Password.Enter" = "Enter your password";
+
+"Create.Wallet.Step1.StepTitle" = "Select Coin";
+"Create.Wallet.Step1.CreateSelected" = "Select a wallet between ICX wallet and ETH wallet.";
+"Create.Wallet.Step1.Instruction" = "You can add ERC20 tokens using Ethereum wallet menu.";
+"Create.Wallet.Step1.SelectCoin" = "Which coin would you like to add?";
+
+"Create.Wallet.Step2.StepTitle" = "Wallet Info.";
+"Create.Wallet.Step2.Header1" = "You are responsible for keeping your password safe. DO NOT FORGET TO SAVE THIS. If you lose your password, you cannot restore it.";
+"Create.Wallet.Step2.Desc1" = "You will need the password to load your wallet in other devices using the Keystore file or your private key.";
+"Create.Wallet.Step2.Header2" = "Enter a wallet name and a password.";
+"Create.Wallet.Step2.WalletName.Placeholder" = "Enter wallet name";
+"Create.Wallet.Step2.Password.Placeholder" = "Enter wallet password";
+"Create.Wallet.Step2.Confirm.Placeholder" = "Confirm Password";
+
+"Create.Wallet.Step3.StepTitle" = "Keystore File";
+"Create.Wallet.Step3.Header.1" = "This Keystore file contains the encrypted private key and requires the wallet password to access it.";
+"Create.Wallet.Step3.Desc.1_1" = "Use this Keystore file to load your wallet from other devices.";
+"Create.Wallet.Step3.Desc.1_2" = "You can download your Keystore file from the \"Backup wallet\" menu later.";
+"Create.Wallet.Step3.Header.2" = "Download Keystore file";
+"Create.Wallet.Step3.Download" = "Download Keystore file";
+
+"Create.Wallet.Step4.StepTitle" = "Private Key";
+"Create.Wallet.Step4.Header.1" = "The private key is unique to your wallet and has no password.";
+"Create.Wallet.Step4.Desc.1_1" = "Pay special attention to your private key as anyone who can access to the private key can transfer assets from the wallets without your permission.";
+"Create.Wallet.Step4.Desc.1_2" = "You can access to your private key from the 'Backup wallet' menu later.";
+
+"Import.Step1.Header" = "How would you like to add your wallet?";
+
+"Import.Step2.Header_1" = "Select your Keystore file and enter your password";
+"Import.Step2.Desc_1" = "If your Keystore file is stored on another device, move the Keystore file to this device or upload it to cloud service and then select the Keystore file.";
+"Import.Step2.SelectFile" = "Select Keystore File";
+"Import.Step2.Button.Title" = "Load";
+
+"Import.Step3.Header_1" = "Please enter a new wallet name";
+"Import.Step3.Placeholder_1" = "Enter wallet name";
+
+"Import.Step2.Header_2_1" = "Select a coin and enter your private key";
+"Import.Step2.Desc_2_1" = "Please be sure to enter the correct private key for the matching coin type.";
+"Import.Step2.Header_2_2" = "Select Coins & Tokens";
+"Import.Step2.Desc_2_2" = "Private Key";
+
+"Import.Step3.Header_2_1" = "Please enter the new wallet name and the password.";
+"Import.Step3.Desc_2_1" = "You are responsible for keeping your password safe. DO NOT FORGET TO SAVE THIS. If you lose your password, you cannot restore it.";
+"Import.Step3.Desc_2_2" = "You will need the password to load your wallet in other devices using the Keystore file or your private key.";
+
+"BundleImport.NavTitle" = "Load Wallet Bundle";
+"BundleImport.TableHeader.Title" = "If you load a wallet bundle, the wallets that are already registered in your wallet will not be loaded.\n\nDo you want to proceed?";
+"BundleImport.TableHeader.Desc" = "The password of each wallet is the same as the wallet bundle password.";
+"BundleImport.TableHeader.Total.Prefix" = "out of %@ are already registered in your ICONex ";
+"BundleImport.TableHeader.Total.Postfix" = "%@ wallets";
+"BundleImport.TableHeader.Registered" = "Registered";
+
+"Main.TotalAssets" = "Total Assets";
+"Main.AssetsInfo" = "The tokens that have no USD-converted prices will not be included";
+"Main.Sort.Wallet" = "Wallets";
+"Main.Sort.Coins" = "Coins&Tokens";
+"Main.Menu.WalletManage" = "Manage Wallet";
+"Main.Menu.TokenManage" = "Manage Token";
+"Main.Menu.Backup" = "Backup Wallet";
+"Main.Menu.ChangePassword" = "Change Wallet Password";
+"Main.Menu.RemoveWallet" = "Remove Wallet";
+
+"Detail.Transfer" = "Transfer";
+"Detail.Deposit" = "Deposit";
+"Detail.TxHistory" = "History";
+"Detail.DepositCompleted" = "Deposit completed";
+"Detail.TransferCompleted" = "Transfer completed";
+"Detail.TransferPending" = "Transfer pending";
+"Detail.ETHTransactions" = "ETH Transaction History";
+"Detail.NoTxHistory" = "No transaction history";
+"Detail.SelectCoin" = "Select Coins & Tokens";
+
+
+"Detail.ViewOption" = "View Option";
+"Detail.Filter.Status" = "Transaction Status";
+"Detail.Filter.Complete" = "Completed";
+"Detail.Filter.Pending" = "Pending";
+"Detail.Filter.Type" = "Transaction Type";
+"Detail.Filter.Transfer" = "Transfer";
+"Detail.Filter.Deposit" = "Deposit";
+"Detail.Filter.All" = "All";
+"Detail.Select.Unit" = "Select Evaluation Currency";
+
+"Token.Management" = "Manage Token";
+"Token.Add" = "Add Token";
+"Token.Empty" = "No registered token.";
+
+"Token.Address" = "Address";
+"Token.EnterAddress" = "Enter address";
+"Token.Name" = "Token Name";
+"Token.EnterName" = "Enter token name";
+"Token.Symbol" = "Token Symbol";
+"Token.EnterSymbol" = "Enter token symbol";
+"Token.Decimals" = "Number of Decimals";
+"Token.EnterNumbers" = "Enter numbers";
+"Token.RemoveToken" = "Remove Token";
+
+"Backup.StepTitle" = "You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
+"Backup.Header1" = "Download the Keystore file";
+"Backup.Desc1_1" = "The Keystore file contains the encrypted private key and requires the wallet password to access it.";
+"Backup.Desc1_2" = "Use this Keystore file to load your wallet from other devices.";
+"Backup.Download" = "Download Keystore file";
+"Backup.Header2" = "Save Private Key";
+"Backup.Desc2_1" = "The private key is unique to your wallet and has no password.";
+"Backup.Desc2_2" = "Pay special attention to your private key as anyone who can access to the private key can transfer assets from the wallets without your permission.";
+
+"Change.PWD.NavTitle" = "Change Wallet Password";
+"Change.PWD.Header1" = "You are responsible for keeping your password safe. DO NOT FORGET TO SAVE THIS. If you lose your password, you cannot restore it.";
+"Change.PWD.Desc1_1" = "You will need the password to load your wallet in other devices using the Keystore file or your private key.";
+"Change.PWD.Header2" = "Enter Current & New Password";
+
+"AddressBook.Select" = "Select Address";
+"AddressBook.AddressBook" = "Registered";
+"AddressBook.Recent" = "Recent";
+"AddressBook.MyWallet" = "My Wallet";
+"AddressBook.Add" = "Add";
+"AddressBook.Empty" = "No registered address";
+"AddressBook.QRReader" = "Scan QR code";
+"AddressBook.InputName" = "Enter wallet name";
+"AddressBook.NoRecentHistory" = "No recent history.";
+"AddressBook.NoWallets" = "No available address.";
+
+"Transfer.Transfer" = "Transfer";
+"Transfer.Balance" = "Balance";
+"Transfer.TransferAmount" = "Transfer Amount";
+"Transfer.Max" = "Max";
+"Transfer.RecvAddress" = "Receiving Address";
+"Transfer.SelectAddress" = "Select Address";
+"Transfer.QR" = "Scan QR code";
+"Transfer.EnterAddress" = "Enter address";
+"Transfer.EnterAmount" = "Enter transfer amount";
+"Transfer.GasLimit" = "Gas Limit";
+"Transfer.EnterGasLimit" = "Enter gas limit (number)";
+"Transfer.GasPrice" = "Gas Price";
+"Transfer.Data" = "Data (Optional)";
+"Transfer.DataTitle" = "Data";
+"Transfer.InputType" = "Input Type";
+"Transfer.EnterData" = "Enter data";
+"Transfer.Data.Cancel" = "Are you sure you want to cancel?";
+"Transfer.EstimatedFee" = "Estimated Maximum Fee";
+"Transfer.EstimatedBalance" = "Estimated Balance";
+"Transfer.Gas.Desc_1" = "Gas limit is the amount of gas to send with your transaction.\nUnnecessary gas is refunded to you at the end of transaction. In other words, you can set the maximum amount of gas but the actual gas consumption is not fixed.";
+"Transfer.Gas.Desc_2" = "Gas price is an unit of gas. 1 Gwei equals 0.000000001 ETH.\nEthereum miners prioritize based on gas price when generating blocks. If you set higher gas price, you have more chance to get your transaction confirmed. It also determines your transaction speed.";
+"Transfer.Gas.Desc_3" = "Estimated Maximum Fee = Gas Price * Gas Limit\nSet proper gas limit and gas price. You will pay transaction fees even if your transaction is not confirmed by miners.";
+"Transfer.Gas.Desc_4" = "If you do not enter the data when required, the transaction will fail.\nYou will still have to pay the transaction fees. You don't have to enter data if it is not required in the transaction.";
+"Transfer.TxFee" = "Estimated Maximum Fee";
+"Transfer.AfterBalance" = "Estimated Balace";
+"Transfer.EstimatedStep" = "Estimated Maximum Fee = Step price * Step limit";
+"Transfer.Slow" = "Slow";
+"Transfer.Fast" = "Fast";
+"Transfer.RequestComplete" = "Transfer request has been completed";
+"Transfer.Step.Limit" = "Step Limit";
+"Transfer.Step.LimitInfo.First" = "Step limit is the amount of Step to send with your transaction.\n";
+"Transfer.Step.LimitInfo.Second" = "Unnecessary Step is refunded to you at the end of transaction. In other words, you can set the maximum amount of Step but the actual Step consumption is not fixed.";
+"Transfer.Step.Price" = "Step Price";
+"Transfer.Step.PriceInfo.First" = "Step price is the amount you pay per unit of Step.";
+"Transfer.Step.PriceInfo.Second" = "Step price is paid in loop and 1 loop is fixed to 0.000000000000000001(";
+"Transfer.Step.PriceInfo.Third" = ") ICX. ICON transaction fee is imposed according to various factors such as the number of smart contract usage, the amount of blockchain database used and the size of transaction data, etc.";
+"Transfer.Step.PriceInfo.Superscript" = "10-18";
+"Transfer.Data.Title" = "Data (Optional)";
+"Transfer.Data.Info" = "You may enter data to send with the transaction.\nTransaction fee is imposed according to the size of data.";
+"Transfer.Data.Input" = "Add";
+"Transfer.Data.View" = "View";
+
+"Side.Create" = "Create Wallet";
+"Side.Import" = "Load Wallet";
+"Side.BundleExport" = "Export Wallet Bundle";
+"Side.ScreenLock" = "Screen Lock";
+"Side.Language" = "Language";
+"Side.Version" = "App Info";
+"Side.Disclaimer" = "ICONex Disclaimer";
+
+"BundleExport.Step1.NavTitle" = "Export Wallet Bundle";
+"BundleExport.Step1.Header" = "Select the wallets to bundle. Passwords are required.";
+"BundleExport.Step1.Desc_1" = "Wallet bundle backs up your wallets in one file. You can easily manage different wallets at once.";
+"BundleExport.Step1.Desc_2" = "You will need the password to load your wallet in other devices using the Keystore file or your private key.";
+"BundleExport.Step1.Selected" = " Selected Wallets";
+"BundleExport.BundlePassword" = "Wallet Bundle Password";
+
+"BundleExport.Step2.Header" = "Please create the password for the wallet bundle and download the backup file.";
+"BundleExport.Step2.Desc1" = "You are responsible for keeping your password safe. DO NOT FORGET TO SAVE THIS. If you lose your password, you cannot restore it.";
+"BundleExport.Step2.Desc2" = "The Keystore file contains the encrypted private key and requires the wallet password to access it.";
+"BundleExport.Step2.Download" = "Download wallet bundle backup file";
+
+"LockScreen.Setting.Title" = "Activate Screen Lock";
+"LockScreen.Setting.Header" = "Do you want to activate the screen lock function?";
+"LockScreen.Setting.Desc1" = "By activating the screen lock function, a 6-digit passcode is required every time you open an ICONex app.\nIf you forget your screen lock passcode, you can reset the passcode using your wallet password.";
+"LockScreen.Setting.useFunction" = "Activate screen lock passcode";
+"LockScreen.Setting.ChangeCode" = "Change screen lock passcode";
+"LockScreen.Setting.ChangeCode.Title" = "Change Screen Lock Passcode";
+"LockScreen.Setting.useBiometrics.TouchID" = "Unlock with Touch ID";
+"LockScreen.Setting.useBiometrics.FaceID" = "Unlock with Face ID";
+
+"LockScreen.Setting.Bio.Title.TouchID" = "Touch ID unlock guide";
+"LockScreen.Setting.Bio.Title.FaceID" = "Face ID unlock guide";
+"LockScreen.Setting.Bio.Header.TouchID" = "Do you want to unlock ICONex with your Touch ID?";
+"LockScreen.Setting.Bio.Header.FaceID" = "Do you want to unlock ICONex with your Face ID?";
+"LockScreen.Setting.Bio.Desc.TouchID" = "You can have fast access to ICONex using your Touch ID.\n\nYou can unlock ICONex with every fingerprint registered on your mobile phone. Please make sure you have registered your own fingerprint.";
+"LockScreen.Setting.Bio.Desc.FaceID" = "You can have fast access to ICONex using your Face ID.\n\nYou can unlock ICONex with every Face ID registered on your mobile phone. Please make sure you have registered your own Face ID.";
+"LockScreen.Setting.Bio.Use.TouchID" = "Use Touch ID";
+"LockScreen.Setting.Bio.Use.FaceID" = "Use Face ID";
+
+"LockScreen.Setting.Passcode.Header" = "Enter 6-digit screen lock passcode";
+"LockScreen.Setting.Passcode.Header_2" = "Confirm screen lock passcode";
+"LockScreen.Setting.Passcode.Header_Error" = "Please confirm your passcode";
+
+"LockScreen.Setting.Passcode.Change.Current" = "Enter current 6-digit passcode";
+"LockScreen.Setting.Passcode.Change.New" = "Enter new 6-digit passcode";
+"LockScreen.Setting.Passcode.Change.Renew" = "Confirm screen lock passcode";
+"LockScreen.Setting.Passcode.Change.Error" = "Passcodes do not match.\nPlease check again.";
+
+"Connect.Select.Title" = "Select Wallet";
+"Connect.Send.Amount" = "Transfer Amount";
+"Connect.Send.to" = "Receiving Address";
+"Connect.Send.StepLimit" = "Step Limit";
+"Connect.Send.StepPrice" = "Step Price";
+"Connect.Send.EstimatedFee" = "Estimated Maximum Fee";
+"Connect.Send.EstimatedRemain" = "Estimated Balance";
+
+"Language.Korean" = "한국어";
+"Language.English" = "English";
+
+"Disclaimer.Title" = "At the time of downloading and using the official ICX wallet, “ICONex”, the below disclaimer will be applied to the users.\n\n";
+"Disclaimer.Content" = "1. The private key ICONex user creates in the process of using the ICONex service is stored in your mobile device, ICON Foundation does not store or/and manage the user's private key. The ICONex user is solely responsible for safekeeping and managing the private key created. In the case of the ICONex user not being able to use the private key due to computer virus, hacking activities, theft/loss, etc., ICON Foundation is not responsible for any loss.\n\n2. ICON Foundation does not guarantee the integrity, stability, accuracy and security of ICONex, but only provides the current version of ICONex “AS IS”. ICON Foundation is continuously running tests and making updates to provide a more stable and convenient service, however despite these efforts there is always the possibility of unexpected problems. ICON Foundation is not responsible for any unexpected problems, such as malfunction, hacking, loss and computer virus.\n\n3. ICON Foundation is not responsible for not being able to provide services due to natural disasters or any other force majeure.\n\n4. ICON Foundation is not responsible for any third-party transactions the ICONex user makes using ICONex as an intermediary.\n\n5. ICON Foundation is not responsible for any indirect, consequential, specific, punitive or any similar damages even though if ICONex is related with any torts, contract, guarantee, liability without fault and carelessness.\n\n6. ICONex supports Korean and English as the official languages. ICON Foundation is not responsible for any loss that comes from mis-translation into other languages than the official languages.\n\n※ All copyrights regarding ICONex is held by ICON Foundation.";
+
+
+"AppInfo.Title" = "App Info";
+"AppInfo.Version" = "Version";
+"AppInfo.Current" = "Current version";
+"AppInfo.Latest" = "Latest version";
+"AppInfo.Update" = "Update";
+"AppInfo.License" = "OpenSource License";
+"AppInfo.DeveloperMode" = "Developer Mode";
+"AppInfo.SelectNetwork" = "Select Network Provider";
+"Version.Update" = "Update";
+"Version.Message" = "Please update to the latest version of ICONex.";
+
+"Retry.NoNetwork" = "No internet connection";
+"Retry.CheckConnectivity" = "Check your mobile data or Wi-Fi and try again";
+"Retry.Retry" = "Retry";
+
+"Swap.Title" = "Token Swap";
+
+"Swap.NavTitle.1" = "Token Swap Instructions";
+"Swap.NavTitle.2" = "Create Wallet for Token Swap";
+"Swap.NavTitle.3" = "Request Token Swap";
+
+"Swap.Step.Step1.Title" = "Instructions";
+"Swap.Step.Step2.Title" = "Wallet\nInfo.";
+"Swap.Step.Step3.Title" = "Backup\nFile";
+"Swap.Step.Step4.Title" = "Private key";
+"Swap.Step.Step5.Title" = "Request\nSwap";
+
+"Swap.Swap" = "Swap";
+"Swap.Step1_1.Header1" = "ICX ERC20 tokens on the Ethereum network can now be swapped and transferred to ICON’s Mainnet.";
+"Swap.Step1_1.Desc1_1" = "Token swap will take place after generating your new ICX coin wallet.";
+"Swap.Step1_1.Desc1_2" = "You have created the wallet for token swap before. Swapped ICX coins will be added to the %@";
+"Swap.Step1_1.Header2" = "Please refer to the following precautions";
+"Swap.Step1_1.Desc2_1" = "If you follow the instructions the ICX wallet for token swap will be created. (The private key of the ICX wallet for token swap will be identical to the private key of your previous Ethereum wallet.)";
+"Swap.Step1_1.Desc2_H" = "Please make sure that you name the wallet so that you can distinguish the wallet for token swap from other wallets.";
+"Swap.Step1_1.Desc2_2" = "If you have stored your tokens in your private wallet such as MyEtherWallet, please load the ETH wallet using the Keystore file or private key. Then, the ICX tokens will be added automatically to your ETH wallet and “Swap” button will be created.";
+"Swap.Step1_1.Desc2_3" = "We do not support token swaps for addresses listed on the exchange. In this regard, please take caution for token swaps within the exchange.";
+"Swap.Step1_1.ButtonTitle" = "[Manual] ICONex Wallet Creation";
+"Swap.Step1_1.Check" = "I have read the precautions.";
+
+"Swap.Step1_2.Header2" = "Please refer to the following precautions.";
+"Swap.Step1_2.Desc2_1" = "Users can appoint the number of ERC20 tokens willing to swap, and once the swap has taken place it cannot be reversed.";
+"Swap.Step1_2.Desc2_2" = "After the swap has been completed, ICX distributions will take place automatically at a designated time. However, schedule is subject to change so please refer to the link below.";
+"Swap.Step1_2.ButtonTitle" = "ICX Token Swap FAQ";
+"Swap.Step1_2.Desc2_3" = "You may not be able to transfer swapped ICX coins to the exchanges that do not support ICX coin wallets.";
+"Swap.Step1_2.Check" = "I have read the precautions.";
+
+"Swap.Step2.Header1" = "You are responsible for keeping your password safe. DO NOT FORGET TO SAVE THIS. If you lose your password, you cannot restore it.";
+"Swap.Step2.Desc1" = "You will need the password to load your wallet in other devices using the Keystore file or your private key.";
+"Swap.Step2.Header2" = "Enter a wallet name and a password.";
+
+"Swap.Step3.Header1" = "This Keystore file contains the encrypted private key and requires the wallet password to access it.";
+"Swap.Step3.Desc1" = "Use this Keystore file to load your wallet from other devices.";
+"Swap.Step3.Desc2" = "You can download your Keystore file from the \"Backup wallet\" menu later.";
+"Swap.Step3.Header2" = "Download Keystore file";
+"Swap.Step3.BackupDownload" = "Download Keystore file";
+
+"Swap.Step4.Header1" = "The private key is unique to your wallet and has no password.";
+"Swap.Step4.Desc1" = "Pay special attention to your private key as anyone who can access to the private key can transfer assets from the wallets without your permission.";
+"Swap.Step4.Desc2" = "You can access to your private key from the 'Backup wallet' menu later.";
+"Swap.Step4.Header2" = "Private Key";
+"Swap.Step4.CopyPrivateKey" = "Copy Private Key";
+"Swap.Step4.WalletInfo" = "View Wallet Info.";
+
+"Swap.Step5.SwapAddress.Header1" = "Please enter the swap amount and complete the token swap request.\nOnce the swap request has taken place it cannot be reversed.";
+"Swap.Step5.SwapAddress.Header" = "Token Swap Address";
+"Swap.Step5.SwapAddress.Desc1" = "This swap address is for ICON's token swap only and is automatically entered.";
+"Swap.Step5.SwapAddress.Desc2" = "Please refer to ICON's official channel regarding the swap address as we commend double checking the swap address";
+"Swap.Step5.ICXAddress.Header1" = "Address for ICX coin";
+"Swap.Step5.ICXAddress.Desc1" = "This is your new ICX wallet address and ICX will be sent automatically at a designated time to “Address for ICX coin“.";
+"Swap.Step5.SwapAmount" = "Swap Amount";
+"Swap.Step5.GasLimit" = "Gas Limit";
+"Swap.Step5.GasPrice" = "Gas Price";
+"Swap.Step5.EstimatedFee" = "Estimated Maximum Fee";
+"Swap.Step5.EstimatedRemain" = "Estimated Balance";
+"Swap.Step5.BottomDesc" = "Gas limit and gas price are optimized for the token swap";
+
+
+"Alert.Swap.AlertTitle" = "Check the amount and the receiving address once again.";
+"Alert.Swap.Header1" = "Swap Amount";
+"Alert.Swap.Header2" = "Max Fee";
+"Alert.Swap.ReceivingAddress" = "Address: ";
+"Alert.Swap.RequestSwap" = "Swap";
+"Alert.Swap.Completed" = "Request for swap has been completed.\n\nICX distribution schedule is subject to change so please refer to the following information.";
+"Alert.Swap.Policy" = "ICX Token Swap FAQ";
+"Alert.Swap.CancelCreate" = "Cancel creating wallet and token swap?";
+"Alert.Swap.CancelSwap" = "Cancel token swap?\nYou may press the swap button later to proceed with the remaining steps.";
+"Alert.CreateCancel" = "Are you sure you want to cancel?";
+"Alert.DownloadKeystore" = "DO NOT SHARE YOUR KEYSTORE FILE WITH OTHERS.\n\nKeystore files that are stored in your \"On My iPhone\" folder may be deleted when you delete the app. Please make sure you have saved all your Keystore files in a secure location.";
+"Alert.SkipDownload" = "Do you want to proceed without downloading the Keystore file?";
+"Alert.PrivateKey" = "Pay special attention to your private key as anyone who can access to the private key can transfer assets from the wallets without your permission.";
+"Alert.Bundle.Import" = "If you load a wallet bundle, the wallets that are already registered in your ICONex will not be loaded. Do you want to proceed?";
+"Alert.TotalAssetInfo" = "The total asset is based on Coinmarketcap and the tokens that have no USD-converted prices will not be included. ";
+"Alert.Bundle.Import.Success" = "Wallet bundle has been loaded. The password of each wallet is the same as the wallet bundle password, and can be altered from the wallet menu.";
+"Alert.Bundle.Export.Instruction" = "If you back up your wallets using the ‘Wallet bundle’ function, the password of each wallet will be changed into the wallet bundle password. \nAre you sure you want to proceed?";
+"Alert.Wallet.EditName" = "Change Wallet Name";
+"Alert.Wallet.Remove" = "Are you sure you want to remove your wallet?";
+"Alert.Wallet.RemainBalance" = "You still have balance in your wallet. If you do not backup this wallet, you may not be able to restore your balance. Are you sure you want to delete?";
+"Alert.Transaction.ID" = "Transaction ID";
+"Alert.Transaction.IDCopy" = "Copy";
+"Alert.Transaction.IDCopied" = "Transaction ID is copied.";
+"Alert.Transaction.History" = "Check Tx";
+"Alert.ICX.Transfer.Info" = "ICX transfer transactions not proceeded will be cancelled automatically, restoring any transfer amount and transaction fees.";
+"Alert.Token.Remove" = "\nAre you sure you want to delete this token?";
+"Alert.Token.Edit.Cancel" = "Are you sure you want to cancel?";
+"Alert.Token.Add.Cancel" = "Are you sure you want to cancel?";
+"Alert.Password.Changed" = "Wallet password has been changed.";
+"Alert.AddressBook.Add" = "Add Address Book";
+"Alert.AddressBook.ETH" = "Enter ETH address.";
+"Alert.AddressBook.ICX" = "Enter ICX address.";
+"Alert.AddressBook.Edit" = "Edit Address Book";
+"Alert.AddressBook.Remove" = "Would you like to remove the address(es) you have selected?";
+"Alert.Transfer.Title" = "Check the amount and the receiving address once again.";
+"Alert.Transfer.Amount" = "Transfer Amount ";
+"Alert.Transfer.Fee" = "Max Fee";
+"Alert.Transfer.EstimatedFee" = "Estimated Maximum Fee";
+"Alert.Transfer.Address" = "Receiving Address ";
+"Alert.Transfer.Data.Delete" = "Are you sure you want to delete data?";
+"Alert.Bio.Fingerprint.Empty" = "Unable to identify your Touch ID. Please try again after registering on mobile settings.";
+"Alert.Wallet.Import.Cancel" = "Are you sure you want to cancel?";
+"Alert.Wallet.RequestPassword" = "Enter Wallet Password";
+"Alert.Wallet.Remove.UnknownBalance" = "Unable to check the balance.\nAre you sure you want to delete?";
+"Alert.Permission.Camera" = "If camera is not authorized, QR code scan function cannot be activated.\n(Camera can be authorized via App settings.)";
+"Alert.Connect.Select.Cancel" = "Cancel select wallet?\nYou will return to previous app.";
+"Alert.Connect.Password.Cancel" = "Cancel enter password?\nYou will return to previous app.";
+"Alert.Connect.Send.Cancel" = "Cancel transfer?\nYou will return to previous app.";
+"Alert.Connect.Send.Completed" = "Transfer Request Complete.\nYou can check the transaction history on ICON Tracker";
+
+"Error.Swap.NoICX" = "You have 0 ICX tokens available for token swap.\nPlease check your balance.";
+"Error.Swap.NoETH" = "Please check your ETH balance. ETH is needed for token swap transaction fee.";
+"Error.CommonError" = "Error occurred.\nPlease try again.";
+"Error.WalletName" = "Enter wallet name";
+"Error.Password" = "Enter password";
+"Error.Password.Length" = "Password must contain at least 8 characters.";
+"Error.Password.CharacterSet" = "Password must contain a combination of letters, numbers, and special characters. ( ? ! : . , % + - / * < > { } ( ) [ ] ` ” ‘ ~ _ ^ \\ | @ # $ & )";
+"Error.Password.Serialize" = "Password must not have more than 2 consecutive identical characters.";
+"Error.Password.Blank" = "Please do not leave blank.";
+"Error.Password.Wrong" = "Please check your password.";
+"Error.Password.Mismatch" = "Passwords do not match. Please check again.";
+"Error.Wallet.Duplicated.Name" = "This wallet name already exists.";
+"Error.Wallet.Duplicated.Address" = "This wallet account already exists.";
+"Error.PrivateKey" = "Incorrect private key. Please check again.";
+"Error.Address" = "Please confirm receiving address.";
+"Error.Letters&NumbersOnly" = "Please enter letters or numbers.";
+"Error.Address.ETH.Invalid" = "Incorrect ETH address.";
+"Error.Address.ICX.Invalid" = "Incorrect ICX address.";
+"Error.Address.IRC.Invalid" = "Incorrect address.";
+"Error.Transfer.AboveMax" = "This exceeds your balance.";
+"Error.Transfer.BelowZero" = "Please enter amount above zero.";
+"Error.Transfer.InsufficientFee" = "Insufficient transaction fee.";
+"Error.Transfer.InsufficientFee.ETH" = "Insufficient ETH balance for transaction fee.";
+"Error.Transfer.InsufficientFee.ICX" = "Insufficient ICX balance for transaction fee.";
+"Error.Transfer.InputGasLimit" = "Please enter gas limit.";
+"Error.Transfer.Data" = "Incorrect data";
+"Error.QRReader.PrivateKey" = "Incorrect private key. Please check again.";
+"Error.NoName" = "No Name";
+"Error.InputAddress" = "Please enter receiving address.";"Error.Wallet.Create" = "Unable to create an Keystore file.";
+"Error.Wallet.CreateFailed" = "Unable to create a wallet.";
+"Error.Wallet.InvalidFile" = "Incorrect wallet file form.";
+"Error.Token.Add" = "Unable to add the token.";
+"Error.Token.Remove" = "Unable to delete the token.";
+"Error.Token.Duplicated" = "You already have this token.";
+"Error.Token.ConnectionRefused" = "Unable to import the token information.";
+"Error.Token.InputName" = "Enter token name.";
+"Error.Token.InputSymbol" = "Enter token symbol.";
+"Error.InputData" = "Please check your data.";
+"Error.EnterSwapAmount" = "Please enter the swap amount.";
+"Error.NoBackupFile" = "Please select keystore file.";
+"Error.TouchID.Locked" = "Touch ID is currently locked. You can reactivate the Touch ID by entering your mobile passcode to unlock the screen.";
+"Error.FaceID.Locked" = "Face ID is currently locked. You can reactivate the Face ID by entering your mobile passcode to unlock the screen.";
+"Error.TouchID.NotEnrolled" = "Touch ID is not registered on your phone. Please register your Touch ID from the Settings menu and try again.";
+"Error.FaceID.NotEnrolled" = "Face ID is not registered on your phone. Please register your Face ID from the Settings menu and try again.";
+"Error.SystemCheck.Failed" = "Integrity Check Failed.\n(Jailbreak / Debugger detected)";
+"Error.Transfer.SameAddress" = "Sending and receiving address are the same.";
+"Error.AddressBook.InputName" = "Please enter address name.";
+"Error.AddressBook.DuplicatedName" = "This address name already exists.";
+"Error.AddressBook.DuplicatedAddress" = "This %@ account already exists.";
+"Error.Detail.InsufficientBalance" = "You have 0 balance. Please deposit and transfer.";
+"Error.Transfer.AmountEmpty" = "Please enter the transfer amount.";
+"Error.Transfer.EmptyLimit" = "Please enter step limit.";
+"Error.Data.Exceeded" = "This exceeds input limit %dKB";
+"Error.Transfer.Limit.LessThen" = "Enter step limit less than %@";
+"Error.Transfer.Limit.MoreThen" = "Enter step limit more than %@";
+"Error.Connect.Send.InsufficientFee" = "This exceeds your balances";
