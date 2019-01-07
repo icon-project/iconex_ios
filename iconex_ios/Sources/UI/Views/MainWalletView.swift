@@ -141,10 +141,11 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                     
                 case 4:
                     // 지갑 삭제
-                    let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
-                    guard let balance = Balance.walletBalanceList[self.walletInfo!.address] else {
+                    guard let walletInfo = self.walletInfo else { return }
+                    let wallet = WManager.loadWalletBy(info: walletInfo)!
+                    guard let balance = Balance.walletBalanceList[walletInfo.address] else {
                         Alert.Confirm(message: "Alert.Wallet.Remove.UnknownBalance".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
-                            Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, _) in
+                            Alert.checkPassword(walletInfo: walletInfo, action: { (isSuccess, _) in
                                 if !WManager.deleteWallet(wallet: wallet) {
                                     Alert.Basic(message: "Error.CommonError".localized).show(root)
                                     return
@@ -168,7 +169,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                         }).show(root)
                         return
                     }
-                    if balance == BigUInt(0) && Balance.tokenBalanceList[self.walletInfo!.address]?.filter({ $0.value != BigUInt(0) }).first == nil {
+                    if balance == BigUInt(0) && Balance.tokenBalanceList[walletInfo.address]?.filter({ $0.value != BigUInt(0) }).first == nil {
                         
                         Alert.Confirm(message: "Alert.Wallet.Remove".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
                             if !WManager.deleteWallet(wallet: wallet) {
@@ -193,7 +194,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                         return
                     } else {
                         Alert.Confirm(message: "Alert.Wallet.RemainBalance".localized, cancel: "Common.No".localized, confirm: "Common.Yes".localized, handler: {
-                            Alert.checkPassword(walletInfo: self.walletInfo!, action: { (isSuccess, _) in
+                            Alert.checkPassword(walletInfo: walletInfo, action: { (isSuccess, _) in
                                 if isSuccess {
                                     if !WManager.deleteWallet(wallet: wallet) {
                                         Alert.Basic(message: "Error.CommonError".localized).show(root)
@@ -475,7 +476,15 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             cell.exchangeValueLabel.text = Tools.balanceToExchange(trimmed, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
             
         } else {
-            let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
+            guard let walletInfo = self.walletInfo, let wallet = WManager.loadWalletBy(info: walletInfo) else {
+                cell.coinNameLabel.text = "-"
+                cell.coinTypeLabel.text = "-"
+                cell.coinValueLabel.text = "-"
+                cell.exchangeTypeLabel.text = "-"
+                cell.exchangeValueLabel.text = "-"
+                
+                return cell
+            }
             
             if indexPath.row == 0 {
                 cell.coinNameLabel.text = self.walletInfo!.type == .eth ? "Ethereum" : "ICON"

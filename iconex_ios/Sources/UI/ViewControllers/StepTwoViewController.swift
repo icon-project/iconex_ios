@@ -167,7 +167,6 @@ class StepTwoViewController: UIViewController {
             let stripName = alias.removeContinuosSuffix(string: " ")
             let password = password1.textField.text!
             try WCreator.createWallet(alias: stripName, password: password, completion: { [unowned self] in
-                WManager.loadWalletList()
                 
                 delegate.nextStep(currentStep: .two)
                 
