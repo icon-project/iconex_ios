@@ -113,6 +113,7 @@
 		D4D33837203C205D001FD669 /* WalletCreateStepView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4D33835203C205D001FD669 /* WalletCreateStepView.xib */; };
 		D4DB3AC521A24A2A0058B31B /* ConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DB3AC421A24A2A0058B31B /* ConnectViewController.swift */; };
 		D4DC3C6C219C0AFF0048ECF1 /* ConnectSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DC3C6B219C0AFF0048ECF1 /* ConnectSendViewController.swift */; };
+		D4E96CE621DF2CB7000E6B30 /* PermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E96CE521DF2CB7000E6B30 /* PermissionViewController.swift */; };
 		D4EAE92421993E5800E6B5EF /* Connect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EAE92121993E5800E6B5EF /* Connect.storyboard */; };
 		D4EAE92521993E5800E6B5EF /* Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EAE92221993E5800E6B5EF /* Connect.swift */; };
 		D4EAE92621993E5800E6B5EF /* BindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EAE92321993E5800E6B5EF /* BindViewController.swift */; };
@@ -351,6 +352,7 @@
 		D4D33835203C205D001FD669 /* WalletCreateStepView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WalletCreateStepView.xib; sourceTree = "<group>"; };
 		D4DB3AC421A24A2A0058B31B /* ConnectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectViewController.swift; sourceTree = "<group>"; };
 		D4DC3C6B219C0AFF0048ECF1 /* ConnectSendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSendViewController.swift; sourceTree = "<group>"; };
+		D4E96CE521DF2CB7000E6B30 /* PermissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionViewController.swift; sourceTree = "<group>"; };
 		D4EAE92121993E5800E6B5EF /* Connect.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Connect.storyboard; sourceTree = "<group>"; };
 		D4EAE92221993E5800E6B5EF /* Connect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Connect.swift; sourceTree = "<group>"; };
 		D4EAE92321993E5800E6B5EF /* BindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindViewController.swift; sourceTree = "<group>"; };
@@ -362,6 +364,14 @@
 		D4EBB849205024E2007B07FB /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
 		D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		D4EF88F721199924000CA278 /* OpensourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpensourceViewController.swift; sourceTree = "<group>"; };
+		D4F6A68A21E2EEDE00F233CD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D4F6A68C21E2EEEF00F233CD /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D4F6A68E21E2EEF800F233CD /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D4F6A68F21E2F03300F233CD /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D4F6A69021E2F1FB00F233CD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D4F6A69321E2F22100F233CD /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		D4F6A69421E2F23200F233CD /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D4F6A69521E2F24300F233CD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4F8E25E21A7E1BA001BE2FA /* DeveloperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperViewController.swift; sourceTree = "<group>"; };
 		D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
@@ -451,6 +461,7 @@
 			isa = PBXGroup;
 			children = (
 				D435CDFC2056737600F0FDC6 /* Loading.storyboard */,
+				D4E96CE521DF2CB7000E6B30 /* PermissionViewController.swift */,
 				D41C4EF820D25B320094E199 /* RetryViewController.swift */,
 				D462C9AC203AAE1B00CF3BE1 /* LaunchViewController.swift */,
 				D462C9AA203AABA800CF3BE1 /* PasscodeViewController.swift */,
@@ -888,6 +899,14 @@
 				en,
 				Base,
 				ko,
+				"zh-Hans",
+				"zh-Hant",
+				ja,
+				fr,
+				es,
+				"pt-PT",
+				it,
+				de,
 			);
 			mainGroup = D4728A062007040B00E0A899;
 			productRefGroup = D4728A102007040B00E0A899 /* Products */;
@@ -1035,6 +1054,7 @@
 				D40FAF4B205FDC80008C2CDA /* WalletBackupViewController.swift in Sources */,
 				D457147B20EEFE32000C073D /* BundleImportListViewController.swift in Sources */,
 				D42ED584207751B4007E6DF8 /* TokenManageViewController.swift in Sources */,
+				D4E96CE621DF2CB7000E6B30 /* PermissionViewController.swift in Sources */,
 				D404609021CB6D94001958F5 /* WalletCreator.swift in Sources */,
 				D4D33836203C205D001FD669 /* WalletCreateStepView.swift in Sources */,
 				D4DC3C6C219C0AFF0048ECF1 /* ConnectSendViewController.swift in Sources */,
@@ -1116,6 +1136,14 @@
 			children = (
 				D46DB4D520A1903500B632D9 /* en */,
 				D46DB4D720A1903800B632D9 /* ko */,
+				D4F6A68A21E2EEDE00F233CD /* zh-Hans */,
+				D4F6A68C21E2EEEF00F233CD /* zh-Hant */,
+				D4F6A68E21E2EEF800F233CD /* ja */,
+				D4F6A68F21E2F03300F233CD /* fr */,
+				D4F6A69021E2F1FB00F233CD /* es */,
+				D4F6A69321E2F22100F233CD /* pt-PT */,
+				D4F6A69421E2F23200F233CD /* it */,
+				D4F6A69521E2F24300F233CD /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

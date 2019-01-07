@@ -82,7 +82,17 @@ class LaunchViewController: UIViewController {
         Balance.getWalletsBalance()
         Exchange.getExchangeList()
         
+        guard UserDefaults.standard.bool(forKey: "confirmPermissions") == true else {
+            openPermission()
+            return
+        }
+        
         let app = UIApplication.shared.delegate as! AppDelegate
         app.checkVersion()
+    }
+    
+    func openPermission() {
+        let permission = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "PermissionView")
+        self.present(permission, animated: true, completion: nil)
     }
 }

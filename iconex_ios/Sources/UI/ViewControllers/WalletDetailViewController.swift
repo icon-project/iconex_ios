@@ -770,7 +770,7 @@ class WalletDetailViewController: UIViewController {
         }
         self.historyList.removeAll()
         
-        let list = Array(txList).sorted { $0.age > $1.age }
+        let list = Array(txList).sorted { self.token == nil ? $0.createDate > $1.createDate : $0.age > $1.age }
         
         self.historyList.append(contentsOf: list)
         
