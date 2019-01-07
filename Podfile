@@ -9,8 +9,7 @@ def import_pods
   pod 'Toast-Swift', '~> 4.0.0'
   pod 'scrypt', :git => 'https://github.com/a1ahn/scrypt-cryptoswift.git'
   pod 'Alamofire'
-#  pod 'ICONKit', '~> 0.2.3'
-  pod 'ICONKit', :path => '~/works/ICONKit'
+  pod 'ICONKit', '~> 0.2.3'
   pod 'LicensesViewController'
 end
 
@@ -24,9 +23,3 @@ target 'iconex_ios' do
   import_pods
 end
 
-target 'ICONex-Today' do
-
-  use_frameworks!
-
-  import_pods
-end
