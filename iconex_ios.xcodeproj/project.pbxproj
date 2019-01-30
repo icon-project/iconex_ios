@@ -123,6 +123,7 @@
 		D4EBB844204FDB5A007B07FB /* SelectableActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBB843204FDB5A007B07FB /* SelectableActionController.swift */; };
 		D4EBB84720501B87007B07FB /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EBB84520501B87007B07FB /* MainMenuViewController.swift */; };
 		D4EBB84A205024E2007B07FB /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4EBB849205024E2007B07FB /* Menu.storyboard */; };
+		D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4ECFE5522013FE4001644AF /* WalletKeystore.swift */; };
 		D4EF88F4211998BD000CA278 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */; };
 		D4EF88F821199924000CA278 /* OpensourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4EF88F721199924000CA278 /* OpensourceViewController.swift */; };
 		D4F8E25F21A7E1BA001BE2FA /* DeveloperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F8E25E21A7E1BA001BE2FA /* DeveloperViewController.swift */; };
@@ -362,6 +363,7 @@
 		D4EBB843204FDB5A007B07FB /* SelectableActionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableActionController.swift; sourceTree = "<group>"; };
 		D4EBB84520501B87007B07FB /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		D4EBB849205024E2007B07FB /* Menu.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Menu.storyboard; sourceTree = "<group>"; };
+		D4ECFE5522013FE4001644AF /* WalletKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeystore.swift; sourceTree = "<group>"; };
 		D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		D4EF88F721199924000CA278 /* OpensourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpensourceViewController.swift; sourceTree = "<group>"; };
 		D4F6A68A21E2EEDE00F233CD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 				D48E49BB2043E6030064CFF4 /* ICXWallet.swift */,
 				D4277E7920746606006F3C95 /* ETHWallet.swift */,
 				D4EB066620C637EB005AF9F1 /* Tokens.swift */,
+				D4ECFE5522013FE4001644AF /* WalletKeystore.swift */,
 			);
 			path = Wallet;
 			sourceTree = "<group>";
@@ -1041,6 +1044,7 @@
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D47A03E020A2E03B009A3A99 /* LockSettingViewController.swift in Sources */,
 				D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */,
+				D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */,
 				D4A7841E2148EA49003A40C0 /* DataInputSourceViewController.swift in Sources */,
 				D477CC2E205F778600797A82 /* SendConfirmViewController.swift in Sources */,
 				D41C4EF920D25B320094E199 /* RetryViewController.swift in Sources */,
