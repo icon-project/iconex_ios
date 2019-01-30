@@ -36,7 +36,7 @@ class BindPasswordViewController: BaseViewController {
     
     var selectedWallet: WalletInfo?
     
-    private var privateKey: String?
+    private var privateKey: PrivateKey?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,13 +149,13 @@ class BindPasswordViewController: BaseViewController {
         guard let info = selectedWallet, let wallet = WManager.loadWalletBy(info: info) as? ICXWallet else { return false }
         guard let password = passwordInputBox.textField.text, password != "" else { return false }
         
-        guard let prvKey = try? wallet.extractICXPrivateKey(password: password) else {
+        guard let prvKey = try? wallet.extractICXPrivateKey(password: password), let prvKeyData = prvKey.hexToData() else {
             self.privateKey = nil
             passwordInputBox.setState(.error, "Error.Password.Wrong".localized)
             return false
         }
         
-        privateKey = prvKey
+        privateKey = PrivateKey(hexData: prvKeyData)
         
         return true
     }
@@ -164,7 +164,8 @@ class BindPasswordViewController: BaseViewController {
         guard let privateKey = self.privateKey else { return }
         guard let params = Conn.received?.params, let jsonData = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted) else { return }
         let password = passwordInputBox.textField.text!
-        let iconWallet = ICON.Wallet(privateKey: privateKey, password: password)
+        
+        let iconWallet = Wallet(privateKey: privateKey)
         
         do {
             let sign = try iconWallet.getSignature(password: password, data: jsonData)

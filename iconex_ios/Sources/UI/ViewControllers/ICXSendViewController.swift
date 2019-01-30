@@ -67,7 +67,7 @@ class ICXSendViewController: BaseViewController {
     var walletInfo: WalletInfo?
     var token: TokenInfo?
     var totalBalance: BigUInt?
-    var privateKey: String?
+    var privateKey: PrivateKey?
     var stepPrice: BigUInt?
     var inputData: String? = nil {
         willSet {

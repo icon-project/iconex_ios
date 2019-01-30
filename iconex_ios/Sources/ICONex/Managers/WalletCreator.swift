@@ -206,14 +206,14 @@ class WalletCreator {
         WManager.loadWalletList()
     }
     
-    func validateKeystore(urlOfData: URL) throws -> (ICON.Keystore, COINTYPE) {
+    func validateKeystore(urlOfData: URL) throws -> (Keystore, COINTYPE) {
         let content = try Data(contentsOf: urlOfData)
         Log.Debug("content - \(String(describing: String(data: content, encoding: .utf8)))")
         let decoder = JSONDecoder()
         
-        let keystore = try decoder.decode(ICON.Keystore.self, from: content)
+        let keystore = try decoder.decode(Keystore.self, from: content)
         
-        if keystore.coinType != nil || keystore.address.hasPrefix("hx") {
+        if keystore.address.hasPrefix("hx") {
             guard WManager.canSaveWallet(address: keystore.address.addHxPrefix()) else { throw IXError.duplicateAddress}
             
             return (keystore, .icx)
@@ -228,11 +228,11 @@ class WalletCreator {
             throw IXError.keyMalformed
         }
         
-        guard let publicKey = ICONUtil.createPublicKey(privateKey: prvKey) else {
+        guard let publicKey = Cipher.createPublicKey(privateKey: prvKey) else {
             throw IXError.copyPublicKey
         }
         
-        let address = ICONUtil.makeAddress(prvKey, publicKey)
+        let address = Cipher.makeAddress(prvKey, publicKey)
         
         return WManager.canSaveWallet(address: address)
     }

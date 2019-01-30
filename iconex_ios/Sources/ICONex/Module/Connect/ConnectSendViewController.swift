@@ -48,7 +48,7 @@ class ConnectSendViewController: BaseViewController {
     private var maxLimit: BigUInt?
     private var stepPrice: BigUInt?
     
-    var privateKey: String?
+    var privateKey: PrivateKey?
     
     override func viewDidLoad() {
         super.viewDidLoad()

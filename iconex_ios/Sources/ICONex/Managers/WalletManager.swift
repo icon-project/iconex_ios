@@ -192,7 +192,7 @@ class WalletManager {
 }
 
 extension WalletManager {
-    public func sendICX(privateKey: String, from: String, to: String, value: BigUInt, stepLimit: BigUInt, message: String? = nil) -> Result<ICONKit.Response.TxHash, ICONResult> {
+    public func sendICX(privateKey: PrivateKey, from: String, to: String, value: BigUInt, stepLimit: BigUInt, message: String? = nil) -> Result<ICONKit.Response.TxHash, ICONResult> {
         let transaction = Transaction()
             .from(from)
             .to(to)
@@ -212,7 +212,7 @@ extension WalletManager {
         return self.service.sendTransaction(signedTransaction: signedTransaction).execute()
     }
     
-    public func sendIRCToken(privateKey: String, from: String, to: String, contractAddress: String, value: BigUInt, stepLimit: BigUInt) -> Result<ICONKit.Response.TxHash, ICONResult> {
+    public func sendIRCToken(privateKey: PrivateKey, from: String, to: String, contractAddress: String, value: BigUInt, stepLimit: BigUInt) -> Result<ICONKit.Response.TxHash, ICONResult> {
         let transaction = Transaction()
         transaction.from(from)
             .to(contractAddress)

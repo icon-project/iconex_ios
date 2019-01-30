@@ -9,7 +9,7 @@ import Foundation
 import ICONKit
 
 class ICXWallet: BaseWallet {
-    var keystore: ICON.Keystore?
+    var keystore: Keystore?
     
     override init() {
         super.init(type: .icx)
@@ -23,7 +23,7 @@ class ICXWallet: BaseWallet {
     convenience init?(alias: String, from: Data) {
         do {
             let decoder = JSONDecoder()
-            let keystore = try decoder.decode(ICON.Keystore.self, from: from)
+            let keystore = try decoder.decode(Keystore.self, from: from)
             
             self.init()
             self.alias = alias
@@ -36,7 +36,7 @@ class ICXWallet: BaseWallet {
         }
     }
     
-    convenience init(keystore: ICON.Keystore) {
+    convenience init(keystore: Keystore) {
         self.init()
 
         let encoder = JSONEncoder()
@@ -80,25 +80,24 @@ class ICXWallet: BaseWallet {
     @discardableResult
     func generateICXKeyStore(privateKey: String, password: String) throws -> Bool {
         
-        let iconWallet = ICON.Wallet(privateKey: privateKey, password: password)
         
-        guard let rawData = iconWallet.rawData else { throw ICError.generateKey }
+        let keystore = try Cipher.createKeystore(privateKey: privateKey, password: password)
         
-        self.__rawData = rawData
-        self.address = iconWallet.address
-        self.keystore = iconWallet.keystore
+        self.__rawData = keystore.data
+        self.address = keystore.address
+        self.keystore = keystore
         return true
     }
     
     func changePassword(old: String, new: String) throws {
-        guard let rawData = self.__rawData else { throw ICError.empty }
+        guard let keystore = self.keystore else { throw IXError.emptyWallet }
+        try keystore.isValid(password: old)
         
-        guard let iconWallet = ICON.Wallet(rawData: rawData) else { throw ICError.malformed }
+        let prvKey = try self.extractICXPrivateKey(password: old)
+        let newKeystore = try Cipher.createKeystore(privateKey: prvKey, password: new)
         
-        try iconWallet.changePassword(current: old, new: new)
-        
-        self.__rawData = iconWallet.rawData
-        self.keystore = iconWallet.keystore
+        self.__rawData = newKeystore.data
+        self.keystore = newKeystore
     }
     
     func saveICXWallet() throws {
@@ -113,13 +112,9 @@ class ICXWallet: BaseWallet {
     }
     
     func extractICXPrivateKey(password: String) throws -> String {
-        guard let rawData = self.__rawData else { throw ICError.empty }
+        guard let keystore = self.keystore else { throw IXError.emptyWallet }
         
-        guard let iconWallet = ICON.Wallet(rawData: rawData) else { throw ICError.malformed }
-        
-        let privateKey = try iconWallet.extractPrivateKey(password: password)
-        
-        return privateKey
+        return try keystore.extractPrivateKey(password: password)
     }
     
     func getBackupKeystoreFilepath() throws -> URL {

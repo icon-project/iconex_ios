@@ -15,7 +15,12 @@ public class Keystore: Codable {
     public var id: String = UUID().uuidString
     public var address: String
     public var crypto: Crypto
-    public var coinType: String = "icx"
+    public var coinType: String?
+    
+    public var data: Data? {
+        let encoder = JSONEncoder()
+        return try? encoder.encode(self)
+    }
     
     enum KeystoreCodingKey: String, CodingKey {
         case version
@@ -41,6 +46,9 @@ public class Keystore: Codable {
             self.crypto = try container.decode(Crypto.self, forKey: .crypto)
         } else {
             self.crypto = try container.decode(Crypto.self, forKey: .Crypto)
+        }
+        if container.contains(.coinType) {
+            self.coinType = try container.decode(String.self, forKey: .coinType)
         }
     }
     
@@ -73,7 +81,11 @@ public class Keystore: Codable {
             self.prf = prf
         }
     }
+}
+
+extension Keystore {
     
+    @discardableResult
     func isValid(password: String) throws -> Bool {
         if self.crypto.kdf == "pbkdf2" {
             guard let enc = self.crypto.ciphertext.hexToData(),
@@ -130,5 +142,53 @@ public class Keystore: Codable {
         let data = try! encoder.encode(self)
         
         return String(data: data, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
+    }
+    
+    func extractPrivateKey(password: String) throws -> String {
+        
+        if crypto.kdf == "pbkdf2" {
+            guard let enc = crypto.ciphertext.hexToData(),
+                let iv = crypto.cipherparams.iv.hexToData(),
+                let salt = crypto.kdfparams.salt.hexToData(),
+                let count = crypto.kdfparams.c else { throw IXError.keyMalformed }
+            
+            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw IXError.decrypt }
+            
+            let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
+            let publicKey = Cipher.createPublicKey(privateKey: decrypted.decryptText)!
+            let newAddress = Cipher.makeAddress(decrypted.decryptText, publicKey)
+            
+            if newAddress == self.address {
+                return decrypted.decryptText
+            }
+            
+            throw ICError.invalid(.privateKey)
+            
+        } else if crypto.kdf == "scrypt" {
+            guard let n = crypto.kdfparams.n,
+                let p = crypto.kdfparams.p,
+                let r = crypto.kdfparams.r,
+                let iv = crypto.cipherparams.iv.hexToData(),
+                let cipherText = crypto.ciphertext.hexToData(),
+                let salt = crypto.kdfparams.salt.hexToData()
+                else { throw ICError.malformed }
+            
+            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw IXError.decrypt }
+            let decryptionKey = devKey[0...15]
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
+            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
+            let decrypted = Data(bytes: decryptedBytes).toHexString()
+            
+            let publicKey = Cipher.createPublicKey(privateKey: decrypted)
+            let newAddress = Cipher.makeAddress(decrypted, publicKey!)
+            
+            if newAddress == self.address {
+                return decrypted
+            }
+            
+            throw ICError.invalid(.privateKey)
+        }
+        
+        throw ICError.invalid(.notSupported)
     }
 }

@@ -10,6 +10,8 @@ import Security
 import CryptoSwift
 import CommonCrypto
 import secp256k1_ios
+import ICONKit
+import scrypt
 
 struct Cipher {
     static func pbkdf2SHA1(password: String, salt: Data, keyByteCount: Int, round: Int) -> Data? {
@@ -44,25 +46,81 @@ struct Cipher {
 
         return localVariables
     }
-}
-
-public struct ICONUtil {
-
-    static let PBE_DKLEN = 32
-    static let PBE_MAC_KECCAK = "Keccak-256"
-    static let PBE_MAC_SHA3 = "SHA3-256"
     
-    static func generatePrivateKey() -> String {
+    static func encrypt(devKey:Data, data: Data, salt: Data) throws -> (cipherText: String, mac: String, iv: String) {
+        let eKey: [UInt8] = Array(devKey.bytes[0..<PBE_DKLEN/2])
+        let mKey: [UInt8] = Array(devKey.bytes[PBE_DKLEN/2..<PBE_DKLEN])
         
-        var key = ""
+        let iv = AES.randomIV(AES.blockSize)
         
-        for _ in 0..<64 {
-            let code = arc4random() % 16
-            
-            key += String(format: "%x", code)
+        let encrypted: [UInt8] = try AES(key: eKey, blockMode: CTR(iv: iv), padding: .noPadding).encrypt(data.bytes)
+        
+        let mac = mKey + encrypted
+        let digest = mac.sha3(.keccak256)
+        
+        return (Data(bytes: encrypted).toHexString(), Data(bytes: digest).toHexString(), Data(iv).toHexString())
+    }
+    
+    static func decrypt(devKey: Data, enc: Data, dkLen: Int, iv: Data) throws -> (decryptText: String, mac: String) {
+        let eKey: [UInt8] = Array(devKey.bytes[0..<PBE_DKLEN/2])
+        let mKey: [UInt8] = Array(devKey.bytes[PBE_DKLEN/2..<PBE_DKLEN])
+        
+        let decrypted: [UInt8] = try AES(key: eKey, blockMode: CTR(iv: iv.bytes), padding: .noPadding).decrypt(enc.bytes)
+        
+        let mac: [UInt8] = mKey + enc.bytes
+        let digest = mac.sha3(.keccak256)
+        
+        return (Data(bytes: decrypted).toHexString(), Data(bytes: digest).toHexString())
+    }
+    
+    static func scrypt(password: String, saltData: Data? = nil, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1) -> Data? {
+        let passwordData = password.data(using: .utf8)!
+        var salt = Data()
+        if let saltValue = saltData {
+            salt = saltValue
+        } else {
+            let saltCount = 32
+            var randomBytes = Array<UInt8>(repeating: 0, count: saltCount)
+            let err = SecRandomCopyBytes(kSecRandomDefault, saltCount, &randomBytes)
+            if err != errSecSuccess { return nil }
+            salt = Data(bytes: randomBytes)
         }
         
-        return key.sha3(.sha256)
+        guard let scrypt = try? Scrypt(password: passwordData.bytes, salt: salt.bytes, dkLen: dkLen, N: N, r: R, p: P) else { return nil }
+        guard let result = try? scrypt.calculate() else { return nil }
+        
+        return Data(bytes: result)
+    }
+    
+    static func getHash(_ value: String) -> String {
+        return value.sha3(.sha256)
+    }
+    
+    static func getHash(_ value: Data) -> Data {
+        return value.sha3(.sha256)
+    }
+    
+    static func createKeystore(privateKey: String, password: String) throws -> Keystore {
+        let prvKey = PrivateKey(hexData: privateKey.hexToData()!)
+        let iconWallet = Wallet(privateKey: prvKey)
+        
+        let saltCount = 32
+        var randomBytes = Array<UInt8>(repeating: 0, count: saltCount)
+        let err = SecRandomCopyBytes(kSecRandomDefault, saltCount, &randomBytes)
+        if err != errSecSuccess { throw IXError.convertKey }
+        let salt = Data(bytes: randomBytes)
+        
+        // HASH round
+        let round = 16384
+        
+        guard let encKey = pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: round) else {
+            throw IXError.convertKey
+        }
+        let result = try encrypt(devKey: encKey, data: privateKey.hexToData()!, salt: salt)
+        let kdfParam = Keystore.KDF(dklen: PBE_DKLEN, salt: salt.toHexString(), c: round, prf: "hmac-sha256")
+        let crypto = Keystore.Crypto(ciphertext: result.cipherText, cipherparams: Keystore.CipherParams(iv: result.iv), cipher: "aes-128-ctr", kdf: "pbkdf2", kdfparams: kdfParam, mac: result.mac)
+        let keystore = Keystore(address: iconWallet.address, crypto: crypto)
+        return keystore
     }
     
     static func createPublicKey(privateKey: String) -> String? {
@@ -87,7 +145,7 @@ public struct ICONUtil {
     }
     
     static func makeAddress(_ privateKey: String?, _ publicKey: String) -> String {
-        return ICONUtil.makeAddress(privateKey, publicKey.hexToData()!)
+        return Cipher.makeAddress(privateKey, publicKey.hexToData()!)
     }
     
     static func makeAddress(_ privateKey: String?, _ publicKey: Data) -> String {
@@ -116,7 +174,7 @@ public struct ICONUtil {
     static func checkAddress(privateKey: String, address: String) -> Bool {
         let fixed = Date.timestampString.sha3(.sha256).hexToData()!
         
-        guard var rsign = ICONUtil.ecdsaRecoverSign(privateKey: privateKey, hashed: fixed) else { return false }
+        guard var rsign = Cipher.ecdsaRecoverSign(privateKey: privateKey, hashed: fixed) else { return false }
         
         guard let vPub = verifyPublickey(hashedMessage: fixed, signature: &rsign), let hexPub = vPub.hexToData() else { return false }
         
@@ -172,32 +230,28 @@ public struct ICONUtil {
         
         return publicKey
     }
+}
+
+let PBE_DKLEN = 32
+
+public struct ICONUtil {
+
+    static let PBE_MAC_KECCAK = "Keccak-256"
+    static let PBE_MAC_SHA3 = "SHA3-256"
     
-    static func encrypt(devKey:Data, data: Data, salt: Data) throws -> (cipherText: String, mac: String, iv: String) {
-        let eKey: [UInt8] = Array(devKey.bytes[0..<PBE_DKLEN/2])
-        let mKey: [UInt8] = Array(devKey.bytes[PBE_DKLEN/2..<PBE_DKLEN])
+    static func generatePrivateKey() -> String {
         
-        let iv = AES.randomIV(AES.blockSize)
+        var key = ""
         
-        let encrypted: [UInt8] = try AES(key: eKey, blockMode: CTR(iv: iv), padding: .noPadding).encrypt(data.bytes)
+        for _ in 0..<64 {
+            let code = arc4random() % 16
+            
+            key += String(format: "%x", code)
+        }
         
-        let mac = mKey + encrypted
-        let digest = mac.sha3(.keccak256)
-        
-        return (Data(bytes: encrypted).toHexString(), Data(bytes: digest).toHexString(), Data(iv).toHexString())
+        return key.sha3(.sha256)
     }
     
-    static func decrypt(devKey: Data, enc: Data, dkLen: Int, iv: Data) throws -> (decryptText: String, mac: String) {
-        let eKey: [UInt8] = Array(devKey.bytes[0..<PBE_DKLEN/2])
-        let mKey: [UInt8] = Array(devKey.bytes[PBE_DKLEN/2..<PBE_DKLEN])
-        
-        let decrypted: [UInt8] = try AES(key: eKey, blockMode: CTR(iv: iv.bytes), padding: .noPadding).decrypt(enc.bytes)
-        
-        let mac: [UInt8] = mKey + enc.bytes
-        let digest = mac.sha3(.keccak256)
-        
-        return (Data(bytes: decrypted).toHexString(), Data(bytes: digest).toHexString())
-    }
 }
 
 

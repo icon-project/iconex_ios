@@ -19,6 +19,7 @@ public enum IXError: Error {
     case sign
     case invalidMessage
     case decrypt
+    case invalidPassword
     
     case emptyWallet
     case invalidKeystore
@@ -69,6 +70,9 @@ extension IXError: LocalizedError {
             
         case .decrypt:
             return "Failed to decrypt"
+            
+        case .invalidPassword:
+            return "Invalid password"
             
         case .emptyWallet:
             return "Empty wallet. Please create wallet first."

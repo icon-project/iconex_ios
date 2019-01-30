@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import BigInt
+import ICONKit
 import web3swift
 import Result
 
@@ -201,13 +202,15 @@ class WalletDetailViewController: UIViewController {
             
             pwdAlert.addConfirm(completion: { (isSuccess, privKey) in
                 if isSuccess {
+                    let prvKey = PrivateKey(hexData: privKey.hexToData()!)
+                    
                     if self.walletInfo!.type == .icx {
                         let sendView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXSendView") as! ICXSendViewController
                         sendView.walletInfo = self.walletInfo
                         if let token = self.token {
                             sendView.token = token
                         }
-                        sendView.privateKey = privKey
+                        sendView.privateKey = prvKey
                         self.navigationController?.pushViewController(sendView, animated: true)
                     } else if self.walletInfo!.type == .eth {
                         let ethSend = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ETHSendView") as! ETHSendViewController
