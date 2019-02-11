@@ -55,10 +55,16 @@ class TokenListViewController: UIViewController {
         
         addButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
-                let manage = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenManageView") as! TokenManageViewController
-                manage.walletInfo = self.walletInfo
-                manage.manageMode = .add
-                self.navigationController?.pushViewController(manage, animated: true)
+                if self.walletInfo!.type == .icx {
+                    let addToken = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenAddListView") as! TokenAddListViewController
+                    addToken.walletInfo = self.walletInfo
+                    self.navigationController?.pushViewController(addToken, animated: true)
+                } else {
+                    let manage = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenManageView") as! TokenManageViewController
+                    manage.walletInfo = self.walletInfo
+                    manage.manageMode = .add
+                    self.navigationController?.pushViewController(manage, animated: true)
+                }
             }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside)

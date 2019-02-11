@@ -30,6 +30,7 @@
 		D421A2682068D10E00687431 /* EditingAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D421A2672068D10E00687431 /* EditingAddressViewController.swift */; };
 		D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4277E7920746606006F3C95 /* ETHWallet.swift */; };
 		D427DCE8221105BF0098D852 /* TokenAddListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D427DCE7221105BF0098D852 /* TokenAddListViewController.swift */; };
+		D427DCEA221117050098D852 /* Tokens.json in Resources */ = {isa = PBXBuildFile; fileRef = D427DCE9221117050098D852 /* Tokens.json */; };
 		D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D428A53D20201B2F005B14D8 /* Configurations.swift */; };
 		D42A6D112057B28E00BC5039 /* Side.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D42A6D102057B28E00BC5039 /* Side.storyboard */; };
 		D42A6D132057C52E00BC5039 /* AddressManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42A6D122057C52E00BC5039 /* AddressManageViewController.swift */; };
@@ -181,6 +182,7 @@
 		D421A2672068D10E00687431 /* EditingAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingAddressViewController.swift; sourceTree = "<group>"; };
 		D4277E7920746606006F3C95 /* ETHWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHWallet.swift; sourceTree = "<group>"; };
 		D427DCE7221105BF0098D852 /* TokenAddListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenAddListViewController.swift; sourceTree = "<group>"; };
+		D427DCE9221117050098D852 /* Tokens.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Tokens.json; sourceTree = "<group>"; };
 		D428A53D20201B2F005B14D8 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
 		D42A6D102057B28E00BC5039 /* Side.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Side.storyboard; sourceTree = "<group>"; };
 		D42A6D122057C52E00BC5039 /* AddressManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressManageViewController.swift; sourceTree = "<group>"; };
@@ -664,6 +666,7 @@
 				D4EB066420C63730005AF9F1 /* ethToken.json */,
 				D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */,
 				D46DB4D620A1903500B632D9 /* Localizable.strings */,
+				D427DCE9221117050098D852 /* Tokens.json */,
 			);
 			path = iconex_ios;
 			sourceTree = "<group>";
@@ -940,6 +943,7 @@
 				D481C4A2203EB0EC00A799D7 /* IXInputBox.xib in Resources */,
 				D43FB68B214B464B005360A8 /* ixShield_icon.foundation.iconex_license.txt in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
+				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				D483EDFE2091A4AE0039BA36 /* IXIndicator.xib in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
 				D4776D4921BE696C00A48472 /* Credits.plist in Resources */,

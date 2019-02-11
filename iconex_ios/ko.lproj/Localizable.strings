@@ -165,6 +165,8 @@
 "Token.Decimals" = "소수 자리 수 (Number of Decimals)";
 "Token.EnterNumbers" = "숫자 입력";
 "Token.RemoveToken" = "토큰 삭제";
+"Token.Add.InputInfo" = "목록에 토큰이 없다면 직접 입력하여 추가해주세요.";
+"Token.Add.Input" = "토큰 정보 입력";
 
 "Backup.StepTitle" = "'지갑 백업 파일(Keystore 파일) 다운로드’ 또는 ‘개인 키 저장’으로 백업을 진행할 수 있습니다.";
 "Backup.Header1" = "지갑 백업 파일 다운로드";
