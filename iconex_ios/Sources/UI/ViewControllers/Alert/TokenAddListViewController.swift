@@ -29,10 +29,6 @@ class TokenAddListCell: UITableViewCell {
         super.awakeFromNib()
         
         _isExpand = false
-        
-//        arrowButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
-//            self._isExpand = !self._isExpand
-//        }).disposed(by: disposeBag)
     }
     
     var state: TokenSelectState = .none {
@@ -162,7 +158,9 @@ class TokenAddListViewController: BaseViewController {
         guard let path = Bundle.main.path(forResource: "Tokens", ofType: "json"), let data = try? Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe) else { return }
         let decoder = JSONDecoder()
         guard let array = try? decoder.decode([FixedToken].self, from: data) else { return }
-        tokenList.append(contentsOf: array)
+        tokenList.append(contentsOf: array.sorted(by: { (a, b) -> Bool in
+            return a.name < b.name
+            }))
         tableView.reloadData()
     }
 }
