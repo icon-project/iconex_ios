@@ -5,11 +5,12 @@ def import_pods
   pod 'RxCocoa', '4.3.1'
   pod 'RxSwift', '4.3.1'
   pod 'RealmSwift', '3.11.0'
-  pod 'web3swift'
+  pod 'web3swift', '1.1.7'
   pod 'Toast-Swift', '~> 4.0.0'
   pod 'scrypt', :git => 'https://github.com/a1ahn/scrypt-cryptoswift.git'
   pod 'Alamofire'
-  pod 'ICONKit', '0.2.4'
+#  pod 'ICONKit', '0.3.0'
+  pod 'ICONKit', :path => '~/works/ICONKit'
   pod 'LicensesViewController'
 end
 

@@ -19,7 +19,7 @@ class MainWalletCell: UITableViewCell {
     @IBOutlet weak var rearContainer: UIView!
     @IBOutlet weak var indicator: IXIndicator!
     
-    let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     var isLoading: Bool = false {
         willSet {
@@ -37,6 +37,11 @@ class MainWalletCell: UITableViewCell {
                 indicator.isHidden = true
             }
         }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
     
     override func awakeFromNib() {

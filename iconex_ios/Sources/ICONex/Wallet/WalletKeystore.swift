@@ -97,7 +97,7 @@ extension Keystore {
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
             let prvKeyStr = decrypted.decryptText
-            let privateKey = PrivateKey(hexData: prvKeyStr.hexToData()!)
+            let privateKey = PrivateKey(hex: prvKeyStr.hexToData()!)
             
             let wallet = Wallet(privateKey: privateKey)
             let newAddress = wallet.address
@@ -121,8 +121,8 @@ extension Keystore {
             let decryptionKey = devKey[0...15]
             guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
             guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
-            let decrypted = Data(bytes: decryptedBytes)
-            let prvKey = PrivateKey(hexData: decrypted)
+            let decrypted = Data(decryptedBytes)
+            let prvKey = PrivateKey(hex: decrypted)
             let wallet = Wallet(privateKey: prvKey)
             let newAddress = wallet.address
             
@@ -155,14 +155,16 @@ extension Keystore {
             guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw IXError.decrypt }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
-            let publicKey = Cipher.createPublicKey(privateKey: decrypted.decryptText)!
-            let newAddress = Cipher.makeAddress(decrypted.decryptText, publicKey)
+            let prvKey = PrivateKey(hex: decrypted.decryptText.hexToData()!)
+            let pubKey = Cipher.createPublicKey(privateKey: prvKey)!
+            let publicKey = PublicKey(hex: pubKey.hexToData()!)
+            let newAddress = Cipher.makeAddress(prvKey, publicKey)
             
             if newAddress == self.address {
                 return decrypted.decryptText
             }
             
-            throw ICError.invalid(.privateKey)
+            throw IXError.keyMalformed
             
         } else if crypto.kdf == "scrypt" {
             guard let n = crypto.kdfparams.n,
@@ -171,24 +173,26 @@ extension Keystore {
                 let iv = crypto.cipherparams.iv.hexToData(),
                 let cipherText = crypto.ciphertext.hexToData(),
                 let salt = crypto.kdfparams.salt.hexToData()
-                else { throw ICError.malformed }
+                else { throw IXError.keyMalformed }
             
             guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw IXError.decrypt }
             let decryptionKey = devKey[0...15]
             guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
             guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
-            let decrypted = Data(bytes: decryptedBytes).toHexString()
+            let decrypted = Data(decryptedBytes)
+            let privateKey = PrivateKey(hex: decrypted)
             
-            let publicKey = Cipher.createPublicKey(privateKey: decrypted)
-            let newAddress = Cipher.makeAddress(decrypted, publicKey!)
+            let pubKey = Cipher.createPublicKey(privateKey: privateKey)
+            let publicKey = PublicKey(hex: pubKey!.hexToData()!)
+            let newAddress = Cipher.makeAddress(privateKey, publicKey)
             
             if newAddress == self.address {
-                return decrypted
+                return privateKey.hexEncoded
             }
             
-            throw ICError.invalid(.privateKey)
+            throw IXError.keyMalformed
         }
         
-        throw ICError.invalid(.notSupported)
+        throw IXError.keyMalformed
     }
 }

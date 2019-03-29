@@ -202,7 +202,7 @@ class WalletDetailViewController: UIViewController {
             
             pwdAlert.addConfirm(completion: { (isSuccess, privKey) in
                 if isSuccess {
-                    let prvKey = PrivateKey(hexData: privKey.hexToData()!)
+                    let prvKey = PrivateKey(hex: privKey.hexToData()!)
                     
                     if self.walletInfo!.type == .icx {
                         let sendView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXSendView") as! ICXSendViewController

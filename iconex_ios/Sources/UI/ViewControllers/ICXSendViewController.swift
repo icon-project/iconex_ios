@@ -489,10 +489,8 @@ class ICXSendViewController: BaseViewController {
                         }
                         var message = ""
                         switch error {
-                        case .httpError(let msg):
-                            if let http = msg {
-                                message = "\n" + http
-                            }
+                        case .error(error: let err):
+                            message = "\n" + err.localizedDescription
                             
                         default:
                             break
@@ -532,10 +530,8 @@ class ICXSendViewController: BaseViewController {
                         }
                         var message = ""
                         switch error {
-                        case .httpError(let msg):
-                            if let http = msg {
-                                message = "\n" + http
-                            }
+                        case .error(error: let err):
+                            message = "\n" + err.localizedDescription
                             
                         default:
                             break

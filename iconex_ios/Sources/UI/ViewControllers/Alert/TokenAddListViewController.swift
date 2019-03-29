@@ -31,6 +31,11 @@ class TokenAddListCell: UITableViewCell {
         _isExpand = false
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
+    
     var state: TokenSelectState = .none {
         willSet {
             switch newValue {
@@ -50,7 +55,7 @@ class TokenAddListCell: UITableViewCell {
             case .selected:
                 checkBox.isEnabled = true
                 checkBox.isSelected = true
-                selectButton.isEnabled = false
+                selectButton.isEnabled = true
                 tokenName.textColor = UIColor(38, 38, 38)
                 addressLabel.textColor = UIColor(38, 38, 38)
             }
@@ -193,7 +198,7 @@ extension TokenAddListViewController: UITableViewDataSource {
                 self.selectedTokens[info.address] = info
                 cell.state = .selected
             }
-            self.actionButton.isEnabled = self.selectedTokens.count != 0
+//            self.actionButton.isEnabled = self.selectedTokens.count != 0
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
         }).disposed(by: cell.disposeBag)

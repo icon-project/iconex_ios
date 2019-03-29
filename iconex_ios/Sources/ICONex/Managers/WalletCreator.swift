@@ -228,11 +228,13 @@ class WalletCreator {
             throw IXError.keyMalformed
         }
         
-        guard let publicKey = Cipher.createPublicKey(privateKey: prvKey) else {
+        let privateKey = PrivateKey(hex: prvKey.hexToData()!)
+        
+        guard let publicKey = Cipher.createPublicKey(privateKey: privateKey) else {
             throw IXError.copyPublicKey
         }
         
-        let address = Cipher.makeAddress(prvKey, publicKey)
+        let address = Cipher.makeAddress(privateKey, PublicKey(hex: publicKey.hexToData()!))
         
         return WManager.canSaveWallet(address: address)
     }

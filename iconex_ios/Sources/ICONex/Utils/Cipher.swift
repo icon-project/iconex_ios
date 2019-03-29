@@ -58,7 +58,7 @@ struct Cipher {
         let mac = mKey + encrypted
         let digest = mac.sha3(.keccak256)
         
-        return (Data(bytes: encrypted).toHexString(), Data(bytes: digest).toHexString(), Data(iv).toHexString())
+        return (Data(encrypted).toHexString(), Data(digest).toHexString(), Data(iv).toHexString())
     }
     
     static func decrypt(devKey: Data, enc: Data, dkLen: Int, iv: Data) throws -> (decryptText: String, mac: String) {
@@ -70,7 +70,7 @@ struct Cipher {
         let mac: [UInt8] = mKey + enc.bytes
         let digest = mac.sha3(.keccak256)
         
-        return (Data(bytes: decrypted).toHexString(), Data(bytes: digest).toHexString())
+        return (Data(decrypted).toHexString(), Data(digest).toHexString())
     }
     
     static func scrypt(password: String, saltData: Data? = nil, dkLen: Int = 32, N: Int = 4096, R: Int = 6, P: Int = 1) -> Data? {
@@ -83,13 +83,13 @@ struct Cipher {
             var randomBytes = Array<UInt8>(repeating: 0, count: saltCount)
             let err = SecRandomCopyBytes(kSecRandomDefault, saltCount, &randomBytes)
             if err != errSecSuccess { return nil }
-            salt = Data(bytes: randomBytes)
+            salt = Data(randomBytes)
         }
         
         guard let scrypt = try? Scrypt(password: passwordData.bytes, salt: salt.bytes, dkLen: dkLen, N: N, r: R, p: P) else { return nil }
         guard let result = try? scrypt.calculate() else { return nil }
         
-        return Data(bytes: result)
+        return Data(result)
     }
     
     static func getHash(_ value: String) -> String {
@@ -101,14 +101,18 @@ struct Cipher {
     }
     
     static func createKeystore(privateKey: String, password: String) throws -> Keystore {
-        let prvKey = PrivateKey(hexData: privateKey.hexToData()!)
+        let hexKey = privateKey.hexToData()!
+        Log.Debug("hex: \(hexKey.hexEncodedString())")
+        let prvKey = PrivateKey(hex: hexKey)
+        Log.Debug("privateKey: \(prvKey.hexEncoded)")
         let iconWallet = Wallet(privateKey: prvKey)
+        Log.Debug("address: \(iconWallet.address)")
         
         let saltCount = 32
         var randomBytes = Array<UInt8>(repeating: 0, count: saltCount)
         let err = SecRandomCopyBytes(kSecRandomDefault, saltCount, &randomBytes)
         if err != errSecSuccess { throw IXError.convertKey }
-        let salt = Data(bytes: randomBytes)
+        let salt = Data(randomBytes)
         
         // HASH round
         let round = 16384
@@ -123,12 +127,12 @@ struct Cipher {
         return keystore
     }
     
-    static func createPublicKey(privateKey: String) -> String? {
+    static func createPublicKey(privateKey: PrivateKey) -> String? {
         let flag = UInt32(SECP256K1_CONTEXT_SIGN)
-        guard let privData = privateKey.hexToData(), let ctx = secp256k1_context_create(flag) else { return nil }
+        guard let ctx = secp256k1_context_create(flag) else { return nil }
         var rawPubkey = secp256k1_pubkey()
         
-        guard secp256k1_ec_pubkey_create(ctx, &rawPubkey, privData.bytes) == 1 else { return nil }
+        guard secp256k1_ec_pubkey_create(ctx, &rawPubkey, privateKey.data.bytes) == 1 else { return nil }
         
         let serializedPubkey = UnsafeMutablePointer<UInt8>.allocate(capacity: 65)
         var pubLen = 65
@@ -144,52 +148,48 @@ struct Cipher {
         return String(publicKey.suffix(publicKey.length - 2))
     }
     
-    static func makeAddress(_ privateKey: String?, _ publicKey: String) -> String {
-        return Cipher.makeAddress(privateKey, publicKey.hexToData()!)
-    }
-    
-    static func makeAddress(_ privateKey: String?, _ publicKey: Data) -> String {
+    static func makeAddress(_ prvKey: PrivateKey?, _ pubKey: PublicKey) -> String {
         var hash: Data
-        if publicKey.count > 64 {
-            hash = publicKey.subdata(in: 1...64)
+        if pubKey.data.count > 64 {
+            hash = pubKey.data.subdata(in: 1...64)
             hash = hash.sha3(.sha256)
         } else {
-            hash = publicKey.sha3(.sha256)
+            hash = pubKey.data.sha3(.sha256)
         }
         
         let sub = hash.suffix(20)
         let address = "hx" + String(sub.toHexString())
         
-        if let privKey = privateKey {
+        if let privKey = prvKey {
             if checkAddress(privateKey: privKey, address: address) {
                 return address
             } else {
-                return makeAddress(privKey, publicKey)
+                return makeAddress(privKey, pubKey)
             }
         }
         
         return address
     }
     
-    static func checkAddress(privateKey: String, address: String) -> Bool {
+    static func checkAddress(privateKey: PrivateKey, address: String) -> Bool {
         let fixed = Date.timestampString.sha3(.sha256).hexToData()!
         
         guard var rsign = Cipher.ecdsaRecoverSign(privateKey: privateKey, hashed: fixed) else { return false }
         
         guard let vPub = verifyPublickey(hashedMessage: fixed, signature: &rsign), let hexPub = vPub.hexToData() else { return false }
         
-        let vaddr = makeAddress(nil, hexPub)
+        let vaddr = makeAddress(nil, PublicKey(hex: hexPub))
         
         return address == vaddr
     }
     
-    static public func ecdsaRecoverSign(privateKey: String, hashed: Data) -> secp256k1_ecdsa_recoverable_signature? {
+    static public func ecdsaRecoverSign(privateKey: PrivateKey, hashed: Data) -> secp256k1_ecdsa_recoverable_signature? {
         let flag = UInt32(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY)
         
-        guard let ctx = secp256k1_context_create(flag), let privData = privateKey.hexToData() else { return nil }
+        guard let ctx = secp256k1_context_create(flag) else { return nil }
         var rsig = secp256k1_ecdsa_recoverable_signature()
         
-        guard secp256k1_ecdsa_sign_recoverable(ctx, &rsig, hashed.bytes, privData.bytes, nil, nil) == 1 else {
+        guard secp256k1_ecdsa_sign_recoverable(ctx, &rsig, hashed.bytes, privateKey.data.bytes, nil, nil) == 1 else {
             secp256k1_context_destroy(ctx)
             return nil }
         

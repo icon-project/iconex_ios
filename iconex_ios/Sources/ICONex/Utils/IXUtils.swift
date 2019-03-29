@@ -541,7 +541,7 @@ func getID() -> String {
     let size = 3
     var randomBytes = Array<UInt8>(repeating: 0, count: size)
     _ = SecRandomCopyBytes(kSecRandomDefault, size, &randomBytes)
-    let id = Data(bytes: randomBytes).toHexString()
+    let id = Data(randomBytes).toHexString()
     
     return id
 }

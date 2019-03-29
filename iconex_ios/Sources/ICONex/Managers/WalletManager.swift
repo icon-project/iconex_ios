@@ -29,13 +29,13 @@ class WalletManager {
     public var service: ICONService {
         switch Config.host {
         case .main:
-            return ICONService(provider: "https://wallet.icon.foundation", nid: "0x1")
+            return ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
             
         case .dev:
-            return ICONService(provider: "https://testwallet.icon.foundation", nid: "0x2")
+            return ICONService(provider: "https://testwallet.icon.foundation/api/v3", nid: "0x2")
             
         case .yeouido:
-            return ICONService(provider: "https://bicon.net.solidwallet.io", nid: "0x3")
+            return ICONService(provider: "https://bicon.net.solidwallet.io/api/v3", nid: "0x3")
         }
     }
     
@@ -192,38 +192,47 @@ class WalletManager {
 }
 
 extension WalletManager {
-    public func sendICX(privateKey: PrivateKey, from: String, to: String, value: BigUInt, stepLimit: BigUInt, message: String? = nil) -> Result<ICONKit.Response.TxHash, ICONResult> {
+    public func sendICX(privateKey: PrivateKey, from: String, to: String, value: BigUInt, stepLimit: BigUInt, message: String? = nil) -> Result<String, ICError> {
+//        let transaction = Transaction()
+//            .from(from)
+//            .to(to)
+//            .value(value)
+//            .stepLimit(stepLimit)
+//            .nonce("0x1")
+//            .nid(self.service.nid)
+        
         let transaction = Transaction()
-            .from(from)
-            .to(to)
-            .value(value)
-            .stepLimit(stepLimit)
-            .nonce("0x1")
-            .nid(self.service.nid)
+        transaction.from = from
+        transaction.to = to
+        transaction.value = value
+        transaction.stepLimit = stepLimit
+        transaction.nonce = "0x1"
+        transaction.nid = self.service.nid
         
         if let msg = message {
-            transaction.message(msg)
+            transaction.dataType = "message"
+            transaction.data = msg
         }
         
         guard let signedTransaction = try? SignedTransaction(transaction: transaction, privateKey: privateKey) else {
-            return .failure(ICONResult.sign)
+            return .failure(ICError.fail(reason: .sign))
         }
         
         return self.service.sendTransaction(signedTransaction: signedTransaction).execute()
     }
     
-    public func sendIRCToken(privateKey: PrivateKey, from: String, to: String, contractAddress: String, value: BigUInt, stepLimit: BigUInt) -> Result<ICONKit.Response.TxHash, ICONResult> {
+    public func sendIRCToken(privateKey: PrivateKey, from: String, to: String, contractAddress: String, value: BigUInt, stepLimit: BigUInt) -> Result<String, ICError> {
         let transaction = Transaction()
-        transaction.from(from)
-            .to(contractAddress)
-            .stepLimit(stepLimit)
-            .nid(self.service.nid)
-            .nonce("0x1")
-            .call("transfer")
-            .params(["_to": to, "_value": "0x" + String(value, radix: 16)])
+        transaction.from = from
+        transaction.to = contractAddress
+        transaction.stepLimit = stepLimit
+        transaction.nid = self.service.nid
+        transaction.nonce = "0x1"
+        transaction.dataType = "call"
+        transaction.data = ["method": "transfer", "params": ["_to": to, "_value": "0x" + String(value, radix: 16)]]
         
         guard let signed = try? SignedTransaction(transaction: transaction, privateKey: privateKey) else {
-            return .failure(ICONResult.sign)
+            return .failure(ICError.fail(reason: .sign))
         }
         return self.service.sendTransaction(signedTransaction: signed).execute()
     }
@@ -281,7 +290,7 @@ extension WalletManager {
         return BigUInt(balance.prefix0xRemoved(), radix: 16)
     }
     
-    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<ICONKit.Response.Call<String>, ICONResult> {
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<ICONKit.Response.Call<String>, ICError> {
         let service = WManager.service
         
         let call = Call<ICONKit.Response.Call<String>>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
