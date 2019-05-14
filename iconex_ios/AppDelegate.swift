@@ -32,6 +32,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
         Configuration.setDebug()
         
+        if let languages = UserDefaults.standard.array(forKey: "AppleLanguages"), let appleLan = languages.first as? String {
+            Log.Debug("languages\n\(languages)")
+            if appleLan != "ko-KR" {
+                Bundle.setLanguage("en")
+            } else {
+                Bundle.setLanguage("ko")
+            }
+        }
+        
         ////////////////////////////////////
         // Realm Configurations & Migration
         ////////////////////////////////////

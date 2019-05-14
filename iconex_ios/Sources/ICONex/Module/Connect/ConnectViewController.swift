@@ -112,10 +112,10 @@ class ConnectViewController: BaseViewController {
                 return false
             }
             
-            let nameCall = Call<ICONKit.Response.Call<String>>(from: from, to: contract, method: "symbol", params: nil)
+            let nameCall = Call<String>(from: from, to: contract, method: "symbol", params: nil)
             let symbolResult = WManager.service.call(nameCall).execute()
             
-            guard let symbolValue = symbolResult.value, let symbol = symbolValue.result else {
+            guard let symbol = symbolResult.value else {
                 if let error = symbolResult.error {
                     Conn.sendError(error: .network(error))
                 }
@@ -123,10 +123,10 @@ class ConnectViewController: BaseViewController {
             Conn.tokenSymbol = symbol
             
             
-            let decimalCall = Call<ICONKit.Response.Call<String>>(from: from, to: contract, method: "decimals", params: nil)
+            let decimalCall = Call<String>(from: from, to: contract, method: "decimals", params: nil)
             let decimalResult = WManager.service.call(decimalCall).execute()
             
-            guard let decimalValue = decimalResult.value, let decimal = decimalValue.result else {
+            guard let decimal = decimalResult.value else {
                 if let error = decimalResult.error {
                     Conn.sendError(error: .network(error))
                 }
@@ -141,11 +141,7 @@ class ConnectViewController: BaseViewController {
                 Log.Debug("Error - \(error)")
                 Conn.sendError(error: ConnectError.network(error))
                 
-            case .success(let result):
-                guard let valueString = result.result, let tokenBalance = BigUInt(valueString.prefix0xRemoved(), radix: 16) else {
-                    Conn.sendError(error: ConnectError.network("Could not fetch balance."))
-                    return false
-                }
+            case .success(let tokenBalance):
                 Balance.tokenBalanceList[from] = [contract: tokenBalance]
                 if tokenBalance < converted {
                     Conn.sendError(error: ConnectError.insufficient(.balance))

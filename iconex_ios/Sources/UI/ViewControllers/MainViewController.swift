@@ -477,6 +477,9 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                     Balance.getWalletsBalance()
                 }
             }
+            if let showing = self.walletStack.arrangedSubviews[currentIndex] as? MainWalletView {
+                showing.mainConstraintChanged(value: value)
+            }
 
             UIView.animate(withDuration: 0.25, animations: {
                 self.view.layoutIfNeeded()

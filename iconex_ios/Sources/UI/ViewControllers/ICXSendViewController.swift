@@ -133,8 +133,8 @@ class ICXSendViewController: BaseViewController {
         
         if let token = self.token {
             self.dataContainer.isHidden = true
-            if let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = balances[token.contractAddress] {
-                let printBalance = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
+            if let balances = Balance.tokenBalanceList[token.dependedAddress], let balance = balances[token.contractAddress] {
+                let printBalance = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, false)
                 balanceLabel.text = printBalance
                 
                 let type = token.symbol
@@ -219,15 +219,17 @@ class ICXSendViewController: BaseViewController {
         
         add1.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
-                guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
-                    return
-                }
                 guard let walletInfo = self.walletInfo, let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
+                
                 var decimal = 0
                 if let token = self.token {
                     decimal = token.defaultDecimal
                 } else {
                     decimal = wallet.decimal
+                }
+                
+                guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!, decimal: decimal, fixed: false) else {
+                    return
                 }
                 let result = formerValue + BigUInt(10).power(decimal + 1)
                 Log.Debug(result)
@@ -239,19 +241,21 @@ class ICXSendViewController: BaseViewController {
         
         add2.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
-                guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
-                    return
-                }
                 guard let walletInfo = self.walletInfo, let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
+                
                 var decimal = 0
                 if let token = self.token {
                     decimal = token.defaultDecimal
                 } else {
                     decimal = wallet.decimal
                 }
+                
+                guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!, decimal: decimal) else {
+                    return
+                }
                 let result = formerValue + BigUInt(10).power(decimal + 2)
                 Log.Debug(result)
-                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true)
+                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal)
                 self.sendInputBox.textField.text = stringValue
                 self.sendInputBox.textField.becomeFirstResponder()
                 self.validateBalance()
@@ -259,19 +263,21 @@ class ICXSendViewController: BaseViewController {
         
         add3.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
-                guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!) else {
-                    return
-                }
                 guard let walletInfo = self.walletInfo, let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
+                
                 var decimal = 0
                 if let token = self.token {
                     decimal = token.defaultDecimal
                 } else {
                     decimal = wallet.decimal
                 }
+                
+                guard let formerValue = Tools.stringToBigUInt(inputText: self.sendInputBox.textField.text!, decimal: decimal) else {
+                    return
+                }
                 let result = formerValue + BigUInt(10).power(decimal + 3)
                 Log.Debug(result)
-                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal, true)
+                let stringValue = Tools.bigToString(value: result, decimal: decimal, decimal)
                 self.sendInputBox.textField.text = stringValue
                 self.sendInputBox.textField.becomeFirstResponder()
                 self.validateBalance()
@@ -285,8 +291,8 @@ class ICXSendViewController: BaseViewController {
                 guard let stepPrice = self.stepPrice else { return }
 
                 if let token = self.token {
-                    guard let balance = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()]?[token.contractAddress] else { return }
-                    self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal, true)
+                    guard let balance = Balance.tokenBalanceList[token.dependedAddress]?[token.contractAddress] else { return }
+                    self.sendInputBox.textField.text = Tools.bigToString(value: balance, decimal: token.decimal, token.decimal)
                 } else {
                     guard let _ = Balance.walletBalanceList[wallet.address!] else { return }
                     var tmpStepLimit = BigUInt(0)
@@ -362,6 +368,8 @@ class ICXSendViewController: BaseViewController {
         limitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: { [unowned self] in
             if self.validateLimit() {
                 self.sendButton.isEnabled = self.validation()
+            } else {
+                self.sendButton.isEnabled = false
             }
         }).disposed(by: disposeBag)
         
@@ -391,7 +399,7 @@ class ICXSendViewController: BaseViewController {
                 dataInput.walletAmount = self.totalBalance
                 dataInput.stepPrice = self.stepPrice
                 let value = self.sendInputBox.textField.text!
-                if let sendValue = Tools.stringToBigUInt(inputText: value) {
+                if let sendValue = Tools.stringToBigUInt(inputText: value, decimal: 18, fixed: false) {
                     dataInput.sendAmount = sendValue
                 }
                 dataInput.costs = self.costs
@@ -447,9 +455,16 @@ class ICXSendViewController: BaseViewController {
         
         sendButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
             
+            var decimal: Int
+            if let token = self.token {
+                decimal = token.decimal
+            } else {
+                decimal = 18
+            }
+            
             let value = self.sendInputBox.textField.text!
-            let bigValue = Tools.stringToBigUInt(inputText: value)!
-            let icxValue = Tools.bigToString(value: bigValue, decimal: 18, 18, false)
+            let bigValue = Tools.stringToBigUInt(inputText: value, decimal: decimal, fixed: false)!
+            let icxValue = Tools.bigToString(value: bigValue, decimal: decimal, decimal, false)
             
             let to = self.addressInputBox.textField.text!
             
@@ -613,7 +628,14 @@ class ICXSendViewController: BaseViewController {
     @discardableResult
     func validateBalance(_ showError: Bool = true) -> Bool {
         guard let totalBalance = self.totalBalance else { return false }
-        guard let sendText = self.sendInputBox.textField.text, sendText != "", let inputValue = Tools.stringToBigUInt(inputText: sendText), let stepPrice = self.stepPrice else {
+        var decimal: Int
+        if let token = self.token {
+            decimal = token.decimal
+        } else {
+            decimal = 18
+        }
+        
+        guard let sendText = self.sendInputBox.textField.text, sendText != "", let inputValue = Tools.stringToBigUInt(inputText: sendText, decimal: decimal), let stepPrice = self.stepPrice else {
             if showError { self.sendInputBox.setState(.error, "Error.Transfer.AmountEmpty".localized) }
             return false
         }
@@ -624,7 +646,7 @@ class ICXSendViewController: BaseViewController {
         }
         
         if let token = self.token {
-            guard let balance = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix().lowercased()]?[token.contractAddress.lowercased()], let minimum = self.calculateStepPrice() else { return false }
+            guard let balance = Balance.tokenBalanceList[token.dependedAddress.lowercased()]?[token.contractAddress.lowercased()], let minimum = self.calculateStepPrice() else { return false }
             guard inputValue <= balance else {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                 return false
@@ -633,6 +655,14 @@ class ICXSendViewController: BaseViewController {
             if minimum > totalBalance {
                 if showError { self.sendInputBox.setState(.error, "Error.Transfer.InsufficientFee.ICX".localized) }
                 return false
+            }
+            
+            let remainValue = balance - inputValue
+            self.remainBalance.text = Tools.bigToString(value: remainValue, decimal: token.defaultDecimal, token.defaultDecimal, false)
+            if let exchanged = Tools.balanceToExchange(remainValue, from: token.symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: token.decimal) {
+                self.exchangedRemainLabel.text = exchanged.currencySeparated() + " USD"
+            } else {
+                self.exchangedRemainLabel.text = "- USD"
             }
         } else {
             guard inputValue <= totalBalance else {
@@ -660,7 +690,7 @@ class ICXSendViewController: BaseViewController {
         }
         
         if showError {
-            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue) else {
+            guard let sendValue = self.sendInputBox.textField.text, let send = Tools.stringToBigUInt(inputText: sendValue, decimal: decimal) else {
                 return false
             }
             
@@ -707,8 +737,10 @@ class ICXSendViewController: BaseViewController {
     @discardableResult
     func validateLimit(_ showError: Bool = true) -> Bool {
         var symbol = "icx"
+        var decimal = 18
         if let token = self.token {
             symbol = token.symbol
+            decimal = token.decimal
         }
         
         var totalBalance: BigUInt
@@ -723,8 +755,8 @@ class ICXSendViewController: BaseViewController {
             let limit = BigUInt(0)
             self.feeAmountLabel.text = Tools.bigToString(value: limit, decimal: 18, 18, false)
             self.exchangedFeeLabel.text = Tools.balanceToExchange(limit, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
-            self.remainBalance.text = Tools.bigToString(value: totalBalance, decimal: 18, 18, false)
-            if let exchangedRemain = Tools.balanceToExchange(totalBalance, from: symbol, to: "usd", belowDecimal: 2, decimal: 18) {
+            self.remainBalance.text = Tools.bigToString(value: totalBalance, decimal: decimal, decimal, false)
+            if let exchangedRemain = Tools.balanceToExchange(totalBalance, from: symbol, to: "usd", belowDecimal: 2, decimal: decimal) {
                 self.exchangedRemainLabel.text = exchangedRemain + " USD"
             } else {
                 self.exchangedRemainLabel.text = "- USD"
@@ -734,7 +766,11 @@ class ICXSendViewController: BaseViewController {
         
         var minLimit: Int = 0
         if let min = self.minLimit {
-            minLimit = Int(min)
+            if self.token != nil {
+                minLimit = Int(min) * 2
+            } else {
+                minLimit = Int(min)
+            }
         }
         var maxLimit = 0
         if let max = self.maxLimit {
@@ -761,15 +797,15 @@ class ICXSendViewController: BaseViewController {
             self.exchangedFeeLabel.text = Tools.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
             Log.Debug("stepPrice - \(stepPrice), limit - \(limit), totalBalance - \(totalBalance), estimated - \(estimated)")
             
-            if let sendText = self.sendInputBox.textField.text, sendText != "", let inputValue = Tools.stringToBigUInt(inputText: sendText) {
+            if let sendText = self.sendInputBox.textField.text, sendText != "", let inputValue = Tools.stringToBigUInt(inputText: sendText, decimal: decimal) {
                 if (self.token != nil ? inputValue : estimated + inputValue) > totalBalance {
                     if showError { self.sendInputBox.setState(.error, "Error.Transfer.AboveMax".localized) }
                     return false
                 }
                 let remain = self.token != nil ? totalBalance - inputValue : totalBalance - (estimated + inputValue)
                 Log.Debug("remain 2 - \(remain)")
-                self.remainBalance.text = Tools.bigToString(value: remain, decimal: 18, 18, false)
-                if let exchanged = Tools.balanceToExchange(remain, from: symbol, to: "usd", belowDecimal: 2, decimal: 18) {
+                self.remainBalance.text = Tools.bigToString(value: remain, decimal: decimal, decimal, false)
+                if let exchanged = Tools.balanceToExchange(remain, from: symbol, to: "usd", belowDecimal: 2, decimal: decimal) {
                     self.exchangedRemainLabel.text = exchanged + " USD"
                 } else {
                     self.exchangedRemainLabel.text = "- USD"

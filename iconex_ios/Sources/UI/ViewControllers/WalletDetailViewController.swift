@@ -265,7 +265,7 @@ class WalletDetailViewController: UIViewController {
                     var tokenBalance = "-"
                     if let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()] {
                         if let bigBalance = balances[token.contractAddress] {
-                            tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
+                            tokenBalance = Tools.bigToString(value: bigBalance, decimal: token.decimal, 4)
                         }
                     }
                     

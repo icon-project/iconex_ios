@@ -412,6 +412,7 @@
 "Alert.Transfer.Address" = "받는 주소";
 "Alert.Transfer.Data.Delete" = "입력된 데이터를 삭제하시겠습니까?";
 "Alert.Bio.Fingerprint.Empty" = "Touch ID가 설정되어 있지 않습니다.\n휴대폰의 설정화면에서 Touch ID를 설정 후 다시 시도해주세요.";
+"Alert.Bio.passcodeNotSet" = "휴대폰의 설정화면에서 “암호 켜기” 설정 후 다시 시도해주세요.";
 "Alert.Wallet.Import.Cancel" = "지갑 가져오기를 취소하시겠습니까?";
 "Alert.Wallet.RequestPassword" = "지갑 비밀번호 입력";
 "Alert.Wallet.Remove.UnknownBalance" = "지갑의 보유금액을 확인 할 수 없습니다.\n정말 삭제하시겠습니까?";

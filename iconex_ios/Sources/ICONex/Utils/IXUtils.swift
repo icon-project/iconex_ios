@@ -24,6 +24,8 @@ struct Tools {
         case notUsed
         case notSupported
         case userFallback
+        case notAvailable
+        case passcodeNotSet
     }
     
     static var decimalSeparator: String {
@@ -287,6 +289,12 @@ struct Tools {
                     
                 case LAError.biometryNotEnrolled:
                     return LAStatus.notUsed
+                    
+                case LAError.biometryNotAvailable:
+                    return LAStatus.notAvailable
+                    
+                case LAError.passcodeNotSet:
+                    return LAStatus.passcodeNotSet
                     
                 default:
                     return LAStatus.notSupported

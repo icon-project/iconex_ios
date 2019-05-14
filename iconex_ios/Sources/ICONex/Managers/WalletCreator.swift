@@ -377,6 +377,36 @@ struct WalletExportBundle: Codable {
     var tokens: [TokenExportBundle]?
     var createdAt: String?
     var coinType: String?
+    
+    init(name: String, type: String, priv: String, tokens: [TokenExportBundle]?, createdAt: String?, coinType: String?) {
+        self.name = name
+        self.type = type
+        self.priv = priv
+        self.tokens = tokens
+        self.createdAt = createdAt
+        self.coinType = coinType
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        name = try container.decode(String.self, forKey: .name)
+        type = try container.decode(String.self, forKey: .type)
+        priv = try container.decode(String.self, forKey: .priv)
+        if container.contains(.tokens) {
+            do {
+                tokens = try container.decode([TokenExportBundle].self, forKey: .tokens)
+            } catch {
+                tokens = nil
+            }
+        }
+        if container.contains(.createdAt) {
+            createdAt = try container.decode(String.self, forKey: .createdAt)
+        }
+        if container.contains(.coinType) {
+            coinType = try container.decode(String.self, forKey: .coinType)
+        }
+    }
 }
 
 struct TokenExportBundle: Codable {
@@ -388,4 +418,38 @@ struct TokenExportBundle: Codable {
     var name: String
     var defaultSymbol: String
     var symbol: String
+    
+    init(address: String, createdAt: String, decimals: Int, defaultDecimals: Int, defaultName: String, name: String, defaultSymbol: String, symbol: String) {
+        self.address = address
+        self.createdAt = createdAt
+        self.decimals = decimals
+        self.defaultDecimals = defaultDecimals
+        self.defaultName = defaultName
+        self.name = name
+        self.defaultSymbol = defaultSymbol
+        self.symbol = symbol
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.address = try container.decode(String.self, forKey: .address)
+        self.createdAt = try container.decode(String.self, forKey: .createdAt)
+        do {
+            self.decimals = try container.decode(Int.self, forKey: .decimals)
+        } catch {
+            let decimal = try container.decode(String.self, forKey: .decimals)
+            self.decimals = Int(decimal)!
+        }
+        do {
+            self.defaultDecimals = try container.decode(Int.self, forKey: .defaultDecimals)
+        } catch {
+            let decimal = try container.decode(String.self, forKey: .defaultDecimals)
+            self.defaultDecimals = Int(decimal)!
+        }
+        self.name = try container.decode(String.self, forKey: .name)
+        self.defaultName = try container.decode(String.self, forKey: .defaultName)
+        self.defaultSymbol = try container.decode(String.self, forKey: .defaultSymbol)
+        self.symbol = try container.decode(String.self, forKey: .symbol)
+    }
 }

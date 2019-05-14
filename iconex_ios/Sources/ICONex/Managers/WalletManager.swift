@@ -58,7 +58,7 @@ class WalletManager {
         do {
             let realm = try Realm()
             
-            let list = realm.objects(WalletModel.self).sorted(byKeyPath: "createdDate").reversed()
+            let list = realm.objects(WalletModel.self).sorted(byKeyPath: "createdDate")
             
             for walletModel in list {
                 
@@ -92,10 +92,10 @@ class WalletManager {
     }
     
     func getStepCosts() -> ICONKit.Response.StepCosts? {
-        let call = Call<ICONKit.Response.Call<ICONKit.Response.StepCosts>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepCosts", params: nil)
+        let call = Call<Response.StepCosts>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepCosts", params: nil)
         let result = self.service.call(call).execute()
         
-        guard let value = result.value, let cost = value.result else {
+        guard let cost = result.value else {
             Log.Debug("error - \(String(describing: result.error))")
             return nil }
         Log.Debug("cost - \(cost)")
@@ -103,28 +103,28 @@ class WalletManager {
     }
     
     func getMaxStepLimit() -> BigUInt? {
-        let call = Call<ICONKit.Response.Call<String>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMaxStepLimit", params: ["contextType": "invoke"])
+        let call = Call<String>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMaxStepLimit", params: ["contextType": "invoke"])
         let result: Result = self.service.call(call).execute()
         
-        guard let value = result.value, let max = value.result, let maxLimit = BigUInt(max.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let value = result.value, let maxLimit = BigUInt(value.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("max - \(maxLimit)")
         return maxLimit
     }
     
     func getMinStepLimit() -> BigUInt? {
-        let call = Call<ICONKit.Response.Call<String>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMinStepLimit", params: nil)
+        let call = Call<String>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMinStepLimit", params: nil)
         let result = self.service.call(call).execute()
         
-        guard let value = result.value, let min = value.result, let minLimit = BigUInt(min.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let min = result.value, let minLimit = BigUInt(min.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("min - \(minLimit)")
         return minLimit
     }
     
     func getStepPrice() -> BigUInt? {
-        let call = Call<ICONKit.Response.Call<String>>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepPrice", params: nil)
+        let call = Call<String>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepPrice", params: nil)
         let result = self.service.call(call).execute()
         
-        guard let value = result.value, let stringPrice = value.result, let stepPrice = BigUInt(stringPrice.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let stringPrice = result.value, let stepPrice = BigUInt(stringPrice.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("stepPrice - \(stepPrice)")
         return stepPrice
     }
@@ -240,10 +240,10 @@ extension WalletManager {
     public func getIRCTokenInfo(walletAddress: String, contractAddress: String, completion: @escaping (((name: String, symbol: String, decimal: String)?) -> ())) {
         
         DispatchQueue.global().async {
-            let nameCall = Call<ICONKit.Response.Call<String>>(from: walletAddress, to: contractAddress, method: "name", params: nil)
+            let nameCall = Call<String>(from: walletAddress, to: contractAddress, method: "name", params: nil)
             let result = self.service.call(nameCall).execute()
             
-            guard let nameResponse = result.value, let name = nameResponse.result else {
+            guard let name = result.value else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -251,10 +251,10 @@ extension WalletManager {
             }
             Log.Debug("name - \(name)")
             
-            let decimalCall = Call<ICONKit.Response.Call<String>>(from: walletAddress, to: contractAddress, method: "decimals", params: nil)
+            let decimalCall = Call<String>(from: walletAddress, to: contractAddress, method: "decimals", params: nil)
             let decResult = self.service.call(decimalCall).execute()
             
-            guard let decResponse = decResult.value, let decimal = decResponse.result else {
+            guard let decimal = decResult.value else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -262,10 +262,10 @@ extension WalletManager {
             }
             Log.Debug("decimal - \(decimal)")
             
-            let symCall = Call<ICONKit.Response.Call<String>>(from: walletAddress, to: contractAddress, method: "symbol", params: nil)
+            let symCall = Call<String>(from: walletAddress, to: contractAddress, method: "symbol", params: nil)
             let symResult = self.service.call(symCall).execute()
             
-            guard let symResponse = symResult.value, let symbol = symResponse.result else {
+            guard let symbol = symResult.value else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -282,18 +282,18 @@ extension WalletManager {
     public func getIRCTokenBalance(tokenInfo: TokenInfo) -> BigUInt? {
         let service = WManager.service
         
-        let call = Call<ICONKit.Response.Call<String>>(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
+        let call = Call<BigUInt>(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
         let result = service.call(call).execute()
         
-        guard let value = result.value, let balance = value.result else { return nil }
+        guard let balance = result.value else { return nil }
         
-        return BigUInt(balance.prefix0xRemoved(), radix: 16)
+        return balance
     }
     
-    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<ICONKit.Response.Call<String>, ICError> {
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, ICError> {
         let service = WManager.service
         
-        let call = Call<ICONKit.Response.Call<String>>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
+        let call = Call<BigUInt>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
         let result = service.call(call).execute()
         
         return result

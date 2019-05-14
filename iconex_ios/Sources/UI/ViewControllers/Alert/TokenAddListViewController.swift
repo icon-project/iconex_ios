@@ -167,6 +167,7 @@ class TokenAddListViewController: BaseViewController {
             return a.name < b.name
             }))
         tableView.reloadData()
+        self.actionButton.isEnabled = false
     }
 }
 
@@ -198,7 +199,7 @@ extension TokenAddListViewController: UITableViewDataSource {
                 self.selectedTokens[info.address] = info
                 cell.state = .selected
             }
-//            self.actionButton.isEnabled = self.selectedTokens.count != 0
+            self.actionButton.isEnabled = self.selectedTokens.count != 0
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
         }).disposed(by: cell.disposeBag)
