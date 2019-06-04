@@ -164,6 +164,8 @@
 "Token.Decimals" = "Number of Decimals";
 "Token.EnterNumbers" = "Enter numbers";
 "Token.RemoveToken" = "Remove Token";
+"Token.Add.InputInfo" = "Enter the token info if it is not on the list.";
+"Token.Add.Input" = "Enter Token Info";
 
 "Backup.StepTitle" = "You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
 "Backup.Header1" = "Download the Keystore file";

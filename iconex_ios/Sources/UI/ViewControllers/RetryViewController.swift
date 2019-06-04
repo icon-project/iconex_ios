@@ -33,7 +33,12 @@ class RetryViewController: BaseViewController {
         retry.setTitle("Retry.Retry".localized, for: .normal)
         retry.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             let app = UIApplication.shared.delegate as! AppDelegate
-            app.checkVersion()
+            
+            self.retry.isEnabled = false
+            
+            app.checkVersion({ [weak self] in
+                self?.retry.isEnabled = true
+            })
         }).disposed(by: disposeBag)
     }
 }

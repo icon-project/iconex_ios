@@ -74,7 +74,7 @@ class BalanceManager {
                 let result = request.execute()
                 switch result {
                 case .success(let balance):
-                    self.walletBalanceList[wallet.address!.add0xPrefix().lowercased()] = balance.value
+                    self.walletBalanceList[wallet.address!.add0xPrefix().lowercased()] = balance
                     
                 case .failure(let error):
                     Log.Debug("Error - \(error)")
@@ -113,7 +113,7 @@ class BalanceManager {
                         
                         switch result {
                         case .success(let balance):
-                            self.walletBalanceList[wallet.address!.lowercased()] = balance.value
+                            self.walletBalanceList[wallet.address!.lowercased()] = balance
                             
                         case .failure(let error):
                             Log.Debug("Error - \(error)")

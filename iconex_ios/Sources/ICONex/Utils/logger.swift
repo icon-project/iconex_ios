@@ -38,23 +38,23 @@ extension LogLevel {
 
 struct Log {
     static func Info<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, line: Int = #line) {
-        logger(.info, object, file, function, line)
+        logger(.info, object(), file, function, line)
     }
     
     static func Verbose<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, line: Int = #line) {
-        logger(.verbose, object, file, function, line)
+        logger(.verbose, object(), file, function, line)
     }
     
     static func Debug<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, line: Int = #line) {
-        logger(.debug, object, file, function, line)
+        logger(.debug, object(), file, function, line)
     }
     
     static func Warning<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, line: Int = #line) {
-        logger(.warning, object, file, function, line)
+        logger(.warning, object(), file, function, line)
     }
     
     static func Error<T>(_ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, line: Int = #line) {
-        logger(.error, object, file, function, line)
+        logger(.error, object(), file, function, line)
     }
     
     static func logger<T>(_ category: LogLevel, _ object: @autoclosure () -> T, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {

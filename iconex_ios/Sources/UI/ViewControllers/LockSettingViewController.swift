@@ -150,6 +150,8 @@ extension LockSettingViewController: UITableViewDataSource {
                                     title = "Error.FaceID.NotEnrolled".localized
                                 }
                                 Alert.Basic(message: title).show(self)
+                            } else if status == Tools.LAStatus.passcodeNotSet {
+                                Alert.Basic(message: "Alert.Bio.passcodeNotSet".localized).show(self)
                             }
                             cell.radio.isOn = false
                         }

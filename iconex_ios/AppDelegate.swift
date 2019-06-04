@@ -28,9 +28,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ////////////////////////////////////
         
         #if DEBUG
-            print(IXSWrapper.getVersion())
+            print("\(IXSWrapper.getVersion())")
         #endif
         Configuration.setDebug()
+        
+        if let languages = UserDefaults.standard.array(forKey: "AppleLanguages"), let appleLan = languages.first as? String {
+            Log.Debug("languages\n\(languages)")
+            if appleLan != "ko-KR" {
+                Bundle.setLanguage("en")
+            } else {
+                Bundle.setLanguage("ko")
+            }
+        }
         
         ////////////////////////////////////
         // Realm Configurations & Migration
@@ -129,7 +138,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: NSNotification.Name("kNotificationLanguageDidChanged"), object: nil)
     }
 
-    func checkVersion() {
+    func checkVersion(_ completion: (() -> Void)? = nil) {
         var tracker: Tracker {
             switch Config.host {
             case .main:
@@ -165,10 +174,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                 case .failure(let error):
                     Log.Debug("Error \(error)")
-                    let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
-                    self.window?.rootViewController = retry
-                    return
-                    
+                    if let comp = completion {
+                        comp()
+                        return
+                    } else {
+                        let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
+                        self.window?.rootViewController = retry
+                        return
+                    }
                 }
             }
         }

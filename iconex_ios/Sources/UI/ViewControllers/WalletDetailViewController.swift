@@ -202,7 +202,7 @@ class WalletDetailViewController: UIViewController {
             
             pwdAlert.addConfirm(completion: { (isSuccess, privKey) in
                 if isSuccess {
-                    let prvKey = PrivateKey(hexData: privKey.hexToData()!)
+                    let prvKey = PrivateKey(hex: privKey.hexToData()!)
                     
                     if self.walletInfo!.type == .icx {
                         let sendView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ICXSendView") as! ICXSendViewController
@@ -265,7 +265,7 @@ class WalletDetailViewController: UIViewController {
                     var tokenBalance = "-"
                     if let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()] {
                         if let bigBalance = balances[token.contractAddress] {
-                            tokenBalance = Tools.bigToString(value: bigBalance, decimal: wallet.decimal, 4)
+                            tokenBalance = Tools.bigToString(value: bigBalance, decimal: token.decimal, 4)
                         }
                     }
                     

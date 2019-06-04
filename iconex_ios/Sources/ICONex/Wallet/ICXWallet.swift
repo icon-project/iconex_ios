@@ -77,16 +77,17 @@ class ICXWallet: BaseWallet {
         return tokenList.filter { $0.contractAddress == contractAddress }.count == 0
     }
     
-    @discardableResult
-    func generateICXKeyStore(privateKey: String, password: String) throws -> Bool {
+    func generateICXKeyStore(privateKey: String, password: String) throws {
         
+        let wallet = Wallet(privateKey: PrivateKey(hex: privateKey.hexToData()!))
+        try wallet.generateKeystore(password: password)
         
-        let keystore = try Cipher.createKeystore(privateKey: privateKey, password: password)
+        self.__rawData = try wallet.keystore!.jsonData()
+        self.address = wallet.address
         
-        self.__rawData = keystore.data
-        self.address = keystore.address
-        self.keystore = keystore
-        return true
+        let decoder = JSONDecoder()
+        
+        self.keystore = try decoder.decode(Keystore.self, from: __rawData!)
     }
     
     func changePassword(old: String, new: String) throws {
@@ -118,7 +119,7 @@ class ICXWallet: BaseWallet {
     }
     
     func getBackupKeystoreFilepath() throws -> URL {
-        guard let rawData = __rawData else { throw ICError.empty }
+        guard let rawData = __rawData else { throw IXError.emptyWallet }
         
         let filename = "UTC--" + Date.currentZuluTime + "--" + self.address!
         

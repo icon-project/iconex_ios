@@ -155,7 +155,7 @@ class BindPasswordViewController: BaseViewController {
             return false
         }
         
-        privateKey = PrivateKey(hexData: prvKeyData)
+        privateKey = PrivateKey(hex: prvKeyData)
         
         return true
     }
@@ -163,12 +163,11 @@ class BindPasswordViewController: BaseViewController {
     func requestSign() {
         guard let privateKey = self.privateKey else { return }
         guard let params = Conn.received?.params, let jsonData = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted) else { return }
-        let password = passwordInputBox.textField.text!
         
         let iconWallet = Wallet(privateKey: privateKey)
         
         do {
-            let sign = try iconWallet.getSignature(password: password, data: jsonData)
+            let sign = try iconWallet.getSignature(data: jsonData)
             
             Conn.sendSignature(sign: sign)
         } catch (let error as ConnectError) {

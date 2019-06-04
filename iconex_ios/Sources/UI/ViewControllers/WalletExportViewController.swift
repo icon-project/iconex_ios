@@ -60,7 +60,7 @@ class WalletExportViewController: UIViewController {
     }
     
     func initialize() {
-        var height = CGFloat(30 + 12 + 12 + 30 + 16 + 2)
+        var height = CGFloat(30.0 + 12.0 + 12.0 + 30.0 + 16.0 + 2.0)
         
         navTitle.text = "BundleExport.Step1.NavTitle".localized
 

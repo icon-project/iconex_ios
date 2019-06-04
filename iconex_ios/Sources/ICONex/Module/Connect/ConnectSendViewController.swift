@@ -70,6 +70,7 @@ class ConnectSendViewController: BaseViewController {
         }).disposed(by: disposeBag)
         stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
             self.sendButton.isEnabled = self.validateLimit()
+            self.stepLimitInputBox.textField.resignFirstResponder()
         }).disposed(by: disposeBag)
         stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
@@ -120,7 +121,7 @@ class ConnectSendViewController: BaseViewController {
                 .from(from)
                 .nid(WManager.service.nid)
                 .nonce("0x1")
-                .stepLimit(limit)
+                .stepLimit(estimated)
             
             if received.method == "sendICX" {
                 transaction
@@ -140,7 +141,7 @@ class ConnectSendViewController: BaseViewController {
                             } else if let hash = result.value {
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
                                 complete.handler = {
-                                    Conn.sendICXHash(txHash: hash.value)
+                                    Conn.sendICXHash(txHash: hash)
                                 }
                                 complete.show(self)
                             }
@@ -154,8 +155,10 @@ class ConnectSendViewController: BaseViewController {
                 guard let contract = received.params?["contractAddress"] as? String else { return }
                 
                 transaction.to(contract)
-                .call("transfer")
-                .params(["_to": to, "_value": "0x" + String(value, radix: 16)])
+                transaction.dataType = "call"
+                transaction.data = ["method": "transfer", "params": ["_to": to, "_value": "0x" + String(value, radix: 16)]]
+//                .call("transfer")
+//                .params(["_to": to, "_value": "0x" + String(value, radix: 16)])
                 
                 guard let decimals = Conn.tokenDecimal else { return }
                 
@@ -171,10 +174,8 @@ class ConnectSendViewController: BaseViewController {
                                 Log.Debug("Error - \(error)")
                                 var msg = ""
                                 switch error {
-                                case .httpError(let httpMessage):
-                                    if let message = httpMessage {
-                                        msg = "\n" + message
-                                    }
+                                case .error(error: let error):
+                                        msg = "\n" + error.localizedDescription
                                     
                                 default:
                                     break
@@ -184,7 +185,7 @@ class ConnectSendViewController: BaseViewController {
                             } else if let hash = result.value {
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
                                 complete.handler = {
-                                    Conn.sendTokenHash(txHash: hash.value)
+                                    Conn.sendTokenHash(txHash: hash)
                                 }
                                 complete.show(self)
                             }

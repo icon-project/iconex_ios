@@ -164,6 +164,8 @@
 "Token.Decimals" = "Number of Decimals";
 "Token.EnterNumbers" = "Enter numbers";
 "Token.RemoveToken" = "Remove Token";
+"Token.Add.InputInfo" = "Enter the token info if it is not on the list.";
+"Token.Add.Input" = "Enter Token Info";
 
 "Backup.StepTitle" = "You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
 "Backup.Header1" = "Download the Keystore file";
@@ -412,6 +414,7 @@
 "Alert.Transfer.Address" = "Receiving Address ";
 "Alert.Transfer.Data.Delete" = "Are you sure you want to delete data?";
 "Alert.Bio.Fingerprint.Empty" = "Unable to identify your Touch ID. Please try again after registering on mobile settings.";
+"Alert.Bio.passcodeNotSet" = "Please go to Settings > Touch ID & Passcode : tap “Turn Passcode On”.";
 "Alert.Wallet.Import.Cancel" = "Are you sure you want to cancel?";
 "Alert.Wallet.RequestPassword" = "Enter Wallet Password";
 "Alert.Wallet.Remove.UnknownBalance" = "Unable to check the balance.\nAre you sure you want to delete?";

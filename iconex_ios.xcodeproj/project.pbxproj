@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A3E8F6903199357E7FC0119E /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */; };
+		ADF5BDDAF7AC5913CD48E249 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43098EC8DD8637F504DC3499 /* Pods_iconex_ios.framework */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D404608E21CB2A71001958F5 /* WalletManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D404608D21CB2A71001958F5 /* WalletManager.swift */; };
 		D404609021CB6D94001958F5 /* WalletCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D404608F21CB6D94001958F5 /* WalletCreator.swift */; };
@@ -29,6 +29,8 @@
 		D41C4EF920D25B320094E199 /* RetryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41C4EF820D25B320094E199 /* RetryViewController.swift */; };
 		D421A2682068D10E00687431 /* EditingAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D421A2672068D10E00687431 /* EditingAddressViewController.swift */; };
 		D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4277E7920746606006F3C95 /* ETHWallet.swift */; };
+		D427DCE8221105BF0098D852 /* TokenAddListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D427DCE7221105BF0098D852 /* TokenAddListViewController.swift */; };
+		D427DCEA221117050098D852 /* Tokens.json in Resources */ = {isa = PBXBuildFile; fileRef = D427DCE9221117050098D852 /* Tokens.json */; };
 		D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D428A53D20201B2F005B14D8 /* Configurations.swift */; };
 		D42A6D112057B28E00BC5039 /* Side.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D42A6D102057B28E00BC5039 /* Side.storyboard */; };
 		D42A6D132057C52E00BC5039 /* AddressManageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42A6D122057C52E00BC5039 /* AddressManageViewController.swift */; };
@@ -153,10 +155,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43098EC8DD8637F504DC3499 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43894C361053A2695BBD24DA /* Pods_ICONex_Today.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ICONex_Today.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9170E3A828192EA10BAB8568 /* Pods-ICONex-Today.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ICONex-Today.release.xcconfig"; path = "Pods/Target Support Files/Pods-ICONex-Today/Pods-ICONex-Today.release.xcconfig"; sourceTree = "<group>"; };
 		AA912E9857C76ABB008EA2F5 /* Pods-ICONex-Today.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ICONex-Today.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ICONex-Today/Pods-ICONex-Today.debug.xcconfig"; sourceTree = "<group>"; };
-		BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D404608D21CB2A71001958F5 /* WalletManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletManager.swift; sourceTree = "<group>"; };
 		D404608F21CB6D94001958F5 /* WalletCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCreator.swift; sourceTree = "<group>"; };
@@ -179,6 +181,8 @@
 		D41C4EF820D25B320094E199 /* RetryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryViewController.swift; sourceTree = "<group>"; };
 		D421A2672068D10E00687431 /* EditingAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditingAddressViewController.swift; sourceTree = "<group>"; };
 		D4277E7920746606006F3C95 /* ETHWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHWallet.swift; sourceTree = "<group>"; };
+		D427DCE7221105BF0098D852 /* TokenAddListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenAddListViewController.swift; sourceTree = "<group>"; };
+		D427DCE9221117050098D852 /* Tokens.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Tokens.json; sourceTree = "<group>"; };
 		D428A53D20201B2F005B14D8 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
 		D42A6D102057B28E00BC5039 /* Side.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Side.storyboard; sourceTree = "<group>"; };
 		D42A6D122057C52E00BC5039 /* AddressManageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressManageViewController.swift; sourceTree = "<group>"; };
@@ -366,14 +370,6 @@
 		D4ECFE5522013FE4001644AF /* WalletKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeystore.swift; sourceTree = "<group>"; };
 		D4EF88F3211998BD000CA278 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
 		D4EF88F721199924000CA278 /* OpensourceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpensourceViewController.swift; sourceTree = "<group>"; };
-		D4F6A68A21E2EEDE00F233CD /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D4F6A68C21E2EEEF00F233CD /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D4F6A68E21E2EEF800F233CD /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D4F6A68F21E2F03300F233CD /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D4F6A69021E2F1FB00F233CD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D4F6A69321E2F22100F233CD /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		D4F6A69421E2F23200F233CD /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
-		D4F6A69521E2F24300F233CD /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4F8E25E21A7E1BA001BE2FA /* DeveloperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperViewController.swift; sourceTree = "<group>"; };
 		D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
@@ -391,8 +387,8 @@
 				D43FB68C214B464B005360A8 /* libssl.a in Frameworks */,
 				D43150662100839A00D30E8E /* CloudKit.framework in Frameworks */,
 				D43FB688214B464A005360A8 /* libcrypto.a in Frameworks */,
-				A3E8F6903199357E7FC0119E /* Pods_iconex_ios.framework in Frameworks */,
 				D43FB691214B464B005360A8 /* lib_ixShield.a in Frameworks */,
+				ADF5BDDAF7AC5913CD48E249 /* Pods_iconex_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,9 +400,9 @@
 			children = (
 				D43150652100839A00D30E8E /* CloudKit.framework */,
 				D44A948A2019CB0D00F60614 /* Security.framework */,
-				BCD89C531BED86CC68F293F7 /* Pods_iconex_ios.framework */,
 				D4A8C08321BE437500B41B36 /* NotificationCenter.framework */,
 				43894C361053A2695BBD24DA /* Pods_ICONex_Today.framework */,
+				43098EC8DD8637F504DC3499 /* Pods_iconex_ios.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -621,6 +617,7 @@
 			isa = PBXGroup;
 			children = (
 				D4EBB849205024E2007B07FB /* Menu.storyboard */,
+				D427DCE7221105BF0098D852 /* TokenAddListViewController.swift */,
 				D42ED583207751B4007E6DF8 /* TokenManageViewController.swift */,
 				D42ED58120774002007E6DF8 /* TokenListViewController.swift */,
 				D4402A94205139AA001BD003 /* WalletDetailMenuController.swift */,
@@ -661,6 +658,7 @@
 				D4EB066420C63730005AF9F1 /* ethToken.json */,
 				D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */,
 				D46DB4D620A1903500B632D9 /* Localizable.strings */,
+				D427DCE9221117050098D852 /* Tokens.json */,
 			);
 			path = iconex_ios;
 			sourceTree = "<group>";
@@ -855,10 +853,10 @@
 				D4728A0B2007040B00E0A899 /* Sources */,
 				D4728A0C2007040B00E0A899 /* Frameworks */,
 				D4728A0D2007040B00E0A899 /* Resources */,
-				8F4831E4B711B141BCFD46A5 /* [CP] Embed Pods Frameworks */,
 				D487AA1D211ABE0E003B262D /* ShellScript */,
 				D4653B56213CE0090059C042 /* Embed Frameworks */,
 				D4A8C09221BE437500B41B36 /* Embed App Extensions */,
+				66BCB88B95E9E7B60896A193 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -885,7 +883,7 @@
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.iCloud = {
 								enabled = 1;
@@ -902,14 +900,6 @@
 				en,
 				Base,
 				ko,
-				"zh-Hans",
-				"zh-Hant",
-				ja,
-				fr,
-				es,
-				"pt-PT",
-				it,
-				de,
 			);
 			mainGroup = D4728A062007040B00E0A899;
 			productRefGroup = D4728A102007040B00E0A899 /* Products */;
@@ -937,6 +927,7 @@
 				D481C4A2203EB0EC00A799D7 /* IXInputBox.xib in Resources */,
 				D43FB68B214B464B005360A8 /* ixShield_icon.foundation.iconex_license.txt in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
+				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				D483EDFE2091A4AE0039BA36 /* IXIndicator.xib in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
 				D4776D4921BE696C00A48472 /* Credits.plist in Resources */,
@@ -972,13 +963,15 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F4831E4B711B141BCFD46A5 /* [CP] Embed Pods Frameworks */ = {
+		66BCB88B95E9E7B60896A193 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
+			inputFileListPaths = (
+			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
@@ -997,6 +990,8 @@
 				"${BUILT_PRODUCTS_DIR}/web3swift/web3swift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
@@ -1017,7 +1012,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D487AA1D211ABE0E003B262D /* ShellScript */ = {
@@ -1062,6 +1057,7 @@
 				D404609021CB6D94001958F5 /* WalletCreator.swift in Sources */,
 				D4D33836203C205D001FD669 /* WalletCreateStepView.swift in Sources */,
 				D4DC3C6C219C0AFF0048ECF1 /* ConnectSendViewController.swift in Sources */,
+				D427DCE8221105BF0098D852 /* TokenAddListViewController.swift in Sources */,
 				D492D7F82068EB2E007D8B33 /* InfoStructs.swift in Sources */,
 				D44A94892019CA0100F60614 /* Cipher.swift in Sources */,
 				D44F9BC42071D912002F2A20 /* ETHSendViewController.swift in Sources */,
@@ -1140,14 +1136,6 @@
 			children = (
 				D46DB4D520A1903500B632D9 /* en */,
 				D46DB4D720A1903800B632D9 /* ko */,
-				D4F6A68A21E2EEDE00F233CD /* zh-Hans */,
-				D4F6A68C21E2EEEF00F233CD /* zh-Hant */,
-				D4F6A68E21E2EEF800F233CD /* ja */,
-				D4F6A68F21E2F03300F233CD /* fr */,
-				D4F6A69021E2F1FB00F233CD /* es */,
-				D4F6A69321E2F22100F233CD /* pt-PT */,
-				D4F6A69421E2F23200F233CD /* it */,
-				D4F6A69521E2F24300F233CD /* de */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1220,6 +1208,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1272,6 +1261,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1281,7 +1271,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F68B1E9098999D8E084B3FE5 /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1297,6 +1287,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/NSHC/**",
+					"$(SRCROOT)/Pods/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1304,7 +1295,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NSHC/**",
-					"$(PROJECT_DIR)/NSHC",
+					"$(SRCROOT)/Pods/**",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D NSHC";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
@@ -1324,7 +1315,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D9AD7C937884A8C3C68BC0F9 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1340,6 +1331,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/NSHC/**",
+					"$(SRCROOT)/Pods/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1347,7 +1339,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/NSHC/**",
-					"$(PROJECT_DIR)/NSHC",
+					"$(SRCROOT)/Pods/**",
 				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D NSHC";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;

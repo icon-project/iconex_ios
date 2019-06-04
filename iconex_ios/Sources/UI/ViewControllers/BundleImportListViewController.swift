@@ -120,8 +120,8 @@ class BundleImportListViewController: BaseViewController {
                     
                     switch result {
                     case .success(let value):
-                        self._balanceList[address] = value.value
-                        Balance.walletBalanceList[address] = value.value
+                        self._balanceList[address] = value
+                        Balance.walletBalanceList[address] = value
                         
                     case .failure(let error):
                         Log.Debug("Error - \(error)")
