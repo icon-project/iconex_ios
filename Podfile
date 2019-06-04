@@ -9,8 +9,7 @@ def import_pods
   pod 'Toast-Swift', '~> 4.0.0'
   pod 'scrypt', :git => 'https://github.com/a1ahn/scrypt-cryptoswift.git'
   pod 'Alamofire'
-#  pod 'ICONKit', '0.3.0'
-  pod 'ICONKit', :path => '~/works/ICONKit'
+  pod 'ICONKit'
   pod 'LicensesViewController'
 end
 
