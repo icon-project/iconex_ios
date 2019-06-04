@@ -854,8 +854,18 @@ class ICXSendViewController: BaseViewController {
             return stepLimit
         } else {
             if let data = self.inputData {
+                Log.Debug("data - \(data)")
+                var dumped: Int
+                if selectedDataType == .utf8 {
+                    let conv = ("\"0x" + data.data(using: .utf8)!.toHexString() + "\"")
+                    Log.Debug("conv - \(conv)")
+                    dumped = conv.bytes.count
+                } else {
+                    dumped = ("\"" + data + "\"").bytes.count
+                }
+                Log.Debug("dumped - \(dumped)")
                 guard let input = BigUInt(costs.input.prefix0xRemoved(), radix: 16) else { return nil }
-                let stepLimit = stepDefault + (input * BigUInt(data.bytes.count))
+                let stepLimit = stepDefault + (input * BigUInt(dumped))
                 
                 return stepLimit
             } else {
