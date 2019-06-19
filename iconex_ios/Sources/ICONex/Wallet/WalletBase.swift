@@ -21,7 +21,7 @@ protocol BaseWalletConvertible {
     var address: String? { get set }
     var __rawData: Data? { get set }
     var type: COINTYPE { get set }
-    var balance: BigUInt? { get set }
+    var balance: BigUInt? { get }
     var decimal: Int { get set }
     var createdDate: Date? { get set }
     var tokens: [TokenInfo]? { get set }
@@ -33,7 +33,10 @@ class BaseWallet: BaseWalletConvertible {
     var address: String?
     var __rawData: Data?
     var type: COINTYPE = .unknown
-    var balance: BigUInt?
+    var balance: BigUInt? {
+        guard let addr = address else { return nil }
+        return BalanceManager.shared.walletBalanceList[addr.add0xPrefix()]
+    }
     var createdDate: Date?
     var tokens: [TokenInfo]?
     

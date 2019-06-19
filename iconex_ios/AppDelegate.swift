@@ -27,9 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Define Connection Host
         ////////////////////////////////////
         
-        #if DEBUG
-            print("\(IXSWrapper.getVersion())")
-        #endif
         Configuration.setDebug()
         
         if let languages = UserDefaults.standard.array(forKey: "AppleLanguages"), let appleLan = languages.first as? String {

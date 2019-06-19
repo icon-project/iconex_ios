@@ -7,10 +7,12 @@
 //
 
 #import "IXSWrapper.h"
+#ifndef DEBUG
 #import "iX.h"
+#endif
 
 @implementation IXSWrapper
-
+#ifndef DEBUG
 + (void)systemCheck:(NSError *__autoreleasing *)error
 {
     struct ix_detected_pattern *patternInfo;
@@ -72,5 +74,5 @@
 {
     return [NSString stringWithCString:ix_getVersion() encoding:NSUTF8StringEncoding];
 }
-
+#endif
 @end

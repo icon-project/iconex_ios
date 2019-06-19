@@ -10,10 +10,12 @@
 
 @interface IXSWrapper : NSObject
 
+#ifndef DEBUG
 + (void)systemCheck: (NSError **)error;
 + (int)detectDebugger;
 + (void)intigrityCheck: (NSError **)error;
 + (void)setDebug;
 + (NSString *)getVersion;
+#endif
 
 @end

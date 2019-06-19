@@ -31,7 +31,7 @@ struct Configuration {
     
     static func systemCheck() -> Bool {
         var error: NSError? = nil
-        #if NSHC
+        #if !DEBUG
         IXSWrapper.systemCheck(&error)
         #endif
         return error == nil
@@ -39,7 +39,7 @@ struct Configuration {
     
     static func integrityCheck() -> Bool {
         
-        #if NSHC
+        #if !DEBUG
         var initInfo = ix_init_info()
         var verifyInfo = ix_verify_info()
         initInfo.integrity_type = IX_INTEGRITY_LOCAL
@@ -67,7 +67,7 @@ struct Configuration {
     }
     
     static func debuggerCheck() -> Bool {
-        #if NSHC && !DEBUG
+        #if !DEBUG
         let result = IXSWrapper.detectDebugger()
         
         return result != 1
@@ -79,7 +79,7 @@ struct Configuration {
     static func setDebug() {
     #if DEBUG
         #if NSHC
-        IXSWrapper.setDebug()
+//        IXSWrapper.setDebug()
         #endif
     #endif
     }

@@ -74,14 +74,12 @@ class WalletManager {
     }
     
     func loadWalletBy(info: WalletInfo) -> BaseWalletConvertible? {
-        guard var wallet = DB.walletBy(info: info) else { return nil }
-        wallet.balance = Balance.walletBalanceList[info.type == .eth ? info.address.add0xPrefix() : info.address]
+        guard let wallet = DB.walletBy(info: info) else { return nil }
         return wallet
     }
     
     func loadWalletBy(address: String, type: COINTYPE) -> BaseWalletConvertible? {
-        guard var wallet = DB.walletBy(address: address.lowercased(), type: type) else { return nil }
-        wallet.balance = Balance.walletBalanceList[type == .eth ? address.add0xPrefix() : address]
+        guard let wallet = DB.walletBy(address: address.lowercased(), type: type) else { return nil }
         return wallet
     }
     

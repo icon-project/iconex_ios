@@ -4,5 +4,7 @@
 
 #import "NSBundle+Language.h"
 
+#ifndef DEBUG
 #import "IXSWrapper.h"
 #import "iX.h"
+#endif
