@@ -183,7 +183,6 @@ class ConnectSendViewController: BaseViewController {
             self.sendButton.isEnabled = self.validateLimit()
             self.stepLimitInputBox.textField.resignFirstResponder()
         }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
         scrollView.rx.didEndScrollingAnimation.subscribe(onNext: {
             self.view.endEditing(true)
@@ -391,7 +390,6 @@ class ConnectSendViewController: BaseViewController {
             
             DispatchQueue.main.async {
                 self.setting()
-                self.calculateStepLimit()
                 self.sendButton.isEnabled = self.validateLimit()
             }
         }
@@ -486,29 +484,6 @@ class ConnectSendViewController: BaseViewController {
             }
             return false
         }
-        
-        var minLimit: Int = 0
-        if let cost = self.costs, let min = BigUInt(cost.defaultValue.prefix0xRemoved(), radix: 16) {
-            minLimit = Int(min)
-        }
-        var maxLimit = 0
-        if let max = self.maxLimit {
-            maxLimit = Int(max)
-        }
-        
-        if limit < minLimit {
-            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 0, 0, true).currencySeparated())
-            if showError { self.stepLimitInputBox.setState(.error, message)}
-            return false
-        }
-        
-        if limit > maxLimit {
-            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 0, 0, true).currencySeparated())
-            if showError { self.stepLimitInputBox.setState(.error, message)}
-            return false
-        }
-        
-        if showError { self.stepLimitInputBox.setState(.normal, nil) }
         
         if let stepPrice = self.stepPrice {
             let estimated = limit * stepPrice
