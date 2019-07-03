@@ -14,6 +14,7 @@ import web3swift
 import LocalAuthentication
 import CryptoSwift
 import Toast_Swift
+import ICONKit
 
 struct Tools {
     public enum LAStatus {
@@ -638,6 +639,27 @@ struct Alert {
         selectable.handler = { index in
             UserDefaults.standard.set(index, forKey: "Provider")
             UserDefaults.standard.synchronize()
+            
+            if let compl = completion {
+                compl()
+            }
+        }
+        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
+    }
+    
+    static func DeveloperNetworkProvider(source: UIViewController, completion: (() -> Void)?) {
+        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
+        selectable.handler = { index in
+            switch index {
+            case 0:
+                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
+            case 1:
+                ConnManager.provider = ICONService(provider: "https://testwallet.icon.foundation/api/v3", nid: "0x2")
+            case 2:
+                ConnManager.provider = ICONService(provider: "https://bicon.net.solidwallet.io/api/v3", nid: "0x3")
+            default:
+                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
+            }
             
             if let compl = completion {
                 compl()

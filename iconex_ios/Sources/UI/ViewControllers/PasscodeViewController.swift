@@ -83,22 +83,25 @@ class PasscodeViewController: UIViewController {
     func checkTouchID() {
         isInitiated = true
         if Tools.isTouchIDEnabled {
-//            if !Tools.touchIDChanged() {
-                Tools.touchIDVerification(message: "") { (status) in
-                    switch status {
-                    case .success:
+            Tools.touchIDVerification(message: "") { (status) in
+                switch status {
+                case .success:
+                    Conn.auth = true
+                    if Conn.isConnect {
+                        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
+                        let app = UIApplication.shared.delegate as! AppDelegate
+                        app.window?.rootViewController = connect
+                        
+                    } else {
                         let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
                         let app = UIApplication.shared.delegate as! AppDelegate
                         app.window?.rootViewController = main
                         break
-                        
-                    default:
-                        break
                     }
+                default:
+                    break
                 }
-//            } else {
-//                Alert.Basic(message: "Touch ID 변경 감지").show(self)
-//            }
+            }
         }
     }
     
@@ -110,9 +113,16 @@ class PasscodeViewController: UIViewController {
             if self.__passcode.length == 6 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     if Tools.verifyPasscode(code: self.__passcode) {
-                        let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-                        let app = UIApplication.shared.delegate as! AppDelegate
-                        app.window?.rootViewController = main
+                        Conn.auth = true
+                        if Conn.isConnect {
+                            let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
+                            let app = UIApplication.shared.delegate as! AppDelegate
+                            app.window?.rootViewController = connect
+                        } else {
+                            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+                            let app = UIApplication.shared.delegate as! AppDelegate
+                            app.window?.rootViewController = main
+                        }
                     } else {
                         self.headerLabel.text = "Passcode.Code.Retry".localized
                         self.__passcode = ""
