@@ -11,10 +11,14 @@ import BigInt
 
 class ViewController: UIViewController {
     @IBOutlet weak var bind: UIButton!
-    @IBOutlet weak var sign: UIButton!
     @IBOutlet weak var sendICX: UIButton!
     @IBOutlet weak var sendToken: UIButton!
+    @IBOutlet weak var sendMessage: UIButton!
+    @IBOutlet weak var sendCall: UIButton!
     @IBOutlet weak var developer: UIButton!
+    
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textViewSendButton: UIButton!
     
     var bindAddress: String? {
         willSet {
@@ -42,146 +46,220 @@ class ViewController: UIViewController {
         
         self.bindAddress = UserDefaults.standard.string(forKey: "binded")
     }
-
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+        self.view.endEditing(true)
+    }
+    
     func checkBind() {
         if let binded = bindAddress {
-            sign.isEnabled = true
             sendICX.isEnabled = true
             sendToken.isEnabled = true
+            sendMessage.isEnabled = true
+            sendCall.isEnabled = true
             bind.setTitle(binded, for: .normal)
         } else {
-            sign.isEnabled = false
             sendICX.isEnabled = false
             sendToken.isEnabled = false
+            sendMessage.isEnabled = false
+            sendCall.isEnabled = false
             bind.setTitle("Bind", for: .normal)
         }
     }
-
+    
     @IBAction func bind(_ sender: Any) {
         if bindAddress != nil {
             bindAddress = nil
         } else {
-            let param = ["id": 1, "method": "bind"] as [String: Any]
+            let param = ["redirect": "connect-sample://"] as [String: Any]
             
-            send(params: param)
+            send(command: .bind, params: param)
         }
-    }
-    
-    @IBAction func sign(_ sender: Any) {
-        let version = "0x3"
-        guard let from = bindAddress else { return }
-        let to = "hx5a05b58a25a1e5ea0f1d5715e1f655dffc1fb30a"
-        let value = "0xde0b6b3a7640000"
-        let stepLimit = "0x12345"
-        let timestamp = "0x563a6cf330136"
-        let nid = "0x3"
-        let nonce = "0x1"
-        
-        let param = ["id": 2, "method": "sign", "params":
-            ["version": version,
-             "from": from,
-             "to": to,
-             "value": value,
-             "stepLimit": stepLimit,
-             "timestamp": timestamp,
-             "nid": nid,
-             "nonce": nonce]
-            ] as [String: Any]
-        
-        send(params: param)
     }
     
     @IBAction func sendICX(_ sender: Any) {
         let alert = UIAlertController(title: "Send Coin", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.placeholder = "to"
-            textField.text = "hx5a05b58a25a1e5ea0f1d5715e1f655dffc1fb30a"
+            textField.text = "hx2e26d96bd7f1f46aac030725d1e302cf91420458"
         }
         alert.addTextField { (textField) in
             textField.placeholder = "Input value"
+            textField.text = "1"
+            textField.keyboardType = .decimalPad
+        }
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
+            var param = ["redirect": "connect-sample://"] as [String: Any]
+
+            var payload = [String: Any]()
+
+            if let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) {
+                let value = "0x" + String(big, radix: 16)
+                payload["value"] = value
+            }
+            let from = self.bindAddress!
+            payload["from"] = from
+
+            let toField = alert.textFields!.first!
+            if let to = toField.text, to != "" {
+                payload["to"] = to
+            }
+            param["payload"] = payload
+
+            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
+                self.send(command: .jsonrpc, params: param)
+            }))
+
+            self.present(confirm, animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    @IBAction func sendToken(_ sender: Any) {
+        let alert = UIAlertController(title: "Send Token", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "to"
+            textField.text = "hx2e26d96bd7f1f46aac030725d1e302cf91420458"
+        }
+        alert.addTextField { textField in
+            textField.placeholder = "Contract"
+            textField.text = "cxb1253480720b91a4a7417b0b08d7feb81bd7f0fb"
+        }
+        alert.addTextField { textField in
+            textField.placeholder = "Token value"
+            textField.keyboardType = .decimalPad
+            textField.text = "1"
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
+            var param = ["redirect": "connect-sample://"] as [String: Any]
+            
+            var payload = [String: Any]()
+            var params = [String: Any]()
+            
+            let toField = alert.textFields!.first!
+            if let to = toField.text, to != "" {
+                params["_to"] = to
+            }
+            let from = self.bindAddress!
+            payload["from"] = from
+            
+            let conField = alert.textFields![1]
+            if let contract = conField.text, contract != "" {
+                payload["to"] = contract
+            }
+            let valueField = alert.textFields!.last!
+            if let valueString = valueField.text, valueString != "", let big = BigUInt(valueString) {
+                let value = "0x" + String(big, radix: 8)
+                params["_value"] = value
+            }
+            payload["data"] = ["method": "transfer", "params": params]
+            param["payload"] = payload
+            
+            print(param)
+            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
+                self.send(command: .jsonrpc, params: param)
+            }))
+            self.present(confirm, animated: true, completion: nil)
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func sendMessage(_ sender: Any) {
+        let alert = UIAlertController(title: "Send Message", message: nil, preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "to"
+            textField.text = "hx2e26d96bd7f1f46aac030725d1e302cf91420458"
+        }
+        alert.addTextField { (textField) in
+            textField.placeholder = "Input value"
+            textField.text = "1"
             textField.keyboardType = .decimalPad
         }
         alert.addTextField { textField in
             textField.text = "Hello, ICON!"
             textField.placeholder = "Messages"
         }
+        
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
-            var param = ["id": 3, "method": "sendICX"] as [String: Any]
+            var param = ["redirect": "connect-sample://"] as [String: Any]
             
-            var params = [String: Any]()
+            var payload = [String: Any]()
             
             if let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) {
                 let value = "0x" + String(big, radix: 16)
-                params["value"] = value
+                payload["value"] = value
             }
             let from = self.bindAddress!
-            params["from"] = from
+            payload["from"] = from
             
             let toField = alert.textFields!.first!
             if let to = toField.text, to != "" {
-                params["to"] = to
+                payload["to"] = to
             }
             
             let mField = alert.textFields!.last!
-            if let msg = mField.text, msg != "", let message = msg.data(using: .utf8)?.toHexString() {
-                params["dataType"] = "message"
-                params["data"] = "0x" + message
+            if let msg = mField.text, msg != "" {
+                payload["dataType"] = "message"
+                payload["data"] = msg
             }
             
-            param["params"] = params
+            param["payload"] = payload
             
-            let confirm = UIAlertController(title: "", message: "\(params)", preferredStyle: .alert)
+            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
             confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
-                self.send(params: param)
+                self.send(command: .jsonrpc, params: param)
             }))
-            
             self.present(confirm, animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
-    @IBAction func sendToken(_ sender: Any) {
-        let alert = UIAlertController(title: "Send Token", message: nil, preferredStyle: .alert)
+    @IBAction func sendCall(_ sender: Any) {
+        let alert = UIAlertController(title: "Send Call", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "to"
-            textField.text = "hx5a05b58a25a1e5ea0f1d5715e1f655dffc1fb30a"
+            textField.placeholder = "Contract(to)"
         }
         alert.addTextField { textField in
-            textField.placeholder = "Contract"
-            textField.text = "cx4ae65c058d35b5bb8cef668be5113354448c0264"
+            textField.placeholder = "Method"
         }
         alert.addTextField { textField in
-            textField.placeholder = "Token value"
-            textField.keyboardType = .decimalPad
+            textField.placeholder = "Params"
+            textField.text = ""
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
-            var param = ["id": 4, "method": "sendToken"] as [String: Any]
+            var param = ["redirect": "connect-sample://"] as [String: Any]
+            var payload = [String: Any]()
             
-            var params = [String: Any]()
-            let toField = alert.textFields!.first!
-            if let to = toField.text, to != "" {
-                params["to"] = to
-            }
             let from = self.bindAddress!
-            params["from"] = from
+            payload["from"] = from
             
-            let conField = alert.textFields![1]
+            let conField = alert.textFields!.first!
             if let contract = conField.text, contract != "" {
-                params["contractAddress"] = contract
+                payload["to"] = contract
             }
-            let valueField = alert.textFields!.last!
-            if let valueString = valueField.text, valueString != "", let big = BigUInt(valueString) {
-                let value = "0x" + String(big, radix: 16)
-                params["value"] = value
+            let methodField = alert.textFields![1]
+            guard let method = methodField.text, method != "" else { return }
+            
+            let dataField = alert.textFields!.last!
+            if let dataString = dataField.text, dataString != "" {
+                guard let data = dataString.data(using: .utf8) else { return }
+                guard let jsonString = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any] else { return }
+                payload["data"] = ["method": method, "params": jsonString]
+            } else {
+                payload["data"] = ["method": method]
+                
             }
-            
-            param["params"] = params
-            
-            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
+            param["payload"] = payload
+            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
             confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
-                self.send(params: param)
+                self.send(command: .jsonrpc, params: param)
             }))
             self.present(confirm, animated: true, completion: nil)
         }))
@@ -195,14 +273,29 @@ class ViewController: UIViewController {
         }
     }
     
-    
-    func send(params: [String: Any]) {
+    @IBAction func testTextView(_ sender: Any) {
+        var param = ["redirect": "connect-sample://"] as [String: Any]
         
-        guard let data = try? JSONSerialization.data(withJSONObject: params, options: []) else { return }
+        guard let data = self.textView.text.data(using: .utf8) else { return }
+        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any] else { return }
+        
+        param["payload"] = json
+        
+        send(command: .jsonrpc, params: param)
+        
+    }
+    
+    func send(command: Command, params: [String: Any]) {
+        guard let data = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted) else { return }
+        
         let encoded = data.base64EncodedString()
-        let items = [URLQueryItem(name: "data", value: encoded), URLQueryItem(name: "caller", value: "connect-sample://")]
+        let items = [URLQueryItem(name: "data", value: encoded)]
+        
         var component = URLComponents(string: "iconex://")!
+        component.host = command.rawValue
         component.queryItems = items
+        
+        print(component)
         
         UIApplication.shared.open(component.url!, options: [:], completionHandler: { result in
             print("\(result)")
@@ -224,23 +317,27 @@ class ViewController: UIViewController {
             print("Invalid response")
             return }
         
-        print("id - \(response.id) , code - \(response.code) , result - \(response.result)")
+        let alert = UIAlertController(title: "Response", message: "Code : \(response.code)\nResult : \(response.result ?? "")\nMessage: \(response.message)", preferredStyle: .alert)
         
-        let alert = UIAlertController(title: "Response", message: "ID : \(response.id)\nCode : \(response.code)\nResult : \(response.result)", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-        guard response.code > 0 else { return }
         
-        // Just for sample. Parameter ID would be random-generated numbers.
-        if response.id == 1 {
-            // method == bind
+        self.present(alert, animated: true, completion: nil)
+        guard response.code >= 0 else { return }
+        
+        // Just for sample.
+        if response.result?.hasPrefix("hx") == true {
             self.bindAddress = response.result
         }
     }
 }
 
 struct Response: Decodable {
-    var id: Int
     var code: Int
-    var result: String
+    var message: String
+    var result: String?
+}
+
+enum Command: String {
+    case bind = "bind"
+    case jsonrpc = "JSON-RPC"
 }

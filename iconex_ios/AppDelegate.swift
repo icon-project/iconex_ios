@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    var connect: UIViewController?
+    var connect: ConnectViewController?
 
     var all: String?
     var necessary: String?
@@ -110,10 +110,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             return
         }
-        
-        if Conn.needTranslate {
-            toConnect()
-        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -122,7 +118,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         Conn.setMessage(source: url)
-//        toConnect()
+        Conn.isConnect = true
+        Balance.getWalletsBalance()
+        if !Tools.isPasscode() || Conn.auth {
+            toConnect()
+        }
         return true
     }
 
@@ -266,36 +266,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func toMain() {
-        dismissHierachy(controller: self.connect, completion: {
-            if let connect = self.connect {
-                if let nav = connect.presentingViewController as? UINavigationController {
-                    nav.viewControllers[0].dismiss(animated: false, completion: {
-                        self.connect = nil
-                    })
-                } else {
-                    connect.presentingViewController?.dismiss(animated: false, completion: {
-                        self.connect = nil
-                    })
-                }
-            }
+        self.window?.rootViewController?.dismiss(animated: false, completion: {
+            self.connect = nil
         })
+        if Conn.isConnect {
+            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+            let app = UIApplication.shared.delegate as! AppDelegate
+            app.window?.rootViewController = main
+        }
     }
     
     func toConnect() {
-        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
+        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
         
         self.connect = connect
         if let top = self.topViewController() {
             Log.Debug("Present - \(top)")
             top.present(connect!, animated: true, completion: nil)
         }
-    }
-    
-    func dismissHierachy(controller: UIViewController?, completion: (() -> Void)?) {
-        if let presented = controller?.presentedViewController {
-            dismissHierachy(controller: presented, completion: completion)
-        }
-        controller?.dismiss(animated: false, completion: completion)
     }
 }
 

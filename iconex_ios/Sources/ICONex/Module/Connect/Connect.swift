@@ -7,24 +7,28 @@
 
 import Foundation
 import UIKit
+import ICONKit
+import BigInt
 
 enum ConnectError: Error {
     case userCancel
     case invalidRequest
-    case invalidMethod
     case invalidJSON
+    case decode
+    case invalidBase64
+    case invalidMethod
     case invalidParameter(ParameterKey)
     case walletEmpty
+    case tokenEmpty
     case notFound(ParameterKey)
     case sameAddress
-    case decode
     case sign
     case insufficient(InsufficientError)
     case network(Any)
     case activateDeveloper
     
     enum ParameterKey {
-        case caller
+        case command
         case wallet(String)
         case id
         case method
@@ -54,22 +58,28 @@ extension ConnectError: LocalizedError {
         case .userCancel:
             return "Operation canceled by user."
             
-        case .decode:
+        case .invalidRequest :
+            return "Invalid request. Could not find data."
+            
+        case .invalidJSON, .decode:
             return "Parse error. (Invalid JSON type)"
             
-        case .invalidRequest, .invalidJSON:
-            return "Invalid request."
-            
+        case .invalidBase64:
+            return "Invalid base64 encoded string."
+        
         case .invalidMethod:
             return "Invalid method."
             
         case .walletEmpty:
             return "ICONex has no ICX wallet."
             
+        case .tokenEmpty:
+            return "Could not find token in wallet"
+            
         case .notFound(let key):
             switch key {
-            case .caller:
-                return "Could not find caller."
+            case .command:
+                return "Could not find command."
                 
             case .wallet(let address):
                 return "Could not find matched wallet. ('\(address)')"
@@ -109,17 +119,20 @@ extension ConnectError {
     public var code: Int {
         switch self {
         case .userCancel:
-            return -1000
-            
-        case .invalidJSON, .decode:
-            return -1001
-            
-        case .invalidRequest:
-            return -1002
+            return -1
             
         case .invalidMethod:
-            return -1003
+            return -1000
             
+        case .invalidRequest:
+            return -1001
+            
+        case .invalidBase64:
+            return -1002
+            
+        case .invalidJSON, .decode:
+            return -1003
+        
         case .sameAddress:
             return -3002
             
@@ -136,15 +149,18 @@ extension ConnectError {
             }
             
         case .walletEmpty:
-            return -2001
+            return -2000
+        
+        case .tokenEmpty:
+            return -2003
             
         case .notFound(let detail):
             switch detail {
-            case .caller:
+            case .command:
                 return -1004
                 
             case .wallet:
-                return -3001
+                return -3000
                 
             default:
                 return -2002
@@ -164,30 +180,27 @@ extension ConnectError {
 
 class Connect {
     static let shared = Connect()
+    var isConnect: Bool = false
+    var auth: Bool = false
     
     var source: URL? = nil
     
-    var caller: String!
+    var action: String?
+    
     var received: ConnectFormat?
     
     var isTranslated: Bool = false
+    
     var needTranslate: Bool {
         return source != nil && !isTranslated
     }
     
-    var action: String? {
-        return received?.method
-    }
-    
-    
     var tokenDecimal: Int?
     var tokenSymbol: String?
     
-    
-    private init() {}
-    
     public func setMessage(source: URL) {
         Log.Debug("Source - \(source)")
+        self.reset()
         self.source = source
     }
     
@@ -196,112 +209,111 @@ class Connect {
         guard isTranslated == false else { return }
         isTranslated = true
         
-        // Check request for developer mode
         guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
-            self.source = nil
-            throw ConnectError.invalidRequest }
-        
-        if let host = components.host, host.lowercased() == "developer" {
-            // Activating developer mode
-            UserDefaults.standard.set(true, forKey: "Developer")
-            UserDefaults.standard.synchronize()
-            
-            
-            self.reset()
-            throw ConnectError.activateDeveloper
-        }
-        
-        
-        guard let queries = components.queryItems else {
             self.source = nil
             throw ConnectError.invalidRequest
         }
         
-        guard let fromQuery = queries.filter({ $0.name == "caller" }).first, let from = fromQuery.value else {
+        guard let host = components.host else { throw ConnectError.notFound(.command) }
+        
+        switch host {
+        case "developer":
+            UserDefaults.standard.set(true, forKey: "Developer")
+            UserDefaults.standard.synchronize()
+            
             self.source = nil
-            throw ConnectError.notFound(.caller)
+            self.sendError(error: .activateDeveloper)
+            return
+            
+        case "bind":
+            self.action = host
+            
+        case "JSON-RPC":
+            self.action = host
+            
+        default:
+            self.source = nil
+            throw ConnectError.invalidParameter(.command)
         }
-        self.caller = from
+        
+        guard let queries = components.queryItems else {
+            self.source = nil
+            throw ConnectError.invalidRequest
+
+        }
         
         guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
             self.source = nil
-            throw ConnectError.notFound(.data)
+            throw ConnectError.invalidRequest
+
         }
         
         guard let data = Data(base64Encoded: dataParam) else {
             self.source = nil
-            throw ConnectError.decode
+            throw ConnectError.invalidBase64
         }
         
         let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        let received = try decoder.decode(ConnectFormat.self, from: data)
-        self.received = received
-        
-        if Conn.action == "bind" {
+        do {
+            let received = try decoder.decode(ConnectFormat.self, from: data)
+            self.received = received
+        } catch {
+            self.source = nil
+            throw ConnectError.invalidJSON
+        }
+
+        if Conn.action == "JSON-RPC" {
+            guard let from = Conn.received?.payload?.from else {
+                self.source = nil
+                throw ConnectError.notFound(.from)
+            }
+            guard let to = Conn.received?.payload?.to else {
+                self.source = nil
+                throw ConnectError.notFound(.to)
+            }
+            guard from != to else {
+                self.source = nil
+                throw ConnectError.sameAddress
+            }
             
-        } else {
-            guard let from = Conn.received?.params?["from"] as? String else { throw ConnectError.notFound(.from) }
-            guard let to = Conn.received?.params?["to"] as? String else { throw ConnectError.notFound(.to) }
-            guard Conn.received?.params?["value"] != nil else { throw ConnectError.notFound(.value) }
+            guard Validator.validateICXAddress(address: from) else {
+                self.source = nil
+                throw ConnectError.invalidParameter(.from)
+            }
             
-            guard from != to else { throw ConnectError.sameAddress}
+            guard Validator.validateIRCAddress(address: to) else { return }
             
-            switch Conn.action {
-            case "sign":
-                guard Conn.received?.params?["stepLimit"] != nil else { throw ConnectError.notFound(.stepLimit) }
-                guard Conn.received?.params?["timestamp"] != nil else { throw ConnectError.notFound(.timestamp) }
-                guard Conn.received?.params?["nid"] != nil else { throw ConnectError.notFound(.nid) }
-                guard Conn.received?.params?["nonce"] != nil else { throw ConnectError.notFound(.nonce) }
+            let tokenSymbolCall = Call<String>(from: from, to: to, method: "symbol", params: nil)
+            let tokenDecimalCall = Call<BigUInt>(from: from, to: to, method: "decimals", params: nil)
+            
+            let requestSymbol = WManager.service.call(tokenSymbolCall).execute()
+            switch requestSymbol {
+            case .success(let symbol):
+                Conn.tokenSymbol = symbol
                 
-            case "sendICX":
-                break
-                
-            case "sendToken":
-                guard Conn.received?.params?["contractAddress"] != nil else { throw ConnectError.notFound(.contractAddress) }
-                break
-                
-            default:
-                throw ConnectError.notFound(.method)
+            case .failure:
+                return
+            }
+            
+            guard Balance.tokenBalanceList[from]?[to] != nil else {
+                self.source = nil
+                throw ConnectError.tokenEmpty
+            }
+            let requestDecimal = WManager.service.call(tokenDecimalCall).execute()
+            switch requestDecimal {
+            case .success(let decimal):
+                Conn.tokenDecimal = Int(decimal)
+            case .failure(let error):
+                self.source = nil
+                throw ConnectError.network(error)
             }
         }
     }
     
     public func sendBind(address: String) {
-        let response = ConnectResponse(id: self.received!.id, code: 1, result: address)
-        
-        self.callback(response: response)
-        let app = UIApplication.shared.delegate as! AppDelegate
-        app.toMain()
-    }
-    
-    public func sendSignature(sign: String) {
-        let response = ConnectResponse(id: self.received!.id, code: 1, result: sign)
-        
-        self.callback(response: response)
-        let app = UIApplication.shared.delegate as! AppDelegate
-        app.toMain()
-    }
-    
-    public func sendICXHash(txHash: String) {
-        let response = ConnectResponse(id: self.received!.id, code: 1, result: txHash)
-        
-        self.callback(response: response)
-        
-        let app = UIApplication.shared.delegate as! AppDelegate
-        app.toMain()
-    }
-    
-    public func sendTokenHash(txHash: String) {
-        let response = ConnectResponse(id: self.received!.id, code: 1, result: txHash)
-        
-        self.callback(response: response)
-        let app = UIApplication.shared.delegate as! AppDelegate
-        app.toMain()
-    }
-    
-    public func sendError(error: ConnectError) {
-        let response = ConnectResponse(id: self.received!.id, code: error.code, result: error.errorDescription)
+        let response = ConnectResponse(code: 0, message: "Success", result: address)
         
         self.callback(response: response)
         let app = UIApplication.shared.delegate as! AppDelegate
@@ -311,7 +323,10 @@ class Connect {
     private func callback(response: ConnectResponse) {
         let encoder = JSONEncoder()
         
-        guard let encoded = try? encoder.encode(response), let caller = self.caller, var component = URLComponents(string: caller) else {
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        
+        guard let encoded = try? encoder.encode(response), let redirect = self.received?.redirect, var component = URLComponents(string: redirect) else {
+            self.reset()
             return
         }
         
@@ -324,58 +339,97 @@ class Connect {
     
     public func reset() {
         self.source = nil
-        self.caller = nil
+        self.action = nil
         self.received = nil
         self.tokenDecimal = nil
         self.tokenSymbol = nil
         isTranslated = false
+    }
+    
+    public func sendICXHash(txHash: String) {
+        let response = ConnectResponse(code: 0, message: "Success", result: txHash)
+
+        self.callback(response: response)
+
+        let app = UIApplication.shared.delegate as! AppDelegate
+        app.toMain()
+    }
+    
+    public func sendError(error: ConnectError) {
+        guard self.received?.redirect != nil else {
+            let app = UIApplication.shared.delegate as! AppDelegate
+            app.toMain()
+            Tools.toast(message: error.errorDescription ?? "Unknown Error")
+            return
+        }
+        let response = ConnectResponse(code: error.code, message: error.errorDescription ?? "Unknown Error", result: nil)
+        
+        self.callback(response: response)
+        let app = UIApplication.shared.delegate as! AppDelegate
+        app.toMain()
     }
 }
 
 let Conn = Connect.shared
 
 struct ConnectFormat: Decodable {
-    var id: Int
-    var method: String
-    var params: [String: Any]?
+    var redirect: String
+    var payload: ConnectTransaction?
+}
+
+struct ConnectResponse: Encodable {
+    var code: Int
+    var message: String
+    var result: String?
+}
+
+struct ConnectTransaction: Decodable {
+    // required
+    var from: String
+    var to: String
     
-    enum CodingKeys: String, CodingKey {
-        case id, method, origin, params
+    // optional
+    var value: String?
+    var nonce: String?
+    var dataType: String?
+    var data: DataValue?
+    
+    struct CallData: Decodable {
+        public var method: String
+        public var params: [String: Any]?
+        
+        enum CodingKeys: CodingKey {
+            case method, params
+        }
+        
+        init(from decoder: Decoder) throws {
+            let values = try decoder.container(keyedBy: CodingKeys.self)
+            self.method = try values.decode(String.self, forKey: .method)
+            self.params = try values.decode(Dictionary<String, Any>.self, forKey: .params)
+        }
     }
     
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        if container.contains(.id) {
-            self.id = try container.decode(Int.self, forKey: .id)
-        } else {
-            throw ConnectError.notFound(.id)
-        }
-        if container.contains(.method) {
-            self.method = try container.decode(String.self, forKey: .method)
-        } else {
-            throw ConnectError.notFound(.method)
-        }
-        if container.contains(.params) {
-            self.params = try container.decode([String: Any].self, forKey: .params)
+    enum DataValue: Decodable {
+        case call(CallData)
+        case message(String)
+        
+        public init(from decoder: Decoder) throws {
+            if let call = try? decoder.singleValueContainer().decode(CallData.self) {
+                self = .call(call)
+                return
+            }
+            else if let message = try? decoder.singleValueContainer().decode(String.self) {
+                self = .message(message)
+                return
+            }
+            throw ConnectError.invalidParameter(.data)
         }
     }
 }
 
-struct ConnectResponse: Encodable {
-    var id: Int
-    var code: Int
-    var result: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case id, code, result
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(code, forKey: .code)
-        if let result = self.result {
-            try container.encode(result, forKey: .result)
-        }
-    }
+class ConnectManager {
+    static let shared = ConnectManager()
+    var provider: ICONService = WManager.service
 }
+
+let ConnManager = ConnectManager.shared

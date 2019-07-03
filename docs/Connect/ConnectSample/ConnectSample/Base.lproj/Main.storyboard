@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2gB-5f-XOB">
-                                <rect key="frame" x="30" y="40" width="315" height="282"/>
+                                <rect key="frame" x="30" y="40" width="315" height="340"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-7E-dmc">
                                         <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
@@ -31,18 +31,18 @@
                                             <action selector="bind:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FIg-AL-mg5"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2OE-jK-ktb">
-                                        <rect key="frame" x="0.0" y="58" width="315" height="50"/>
-                                        <state key="normal" title="Sign"/>
-                                        <connections>
-                                            <action selector="sign:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8vB-K0-6qj"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mPg-AB-oZv">
-                                        <rect key="frame" x="0.0" y="116" width="315" height="50"/>
+                                        <rect key="frame" x="0.0" y="58" width="315" height="50"/>
                                         <state key="normal" title="Send ICX"/>
                                         <connections>
                                             <action selector="sendICX:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1fG-1C-sMu"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="avc-Wb-zVy">
+                                        <rect key="frame" x="0.0" y="116" width="315" height="50"/>
+                                        <state key="normal" title="Send Message"/>
+                                        <connections>
+                                            <action selector="sendMessage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qup-cO-Yxr"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SPv-oZ-4OD">
@@ -52,8 +52,15 @@
                                             <action selector="sendToken:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tkf-k0-foC"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRJ-Og-3pl">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OWq-am-drP">
                                         <rect key="frame" x="0.0" y="232" width="315" height="50"/>
+                                        <state key="normal" title="Send Call"/>
+                                        <connections>
+                                            <action selector="sendCall:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TmW-tS-Z4X"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRJ-Og-3pl">
+                                        <rect key="frame" x="0.0" y="290" width="315" height="50"/>
                                         <state key="normal" title="Activate Developer Mode"/>
                                         <connections>
                                             <action selector="activateDeveloper:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pln-0g-pyR"/>
@@ -61,11 +68,33 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Uor-6T-AUs">
+                                <rect key="frame" x="30" y="390" width="315" height="200"/>
+                                <color key="backgroundColor" white="0.050000000000000003" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="I6Q-GN-haO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGp-wE-WDx">
+                                <rect key="frame" x="30" y="603" width="315" height="30"/>
+                                <state key="normal" title="Test"/>
+                                <connections>
+                                    <action selector="testTextView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jw6-bf-a3E"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="2gB-5f-XOB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="CLm-XY-3e3"/>
+                            <constraint firstItem="Uor-6T-AUs" firstAttribute="top" secondItem="2gB-5f-XOB" secondAttribute="bottom" constant="10" id="Cpt-mM-fht"/>
                             <constraint firstItem="2gB-5f-XOB" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="RxP-sA-lMd"/>
+                            <constraint firstItem="Uor-6T-AUs" firstAttribute="trailing" secondItem="2gB-5f-XOB" secondAttribute="trailing" id="Sdd-fY-VOL"/>
+                            <constraint firstItem="WGp-wE-WDx" firstAttribute="leading" secondItem="Uor-6T-AUs" secondAttribute="leading" id="T75-VH-Ikb"/>
+                            <constraint firstItem="WGp-wE-WDx" firstAttribute="top" secondItem="Uor-6T-AUs" secondAttribute="bottom" constant="13" id="UcV-Cx-duT"/>
+                            <constraint firstItem="Uor-6T-AUs" firstAttribute="leading" secondItem="2gB-5f-XOB" secondAttribute="leading" id="vv8-SJ-43P"/>
+                            <constraint firstItem="WGp-wE-WDx" firstAttribute="trailing" secondItem="Uor-6T-AUs" secondAttribute="trailing" id="xyk-iN-mAe"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2gB-5f-XOB" secondAttribute="trailing" constant="30" id="yfr-0o-sCv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -73,13 +102,17 @@
                     <connections>
                         <outlet property="bind" destination="EbP-7E-dmc" id="9Bw-hf-4Ef"/>
                         <outlet property="developer" destination="vRJ-Og-3pl" id="Ns5-yh-OY8"/>
+                        <outlet property="sendCall" destination="OWq-am-drP" id="iRT-pb-hgk"/>
                         <outlet property="sendICX" destination="mPg-AB-oZv" id="jyR-1C-OOz"/>
+                        <outlet property="sendMessage" destination="avc-Wb-zVy" id="U9S-69-PWd"/>
                         <outlet property="sendToken" destination="SPv-oZ-4OD" id="gF7-Bn-vqj"/>
-                        <outlet property="sign" destination="2OE-jK-ktb" id="V8O-0s-OAb"/>
+                        <outlet property="textView" destination="Uor-6T-AUs" id="6Eh-3g-22B"/>
+                        <outlet property="textViewSendButton" destination="WGp-wE-WDx" id="qJd-4d-sIA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="56.799999999999997" y="27.436281859070466"/>
         </scene>
     </scenes>
 </document>

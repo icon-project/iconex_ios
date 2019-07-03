@@ -283,6 +283,7 @@
 "LockScreen.Setting.Passcode.Change.Error" = "잠금 번호가 일치하지 않습니다.\n설정할 잠금 번호 입력부터 다시 시도해주세요.";
  
 "Connect.Select.Title" = "지갑 선택";
+"Connect.Send.Developer.Title" = "네트워크 선택";
 "Connect.Send.Amount" = "송금할 코인 수량";
 "Connect.Send.to" = "송금 받는 주소";
 "Connect.Send.StepLimit" = "Step 한도";

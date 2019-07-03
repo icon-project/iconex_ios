@@ -34,20 +34,13 @@ class ConnectViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
         if Conn.needTranslate {
             do {
                 try Conn.translate()
                 proceed()
             } catch let e as ConnectError {
                 Log.Debug("ConnectError - \(e)")
-                
-                if e.code == ConnectError.activateDeveloper.code {
-                    Tools.toast(message: e.errorDescription!)
-                    self.dismiss(animated: true, completion: nil)
-                } else {
-                    Conn.sendError(error: e)
-                }
+                Conn.sendError(error: e)
             } catch {
                 Log.Debug("error - \(error)")
                 Conn.sendError(error: .invalidRequest)
@@ -73,112 +66,110 @@ class ConnectViewController: BaseViewController {
             return true
         }
         
-        guard let from = Conn.received?.params?["from"] as? String else {
-            Conn.sendError(error: .notFound(.from))
-            return false
-        }
-        guard WManager.loadWalletBy(address: from, type: .icx) != nil else {
-            Conn.sendError(error: .notFound(.address))
-            return false
-        }
-        
-        guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else { return false }
-        guard let value = Conn.received?.params?["value"] as? String else {
-            Conn.sendError(error: ConnectError.notFound(.value))
-            return false
-        }
-        guard let converted = BigUInt(value.prefix0xRemoved(), radix: 16) else {
-            Conn.sendError(error: ConnectError.invalidParameter(.value))
-            return false
-        }
-        
-        
-        
-        if Conn.action == "sendICX" {
-            if let balance = Balance.walletBalanceList[info.address] {
-                if balance == 0 || balance < converted {
-                    Conn.sendError(error: ConnectError.insufficient(.balance))
+        if Conn.action == "JSON-RPC" {
+            guard let from = Conn.received?.payload?.from else {
+                Conn.sendError(error: .notFound(.from))
+                return false
+            }
+            
+            guard let to = Conn.received?.payload?.to else {
+                Conn.sendError(error: .notFound(.to))
+                return false
+            }
+            
+            guard WManager.loadWalletBy(address: from, type: .icx) != nil else {
+                Conn.sendError(error: .notFound(.address))
+                return false
+            }
+            
+            guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else { return false }
+            
+            var requestedValue: BigUInt = 0
+            
+            if let value = Conn.received?.payload?.value {
+                guard let converted = BigUInt(value.prefix0xRemoved(), radix: 16) else {
+                    Conn.sendError(error: ConnectError.invalidParameter(.value))
                     return false
                 }
-            } else if !Balance.isBalanceLoadCompleted {
-                return false
+                requestedValue = converted
+            }
+            
+            if Conn.tokenSymbol != nil, Conn.tokenDecimal != nil {
+                if let balance = Balance.tokenBalanceList[from]?[to] {
+                    if balance == 0 || balance < requestedValue {
+                        Conn.sendError(error: .insufficient(.balance))
+                        return false
+                    }
+                } else if !Balance.isBalanceLoadCompleted {
+                    return false
+                } else {
+                    Conn.sendError(error: .network("Could not fetch balance."))
+                    return false
+                }
             } else {
-                Conn.sendError(error: ConnectError.network("Could not fetch balance."))
-                return false
-            }
-        } else if Conn.action == "sendToken" {
-            guard let contract = Conn.received?.params?["contractAddress"] as? String else {
-                Conn.sendError(error: ConnectError.notFound(.contractAddress))
-                return false
-            }
-            
-            let nameCall = Call<String>(from: from, to: contract, method: "symbol", params: nil)
-            let symbolResult = WManager.service.call(nameCall).execute()
-            
-            guard let symbol = symbolResult.value else {
-                if let error = symbolResult.error {
-                    Conn.sendError(error: .network(error))
-                }
-                return false }
-            Conn.tokenSymbol = symbol
-            
-            
-            let decimalCall = Call<String>(from: from, to: contract, method: "decimals", params: nil)
-            let decimalResult = WManager.service.call(decimalCall).execute()
-            
-            guard let decimal = decimalResult.value else {
-                if let error = decimalResult.error {
-                    Conn.sendError(error: .network(error))
-                }
-                return false }
-            Conn.tokenDecimal = Int(decimal.prefix0xRemoved(), radix: 16)
-
-            
-            let balanceResult = WManager.getIRCTokenBalance(dependedAddress: from, contractAddress: contract)
-            
-            switch balanceResult {
-            case .failure(let error):
-                Log.Debug("Error - \(error)")
-                Conn.sendError(error: ConnectError.network(error))
-                
-            case .success(let tokenBalance):
-                Balance.tokenBalanceList[from] = [contract: tokenBalance]
-                if tokenBalance < converted {
-                    Conn.sendError(error: ConnectError.insufficient(.balance))
+                if let balance = Balance.walletBalanceList[info.address] {
+                    if balance == 0 || balance < requestedValue {
+                        Conn.sendError(error: ConnectError.insufficient(.balance))
+                        return false
+                    }
+                } else if !Balance.isBalanceLoadCompleted {
+                    return false
+                } else {
+                    Conn.sendError(error: ConnectError.network("Could not fetch balance."))
                     return false
                 }
             }
         }
+        
         didProceed = true
         return true
     }
     
     func action() {
-        
-            let storyboard = UIStoryboard(name: "Connect", bundle: nil)
-            
-            if Conn.action == "bind" {
+        let storyboard = UIStoryboard(name: "Connect", bundle: nil)
+        guard let action = Conn.action else {
+            return
+        }
+        if (Conn.auth && Tools.isPasscode()) {
+            switch action {
+            case "bind":
                 let bind = storyboard.instantiateViewController(withIdentifier: "BindView")
                 self.present(bind, animated: true, completion: nil)
-            } else {
-                guard let from = Conn.received?.params?["from"] as? String else { return }
                 
+            case "JSON-RPC":
+                guard let from = Conn.received?.payload?.from else { return }
                 guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else {
                     Conn.sendError(error: ConnectError.notFound(.wallet(from)))
                     return
                 }
+                let sign = storyboard.instantiateViewController(withIdentifier: "BindPasswordView") as! BindPasswordViewController
+                sign.selectedWallet = info
+                self.present(sign, animated: true, completion: nil)
                 
-                switch Conn.action {
-                case "sign", "sendICX", "sendToken":
-                    let sign = storyboard.instantiateViewController(withIdentifier: "BindPasswordView") as! BindPasswordViewController
-                    sign.selectedWallet = info
-                    self.present(sign, animated: true, completion: nil)
-                    
-                default:
-                    Conn.sendError(error: ConnectError.notFound(.method))
+            default:
+                Conn.sendError(error: ConnectError.notFound(.method))
+                return
+            }
+        } else if Tools.isPasscode() == false {
+            switch action {
+            case "bind":
+                let bind = storyboard.instantiateViewController(withIdentifier: "BindView")
+                self.present(bind, animated: true, completion: nil)
+                
+            case "JSON-RPC":
+                guard let from = Conn.received?.payload?.from else { return }
+                guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else {
+                    Conn.sendError(error: ConnectError.notFound(.wallet(from)))
                     return
                 }
+                let sign = storyboard.instantiateViewController(withIdentifier: "BindPasswordView") as! BindPasswordViewController
+                sign.selectedWallet = info
+                self.present(sign, animated: true, completion: nil)
+                
+            default:
+                Conn.sendError(error: ConnectError.notFound(.method))
+                return
             }
-        
+        }
     }
 }
