@@ -282,6 +282,8 @@
 "LockScreen.Setting.Passcode.Change.Error" = "Passcodes do not match.\nPlease check again.";
 
 "Connect.Select.Title" = "Select Wallet";
+
+"Connect.Send.Developer.Title" = "Select Network";
 "Connect.Send.Amount" = "Transfer Amount";
 "Connect.Send.to" = "Receiving Address";
 "Connect.Send.StepLimit" = "Step Limit";
