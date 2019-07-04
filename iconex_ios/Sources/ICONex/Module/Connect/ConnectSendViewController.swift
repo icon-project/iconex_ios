@@ -125,18 +125,8 @@ class ConnectSendViewController: BaseViewController {
                         Conn.sendError(error: .notFound(.to))
                         return
                     }
-                    guard let value = call.params?["_value"] as? String else {
-                        Conn.sendError(error: .notFound(.value))
-                        return
-                    }
-                    
                     self.isTransfer = true
                     self.transferToAddress = toAddress
-                    guard let bigValue = BigUInt(value.prefix0xRemoved(), radix: decimal) else {
-                        Conn.sendError(error: .invalidParameter(.value))
-                        return
-                    }
-                    self.value = bigValue
                 }
             }
             
@@ -174,8 +164,6 @@ class ConnectSendViewController: BaseViewController {
                 self.sendButton.isEnabled = self.validateLimit()
             })
         }).disposed(by: disposeBag)
-        
-        stepLimitInputBox.textField.keyboardType = .numberPad
         stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
             self.stepLimitInputBox.setState(.focus)
         }).disposed(by: disposeBag)
@@ -183,6 +171,7 @@ class ConnectSendViewController: BaseViewController {
             self.sendButton.isEnabled = self.validateLimit()
             self.stepLimitInputBox.textField.resignFirstResponder()
         }).disposed(by: disposeBag)
+        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
         scrollView.rx.didEndScrollingAnimation.subscribe(onNext: {
             self.view.endEditing(true)
@@ -351,6 +340,9 @@ class ConnectSendViewController: BaseViewController {
         toTitle.text = "Connect.Send.to".localized
         to.text = self.isTransfer ? self.transferToAddress : Conn.received?.payload?.to
         stepLimitTitle.text = "Connect.Send.StepLimit".localized
+        stepLimitInputBox.textField.placeholder = "Placeholder.StepLimit".localized
+        stepLimitInputBox.setType(.integer)
+        stepLimitInputBox.setState(.normal)
         stepPriceTitle.text = "Connect.Send.StepPrice".localized
         stepPriceLabel.text = "-"
         stepPriceGloop.text = "ICX (- Gloop)"
@@ -390,6 +382,7 @@ class ConnectSendViewController: BaseViewController {
             
             DispatchQueue.main.async {
                 self.setting()
+                self.calculateStepLimit()
                 self.sendButton.isEnabled = self.validateLimit()
             }
         }
@@ -398,6 +391,22 @@ class ConnectSendViewController: BaseViewController {
     func setting() {
         
         if let decimal = Conn.tokenDecimal, let symbol = Conn.tokenSymbol {
+            guard let data = Conn.received?.payload?.data else { return }
+            
+            switch data {
+            case .call(let call):
+                guard let value = call.params?["_value"] as? String else {
+                    Conn.sendError(error: .notFound(.value))
+                    return
+                }
+                guard let bigValue = BigUInt(value.prefix0xRemoved(), radix: decimal) else {
+                    Conn.sendError(error: .invalidParameter(.value))
+                    return
+                }
+                self.value = bigValue
+            default: return
+            }
+            
             amount.text = Tools.bigToString(value: self.value, decimal: decimal, decimal, false).currencySeparated()
             if let exchange = Tools.balanceToExchange(self.value, from: symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: decimal) {
                 exchangeAmount.text = exchange + " USD"
@@ -485,6 +494,29 @@ class ConnectSendViewController: BaseViewController {
             return false
         }
         
+        var minLimit: Int = 0
+        if let cost = self.costs, let min = BigUInt(cost.defaultValue.prefix0xRemoved(), radix: 16) {
+            minLimit = Int(min)
+        }
+        var maxLimit = 0
+        if let max = self.maxLimit {
+            maxLimit = Int(max)
+        }
+        
+        if limit < minLimit {
+            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 0, 0, true).currencySeparated())
+            if showError { self.stepLimitInputBox.setState(.error, message)}
+            return false
+        }
+        
+        if limit > maxLimit {
+            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 0, 0, true).currencySeparated())
+            if showError { self.stepLimitInputBox.setState(.error, message)}
+            return false
+        }
+        
+        if showError { self.stepLimitInputBox.setState(.normal, nil) }
+        
         if let stepPrice = self.stepPrice {
             let estimated = limit * stepPrice
             self.estimatedFee.text = Tools.bigToString(value: estimated, decimal: 18, 18, false).currencySeparated()
@@ -562,12 +594,7 @@ class ConnectSendViewController: BaseViewController {
     
     @discardableResult
     func calculateStepLimit() -> BigUInt? {
-        guard let data = Conn.received?.payload?.data else {
-            let step = BigUInt(integerLiteral: 100000)
-            self.stepLimitInputBox.textField.text = String(step)
-            return step
-        }
-        let step = BigUInt(integerLiteral: 1000000)
+        let step: BigUInt = Conn.received?.payload?.data == nil ? BigUInt(integerLiteral: 100000) : BigUInt(integerLiteral: 1000000)
         self.stepLimitInputBox.textField.text = String(step)
         return step
     }
