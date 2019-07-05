@@ -330,6 +330,8 @@ class ConnectSendViewController: BaseViewController {
                 return
             }
             networkLabel.text = provider.name
+        } else {
+            developer.isHidden = true
         }
         
         amountTitle.text = "Connect.Send.Amount".localized + " (\(self.symbol))"
