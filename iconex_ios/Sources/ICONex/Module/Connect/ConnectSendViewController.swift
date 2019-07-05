@@ -73,7 +73,7 @@ class ConnectSendViewController: BaseViewController {
     
     var privateKey: PrivateKey?
     
-    var tx: ConnectTransaction?
+    var connTx: ConnectTransaction?
     
     private var transaction: Transaction?
     
@@ -92,33 +92,36 @@ class ConnectSendViewController: BaseViewController {
     }
     
     func generateTransaction() {
-        guard let txInfo = tx else {
+        guard let txInfo = connTx else {
             Conn.sendError(error: ConnectError.invalidJSON)
             return
         }
+        // test
+        let tx = Transaction()
+        tx.from = txInfo.from
+        tx.to = txInfo.to
+        tx.value = txInfo.value?.hexToBigUInt()
+        tx.nid = txInfo.nid
+        tx.nonce = txInfo.nonce
         
-        if let txData = txInfo.data {
-            switch txData {
+        if let timestamp = txInfo.timestamp {
+            tx.timestamp = timestamp
+        }
+        
+        tx.dataType = txInfo.dataType
+        if let data = txInfo.data {
+            switch data {
             case .message(let message):
-                transaction = MessageTransaction()
-                    .from(txInfo.from)
-                    .to(txInfo.to)
-                    .value((txInfo.value?.hexToBigUInt()) ?? 0)
-                    .nid(WManager.service.nid)
-                    .message(message)
+                tx.data = message
                 
             case .call(let call):
-                transaction = CallTransaction()
-                    .method(call.method)
-                    .params(call.params!)
-                    .from(txInfo.from)
-                    .to(txInfo.to)
-                    .value((txInfo.value?.hexToBigUInt()) ?? 0)
-                    .nid(WManager.service.nid)
+                var dataDic = [String: Any]()
+                dataDic["method"] = call.method
                 
-                if let value = txInfo.value?.hexToBigUInt() {
-                    transaction?.value(value)
+                if let params = call.params {
+                    dataDic["params"] = params
                 }
+                tx.data = dataDic
                 
                 if call.method == "transfer" {
                     guard let toAddress = call.params?["_to"] as? String else {
@@ -129,21 +132,16 @@ class ConnectSendViewController: BaseViewController {
                     self.transferToAddress = toAddress
                 }
             }
-            
-        } else {
-            transaction = Transaction()
-                .from(txInfo.from)
-                .to(txInfo.to)
-                .value((txInfo.value?.hexToBigUInt()) ?? 0)
-                .nid(WManager.service.nid)
         }
         
-        guard let tx = transaction, let estimatedStepCost = stepLimitInputBox.textField.text, let step = BigUInt(estimatedStepCost) else {
+        transaction = tx
+        
+        guard let createdTx = transaction, let estimatedStepCost = stepLimitInputBox.textField.text, let step = BigUInt(estimatedStepCost) else {
             stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)
             return
         }
         
-        tx.stepLimit(step)
+        createdTx.stepLimit(step)
     }
 
     func initialize() {
@@ -222,7 +220,7 @@ class ConnectSendViewController: BaseViewController {
         
         sendButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard let received = Conn.received else { return }
-            guard let to = received.payload?.to else { return }
+            guard let to = received.payload?.params.to else { return }
             guard let stepPrice = self.stepPrice else { return }
             guard let key = self.privateKey else { return }
             guard let balance = self.balance else { return }
@@ -298,7 +296,7 @@ class ConnectSendViewController: BaseViewController {
                         confirm.dismiss(animated: true, completion: {
                             if let error = result.error {
                                 Log.Debug("Error - \(error)")
-                                Tools.toast(message: "Error.CommonError".localized)
+                                Conn.sendError(error: .network(error))
                             } else if let hash = result.value {
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
                                 complete.handler = {
@@ -317,7 +315,7 @@ class ConnectSendViewController: BaseViewController {
     }
     
     func initializeUI() {
-        guard let from = Conn.received?.payload?.from, let wallet = WManager.loadWalletBy(address: from, type: .icx) as? ICXWallet else { return }
+        guard let from = Conn.received?.payload?.params.from, let wallet = WManager.loadWalletBy(address: from, type: .icx) as? ICXWallet else { return }
         
         navTitle.text = wallet.alias
         
@@ -338,7 +336,7 @@ class ConnectSendViewController: BaseViewController {
         amount.text = "-"
         exchangeAmount.text = "- USD"
         toTitle.text = "Connect.Send.to".localized
-        to.text = self.isTransfer ? self.transferToAddress : Conn.received?.payload?.to
+        to.text = self.isTransfer ? self.transferToAddress : Conn.received?.payload?.params.to
         stepLimitTitle.text = "Connect.Send.StepLimit".localized
         stepLimitInputBox.textField.placeholder = "Placeholder.StepLimit".localized
         stepLimitInputBox.setType(.integer)
@@ -364,7 +362,7 @@ class ConnectSendViewController: BaseViewController {
         dataView.isHidden = true
         dataViewHeight.constant = 0
         
-        self.data.isHidden = Conn.received?.payload?.data == nil ? true : false
+        self.data.isHidden = Conn.received?.payload?.params.data == nil ? true : false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -391,7 +389,7 @@ class ConnectSendViewController: BaseViewController {
     func setting() {
         
         if let decimal = Conn.tokenDecimal, let symbol = Conn.tokenSymbol {
-            guard let data = Conn.received?.payload?.data else { return }
+            guard let data = Conn.received?.payload?.params.data else { return }
             
             switch data {
             case .call(let call):
@@ -414,7 +412,7 @@ class ConnectSendViewController: BaseViewController {
                 exchangeAmount.text = "- USD"
             }
         } else {
-            let valueString = Conn.received?.payload?.value ?? "0"
+            let valueString = Conn.received?.payload?.params.value ?? "0"
             guard let value = BigUInt(valueString.prefix0xRemoved(), radix: 16) else {
                 Conn.sendError(error: ConnectError.invalidParameter(.value))
                 return
@@ -428,16 +426,23 @@ class ConnectSendViewController: BaseViewController {
                 exchangeAmount.text = "- USD"
             }
         }
-        if let data = Conn.received?.payload?.data {
-            var dataInfo: String
-            var callData: [String: Any]
-            
+        if let data = Conn.received?.payload?.params.data {
             switch data {
             case .message(let message):
-                dataInfo = message
-                dataLabel.text = dataInfo
+                if message == "" {
+                    dataLabel.text = message
+                    return
+                }
+                
+                guard let msgData = message.prefix0xRemoved().hexToData(), let str = String(data: msgData, encoding: .utf8) else {
+                    Conn.sendError(error: .invalidParameter(.data))
+                    return
+        
+                }
+                dataLabel.text = str
                 
             case .call(let call):
+                var callData: [String: Any]
                 callData = ["method": call.method]
                 
                 guard let params: [String: Any] = call.params else { return }
@@ -567,7 +572,7 @@ class ConnectSendViewController: BaseViewController {
     
     func refreshBalance() -> BigUInt? {
         let provider = self.provider
-        guard let fromAddress = Conn.received?.payload?.from else { return nil }
+        guard let fromAddress = Conn.received?.payload?.params.from else { return nil }
         
         if symbol == "ICX" {
             let request = provider.getBalance(address: fromAddress).execute()
@@ -579,7 +584,7 @@ class ConnectSendViewController: BaseViewController {
                 return nil
             }
         } else {
-            guard let contractAddress = Conn.received?.payload?.to else { return nil }
+            guard let contractAddress = Conn.received?.payload?.params.to else { return nil }
             let call = Call<BigUInt>(from: fromAddress, to: contractAddress, method: "balanceOf", params: ["_owner": fromAddress])
             let request = provider.call(call).execute()
             
@@ -594,7 +599,7 @@ class ConnectSendViewController: BaseViewController {
     
     @discardableResult
     func calculateStepLimit() -> BigUInt? {
-        let step: BigUInt = Conn.received?.payload?.data == nil ? BigUInt(integerLiteral: 100000) : BigUInt(integerLiteral: 1000000)
+        let step: BigUInt = Conn.received?.payload?.params.data == nil ? BigUInt(integerLiteral: 100000) : BigUInt(integerLiteral: 1000000)
         self.stepLimitInputBox.textField.text = String(step)
         return step
     }

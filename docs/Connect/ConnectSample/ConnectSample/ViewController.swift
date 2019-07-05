@@ -92,23 +92,29 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
-
-            var payload = [String: Any]()
-
-            if let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) {
-                let value = "0x" + String(big, radix: 16)
-                payload["value"] = value
-            }
+            guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
+            
             let from = self.bindAddress!
-            payload["from"] = from
 
             let toField = alert.textFields!.first!
-            if let to = toField.text, to != "" {
-                payload["to"] = to
-            }
+            guard let to = toField.text, to != "" else { return }
+            
+            let coinTransfer: Transaction = Transaction()
+                .from(from)
+                .to(to)
+                .value(big)
+                .nid("0x1")
+                .nonce("0x1")
+            
+            guard let txData = try? coinTransfer.toDic() else { return }
+            
+            let payload = self.generateJSONRPC(params: txData)
+            
             param["payload"] = payload
-
-            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
+            
+            print(param)
+            
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
             confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
                 self.send(command: .jsonrpc, params: param)
             }))
@@ -137,30 +143,32 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
             
-            var payload = [String: Any]()
-            var params = [String: Any]()
+            let from = self.bindAddress!
             
             let toField = alert.textFields!.first!
-            if let to = toField.text, to != "" {
-                params["_to"] = to
-            }
-            let from = self.bindAddress!
-            payload["from"] = from
+            guard let to = toField.text, to != "" else { return }
             
             let conField = alert.textFields![1]
-            if let contract = conField.text, contract != "" {
-                payload["to"] = contract
-            }
+            guard let contract = conField.text, contract != "" else { return }
+            
             let valueField = alert.textFields!.last!
-            if let valueString = valueField.text, valueString != "", let big = BigUInt(valueString) {
-                let value = "0x" + String(big, radix: 8)
-                params["_value"] = value
-            }
-            payload["data"] = ["method": "transfer", "params": params]
+            guard let valueString = valueField.text, valueString != "", let bigValue = BigUInt(valueString) else { return }
+            let value = "0x" + String(bigValue, radix: 8)
+            
+            let tokenTransaction = CallTransaction()
+                .from(from)
+                .to(contract)
+                .nid("0x2")
+                .method("transfer")
+                .params(["_to": to, "_value": value])
+            
+            guard let txData = try? tokenTransaction.toDic() else { return }
+            
+            let payload = self.generateJSONRPC(params: txData)
+            
             param["payload"] = payload
             
-            print(param)
-            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
             confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
                 self.send(command: .jsonrpc, params: param)
             }))
@@ -189,29 +197,31 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
             
-            var payload = [String: Any]()
-            
-            if let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) {
-                let value = "0x" + String(big, radix: 16)
-                payload["value"] = value
-            }
             let from = self.bindAddress!
-            payload["from"] = from
             
             let toField = alert.textFields!.first!
-            if let to = toField.text, to != "" {
-                payload["to"] = to
-            }
+            guard let to = toField.text, to != "" else { return }
             
             let mField = alert.textFields!.last!
-            if let msg = mField.text, msg != "" {
-                payload["dataType"] = "message"
-                payload["data"] = msg
+            guard let msg = mField.text, msg != "" else { return }
+            
+            let message = MessageTransaction()
+                .from(from)
+                .to(to)
+                .nid("0x2")
+                .message(msg)
+            
+            
+            if let valueString = alert.textFields![1].text, valueString != "", let bigValue = BigUInt(valueString) {
+                message.value(bigValue)
             }
+            
+            guard let txData = try? message.toDic() else { return }
+            let payload = self.generateJSONRPC(params: txData)
             
             param["payload"] = payload
             
-            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
             confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
                 self.send(command: .jsonrpc, params: param)
             }))
@@ -224,9 +234,11 @@ class ViewController: UIViewController {
         let alert = UIAlertController(title: "Send Call", message: nil, preferredStyle: .alert)
         alert.addTextField { textField in
             textField.placeholder = "Contract(to)"
+            textField.text = "cx334db6519871cb2bfd154cec0905ced4ea142de1"
         }
         alert.addTextField { textField in
             textField.placeholder = "Method"
+            textField.text = "reserve"
         }
         alert.addTextField { textField in
             textField.placeholder = "Params"
@@ -235,29 +247,36 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
-            var payload = [String: Any]()
             
             let from = self.bindAddress!
-            payload["from"] = from
             
             let conField = alert.textFields!.first!
-            if let contract = conField.text, contract != "" {
-                payload["to"] = contract
-            }
+            guard let contract = conField.text, contract != "" else { return }
+            
             let methodField = alert.textFields![1]
             guard let method = methodField.text, method != "" else { return }
+            
+            let callTx = CallTransaction()
+                .from(from)
+                .to(contract)
+                .nid("0x1")
+                .method(method)
             
             let dataField = alert.textFields!.last!
             if let dataString = dataField.text, dataString != "" {
                 guard let data = dataString.data(using: .utf8) else { return }
                 guard let jsonString = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any] else { return }
-                payload["data"] = ["method": method, "params": jsonString]
-            } else {
-                payload["data"] = ["method": method]
-                
+
+                callTx.params(jsonString)
             }
+            
+            guard let txData = try? callTx.toDic() else { return }
+            
+            let payload = self.generateJSONRPC(params: txData)
+            
             param["payload"] = payload
-            let confirm = UIAlertController(title: "", message: "\(payload)", preferredStyle: .alert)
+            
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
             confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
                 self.send(command: .jsonrpc, params: param)
             }))
@@ -277,12 +296,19 @@ class ViewController: UIViewController {
         var param = ["redirect": "connect-sample://"] as [String: Any]
         
         guard let data = self.textView.text.data(using: .utf8) else { return }
-        guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any] else { return }
         
-        param["payload"] = json
-        
-        send(command: .jsonrpc, params: param)
-        
+        do {
+            let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String: Any]
+            param["payload"] = json
+            
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
+                self.send(command: .jsonrpc, params: param)
+            }))
+            self.present(confirm, animated: true, completion: nil)
+        } catch let error as NSError {
+            print(error)
+        }
     }
     
     func send(command: Command, params: [String: Any]) {
@@ -328,6 +354,19 @@ class ViewController: UIViewController {
         if response.result?.hasPrefix("hx") == true {
             self.bindAddress = response.result
         }
+    }
+    
+    func generateJSONRPC(params: [String: Any]) -> [String: Any] {
+        var basic = ["jsonrpc": "2.0",
+                     "method": "icx_sendTransaction",
+                     "id": getID()] as [String : Any]
+        
+        basic["params"] = params
+        return basic
+    }
+    
+    func getID() -> Int {
+        return Int(arc4random_uniform(9999))
     }
 }
 

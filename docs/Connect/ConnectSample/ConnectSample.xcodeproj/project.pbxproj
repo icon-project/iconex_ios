@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -80,10 +80,10 @@
 			children = (
 				D4F5EEC621995CA500E477FB /* AppDelegate.swift */,
 				D4F5EEC821995CA500E477FB /* ViewController.swift */,
+				D4F5EED221995CA600E477FB /* Info.plist */,
 				D4F5EECA21995CA500E477FB /* Main.storyboard */,
 				D4F5EECD21995CA600E477FB /* Assets.xcassets */,
 				D4F5EECF21995CA600E477FB /* LaunchScreen.storyboard */,
-				D4F5EED221995CA600E477FB /* Info.plist */,
 			);
 			path = ConnectSample;
 			sourceTree = "<group>";

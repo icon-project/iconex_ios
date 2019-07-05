@@ -18,83 +18,88 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2gB-5f-XOB">
-                                <rect key="frame" x="30" y="40" width="315" height="340"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="2gB-5f-XOB">
+                                <rect key="frame" x="30" y="20" width="315" height="477"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EbP-7E-dmc">
-                                        <rect key="frame" x="0.0" y="0.0" width="315" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="Zq4-ft-V7f"/>
-                                        </constraints>
+                                        <rect key="frame" x="0.0" y="0.0" width="315" height="30"/>
                                         <state key="normal" title="Bind"/>
                                         <connections>
                                             <action selector="bind:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FIg-AL-mg5"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mPg-AB-oZv">
-                                        <rect key="frame" x="0.0" y="58" width="315" height="50"/>
+                                        <rect key="frame" x="0.0" y="39.5" width="315" height="30"/>
                                         <state key="normal" title="Send ICX"/>
                                         <connections>
                                             <action selector="sendICX:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1fG-1C-sMu"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="avc-Wb-zVy">
-                                        <rect key="frame" x="0.0" y="116" width="315" height="50"/>
+                                        <rect key="frame" x="0.0" y="79" width="315" height="30"/>
                                         <state key="normal" title="Send Message"/>
                                         <connections>
                                             <action selector="sendMessage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Qup-cO-Yxr"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SPv-oZ-4OD">
-                                        <rect key="frame" x="0.0" y="174" width="315" height="50"/>
+                                        <rect key="frame" x="0.0" y="118.5" width="315" height="30"/>
                                         <state key="normal" title="Send Token"/>
                                         <connections>
                                             <action selector="sendToken:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Tkf-k0-foC"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OWq-am-drP">
-                                        <rect key="frame" x="0.0" y="232" width="315" height="50"/>
+                                        <rect key="frame" x="0.0" y="158.5" width="315" height="30"/>
                                         <state key="normal" title="Send Call"/>
                                         <connections>
                                             <action selector="sendCall:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TmW-tS-Z4X"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vRJ-Og-3pl">
-                                        <rect key="frame" x="0.0" y="290" width="315" height="50"/>
+                                        <rect key="frame" x="0.0" y="198" width="315" height="30"/>
                                         <state key="normal" title="Activate Developer Mode"/>
                                         <connections>
                                             <action selector="activateDeveloper:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pln-0g-pyR"/>
                                         </connections>
                                     </button>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Uor-6T-AUs">
+                                        <rect key="frame" x="0.0" y="237.5" width="315" height="200"/>
+                                        <color key="backgroundColor" white="0.050000000000000003" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="p8c-QM-xja"/>
+                                        </constraints>
+                                        <string key="text">{
+    "id": 1234,
+    "jsonrpc": "2.0",
+    "method": "icx_sendTransaction",
+    "params": {
+        "data": "0x48656c6c6f2c2049434f4e21",
+        "nid": "0x2",
+        "from": "hx9043346dbaa72bca42ecec6b6e22845a4047426d",
+        "to": "hx2e26d96bd7f1f46aac030725d1e302cf91420458",
+        "version": "0x3",
+        "nonce": "0x1"
+    }
+}</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGp-wE-WDx">
+                                        <rect key="frame" x="0.0" y="447" width="315" height="30"/>
+                                        <state key="normal" title="JSON-RPC Test"/>
+                                        <connections>
+                                            <action selector="testTextView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jw6-bf-a3E"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </stackView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Uor-6T-AUs">
-                                <rect key="frame" x="30" y="390" width="315" height="200"/>
-                                <color key="backgroundColor" white="0.050000000000000003" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="I6Q-GN-haO"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WGp-wE-WDx">
-                                <rect key="frame" x="30" y="603" width="315" height="30"/>
-                                <state key="normal" title="Test"/>
-                                <connections>
-                                    <action selector="testTextView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Jw6-bf-a3E"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="2gB-5f-XOB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="30" id="CLm-XY-3e3"/>
-                            <constraint firstItem="Uor-6T-AUs" firstAttribute="top" secondItem="2gB-5f-XOB" secondAttribute="bottom" constant="10" id="Cpt-mM-fht"/>
-                            <constraint firstItem="2gB-5f-XOB" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="RxP-sA-lMd"/>
-                            <constraint firstItem="Uor-6T-AUs" firstAttribute="trailing" secondItem="2gB-5f-XOB" secondAttribute="trailing" id="Sdd-fY-VOL"/>
-                            <constraint firstItem="WGp-wE-WDx" firstAttribute="leading" secondItem="Uor-6T-AUs" secondAttribute="leading" id="T75-VH-Ikb"/>
-                            <constraint firstItem="WGp-wE-WDx" firstAttribute="top" secondItem="Uor-6T-AUs" secondAttribute="bottom" constant="13" id="UcV-Cx-duT"/>
-                            <constraint firstItem="Uor-6T-AUs" firstAttribute="leading" secondItem="2gB-5f-XOB" secondAttribute="leading" id="vv8-SJ-43P"/>
-                            <constraint firstItem="WGp-wE-WDx" firstAttribute="trailing" secondItem="Uor-6T-AUs" secondAttribute="trailing" id="xyk-iN-mAe"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2gB-5f-XOB" secondAttribute="bottom" constant="170" id="MEx-C6-tYZ"/>
+                            <constraint firstItem="2gB-5f-XOB" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="eci-YX-upn"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2gB-5f-XOB" secondAttribute="trailing" constant="30" id="yfr-0o-sCv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>

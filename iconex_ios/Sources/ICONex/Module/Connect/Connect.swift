@@ -205,6 +205,7 @@ class Connect {
     }
     
     public func translate() throws {
+        Balance.getWalletsBalance()
         guard let source = self.source else { return }
         guard isTranslated == false else { return }
         isTranslated = true
@@ -263,13 +264,18 @@ class Connect {
             self.source = nil
             throw ConnectError.invalidJSON
         }
-
+        
         if Conn.action == "JSON-RPC" {
-            guard let from = Conn.received?.payload?.from else {
+            guard self.received?.payload?.method == "icx_sendTransaction" else {
+                self.source = nil
+                throw ConnectError.invalidMethod
+            }
+            
+            guard let from = Conn.received?.payload?.params.from else {
                 self.source = nil
                 throw ConnectError.notFound(.from)
             }
-            guard let to = Conn.received?.payload?.to else {
+            guard let to = Conn.received?.payload?.params.to else {
                 self.source = nil
                 throw ConnectError.notFound(.to)
             }
@@ -372,23 +378,31 @@ class Connect {
 
 let Conn = Connect.shared
 
-struct ConnectFormat: Decodable {
-    var redirect: String
-    var payload: ConnectTransaction?
-}
-
 struct ConnectResponse: Encodable {
     var code: Int
     var message: String
     var result: String?
 }
 
+struct ConnectFormat: Decodable {
+    var redirect: String
+    var payload: ConnectRequest?
+}
+
+struct ConnectRequest: Decodable {
+    var id: Int64
+    var jsonrpc: String
+    var method: String
+    var params: ConnectTransaction
+}
+
 struct ConnectTransaction: Decodable {
-    // required
-    var from: String
-    var to: String
-    
-    // optional
+    var version: String?
+    var stepLimit: BigUInt?
+    var timestamp: String?
+    var nid: String?
+    var from: String?
+    var to: String?
     var value: String?
     var nonce: String?
     var dataType: String?

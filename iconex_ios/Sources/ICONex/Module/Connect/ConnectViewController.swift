@@ -67,12 +67,12 @@ class ConnectViewController: BaseViewController {
         }
         
         if Conn.action == "JSON-RPC" {
-            guard let from = Conn.received?.payload?.from else {
+            guard let from = Conn.received?.payload?.params.from else {
                 Conn.sendError(error: .notFound(.from))
                 return false
             }
             
-            guard let to = Conn.received?.payload?.to else {
+            guard let to = Conn.received?.payload?.params.to else {
                 Conn.sendError(error: .notFound(.to))
                 return false
             }
@@ -86,7 +86,7 @@ class ConnectViewController: BaseViewController {
             
             var requestedValue: BigUInt = 0
             
-            if let value = Conn.received?.payload?.value {
+            if let value = Conn.received?.payload?.params.value {
                 guard let converted = BigUInt(value.prefix0xRemoved(), radix: 16) else {
                     Conn.sendError(error: ConnectError.invalidParameter(.value))
                     return false
@@ -130,34 +130,14 @@ class ConnectViewController: BaseViewController {
         guard let action = Conn.action else {
             return
         }
-        if (Conn.auth && Tools.isPasscode()) {
+        if (Conn.auth && Tools.isPasscode()) || !Tools.isPasscode() {
             switch action {
             case "bind":
                 let bind = storyboard.instantiateViewController(withIdentifier: "BindView")
                 self.present(bind, animated: true, completion: nil)
                 
             case "JSON-RPC":
-                guard let from = Conn.received?.payload?.from else { return }
-                guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else {
-                    Conn.sendError(error: ConnectError.notFound(.wallet(from)))
-                    return
-                }
-                let sign = storyboard.instantiateViewController(withIdentifier: "BindPasswordView") as! BindPasswordViewController
-                sign.selectedWallet = info
-                self.present(sign, animated: true, completion: nil)
-                
-            default:
-                Conn.sendError(error: ConnectError.notFound(.method))
-                return
-            }
-        } else if Tools.isPasscode() == false {
-            switch action {
-            case "bind":
-                let bind = storyboard.instantiateViewController(withIdentifier: "BindView")
-                self.present(bind, animated: true, completion: nil)
-                
-            case "JSON-RPC":
-                guard let from = Conn.received?.payload?.from else { return }
+                guard let from = Conn.received?.payload?.params.from else { return }
                 guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else {
                     Conn.sendError(error: ConnectError.notFound(.wallet(from)))
                     return

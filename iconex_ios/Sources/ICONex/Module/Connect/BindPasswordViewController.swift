@@ -109,7 +109,7 @@ class BindPasswordViewController: BaseViewController {
         guard let from = wallet.address else { return }
         
         if let decimal = Conn.tokenDecimal, let symbol = Conn.tokenSymbol {
-            guard let contract = Conn.received?.payload?.to else { return }
+            guard let contract = Conn.received?.payload?.params.to else { return }
             guard let balance = Balance.tokenBalanceList[from]?[contract] else { return }
             
             self.walletAmount.text = Tools.bigToString(value: balance, decimal: decimal, decimal, true).currencySeparated()
@@ -146,7 +146,7 @@ class BindPasswordViewController: BaseViewController {
             Conn.sendError(error: .invalidJSON)
             return
         }
-        sendView.tx = payload
+        sendView.connTx = payload.params
         self.present(sendView, animated: true, completion: nil)
     }
 }

@@ -119,6 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         Conn.setMessage(source: url)
         Conn.isConnect = true
+        Exchange.getExchangeList()
         Balance.getWalletsBalance()
         if !Tools.isPasscode() || Conn.auth {
             toConnect()
