@@ -90,7 +90,7 @@ class ViewController: UIViewController {
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: "Send Loop", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
             guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
             
@@ -119,6 +119,75 @@ class ViewController: UIViewController {
                 self.send(command: .jsonrpc, params: param)
             }))
 
+            self.present(confirm, animated: true, completion: nil)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Send gLoop", style: .default, handler: { (action) in
+            var param = ["redirect": "connect-sample://"] as [String: Any]
+            guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
+            
+            let from = self.bindAddress!
+            
+            let gLoop = BigUInt(10).power(9)
+            
+            let toField = alert.textFields!.first!
+            guard let to = toField.text, to != "" else { return }
+            
+            let coinTransfer: Transaction = Transaction()
+                .from(from)
+                .to(to)
+                .value(big.multiplied(by: gLoop))
+                .nid("0x1")
+                .nonce("0x1")
+            
+            guard let txData = try? coinTransfer.toDic() else { return }
+            
+            let payload = self.generateJSONRPC(params: txData)
+            
+            param["payload"] = payload
+            
+            print(param)
+            
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
+                self.send(command: .jsonrpc, params: param)
+            }))
+            
+            self.present(confirm, animated: true, completion: nil)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Send ICX", style: .default, handler: { (action) in
+            var param = ["redirect": "connect-sample://"] as [String: Any]
+            guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
+            
+            let from = self.bindAddress!
+            
+            let icx = BigUInt(10).power(18)
+
+            
+            let toField = alert.textFields!.first!
+            guard let to = toField.text, to != "" else { return }
+            
+            let coinTransfer: Transaction = Transaction()
+                .from(from)
+                .to(to)
+                .value(big.multiplied(by: icx))
+                .nid("0x1")
+                .nonce("0x1")
+            
+            guard let txData = try? coinTransfer.toDic() else { return }
+            
+            let payload = self.generateJSONRPC(params: txData)
+            
+            param["payload"] = payload
+            
+            print(param)
+            
+            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
+            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
+                self.send(command: .jsonrpc, params: param)
+            }))
+            
             self.present(confirm, animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
