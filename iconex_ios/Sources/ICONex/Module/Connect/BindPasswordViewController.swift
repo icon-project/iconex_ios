@@ -110,16 +110,28 @@ class BindPasswordViewController: BaseViewController {
         
         if let decimal = Conn.tokenDecimal, let symbol = Conn.tokenSymbol {
             guard let contract = Conn.received?.payload?.params.to else { return }
-            guard let balance = Balance.tokenBalanceList[from]?[contract] else { return }
-            
-            self.walletAmount.text = Tools.bigToString(value: balance, decimal: decimal, decimal, true).currencySeparated()
-            self.symbolLabel.text = symbol
-            
+
+            let call = Call<BigUInt>(from: from, to: contract, method: "balanceOf", params: ["_owner": from])
+            let request = WManager.service.call(call).execute()
+
+            switch request {
+            case .success(let balance):
+                self.walletAmount.text = Tools.bigToString(value: balance, decimal: decimal, decimal, true).currencySeparated()
+                self.symbolLabel.text = symbol
+            case .failure:
+                return
+            }
+
+
         } else {
-            guard let balance = Balance.walletBalanceList[from] else { return }
-            
-            self.walletAmount.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
-            self.symbolLabel.text = "ICX"
+            let result = WManager.service.getBalance(address: from).execute()
+
+            switch result {
+            case .success(let balance):
+                self.walletAmount.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
+                self.symbolLabel.text = "ICX"
+            case .failure: return
+            }
         }
     }
     

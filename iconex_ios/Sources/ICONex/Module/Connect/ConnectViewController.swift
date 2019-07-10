@@ -21,13 +21,6 @@ class ConnectViewController: BaseViewController {
 
         // Do any additional setup after loading the view.
         
-        balanceListDidChanged().observeOn(MainScheduler.instance).subscribe(onNext: { [weak self] _ in
-            if Conn.isTranslated {
-                self?.proceed()
-            }
-        }).disposed(by: disposeBag)
-        
-        
         Tools.rotateAnimation(inView: refresh01)
         Tools.rotateReverseAnimation(inView: refresh02)
     }
@@ -40,7 +33,14 @@ class ConnectViewController: BaseViewController {
                 proceed()
             } catch let e as ConnectError {
                 Log.Debug("ConnectError - \(e)")
-                Conn.sendError(error: e)
+                if e.code == ConnectError.activateDeveloper.code {
+                    Conn.redirect = nil
+                    let app = UIApplication.shared.delegate as! AppDelegate
+                    app.toMain()
+                    Tools.toast(message: e.errorDescription!)
+                } else {
+                    Conn.sendError(error: e)
+                }
             } catch {
                 Log.Debug("error - \(error)")
                 Conn.sendError(error: .invalidRequest)
@@ -78,11 +78,9 @@ class ConnectViewController: BaseViewController {
             }
             
             guard WManager.loadWalletBy(address: from, type: .icx) != nil else {
-                Conn.sendError(error: .notFound(.address))
+                Conn.sendError(error: .invalidParameter(.address))
                 return false
             }
-            
-            guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else { return false }
             
             var requestedValue: BigUInt = 0
             
@@ -94,28 +92,47 @@ class ConnectViewController: BaseViewController {
                 requestedValue = converted
             }
             
-            if Conn.tokenSymbol != nil, Conn.tokenDecimal != nil {
-                if let balance = Balance.tokenBalanceList[from]?[to] {
+            if let decimal = Conn.tokenDecimal {
+                guard let data = Conn.received?.payload?.params.data else { return false }
+                
+                switch data {
+                case .call(let call):
+                    guard let value = call.params?["_value"] as? String else {
+                        Conn.sendError(error: .notFound(.value))
+                        return false
+                    }
+                    guard let bigValue = BigUInt(value.prefix0xRemoved(), radix: decimal) else {
+                        Conn.sendError(error: .invalidParameter(.value))
+                        return false
+                    }
+                    requestedValue = bigValue
+                default: return false
+                }
+                
+                let call = Call<BigUInt>(from: from, to: to, method: "balanceOf", params: ["_owner": from])
+                let request = WManager.service.call(call).execute()
+                switch request {
+                case .success(let balance):
                     if balance == 0 || balance < requestedValue {
                         Conn.sendError(error: .insufficient(.balance))
                         return false
                     }
-                } else if !Balance.isBalanceLoadCompleted {
-                    return false
-                } else {
-                    Conn.sendError(error: .network("Could not fetch balance."))
+                case .failure(let err):
+                    Conn.sendError(error: .network(err.errorDescription!))
                     return false
                 }
             } else {
-                if let balance = Balance.walletBalanceList[info.address] {
+                let result = WManager.service.getBalance(address: from).execute()
+                
+                switch result {
+                case .success(let balance):
                     if balance == 0 || balance < requestedValue {
                         Conn.sendError(error: ConnectError.insufficient(.balance))
                         return false
                     }
-                } else if !Balance.isBalanceLoadCompleted {
-                    return false
-                } else {
-                    Conn.sendError(error: ConnectError.network("Could not fetch balance."))
+                case .failure(let error):
+                    Log.Debug("Error - \(error)")
+                    Conn.sendError(error: .network(error))
                     return false
                 }
             }

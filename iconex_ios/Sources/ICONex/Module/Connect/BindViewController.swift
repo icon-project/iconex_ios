@@ -8,6 +8,8 @@
 
 import UIKit
 
+import RxSwift
+
 class BindCell: UITableViewCell {
     @IBOutlet weak var radio: UIImageView!
     @IBOutlet weak var name: UILabel!
@@ -64,11 +66,14 @@ class BindViewController: BaseViewController {
             self.dismiss(animated: true, completion: nil)
             Conn.sendBind(address: address)
         }).disposed(by: disposeBag)
+        
+        balanceListDidChanged().observeOn(MainScheduler.instance).subscribe(onNext: { _ in
+            self.tableView.reloadData()
+        }).disposed(by: disposeBag)
     }
     
     func loadWallet() {
         self.walletList = WManager.walletInfoList.filter({ $0.type == .icx })
-        self.tableView.reloadData()
     }
 }
 

@@ -121,9 +121,6 @@ extension ConnectError {
         case .userCancel:
             return -1
             
-        case .invalidMethod:
-            return -1000
-            
         case .invalidRequest:
             return -1001
             
@@ -132,6 +129,9 @@ extension ConnectError {
             
         case .invalidJSON, .decode:
             return -1003
+            
+        case .invalidMethod:
+            return -1004
         
         case .sameAddress:
             return -3002
@@ -157,7 +157,7 @@ extension ConnectError {
         case .notFound(let detail):
             switch detail {
             case .command:
-                return -1004
+                return -1000
                 
             case .wallet:
                 return -3000
@@ -185,6 +185,8 @@ class Connect {
     
     var source: URL? = nil
     
+    var redirect: URL? = nil
+    
     var action: String?
     
     var received: ConnectFormat?
@@ -205,7 +207,6 @@ class Connect {
     }
     
     public func translate() throws {
-        Balance.getWalletsBalance()
         guard let source = self.source else { return }
         guard isTranslated == false else { return }
         isTranslated = true
@@ -217,20 +218,19 @@ class Connect {
         
         guard let host = components.host else { throw ConnectError.notFound(.command) }
         
-        switch host {
+        switch host.lowercased() {
         case "developer":
             UserDefaults.standard.set(true, forKey: "Developer")
             UserDefaults.standard.synchronize()
             
             self.source = nil
-            self.sendError(error: .activateDeveloper)
-            return
+            throw ConnectError.activateDeveloper
             
         case "bind":
-            self.action = host
+            self.action = host.lowercased()
             
-        case "JSON-RPC":
-            self.action = host
+        case "json-rpc":
+            self.action = host.uppercased()
             
         default:
             self.source = nil
@@ -266,7 +266,7 @@ class Connect {
         }
         
         if Conn.action == "JSON-RPC" {
-            guard self.received?.payload?.method == "icx_sendTransaction" else {
+            guard self.received?.payload?.jsonrpc == "2.0", self.received?.payload?.method == "icx_sendTransaction" else {
                 self.source = nil
                 throw ConnectError.invalidMethod
             }
@@ -303,10 +303,6 @@ class Connect {
                 return
             }
             
-            guard Balance.tokenBalanceList[from]?[to] != nil else {
-                self.source = nil
-                throw ConnectError.tokenEmpty
-            }
             let requestDecimal = WManager.service.call(tokenDecimalCall).execute()
             switch requestDecimal {
             case .success(let decimal):
@@ -331,7 +327,7 @@ class Connect {
         
         encoder.keyEncodingStrategy = .convertToSnakeCase
         
-        guard let encoded = try? encoder.encode(response), let redirect = self.received?.redirect, var component = URLComponents(string: redirect) else {
+        guard let encoded = try? encoder.encode(response), let redirect = self.redirect, var component = URLComponents(url: redirect, resolvingAgainstBaseURL: false) else {
             self.reset()
             return
         }
@@ -356,13 +352,13 @@ class Connect {
         let response = ConnectResponse(code: 0, message: "Success", result: txHash)
 
         self.callback(response: response)
-
+        Conn.redirect = nil
         let app = UIApplication.shared.delegate as! AppDelegate
         app.toMain()
     }
     
     public func sendError(error: ConnectError) {
-        guard self.received?.redirect != nil else {
+        guard Conn.redirect != nil else {
             let app = UIApplication.shared.delegate as! AppDelegate
             app.toMain()
             Tools.toast(message: error.errorDescription ?? "Unknown Error")
@@ -371,6 +367,7 @@ class Connect {
         let response = ConnectResponse(code: error.code, message: error.errorDescription ?? "Unknown Error", result: nil)
         
         self.callback(response: response)
+        Conn.redirect = nil
         let app = UIApplication.shared.delegate as! AppDelegate
         app.toMain()
     }

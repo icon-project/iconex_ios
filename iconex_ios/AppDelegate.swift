@@ -20,6 +20,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var all: String?
     var necessary: String?
     
+    func setRedirect(source: URL) {
+        do {
+            guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
+                throw ConnectError.invalidRequest
+            }
+            guard let queries = components.queryItems else {
+                throw ConnectError.invalidRequest
+            }
+            guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
+                throw ConnectError.invalidRequest
+                
+            }
+            guard let data = Data(base64Encoded: dataParam) else {
+                throw ConnectError.invalidBase64
+            }
+            
+            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let redirect = json["redirect"] as? String else {
+                throw ConnectError.invalidJSON
+            }
+            guard let conURL = URL(string: redirect) else {
+                throw ConnectError.invalidJSON
+            }
+            
+            Conn.redirect = conURL
+        } catch {
+            
+        }
+        
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -65,10 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log.Debug(removed)
         } catch {
             Log.Debug(error)
-        }
-        
-        if let options = launchOptions, let url = options[.url] as? URL {
-            Conn.setMessage(source: url)
         }
         
         NSSetUncaughtExceptionHandler { (exception) in
@@ -117,13 +143,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        setRedirect(source: url)
         Conn.setMessage(source: url)
-        Conn.isConnect = true
-        Exchange.getExchangeList()
-        Balance.getWalletsBalance()
-        if !Tools.isPasscode() || Conn.auth {
+        if Conn.isConnect && (!Tools.isPasscode() || Conn.auth) {
+            Exchange.getExchangeList()
+            Balance.getWalletsBalance()
             toConnect()
         }
+        Conn.isConnect = true
         return true
     }
 
@@ -197,6 +224,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if Tools.isPasscode() {
                 let passcode = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "PasscodeView")
                 app.window?.rootViewController = passcode
+            } else if !Tools.isPasscode() && Conn.isConnect {
+                let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
+                app.window?.rootViewController = connect
             } else {
                 let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
                 app.window?.rootViewController = main

@@ -103,7 +103,7 @@ class ViewController: UIViewController {
                 .from(from)
                 .to(to)
                 .value(big)
-                .nid("0x1")
+                .nid("0x2")
                 .nonce("0x1")
             
             guard let txData = try? coinTransfer.toDic() else { return }
@@ -137,7 +137,7 @@ class ViewController: UIViewController {
                 .from(from)
                 .to(to)
                 .value(big.multiplied(by: gLoop))
-                .nid("0x1")
+                .nid("0x2")
                 .nonce("0x1")
             
             guard let txData = try? coinTransfer.toDic() else { return }
@@ -172,7 +172,7 @@ class ViewController: UIViewController {
                 .from(from)
                 .to(to)
                 .value(big.multiplied(by: icx))
-                .nid("0x1")
+                .nid("0x2")
                 .nonce("0x1")
             
             guard let txData = try? coinTransfer.toDic() else { return }
@@ -337,6 +337,8 @@ class ViewController: UIViewController {
                 guard let jsonString = try? JSONSerialization.jsonObject(with: data, options: []) as! [String: Any] else { return }
 
                 callTx.params(jsonString)
+            } else {
+                callTx.params([:])
             }
             
             guard let txData = try? callTx.toDic() else { return }

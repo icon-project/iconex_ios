@@ -77,8 +77,6 @@ class ConnectSendViewController: BaseViewController {
     
     private var transaction: Transaction?
     
-    private var transferToAddress: String?
-    private var isTransfer: Bool = false
     private var balance: BigUInt?
     
     private var provider: ICONService = WManager.service
@@ -89,6 +87,7 @@ class ConnectSendViewController: BaseViewController {
         self.balance = refreshBalance()
         initializeUI()
         initialize()
+        setting()
     }
     
     func generateTransaction() {
@@ -96,7 +95,7 @@ class ConnectSendViewController: BaseViewController {
             Conn.sendError(error: ConnectError.invalidJSON)
             return
         }
-        // test
+        
         let tx = Transaction()
         tx.from = txInfo.from
         tx.to = txInfo.to
@@ -122,15 +121,6 @@ class ConnectSendViewController: BaseViewController {
                     dataDic["params"] = params
                 }
                 tx.data = dataDic
-                
-                if call.method == "transfer" {
-                    guard let toAddress = call.params?["_to"] as? String else {
-                        Conn.sendError(error: .notFound(.to))
-                        return
-                    }
-                    self.isTransfer = true
-                    self.transferToAddress = toAddress
-                }
             }
         }
         
@@ -315,7 +305,7 @@ class ConnectSendViewController: BaseViewController {
     }
     
     func initializeUI() {
-        guard let from = Conn.received?.payload?.params.from, let wallet = WManager.loadWalletBy(address: from, type: .icx) as? ICXWallet else { return }
+        guard let from = Conn.received?.payload?.params.from, let toAddress = Conn.received?.payload?.params.to, let wallet = WManager.loadWalletBy(address: from, type: .icx) as? ICXWallet else { return }
         
         navTitle.text = wallet.alias
         
@@ -338,7 +328,7 @@ class ConnectSendViewController: BaseViewController {
         amount.text = "-"
         exchangeAmount.text = "- USD"
         toTitle.text = "Connect.Send.to".localized
-        to.text = self.isTransfer ? self.transferToAddress : Conn.received?.payload?.params.to
+        to.text = toAddress
         stepLimitTitle.text = "Connect.Send.StepLimit".localized
         stepLimitInputBox.textField.placeholder = "Placeholder.StepLimit".localized
         stepLimitInputBox.setType(.integer)
@@ -381,7 +371,6 @@ class ConnectSendViewController: BaseViewController {
             }
             
             DispatchQueue.main.async {
-                self.setting()
                 self.calculateStepLimit()
                 self.sendButton.isEnabled = self.validateLimit()
             }
