@@ -6,5 +6,5 @@ target 'ConnectSample' do
   use_frameworks!
 
   # Pods for ConnectSample
-  pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit', :branch => 'develop'
+  pod 'ICONKit'
 end

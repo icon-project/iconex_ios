@@ -1,23 +1,23 @@
 PODS:
-  - Alamofire (4.8.1)
+  - Alamofire (4.8.2)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.11.0)
-  - ICONKit (0.3.1):
+  - ICONKit (0.3.2):
     - BigInt
     - CryptoSwift (~> 0.11.0)
     - Result
     - scrypt
     - secp256k1_ios (~> 0.1.3)
   - LicensesViewController (0.7.0)
-  - PromiseKit (6.8.3):
-    - PromiseKit/CorePromise (= 6.8.3)
-    - PromiseKit/Foundation (= 6.8.3)
-    - PromiseKit/UIKit (= 6.8.3)
-  - PromiseKit/CorePromise (6.8.3)
-  - PromiseKit/Foundation (6.8.3):
+  - PromiseKit (6.10.0):
+    - PromiseKit/CorePromise (= 6.10.0)
+    - PromiseKit/Foundation (= 6.10.0)
+    - PromiseKit/UIKit (= 6.10.0)
+  - PromiseKit/CorePromise (6.10.0)
+  - PromiseKit/Foundation (6.10.0):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.8.3):
+  - PromiseKit/UIKit (6.10.0):
     - PromiseKit/CorePromise
   - Realm (3.11.0):
     - Realm/Headers (= 3.11.0)
@@ -43,7 +43,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - ICONKit (from `https://github.com/icon-project/ICONKit`, branch `develop`)
+  - ICONKit
   - LicensesViewController
   - RealmSwift (= 3.11.0)
   - RxCocoa (= 4.3.1)
@@ -57,6 +57,7 @@ SPEC REPOS:
     - Alamofire
     - BigInt
     - CryptoSwift
+    - ICONKit
     - LicensesViewController
     - PromiseKit
     - Realm
@@ -70,27 +71,21 @@ SPEC REPOS:
     - web3swift
 
 EXTERNAL SOURCES:
-  ICONKit:
-    :branch: develop
-    :git: https://github.com/icon-project/ICONKit
   scrypt:
     :git: https://github.com/a1ahn/scrypt-cryptoswift.git
 
 CHECKOUT OPTIONS:
-  ICONKit:
-    :commit: 4a602187389665aeb20011b8f7984cc666bde1a3
-    :git: https://github.com/icon-project/ICONKit
   scrypt:
     :commit: 2ced9c58054328c723135a16717dd3ff0fcf6e57
     :git: https://github.com/a1ahn/scrypt-cryptoswift.git
 
 SPEC CHECKSUMS:
-  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
-  ICONKit: 1e73834efe4a73f0e9574688b7b17b098948da33
+  ICONKit: dcee236be4072a0d1a96dfcdbe37b62631d35d32
   LicensesViewController: 2f7bba13b3cec7516d4990e41df297720fdbaaab
-  PromiseKit: 94c6e781838c5bf4717677d0d882b0e7250c80fc
+  PromiseKit: 1fdaeb6c0a94a5114fcb814ff3d772b86886ad4e
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
   RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
@@ -102,6 +97,6 @@ SPEC CHECKSUMS:
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
   web3swift: e39ddb21627fcc6b47881b49583f589cae128902
 
-PODFILE CHECKSUM: ff15a39e553b83c5fb1044e925300b9ade80c2d9
+PODFILE CHECKSUM: 8a4f05bc6a7824293562727bf3bf569fd3325f42
 
 COCOAPODS: 1.7.2
