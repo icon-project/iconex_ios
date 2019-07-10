@@ -10,8 +10,7 @@ import RxSwift
 import RxCocoa
 import BigInt
 import ICONKit
-import web3swift
-import Result
+import Web3swift
 
 class WalletDetailCell: UITableViewCell {
     @IBOutlet weak var txTitleLabel: UILabel!

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import web3swift
+import Web3swift
 import BigInt
 
 typealias ETHTokenResult = (name: String, symbol: String, decimal: Int)
@@ -34,50 +34,50 @@ struct Ethereum {
     }
     
     static var gasPrice: BigUInt? {
-        guard let web3 = Web3.new(Ethereum.provider) else {
+        guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
-        guard case .success(let gasPrice) = web3.eth.getGasPrice() else { return nil }
+        guard let gasPrice = try? web3.eth.getGasPrice() else { return nil }
         Log.Debug("gasPrice: \(gasPrice)")
         return gasPrice
     }
     
     static func requestBalance(address: String) -> BigUInt? {
-        guard let web3 = Web3.new(Ethereum.provider) else {
+        guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
         
         guard let ethAddress = EthereumAddress(address) else { return nil }
         
-        let result = web3.eth.getBalance(address: ethAddress)
+        let result = try? web3.eth.getBalance(address: ethAddress)
         
-        return result.value
+        return result
     }
     
     static func requestETHEstimatedGas(value: BigUInt, data: Data, from: String, to: String) -> BigUInt? {
         
-        guard let web3 = Web3.new(Ethereum.provider) else {
+        guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
         
-        var options = Web3Options.defaultOptions()
+        var options = TransactionOptions.defaultOptions
         options.from = EthereumAddress(from)
         options.to = EthereumAddress(to)
         options.value = value
         
         let contract = web3.contract(Web3.Utils.coldWalletABI, at: EthereumAddress(to))
-        let intermediate = contract?.method(options: options)
+        let intermediate = contract?.method(transactionOptions: options)
         
         
-        guard let estimatedGas = intermediate?.estimateGas(options: nil) else {
+        guard let estimatedGas = try? intermediate?.estimateGas(transactionOptions: nil) else {
             return nil
         }
         
-        return estimatedGas.value
+        return estimatedGas
     }
     
     static func requestTokenEstimatedGas(value: BigUInt, gasPrice: BigUInt, from: String, to: String, tokenInfo: TokenInfo) -> BigUInt? {
-        guard let web3 = Web3.new(Ethereum.provider) else {
+        guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
         
@@ -85,54 +85,53 @@ struct Ethereum {
         let toAddress = EthereumAddress(to)
         let contractAddress = EthereumAddress(tokenInfo.contractAddress)
         
-        var options = Web3Options.defaultOptions()
-        options.gasPrice = gasPrice
+        var options = TransactionOptions.defaultOptions
+        options.gasPrice = .manual(gasPrice)
         
-        let tokenEstimated = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, options: options)
-        let estimatedResult = tokenEstimated!.estimateGas(options: nil)
-        guard case .success(let gasEstimated) = estimatedResult else { return nil }
-        Log.Debug("estimated: \(gasEstimated)")
-        return gasEstimated
+        let tokenEstimated = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, transactionOptions: options)
+        let estimated = try? tokenEstimated!.estimateGas(transactionOptions: nil)
+        Log.Debug("estimated: \(estimated)")
+        return estimated
     }
     
     static func requestSendTransaction(privateKey: String, gasPrice: BigUInt, gasLimit: BigUInt, from: String, to: String, value: BigUInt, data: Data, completion: @escaping (_ isSuccess: Bool,_ reason: Int) -> Void) {
         
         DispatchQueue.global(qos: .default).async {
-            guard let web3 = Web3.new(Ethereum.provider) else {
+            guard let web3 = try? Web3.new(Ethereum.provider) else {
                 DispatchQueue.main.async {
                     completion(false, -99)
                 }
                 return
             }
-            var options = Web3Options.defaultOptions()
-            options.gasPrice = gasPrice
-            options.gasLimit = gasLimit
+            var options = TransactionOptions.defaultOptions
+            options.gasPrice = .manual(gasPrice)
+            options.gasLimit = .manual(gasLimit)
             options.from = EthereumAddress(from)
 
             let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
             let manager = KeystoreManager([keystore!])
             web3.addKeystoreManager(manager)
             
-            let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data, options: options)
+            let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data, transactionOptions: options)
             
-            let estimatedResult = intermediate!.estimateGas(options: nil)
-            
-            guard case .success(let estimated) = estimatedResult else {
+            if let estimated = try? intermediate!.estimateGas(transactionOptions: nil) {
+                Log.Debug("estimated: \(estimated), gasLimit: \(gasLimit)")
+                if estimated > gasLimit {
+                    DispatchQueue.main.async {
+                        completion(false, -1)
+                    }
+                    return
+                }
+                
+            } else {
                 DispatchQueue.main.async {
                     completion(false, -99)
                 }
                 return
             }
-            Log.Debug("estimated: \(estimated), gasLimit: \(gasLimit)")
-            if estimated > gasLimit {
-                DispatchQueue.main.async {
-                    completion(false, -1)
-                }
-                return
-            }
             
             
-            guard let result = intermediate?.send() else {
+            guard let result = try? intermediate?.send() else {
                 DispatchQueue.main.async {
                     completion(false, -99)
                 }
@@ -141,23 +140,14 @@ struct Ethereum {
             
             DispatchQueue.main.async {
                 Log.Debug("result: \(result)")
-                switch result {
-                case .success(_):
-                    if let txResult = result.value {
-                        if let txHash = txResult.transaction.txhash {
-                            do {
-                                try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: "eth")
-                            } catch {
-                                Log.Debug("\(error)")
-                            }
-                            completion(true, 0)
-                        }
-                    } else {
-                        completion(false, -99)
+                if let txHash = result.transaction.txhash {
+                    do {
+                        try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: "eth")
+                    } catch {
+                        Log.Debug("\(error)")
                     }
-                    
-                case .failure(let error):
-                    Log.Debug("\(error)")
+                    completion(true, 0)
+                } else {
                     completion(false, -99)
                 }
             }
@@ -169,7 +159,7 @@ struct Ethereum {
         
         DispatchQueue.global(qos: .userInitiated).async {
             
-        guard let web3 = Web3.new(Ethereum.provider) else {
+        guard let web3 = try? Web3.new(Ethereum.provider) else {
             DispatchQueue.main.async {
                 completion(nil)
             }
@@ -183,20 +173,17 @@ struct Ethereum {
             return
         }
         
-        var options = Web3Options.defaultOptions()
+        var options = TransactionOptions.defaultOptions
         options.from = EthereumAddress(myAddress)
         
             var tokenResult = ETHTokenResult("", "", 0)
             
-            if let intermediate = contract.method("name", parameters: [], extraData: Data(), options: options) {
-                let result = intermediate.call(options: nil)
+            if let intermediate = contract.method("name", parameters: [], extraData: Data(), transactionOptions: options) {
+                if let value = try? intermediate.call(transactionOptions: nil) {
                 
-                Log.Debug("name: \(result)")
-                switch result {
-                case .success(let value):
                     tokenResult.name = value["0"] as! String
                     
-                default:
+                } else {
                     DispatchQueue.main.async {
                         completion(nil)
                     }
@@ -204,15 +191,12 @@ struct Ethereum {
                 }
             }
             
-            if let intermediate = contract.method("symbol", parameters: [], extraData: Data(), options: options) {
-                let result = intermediate.call(options: nil)
+            if let intermediate = contract.method("symbol", parameters: [], extraData: Data(), transactionOptions: options) {
+                if let value = try? intermediate.call(transactionOptions: nil) {
                 
-                Log.Debug("symbol: \(result)")
-                switch result {
-                case .success(let value):
+                    Log.Debug("symbol: \(value)")
                     tokenResult.symbol = value["0"] as! String
-                    
-                default:
+                } else {
                     DispatchQueue.main.async {
                         completion(nil)
                     }
@@ -220,15 +204,12 @@ struct Ethereum {
                 }
             }
             
-            if let intermediate = contract.method("decimals", parameters: [], extraData: Data(), options: options) {
-                let result = intermediate.call(options: nil)
+            if let intermediate = contract.method("decimals", parameters: [], extraData: Data(), transactionOptions: options) {
+                if let value = try? intermediate.call(transactionOptions: nil) {
                 
-                Log.Debug("decimal: \(result)")
-                switch result {
-                case .success(let value):
+                    Log.Debug("decimal: \(value)")
                     tokenResult.decimal = Int(value["0"] as! BigUInt)
-                    
-                default:
+                } else {
                     DispatchQueue.main.async {
                         completion(nil)
                     }
@@ -242,7 +223,7 @@ struct Ethereum {
     }
     
     static func requestTokenBalance(token: TokenInfo) -> BigUInt? {
-        guard let web3 = Web3.new(Ethereum.provider) else {
+        guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
         let ethAddress = EthereumAddress(token.contractAddress)
@@ -252,26 +233,19 @@ struct Ethereum {
             return nil
         }
         
-        var options = Web3Options.defaultOptions()
+        var options = TransactionOptions.defaultOptions
         let address = EthereumAddress(token.dependedAddress.add0xPrefix())
         options.from = address
-        guard let balance = contract.method("balanceOf", parameters: [address] as [AnyObject], options: options)?.call(options: nil) else {
+        guard let value = try? contract.method("balanceOf", parameters: [address] as [AnyObject], transactionOptions: options)!.call(transactionOptions: nil) else {
             
             return nil
         }
-        
-        switch balance {
-        case .success(let value):
-            return value["0"] as? BigUInt
-            
-        default:
-            return nil
-        }
+        return value["0"] as? BigUInt
     }
     
     static func requestTokenSendTransaction(privateKey: String, from: String, to: String, tokenInfo: TokenInfo, limit: BigUInt, price: BigUInt, value: BigUInt, completion: @escaping (_ isCompleted: Bool) -> Void) {
         DispatchQueue.global(qos: .default).async {
-            guard let web3 = Web3.new(Ethereum.provider) else {
+            guard let web3 = try? Web3.new(Ethereum.provider) else {
                 Log.Debug("HALT")
                 DispatchQueue.main.async {
                     completion(false)
@@ -287,11 +261,11 @@ struct Ethereum {
             let manager = KeystoreManager([keystore!])
             web3.addKeystoreManager(manager)
             
-            var options = Web3Options.defaultOptions()
-            options.gasLimit = limit
-            options.gasPrice = price
+            var options = TransactionOptions.defaultOptions
+            options.gasLimit = .manual(limit)
+            options.gasPrice = .manual(price)
             
-            guard let intermediate = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, options: options) else {
+            guard let intermediate = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, transactionOptions: options) else {
                 Log.Debug("HALT")
                 DispatchQueue.main.async {
                     completion(false)
@@ -299,30 +273,23 @@ struct Ethereum {
                 return
             }
             
-            let result = intermediate.send()
+            if let result = try? intermediate.send() {
             
-            switch result {
-            case .success(_):
-                
                 DispatchQueue.main.async {
-                    Log.Debug("success: \(String(describing: result.value))")
-                    if let txResult = result.value {
-                        if let txHash = txResult.transaction.txhash {
-                            do {
-                                try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
-                            } catch {
-                                Log.Debug("\(error)")
-                            }
+                    Log.Debug("success: \(String(describing: result))")
+                    if let txHash = result.transaction.txhash {
+                        do {
+                            try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
+                        } catch {
+                            Log.Debug("\(error)")
                         }
-                        
                         completion(true)
                     } else {
                         completion(false)
                     }
                 }
                 
-            case .failure(let error):
-                Log.Debug("failure: \(error)")
+            } else {
                 DispatchQueue.main.async {
                     completion(false)
                 }

@@ -8,7 +8,6 @@
 import Foundation
 import ICONKit
 import BigInt
-import Result
 import Realm
 import RealmSwift
 
@@ -93,18 +92,22 @@ class WalletManager {
         let call = Call<Response.StepCosts>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepCosts", params: nil)
         let result = self.service.call(call).execute()
         
-        guard let cost = result.value else {
-            Log.Debug("error - \(String(describing: result.error))")
-            return nil }
-        Log.Debug("cost - \(cost)")
-        return cost
+        switch result {
+        case .failure(let error):
+            Log.Debug("error - \(String(describing: error))")
+            return nil
+            
+        case .success(let cost):
+            Log.Debug("cost - \(cost)")
+            return cost
+        }
     }
     
     func getMaxStepLimit() -> BigUInt? {
         let call = Call<String>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMaxStepLimit", params: ["contextType": "invoke"])
         let result: Result = self.service.call(call).execute()
         
-        guard let value = result.value, let maxLimit = BigUInt(value.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let value = try? result.get(), let maxLimit = BigUInt(value.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("max - \(maxLimit)")
         return maxLimit
     }
@@ -113,7 +116,7 @@ class WalletManager {
         let call = Call<String>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getMinStepLimit", params: nil)
         let result = self.service.call(call).execute()
         
-        guard let min = result.value, let minLimit = BigUInt(min.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let min = try? result.get(), let minLimit = BigUInt(min.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("min - \(minLimit)")
         return minLimit
     }
@@ -122,7 +125,7 @@ class WalletManager {
         let call = Call<String>(from: "hx0000000000000000000000000000000000000000", to: self.govnAddress, method: "getStepPrice", params: nil)
         let result = self.service.call(call).execute()
         
-        guard let stringPrice = result.value, let stepPrice = BigUInt(stringPrice.prefix0xRemoved(), radix: 16) else { return nil }
+        guard let stringPrice = try? result.get(), let stepPrice = BigUInt(stringPrice.prefix0xRemoved(), radix: 16) else { return nil }
         Log.Debug("stepPrice - \(stepPrice)")
         return stepPrice
     }
@@ -241,7 +244,7 @@ extension WalletManager {
             let nameCall = Call<String>(from: walletAddress, to: contractAddress, method: "name", params: nil)
             let result = self.service.call(nameCall).execute()
             
-            guard let name = result.value else {
+            guard let name = try? result.get() else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -252,7 +255,7 @@ extension WalletManager {
             let decimalCall = Call<String>(from: walletAddress, to: contractAddress, method: "decimals", params: nil)
             let decResult = self.service.call(decimalCall).execute()
             
-            guard let decimal = decResult.value else {
+            guard let decimal = try? decResult.get() else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -263,7 +266,7 @@ extension WalletManager {
             let symCall = Call<String>(from: walletAddress, to: contractAddress, method: "symbol", params: nil)
             let symResult = self.service.call(symCall).execute()
             
-            guard let symbol = symResult.value else {
+            guard let symbol = try? symResult.get() else {
                 DispatchQueue.main.async {
                     completion(nil)
                 }
@@ -283,7 +286,7 @@ extension WalletManager {
         let call = Call<BigUInt>(from: tokenInfo.dependedAddress, to: tokenInfo.contractAddress, method: "balanceOf", params: ["_owner": tokenInfo.dependedAddress])
         let result = service.call(call).execute()
         
-        guard let balance = result.value else { return nil }
+        guard let balance = try? result.get() else { return nil }
         
         return balance
     }

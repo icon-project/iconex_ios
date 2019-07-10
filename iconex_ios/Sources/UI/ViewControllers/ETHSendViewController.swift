@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import BigInt
-import web3swift
+import Web3swift
 
 class ETHSendViewController: UIViewController {
     @IBOutlet weak var navTitle: UILabel!

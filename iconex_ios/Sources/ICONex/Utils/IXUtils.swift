@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import BigInt
-import web3swift
+import Web3swift
 import LocalAuthentication
 import CryptoSwift
 import Toast_Swift

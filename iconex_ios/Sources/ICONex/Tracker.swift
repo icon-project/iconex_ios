@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Result
 
 open class Tracker {
     public struct TxList: Hashable {

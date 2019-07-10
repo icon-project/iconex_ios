@@ -4,265 +4,152 @@ ICONex Connect is a simple protocol for supporting 3rd party applications who wa
 ## Features
 * Get address of ICON wallet which managed by ICONex.
 * Request send transaction.
-* Request send ICX or IRC Token.
 
 ## Basic Transmission Protocol
 * Request
 
-| Key | Type | Description |
-| --- | ---- | ----------- |
-| data | String | Base64 encoded string of JSON Object |
-| caller | String | Custom URL Scheme |
+```iconex://[Command]?data=[Base64-encoded JSON object]```
 
 ```Swift
-var action = [String: Any]()
-action["id"] = 1234
-action["method"] = "bind"
+let call = CallTransaction()
+    .from(wallet.address)
+    .to(scoreAddress)
+    .stepLimit(BigUInt(1000000))
+    .nid(self.iconService.nid)
+    .nonce("0x1")
+    .method("transfer")
+    .params(["_to": to, "_value": "0x1234"])
 
-guard let data = try? JSONSerialization.data(withJSONObject: action, options: []) else { return }
+guard let txData = try? call.toDic() else { return }
+
+var json = ["jsonrpc": "2.0", "method": "icx_sendTransaction", "id": 1234] as [String: Any]
+json["params"] = txData
+
+var params = ["redirect": "your-app-scheme://"] as [String: Any]
+
+params["payload"] = json
+
+guard let data = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted) else { return }
+
 let encoded = data.base64EncodedString()
+let items = [URLQueryItem(name: "data", value: encoded)]
 
-let items = [URLQueryItem(name: "data", value: encoded), URLQueryItem(name: "caller", value: "my-app-scheme://")]
 var component = URLComponents(string: "iconex://")!
+component.host = "JSON-RPC"
 component.queryItems = items
 
 UIApplication.shared.open(component.url!, options: [:], completionHandler: nil)
 ```
 
 * Response
-`my-app-scheme://?data=Base64EncodedString`
+`your-app-scheme://?data=Base64EncodedString`
 
-## JSON Speicifications
-* [Value Types](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md#value-types)
+## JSON-RPC object
 
-## API Convention
-```Swift
-// Request
-{
-    "id": $INT1,
-    "method": "$STRING1"
-    "params": {
-        "$KEY1": "$VALUE1",
-        "$KEY2": "$VALUE2",
-        ...
-    }
-}
+Base64 encoded ICON JSON-RPC API
 
-// Response
-{
-    "id": $INT1,
-    "code": $INT2,    // if code == 1 success, else fail
-    "result": "$VALUE1"
-}
-```
+[https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md](https://github.com/icon-project/icon-rpc-server/blob/master/docs/icon-json-rpc-v3.md)
 
-| Key | Type | Description | Required |
-| --- | ---- | ----------- | -------- |
-| id | INT | Request Identifier | Required |
-| method | String | Method for current request | Required |
-| params | T_DATA_TYPE | Parameters for current request | Optional |
+## Commands
+| Action | Description |
+| ------ | ----------- |
+| bind | Request wallet address |
+| JSON-RPC | Send transaction via ICONex Connect |
 
-## Methods
-| Method | Description | Required Parameters |
-| ------ | ----------- | ------------------- |
-| bind | Request wallet address | - |
-| sign | Request sign for transaction | version, from, value, stepLimit, timestamp, dataType(optional), data(optional) |
-| sendICX | Request send ICX | from, to, value |
-| sendToken | Request send IRC token | from, to, value, contractAddress |
-
-### bind
+### Command: bind
 * Return selected wallet's address.
 
-#### Parameters
-NULL
+#### Request
+| Key | Value type | Description | Required |
+| --- | --- | --- | --- |
+| redirect | Redirect URL | Target URL to send a selected wallet address | Mendatory |
 
-#### Returns
-Selected wallet's address.
+#### Response
+| Key | Value type | Description | Required |
+| --- | --- | --- | --- |
+| code | Int | Result code | Mendatory |
+| message | String | Simplified result message | Mendatory |
+| result | String | Selected wallet address | Optional |
+
+#### Result Code
+| Code | Message | Description |
+| ---- | ---- | ---- |
+| -2000 | ICONex has no ICX wallet. | ICONex has no ICX wallet for support. |
+| Etc. | Refer to Common Result Code | - |
 
 #### Example
 
 ```Swift
 //Request
 {
-    "id": 1234,
-    "method" : bind
+    "redirect": "your-app-scheme://"
 }
 
 // Response - success
 {
-    "id": 1234,
-    "code": 1,
+    "code": 0,
+    "message": "Success"
     "result": "hx1234..."
 }
 
 //Response - fail
 {
-    "id": 1234,
     "code": -1000,
-    "result": "Operation canceled by user."
+    "message": "Operation canceled by user."
 }
 ```
 
-### sign
-* Returns the signature of the transaction hash.
+### Command: JSON-RPC
+* Request send transaction via ICONex.
 
-#### Parameters
+#### Request
+| Key | Value type | Description | Required |
+| --- | --- | --- | --- |
+| payload | JSON | Base64-encoded JSON-RPC object string | Mendatory | 
+| redirect | Redirect URL | Target URL to send a transaction hash | Mendatory |
 
-| Key | Type | Description | Required |
-| --- | ---- | ----------- | -------- |
-| version | T_INT | Protocol version ("0x3" for v3) | Required |
-| from | T_ADDR_EOA | EOA address that created transaction | Required |
-| to | T_ADDR_EOA | EOA address to receive coins, or SCORE address to execute the transaction. | Required |
-| value | T_INT | Amount of ICX coins in to transfer. When omitted, assumes 0. (1 icx = 1 * 10^18 loop) | Required |
-| stepLimit | T_INT | Maximum Step allowance that can be used by the transaction. | Required |
-| timestamp | T_INT | Transaction creation time. timestamp is in microsecond. | Required |
-| nid | T_INT | Network ID ("0x1" for Mainnet, "0x2" for Testnet, etc) | Required |
-| nonce | T_INT | An arbitrary number used to prevent transaction hash collision. | Required |
-| dataType | T_DATA_TYPE | Type of data (call, deploy or message) | Optional |
-| data | T_DICT or String | The content of data varies depending on the dataType. | Optional |
+#### Response
+| Key | Value type | Description | Required |
+| --- | --- | --- | --- |
+| code | Int | Result code | Mendatory |
+| message | String | Implified result message | Mendatory |
+| result | String | Received transaction hash after send a transaction | Optional |
 
-#### Returns
-Signature of transaction hash.
-
-#### Example
-
-```Swift
-// Request
-{
-    "id": 1234,
-    "method": "sign",
-    "params": {
-        "version": "0x3",
-        "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
-        "to": "hx5bfdb090f43a808005ffc27c25b213145e80b7cd",
-        "value": "0xde0b6b3a7640000",
-        "stepLimit": "0x12345",
-        "timestamp": "0x563a6cf330136",
-        "nid": "0x2",
-        "nonce": "0x1"
-    }
-}
-
-// Response - success
-{
-    "id": 1234,
-    "code": 1,
-    "result": "SIGNED_VALUE"
-}
-
-// Response - fail
-{
-    "id": 1234,
-    "code": -1000,
-    "result": "Operation canceled by user."
-}
-```
-
-### sendICX
-* Send ICX via ICONex and returns transaction hash.
-
-#### Parameters
-
-| Key | Type | Description | Required |
-| --- | ---- | ----------- | -------- |
-| from | T_ADDR_EOA | EOA address that will send ICX coins. | Required |
-| to | T_ADDR_EOA | EOA address to receive coins. | Required |
-| value | T_INT | Amount of ICX coins in to transfer | Required |
-| dataType | T_DATA_TYPE | Type of data (call, deploy or message) | Optional |
-| data | T_DICT or String | the content of data varies depending on the dataType. | Optional |
-
-#### Returns
-Transaction hash
-
-#### Example
-
-```Swift
-// Request
-{
-    "id": 1234,
-    "method": "sendICX",
-    "params": {
-            "to": "hxab2d8215eab14bc6bdd8bfb2c8151257032ecd8b",
-            "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
-            "value": "0x1"
-        }
-}
-
-// Response - success
-{
-    "id": 1234,
-    "code": 1,
-    "result": "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238"
-}
-
-// Response - fail
-{
-    "id": 1234,
-    "code": -1000,
-    "result": "Opertaion canceled by user."
-}
-```
-
-### sendToken
-* Send IRC token via ICONex and returns transaction hash.
-
-#### Parameters
-
-| Key | Type | Description | Required |
-| --- | ---- | ----------- | -------- |
-| from | T_ADDR_EOA | EOA address that will send IRC token. | Required |
-| to | T_ADDR_EOA | EOA address to receive tokens. | Required |
-| value | T_INT | Amount of IRC token | Required |
-| contractAddress | T_ADDR_EOA | SCORE contract address | Required |
-
-#### Returns
-Transaction hash
-
-#### Example
-
-```Swift
-// Request
-{
-    "id": 1234,
-    "method": "sendToken",
-    "params": {
-            "from": "hxbe258ceb872e08851f1f59694dac2558708ece11",
-            "to": "hxab2d8215eab14bc6bdd8bfb2c8151257032ecd8b",
-            "value": "0x1",
-            "contractAddress": "cxb0776ee37f5b45bfaea8cff1d8232fbb6122ec32"
-        }
-}
-
-// Response - success
-{
-    "id": 1234,
-    "code": 1,
-    "result": "0xb903239f8543d04b5dc1ba6579132b143087c68db1b2168786408fcbce568238"
-}
-
-// Response - fail
-{
-    "id": 1234,
-    "code": -1000,
-    "result": "Opertaion canceld by user"
-}
-```
-
-## Error Code
-
+#### Result Code
 | Code | Message | Description |
-| ---- | ------- | ----------- |
-| -1000 | Operation canceld by user. | User cancel |
-| -1001 | Parse error (Invalid JSON type) | Data is not a JSON type |
-| -1002 | Invalid request. | JSON must contains required parameters. |
-| -1003 | Invalid method | Invalid method |
-| -1004 | Not found caller. | Could not found caller in request. |
-| -2001 | ICONex has no ICX wallet. | ICONex has no ICX wallet for support. |
-| -2002 | Not found parameter. ('$key') | $key is not found in "params" |
-| -3001 | Could not find matched wallet. ('$address') | There is no wallet matched with given address. |
-| -3002 | Sending and receiving address are same. | Sending and receiving address are same. |
-| -3003 | Insufficient balance. | Requested value is bigger than balance. |
-| -3004 | Insufficient balance for fee. | Insufficient balance for fee. |
-| -3005 | Invalid parameter. ('$key') | Something is wrong with value. |
-| -4001 | Failed to sign. | Error occurs while signing |
-| -9999 | Somethings wrong with network ($message) | All errors while networking. $message may contains the reason of error. |
+| --- | --- | --- |
+| -3000 | Not found wallet($walletAddress) | $walletAddress does not exist. |
+| extra | Refer to Common Result Code |
+
+#### Example
+```Swift
+// Request
+{
+    "payload": {base64 encoded JSON-RPC object String},
+    "redirect": "your-app-scheme://"
+}
+
+// Success; Send transaation
+{
+    "code": 0,
+    "message": "success",
+    "result": "0xabcd1234..."
+}
+
+// Fail
+{
+    "code": -3000,
+    "message": "Not found wallet (hx1234abcd...)"
+}
+```
+
+## Common Result Code
+| Category | Code | Message | Description |
+| --- | --- | --- | --- |
+| Success | 0 | Success | |
+| General | -1 | Operation canceled by user. | User cancel |
+| Parsing | -1000 | Command not found. | Command(HOST) not found |
+|| -1001 | Invalid request. Could not find data. | Could not find data in query. |
+|| -1002 | Invalid base64 encoded string. | Base64 decoding failure |
+|| -1003 | Invalid JSON syntax. ||
+| Unspecified | -9999 | Unspecified error. | Unknown |

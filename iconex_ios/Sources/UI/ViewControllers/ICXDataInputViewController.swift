@@ -163,7 +163,7 @@ class ICXDataInputViewController: BaseViewController {
             self.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
         
-        removeButton.rx.controlEvent(UIControlEvents.touchUpInside).subscribe(onNext: { [unowned self] in
+        removeButton.rx.tap.subscribe(onNext: { [unowned self] in
             let alert = Alert.Confirm(message: "Alert.Transfer.Data.Delete".localized, handler: {
                 if let handler = self.handler {
                     handler(nil)

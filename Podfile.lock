@@ -2,101 +2,102 @@ PODS:
   - Alamofire (4.8.2)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
-  - CryptoSwift (0.11.0)
-  - ICONKit (0.3.2):
+  - CryptoSwift (1.0.0)
+  - ICONKit (0.4.0):
     - BigInt
-    - CryptoSwift (~> 0.11.0)
-    - Result
-    - scrypt
-    - secp256k1_ios (~> 0.1.3)
+    - CryptoSwift
+    - secp256k1_ios
   - LicensesViewController (0.7.0)
-  - PromiseKit (6.10.0):
-    - PromiseKit/CorePromise (= 6.10.0)
-    - PromiseKit/Foundation (= 6.10.0)
-    - PromiseKit/UIKit (= 6.10.0)
-  - PromiseKit/CorePromise (6.10.0)
-  - PromiseKit/Foundation (6.10.0):
+  - PromiseKit (6.8.4):
+    - PromiseKit/CorePromise (= 6.8.4)
+    - PromiseKit/Foundation (= 6.8.4)
+    - PromiseKit/UIKit (= 6.8.4)
+  - PromiseKit/CorePromise (6.8.4)
+  - PromiseKit/Foundation (6.8.4):
     - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.10.0):
+  - PromiseKit/UIKit (6.8.4):
     - PromiseKit/CorePromise
   - Realm (3.11.0):
     - Realm/Headers (= 3.11.0)
   - Realm/Headers (3.11.0)
   - RealmSwift (3.11.0):
     - Realm (= 3.11.0)
-  - Result (3.2.4)
-  - RxCocoa (4.3.1):
-    - RxSwift (~> 4.0)
-  - RxSwift (4.3.1)
-  - scrypt (1.8.1):
-    - CryptoSwift (~> 0.11)
+  - RxCocoa (5.0.0):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxRelay (5.0.0):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.0)
   - secp256k1_ios (0.1.3)
+  - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
+  - Starscream (3.1.0)
   - Toast-Swift (4.0.1)
-  - web3swift (1.1.7):
-    - BigInt (~> 3.1)
-    - CryptoSwift (~> 0.11)
-    - PromiseKit (~> 6.3)
-    - Result (~> 3.0)
-    - scrypt (~> 1.7)
-    - secp256k1_ios (~> 0.1)
+  - web3swift (2.1.6):
+    - BigInt (= 3.1)
+    - CryptoSwift (= 1.0.0)
+    - PromiseKit (= 6.8.4)
+    - secp256k1_swift (= 1.0.3)
+    - Starscream (= 3.1.0)
 
 DEPENDENCIES:
   - Alamofire
-  - ICONKit
+  - ICONKit (from `https://github.com/icon-project/ICONKit`, branch `develop`)
   - LicensesViewController
   - RealmSwift (= 3.11.0)
-  - RxCocoa (= 4.3.1)
-  - RxSwift (= 4.3.1)
-  - scrypt (from `https://github.com/a1ahn/scrypt-cryptoswift.git`)
+  - RxCocoa
+  - RxSwift
   - Toast-Swift (~> 4.0.0)
-  - web3swift (= 1.1.7)
+  - web3swift
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - BigInt
     - CryptoSwift
-    - ICONKit
     - LicensesViewController
     - PromiseKit
     - Realm
     - RealmSwift
-    - Result
     - RxCocoa
+    - RxRelay
     - RxSwift
     - secp256k1_ios
+    - secp256k1_swift
     - SipHash
+    - Starscream
     - Toast-Swift
     - web3swift
 
 EXTERNAL SOURCES:
-  scrypt:
-    :git: https://github.com/a1ahn/scrypt-cryptoswift.git
+  ICONKit:
+    :branch: develop
+    :git: https://github.com/icon-project/ICONKit
 
 CHECKOUT OPTIONS:
-  scrypt:
-    :commit: 2ced9c58054328c723135a16717dd3ff0fcf6e57
-    :git: https://github.com/a1ahn/scrypt-cryptoswift.git
+  ICONKit:
+    :commit: 29d6623a25589701b60f4891a6fe1bb621e28ecf
+    :git: https://github.com/icon-project/ICONKit
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
-  CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
-  ICONKit: dcee236be4072a0d1a96dfcdbe37b62631d35d32
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
+  ICONKit: 4a237bf67b1c640c0bdd18343ca0b1c8c6e4a42c
   LicensesViewController: 2f7bba13b3cec7516d4990e41df297720fdbaaab
-  PromiseKit: 1fdaeb6c0a94a5114fcb814ff3d772b86886ad4e
+  PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
   RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
-  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
-  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
-  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
-  scrypt: 3f6c9e7597091c0e79c4516870b9989064ceee5d
+  RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
+  RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
+  RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
+  secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
+  Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
-  web3swift: e39ddb21627fcc6b47881b49583f589cae128902
+  web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 8a4f05bc6a7824293562727bf3bf569fd3325f42
+PODFILE CHECKSUM: 2e896069fc544054d6f8dd3f2a38d69316285835
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.7.3

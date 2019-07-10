@@ -11,7 +11,6 @@ import CryptoSwift
 import CommonCrypto
 import secp256k1_ios
 import ICONKit
-import scrypt
 
 struct Cipher {
     static func pbkdf2SHA1(password: String, salt: Data, keyByteCount: Int, round: Int) -> Data? {

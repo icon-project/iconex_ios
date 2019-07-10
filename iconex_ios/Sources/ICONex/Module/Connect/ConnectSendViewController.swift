@@ -247,7 +247,8 @@ class ConnectSendViewController: BaseViewController {
                     if let signed = try? SignedTransaction(transaction: tx, privateKey: key) {
                         let result = self.provider.sendTransaction(signedTransaction: signed).execute()
                         confirm.dismiss(animated: true, completion: {
-                            if let error = result.error {
+                            switch result {
+                            case .failure(let error):
                                 Log.Debug("Error - \(error)")
                                 var msg = ""
                                 switch error {
@@ -259,7 +260,8 @@ class ConnectSendViewController: BaseViewController {
                                 }
                                 
                                 Tools.toast(message: "Error.CommonError".localized + msg)
-                            } else if let hash = result.value {
+                            
+                            case .success(let hash):
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
                                 complete.handler = {
                                     Conn.sendICXHash(txHash: hash)
@@ -284,10 +286,12 @@ class ConnectSendViewController: BaseViewController {
                     if let signed = try? SignedTransaction(transaction: tx, privateKey: key) {
                         let result = self.provider.sendTransaction(signedTransaction: signed).execute()
                         confirm.dismiss(animated: true, completion: {
-                            if let error = result.error {
+                            switch result {
+                            case .failure(let error):
                                 Log.Debug("Error - \(error)")
                                 Conn.sendError(error: .network(error))
-                            } else if let hash = result.value {
+                            
+                            case .success(let hash):
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
                                 complete.handler = {
                                     Conn.sendICXHash(txHash: hash)

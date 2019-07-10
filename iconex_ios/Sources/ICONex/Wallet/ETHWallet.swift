@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import web3swift
+import Web3swift
 import ICONKit
 
 class ETHWallet: BaseWallet {

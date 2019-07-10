@@ -8,7 +8,7 @@
 
 import Foundation
 import ICONKit
-import web3swift
+import Web3swift
 
 // MARK: Wallet Creator
 

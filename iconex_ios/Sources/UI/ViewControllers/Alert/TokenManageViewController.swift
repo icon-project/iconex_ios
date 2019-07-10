@@ -8,7 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import web3swift
+import Web3swift
 import ICONKit
 import BigInt
 

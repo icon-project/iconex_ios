@@ -8,7 +8,6 @@
 import Foundation
 import ICONKit
 import CryptoSwift
-import scrypt
 
 public class Keystore: Codable {
     public var version: Int = 3
