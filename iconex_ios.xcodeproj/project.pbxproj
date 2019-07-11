@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B1AE15AE53087E5A27AC05B4 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D49B509327D2DAFEB3E3444 /* Pods_iconex_ios.framework */; };
 		BF2C561C22B9DB1D002AD5CC /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C55BF22B9DB1D002AD5CC /* libcrypto.a */; };
 		BF2C561D22B9DB1D002AD5CC /* updateinfo.dat in Resources */ = {isa = PBXBuildFile; fileRef = BF2C55C022B9DB1D002AD5CC /* updateinfo.dat */; };
 		BF2C561E22B9DB1D002AD5CC /* libnperm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C55C122B9DB1D002AD5CC /* libnperm.a */; };
@@ -51,6 +50,7 @@
 		D435CDFF2056737600F0FDC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D435CDFD2056737600F0FDC6 /* Main.storyboard */; };
 		D435CE0120567F7B00F0FDC6 /* ICXSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D435CE0020567F7B00F0FDC6 /* ICXSendViewController.swift */; };
 		D43BF34620522E7D00AAFA15 /* WalletDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43BF34520522E7D00AAFA15 /* WalletDetailViewController.swift */; };
+		D43DB33622D5D84D0029FFF0 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D43DB33522D5D84D0029FFF0 /* Pods_iconex_ios.framework */; };
 		D43FB694214B485D005360A8 /* IXSWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D43FB692214B485D005360A8 /* IXSWrapper.m */; };
 		D4402A8F205108A8001BD003 /* WalletAddressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4402A8E205108A8001BD003 /* WalletAddressViewController.swift */; };
 		D4402A922051258B001BD003 /* MainWalletCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4402A902051258B001BD003 /* MainWalletCell.swift */; };
@@ -132,16 +132,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D4653B56213CE0090059C042 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		D4A8C09221BE437500B41B36 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -286,6 +276,7 @@
 		D435CDFD2056737600F0FDC6 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		D435CE0020567F7B00F0FDC6 /* ICXSendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICXSendViewController.swift; sourceTree = "<group>"; };
 		D43BF34520522E7D00AAFA15 /* WalletDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetailViewController.swift; sourceTree = "<group>"; };
+		D43DB33522D5D84D0029FFF0 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D43FB692214B485D005360A8 /* IXSWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IXSWrapper.m; sourceTree = "<group>"; };
 		D43FB693214B485D005360A8 /* IXSWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IXSWrapper.h; sourceTree = "<group>"; };
 		D4402A8E205108A8001BD003 /* WalletAddressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletAddressViewController.swift; sourceTree = "<group>"; };
@@ -378,6 +369,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D43DB33622D5D84D0029FFF0 /* Pods_iconex_ios.framework in Frameworks */,
 				BF2C562122B9DB1D002AD5CC /* libnSafer.a in Frameworks */,
 				D44A948B2019CB0D00F60614 /* Security.framework in Frameworks */,
 				BF2C562222B9DB1D002AD5CC /* libNSHCBasic.a in Frameworks */,
@@ -386,7 +378,6 @@
 				D43150662100839A00D30E8E /* CloudKit.framework in Frameworks */,
 				BF2C561C22B9DB1D002AD5CC /* libcrypto.a in Frameworks */,
 				BF2C562422B9DB1D002AD5CC /* lib_ixShield.a in Frameworks */,
-				B1AE15AE53087E5A27AC05B4 /* Pods_iconex_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +387,7 @@
 		8D4DDEC28B4D9720DC645944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D43DB33522D5D84D0029FFF0 /* Pods_iconex_ios.framework */,
 				D43150652100839A00D30E8E /* CloudKit.framework */,
 				D44A948A2019CB0D00F60614 /* Security.framework */,
 				D4A8C08321BE437500B41B36 /* NotificationCenter.framework */,
@@ -850,7 +842,6 @@
 				D4728A0C2007040B00E0A899 /* Frameworks */,
 				D4728A0D2007040B00E0A899 /* Resources */,
 				D487AA1D211ABE0E003B262D /* ShellScript */,
-				D4653B56213CE0090059C042 /* Embed Frameworks */,
 				D4A8C09221BE437500B41B36 /* Embed App Extensions */,
 				51D71B01DE7ADF3734812162 /* [CP] Embed Pods Frameworks */,
 			);
@@ -962,7 +953,6 @@
 				"${BUILT_PRODUCTS_DIR}/SipHash/SipHash.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
-				"${BUILT_PRODUCTS_DIR}/secp256k1_ios/secp256k1_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1_swift/secp256k1_swift.framework",
 				"${BUILT_PRODUCTS_DIR}/web3swift/Web3swift.framework",
 			);
@@ -982,7 +972,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SipHash.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_ios.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1_swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Web3swift.framework",
 			);
@@ -1267,7 +1256,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BEF1721C7EF2B5E200B04E3F /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1275,7 +1263,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 27F4PR54DX;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(inherited)",
@@ -1312,7 +1300,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C6C6EB5519E79EAB45A421A8 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1320,7 +1307,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 27F4PR54DX;
-				ENABLE_BITCODE = NO;
+				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(inherited)",
