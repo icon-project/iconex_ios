@@ -12,6 +12,32 @@ struct Configuration {
         case main = 0
         case dev = 1
         case yeouido = 2
+        
+        var provider: String {
+            switch self {
+            case .main:
+                return "https://wallet.icon.foundation/api/v3"
+                
+            case .dev:
+                return "https://testwallet.icon.foundation/api/v3"
+                
+            case .yeouido:
+                return "https://bicon.net.solidwallet.io/api/v3"
+            }
+        }
+        
+        var nid: String {
+            switch self {
+            case .main:
+                return "0x1"
+                
+            case .dev:
+                return "0x2"
+                
+            case .yeouido:
+                return "0x3"
+            }
+        }
     }
     
     

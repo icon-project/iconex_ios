@@ -99,7 +99,7 @@ struct Cipher {
         return value.sha3(.sha256)
     }
     
-    static func createKeystore(privateKey: String, password: String) throws -> Keystore {
+    static func createKeystore(privateKey: String, password: String) throws -> ICONKeystore {
         let hexKey = privateKey.hexToData()!
         Log.Debug("hex: \(hexKey.hexEncodedString())")
         let prvKey = PrivateKey(hex: hexKey)
@@ -120,9 +120,9 @@ struct Cipher {
             throw IXError.convertKey
         }
         let result = try encrypt(devKey: encKey, data: privateKey.hexToData()!, salt: salt)
-        let kdfParam = Keystore.KDF(dklen: PBE_DKLEN, salt: salt.toHexString(), c: round, prf: "hmac-sha256")
-        let crypto = Keystore.Crypto(ciphertext: result.cipherText, cipherparams: Keystore.CipherParams(iv: result.iv), cipher: "aes-128-ctr", kdf: "pbkdf2", kdfparams: kdfParam, mac: result.mac)
-        let keystore = Keystore(address: iconWallet.address, crypto: crypto)
+        let kdfParam = ICONKeystore.KDF(dklen: PBE_DKLEN, salt: salt.toHexString(), c: round, prf: "hmac-sha256")
+        let crypto = ICONKeystore.Crypto(ciphertext: result.cipherText, cipherparams: ICONKeystore.CipherParams(iv: result.iv), cipher: "aes-128-ctr", kdf: "pbkdf2", kdfparams: kdfParam, mac: result.mac)
+        let keystore = ICONKeystore(address: iconWallet.address, crypto: crypto)
         return keystore
     }
     

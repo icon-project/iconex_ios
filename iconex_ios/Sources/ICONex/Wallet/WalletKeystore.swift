@@ -9,7 +9,7 @@ import Foundation
 import ICONKit
 import CryptoSwift
 
-public class Keystore: Codable {
+public class ICONKeystore: Codable {
     public var version: Int = 3
     public var id: String = UUID().uuidString
     public var address: String
@@ -82,7 +82,7 @@ public class Keystore: Codable {
     }
 }
 
-extension Keystore {
+extension ICONKeystore {
     
     @discardableResult
     func isValid(password: String) throws -> Bool {
@@ -143,7 +143,7 @@ extension Keystore {
         return String(data: data, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
     }
     
-    func extractPrivateKey(password: String) throws -> String {
+    func extractPrivateKey(password: String) throws -> PrivateKey {
         
         if crypto.kdf == "pbkdf2" {
             guard let enc = crypto.ciphertext.hexToData(),
@@ -160,7 +160,7 @@ extension Keystore {
             let newAddress = Cipher.makeAddress(prvKey, publicKey)
             
             if newAddress == self.address {
-                return decrypted.decryptText
+                return PrivateKey(hex: Data(hex: decrypted.decryptText))
             }
             
             throw IXError.keyMalformed
@@ -186,7 +186,7 @@ extension Keystore {
             let newAddress = Cipher.makeAddress(privateKey, publicKey)
             
             if newAddress == self.address {
-                return privateKey.hexEncoded
+                return privateKey
             }
             
             throw IXError.keyMalformed

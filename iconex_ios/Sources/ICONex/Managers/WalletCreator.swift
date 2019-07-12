@@ -206,12 +206,12 @@ class WalletCreator {
         WManager.loadWalletList()
     }
     
-    func validateKeystore(urlOfData: URL) throws -> (Keystore, COINTYPE) {
+    func validateKeystore(urlOfData: URL) throws -> (ICONKeystore, COINTYPE) {
         let content = try Data(contentsOf: urlOfData)
         Log.Debug("content - \(String(describing: String(data: content, encoding: .utf8)))")
         let decoder = JSONDecoder()
         
-        let keystore = try decoder.decode(Keystore.self, from: content)
+        let keystore = try decoder.decode(ICONKeystore.self, from: content)
         
         if keystore.address.hasPrefix("hx") {
             guard WManager.canSaveWallet(address: keystore.address.addHxPrefix()) else { throw IXError.duplicateAddress}

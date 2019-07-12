@@ -9,119 +9,78 @@ import Foundation
 import ICONKit
 
 class ICXWallet: BaseWallet {
-    var keystore: Keystore?
     
-    override init() {
-        super.init(type: .icx)
-    }
-    
-    init(alias: String) {
-        super.init(type: .icx)
-        self.alias = alias
-    }
-    
-    convenience init?(alias: String, from: Data) {
+    init?(name: String, from: Data) {
         do {
             let decoder = JSONDecoder()
-            let keystore = try decoder.decode(Keystore.self, from: from)
-            
-            self.init()
-            self.alias = alias
-            self.__rawData = from
-            self.type = .icx
-            self.keystore = keystore
-            self.address = keystore.address
+            let keystore = try decoder.decode(ICONKeystore.self, from: from)
+            super.init(name: name, keystore: keystore)
         } catch {
             return nil
         }
     }
     
-    convenience init(keystore: Keystore) {
-        self.init()
-
-        let encoder = JSONEncoder()
-        __rawData = try? encoder.encode(keystore)
-        self.address = keystore.address
-        self.keystore = keystore
+    init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil) {
+        super.init(name: name, keystore: keystore)
+        self.tokens = tokens
     }
     
-    convenience init(privateKey: String, password: String) {
-        self.init()
-        
-        do {
-            try generateICXKeyStore(privateKey: privateKey, password: password)
-        } catch {
-            return
-        }
-    }
-    
+    #warning("TODO: Implement exportBunlde")
     func exportBundle() -> WalletExportBundle {
-        let priv = String(data: __rawData!, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
-        
-        var export = WalletExportBundle(name: self.alias!, type: "icx", priv: priv, tokens: nil, createdAt: self.createdDate!.millieTimestamp, coinType: "icx")
-        
-        var datas = [TokenExportBundle]()
-        if let tokens = self.tokens {
-            for token in tokens {
-                let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
-                datas.append(exportToken)
-            }
-        }
-        export.tokens = datas
-        
-        return export
+//        let priv = String(data: __rawData!, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
+//
+//        var export = WalletExportBundle(name: self.alias!, type: "icx", priv: priv, tokens: nil, createdAt: self.createdDate!.millieTimestamp, coinType: "icx")
+//
+//        var datas = [TokenExportBundle]()
+//        if let tokens = self.tokens {
+//            for token in tokens {
+//                let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
+//                datas.append(exportToken)
+//            }
+//        }
+//        export.tokens = datas
+//
+//        return export
     }
     
     func canSaveToken(contractAddress: String) -> Bool {
         guard let tokenList = tokens else { return true }
-        return tokenList.filter { $0.contractAddress == contractAddress }.count == 0
+        return tokenList.filter { $0.contract == contractAddress }.count == 0
     }
     
+    @available(*, unavailable)
     func generateICXKeyStore(privateKey: String, password: String) throws {
-        
-        let wallet = Wallet(privateKey: PrivateKey(hex: privateKey.hexToData()!))
-        try wallet.generateKeystore(password: password)
-        
-        self.__rawData = try wallet.keystore!.jsonData()
-        self.address = wallet.address
-        
-        let decoder = JSONDecoder()
-        
-        self.keystore = try decoder.decode(Keystore.self, from: __rawData!)
     }
     
+    #warning("TODO: Implement changePassword")
     func changePassword(old: String, new: String) throws {
-        guard let keystore = self.keystore else { throw IXError.emptyWallet }
-        try keystore.isValid(password: old)
-        
-        let prvKey = try self.extractICXPrivateKey(password: old)
-        let newKeystore = try Cipher.createKeystore(privateKey: prvKey, password: new)
-        
-        self.__rawData = newKeystore.data
-        self.keystore = newKeystore
+//        guard let keystore = self.keystore else { throw IXError.emptyWallet }
+//        try keystore.isValid(password: old)
+//
+//        let prvKey = try self.extractICXPrivateKey(password: old)
+//        let newKeystore = try Cipher.createKeystore(privateKey: prvKey, password: new)
+//
+//        self.__rawData = newKeystore.data
+//        self.keystore = newKeystore
     }
     
+    #warning("TODO: Implement saveICXWallet")
     func saveICXWallet() throws {
-        
-        try DB.saveWallet(name: self.alias!, address: self.address!, type: "icx", rawData: self.__rawData)
+        try DB.saveWallet(name: self.name, address: self.address, type: "icx", rawData: self.rawData)
         
         if let tokens = self.tokens {
             for tokenInfo in tokens {
-                try DB.addToken(tokenInfo: tokenInfo)
+//                try DB.addToken(tokenInfo: tokenInfo)
             }
         }
     }
     
-    func extractICXPrivateKey(password: String) throws -> String {
-        guard let keystore = self.keystore else { throw IXError.emptyWallet }
-        
+    func extractICXPrivateKey(password: String) throws -> PrivateKey {
         return try keystore.extractPrivateKey(password: password)
     }
     
     func getBackupKeystoreFilepath() throws -> URL {
-        guard let rawData = __rawData else { throw IXError.emptyWallet }
-        
-        let filename = "UTC--" + Date.currentZuluTime + "--" + self.address!
+        let filename = "UTC--" + Date.currentZuluTime + "--" + self.address
         
         let fm = FileManager.default
         

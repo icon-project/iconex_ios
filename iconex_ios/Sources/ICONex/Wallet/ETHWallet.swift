@@ -10,7 +10,7 @@ import Web3swift
 import ICONKit
 
 class ETHWallet: BaseWallet {
-    var keystore: Keystore?
+    var keystore: ICONKeystore?
     
     override init() {
         super.init(type: .eth)
@@ -29,7 +29,7 @@ class ETHWallet: BaseWallet {
         let decoder = JSONDecoder()
         
         do {
-            let keystore = try decoder.decode(Keystore.self, from: from)
+            let keystore = try decoder.decode(ICONKeystore.self, from: from)
             keystore.address = keystore.address.add0xPrefix().lowercased()
             self.keystore = keystore
             self.address = keystore.address
@@ -41,7 +41,7 @@ class ETHWallet: BaseWallet {
         }
     }
     
-    convenience init(keystore: Keystore) {
+    convenience init(keystore: ICONKeystore) {
         self.init()
         
         let encoder = JSONEncoder()
@@ -58,7 +58,7 @@ class ETHWallet: BaseWallet {
             let decoder = JSONDecoder()
             let encoder = JSONEncoder()
             
-            let keystore = try decoder.decode(Keystore.self, from: keystoreData)
+            let keystore = try decoder.decode(ICONKeystore.self, from: keystoreData)
             keystore.address = keystore.address.add0xPrefix().lowercased()
             
             self.keystore = keystore
@@ -90,7 +90,7 @@ class ETHWallet: BaseWallet {
         self.__rawData = encoded
         
         let decoder = JSONDecoder()
-        let keystore = try decoder.decode(Keystore.self, from: encoded)
+        let keystore = try decoder.decode(ICONKeystore.self, from: encoded)
         self.keystore = keystore
     }
     
@@ -109,7 +109,7 @@ class ETHWallet: BaseWallet {
         self.__rawData = encoded
         
         let decoder = JSONDecoder()
-        let keystore = try decoder.decode(Keystore.self, from: encoded)
+        let keystore = try decoder.decode(ICONKeystore.self, from: encoded)
         self.keystore = keystore
     }
     
@@ -131,7 +131,7 @@ class ETHWallet: BaseWallet {
         self.__rawData = encoded
         
         let decoder = JSONDecoder()
-        let keystore = try decoder.decode(Keystore.self, from: encoded)
+        let keystore = try decoder.decode(ICONKeystore.self, from: encoded)
         self.keystore = keystore
     }
     

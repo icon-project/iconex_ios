@@ -94,7 +94,7 @@ Base64 encoded ICON JSON-RPC API
 
 //Response - fail
 {
-    "code": -1000,
+    "code": -1,
     "message": "Operation canceled by user."
 }
 ```

@@ -8,60 +8,50 @@
 import Foundation
 import BigInt
 
-enum COINTYPE: String {
-    case icx = "icx"
-    case eth = "eth"
-    case irc = "irc"
-    case unknown = "unknown"
-}
-
 protocol BaseWalletConvertible {
-    
-    var alias: String? { get set }
-    var address: String? { get set }
-    var __rawData: Data? { get set }
-    var type: COINTYPE { get set }
-    var balance: BigUInt? { get }
+    var name: String { get set }
+    var address: String { get }
     var decimal: Int { get set }
-    var createdDate: Date? { get set }
-    var tokens: [TokenInfo]? { get set }
+    var tokens: [Token]? { get set }
+    var created: Date { get set }
+    var balance: BigUInt? { get }
+    var keystore: ICONKeystore { get set }
+    var rawData: Data { get }
 }
 
 class BaseWallet: BaseWalletConvertible {
+    var name: String
+    var address: String {
+        return keystore.address
+    }
     var decimal: Int = 18
-    var alias: String?
-    var address: String?
-    var __rawData: Data?
-    var type: COINTYPE = .unknown
     var balance: BigUInt? {
-        guard let addr = address else { return nil }
-        return BalanceManager.shared.walletBalanceList[addr.add0xPrefix()]
+        return BalanceManager.shared.walletBalanceList[address]
     }
-    var createdDate: Date?
-    var tokens: [TokenInfo]?
-    
-    init() {
-        self.type = .unknown
-    }
-    
-    init(type: COINTYPE) {
-        self.type = type
+    var created: Date
+    var tokens: [Token]?
+    var keystore: ICONKeystore
+    var rawData: Data {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        
+        return try! encoder.encode(keystore)
     }
     
-    /// alias 명의 지갑 생성
-    ///
-    /// - Parameter alias: 지갑 이름
-    convenience init(alias: String, type: COINTYPE) {
-        self.init()
-        self.alias = alias
-        self.type = type
+    init(name: String, keystore: ICONKeystore, created: Date = Date()) {
+        self.name = name
+        self.keystore = keystore
+        self.created = created
     }
     
-    convenience init(alias: String, from: Data, type: COINTYPE) {
-        self.init()
-        self.alias = alias
-        self.__rawData = from
-        self.type = type
+    init?(name: String, rawData: Data, created: Date = Date()) {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let keystore = try? decoder.decode(ICONKeystore.self, from: rawData) else { return nil }
+        
+        self.name = name
+        self.keystore = keystore
+        self.created = created
     }
     
     /// PrivateKey 생성

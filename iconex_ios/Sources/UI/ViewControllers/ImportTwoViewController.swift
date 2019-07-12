@@ -33,7 +33,7 @@ class ImportTwoViewController: UIViewController {
     @IBOutlet weak var qrContainer: UIView!
     @IBOutlet weak var qrButton: UIButton!
     
-    var validatedData: (Keystore, COINTYPE)?
+    var validatedData: (ICONKeystore, COINTYPE)?
     
     private var typeList: [(name: String, type: COINTYPE)]!
     private var selectedIndex = 0
@@ -367,7 +367,7 @@ extension ImportTwoViewController: UIDocumentPickerDelegate {
             }
         } else {
             do {
-                let data: (Keystore, COINTYPE) = try WCreator.validateKeystore(urlOfData: url)
+                let data: (ICONKeystore, COINTYPE) = try WCreator.validateKeystore(urlOfData: url)
                 
                 Log.Debug(data.0)
                 validatedData = data

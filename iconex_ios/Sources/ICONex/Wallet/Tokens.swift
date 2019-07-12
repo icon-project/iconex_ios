@@ -7,13 +7,10 @@
 
 import Foundation
 
-struct TokenListInfo: Codable {
-    var symbol: String
-    var address: String
+struct Token {
+    var name: String
     var decimal: Int
-    var type: String
-}
-
-class TokenLoader {
-    
+    var parent: String
+    var contract: String
+    var created: Date
 }
