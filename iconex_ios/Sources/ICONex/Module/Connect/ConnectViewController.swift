@@ -101,7 +101,7 @@ class ConnectViewController: BaseViewController {
                         Conn.sendError(error: .notFound(.value))
                         return false
                     }
-                    guard let bigValue = BigUInt(value.prefix0xRemoved(), radix: decimal) else {
+                    guard let bigValue = BigUInt(value.prefix0xRemoved(), radix: 16) else {
                         Conn.sendError(error: .invalidParameter(.value))
                         return false
                     }
