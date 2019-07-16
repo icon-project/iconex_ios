@@ -74,7 +74,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ICONKit:
-    :commit: 5922377c23caafe5b7fb6f3a82bc5789c2062449
+    :commit: a0d927196f113236cf338651bd90b8996da18575
     :git: https://github.com/icon-project/ICONKit
 
 SPEC CHECKSUMS:
