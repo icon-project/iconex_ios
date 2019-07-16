@@ -9,7 +9,7 @@ import Foundation
 import Security
 import CryptoSwift
 import CommonCrypto
-import secp256k1_ios
+import secp256k1_swift
 import ICONKit
 
 struct Cipher {

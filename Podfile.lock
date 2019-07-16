@@ -6,7 +6,7 @@ PODS:
   - ICONKit (0.4.0):
     - BigInt
     - CryptoSwift
-    - secp256k1_ios
+    - secp256k1_swift
   - LicensesViewController (0.7.0)
   - PromiseKit (6.8.4):
     - PromiseKit/CorePromise (= 6.8.4)
@@ -28,7 +28,6 @@ PODS:
   - RxRelay (5.0.0):
     - RxSwift (~> 5)
   - RxSwift (5.0.0)
-  - secp256k1_ios (0.1.3)
   - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
   - Starscream (3.1.0)
@@ -62,7 +61,6 @@ SPEC REPOS:
     - RxCocoa
     - RxRelay
     - RxSwift
-    - secp256k1_ios
     - secp256k1_swift
     - SipHash
     - Starscream
@@ -76,14 +74,14 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ICONKit:
-    :commit: 29d6623a25589701b60f4891a6fe1bb621e28ecf
+    :commit: 5922377c23caafe5b7fb6f3a82bc5789c2062449
     :git: https://github.com/icon-project/ICONKit
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  ICONKit: 4a237bf67b1c640c0bdd18343ca0b1c8c6e4a42c
+  ICONKit: 08650679326508d1e425323f6554b1f34c7a3108
   LicensesViewController: 2f7bba13b3cec7516d4990e41df297720fdbaaab
   PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
@@ -91,7 +89,6 @@ SPEC CHECKSUMS:
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
   RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
-  secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
