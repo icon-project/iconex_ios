@@ -18,7 +18,7 @@ struct AddressBook {
         return DB.canSaveAddressBook(address: address)
     }
     
-    static func addAddressBook(name: String, address: String, type: COINTYPE) throws {
+    static func addAddressBook(name: String, address: String, type: String) throws {
         try DB.saveAddressBook(name: name, address: address, type: type)
     }
     
@@ -30,7 +30,7 @@ struct AddressBook {
         }
     }
     
-    static func loadAddressBookList(by: COINTYPE) -> [AddressBookInfo] {
+    static func loadAddressBookList(by: String) -> [AddressBookInfo] {
         
         var addressBookList = [AddressBookInfo]()
         do {

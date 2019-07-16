@@ -8,8 +8,7 @@ def import_pods
   pod 'web3swift', :modular_headers => true
   pod 'Toast-Swift', '~> 4.0.0'
   pod 'Alamofire'
-#  pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit', :branch => 'develop'
-  pod 'ICONKit', :path => '~/works/ICONKit'
+  pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit', :branch => 'develop'
   pod 'LicensesViewController'
 end
 

@@ -41,7 +41,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - ICONKit (from `~/works/ICONKit`)
+  - ICONKit (from `https://github.com/icon-project/ICONKit`, branch `develop`)
   - LicensesViewController
   - RealmSwift (= 3.11.0)
   - RxCocoa
@@ -95,6 +95,6 @@ SPEC CHECKSUMS:
   Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: e160e8c192fbd8927d7a4b559ee74b379fccb01d
+PODFILE CHECKSUM: 2ace3147fcbffc7fab602a2e6193d2e5e643df2b
 
 COCOAPODS: 1.7.3

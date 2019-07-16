@@ -143,7 +143,7 @@ struct DB {
     static func changeWalletPassword(wallet: BaseWalletConvertible,oldPassword: String, newPassword: String) throws -> Bool {
         let realm = try Realm()
         
-        guard let walletModel = realm.objects(WalletModel.self).filter({ $0.name == wallet.alias! }).first else {
+        guard let walletModel = realm.objects(WalletModel.self).filter({ $0.name == wallet.name }).first else {
             return false
         }
         
@@ -196,7 +196,7 @@ struct DB {
         return wallet.name
     }
     
-    static func walletListBy(coin: COINTYPE) -> CoinInfo? {
+    static func walletListBy(type: String) -> CoinInfo? {
         let realm = try! Realm()
         
         let list = realm.objects(WalletModel.self).filter({ $0.type == coin.rawValue })
@@ -205,11 +205,11 @@ struct DB {
         
         var name = ""
         
-        switch coin {
-        case .icx:
+        switch type {
+        case "icx":
             name = "ICON"
             
-        case .eth:
+        case "eth":
             name = "Ethereum"
             
         default:
@@ -265,7 +265,7 @@ struct DB {
         return walletBy(address: info.address, type: info.type)
     }
     
-    static func walletBy(address: String, type: COINTYPE) -> BaseWalletConvertible? {
+    static func walletBy(address: String, type: String) -> BaseWalletConvertible? {
         do {
             let realm = try Realm()
             

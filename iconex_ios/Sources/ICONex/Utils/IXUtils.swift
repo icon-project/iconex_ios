@@ -592,7 +592,7 @@ struct Alert {
         
     }
     
-    static func editingAddress(name: String? = nil, address: String? = nil, mode: EditingMode, type: COINTYPE, handler: (() -> Void)?) -> EditingAddressViewController {
+    static func editingAddress(name: String? = nil, address: String? = nil, mode: EditingMode, type: String, handler: (() -> Void)?) -> EditingAddressViewController {
         let add = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "EditingAddressView") as! EditingAddressViewController
         add.name = name
         add.address = address
