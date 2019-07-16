@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A60740C26377090D215507F /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 935E268B122AF70B35F329AB /* Pods_iconex_ios.framework */; };
 		BF2C561C22B9DB1D002AD5CC /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C55BF22B9DB1D002AD5CC /* libcrypto.a */; };
 		BF2C561D22B9DB1D002AD5CC /* updateinfo.dat in Resources */ = {isa = PBXBuildFile; fileRef = BF2C55C022B9DB1D002AD5CC /* updateinfo.dat */; };
 		BF2C561E22B9DB1D002AD5CC /* libnperm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C55C122B9DB1D002AD5CC /* libnperm.a */; };
@@ -146,8 +147,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7D49B509327D2DAFEB3E3444 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		BEF1721C7EF2B5E200B04E3F /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
+		24351D30F744AAC8ED1AC821 /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
+		935E268B122AF70B35F329AB /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9559C579D1D8ADFC3438E276 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		BF0B659222CB52E400E13200 /* Pods-iconex_ios-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Pods-iconex_ios-acknowledgements.plist"; sourceTree = "<group>"; };
 		BF2C55BF22B9DB1D002AD5CC /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libcrypto.a; sourceTree = "<group>"; };
 		BF2C55C022B9DB1D002AD5CC /* updateinfo.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = updateinfo.dat; sourceTree = "<group>"; };
@@ -241,7 +243,6 @@
 		BF2C561922B9DB1D002AD5CC /* libNSHCBasic.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libNSHCBasic.a; sourceTree = "<group>"; };
 		BF2C561A22B9DB1D002AD5CC /* san.dat */ = {isa = PBXFileReference; lastKnownFileType = file; path = san.dat; sourceTree = "<group>"; };
 		BF2C561B22B9DB1D002AD5CC /* lib_ixShield.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = lib_ixShield.a; sourceTree = "<group>"; };
-		C6C6EB5519E79EAB45A421A8 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D404608D21CB2A71001958F5 /* WalletManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletManager.swift; sourceTree = "<group>"; };
 		D404608F21CB6D94001958F5 /* WalletCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCreator.swift; sourceTree = "<group>"; };
@@ -380,6 +381,10 @@
 				D43150662100839A00D30E8E /* CloudKit.framework in Frameworks */,
 				BF2C561C22B9DB1D002AD5CC /* libcrypto.a in Frameworks */,
 				BF2C562422B9DB1D002AD5CC /* lib_ixShield.a in Frameworks */,
+<<<<<<< HEAD
+=======
+				4A60740C26377090D215507F /* Pods_iconex_ios.framework in Frameworks */,
+>>>>>>> connect-patch-1
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +398,7 @@
 				D43150652100839A00D30E8E /* CloudKit.framework */,
 				D44A948A2019CB0D00F60614 /* Security.framework */,
 				D4A8C08321BE437500B41B36 /* NotificationCenter.framework */,
-				7D49B509327D2DAFEB3E3444 /* Pods_iconex_ios.framework */,
+				935E268B122AF70B35F329AB /* Pods_iconex_ios.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -827,8 +832,8 @@
 		E21AF62972AB4E5ECFA13B86 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BEF1721C7EF2B5E200B04E3F /* Pods-iconex_ios.debug.xcconfig */,
-				C6C6EB5519E79EAB45A421A8 /* Pods-iconex_ios.release.xcconfig */,
+				24351D30F744AAC8ED1AC821 /* Pods-iconex_ios.debug.xcconfig */,
+				9559C579D1D8ADFC3438E276 /* Pods-iconex_ios.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -840,13 +845,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4728A212007040B00E0A899 /* Build configuration list for PBXNativeTarget "iconex_ios" */;
 			buildPhases = (
-				F702B58F81A95FBF9CAD0C76 /* [CP] Check Pods Manifest.lock */,
+				BCAE50549C215923F5C5AFBF /* [CP] Check Pods Manifest.lock */,
 				D4728A0B2007040B00E0A899 /* Sources */,
 				D4728A0C2007040B00E0A899 /* Frameworks */,
 				D4728A0D2007040B00E0A899 /* Resources */,
 				D487AA1D211ABE0E003B262D /* ShellScript */,
 				D4A8C09221BE437500B41B36 /* Embed App Extensions */,
-				51D71B01DE7ADF3734812162 /* [CP] Embed Pods Frameworks */,
+				44063E9FE35B55DF0A25B352 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -935,7 +940,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		51D71B01DE7ADF3734812162 /* [CP] Embed Pods Frameworks */ = {
+		44063E9FE35B55DF0A25B352 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -983,20 +988,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D487AA1D211ABE0E003B262D /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n./credits.py -s \"$SRCROOT\" -o \"$SRCROOT/Credits.plist\"\n";
-		};
-		F702B58F81A95FBF9CAD0C76 /* [CP] Check Pods Manifest.lock */ = {
+		BCAE50549C215923F5C5AFBF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1017,6 +1009,19 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		D487AA1D211ABE0E003B262D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n./credits.py -s \"$SRCROOT\" -o \"$SRCROOT/Credits.plist\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1258,7 +1263,7 @@
 		};
 		D4728A222007040B00E0A899 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BEF1721C7EF2B5E200B04E3F /* Pods-iconex_ios.debug.xcconfig */;
+			baseConfigurationReference = 24351D30F744AAC8ED1AC821 /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1302,7 +1307,7 @@
 		};
 		D4728A232007040B00E0A899 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C6C6EB5519E79EAB45A421A8 /* Pods-iconex_ios.release.xcconfig */;
+			baseConfigurationReference = 9559C579D1D8ADFC3438E276 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

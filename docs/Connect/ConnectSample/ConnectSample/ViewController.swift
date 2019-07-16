@@ -90,80 +90,30 @@ class ViewController: UIViewController {
         }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Send Loop", style: .default, handler: { (action) in
-            var param = ["redirect": "connect-sample://"] as [String: Any]
-            guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
-            
-            let from = self.bindAddress!
-
-            let toField = alert.textFields!.first!
-            guard let to = toField.text, to != "" else { return }
-            
-            let coinTransfer: Transaction = Transaction()
-                .from(from)
-                .to(to)
-                .value(big)
-                .nid("0x2")
-                .nonce("0x1")
-            
-            guard let txData = try? coinTransfer.toDic() else { return }
-            
-            let payload = self.generateJSONRPC(params: txData)
-            
-            param["payload"] = payload
-            
-            print(param)
-            
-            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
-            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
-                self.send(command: .jsonrpc, params: param)
-            }))
-
-            self.present(confirm, animated: true, completion: nil)
-        }))
-        
-        alert.addAction(UIAlertAction(title: "Send gLoop", style: .default, handler: { (action) in
-            var param = ["redirect": "connect-sample://"] as [String: Any]
-            guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
-            
-            let from = self.bindAddress!
-            
-            let gLoop = BigUInt(10).power(9)
-            
-            let toField = alert.textFields!.first!
-            guard let to = toField.text, to != "" else { return }
-            
-            let coinTransfer: Transaction = Transaction()
-                .from(from)
-                .to(to)
-                .value(big.multiplied(by: gLoop))
-                .nid("0x2")
-                .nonce("0x1")
-            
-            guard let txData = try? coinTransfer.toDic() else { return }
-            
-            let payload = self.generateJSONRPC(params: txData)
-            
-            param["payload"] = payload
-            
-            print(param)
-            
-            let confirm = UIAlertController(title: "", message: "\(param)", preferredStyle: .alert)
-            confirm.addAction(UIAlertAction(title: "Send", style: .cancel, handler: { action in
-                self.send(command: .jsonrpc, params: param)
-            }))
-            
-            self.present(confirm, animated: true, completion: nil)
-        }))
-        
         alert.addAction(UIAlertAction(title: "Send ICX", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
-            guard let valueString = alert.textFields![1].text, valueString != "", let big = BigUInt(valueString) else { return }
+            guard let valueString = alert.textFields![1].text, valueString != "" else { return }
+            
+            var bigValue: BigUInt
+            
+            if valueString.contains(".") {
+                let value = valueString.split(separator: ".")
+                
+                guard let intVal = BigUInt(value[0])?.convert() else { return }
+                bigValue = intVal
+                
+                let div = value[1].count
+                if div != 0 {
+                    guard let doubleVal = BigUInt(value[1])?.convert() else { return }
+                    let pow = BigUInt(10).power(div)
+                    bigValue += doubleVal / pow
+                }
+                
+            } else {
+                bigValue =  BigUInt(valueString)?.convert() ?? 0
+            }
             
             let from = self.bindAddress!
-            
-            let icx = BigUInt(10).power(18)
-
             
             let toField = alert.textFields!.first!
             guard let to = toField.text, to != "" else { return }
@@ -171,7 +121,7 @@ class ViewController: UIViewController {
             let coinTransfer: Transaction = Transaction()
                 .from(from)
                 .to(to)
-                .value(big.multiplied(by: icx))
+                .value(bigValue)
                 .nid("0x2")
                 .nonce("0x1")
             
@@ -221,8 +171,27 @@ class ViewController: UIViewController {
             guard let contract = conField.text, contract != "" else { return }
             
             let valueField = alert.textFields!.last!
-            guard let valueString = valueField.text, valueString != "", let bigValue = BigUInt(valueString) else { return }
-            let value = "0x" + String(bigValue, radix: 8)
+            guard let valueString = valueField.text, valueString != "" else { return }
+
+            var bigValue: BigUInt
+
+            if valueString.contains(".") {
+                let value = valueString.split(separator: ".")
+
+                guard let intVal = BigUInt(value[0])?.multiplied(by: 100000000) else { return }
+                bigValue = intVal
+
+                let div = value[1].count
+                if div != 0 {
+                    guard let doubleVal = BigUInt(value[1])?.multiplied(by: 100000000) else { return }
+                    let pow = BigUInt(10).power(div)
+                    bigValue += doubleVal / pow
+                }
+
+            } else {
+                bigValue = BigUInt(valueString)?.multiplied(by: 100000000) ?? 0
+            }
+            let value = "0x" + String(bigValue, radix: 16)
             
             let tokenTransaction = CallTransaction()
                 .from(from)
@@ -280,8 +249,26 @@ class ViewController: UIViewController {
                 .nid("0x2")
                 .message(msg)
             
-            
-            if let valueString = alert.textFields![1].text, valueString != "", let bigValue = BigUInt(valueString) {
+            if let valueString = alert.textFields![1].text, valueString != "" {
+                var bigValue: BigUInt
+                
+                if valueString.contains(".") {
+                    let value = valueString.split(separator: ".")
+                    
+                    guard let intVal = BigUInt(value[0])?.convert() else { return }
+                    bigValue = intVal
+                    
+                    let div = value[1].count
+                    if div != 0 {
+                        guard let doubleVal = BigUInt(value[1])?.convert() else { return }
+                        let pow = BigUInt(10).power(div)
+                        bigValue += doubleVal / pow
+                    }
+                    
+                } else {
+                    bigValue =  BigUInt(valueString)?.convert() ?? 0
+                }
+                
                 message.value(bigValue)
             }
             

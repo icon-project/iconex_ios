@@ -69,7 +69,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   ICONKit:
-    :path: "~/works/ICONKit"
+    :branch: develop
+    :git: https://github.com/icon-project/ICONKit
+
+CHECKOUT OPTIONS:
+  ICONKit:
+    :commit: 5922377c23caafe5b7fb6f3a82bc5789c2062449
+    :git: https://github.com/icon-project/ICONKit
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
