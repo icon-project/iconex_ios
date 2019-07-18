@@ -10,7 +10,7 @@ import Foundation
 import ICONKit
 import BigInt
 
-class Manager {
+class WalletManager {
     static let sharedInstance = Manager()
     
     private init() {}

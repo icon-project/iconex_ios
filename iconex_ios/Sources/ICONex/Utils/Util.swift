@@ -11,24 +11,11 @@ import RxCocoa
 import RxSwift
 import BigInt
 import Web3swift
-import LocalAuthentication
 import CryptoSwift
 import Toast_Swift
 import ICONKit
 
 struct Tools {
-    public enum LAStatus {
-        case success
-        case failed
-        case userCancel
-        case locked
-        case notUsed
-        case notSupported
-        case userFallback
-        case notAvailable
-        case passcodeNotSet
-    }
-    
     static var decimalSeparator: String {
         var separator = "."
         let formatter = NumberFormatter()
@@ -55,18 +42,6 @@ struct Tools {
         return separator
     }
     
-    static func hexStringToBalanceString(hexString: String, decimal: Int) -> String? {
-        var stringValue = hexString as NSString
-        if stringValue.hasPrefix("0x") {
-            stringValue = stringValue.substring(from: 2) as NSString
-        }
-        guard let bigInt = BigUInt(String(stringValue), radix: 16) else {
-            return nil
-        }
-        
-        return bigToString(value: bigInt, decimal: decimal)
-    }
-    
     static func bigToString(value bigInt: BigUInt, decimal: Int, _ below: Int = 0, _ remove: Bool = false) -> String {
         let total = bigInt.quotientAndRemainder(dividingBy: BigUInt(10).power(decimal))
         let icx = String(total.quotient, radix: 10)
@@ -87,41 +62,6 @@ struct Tools {
         wei = under as String
         
         return wei == "" ? icx : icx + Tools.decimalSeparator + wei
-    }
-    
-    static func hexStringToBig(value: String) -> BigUInt? {
-        var balance = value
-        if balance.hasPrefix("0x") {
-            balance = String(balance[balance.index(balance.startIndex, offsetBy: 2)..<balance.endIndex])
-        }
-        
-        return BigUInt(balance, radix: 16)
-    }
-    
-    static func getICXtoHEX(dic: [String: Any]) -> String {
-        var response: String
-        if let result = dic["result"] as? [String: Any] {
-            response = result["response"] as! String
-        } else {
-            response = dic["response"] as! String
-        }
-        
-        response = String(response[response.index(response.startIndex, offsetBy: 2)..<response.endIndex])
-        
-        return response
-    }
-    
-    static func getICX(dic: [String: Any]) -> BigUInt? {
-        var response: String
-        if let result = dic["result"] as? [String: Any] {
-            response = result["response"] as! String
-        } else {
-            response = dic["response"] as! String
-        }
-        
-        response = String(response[response.index(response.startIndex, offsetBy: 2)..<response.endIndex])
-        
-        return hexStringToBig(value: response)
     }
     
     static func stringToBigUInt(inputText: String, decimal: Int = 18, fixed: Bool = false) -> BigUInt? {
@@ -153,46 +93,6 @@ struct Tools {
         }
         
         return result
-    }
-    
-    static func convertedHexString(value: String, decimal: Int = 18) -> String? {
-        let comp = value.components(separatedBy: Tools.decimalSeparator)
-        
-        var converted: BigUInt?
-        if comp.count < 2 {
-            guard let first = comp.first, let quotient = BigUInt(first) else {
-                return nil
-            }
-            
-            let completed = quotient * BigUInt(10).power(decimal)
-            converted = completed
-        } else {
-            guard let first = comp.first, let second = comp.last, let quotient = BigUInt(first, radix: 10), let remainder = BigUInt(second, radix: 10) else {
-                return nil
-            }
-            let completed = (quotient * BigUInt(10).power(decimal)) + (remainder * BigUInt(10).power(decimal - second.length))
-            converted = completed
-        }
-        
-        let result = String(converted!, radix: 16)
-        
-        return "0x" + result
-    }
-    
-    static func balanceToExchange(_ value: BigUInt, from: String, to: String, belowDecimal: Int = 4, decimal: Int = 18) -> String? {
-        guard let exchanged = balanceToExchangeBigInt(value, from: from, to: to, decimal: decimal) else { return nil }
-        
-        return bigToString(value: exchanged, decimal: decimal, belowDecimal, false)
-    }
-    
-    static func balanceToExchangeBigInt(_ value: BigUInt, from: String, to: String, decimal: Int = 18) -> BigUInt? {
-        guard let rateString = Exchange.exchangeInfoList[from+to], rateString.createDate != nil, let rate = Tools.stringToBigUInt(inputText: rateString.price, decimal: decimal, fixed: true) else {
-            return nil
-        }
-        
-        let exchanged = value * rate / BigUInt(10).power(decimal)
-        
-        return exchanged
     }
     
     static func rotateAnimation(inView: UIView) {
@@ -265,158 +165,6 @@ struct Tools {
         UserDefaults.standard.synchronize()
     }
     
-    static func canVerificateTouchID() -> LAStatus {
-        let context = LAContext()
-        
-        var errorPointer: NSError?
-        let _ = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &errorPointer)
-        
-        guard let error = errorPointer as? LAError else {
-            return .success
-        }
-        
-        switch error {
-        case LAError.touchIDLockout:
-            return LAStatus.locked
-            
-        case LAError.touchIDNotEnrolled:
-            return LAStatus.notUsed
-            
-        default:
-            if #available(iOS 11, *) {
-                switch error {
-                case LAError.biometryLockout:
-                    return LAStatus.locked
-                    
-                case LAError.biometryNotEnrolled:
-                    return LAStatus.notUsed
-                    
-                case LAError.biometryNotAvailable:
-                    return LAStatus.notAvailable
-                    
-                case LAError.passcodeNotSet:
-                    return LAStatus.passcodeNotSet
-                    
-                default:
-                    return LAStatus.notSupported
-                }
-            } else {
-                return LAStatus.notSupported
-            }
-        }
-    }
-    
-    static var isTouchIDEnabled: Bool {
-        return UserDefaults.standard.bool(forKey: "useBio")
-    }
-    
-    static func touchIDVerification(message: String, completion: @escaping ((_ state: LAStatus) -> Void)) {
-        let context = LAContext()
-        var reason = ""
-        switch UIDevice.current.type {
-        case .iPhoneX:
-            reason = "LockScreen.Setting.Bio.Use.FaceID".localized
-            
-        default:
-            reason = "LockScreen.Setting.Bio.Use.TouchID".localized
-        }
-        
-        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (isSuccess, error) in
-            
-            var state = LAStatus.success
-            
-            if isSuccess {
-                if let domain = context.evaluatedPolicyDomainState {
-                    UserDefaults.standard.set(domain, forKey: "domain")
-                    UserDefaults.standard.synchronize()
-                    
-                    Log.Debug("save users domain.")
-                }
-            } else {
-                switch error!._code {
-                case LAError.Code.systemCancel.rawValue, LAError.Code.userCancel.rawValue:
-                    state = .userCancel
-                    break
-                    
-                case LAError.Code.authenticationFailed.rawValue:
-                    state = .failed
-                    break
-                    
-                case LAError.Code.passcodeNotSet.rawValue, LAError.Code.touchIDNotEnrolled.rawValue:
-                    state = .notUsed
-                    break
-                    
-                case LAError.Code.touchIDNotAvailable.rawValue:
-                    state = .notSupported
-                    break
-                    
-                case LAError.Code.userFallback.rawValue:
-                    state = .userFallback
-                    break
-                    
-                default:
-                    if (error!._code == LAError.Code.appCancel.rawValue) {
-                        state = .userCancel
-                    } else if (error!._code == LAError.Code.touchIDLockout.rawValue) {
-                        state = .locked
-                    } else {
-                        state = .userCancel
-                    }
-                    
-                    break
-                }
-            }
-            DispatchQueue.main.async {
-                completion(state)
-            }
-        }
-    }
-    
-    static func touchIDChanged() -> Bool {
-        let context = LAContext()
-        
-        context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
-        
-        guard let oldDomain = UserDefaults.standard.data(forKey: "domain") else {
-            return false
-        }
-        
-        guard let newDomain = context.evaluatedPolicyDomainState else {
-            return false
-        }
-        
-        let changed = oldDomain != newDomain
-        
-        Log.Debug("TouchID domain status: \(changed)")
-        
-        return changed
-    }
-    
-    static func biometryType() -> NSString {
-        switch UIDevice.current.type {
-        case .iPhoneX:
-            return "Face ID"
-            
-        default:
-            return "Touch ID"
-        }
-    }
-    
-    static func invalidateTouchID() {
-        let context = LAContext()
-        
-        context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
-        
-        guard let newDomain = context.evaluatedPolicyDomainState else {
-            return
-        }
-        
-        UserDefaults.standard.set(newDomain, forKey: "domain")
-        UserDefaults.standard.synchronize()
-        
-        Log.Debug("TouchID domain saved.")
-    }
-    
     static func removeTouchID() {
         UserDefaults.standard.removeObject(forKey: "domain")
         UserDefaults.standard.removeObject(forKey: "useBio")
@@ -429,65 +177,6 @@ struct Tools {
         guard let window = app.window else { return }
         
         window.makeToast(message)        
-    }
-}
-
-
-struct Validator {
-    static func validateCharacterSet(password: String) -> Bool {
-        var charSet = CharacterSet.lowercaseLetters
-        let digitSet = CharacterSet.decimalDigits
-        let specialSet = CharacterSet(charactersIn: "?!:.,%+-/*<>{}()[]`\"'~_^\\|@#$&")
-        let letterSet = charSet.union(CharacterSet.uppercaseLetters)
-
-        charSet = letterSet.union(digitSet)
-        charSet = charSet.union(specialSet)
-        
-        let notAllowed = password.unicodeScalars.filter { charSet.inverted.contains($0) }
-        let hasLetters = password.unicodeScalars.filter { letterSet.contains($0) }
-        let hasDigits = password.unicodeScalars.filter { digitSet.contains($0) }
-        let hasSpecial = password.unicodeScalars.filter { specialSet.contains($0) }
-        
-        return notAllowed.count == 0 && hasLetters.count > 0 && hasDigits.count > 0 && hasSpecial.count > 0
-    }
-    
-    static func validateSequenceNumber(password: String) -> Bool {
-        var valid = true
-        
-        let pinArray = password.unicodeScalars.filter({ $0.isASCII }).map({ $0.value })
-        
-        for i in 2..<pinArray.count {
-            let c1 = Int(String(pinArray[i - 2]))!
-            let c2 = Int(String(pinArray[i - 1]))!
-            let c3 = Int(String(pinArray[i]))!
-            
-            if c1 == c2 && c2 == c3 {
-                valid = false
-                break
-            }
-        }
-        
-        return valid
-    }
-    
-    static func validateICXAddress(address: String) -> Bool {
-        let pattern = "^(hx[a-zA-Z0-9]{40})$"
-        let result = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return result.evaluate(with: address)
-    }
-    
-    static func validateIRCAddress(address: String) -> Bool {
-        let pattern = "^(cx[a-zA-Z0-9]{40})$"
-        let result = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return result.evaluate(with: address)
-    }
-    
-    static func validateETHAddress(address: String) -> Bool {
-        let tempAddress = address.add0xPrefix()
-        guard tempAddress.length == 42 else { return false }
-        let pattern = "^(0x[a-zA-Z0-9]{40})$"
-        let result = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return result.evaluate(with: tempAddress)
     }
 }
 
