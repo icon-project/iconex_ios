@@ -158,7 +158,7 @@ class EditingAddressViewController: UIViewController {
                             }
                         })
                     } catch {
-                        Log.Debug("error: \(error)")
+                        Log("error: \(error)")
                         self.dismiss(animated: true, completion: {
                             let app = UIApplication.shared.delegate as! AppDelegate
                             guard let root = app.window?.rootViewController else {

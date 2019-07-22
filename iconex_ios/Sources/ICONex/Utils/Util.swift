@@ -15,7 +15,7 @@ import CryptoSwift
 import Toast_Swift
 import ICONKit
 
-struct Tools {
+struct Tool {
     static var decimalSeparator: String {
         var separator = "."
         let formatter = NumberFormatter()
@@ -40,59 +40,6 @@ struct Tools {
         }
         
         return separator
-    }
-    
-    static func bigToString(value bigInt: BigUInt, decimal: Int, _ below: Int = 0, _ remove: Bool = false) -> String {
-        let total = bigInt.quotientAndRemainder(dividingBy: BigUInt(10).power(decimal))
-        let icx = String(total.quotient, radix: 10)
-        var wei = String(total.remainder, radix: 10)
-        
-        while wei.length < decimal {
-            wei = "0" + wei
-        }
-        
-        var under = wei as NSString
-        while under.length > below {
-            under = under.substring(to: under.length - 1) as NSString
-        }
-        while remove && under.hasSuffix("0") {
-            under = under.substring(to: under.length - 1) as NSString
-        }
-
-        wei = under as String
-        
-        return wei == "" ? icx : icx + Tools.decimalSeparator + wei
-    }
-    
-    static func stringToBigUInt(inputText: String, decimal: Int = 18, fixed: Bool = false) -> BigUInt? {
-        var groupingSeparator = Tools.groupingSeparator
-        var decimalSeparator = Tools.decimalSeparator
-        
-        if fixed {
-            groupingSeparator = ","
-            decimalSeparator = "."
-        }
-        
-        let strip = inputText.replacingOccurrences(of: groupingSeparator, with: "")
-        let comp = strip.components(separatedBy: decimalSeparator)
-        
-        var result: BigUInt?
-        if comp.count < 2 {
-            guard let first = comp.first, let quotient = BigUInt(first) else {
-                return nil
-            }
-            
-            let completed = quotient * BigUInt(10).power(decimal)
-            result = completed
-        } else {
-            guard let first = comp.first, let second = comp.last, let quotient = BigUInt(first, radix: 10), let remainder = BigUInt(second, radix: 10) else {
-                return nil
-            }
-            let completed = (quotient * BigUInt(10).power(decimal)) + (remainder * BigUInt(10).power(decimal - second.length))
-            result = completed
-        }
-        
-        return result
     }
     
     static func rotateAnimation(inView: UIView) {

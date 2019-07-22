@@ -148,7 +148,7 @@ class ICXDataInputViewController: BaseViewController {
             if let send = self.sendAmount {
                 sendValue = send
             }
-            Log.Debug("amount - \(amount) , stepLimit - \(stepLimit) , sendValue - \(sendValue)")
+            Log("amount - \(amount) , stepLimit - \(stepLimit) , sendValue - \(sendValue)")
             if amount > sendValue, stepLimit > (amount - sendValue) {
                 Alert.Basic(message: "Error.Transfer.InsufficientFee.ICX".localized).show(self)
                 return

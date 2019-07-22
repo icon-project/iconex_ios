@@ -97,7 +97,7 @@ class WalletBackupViewController: UIViewController {
                         app.fileShare(filepath: filepath, self.backupButton)
                         
                     } catch {
-                        Log.Debug(error)
+                        Log(error)
                         Alert.Basic(message: "Error.CommonError".localized).show(self)
                     }
                 })
@@ -111,7 +111,7 @@ class WalletBackupViewController: UIViewController {
                     return
                 }
                 copyString(message: prvKey)
-                Tools.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }).disposed(by: disposeBag)
         
         eyeButton.rx.controlEvent(UIControl.Event.touchUpInside)

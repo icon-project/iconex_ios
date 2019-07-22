@@ -9,76 +9,27 @@ import Foundation
 import RealmSwift
 import ICONKit
 
-class TokenModel: Object {
-    @objc dynamic var id = 0
-    @objc dynamic var name = ""
-    @objc dynamic var defaultName = ""
-    @objc dynamic var dependedAddress: String = ""
-    @objc dynamic var contractAddress: String = ""
-    @objc dynamic var parentType: String = ""
-    @objc dynamic var symbol: String = ""
-    @objc dynamic var decimal: Int = 0
-    @objc dynamic var defaultDecimal: Int = 0
-    @objc dynamic var createdDate: Date = Date()
-    @objc dynamic var swapAddress: String? = nil
-    
-    override static func primaryKey() -> String? {
-        return "id"
-    }
-}
-
-class WalletModel: Object {
-    @objc dynamic var id = 0
-    @objc dynamic var name: String = ""
-    @objc dynamic var type: String = ""
-    @objc dynamic var address: String = ""
-    @objc dynamic var createdDate: Date = Date()
-    @objc dynamic var rawData: Data? = nil
-    let tokens = List<TokenModel>()
-    
-    override static func primaryKey() -> String? {
-        return "id"
-    }
-}
-
-class TransactionModel: Object {
-    @objc dynamic var id = 0
-    @objc dynamic var txHash: String = ""
-    @objc dynamic var from: String = ""
-    @objc dynamic var to: String = ""
-    @objc dynamic var date: Date = Date()
-    @objc dynamic var type: String = ""
-    @objc dynamic var value: String = ""
-    @objc dynamic var completed: Bool = false
-    @objc dynamic var tokenSymbol: String?
-    
-    override static func primaryKey() -> String? {
-        return "id"
-    }
-}
-
-class AddressBookModel: Object {
-    @objc dynamic var id = 0
-    @objc dynamic var name: String = ""
-    @objc dynamic var address: String = ""
-    @objc dynamic var type: String = ""
-    @objc dynamic var createdDate: Date = Date()
-    
-    override static func primaryKey() -> String? {
-        return "id"
-    }
-}
-
-class TokenListModel: Object {
-    @objc dynamic var id = 0
-    @objc dynamic var address: String = ""
-    @objc dynamic var symbol: String = ""
-    @objc dynamic var decimal: Int = 0
-    @objc dynamic var type: String = "default"
-}
-
 struct DB {
     // Wallet
+    static func loadWallets() -> [BaseWalletConvertible] {
+        let realm = try! Realm()
+        
+        let list = realm.objects(WalletModel.self).sorted(byKeyPath: "createdDate")
+        
+        var walletList = [BaseWalletConvertible]()
+        for walletModel in list {
+            var wallet: BaseWalletConvertible
+            if walletModel.type == "icx" {
+                wallet = ICXWallet(model: walletModel)
+            } else {
+                
+            }
+            walletList.append(wallet)
+        }
+        
+        return walletList
+    }
+    
     static func walletTypes() -> [String] {
         let realm = try! Realm()
         
@@ -101,14 +52,37 @@ struct DB {
         return sorted
     }
     
+    static func canSaveWallet(name: String) -> Bool {
+        let realm = try! Realm()
+        
+        let list = realm.objects(WalletModel.self).filter { $0.name == name }
+        
+        if list.count > 0 {
+            return false
+        }
+        
+        return true
+    }
+    
+    static func canSaveWallet(address: String) -> Bool {
+        let realm = try! Realm()
+        
+        let wallet = realm.objects(WalletModel.self).filter( { $0.address.lowercased() == address.lowercased() })
+        if wallet.count > 0 {
+            return false
+        }
+        
+        return true
+    }
+    
     static func saveWallet(name: String, address: String, type: String, rawData: Data?) throws {
         let realm = try Realm()
         
         guard realm.objects(WalletModel.self).filter({ $0.address == address }).first == nil else {
-            throw IXError.duplicateAddress
+            throw CommonError.duplicateAddress
         }
         guard realm.objects(WalletModel.self).filter({ $0.name == name }).first == nil else {
-            throw IXError.duplicateName
+            throw CommonError.duplicateName
         }
         
         let wallet = WalletModel()
@@ -126,64 +100,56 @@ struct DB {
         }
     }
     
-    static func changeWalletName(former: String, newName: String) throws -> Bool {
+    static func changeWalletName(former: String, newName: String) throws {
         let realm = try Realm()
         
         guard let wallet = realm.objects(WalletModel.self).filter({ $0.name == former }).first else {
-            return false
+            throw CommonError.duplicateName
         }
         
         try realm.write {
             wallet.name = newName
         }
-        
-        return true
     }
     
-    static func changeWalletPassword(wallet: BaseWalletConvertible,oldPassword: String, newPassword: String) throws -> Bool {
+    static func changeWalletPassword(wallet: BaseWalletConvertible,oldPassword: String, newPassword: String) throws {
         let realm = try Realm()
         
         guard let walletModel = realm.objects(WalletModel.self).filter({ $0.name == wallet.name }).first else {
-            return false
+            throw WalletError.noWallet(wallet.name)
         }
         
-        if wallet.type == .icx {
-            let icx = wallet as! ICXWallet
+        if let icx = wallet as? ICXWallet {
             try icx.changePassword(old: oldPassword, new: newPassword)
             
             try realm.write {
-                walletModel.rawData = icx.__rawData
+                walletModel.rawData = icx.rawData
             }
-        } else if wallet.type == .eth {
-            let eth = wallet as! ETHWallet
+        } else if let eth = wallet as? ETHWallet {
             try eth.changePassword(oldPassword: oldPassword, newPassword: newPassword)
             
             try realm.write {
-                walletModel.rawData = eth.__rawData
+                walletModel.rawData = eth.rawData
             }
         }
-        
-        return true
     }
     
-    static func deleteWallet(wallet: BaseWalletConvertible) throws -> Bool {
+    static func deleteWallet(wallet: BaseWalletConvertible) throws {
         let realm = try Realm()
         
-        guard let walletModel = realm.objects(WalletModel.self).filter({ $0.name == wallet.alias! }).first else {
-            return false
+        guard let walletModel = realm.objects(WalletModel.self).filter({ $0.name == wallet.name }).first else {
+            throw WalletError.noWallet(wallet.name)
         }
         
         try realm.write {
             realm.delete(walletModel)
         }
         
-        let tokenList = try DB.tokenList(dependedAddress: (wallet.type == .eth ? wallet.address!.add0xPrefix() : wallet.address!))
+        let tokenList = try DB.tokenList(dependedAddress: wallet.address.add0xPrefix())
         
         for token in tokenList {
             try DB.removeToken(tokenInfo: token)
         }
-        
-        return true
     }
     
     static func findWalletName(with: TransactionModel, exclude: String) -> String? {
@@ -199,7 +165,7 @@ struct DB {
     static func walletListBy(type: String) -> CoinInfo? {
         let realm = try! Realm()
         
-        let list = realm.objects(WalletModel.self).filter({ $0.type == coin.rawValue })
+        let list = realm.objects(WalletModel.self).filter({ $0.type == type })
         
         if list.count == 0 { return nil }
         
@@ -230,7 +196,7 @@ struct DB {
         return info
     }
     
-    static func walletListBy(token: TokenInfo) -> CoinInfo? {
+    static func walletListBy(token: Token) -> CoinInfo? {
         let realm = try! Realm()
         
         let list = realm.objects(TokenModel.self).filter({ $0.contractAddress == token.contractAddress })
@@ -269,11 +235,11 @@ struct DB {
         do {
             let realm = try Realm()
             
-            guard let model = realm.objects(WalletModel.self).filter({ $0.type == type.rawValue.lowercased() && $0.address.lowercased() == address.lowercased() }).first else { return nil }
+            guard let model = realm.objects(WalletModel.self).filter({ $0.type == type.lowercased() && $0.address.lowercased() == address.lowercased() }).first else { return nil }
             
-            if type == .icx {
-                guard let icx = ICXWallet(alias: model.name, from: model.rawData!) else { return nil }
-                icx.createdDate = model.createdDate
+            if type == "icx" {
+                guard let icx = ICXWallet(name: model.name, from: model.rawData!) else { return nil }
+                icx.created = model.createdDate
                 
                 let modelList = try DB.tokenList(dependedAddress: address)
                 
@@ -281,8 +247,8 @@ struct DB {
                 
                 return icx
             } else {
-                let eth = ETHWallet(alias: model.name, from: model.rawData!)
-                eth.createdDate = model.createdDate
+                let eth = ETHWallet(name: model.name, from: model.rawData!)!
+                eth.created = model.createdDate
                 
                 let modelList = try DB.tokenList(dependedAddress: address)
                 
@@ -321,7 +287,7 @@ struct DB {
         let realm = try! Realm()
         
         let expireDate = Date().timeIntervalSince1970
-        Log.Debug("expireDate \(expireDate)")
+        Log("expireDate - \(expireDate)")
         
         let lists = realm.objects(TransactionModel.self).sorted(byKeyPath: "date").reversed().filter({ $0.from == address && $0.completed == false && $0.date.timeIntervalSince1970 > Date().timeIntervalSince1970 - (60 * 2)})
         
@@ -368,13 +334,13 @@ struct DB {
         return false
     }
     
-    static func saveAddressBook(name: String, address: String, type: COINTYPE) throws {
+    static func saveAddressBook(name: String, address: String, type: String) throws {
         let realm = try Realm()
         
         let addressBook = AddressBookModel()
         addressBook.name = name
         addressBook.address = address
-        addressBook.type = type.rawValue
+        addressBook.type = type
         
         if let maxID = realm.objects(AddressBookModel.self).max(ofProperty: "id") as Int? {
             addressBook.id = maxID + 1
@@ -389,7 +355,7 @@ struct DB {
         let realm = try Realm()
         
         guard let info = realm.objects(AddressBookModel.self).filter({ $0.name == oldName }).first else {
-            throw IXError.noAddressInfo
+            throw WalletError.noWallet(oldName)
         }
         
         try realm.write {
@@ -397,10 +363,10 @@ struct DB {
         }
     }
     
-    static func addressBookList(by: COINTYPE) throws -> [AddressBookModel] {
+    static func addressBookList(by: String) throws -> [AddressBookModel] {
         let realm = try Realm()
         
-        let list = realm.objects(AddressBookModel.self).sorted(byKeyPath: "createdDate").filter({ $0.type == by.rawValue })
+        let list = realm.objects(AddressBookModel.self).sorted(byKeyPath: "createdDate").filter({ $0.type == by })
         
         return Array(list)
     }
@@ -418,27 +384,27 @@ struct DB {
     }
     
     // MARK: Token
-    static func allTokenList() -> [TokenInfo] {
+    static func allTokenList() -> [Token] {
         let realm = try! Realm()
         
         let tokenList = realm.objects(TokenModel.self)
-        var dic = [String: TokenInfo]()
+        var dic = [String: Token]()
         for token in tokenList {
-            let info = TokenInfo(token: token)
+            let info = Token(token: token)
             dic[token.symbol] = info
         }
         
         return Array(dic.values)
     }
     
-    static func tokenList(dependedAddress: String) throws -> [TokenInfo] {
+    static func tokenList(dependedAddress: String) throws -> [Token] {
         let realm = try Realm()
         
         let list = realm.objects(TokenModel.self).sorted(byKeyPath: "id").filter({ $0.dependedAddress.lowercased() == dependedAddress.lowercased() })
         
-        var infoList = [TokenInfo]()
+        var infoList = [Token]()
         for model in list {
-            let info = TokenInfo(token: model)
+            let info = Token(token: model)
             infoList.append(info)
         }
         
@@ -453,7 +419,7 @@ struct DB {
         return Array(list)
     }
     
-    static func addToken(tokenInfo: TokenInfo) throws {
+    static func addToken(tokenInfo: Token) throws {
         let realm = try Realm()
         
         let token = TokenModel()
@@ -476,13 +442,13 @@ struct DB {
         }
     }
     
-    static func modifyToken(tokenInfo: TokenInfo) throws {
+    static func modifyToken(tokenInfo: Token) throws {
         let realm = try Realm()
-        Log.Debug("token - \(tokenInfo.contractAddress) , \(tokenInfo.dependedAddress)")
+        Log("token - \(tokenInfo.contractAddress) , \(tokenInfo.dependedAddress)")
         let contract = tokenInfo.dependedAddress.hasPrefix("hx") ? tokenInfo.contractAddress.lowercased() : tokenInfo.contractAddress.add0xPrefix().lowercased()
         
         guard let model = realm.objects(TokenModel.self).filter( "contractAddress = %@ and dependedAddress = %@", contract, tokenInfo.dependedAddress).first else {
-            Log.Debug("contract - \(contract) , depeded - \(tokenInfo.dependedAddress)")
+            Log("contract - \(contract) , depeded - \(tokenInfo.dependedAddress)")
             throw IXError.invalidTokenInfo }
         
         let token = TokenModel()
@@ -503,7 +469,7 @@ struct DB {
         }
     }
     
-    static func removeToken(tokenInfo: TokenInfo) throws {
+    static func removeToken(tokenInfo: Token) throws {
         let realm = try Realm()
         
         let token = realm.objects(TokenModel.self).filter({ $0.dependedAddress == tokenInfo.dependedAddress && $0.contractAddress == tokenInfo.contractAddress })
@@ -542,7 +508,7 @@ struct DB {
                 }
                 
             } catch {
-                Log.Debug("error: \(error)")
+                Log("error: \(error)")
             }
         }
     }
@@ -554,10 +520,10 @@ struct DB {
             let list = realm.objects(TokenListModel.self)
             
             for tokenInfo in list {
-                Log.Debug("name: \(tokenInfo.symbol)")
+                Log("name: \(tokenInfo.symbol)")
             }
         } catch {
-            Log.Debug("error \(error)")
+            Log("error \(error)")
         }
     }
     
@@ -570,7 +536,7 @@ struct DB {
             let info = TokenListInfo(symbol: model.symbol, address: model.address, decimal: model.decimal, type: model.type)
             return info                                   
         } catch {
-            Log.Debug("error \(error)")
+            Log("error \(error)")
         }
         
         return nil

@@ -82,7 +82,7 @@ class StepThreeViewController: UIViewController {
                 self?.isBackedup = true
             } catch {
                 self?.present(Alert.Basic(message: Localized(key: "Error.Wallet.Create")), animated: true, completion: nil)
-                Log.Debug(error)
+                Log(error)
             }
         })
         

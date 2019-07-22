@@ -267,7 +267,7 @@ class ImportThreeViewController: UIViewController {
                     }
                 })
             } catch {
-                Log.Debug("\(error)")
+                Log("\(error)")
                 Alert.Basic(message: "Error.Wallet.CreateFailed".localized).show(self)
             }
         }

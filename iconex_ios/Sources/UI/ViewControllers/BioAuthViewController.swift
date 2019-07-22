@@ -35,7 +35,7 @@ class BioAuthViewController: UIViewController {
         
         useButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
-                Tools.touchIDVerification(message: "", completion: { (state) in
+                Tool.touchIDVerification(message: "", completion: { (state) in
                     switch state {
                     case .success:
                         UserDefaults.standard.set(true, forKey: "useBio")
@@ -57,7 +57,7 @@ class BioAuthViewController: UIViewController {
         useButton.styleDark()
         useButton.rounded()
         
-        switch Tools.biometryType() {
+        switch Tool.biometryType() {
         case "Touch ID":
             navTitle.text = "LockScreen.Setting.Bio.Title.TouchID".localized
             headerLabel.text = "LockScreen.Setting.Bio.Header.TouchID".localized

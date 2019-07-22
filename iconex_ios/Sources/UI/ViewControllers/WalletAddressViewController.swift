@@ -62,7 +62,7 @@ class WalletAddressViewController: UIViewController {
                 return
             }
             copyString(message: address)
-            Tools.toast(message: "Wallet.Address.CopyComplete".localized)
+            Tool.toast(message: "Wallet.Address.CopyComplete".localized)
         }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [weak self] in

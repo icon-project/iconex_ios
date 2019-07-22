@@ -21,8 +21,8 @@ class ConnectViewController: BaseViewController {
 
         // Do any additional setup after loading the view.
         
-        Tools.rotateAnimation(inView: refresh01)
-        Tools.rotateReverseAnimation(inView: refresh02)
+        Tool.rotateAnimation(inView: refresh01)
+        Tool.rotateReverseAnimation(inView: refresh02)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -32,17 +32,17 @@ class ConnectViewController: BaseViewController {
                 try Conn.translate()
                 proceed()
             } catch let e as ConnectError {
-                Log.Debug("ConnectError - \(e)")
+                Log("ConnectError - \(e)")
                 if e.code == ConnectError.activateDeveloper.code {
                     Conn.redirect = nil
                     let app = UIApplication.shared.delegate as! AppDelegate
                     app.toMain()
-                    Tools.toast(message: e.errorDescription!)
+                    Tool.toast(message: e.errorDescription!)
                 } else {
                     Conn.sendError(error: e)
                 }
             } catch {
-                Log.Debug("error - \(error)")
+                Log("error - \(error)")
                 Conn.sendError(error: .invalidRequest)
             }
         }
@@ -131,7 +131,7 @@ class ConnectViewController: BaseViewController {
                         return false
                     }
                 case .failure(let error):
-                    Log.Debug("Error - \(error)")
+                    Log("Error - \(error)")
                     Conn.sendError(error: .network(error))
                     return false
                 }
@@ -147,7 +147,7 @@ class ConnectViewController: BaseViewController {
         guard let action = Conn.action else {
             return
         }
-        if (Conn.auth && Tools.isPasscode()) || !Tools.isPasscode() {
+        if (Conn.auth && Tool.isPasscode()) || !Tool.isPasscode() {
             switch action {
             case "bind":
                 let bind = storyboard.instantiateViewController(withIdentifier: "BindView")

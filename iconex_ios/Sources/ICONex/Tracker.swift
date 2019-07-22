@@ -94,7 +94,7 @@ open class Tracker {
             return try? JSONSerialization.data(withJSONObject: data, options: [])
             
         case .failure(let error):
-            Log.Debug("exchange error - \(error)")
+            Log("exchange error - \(error)")
             
         }
         return nil
@@ -108,7 +108,7 @@ open class Tracker {
             return response
             
         case .failure(let error):
-            Log.Debug("Error - \(error)")
+            Log("Error - \(error)")
         }
         
         return nil
@@ -122,7 +122,7 @@ open class Tracker {
             return resopnse
             
         case .failure(let error):
-            Log.Debug("Error - \(error)")
+            Log("Error - \(error)")
         }
         
         return nil

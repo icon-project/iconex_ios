@@ -93,13 +93,13 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
         if Balance.isBalanceLoadCompleted, let excBalances = Balance.getTotalBalances() {
             self.totalLoader.isHidden = true
             self.totalBalanceLabel.isHidden = false
-            let exchanged = Tools.bigToString(value: excBalances, decimal: 18, Exchange.currentExchange == "usd" ? 2 : 4, false)
+            let exchanged = Tool.bigToString(value: excBalances, decimal: 18, Exchange.currentExchange == "usd" ? 2 : 4, false)
             let attr = NSAttributedString(string: exchanged.currencySeparated(), attributes: [.kern: -2.0])
             self.totalBalanceLabel.attributedText = attr
         } else {
             self.totalLoader.isHidden = false
             self.totalBalanceLabel.isHidden = true
-            Tools.rotateAnimation(inView: self.totalLoader)
+            Tool.rotateAnimation(inView: self.totalLoader)
         }
     }
     
@@ -471,8 +471,8 @@ class MainViewController: BaseViewController, UIGestureRecognizerDelegate, UIScr
                 topConstraint.constant = value
             } else if value >= 100 {
                 loadHeight.constant = 100.0
-                Tools.rotateAnimation(inView: pullLoader1)
-                Tools.rotateReverseAnimation(inView: pullLoader2)
+                Tool.rotateAnimation(inView: pullLoader1)
+                Tool.rotateReverseAnimation(inView: pullLoader2)
                 if Balance.isBalanceLoadCompleted {
                     Balance.getWalletsBalance()
                 }

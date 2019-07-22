@@ -128,7 +128,7 @@ class CreateLockViewController: UIViewController {
                     if self.mode! == .create || self.mode! == .recreate {
                         if let firstCode = self.__firstCode {
                             if firstCode == self.__passcode {
-                                if Tools.createPasscode(code: firstCode) {
+                                if Tool.createPasscode(code: firstCode) {
                                     
                                 }
                                 if self.mode! == .recreate {
@@ -159,7 +159,7 @@ class CreateLockViewController: UIViewController {
                         }
                     } else if self.mode! == .change {
                         if self.__firstCode == nil {
-                            if Tools.verifyPasscode(code: self.__passcode) {
+                            if Tool.verifyPasscode(code: self.__passcode) {
                                 self.lockHeader.text = "LockScreen.Setting.Passcode.Change.New".localized
                                 self.__passcode = ""
                                 self.mode = .create
@@ -169,9 +169,9 @@ class CreateLockViewController: UIViewController {
                             }
                         }
                     } else {
-                        if Tools.verifyPasscode(code: self.__passcode) {
-                            Tools.removePasscode()
-                            Tools.removeTouchID()
+                        if Tool.verifyPasscode(code: self.__passcode) {
+                            Tool.removePasscode()
+                            Tool.removeTouchID()
                             self.navigationController?.popViewController(animated: true)
                         } else {
                             self.lockHeader.text = "LockScreen.Setting.Passcode.Header_Error".localized

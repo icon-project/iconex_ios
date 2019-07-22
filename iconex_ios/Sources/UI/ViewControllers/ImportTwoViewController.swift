@@ -202,7 +202,7 @@ class ImportTwoViewController: UIViewController {
                         WCreator.newWallet = icxWallet
                         WCreator.newPrivateKey = privateKey
                     } catch {
-                        Log.Debug(error)
+                        Log(error)
                         
                         inputBox.setState(.error, "Error.Password.Wrong".localized)
                         return false
@@ -218,7 +218,7 @@ class ImportTwoViewController: UIViewController {
                         WCreator.newWallet = ethWallet
                         WCreator.newPrivateKey = privateKey
                     } catch {
-                        Log.Debug("error - \(error)")
+                        Log("error - \(error)")
                         
                         inputBox.setState(.error, "Error.Password.Wrong".localized)
                         return false
@@ -281,7 +281,7 @@ class ImportTwoViewController: UIViewController {
                     return true
                 }
             } catch {
-                Log.Debug("\(error)")
+                Log("\(error)")
                 self.inputBox2.setState(.error, "Error.PrivateKey".localized)
                 return false
             }
@@ -355,7 +355,7 @@ class ImportTwoViewController: UIViewController {
 
 extension ImportTwoViewController: UIDocumentPickerDelegate {
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        Log.Debug(url.lastPathComponent)
+        Log(url.lastPathComponent)
         if WCreator.checkWalletBundle(url: url) {
             validatedData = nil
             
@@ -369,7 +369,7 @@ extension ImportTwoViewController: UIDocumentPickerDelegate {
             do {
                 let data: (ICONKeystore, COINTYPE) = try WCreator.validateKeystore(urlOfData: url)
                 
-                Log.Debug(data.0)
+                Log(data.0)
                 validatedData = data
                 WCreator.newBundle = nil
                 
@@ -393,7 +393,7 @@ extension ImportTwoViewController: UIDocumentPickerDelegate {
             } catch {
                 fileErrorLabel.text = "Error.Wallet.InvalidFile".localized
                 fileErrorLabel.isHidden = false
-                Log.Debug("\(error)")
+                Log("\(error)")
             }
         }
     }

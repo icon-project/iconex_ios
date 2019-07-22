@@ -8,60 +8,64 @@
 import Foundation
 import ICONKit
 
-class ICXWallet: BaseWallet {
+class ICXWallet: BaseWalletConvertible {
+    var name: String
+    var created: Date
+    var keystore: ICONKeystore
     
-    init?(name: String, from: Data) {
-        do {
-            let decoder = JSONDecoder()
-            let keystore = try decoder.decode(ICONKeystore.self, from: from)
-            super.init(name: name, keystore: keystore)
-        } catch {
-            return nil
+    var tokens: [Token]? {
+        return try? DB.tokenList(dependedAddress: address)
+    }
+    
+    init(name: String, keystore: ICONKeystore, created: Date = Date()) {
+        self.name = name
+        self.keystore = keystore
+        self.created = created
+    }
+    
+    init?(name: String, rawData: Data, created: Date = Date()) {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let keystore = try? decoder.decode(ICONKeystore.self, from: rawData) else { return nil }
+        
+        self.name = name
+        self.keystore = keystore
+        self.created = created
+    }
+    
+    init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil, created: Date = Date()) {
+        self.name = name
+        self.keystore = keystore
+        self.created = created
+        
+        
+    }
+    
+    init(model: WalletModel) {
+        self.name = model.name
+        self.created = model.createdDate
+        self.keystore = try! JSONDecoder().decode(ICONKeystore.self, from: model.rawData!)
+    }
+    
+    func exportBundle() -> WalletBundle {
+        let priv = String(data: rawData, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
+
+        var export = WalletBundle(name: self.name, type: "icx", priv: priv, tokens: nil, createdAt: self.created.millieTimestamp, coinType: "icx")
+
+        var datas = [TokenBundle]()
+        if let tokens = self.tokens {
+            for token in tokens {
+                let exportToken = TokenBundle(address: token.contract, createdAt: token.created.timestampString, decimals: token.decimal, name: token.name, symbol: token.symbol)
+                datas.append(exportToken)
+            }
         }
-    }
-    
-    init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil) {
-        super.init(name: name, keystore: keystore)
-        self.tokens = tokens
-    }
-    
-    #warning("TODO: Implement exportBunlde")
-    func exportBundle() -> WalletExportBundle {
-//        let priv = String(data: __rawData!, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
-//
-//        var export = WalletExportBundle(name: self.alias!, type: "icx", priv: priv, tokens: nil, createdAt: self.createdDate!.millieTimestamp, coinType: "icx")
-//
-//        var datas = [TokenExportBundle]()
-//        if let tokens = self.tokens {
-//            for token in tokens {
-//                let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
-//                datas.append(exportToken)
-//            }
-//        }
-//        export.tokens = datas
-//
-//        return export
-    }
-    
-    func canSaveToken(contractAddress: String) -> Bool {
-        guard let tokenList = tokens else { return true }
-        return tokenList.filter { $0.contract == contractAddress }.count == 0
+        export.tokens = datas
+
+        return export
     }
     
     @available(*, unavailable)
     func generateICXKeyStore(privateKey: String, password: String) throws {
-    }
-    
-    #warning("TODO: Implement changePassword")
-    func changePassword(old: String, new: String) throws {
-//        guard let keystore = self.keystore else { throw IXError.emptyWallet }
-//        try keystore.isValid(password: old)
-//
-//        let prvKey = try self.extractICXPrivateKey(password: old)
-//        let newKeystore = try Cipher.createKeystore(privateKey: prvKey, password: new)
-//
-//        self.__rawData = newKeystore.data
-//        self.keystore = newKeystore
     }
     
     #warning("TODO: Implement saveICXWallet")

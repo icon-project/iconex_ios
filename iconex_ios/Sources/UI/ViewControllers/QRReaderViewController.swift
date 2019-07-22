@@ -107,7 +107,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 self.dismiss(animated: true, completion: nil)
             }
             alert.show(self)
-            Log.Error("\(error)")
+            Log("\(error)")
             return
         }
         
@@ -253,7 +253,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 }
                 
-                Log.Debug(code)
+                Log(code)
             }
         }
     }

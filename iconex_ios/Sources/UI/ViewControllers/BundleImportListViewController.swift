@@ -22,7 +22,7 @@ class BundleImportCell: UITableViewCell {
             if newValue {
                 balanceLabel.isHidden = newValue
                 loadingView.isHidden = !newValue
-                Tools.rotateAnimation(inView: loadingView)
+                Tool.rotateAnimation(inView: loadingView)
             } else {
                 balanceLabel.isHidden = newValue
                 loadingView.isHidden = !newValue
@@ -124,7 +124,7 @@ class BundleImportListViewController: BaseViewController {
                         Balance.walletBalanceList[address] = value
                         
                     case .failure(let error):
-                        Log.Debug("Error - \(error)")
+                        Log("Error - \(error)")
                     }
                     
                     self._queue.remove(address)
@@ -253,7 +253,7 @@ extension BundleImportListViewController: UITableViewDataSource {
             cell.unitLabel.text = value.type.uppercased()
             if let balance = _balanceList[address] {
                 cell.isLoading = false
-                cell.balanceLabel.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
+                cell.balanceLabel.text = Tool.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
             } else if _queue.contains(address) {
                 cell.isLoading = true
             } else {

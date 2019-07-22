@@ -93,7 +93,7 @@ class StepFourViewController: UIViewController {
                     return
                 }
                 copyString(message: prv)
-                Tools.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }).disposed(by: disposeBag)
     }
     

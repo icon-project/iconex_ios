@@ -19,7 +19,7 @@ class IXIndicator: UIView {
         view.frame = bounds
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(view)
-        Tools.rotateAnimation(inView: view)
+        Tool.rotateAnimation(inView: view)
     }
     
     func loadViewFromNib() -> UIView? {

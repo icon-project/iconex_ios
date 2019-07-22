@@ -87,13 +87,13 @@ class WalletPrivateInfoViewController: UIViewController {
         addressCopy.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 copyString(message: self.wallet.address!)
-                Tools.toast(message: "Wallet.Address.CopyComplete".localized)
+                Tool.toast(message: "Wallet.Address.CopyComplete".localized)
             }).disposed(by: disposeBag)
         
         keyCopy.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: { [unowned self] in
                 copyString(message: self.privKey!)
-                Tools.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }).disposed(by: disposeBag)
         
         scrollView.rx.didEndDecelerating.observeOn(MainScheduler.instance).subscribe(onNext: { [unowned self] _ in

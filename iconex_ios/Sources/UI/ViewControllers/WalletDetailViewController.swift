@@ -78,8 +78,8 @@ class WalletDetailViewController: UIViewController {
     private var isDragTriggered: Bool = false
     private var isScrollable: Bool = true
     
-    var walletInfo: WalletInfo?
-    var token: TokenInfo?
+    var walletInfo: BaseWalletConvertible!
+    var token: Token?
     var historyList = [Tracker.TxList]()
     var filteredList: [Tracker.TxList]?
     var holdList: [TransactionModel]?
@@ -87,7 +87,7 @@ class WalletDetailViewController: UIViewController {
     var step: Int = 1
     private var totalData: Int = 0
     private var exchangeItem: [String] {
-        if self.walletInfo?.type == .icx {
+        if self.walletInfo.address.hasPrefix("hx") {
             return ["USD", "BTC", "ETH"]
         } else {
             return ["USD", "BTC", "ICX"]
@@ -98,7 +98,7 @@ class WalletDetailViewController: UIViewController {
             if !newValue {
                 tableView.isScrollEnabled = false
                 fullLoaderContainer.isHidden = false
-                Tools.rotateAnimation(inView: fullLoaderImage)
+                Tool.rotateAnimation(inView: fullLoaderImage)
             } else {
                 tableView.isScrollEnabled = true
                 fullLoaderContainer.isHidden = true
@@ -231,7 +231,7 @@ class WalletDetailViewController: UIViewController {
         
         inButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: {[unowned self] in
-                Alert.PrivateInfo(walletInfo: self.walletInfo!).show(self)
+                Alert.PrivateInfo(walletInfo: self.walletInfo).show(self)
             }).disposed(by: disposeBag)
         
         filterButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
@@ -254,7 +254,7 @@ class WalletDetailViewController: UIViewController {
             
             var balance = "-"
             if let value = Balance.walletBalanceList[wallet.address!] {
-                balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
+                balance = Tool.bigToString(value: value, decimal: wallet.decimal, 4)
             }
             
             info.append((name: wallet.type == .eth ? "Ethereum" : "ICON", balance: balance, symbol: wallet.type.rawValue.uppercased()))
@@ -264,7 +264,7 @@ class WalletDetailViewController: UIViewController {
                     var tokenBalance = "-"
                     if let balances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()] {
                         if let bigBalance = balances[token.contractAddress] {
-                            tokenBalance = Tools.bigToString(value: bigBalance, decimal: token.decimal, 4)
+                            tokenBalance = Tool.bigToString(value: bigBalance, decimal: token.decimal, 4)
                         }
                     }
                     
@@ -469,7 +469,7 @@ class WalletDetailViewController: UIViewController {
                     self.isDragTriggered = true
                     self.tableView.contentInset = UIEdgeInsets(top: 78, left: 0, bottom: 0, right: 0)
                     self.refresh01.transform = CGAffineTransform.identity
-                    Tools.rotateAnimation(inView: self.refresh01)
+                    Tool.rotateAnimation(inView: self.refresh01)
                     
                     Observable<Int>.timer(0.5, scheduler: MainScheduler.instance).debug("timer").subscribe(onNext: { _ in
                         self.requestBalance(true)
@@ -478,7 +478,7 @@ class WalletDetailViewController: UIViewController {
                         self.fetchRecentTransaction(true)
                     }).disposed(by: self.disposeBag)
                     
-                    Log.Debug("Now Load!!")
+                    Log("Now Load!!")
                 } else if self.totalData < self.step * 10 {
                     self.tableView.contentInset = UIEdgeInsets.zero
                 }
@@ -569,7 +569,7 @@ class WalletDetailViewController: UIViewController {
                 if let list = filteredList, list.count != 0, list.count < totalData {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "WalletDetailLoadCell") as! WalletDetailLoadCell
                     cell.backgroundColor = UIColor.white
-                    Tools.rotateAnimation(inView: cell.indicator)
+                    Tool.rotateAnimation(inView: cell.indicator)
                     tableView.tableFooterView = cell
                 }
             } else if viewState.type == 1 {
@@ -626,7 +626,7 @@ class WalletDetailViewController: UIViewController {
                     
                     DispatchQueue.main.async {
                         if let balance = result {
-                            let stringBalance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
+                            let stringBalance = Tool.bigToString(value: balance, decimal: token.defaultDecimal, 4)
                             let attr = NSAttributedString(string: stringBalance.currencySeparated(), attributes: [.kern: -2.0])
                             self.balanceLabel.attributedText = attr
                             self.loadExchanged()
@@ -643,10 +643,10 @@ class WalletDetailViewController: UIViewController {
                 }
             } else {
                 if let balances = Balance.tokenBalanceList[wallet.address!.add0xPrefix()], let balance = balances[token.contractAddress] {
-                    Log.Debug("balace \(balances)")
+                    Log("balace \(balances)")
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
-                    let balance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
+                    let balance = Tool.bigToString(value: balance, decimal: token.defaultDecimal, 4)
                     let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                     self.balanceLabel.attributedText = attr
                 } else {
@@ -658,7 +658,7 @@ class WalletDetailViewController: UIViewController {
                             DispatchQueue.main.async { [unowned self] in
                                 self.headerLoading.isHidden = true
                                 self.balanceLabel.isHidden = false
-                                let balance = Tools.bigToString(value: balance, decimal: token.defaultDecimal, 4)
+                                let balance = Tool.bigToString(value: balance, decimal: token.defaultDecimal, 4)
                                 let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                                 self.balanceLabel.attributedText = attr
                                 self.loadExchanged()
@@ -677,7 +677,7 @@ class WalletDetailViewController: UIViewController {
             if dragged {
                 Balance.getBalance(wallet: wallet) { [weak self] (isSuccess) in
                     if let value = Balance.walletBalanceList[wallet.address!] {
-                        let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
+                        let balance = Tool.bigToString(value: value, decimal: wallet.decimal, 4)
                         let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                         self?.balanceLabel.attributedText = attr
                         self?.loadExchanged()
@@ -692,7 +692,7 @@ class WalletDetailViewController: UIViewController {
                 if let value = Balance.walletBalanceList[wallet.address!] {
                     headerLoading.isHidden = true
                     balanceLabel.isHidden = false
-                    let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
+                    let balance = Tool.bigToString(value: value, decimal: wallet.decimal, 4)
                     let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                     self.balanceLabel.attributedText = attr
                     self.loadExchanged()
@@ -703,7 +703,7 @@ class WalletDetailViewController: UIViewController {
                         self?.headerLoading.isHidden = true
                         self?.balanceLabel.isHidden = false
                         if let value = Balance.walletBalanceList[wallet.address!] {
-                            let balance = Tools.bigToString(value: value, decimal: wallet.decimal, 4)
+                            let balance = Tool.bigToString(value: value, decimal: wallet.decimal, 4)
                             let attr = NSAttributedString(string: balance.currencySeparated(), attributes: [.kern: -2.0])
                             self?.balanceLabel.attributedText = attr
                             self?.loadExchanged()
@@ -788,7 +788,7 @@ class WalletDetailViewController: UIViewController {
                 return
             }
             
-            guard token.symbol.lowercased() != exchangeType, let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: token.decimal) else {
+            guard token.symbol.lowercased() != exchangeType, let exchanged = Tool.balanceToExchange(balance, from: token.symbol.lowercased(), to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: token.decimal) else {
                 exchangeLabel.text = "-"
                 return
             }
@@ -797,7 +797,7 @@ class WalletDetailViewController: UIViewController {
             guard let wallet = WManager.loadWalletBy(info: self.walletInfo!), let balance = Balance.walletBalanceList[wallet.address!] else {
                 return
             }
-            guard exchangeType != wallet.type.rawValue, let exchanged = Tools.balanceToExchange(balance, from: wallet.type.rawValue, to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: wallet.decimal) else {
+            guard exchangeType != wallet.type.rawValue, let exchanged = Tool.balanceToExchange(balance, from: wallet.type.rawValue, to: exchangeType, belowDecimal: exchangeType == "usd" ? 2 : 4, decimal: wallet.decimal) else {
                 exchangeLabel.text = "-"
                 return
             }

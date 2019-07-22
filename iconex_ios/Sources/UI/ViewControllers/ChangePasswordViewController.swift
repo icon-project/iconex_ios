@@ -163,7 +163,7 @@ class ChangePasswordViewController: UIViewController {
         do {
             let wallet = WManager.loadWalletBy(info: self.walletInfo!)!
             let result = try WManager.changeWalletPassword(wallet: wallet, old: oldValue, new: newValue)
-            Log.Debug("changing: \(result)")
+            Log("changing: \(result)")
             if result {
                 WManager.loadWalletList()
             } else {
@@ -173,7 +173,7 @@ class ChangePasswordViewController: UIViewController {
             }
         } catch {
             self.confirmButton.isEnabled = true
-            Log.Debug("error: \(error)")
+            Log("error: \(error)")
             let message = "Error.CommonError".localized + "\n\(error.localizedDescription)"
             Alert.Basic(message: message).show(self)
             return

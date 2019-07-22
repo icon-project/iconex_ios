@@ -74,7 +74,7 @@ class SendConfirmViewController: UIViewController {
                     imageView.image = #imageLiteral(resourceName: "icRefresh01")
                     imageView.tag = 999
                     self.confirmButton.addSubview(imageView)
-                    Tools.rotateAnimation(inView: imageView)
+                    Tool.rotateAnimation(inView: imageView)
                     
                     completion()
                 }

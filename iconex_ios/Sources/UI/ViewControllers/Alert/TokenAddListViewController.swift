@@ -122,12 +122,12 @@ class TokenAddListViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         actionButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
-            Log.Debug(self.selectedTokens)
+            Log(self.selectedTokens)
             
             guard let wallet = DB.walletBy(info: self.walletInfo!) as? ICXWallet else { return }
             for info in self.selectedTokens.values {
                 do {
-                    let token = TokenInfo(name: info.name, defaultName: info.name, symbol: info.symbol, decimal: info.decimal, defaultDecimal: info.decimal, dependedAddress: wallet.address!, contractAddress: info.address, parentType: "icx")
+                    let token = Token(name: info.name, defaultName: info.name, symbol: info.symbol, decimal: info.decimal, defaultDecimal: info.decimal, dependedAddress: wallet.address!, contractAddress: info.address, parentType: "icx")
                     try DB.addToken(tokenInfo: token)
                 } catch {
                     continue

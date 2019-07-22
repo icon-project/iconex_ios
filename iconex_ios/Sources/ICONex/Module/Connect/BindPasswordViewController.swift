@@ -116,7 +116,7 @@ class BindPasswordViewController: BaseViewController {
 
             switch request {
             case .success(let balance):
-                self.walletAmount.text = Tools.bigToString(value: balance, decimal: decimal, decimal, true).currencySeparated()
+                self.walletAmount.text = Tool.bigToString(value: balance, decimal: decimal, decimal, true).currencySeparated()
                 self.symbolLabel.text = symbol
             case .failure:
                 return
@@ -128,7 +128,7 @@ class BindPasswordViewController: BaseViewController {
 
             switch result {
             case .success(let balance):
-                self.walletAmount.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
+                self.walletAmount.text = Tool.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
                 self.symbolLabel.text = "ICX"
             case .failure: return
             }

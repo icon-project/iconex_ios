@@ -10,17 +10,39 @@ import Foundation
 import ICONKit
 import BigInt
 
+// MARK: WalletManager
 class WalletManager {
-    static let sharedInstance = Manager()
+    static let shared = WalletManager()
+    
+    private init() {}
+    
+    var walletList: [BaseWalletConvertible] {
+        return DB.loadWallets()
+    }
+    
+    var types: [String] {
+        return DB.walletTypes()
+    }
+}
+
+extension WalletManager {
+    func walletBy(address: String, type: String) -> BaseWalletConvertible? {
+        return DB.walletBy(address: address.lowercased(), type: type.lowercased())
+    }
+    
+}
+
+
+
+
+// MARK: ICONManager
+class ICONManager {
+    static let shared = ICONManager()
     
     private init() {}
     
     var iconService: ICONService {
         return ICONService(provider: Config.host.provider, nid: Config.host.nid)
     }
-}
-
-// MARK: Managing ICX wallets
-extension Manager {
     
 }

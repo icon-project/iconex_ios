@@ -60,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Configuration.setDebug()
         
         if let languages = UserDefaults.standard.array(forKey: "AppleLanguages"), let appleLan = languages.first as? String {
-            Log.Debug("languages\n\(languages)")
+            Log("languages\n\(languages)")
             if appleLan != "ko-KR" {
                 Bundle.setLanguage("en")
             } else {
@@ -85,23 +85,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         path = path.appendingPathComponent("ICONex")
         do {
             let contents = try FileManager.default.contentsOfDirectory(atPath: path.path)
-            Log.Debug(contents)
+            Log(contents)
             
             for content in contents {
                 try FileManager.default.removeItem(atPath: path.appendingPathComponent(content).path)
             }
             
             let removed = try FileManager.default.contentsOfDirectory(atPath: path.path)
-            Log.Debug(removed)
+            Log(removed)
         } catch {
-            Log.Debug(error)
+            Log(error)
         }
         
         NSSetUncaughtExceptionHandler { (exception) in
-            Log.Error("CRASH =======================")
-            Log.Error("\(exception)")
-            Log.Error("Stack trace ========================")
-            Log.Error("\(exception.callStackSymbols)")
+            Log("CRASH =======================")
+            Log("\(exception)")
+            Log("Stack trace ========================")
+            Log("\(exception.callStackSymbols)")
         }
         return true
     }
@@ -145,7 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         setRedirect(source: url)
         Conn.setMessage(source: url)
-        if Conn.isConnect && (!Tools.isPasscode() || Conn.auth) {
+        if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
             Exchange.getExchangeList()
             Balance.getWalletsBalance()
             toConnect()
@@ -189,7 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         self.window?.rootViewController = retry
                         return
                     }
-                    Log.Debug("Version: \(json)")
+                    Log("Version: \(json)")
                     if result == "OK" {
                         let data = json["data"] as! [String: String]
                         self.all = data["all"]
@@ -198,7 +198,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.retry()
                     
                 case .failure(let error):
-                    Log.Debug("Error \(error)")
+                    Log("Error \(error)")
                     if let comp = completion {
                         comp()
                         return
@@ -221,10 +221,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let app = UIApplication.shared.delegate as! AppDelegate
         
         if list.count > 0 {
-            if Tools.isPasscode() {
+            if Tool.isPasscode() {
                 let passcode = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "PasscodeView")
                 app.window?.rootViewController = passcode
-            } else if !Tools.isPasscode() && Conn.isConnect {
+            } else if !Tool.isPasscode() && Conn.isConnect {
                 let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
                 app.window?.rootViewController = connect
             } else {
@@ -312,7 +312,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.connect = connect
         if let top = self.topViewController() {
-            Log.Debug("Present - \(top)")
+            Log("Present - \(top)")
             top.present(connect!, animated: true, completion: nil)
         }
     }

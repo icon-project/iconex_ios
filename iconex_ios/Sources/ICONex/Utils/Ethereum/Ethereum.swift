@@ -38,7 +38,7 @@ struct Ethereum {
             return nil
         }
         guard let gasPrice = try? web3.eth.getGasPrice() else { return nil }
-        Log.Debug("gasPrice: \(gasPrice)")
+        Log("gasPrice: \(gasPrice)")
         return gasPrice
     }
     
@@ -76,21 +76,21 @@ struct Ethereum {
         return estimatedGas
     }
     
-    static func requestTokenEstimatedGas(value: BigUInt, gasPrice: BigUInt, from: String, to: String, tokenInfo: TokenInfo) -> BigUInt? {
+    static func requestTokenEstimatedGas(value: BigUInt, gasPrice: BigUInt, from: String, to: String, tokenInfo: Token) -> BigUInt? {
         guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
         
         let fromAddress = EthereumAddress(from)
         let toAddress = EthereumAddress(to)
-        let contractAddress = EthereumAddress(tokenInfo.contractAddress)
+        let contractAddress = EthereumAddress(tokenInfo.contract)
         
         var options = TransactionOptions.defaultOptions
         options.gasPrice = .manual(gasPrice)
         
         let tokenEstimated = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, transactionOptions: options)
         let estimated = try? tokenEstimated!.estimateGas(transactionOptions: nil)
-        Log.Debug("estimated: \(estimated)")
+        Log("estimated: \(estimated)")
         return estimated
     }
     
@@ -115,7 +115,7 @@ struct Ethereum {
             let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data, transactionOptions: options)
             
             if let estimated = try? intermediate!.estimateGas(transactionOptions: nil) {
-                Log.Debug("estimated: \(estimated), gasLimit: \(gasLimit)")
+                Log("estimated: \(estimated), gasLimit: \(gasLimit)")
                 if estimated > gasLimit {
                     DispatchQueue.main.async {
                         completion(false, -1)
@@ -139,12 +139,12 @@ struct Ethereum {
             }
             
             DispatchQueue.main.async {
-                Log.Debug("result: \(result)")
+                Log("result: \(result)")
                 if let txHash = result.transaction.txhash {
                     do {
-                        try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: "eth")
+                        try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: value.toString(decimal: 18, 18, true), type: "eth")
                     } catch {
-                        Log.Debug("\(error)")
+                        Log("\(error)")
                     }
                     completion(true, 0)
                 } else {
@@ -194,7 +194,7 @@ struct Ethereum {
             if let intermediate = contract.method("symbol", parameters: [], extraData: Data(), transactionOptions: options) {
                 if let value = try? intermediate.call(transactionOptions: nil) {
                 
-                    Log.Debug("symbol: \(value)")
+                    Log("symbol: \(value)")
                     tokenResult.symbol = value["0"] as! String
                 } else {
                     DispatchQueue.main.async {
@@ -207,7 +207,7 @@ struct Ethereum {
             if let intermediate = contract.method("decimals", parameters: [], extraData: Data(), transactionOptions: options) {
                 if let value = try? intermediate.call(transactionOptions: nil) {
                 
-                    Log.Debug("decimal: \(value)")
+                    Log("decimal: \(value)")
                     tokenResult.decimal = Int(value["0"] as! BigUInt)
                 } else {
                     DispatchQueue.main.async {
@@ -222,11 +222,11 @@ struct Ethereum {
         }
     }
     
-    static func requestTokenBalance(token: TokenInfo) -> BigUInt? {
+    static func requestTokenBalance(token: Token) -> BigUInt? {
         guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
-        let ethAddress = EthereumAddress(token.contractAddress)
+        let ethAddress = EthereumAddress(token.contract)
         
         guard let contract = web3.contract(Web3.Utils.erc20ABI, at: ethAddress) else {
             
@@ -234,7 +234,7 @@ struct Ethereum {
         }
         
         var options = TransactionOptions.defaultOptions
-        let address = EthereumAddress(token.dependedAddress.add0xPrefix())
+        let address = EthereumAddress(token.parent.add0xPrefix())
         options.from = address
         guard let value = try? contract.method("balanceOf", parameters: [address] as [AnyObject], transactionOptions: options)!.call(transactionOptions: nil) else {
             
@@ -243,10 +243,10 @@ struct Ethereum {
         return value["0"] as? BigUInt
     }
     
-    static func requestTokenSendTransaction(privateKey: String, from: String, to: String, tokenInfo: TokenInfo, limit: BigUInt, price: BigUInt, value: BigUInt, completion: @escaping (_ isCompleted: Bool) -> Void) {
+    static func requestTokenSendTransaction(privateKey: String, from: String, to: String, tokenInfo: Token, limit: BigUInt, price: BigUInt, value: BigUInt, completion: @escaping (_ isCompleted: Bool) -> Void) {
         DispatchQueue.global(qos: .default).async {
             guard let web3 = try? Web3.new(Ethereum.provider) else {
-                Log.Debug("HALT")
+                Log("HALT")
                 DispatchQueue.main.async {
                     completion(false)
                 }
@@ -255,7 +255,7 @@ struct Ethereum {
             
             let fromAddress = EthereumAddress(from)
             let toAddress = EthereumAddress(to)
-            let contractAddress = EthereumAddress(tokenInfo.contractAddress)
+            let contractAddress = EthereumAddress(tokenInfo.contract)
             
             let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
             let manager = KeystoreManager([keystore!])
@@ -266,7 +266,7 @@ struct Ethereum {
             options.gasPrice = .manual(price)
             
             guard let intermediate = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, transactionOptions: options) else {
-                Log.Debug("HALT")
+                Log("HALT")
                 DispatchQueue.main.async {
                     completion(false)
                 }
@@ -276,12 +276,12 @@ struct Ethereum {
             if let result = try? intermediate.send() {
             
                 DispatchQueue.main.async {
-                    Log.Debug("success: \(String(describing: result))")
+                    Log("success: \(String(describing: result))")
                     if let txHash = result.transaction.txhash {
                         do {
-                            try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tools.bigToString(value: value, decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
+                            try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: Tool.bigToString(value: value, decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
                         } catch {
-                            Log.Debug("\(error)")
+                            Log("\(error)")
                         }
                         completion(true)
                     } else {
@@ -300,7 +300,7 @@ struct Ethereum {
 
 extension String {
     func add0xPrefix() -> String {
-        guard self.length == 40 else { return self }
+        guard self.count == 40 else { return self }
         
         if !self.hasPrefix("0x") {
             return "0x" + self
@@ -310,7 +310,7 @@ extension String {
     }
     
     func addHxPrefix() -> String {
-        guard self.length == 40 else { return self }
+        guard self.count == 40 else { return self }
         
         if !self.hasPrefix("hx") {
             return "hx" + self

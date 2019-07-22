@@ -119,7 +119,7 @@ extension LockSettingViewController: UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "LockSettingRadioCell", for: indexPath) as! LockSettingRadioCell
-            switch Tools.biometryType() {
+            switch Tool.biometryType() {
             case "Touch ID":
                 cell.cellTitle.text = "LockScreen.Setting.useBiometrics.TouchID".localized
                 
@@ -133,30 +133,30 @@ extension LockSettingViewController: UITableViewDataSource {
             cell.radio.rx.controlEvent(UIControl.Event.valueChanged)
                 .subscribe(onNext: { [unowned self] in
                     if cell.radio.isOn {
-                        let status = Tools.canVerificateTouchID()
-                        if status == Tools.LAStatus.success {
+                        let status = Tool.canVerificateTouchID()
+                        if status == Tool.LAStatus.success {
                             let bio = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "BioAuthView")
                             self.navigationController?.pushViewController(bio, animated: true)
                         } else {
-                            if status == Tools.LAStatus.locked {
+                            if status == Tool.LAStatus.locked {
                                 var title = "Error.TouchID.Locked".localized
-                                if Tools.biometryType() == "Face ID" {
+                                if Tool.biometryType() == "Face ID" {
                                     title = "Error.FaceID.Locked".localized
                                 }
                                 Alert.Basic(message: title).show(self)
-                            } else if status == Tools.LAStatus.notUsed {
+                            } else if status == Tool.LAStatus.notUsed {
                                 var title = "Error.TouchID.NotEnrolled".localized
-                                if Tools.biometryType() == "Face ID" {
+                                if Tool.biometryType() == "Face ID" {
                                     title = "Error.FaceID.NotEnrolled".localized
                                 }
                                 Alert.Basic(message: title).show(self)
-                            } else if status == Tools.LAStatus.passcodeNotSet {
+                            } else if status == Tool.LAStatus.passcodeNotSet {
                                 Alert.Basic(message: "Alert.Bio.passcodeNotSet".localized).show(self)
                             }
                             cell.radio.isOn = false
                         }
                     } else {
-                        Tools.removeTouchID()
+                        Tool.removeTouchID()
                         self.tableView.reloadRows(at: [indexPath], with: .automatic)
                     }
                 }).disposed(by: cell.disposeBag)

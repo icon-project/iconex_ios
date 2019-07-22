@@ -82,8 +82,8 @@ class PasscodeViewController: UIViewController {
     
     func checkTouchID() {
         isInitiated = true
-        if Tools.isTouchIDEnabled {
-            Tools.touchIDVerification(message: "") { (status) in
+        if Tool.isTouchIDEnabled {
+            Tool.touchIDVerification(message: "") { (status) in
                 switch status {
                 case .success:
                     Conn.auth = true
@@ -112,7 +112,7 @@ class PasscodeViewController: UIViewController {
             self.refresh()
             if self.__passcode.length == 6 {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                    if Tools.verifyPasscode(code: self.__passcode) {
+                    if Tool.verifyPasscode(code: self.__passcode) {
                         Conn.auth = true
                         if Conn.isConnect {
                             let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController

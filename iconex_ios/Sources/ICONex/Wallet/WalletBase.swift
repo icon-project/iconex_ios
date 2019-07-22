@@ -10,54 +10,75 @@ import BigInt
 
 protocol BaseWalletConvertible {
     var name: String { get set }
-    var address: String { get }
-    var decimal: Int { get set }
-    var tokens: [Token]? { get set }
+    var tokens: [Token]? { get }
     var created: Date { get set }
-    var balance: BigUInt? { get }
     var keystore: ICONKeystore { get set }
+    
+    var address: String { get }
+    var decimal: Int { get }
+    var balance: BigUInt? { get }
     var rawData: Data { get }
 }
 
-class BaseWallet: BaseWalletConvertible {
-    var name: String
+//class BaseWallet: BaseWalletConvertible {
+extension BaseWalletConvertible {
     var address: String {
         return keystore.address
     }
-    var decimal: Int = 18
+    var decimal: Int { return 18 }
     var balance: BigUInt? {
-        return BalanceManager.shared.walletBalanceList[address]
+        return nil
     }
-    var created: Date
-    var tokens: [Token]?
-    var keystore: ICONKeystore
     var rawData: Data {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
         
         return try! encoder.encode(keystore)
     }
-    
-    init(name: String, keystore: ICONKeystore, created: Date = Date()) {
-        self.name = name
-        self.keystore = keystore
-        self.created = created
+}
+
+extension BaseWalletConvertible {
+    func canSave(name: String) -> Bool {
+        return DB.canSaveWallet(name: name)
     }
     
-    init?(name: String, rawData: Data, created: Date = Date()) {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        guard let keystore = try? decoder.decode(ICONKeystore.self, from: rawData) else { return nil }
-        
-        self.name = name
-        self.keystore = keystore
-        self.created = created
+    func canSave(address: String) -> Bool {
+        return DB.canSaveWallet(address: address)
     }
     
-    /// PrivateKey 생성
-    ///
-    /// - Returns: Private Key
-    func generatePrivateKey() -> String {
-        return ICONUtil.generatePrivateKey()
+    func canSave() throws {
+        guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
+        guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
+    }
+    
+    func save() throws {
+        guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
+        guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
+        try DB.saveWallet(name: name, address: address, type: address.hasPrefix("0x") ? "eth" : "icx", rawData: rawData)
+    }
+    
+    func changeName(older: String, newer: String) throws {
+        try DB.changeWalletName(former: older, newName: newer)
+    }
+    
+    func delete() throws {
+        try DB.deleteWallet(wallet: self)
+    }
+    
+    func canSaveToken(contractAddress: String) -> Bool {
+        guard let tokenList = tokens else { return true }
+        return tokenList.filter { $0.contract == contractAddress }.count == 0
+    }
+    
+    func saveToken(token: Token) throws {
+        try DB.addToken(tokenInfo: token)
+    }
+    
+    func deleteToken(token: Token) throws {
+        try DB.removeToken(tokenInfo: token)
+    }
+    
+    func modifyToken(token: Token) throws {
+        try DB.modifyToken(tokenInfo: token)
     }
 }

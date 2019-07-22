@@ -92,7 +92,7 @@ class WalletPasswordViewController: UIViewController {
                         }
                     })
                 } catch {
-                    Log.Debug("error: \(error)")
+                    Log("error: \(error)")
                     self.passwordInputBox.setState(.error, "Error.Password.Wrong".localized)
                 }
             }).disposed(by: disposeBag)

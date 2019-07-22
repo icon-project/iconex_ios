@@ -144,12 +144,15 @@ Base64 encoded ICON JSON-RPC API
 ```
 
 ## Common Result Code
-| Category | Code | Message | Description |
-| --- | --- | --- | --- |
-| Success | 0 | Success | |
-| General | -1 | Operation canceled by user. | User cancel |
-| Parsing | -1000 | Command not found. | Command(HOST) not found |
-|| -1001 | Invalid request. Could not find data. | Could not find data in query. |
-|| -1002 | Invalid base64 encoded string. | Base64 decoding failure |
-|| -1003 | Invalid JSON syntax. ||
-| Unspecified | -9999 | Unspecified error. | Unknown |
+| Code | Message | 
+| --- | --- | 
+| 0 | Success |
+| -1 | Operation canceled by user. |
+| -1000 | Command not found. | 
+| -1001 | Invalid request. Could not find data. |
+| -1002 | Invalid base64 encoded string. | 
+| -1003 | Invalid Command |
+| -1004 | Invalid JSON syntax. |
+| -2000 | Have no wallet |
+| -3000 | Not found wallet($walletAddress)
+| -9999 | Unspecified error |

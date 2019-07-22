@@ -240,9 +240,9 @@ enum IXTextFieldType {
             case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9":
                 return true
                 
-            case Tools.decimalSeparator:
+            case Tool.decimalSeparator:
                 if _fieldType == .integer { return false }
-                let array = Array(textField.text!).filter { String($0) == Tools.decimalSeparator }
+                let array = Array(textField.text!).filter { String($0) == Tool.decimalSeparator }
                 let result = array.count >= 1 ? false : true
                 return result
                 

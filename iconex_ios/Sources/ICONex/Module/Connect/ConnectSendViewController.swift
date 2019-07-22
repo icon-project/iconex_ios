@@ -238,9 +238,9 @@ class ConnectSendViewController: BaseViewController {
             // irc
             if let tokenSymbol = Conn.tokenSymbol, let decimals = Conn.tokenDecimal {
                 confirm.feeType = "icx"
-                confirm.fee = Tools.bigToString(value: estimated, decimal: 18, 18, false)
+                confirm.fee = estimated.toString(decimal: 18, 18, false)
                 confirm.address = to
-                confirm.value = Tools.bigToString(value: self.value, decimal: decimals, decimals, false).currencySeparated()
+                confirm.value = self.value.toString(decimal: decimals, decimals, false).currencySeparated()
                 confirm.type = tokenSymbol.uppercased()
 
                 confirm.handler = {
@@ -249,7 +249,7 @@ class ConnectSendViewController: BaseViewController {
                         confirm.dismiss(animated: true, completion: {
                             switch result {
                             case .failure(let error):
-                                Log.Debug("Error - \(error)")
+                                Log("Error - \(error)")
                                 var msg = ""
                                 switch error {
                                 case .error(error: let error):
@@ -259,7 +259,7 @@ class ConnectSendViewController: BaseViewController {
                                     break
                                 }
                                 
-                                Tools.toast(message: "Error.CommonError".localized + msg)
+                                Tool.toast(message: "Error.CommonError".localized + msg)
                             
                             case .success(let hash):
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
@@ -277,10 +277,10 @@ class ConnectSendViewController: BaseViewController {
                 confirm.show(self)
             } else {
                 confirm.feeType = "icx"
-                confirm.fee = Tools.bigToString(value: estimated, decimal: 18, 18, false)
+                confirm.fee = estimated.toString(decimal: 18, 18, false)
                 confirm.address = to
 
-                confirm.value = Tools.bigToString(value: self.value, decimal: 18, 18, false).currencySeparated()
+                confirm.value = self.value.toString(decimal: 18, 18, false).currencySeparated()
                 confirm.type = "icx"
                 confirm.handler = {
                     if let signed = try? SignedTransaction(transaction: tx, privateKey: key) {
@@ -288,7 +288,7 @@ class ConnectSendViewController: BaseViewController {
                         confirm.dismiss(animated: true, completion: {
                             switch result {
                             case .failure(let error):
-                                Log.Debug("Error - \(error)")
+                                Log("Error - \(error)")
                                 Conn.sendError(error: .network(error))
                             
                             case .success(let hash):
@@ -400,8 +400,8 @@ class ConnectSendViewController: BaseViewController {
             default: return
             }
             
-            amount.text = Tools.bigToString(value: self.value, decimal: decimal, decimal, false).currencySeparated()
-            if let exchange = Tools.balanceToExchange(self.value, from: symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: decimal) {
+            amount.text = self.value.toString(decimal: decimal, decimal, false).currencySeparated()
+            if let exchange = Tool.balanceToExchange(self.value, from: symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: decimal) {
                 exchangeAmount.text = exchange + " USD"
             } else {
                 exchangeAmount.text = "- USD"
@@ -414,8 +414,8 @@ class ConnectSendViewController: BaseViewController {
             }
             self.value = value
             
-            amount.text = Tools.bigToString(value: self.value, decimal: 18, 18, false).currencySeparated()
-            if let exchange = Tools.balanceToExchange(self.value, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
+            amount.text = self.value.toString(decimal: 18, 18, false).currencySeparated()
+            if let exchange = Tool.balanceToExchange(self.value, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
                 exchangeAmount.text = exchange + " USD"
             } else {
                 exchangeAmount.text = "- USD"
@@ -455,12 +455,12 @@ class ConnectSendViewController: BaseViewController {
             if let stepPrice = WManager.getStepPrice() {
                 DispatchQueue.main.async {
                     let powered = stepPrice * BigUInt(10).power(9)
-                    let priceGloop = Tools.bigToString(value: powered, decimal: 18, 18, true).currencySeparated()
-                    let priceICX = Tools.bigToString(value: stepPrice, decimal: 18, 18, true).currencySeparated()
+                    let priceGloop = Tool.bigToString(value: powered, decimal: 18, 18, true).currencySeparated()
+                    let priceICX = Tool.bigToString(value: stepPrice, decimal: 18, 18, true).currencySeparated()
                     
                     self.stepPriceLabel.text = priceICX
                     self.stepPriceGloop.text = " ICX" + " (" + priceGloop + " Gloop)"
-                    if let exchangedPrice = Tools.balanceToExchange(stepPrice, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
+                    if let exchangedPrice = Tool.balanceToExchange(stepPrice, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
                         self.exchangeStepPrice.text = exchangedPrice + " USD"
                     } else {
                         self.exchangeStepPrice.text = "- USD"
@@ -483,10 +483,10 @@ class ConnectSendViewController: BaseViewController {
         guard let limitString = self.stepLimitInputBox.textField.text , limitString != "", let limit = BigUInt(limitString) else {
             if showError { self.stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)}
             let limit = BigUInt(0)
-            self.estimatedFee.text = Tools.bigToString(value: limit, decimal: 18, 18, false).currencySeparated()
-            self.exchangeEstimatedFee.text = Tools.balanceToExchange(limit, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
-            self.remain.text = Tools.bigToString(value: totalBalance, decimal: decimal, decimal, false).currencySeparated()
-            if let exchangedRemain = Tools.balanceToExchange(totalBalance, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) {
+            self.estimatedFee.text = limit.toString(decimal: 18, 18, false).currencySeparated()
+            self.exchangeEstimatedFee.text = Tool.balanceToExchange(limit, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
+            self.remain.text = totalBalance.toString(decimal: decimal, decimal, false).currencySeparated()
+            if let exchangedRemain = Tool.balanceToExchange(totalBalance, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) {
                 self.exchangeRemain.text = exchangedRemain + " USD"
             } else {
                 self.exchangeRemain.text = "- USD"
@@ -504,13 +504,13 @@ class ConnectSendViewController: BaseViewController {
         }
         
         if limit < minLimit {
-            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 0, 0, true).currencySeparated())
+            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, BigUInt(minLimit).toString(decimal: 0, 0, true).currencySeparated())
             if showError { self.stepLimitInputBox.setState(.error, message)}
             return false
         }
         
         if limit > maxLimit {
-            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 0, 0, true).currencySeparated())
+            let message = String(format: "Error.Transfer.Limit.LessThen".localized, BigUInt(maxLimit).toString(decimal: 0, 0, true).currencySeparated())
             if showError { self.stepLimitInputBox.setState(.error, message)}
             return false
         }
@@ -519,8 +519,8 @@ class ConnectSendViewController: BaseViewController {
         
         if let stepPrice = self.stepPrice {
             let estimated = limit * stepPrice
-            self.estimatedFee.text = Tools.bigToString(value: estimated, decimal: 18, 18, false).currencySeparated()
-            self.exchangeEstimatedFee.text = Tools.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
+            self.estimatedFee.text = estimated.toString(decimal: 18, 18, false).currencySeparated()
+            self.exchangeEstimatedFee.text = Tool.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
             
             if (symbol != "ICX" ? self.value : estimated + self.value) > totalBalance {
                 self.remain.text = ""
@@ -528,12 +528,12 @@ class ConnectSendViewController: BaseViewController {
                 return false
             }
             let remain = symbol != "ICX" ? totalBalance - self.value : totalBalance - (estimated + self.value)
-            Log.Debug("remain 2 - \(remain)")
-            self.remain.text = Tools.bigToString(value: remain, decimal: decimal, decimal, false)
+            Log("remain 2 - \(remain)")
+            self.remain.text = remain.toString(decimal: decimal, decimal, false)
             if symbol != "ICX" {
                 self.exchangeRemain.text = "- USD"
             } else {
-                guard let exchanged = Tools.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) else {
+                guard let exchanged = Tool.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) else {
                     self.exchangeRemain.text = "- USD"
                     return false
                 }

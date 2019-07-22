@@ -149,7 +149,7 @@ extension WalletExportViewController: UITableViewDataSource {
         let wallet = WManager.loadWalletBy(info: info)!
         cell.nameLabel.text = wallet.alias
         if let balance = Balance.walletBalanceList[wallet.address!] {
-            cell.valueLabel.text = Tools.bigToString(value: balance, decimal: wallet.decimal, 4)
+            cell.valueLabel.text = Tool.bigToString(value: balance, decimal: wallet.decimal, 4)
         } else {
             cell.valueLabel.text = "-"
         }

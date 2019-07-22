@@ -41,7 +41,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
     
     private var walletInfo: WalletInfo?
     private var coin: CoinInfo?
-    private var token: TokenInfo?
+    private var token: Token?
     
     private let disposeBag = DisposeBag()
     
@@ -103,7 +103,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                                 root.present(basic, animated: true, completion: nil)
                             }
                         } catch {
-                            Log.Debug("error: \(error)")
+                            Log("error: \(error)")
                             let message = "Error.CommonError".localized
                             let basic = Alert.Basic(message: message)
                             root.present(basic, animated: true, completion: nil)
@@ -262,18 +262,18 @@ class MainWalletView: UIView, UIScrollViewDelegate {
             guard let wallet = WManager.loadWalletBy(info: walletInfo) else { return }
             walletsTotalView.isHidden = false
             coinsTotalView.isHidden = true
-            if let address = wallet.address, let value = Balance.walletBalanceList[address], let vExchanged = Tools.balanceToExchange(value, from: wallet.type.rawValue.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: wallet.decimal) {
+            if let address = wallet.address, let value = Balance.walletBalanceList[address], let vExchanged = Tool.balanceToExchange(value, from: wallet.type.rawValue.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: wallet.decimal) {
                 indicator.isHidden = true
                 totalBalanceLabel.isHidden = false
                 
-                var total = Tools.stringToBigUInt(inputText: vExchanged, decimal: wallet.decimal)!
+                var total = Tool.stringToBigUInt(inputText: vExchanged, decimal: wallet.decimal)!
                 if let tokens = wallet.tokens {
                     for token in tokens {
-                        guard let tokenBalances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress], let exchanged = Tools.balanceToExchange(balance, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: token.decimal) else { continue }
-                        total += Tools.stringToBigUInt(inputText: exchanged, decimal: token.decimal)!
+                        guard let tokenBalances = Balance.tokenBalanceList[token.dependedAddress.add0xPrefix()], let balance = tokenBalances[token.contractAddress], let exchanged = Tool.balanceToExchange(balance, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: token.decimal) else { continue }
+                        total += Tool.stringToBigUInt(inputText: exchanged, decimal: token.decimal)!
                     }
                 }
-                totalBalanceLabel.text = Tools.bigToString(value: total, decimal: wallet.decimal, Exchange.currentExchange == "usd" ? 2 : 4, false).currencySeparated()
+                totalBalanceLabel.text = Tool.bigToString(value: total, decimal: wallet.decimal, Exchange.currentExchange == "usd" ? 2 : 4, false).currencySeparated()
             } else {
                 if Balance.isBalanceLoadCompleted {
                     indicator.isHidden = true
@@ -294,20 +294,20 @@ class MainWalletView: UIView, UIScrollViewDelegate {
                 guard let wallet = WManager.loadWalletBy(info: walletInfo), let balance = Balance.walletBalanceList[walletInfo.address] else  { continue }
                 decimal = wallet.decimal
                 
-                let trimming = Tools.bigToString(value: balance, decimal: decimal, 4, false).currencySeparated()
-                let trimmed = Tools.stringToBigUInt(inputText: trimming, decimal: decimal)!
+                let trimming = Tool.bigToString(value: balance, decimal: decimal, 4, false).currencySeparated()
+                let trimmed = Tool.stringToBigUInt(inputText: trimming, decimal: decimal)!
                 total += trimmed
                 
-                guard let exchanged = Tools.balanceToExchange(trimmed, from: wallet.type.rawValue.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: wallet.decimal), let exc = Tools.stringToBigUInt(inputText: exchanged, decimal: wallet.decimal) else { continue }
+                guard let exchanged = Tool.balanceToExchange(trimmed, from: wallet.type.rawValue.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: wallet.decimal), let exc = Tool.stringToBigUInt(inputText: exchanged, decimal: wallet.decimal) else { continue }
                 if let totalValue = exchangeTotal {
                     exchangeTotal = totalValue + exc
                 } else {
                     exchangeTotal = exc
                 }
             }
-            coinsTotalBalance.text = Tools.bigToString(value: total, decimal: decimal, 4, false).currencySeparated()
+            coinsTotalBalance.text = Tool.bigToString(value: total, decimal: decimal, 4, false).currencySeparated()
             if let value = exchangeTotal {
-                coinsTotalExchange.text = Tools.bigToString(value: value, decimal: decimal, below, false).currencySeparated()
+                coinsTotalExchange.text = Tool.bigToString(value: value, decimal: decimal, below, false).currencySeparated()
             } else {
                 coinsTotalExchange.text = "-"
             }
@@ -324,21 +324,21 @@ class MainWalletView: UIView, UIScrollViewDelegate {
             var exchangeTotal: BigUInt? = nil
             for walletInfo in wallets {
                 guard let wallet = WManager.loadWalletBy(info: walletInfo), let item = wallet.tokens?.filter({ $0.symbol == token.symbol }).first, let tokenBalances = Balance.tokenBalanceList[item.dependedAddress.add0xPrefix()], let balance = tokenBalances[item.contractAddress] else { continue }
-                let trimming = Tools.bigToString(value: balance, decimal: token.decimal, 4, false)
-                let trimmed = Tools.stringToBigUInt(inputText: trimming, decimal: token.decimal)!
+                let trimming = Tool.bigToString(value: balance, decimal: token.decimal, 4, false)
+                let trimmed = Tool.stringToBigUInt(inputText: trimming, decimal: token.decimal)!
                 
                 total += trimmed
                 
-                guard let exchanged = Tools.balanceToExchange(trimmed, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: token.decimal), let exc = Tools.stringToBigUInt(inputText: exchanged, decimal: token.decimal) else { continue }
+                guard let exchanged = Tool.balanceToExchange(trimmed, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: below, decimal: token.decimal), let exc = Tool.stringToBigUInt(inputText: exchanged, decimal: token.decimal) else { continue }
                 if let totalValue = exchangeTotal {
                     exchangeTotal = totalValue + exc
                 } else {
                     exchangeTotal = exc
                 }
             }
-            coinsTotalBalance.text = Tools.bigToString(value: total, decimal: token.decimal, 4, false).currencySeparated()
+            coinsTotalBalance.text = Tool.bigToString(value: total, decimal: token.decimal, 4, false).currencySeparated()
             if let value = exchangeTotal {
-                coinsTotalExchange.text = Tools.bigToString(value: value, decimal: token.decimal, below, false).currencySeparated()
+                coinsTotalExchange.text = Tool.bigToString(value: value, decimal: token.decimal, below, false).currencySeparated()
             } else {
                 coinsTotalExchange.text = "-"
             }
@@ -374,7 +374,7 @@ class MainWalletView: UIView, UIScrollViewDelegate {
         self.setWalletBalance()
     }
     
-    func setWalletInfo(token: TokenInfo) {
+    func setWalletInfo(token: Token) {
         self.walletInfo = nil
         self.coin = nil
         self.addressButton.isHidden = true
@@ -434,14 +434,14 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             
             cell.coinNameLabel.text = walletInfo.name
             if let value = Balance.walletBalanceList[walletInfo.address], let wallet = WManager.loadWalletBy(info: walletInfo) {
-                let valueString = Tools.bigToString(value: value, decimal: 18, 4)
+                let valueString = Tool.bigToString(value: value, decimal: 18, 4)
                 cell.coinValueLabel.text = valueString.currencySeparated()
                 
-                let trimmed = Tools.stringToBigUInt(inputText: valueString, decimal: wallet.decimal)!
+                let trimmed = Tool.stringToBigUInt(inputText: valueString, decimal: wallet.decimal)!
                 
-                guard let exchanged = Tools.balanceToExchange(trimmed, from: coin.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: wallet.decimal) else {
+                guard let exchanged = Tool.balanceToExchange(trimmed, from: coin.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: wallet.decimal) else {
                     cell.isLoading = !Balance.isBalanceLoadCompleted
-                    Tools.rotateAnimation(inView: cell.indicator)
+                    Tool.rotateAnimation(inView: cell.indicator)
                     
                     return cell
                 }
@@ -449,7 +449,7 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 cell.isLoading = false
             } else {
                 cell.isLoading = !Balance.isBalanceLoadCompleted
-                Tools.rotateAnimation(inView: cell.indicator)
+                Tool.rotateAnimation(inView: cell.indicator)
             }
         } else if let token = self.token {
             cell.coinTypeLabel.text = token.symbol.uppercased()
@@ -467,13 +467,13 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
             guard let tokenBalances = Balance.tokenBalanceList[item.dependedAddress.add0xPrefix()] else { return cell }
             guard let balance = tokenBalances[item.contractAddress] else {
                 cell.isLoading = !Balance.isBalanceLoadCompleted
-                Tools.rotateAnimation(inView: cell.indicator)
+                Tool.rotateAnimation(inView: cell.indicator)
                 return cell
             }
-            let trimming = Tools.bigToString(value: balance, decimal: token.decimal, 4)
+            let trimming = Tool.bigToString(value: balance, decimal: token.decimal, 4)
             cell.coinValueLabel.text = trimming.currencySeparated()
-            let trimmed = Tools.stringToBigUInt(inputText: trimming, decimal: token.decimal)!
-            cell.exchangeValueLabel.text = Tools.balanceToExchange(trimmed, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
+            let trimmed = Tool.stringToBigUInt(inputText: trimming, decimal: token.decimal)!
+            cell.exchangeValueLabel.text = Tool.balanceToExchange(trimmed, from: token.symbol.lowercased(), to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
             
         } else {
             guard let walletInfo = self.walletInfo, let wallet = WManager.loadWalletBy(info: walletInfo) else {
@@ -490,21 +490,21 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 cell.coinNameLabel.text = self.walletInfo!.type == .eth ? "Ethereum" : "ICON"
                 cell.coinTypeLabel.text = self.walletInfo!.type == .eth ? "ETH" : "ICX"
                 if let value = Balance.walletBalanceList[wallet.address!] {
-                    let valueString = Tools.bigToString(value: value, decimal: 18, 4)
+                    let valueString = Tool.bigToString(value: value, decimal: 18, 4)
                     cell.coinValueLabel.text = valueString.currencySeparated()
                     
                     let type = self.walletInfo!.type == .eth ? "eth" : "icx"
                     
-                    guard let exchanged = Tools.balanceToExchange(value, from: type, to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4) else {
+                    guard let exchanged = Tool.balanceToExchange(value, from: type, to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4) else {
                         cell.isLoading = !Balance.isBalanceLoadCompleted
-                        Tools.rotateAnimation(inView: cell.indicator)
+                        Tool.rotateAnimation(inView: cell.indicator)
                         return cell
                     }
                     cell.exchangeValueLabel.text = exchanged.currencySeparated()
                     cell.isLoading = false
                 } else {
                     cell.isLoading = !Balance.isBalanceLoadCompleted
-                    Tools.rotateAnimation(inView: cell.indicator)
+                    Tool.rotateAnimation(inView: cell.indicator)
                 }
                 
             } else {
@@ -513,13 +513,13 @@ extension MainWalletView: UITableViewDelegate, UITableViewDataSource {
                 cell.coinTypeLabel.text = token.symbol
                 guard let tokenBalances = Balance.tokenBalanceList[token.dependedAddress.lowercased().add0xPrefix()], let balance = tokenBalances[token.contractAddress.lowercased()] else {
                     cell.isLoading = !Balance.isBalanceLoadCompleted
-                    Tools.rotateAnimation(inView: cell.indicator)
+                    Tool.rotateAnimation(inView: cell.indicator)
                     return cell
                 }
                 
-                cell.coinValueLabel.text = Tools.bigToString(value: balance, decimal: token.decimal, 4).currencySeparated()
+                cell.coinValueLabel.text = Tool.bigToString(value: balance, decimal: token.decimal, 4).currencySeparated()
                 let tag = token.symbol.lowercased()
-                cell.exchangeValueLabel.text = Tools.balanceToExchange(balance, from: tag, to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
+                cell.exchangeValueLabel.text = Tool.balanceToExchange(balance, from: tag, to: Exchange.currentExchange, belowDecimal: Exchange.currentExchange == "usd" ? 2 : 4, decimal: token.decimal)?.currencySeparated() ?? "-"
                 cell.isLoading = false
             }
         }

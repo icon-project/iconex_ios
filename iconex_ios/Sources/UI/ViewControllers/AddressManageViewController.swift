@@ -239,9 +239,9 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
             cell.walletName.text = wallet.alias
             cell.addressLabel.text = wallet.address
             if let balance = Balance.walletBalanceList[wallet.address!] {
-                cell.amountLabel.text = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
+                cell.amountLabel.text = Tool.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
             } else if let balance = Balance.walletBalanceList[wallet.address!] {
-                cell.amountLabel.text = Tools.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
+                cell.amountLabel.text = Tool.bigToString(value: balance, decimal: wallet.decimal, wallet.decimal, false)
             } else {
                 cell.amountLabel.text = "-"
             }
@@ -296,7 +296,7 @@ extension AddressManageViewController: UITableViewDelegate, UITableViewDataSourc
                     do {
                         try AddressBook.deleteAddressBook(name: address.name)
                     } catch {
-                        Log.Debug("Delete AddressBook Error: \(error)")
+                        Log("Delete AddressBook Error: \(error)")
                     }
                     
                     self.loadWalletList()

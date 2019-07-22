@@ -50,7 +50,7 @@ class TransactionDetailViewController: UIViewController {
         copyButton.rx.controlEvent(UIControl.Event.touchUpInside)
             .subscribe(onNext: {[unowned self] in
                 copyString(message: self.txHash!)
-                Tools.toast(message: "Alert.Transaction.IDCopied".localized)
+                Tool.toast(message: "Alert.Transaction.IDCopied".localized)
             }).disposed(by: disposeBag)
         
         trackerButton.rx.controlEvent(UIControl.Event.touchUpInside)

@@ -39,7 +39,7 @@ struct Cipher {
         }
 
         if (derivationStatus != 0) {
-            Log.Error("\(derivationStatus)")
+            Log("\(derivationStatus)")
             return nil;
         }
 
@@ -101,23 +101,23 @@ struct Cipher {
     
     static func createKeystore(privateKey: String, password: String) throws -> ICONKeystore {
         let hexKey = privateKey.hexToData()!
-        Log.Debug("hex: \(hexKey.hexEncodedString())")
+        Log("hex: \(hexKey.hexEncodedString())")
         let prvKey = PrivateKey(hex: hexKey)
-        Log.Debug("privateKey: \(prvKey.hexEncoded)")
+        Log("privateKey: \(prvKey.hexEncoded)")
         let iconWallet = Wallet(privateKey: prvKey)
-        Log.Debug("address: \(iconWallet.address)")
+        Log("address: \(iconWallet.address)")
         
         let saltCount = 32
         var randomBytes = Array<UInt8>(repeating: 0, count: saltCount)
         let err = SecRandomCopyBytes(kSecRandomDefault, saltCount, &randomBytes)
-        if err != errSecSuccess { throw IXError.convertKey }
+        if err != errSecSuccess { throw CryptError.convertKey }
         let salt = Data(randomBytes)
         
         // HASH round
         let round = 16384
         
         guard let encKey = pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: round) else {
-            throw IXError.convertKey
+            throw CryptError.convertKey
         }
         let result = try encrypt(devKey: encKey, data: privateKey.hexToData()!, salt: salt)
         let kdfParam = ICONKeystore.KDF(dklen: PBE_DKLEN, salt: salt.toHexString(), c: round, prf: "hmac-sha256")
@@ -144,7 +144,7 @@ struct Cipher {
         
         let publicKey = Data(bytes: serializedPubkey, count: 65).toHexString()
         
-        return String(publicKey.suffix(publicKey.length - 2))
+        return String(publicKey.suffix(publicKey.count - 2))
     }
     
     static func makeAddress(_ prvKey: PrivateKey?, _ pubKey: PublicKey) -> String {
@@ -232,26 +232,3 @@ struct Cipher {
 }
 
 let PBE_DKLEN = 32
-
-public struct ICONUtil {
-
-    static let PBE_MAC_KECCAK = "Keccak-256"
-    static let PBE_MAC_SHA3 = "SHA3-256"
-    
-    static func generatePrivateKey() -> String {
-        
-        var key = ""
-        
-        for _ in 0..<64 {
-            let code = arc4random() % 16
-            
-            key += String(format: "%x", code)
-        }
-        
-        return key.sha3(.sha256)
-    }
-    
-}
-
-
-

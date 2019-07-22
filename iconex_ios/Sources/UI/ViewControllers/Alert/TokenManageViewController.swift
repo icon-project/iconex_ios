@@ -38,7 +38,7 @@ class TokenManageViewController: UIViewController {
     var manageMode: ManageMode = .add
     
     var walletInfo: WalletInfo?
-    var selectedToken: TokenInfo?
+    var selectedToken: Token?
     
     private var defaultDecimal: Int?
     private var isChecked: Bool = false
@@ -195,7 +195,7 @@ class TokenManageViewController: UIViewController {
                         try DB.modifyToken(tokenInfo: self.selectedToken!)
                         self.navTitle.text = self.tokenInputBox.textField.text
                     } catch {
-                        Log.Debug("\(error)")
+                        Log("\(error)")
                     }
                 } else {
                     self.tokenInputBox.isEnable = true
@@ -220,7 +220,7 @@ class TokenManageViewController: UIViewController {
                         
                         self.navigationController?.popViewController(animated: true)
                     } catch {
-                        Log.Debug("\(error)")
+                        Log("\(error)")
                         Alert.Basic(message: "Error.Token.Remove".localized).show(self)
                     }
                     
@@ -242,7 +242,7 @@ class TokenManageViewController: UIViewController {
                 
                 self.navigationController?.popViewController(animated: true)
             } catch {
-                Log.Debug("\(error)")
+                Log("\(error)")
                 Alert.Basic(message: "Error.Token.Add".localized).show(self)
             }
         }).disposed(by: disposeBag)
@@ -293,7 +293,7 @@ class TokenManageViewController: UIViewController {
                 self.decimalInputBox.textField.text = String(tokenListInfo.decimal)
                 self.decimalInputBox.setState(.normal, "")
                 
-                self.selectedToken = TokenInfo(name: "", defaultName: "", symbol: tokenListInfo.symbol, decimal: tokenListInfo.decimal, defaultDecimal: tokenListInfo.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
+                self.selectedToken = Token(name: "", defaultName: "", symbol: tokenListInfo.symbol, decimal: tokenListInfo.decimal, defaultDecimal: tokenListInfo.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
                 
                 self.confirmButton.isEnabled = self.validation()
             } else {
@@ -401,7 +401,7 @@ class TokenManageViewController: UIViewController {
         }
         
         if let tokenInfo = self.selectedToken {
-            self.selectedToken = TokenInfo(name: name, defaultName: tokenInfo.name, symbol: tokenInfo.symbol, decimal: tokenInfo.decimal, defaultDecimal: tokenInfo.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
+            self.selectedToken = Token(name: name, defaultName: tokenInfo.name, symbol: tokenInfo.symbol, decimal: tokenInfo.decimal, defaultDecimal: tokenInfo.decimal, dependedAddress: self.walletInfo!.address, contractAddress: self.addressInputBox.textField.text!, parentType: self.walletInfo!.type.rawValue)
         }
         
         tokenInputBox.setState(.normal, "")

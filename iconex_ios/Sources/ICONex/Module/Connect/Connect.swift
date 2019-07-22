@@ -201,7 +201,7 @@ class Connect {
     var tokenSymbol: String?
     
     public func setMessage(source: URL) {
-        Log.Debug("Source - \(source)")
+        Log("Source - \(source)")
         self.reset()
         self.source = source
     }
@@ -361,7 +361,7 @@ class Connect {
         guard Conn.redirect != nil else {
             let app = UIApplication.shared.delegate as! AppDelegate
             app.toMain()
-            Tools.toast(message: error.errorDescription ?? "Unknown Error")
+            Tool.toast(message: error.errorDescription ?? "Unknown Error")
             return
         }
         let response = ConnectResponse(code: error.code, message: error.errorDescription ?? "Unknown Error", result: nil)

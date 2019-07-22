@@ -175,7 +175,7 @@ class WalletExportPasswordViewController: UIViewController {
                 app.fileShare(filepath: filepath, self.makeButton)
                 
             } else {
-                Log.Debug("Error: export bundle")
+                Log("Error: export bundle")
             }
         })
     }

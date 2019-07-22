@@ -38,7 +38,7 @@ class EthereumClient: Operation {
     func fetch() {
         var address = ""
         if let wallet = self.wallet {
-            address = wallet.address!
+            address = wallet.address
         } else if let adr = self.address {
             address = adr
         }

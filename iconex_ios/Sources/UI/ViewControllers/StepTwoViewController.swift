@@ -175,9 +175,9 @@ class StepTwoViewController: UIViewController {
                 self.password2.textField.text = nil
             })
         } catch {
-            Log.Error(error)
+            Log(error)
             
-            Tools.toast(message: "Error.Wallet.CreateFailed".localized)
+            Tool.toast(message: "Error.Wallet.CreateFailed".localized)
         }
     }
     
