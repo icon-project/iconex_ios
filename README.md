@@ -5,12 +5,12 @@ ICONex is a wallet where you can keep not only ICX but also other various crypto
 You can also download from [AppStore](https://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8).
 
 ## Version
-* 1.6.0
+* 1.6.1
 
 ## Requirements
-* Xcode 9 release
+* Xcode 10 release
 * Swift 5.0
-* iOS 10 or higher
+* iOS 11 or higher
 * [Cocoapods](https://cocoapods.org/)
 
 ## Getting started
