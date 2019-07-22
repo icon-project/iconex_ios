@@ -71,12 +71,6 @@ Base64 encoded ICON JSON-RPC API
 | message | String | Simplified result message | Mendatory |
 | result | String | Selected wallet address | Optional |
 
-#### Result Code
-| Code | Message | Description |
-| ---- | ---- | ---- |
-| -2000 | ICONex has no ICX wallet. | ICONex has no ICX wallet for support. |
-| Etc. | Refer to Common Result Code | - |
-
 #### Example
 
 ```Swift
@@ -94,7 +88,7 @@ Base64 encoded ICON JSON-RPC API
 
 //Response - fail
 {
-    "code": -1000,
+    "code": -1,
     "message": "Operation canceled by user."
 }
 ```
@@ -114,12 +108,6 @@ Base64 encoded ICON JSON-RPC API
 | code | Int | Result code | Mendatory |
 | message | String | Implified result message | Mendatory |
 | result | String | Received transaction hash after send a transaction | Optional |
-
-#### Result Code
-| Code | Message | Description |
-| --- | --- | --- |
-| -3000 | Not found wallet($walletAddress) | $walletAddress does not exist. |
-| extra | Refer to Common Result Code |
 
 #### Example
 ```Swift
@@ -144,12 +132,15 @@ Base64 encoded ICON JSON-RPC API
 ```
 
 ## Common Result Code
-| Category | Code | Message | Description |
-| --- | --- | --- | --- |
-| Success | 0 | Success | |
-| General | -1 | Operation canceled by user. | User cancel |
-| Parsing | -1000 | Command not found. | Command(HOST) not found |
-|| -1001 | Invalid request. Could not find data. | Could not find data in query. |
-|| -1002 | Invalid base64 encoded string. | Base64 decoding failure |
-|| -1003 | Invalid JSON syntax. ||
-| Unspecified | -9999 | Unspecified error. | Unknown |
+| Code | Message | 
+| --- | --- | 
+| 0 | Success |
+| -1 | Operation canceled by user. |
+| -1000 | Command not found. | 
+| -1001 | Invalid request. Could not find data. |
+| -1002 | Invalid base64 encoded string. | 
+| -1003 | Invalid Command |
+| -1004 | Invalid JSON syntax. |
+| -2000 | Have no wallet |
+| -3000 | Not found wallet($walletAddress)
+| -9999 | Unspecified error |
