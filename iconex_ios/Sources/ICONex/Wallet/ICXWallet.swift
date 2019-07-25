@@ -38,7 +38,13 @@ class ICXWallet: BaseWalletConvertible {
         self.keystore = keystore
         self.created = created
         
-        
+        if let list = tokens {
+            for token in list {
+                if canSaveToken(contractAddress: token.contract) {
+                    try? addToken(token: token)
+                }
+            }
+        }
     }
     
     init(model: WalletModel) {
@@ -47,36 +53,23 @@ class ICXWallet: BaseWalletConvertible {
         self.keystore = try! JSONDecoder().decode(ICONKeystore.self, from: model.rawData!)
     }
     
-    func exportBundle() -> WalletBundle {
-        let priv = String(data: rawData, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
-
-        var export = WalletBundle(name: self.name, type: "icx", priv: priv, tokens: nil, createdAt: self.created.millieTimestamp, coinType: "icx")
-
-        var datas = [TokenBundle]()
-        if let tokens = self.tokens {
-            for token in tokens {
-                let exportToken = TokenBundle(address: token.contract, createdAt: token.created.timestampString, decimals: token.decimal, name: token.name, symbol: token.symbol)
-                datas.append(exportToken)
-            }
-        }
-        export.tokens = datas
-
-        return export
+    static func new(name: String, password: String) throws -> ICXWallet {
+        let keystore = try generateICXKeystore(password: password)
+        let icx = ICXWallet(name: name, keystore: keystore)
+        return icx
     }
     
-    @available(*, unavailable)
-    func generateICXKeyStore(privateKey: String, password: String) throws {
-    }
-    
-    #warning("TODO: Implement saveICXWallet")
-    func saveICXWallet() throws {
-        try DB.saveWallet(name: self.name, address: self.address, type: "icx", rawData: self.rawData)
+    static fileprivate func generateICXKeystore(_ privateKey: PrivateKey? = nil, password: String) throws -> ICONKeystore {
+        let wallet = Wallet(privateKey: privateKey)
+        try wallet.generateKeystore(password: password)
         
-        if let tokens = self.tokens {
-            for tokenInfo in tokens {
-//                try DB.addToken(tokenInfo: tokenInfo)
-            }
-        }
+        return try wallet.keystore!.convert()
+    }
+    
+    func changePassword(oldPassword: String, newPassword: String) throws {
+        let prv = try extractICXPrivateKey(password: oldPassword)
+        let wallet = Wallet(privateKey: prv)
+        self.keystore = try wallet.keystore!.convert()
     }
     
     func extractICXPrivateKey(password: String) throws -> PrivateKey {
@@ -99,5 +92,32 @@ class ICXWallet: BaseWalletConvertible {
         try rawData.write(to: filePath, options: .atomic)
         
         return filePath
+    }
+    
+    func exportBundle() -> WalletBundle {
+        let priv = String(data: rawData, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
+        
+        var export = WalletBundle(name: self.name, type: "icx", priv: priv, tokens: nil, createdAt: self.created.millieTimestamp, coinType: "icx")
+        
+        var datas = [TokenBundle]()
+        if let tokens = self.tokens {
+            for token in tokens {
+                let exportToken = TokenBundle(address: token.contract, createdAt: token.created.timestampString, decimals: token.decimal, name: token.name, symbol: token.symbol)
+                datas.append(exportToken)
+            }
+        }
+        export.tokens = datas
+        
+        return export
+    }
+}
+
+extension Keystore {
+    func convert() throws -> ICONKeystore {
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(self)
+        
+        let decoder = JSONDecoder()
+        return try decoder.decode(ICONKeystore.self, from: data)
     }
 }

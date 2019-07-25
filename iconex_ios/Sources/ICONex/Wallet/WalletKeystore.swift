@@ -90,9 +90,9 @@ extension ICONKeystore {
             guard let enc = self.crypto.ciphertext.hexToData(),
                 let iv = self.crypto.cipherparams.iv.hexToData(),
                 let salt = self.crypto.kdfparams.salt.hexToData(),
-                let count = self.crypto.kdfparams.c else { throw IXError.invalidKeystore }
+                let count = self.crypto.kdfparams.c else { throw WalletError.invalidKeystore }
             
-            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw IXError.decrypt }
+            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw CryptError.invalidPassword }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
             let prvKeyStr = decrypted.decryptText
@@ -105,7 +105,7 @@ extension ICONKeystore {
                 return true
             }
             
-            throw IXError.decrypt
+            throw CryptError.invalidPassword
             
         } else if self.crypto.kdf == "scrypt" {
             guard let n = self.crypto.kdfparams.n,
@@ -114,12 +114,12 @@ extension ICONKeystore {
                 let iv = self.crypto.cipherparams.iv.hexToData(),
                 let cipherText = self.crypto.ciphertext.hexToData(),
                 let salt = self.crypto.kdfparams.salt.hexToData()
-                else { throw IXError.keyMalformed }
+                else { throw WalletError.invalidKeystore }
             
-            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: self.crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw IXError.decrypt }
+            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: self.crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw CryptError.invalidPassword }
             let decryptionKey = devKey[0...15]
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
-            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw CryptError.invalidPassword }
+            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw CryptError.invalidPassword }
             let decrypted = Data(decryptedBytes)
             let prvKey = PrivateKey(hex: decrypted)
             let wallet = Wallet(privateKey: prvKey)
@@ -129,10 +129,10 @@ extension ICONKeystore {
                 return true
             }
             
-            throw IXError.invalidPassword
+            throw CryptError.invalidPassword
         }
         
-        throw IXError.invalidKeystore
+        throw WalletError.invalidKeystore
     }
     
     func toString() -> String {
@@ -149,9 +149,9 @@ extension ICONKeystore {
             guard let enc = crypto.ciphertext.hexToData(),
                 let iv = crypto.cipherparams.iv.hexToData(),
                 let salt = crypto.kdfparams.salt.hexToData(),
-                let count = crypto.kdfparams.c else { throw IXError.keyMalformed }
+                let count = crypto.kdfparams.c else { throw CryptError.keyMalformed }
             
-            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw IXError.decrypt }
+            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw CryptError.invalidPassword }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
             let prvKey = PrivateKey(hex: decrypted.decryptText.hexToData()!)
@@ -163,7 +163,7 @@ extension ICONKeystore {
                 return PrivateKey(hex: Data(hex: decrypted.decryptText))
             }
             
-            throw IXError.keyMalformed
+            throw CryptError.keyMalformed
             
         } else if crypto.kdf == "scrypt" {
             guard let n = crypto.kdfparams.n,
@@ -172,12 +172,12 @@ extension ICONKeystore {
                 let iv = crypto.cipherparams.iv.hexToData(),
                 let cipherText = crypto.ciphertext.hexToData(),
                 let salt = crypto.kdfparams.salt.hexToData()
-                else { throw IXError.keyMalformed }
+                else { throw CryptError.keyMalformed }
             
-            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw IXError.decrypt }
+            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw CryptError.invalidPassword }
             let decryptionKey = devKey[0...15]
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
-            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
+            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw CryptError.invalidPassword }
+            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw CryptError.invalidPassword }
             let decrypted = Data(decryptedBytes)
             let privateKey = PrivateKey(hex: decrypted)
             
@@ -189,9 +189,9 @@ extension ICONKeystore {
                 return privateKey
             }
             
-            throw IXError.keyMalformed
+            throw CryptError.keyMalformed
         }
         
-        throw IXError.keyMalformed
+        throw CryptError.keyMalformed
     }
 }

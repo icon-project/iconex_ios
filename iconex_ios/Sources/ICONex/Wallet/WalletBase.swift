@@ -70,7 +70,7 @@ extension BaseWalletConvertible {
         return tokenList.filter { $0.contract == contractAddress }.count == 0
     }
     
-    func saveToken(token: Token) throws {
+    func addToken(token: Token) throws {
         try DB.addToken(tokenInfo: token)
     }
     

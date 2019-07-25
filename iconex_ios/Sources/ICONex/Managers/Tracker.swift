@@ -154,7 +154,7 @@ open class Tracker {
         _ = semaphore.wait(timeout: .distantFuture)
         guard error == nil, response?.statusCode == 200, let value = data else { return .failure(TrackerResult.httpError) }
         
-        guard let parsed = try? JSONSerialization.jsonObject(with: value, options: []) as! [String: Any] else { return .failure(TrackerResult.parsing) }
+        guard let parsed = try? JSONSerialization.jsonObject(with: value, options: []) as? [String: Any] else { return .failure(TrackerResult.parsing) }
         
         return .success(parsed)
     }

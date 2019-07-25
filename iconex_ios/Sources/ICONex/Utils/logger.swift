@@ -33,6 +33,6 @@ func Log<T>(_ object: @autoclosure () -> T, category: LogLevel = .debug, _ file:
 
 extension String {
     func log(_ file: String = #file, _ function: String = #function, line: Int = #line) {
-        Log("\(self)", file, function, line)
+        Log("\(self)", category: .debug, file, function, line)
     }
 }

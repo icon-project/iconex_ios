@@ -20,7 +20,7 @@ extension BigUInt {
         }
         
         var under = wei as NSString
-        while under.length > below {
+        while under.length > under {
             under = under.substring(to: under.length - 1) as NSString
         }
         while remove && under.hasSuffix("0") {

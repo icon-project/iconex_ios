@@ -129,3 +129,24 @@ extension String {
         return below == "" ? formatted : formatted + Tool.decimalSeparator + below
     }
 }
+
+extension String {
+    func add0xPrefix() -> String {
+        guard self.count == 40 else { return self }
+        
+        if !self.hasPrefix("0x") {
+            return "0x" + self
+        }
+        
+        return self
+    }
+    
+    func addHxPrefix() -> String {
+        guard self.count == 40 else { return self }
+        
+        if !self.hasPrefix("hx") {
+            return "hx" + self
+        }
+        return self
+    }
+}

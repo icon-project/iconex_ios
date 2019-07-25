@@ -195,112 +195,112 @@ func Localized(key: String) -> String {
     return NSLocalizedString(key, comment: "")
 }
 
-struct Alert {
-    public enum EditingMode {
-        case add, edit
-    }
-    
-    static func Basic(message: String, alignment: NSTextAlignment = .center) -> BasicActionViewController {
-        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
-        basic.message = message
-        basic.setAlignment(alignment)
-        return basic
-    }
-    
-    static func Basic(attributed: NSAttributedString) -> BasicActionViewController {
-        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
-        basic.attrMessage = attributed
-        
-        return basic
-    }
-    
-    static func Confirm(message: String, cancel: String? = "Common.No".localized, confirm: String? = "Common.Yes".localized, handler: (() -> Void)?, _ cancelHandler: (() -> Void)? = nil) -> ConfirmActionViewController {
-        let confirmAction = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "ConfirmActionView") as! ConfirmActionViewController
-        confirmAction.message = message
-        confirmAction.addConfirm(action: handler)
-        confirmAction.cancel = cancelHandler
-        confirmAction.confirmTitle = confirm
-        confirmAction.cancelTitle = cancel
-        return confirmAction
-    }
-    
-    static func shareBackup(filePath: URL) {
-        
-    }
-    
-    static func editingAddress(name: String? = nil, address: String? = nil, mode: EditingMode, type: String, handler: (() -> Void)?) -> EditingAddressViewController {
-        let add = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "EditingAddressView") as! EditingAddressViewController
-        add.name = name
-        add.address = address
-        add.type = type
-        add.mode = mode
-        add.handler = handler
-        
-        return add
-    }
-    
-    static func transactionDetail(txHash: String) -> TransactionDetailViewController {
-        let detail = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "TransactionDetailView") as! TransactionDetailViewController
-        detail.txHash = txHash
-        
-        return detail
-    }
-    
-    static func checkPassword(walletInfo: WalletInfo, action: @escaping (_ isSuccess: Bool, _ privateKey: String) -> Void) -> WalletPasswordViewController{
-        let auth = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "WalletPasswordView") as! WalletPasswordViewController
-        auth.walletInfo = walletInfo
-        auth.addConfirm(completion: action)
-        
-        return auth
-    }
-    
-    static func TokenManage(walletInfo: WalletInfo) -> UINavigationController {
-        let token = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenListNav") as! TokenListViewController
-        token.walletInfo = walletInfo
-        
-        let nav = UINavigationController(rootViewController: token)
-        nav.isNavigationBarHidden = true
-        return nav
-    }
-    
-    static func PrivateInfo(walletInfo: WalletInfo) -> WalletPrivateInfoViewController {
-        let info = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "WalletPrivateInfo") as! WalletPrivateInfoViewController
-        info.wallet = WManager.loadWalletBy(info: walletInfo)
-        
-        return info
-    }
-    
-    static func NetworkProvider(source: UIViewController, completion: (() -> Void)?) {
-        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
-        selectable.handler = { index in
-            UserDefaults.standard.set(index, forKey: "Provider")
-            UserDefaults.standard.synchronize()
-            
-            if let compl = completion {
-                compl()
-            }
-        }
-        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
-    }
-    
-    static func DeveloperNetworkProvider(source: UIViewController, completion: (() -> Void)?) {
-        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
-        selectable.handler = { index in
-            switch index {
-            case 0:
-                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
-            case 1:
-                ConnManager.provider = ICONService(provider: "https://testwallet.icon.foundation/api/v3", nid: "0x2")
-            case 2:
-                ConnManager.provider = ICONService(provider: "https://bicon.net.solidwallet.io/api/v3", nid: "0x3")
-            default:
-                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
-            }
-            
-            if let compl = completion {
-                compl()
-            }
-        }
-        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
-    }
-}
+//struct Alert {
+//    public enum EditingMode {
+//        case add, edit
+//    }
+//    
+//    static func Basic(message: String, alignment: NSTextAlignment = .center) -> BasicActionViewController {
+//        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
+//        basic.message = message
+//        basic.setAlignment(alignment)
+//        return basic
+//    }
+//    
+//    static func Basic(attributed: NSAttributedString) -> BasicActionViewController {
+//        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
+//        basic.attrMessage = attributed
+//        
+//        return basic
+//    }
+//    
+//    static func Confirm(message: String, cancel: String? = "Common.No".localized, confirm: String? = "Common.Yes".localized, handler: (() -> Void)?, _ cancelHandler: (() -> Void)? = nil) -> ConfirmActionViewController {
+//        let confirmAction = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "ConfirmActionView") as! ConfirmActionViewController
+//        confirmAction.message = message
+//        confirmAction.addConfirm(action: handler)
+//        confirmAction.cancel = cancelHandler
+//        confirmAction.confirmTitle = confirm
+//        confirmAction.cancelTitle = cancel
+//        return confirmAction
+//    }
+//    
+//    static func shareBackup(filePath: URL) {
+//        
+//    }
+//    
+//    static func editingAddress(name: String? = nil, address: String? = nil, mode: EditingMode, type: String, handler: (() -> Void)?) -> EditingAddressViewController {
+//        let add = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "EditingAddressView") as! EditingAddressViewController
+//        add.name = name
+//        add.address = address
+//        add.type = type
+//        add.mode = mode
+//        add.handler = handler
+//        
+//        return add
+//    }
+//    
+//    static func transactionDetail(txHash: String) -> TransactionDetailViewController {
+//        let detail = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "TransactionDetailView") as! TransactionDetailViewController
+//        detail.txHash = txHash
+//        
+//        return detail
+//    }
+//    
+//    static func checkPassword(walletInfo: WalletInfo, action: @escaping (_ isSuccess: Bool, _ privateKey: String) -> Void) -> WalletPasswordViewController{
+//        let auth = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "WalletPasswordView") as! WalletPasswordViewController
+//        auth.walletInfo = walletInfo
+//        auth.addConfirm(completion: action)
+//        
+//        return auth
+//    }
+//    
+//    static func TokenManage(walletInfo: WalletInfo) -> UINavigationController {
+//        let token = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenListNav") as! TokenListViewController
+//        token.walletInfo = walletInfo
+//        
+//        let nav = UINavigationController(rootViewController: token)
+//        nav.isNavigationBarHidden = true
+//        return nav
+//    }
+//    
+//    static func PrivateInfo(walletInfo: WalletInfo) -> WalletPrivateInfoViewController {
+//        let info = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "WalletPrivateInfo") as! WalletPrivateInfoViewController
+//        info.wallet = WManager.loadWalletBy(info: walletInfo)
+//        
+//        return info
+//    }
+//    
+//    static func NetworkProvider(source: UIViewController, completion: (() -> Void)?) {
+//        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
+//        selectable.handler = { index in
+//            UserDefaults.standard.set(index, forKey: "Provider")
+//            UserDefaults.standard.synchronize()
+//            
+//            if let compl = completion {
+//                compl()
+//            }
+//        }
+//        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
+//    }
+//    
+//    static func DeveloperNetworkProvider(source: UIViewController, completion: (() -> Void)?) {
+//        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
+//        selectable.handler = { index in
+//            switch index {
+//            case 0:
+//                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
+//            case 1:
+//                ConnManager.provider = ICONService(provider: "https://testwallet.icon.foundation/api/v3", nid: "0x2")
+//            case 2:
+//                ConnManager.provider = ICONService(provider: "https://bicon.net.solidwallet.io/api/v3", nid: "0x3")
+//            default:
+//                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
+//            }
+//            
+//            if let compl = completion {
+//                compl()
+//            }
+//        }
+//        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
+//    }
+//}

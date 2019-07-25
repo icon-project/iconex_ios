@@ -11,9 +11,12 @@ import ICONKit
 
 class ETHWallet: BaseWalletConvertible {
     var name: String
-    var tokens: [Token]?
     var created: Date
     var keystore: ICONKeystore
+    
+    var tokens: [Token]? {
+        return try? DB.tokenList(dependedAddress: address)
+    }
     
     init(name: String, keystore: ICONKeystore, created: Date = Date()) {
         self.name = name
@@ -34,8 +37,15 @@ class ETHWallet: BaseWalletConvertible {
     init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil, created: Date = Date()) {
         self.name = name
         self.keystore = keystore
-        self.tokens = tokens
         self.created = created
+        
+        if let list = tokens {
+            for token in list {
+                if canSaveToken(contractAddress: token.contract) {
+                    try? addToken(token: token)
+                }
+            }
+        }
     }
     
     init(model: WalletModel) {
@@ -44,16 +54,13 @@ class ETHWallet: BaseWalletConvertible {
         self.keystore = try! JSONDecoder().decode(ICONKeystore.self, from: model.rawData!)
     }
     
-    func loadToken() {
-        
+    static func new(name: String, password: String) throws -> ETHWallet {
+        let keystore = try generateETHKeyStore(password: password)
+        let eth = ETHWallet(name: name, keystore: keystore)
+        return eth
     }
     
-    func canSaveToken(contractAddress: String) -> Bool {
-        guard let tokenList = tokens else { return true }
-        return tokenList.filter { $0.contract.lowercased() == contractAddress.lowercased() }.count == 0
-    }
-    
-    func generateETHKeyStore(password: String) throws {
+    static fileprivate func generateETHKeyStore(password: String) throws -> ICONKeystore {
         let generator = try EthereumKeystoreV3(password: password, aesMode: "aes-128-ctr")
         
         guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
@@ -62,10 +69,10 @@ class ETHWallet: BaseWalletConvertible {
         
         let decoder = JSONDecoder()
         let keystore = try decoder.decode(ICONKeystore.self, from: raw)
-        self.keystore = keystore
+        return keystore
     }
     
-    func generateETHKeyStore(privateKey: PrivateKey, password: String) throws {
+    static fileprivate func generateETHKeyStore(privateKey: PrivateKey, password: String) throws -> ICONKeystore {
         let generator = try EthereumKeystoreV3(privateKey: privateKey.data, password: password, aesMode: "aes-128-ctr")
         
         guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
@@ -74,7 +81,7 @@ class ETHWallet: BaseWalletConvertible {
         
         let decoder = JSONDecoder()
         let keystore = try decoder.decode(ICONKeystore.self, from: raw)
-        self.keystore = keystore
+        return keystore
     }
     
     func changePassword(oldPassword: String, newPassword: String) throws {
@@ -94,15 +101,16 @@ class ETHWallet: BaseWalletConvertible {
         self.keystore = keystore
     }
     
-    func saveETHWallet() throws {
+    func extractETHPrivateKey(password: String) throws -> String {
+        let encoder = JSONEncoder()
+        let tempData = try encoder.encode(keystore)
         
-        try DB.saveWallet(name: self.name, address: self.address.add0xPrefix().lowercased(), type: "eth", rawData: self.rawData)
+        guard let generator = EthereumKeystoreV3(tempData) else { throw WalletError.invalidKeystore }
         
-        if let tokens = self.tokens {
-            for tokenInfo in tokens {
-                try DB.addToken(tokenInfo: tokenInfo)
-            }
-        }
+        guard let ethereum = EthereumAddress(keystore.address.add0xPrefix()) else { throw WalletError.invalidKeystore }
+        let privateKeyData = try generator.UNSAFE_getPrivateKeyData(password: password, account: ethereum)
+        
+        return privateKeyData.toHexString()
     }
     
     func getBackupKeystoreFilepath() throws -> URL {
@@ -126,18 +134,6 @@ class ETHWallet: BaseWalletConvertible {
         try encoded.write(to: filePath, options: .atomic)
         
         return filePath
-    }
-    
-    func extractETHPrivateKey(password: String) throws -> String {
-        let encoder = JSONEncoder()
-        let tempData = try encoder.encode(keystore)
-        
-        guard let generator = EthereumKeystoreV3(tempData) else { throw WalletError.invalidKeystore }
-        
-        guard let ethereum = EthereumAddress(keystore.address.add0xPrefix()) else { throw WalletError.invalidKeystore }
-        let privateKeyData = try generator.UNSAFE_getPrivateKeyData(password: password, account: ethereum)
-        
-        return privateKeyData.toHexString()
     }
     
     func exportBundle() -> WalletBundle {

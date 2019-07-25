@@ -26,6 +26,7 @@ enum WalletError: Error, CustomDebugStringConvertible {
     case emptyWallet
     case invalidKeystore
     case noWallet(String)
+    case noToken(String)
     
     var debugDescription: String {
         return "Fata error. WalletError(\(self))"

@@ -10,16 +10,16 @@ import Foundation
 struct Configuration {
     public enum HOST: Int {
         case main = 0
-        case dev = 1
+        case testnet = 1
         case yeouido = 2
         
         var provider: String {
             switch self {
             case .main:
-                return "https://wallet.icon.foundation/api/v3"
+                return "https://ctz.solidwallet.io/api/v3"
                 
-            case .dev:
-                return "https://testwallet.icon.foundation/api/v3"
+            case .testnet:
+                return "https://test-ctz.solidwallet.io/api/v3"
                 
             case .yeouido:
                 return "https://bicon.net.solidwallet.io/api/v3"
@@ -31,7 +31,7 @@ struct Configuration {
             case .main:
                 return "0x1"
                 
-            case .dev:
+            case .testnet:
                 return "0x2"
                 
             case .yeouido:
@@ -56,37 +56,62 @@ struct Configuration {
     }
     
     static func systemCheck() -> Bool {
-        var error: NSError? = nil
         #if !DEBUG
-        IXSWrapper.systemCheck(&error)
+        var patternInfo:UnsafeMutablePointer<ix_detected_pattern>?
+        let ret = a3c76b59d787bed13ac3766dd1e003fdc(&patternInfo) //ix_sysCheckStart(&patternInfo)
+        
+        if ret != 1 {
+            return false
+        } else {
+            let pattern:iXDetectedPattern = iXInfoUtil.convertDetectedPattern(patternInfo)
+            let jbCode:String = pattern.pattern_type_id;
+            
+            if jbCode.isEmpty == false {
+                if jbCode == "0000" {
+                    
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+        }
+        return true
         #endif
-        return error == nil
+        return true
     }
     
     static func integrityCheck() -> Bool {
         
         #if !DEBUG
+        var isRet:Bool = true
+        
+        // version : 1.2.1
         var initInfo = ix_init_info()
         var verifyInfo = ix_verify_info()
+        
         initInfo.integrity_type = IX_INTEGRITY_LOCAL
         
-        let ret = a106c4e13097eb3613110ee85730fc9f9(&initInfo, &verifyInfo)
+        let ret = a106c4e13097eb3613110ee85730fc9f9(&initInfo, &verifyInfo) // ix_integrityCheck(&initInfo, &verifyInfo)
+        let info:iXVerifyInfo = iXInfoUtil.convertVerifyInfo(&verifyInfo)
         
-        var copyVerify = verifyInfo
-        
-        if ret == 1 {
-            let result = withUnsafePointer(to: &copyVerify.verify_result) {
-                $0.withMemoryRebound(to: UInt8.self, capacity: MemoryLayout.size(ofValue: verifyInfo.verify_result), {
-                    String(cString: $0)
-                })
+        if ret != 1
+        {
+            isRet = false;
+        }
+        else
+        {
+            if info.verify_result == VERIFY_SUCC
+            {
+                isRet = true;
             }
-            
-            if result == VERIFY_SUCC {
-                return true
+            else
+            {
+                isRet = false;
             }
         }
         
-        return false
+        return isRet;
         #else
         return true
         #endif
@@ -94,9 +119,7 @@ struct Configuration {
     
     static func debuggerCheck() -> Bool {
         #if !DEBUG
-        let result = IXSWrapper.detectDebugger()
-        
-        return result != 1
+        return f16fc676040b6d2ee392956bfee0fcbd() != 1
         #else
         return true
         #endif
@@ -120,7 +143,7 @@ extension Configuration.HOST {
         case .main:
             return "Mainnet"
             
-        case .dev:
+        case .testnet:
             return "Testnet"
             
         case .yeouido:

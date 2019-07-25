@@ -189,3 +189,18 @@ struct TokenBundle: Codable {
     }
 }
 
+struct TransactionInfo {
+    var name: String
+    var address: String
+    var date: Date
+    var hexAmount: String
+    var tokenSymbol: String?
+    
+    init(name: String, address: String, date: Date, hexAmount: String, tokenSymbol: String? = nil) {
+        self.name = name
+        self.address = address
+        self.date = date
+        self.hexAmount = hexAmount
+        self.tokenSymbol = tokenSymbol
+    }
+}

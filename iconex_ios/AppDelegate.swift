@@ -169,7 +169,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .main:
                 return Tracker.main()
                 
-            case .dev:
+            case .testnet:
                 return Tracker.dev()
                 
             case .yeouido:
