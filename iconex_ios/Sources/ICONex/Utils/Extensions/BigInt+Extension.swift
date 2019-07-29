@@ -19,16 +19,24 @@ extension BigUInt {
             wei = "0" + wei
         }
         
-        var under = wei as NSString
-        while under.length > under {
-            under = under.substring(to: under.length - 1) as NSString
+        var below = wei as NSString
+        while below.length > under {
+            below = below.substring(to: below.length - 1) as NSString
         }
-        while remove && under.hasSuffix("0") {
-            under = under.substring(to: under.length - 1) as NSString
+        while remove && below.hasSuffix("0") {
+            below = below.substring(to: below.length - 1) as NSString
         }
         
-        wei = under as String
+        wei = below as String
         
         return wei == "" ? icx : icx + Tool.decimalSeparator + wei
+    }
+    
+    func exchange(from: String, to: String, decimal: Int = 18) -> BigUInt? {
+        guard let rateString = Manager.exchange.exchangeInfoList[from+to],
+            rateString.createDate != nil,
+            let rate = rateString.price.bigUInt(decimal: decimal, fixed: true) else { return nil }
+        
+        return self * rate / BigUInt(10).power(decimal)
     }
 }

@@ -79,7 +79,7 @@ class ConnectSendViewController: BaseViewController {
     
     private var balance: BigUInt?
     
-    private var provider: ICONService = WManager.service
+    private var provider: ICONService = Manager.icon.service
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,7 +148,7 @@ class ConnectSendViewController: BaseViewController {
         // developermode choose network button
         chooseNetworkButton.rx.controlEvent(.touchUpInside).subscribe(onNext: {
             Alert.DeveloperNetworkProvider(source: self, completion: {
-                self.refresh()
+                self.refreshNetwork()
                 self.sendButton.isEnabled = self.validateLimit()
             })
         }).disposed(by: disposeBag)
@@ -309,9 +309,9 @@ class ConnectSendViewController: BaseViewController {
     }
     
     func initializeUI() {
-        guard let from = Conn.received?.payload?.params.from, let toAddress = Conn.received?.payload?.params.to, let wallet = WManager.loadWalletBy(address: from, type: .icx) as? ICXWallet else { return }
+        guard let from = Conn.received?.payload?.params.from, let toAddress = Conn.received?.payload?.params.to, let wallet = Manager.wallet.walletBy(address: from, type: "icx") as? ICXWallet else { return }
         
-        navTitle.text = wallet.alias
+        navTitle.text = wallet.name
         
         // developer mode
         if UserDefaults.standard.bool(forKey: "Developer") {
@@ -366,11 +366,11 @@ class ConnectSendViewController: BaseViewController {
         getStepPrice()
         
         DispatchQueue.global(qos: .utility).async {
-            if let cost = WManager.getStepCosts() {
+            if let cost = Manager.icon.getStepCosts() {
                 self.costs = cost
             }
             
-            if let maxLimit = WManager.getMaxStepLimit() {
+            if let maxLimit = Manager.icon.getMaxStepLimit() {
                 self.maxLimit = maxLimit
             }
             
@@ -401,8 +401,8 @@ class ConnectSendViewController: BaseViewController {
             }
             
             amount.text = self.value.toString(decimal: decimal, decimal, false).currencySeparated()
-            if let exchange = Tool.balanceToExchange(self.value, from: symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: decimal) {
-                exchangeAmount.text = exchange + " USD"
+            if let exchange = balance?.exchange(from: symbol.lowercased(), to: "usd", decimal: decimal) {
+                exchangeAmount.text = exchange.toString(decimal: decimal, 2, false) + " USD"
             } else {
                 exchangeAmount.text = "- USD"
             }
@@ -415,8 +415,8 @@ class ConnectSendViewController: BaseViewController {
             self.value = value
             
             amount.text = self.value.toString(decimal: 18, 18, false).currencySeparated()
-            if let exchange = Tool.balanceToExchange(self.value, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
-                exchangeAmount.text = exchange + " USD"
+            if let exchange = self.value.exchange(from: "icx", to: "usd", decimal: 18) {
+                exchangeAmount.text = exchange.toString(decimal: 18, 2, false) + " USD"
             } else {
                 exchangeAmount.text = "- USD"
             }
@@ -452,16 +452,16 @@ class ConnectSendViewController: BaseViewController {
     
     func getStepPrice() {
         DispatchQueue.global().async {
-            if let stepPrice = WManager.getStepPrice() {
+            if let stepPrice = Manager.icon.getStepPrice() {
                 DispatchQueue.main.async {
                     let powered = stepPrice * BigUInt(10).power(9)
-                    let priceGloop = Tool.bigToString(value: powered, decimal: 18, 18, true).currencySeparated()
-                    let priceICX = Tool.bigToString(value: stepPrice, decimal: 18, 18, true).currencySeparated()
+                    let priceGloop = powered.toString(decimal: 18, 18, true).currencySeparated()
+                    let priceICX = stepPrice.toString(decimal: 18, 18, true).currencySeparated()
                     
                     self.stepPriceLabel.text = priceICX
                     self.stepPriceGloop.text = " ICX" + " (" + priceGloop + " Gloop)"
-                    if let exchangedPrice = Tool.balanceToExchange(stepPrice, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
-                        self.exchangeStepPrice.text = exchangedPrice + " USD"
+                    if let exchangedPrice = stepPrice.exchange(from: "icx", to: "usd", decimal: 18) {
+                        self.exchangeStepPrice.text = exchangedPrice.toString(decimal: 18, 2, false) + " USD"
                     } else {
                         self.exchangeStepPrice.text = "- USD"
                     }
@@ -484,9 +484,9 @@ class ConnectSendViewController: BaseViewController {
             if showError { self.stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)}
             let limit = BigUInt(0)
             self.estimatedFee.text = limit.toString(decimal: 18, 18, false).currencySeparated()
-            self.exchangeEstimatedFee.text = Tool.balanceToExchange(limit, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
+            self.exchangeEstimatedFee.text = limit.exchange(from: "icx", to: "usd", decimal: 18)!.toString(decimal: 18, 2, false) + " USD"
             self.remain.text = totalBalance.toString(decimal: decimal, decimal, false).currencySeparated()
-            if let exchangedRemain = Tool.balanceToExchange(totalBalance, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) {
+            if let exchangedRemain = totalBalance.exchange(from: "icx", to: "usd", decimal: decimal)?.toString(decimal: decimal, 2, false) {
                 self.exchangeRemain.text = exchangedRemain + " USD"
             } else {
                 self.exchangeRemain.text = "- USD"
@@ -543,7 +543,7 @@ class ConnectSendViewController: BaseViewController {
         return true
     }
     
-    func refresh() {
+    func refreshNetwork() {
         self.provider = ConnManager.provider
         
         let networkId = self.provider.nid

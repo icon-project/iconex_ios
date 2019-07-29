@@ -146,8 +146,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setRedirect(source: url)
         Conn.setMessage(source: url)
         if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
-            Exchange.getExchangeList()
-            Balance.getWalletsBalance()
+            Manager.exchange.getExchangeList()
+            Manager.balance.getAllBalances()
             toConnect()
         }
         Conn.isConnect = true
@@ -213,10 +213,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func go() {
-        Exchange.getExchangeList()
-        Balance.getWalletsBalance()
+        Manager.exchange.getExchangeList()
+        Manager.balance.getAllBalances()
         
-        let list = WManager.walletInfoList
+        let list = Manager.wallet.walletList
         
         let app = UIApplication.shared.delegate as! AppDelegate
         

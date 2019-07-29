@@ -17,6 +17,8 @@ struct Manager {
     static let icon = ICONManager.shared
     
     static let balance = BalanceManager.shared
+    
+    static let exchange = ExchangeManager.shared
 }
 
 
@@ -50,23 +52,23 @@ class ICONManager {
     var iconService: ICONService {
         return ICONService(provider: Config.host.provider, nid: Config.host.nid)
     }
+    
+    var service: ICONService { return self.iconService }
 }
 
 extension ICONManager {
     func getStepCosts() -> ICONKit.Response.StepCosts? {
-        func getStepCosts() -> ICONKit.Response.StepCosts? {
-            let call = Call<Response.StepCosts>(from: CONST.governance, to: CONST.scoreGovernance, method: "getStepCosts", params: nil)
-            let result = self.iconService.call(call).execute()
+        let call = Call<Response.StepCosts>(from: CONST.governance, to: CONST.scoreGovernance, method: "getStepCosts", params: nil)
+        let result = self.iconService.call(call).execute()
+        
+        switch result {
+        case .failure(let error):
+            Log("error - \(String(describing: error))")
+            return nil
             
-            switch result {
-            case .failure(let error):
-                Log("error - \(String(describing: error))")
-                return nil
-                
-            case .success(let cost):
-                Log("cost - \(cost)")
-                return cost
-            }
+        case .success(let cost):
+            Log("cost - \(cost)")
+            return cost
         }
     }
     
@@ -222,6 +224,61 @@ extension BalanceManager {
             return balance
         } else {
             return nil
+        }
+    }
+}
+
+// MARK: ExchangeManager
+class ExchangeManager {
+    static let shared = ExchangeManager()
+    
+    var exchangeList = "icxeth,icxbtc,icxusd,ethusd,ethbtc,etheth,btcicx,ethicx,icxicx"
+    var currentExchange: String = "usd"
+    var exchangeInfoList = [String: ExchangeInfo]()
+    
+    private init () { }
+    
+    func getExchangeList() {
+        var tracker: Tracker {
+            switch Config.host {
+            case .main:
+                return Tracker.main()
+                
+            case .testnet:
+                return Tracker.dev()
+                
+            case .yeouido:
+                return Tracker.local()
+            }
+        }
+        
+        guard let data = tracker.exchangeData(list: exchangeList) else { return }
+        
+        do {
+            let decoder = JSONDecoder()
+            let list = try decoder.decode([ExchangeInfo].self, from: data)
+            
+            for info in list {
+                self.exchangeInfoList[info.tradeName] = info
+            }
+        } catch {
+            Log("Error - \(error)")
+        }
+    }
+    
+    func addToken(_ symbol: String) {
+        let lowerCased = symbol.lowercased()
+        var expected = "\(lowerCased)eth"
+        if !exchangeList.contains(expected) {
+            exchangeList.append("," + expected)
+        }
+        expected = "\(lowerCased)btc"
+        if !exchangeList.contains(expected) {
+            exchangeList.append("," + expected)
+        }
+        expected = "\(lowerCased)usd"
+        if !exchangeList.contains(expected) {
+            exchangeList.append("," + expected)
         }
     }
 }

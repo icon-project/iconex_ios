@@ -58,7 +58,7 @@ class ConnectViewController: BaseViewController {
     
     func prepare() -> Bool {
         if Conn.action == "bind" {
-            guard WManager.walletInfoList.count > 0 else {
+            guard Manager.wallet.walletList.count > 0 else {
                 Conn.sendError(error: .walletEmpty)
                 return false
             }
@@ -77,7 +77,7 @@ class ConnectViewController: BaseViewController {
                 return false
             }
             
-            guard WManager.loadWalletBy(address: from, type: .icx) != nil else {
+            guard let wallet = Manager.wallet.walletBy(address: from, type: "icx") as? ICXWallet else {
                 Conn.sendError(error: .invalidParameter(.address))
                 return false
             }
@@ -92,7 +92,7 @@ class ConnectViewController: BaseViewController {
                 requestedValue = converted
             }
             
-            if let decimal = Conn.tokenDecimal {
+            if Conn.tokenDecimal != nil {
                 guard let data = Conn.received?.payload?.params.data else { return false }
                 
                 switch data {
@@ -110,7 +110,7 @@ class ConnectViewController: BaseViewController {
                 }
                 
                 let call = Call<BigUInt>(from: from, to: to, method: "balanceOf", params: ["_owner": from])
-                let request = WManager.service.call(call).execute()
+                let request = Manager.icon.service.call(call).execute()
                 switch request {
                 case .success(let balance):
                     if balance == 0 || balance < requestedValue {
@@ -122,17 +122,13 @@ class ConnectViewController: BaseViewController {
                     return false
                 }
             } else {
-                let result = WManager.service.getBalance(address: from).execute()
-                
-                switch result {
-                case .success(let balance):
+                if let balance = Manager.icon.getBalance(wallet: wallet) {
                     if balance == 0 || balance < requestedValue {
                         Conn.sendError(error: ConnectError.insufficient(.balance))
                         return false
                     }
-                case .failure(let error):
-                    Log("Error - \(error)")
-                    Conn.sendError(error: .network(error))
+                } else {
+                    Conn.sendError(error: .network("Could not connect"))
                     return false
                 }
             }
@@ -155,7 +151,7 @@ class ConnectViewController: BaseViewController {
                 
             case "JSON-RPC":
                 guard let from = Conn.received?.payload?.params.from else { return }
-                guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else {
+                guard let info = Manager.wallet.walletList.filter({ $0.address == from }).first else {
                     Conn.sendError(error: ConnectError.notFound(.wallet(from)))
                     return
                 }

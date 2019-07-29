@@ -15,7 +15,7 @@ enum LogLevel: String {
     case error = "ERROR"
 }
 
-func Log<T>(_ object: @autoclosure () -> T, category: LogLevel = .debug, _ file: String = #file, _ function: String = #function, line: Int = #line) {
+func Log<T>(_ object: @autoclosure () -> T, _ category: LogLevel = .debug, _ file: String = #file, _ function: String = #function, _ line: Int = #line) {
     #if DEBUG
     let objValue = object()
     var stringRepresentation: String = ""
@@ -33,6 +33,6 @@ func Log<T>(_ object: @autoclosure () -> T, category: LogLevel = .debug, _ file:
 
 extension String {
     func log(_ file: String = #file, _ function: String = #function, line: Int = #line) {
-        Log("\(self)", category: .debug, file, function, line)
+        Log("\(self)", .debug, file, function, line)
     }
 }
