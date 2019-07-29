@@ -19,6 +19,7 @@
 		BF2C562422B9DB1D002AD5CC /* lib_ixShield.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C561B22B9DB1D002AD5CC /* lib_ixShield.a */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
+		D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D424B72D22EEB0E600D9BD12 /* Colors.swift */; };
 		D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4277E7920746606006F3C95 /* ETHWallet.swift */; };
 		D427DCEA221117050098D852 /* Tokens.json in Resources */ = {isa = PBXBuildFile; fileRef = D427DCE9221117050098D852 /* Tokens.json */; };
 		D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D428A53D20201B2F005B14D8 /* Configurations.swift */; };
@@ -175,6 +176,7 @@
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D41B430E207B71C60011DDB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/ahn/Documents/work/ios-iCONex/Info.plist"; sourceTree = "<absolute>"; };
+		D424B72D22EEB0E600D9BD12 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D4277E7920746606006F3C95 /* ETHWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHWallet.swift; sourceTree = "<group>"; };
 		D427DCE9221117050098D852 /* Tokens.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Tokens.json; sourceTree = "<group>"; };
 		D428A53D20201B2F005B14D8 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
@@ -520,6 +522,7 @@
 			isa = PBXGroup;
 			children = (
 				D4C542C922E995A10099358D /* ViewControllers */,
+				D424B72D22EEB0E600D9BD12 /* Colors.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -742,6 +745,7 @@
 				D4C542C622E969CC0099358D /* Connect.swift in Sources */,
 				D4B178EB206E0A5800F8CC35 /* Animator.swift in Sources */,
 				D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */,
+				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
 				D4C542C522E969CC0099358D /* ConnectSendViewController.swift in Sources */,
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D446A07022E160540000D4CA /* String+Extension.swift in Sources */,

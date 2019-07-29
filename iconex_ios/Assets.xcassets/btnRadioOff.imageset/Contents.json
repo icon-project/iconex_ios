@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "scale" : "1x",
+      "filename" : "btnRadioOff.png"
+    },
+    {
+      "scale" : "2x",
+      "filename" : "btnRadioOff@2x.png",
+      "idiom" : "universal"
+    },
+    {
+      "filename" : "btnRadioOff@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

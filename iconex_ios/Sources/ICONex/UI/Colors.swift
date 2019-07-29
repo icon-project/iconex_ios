@@ -7,3 +7,49 @@
 //
 
 import Foundation
+import UIKit
+
+enum SymbolColor {
+    case A, B, C, D, E, F, G, H, I, J, K, L
+    
+    var background: UIColor {
+        switch self {
+        case .A:
+            return #colorLiteral(red: 0.3058823529, green: 0.5647058824, blue: 0.8705882353, alpha: 1)
+            
+        case .B:
+            return #colorLiteral(red: 0.4509803922, green: 0.3607843137, blue: 0.8, alpha: 1)
+            
+        case .C:
+            return #colorLiteral(red: 0.7098039216, green: 0.2784313725, blue: 0.8, alpha: 1)
+            
+        case .D:
+            return #colorLiteral(red: 0.2509803922, green: 0.6392156863, blue: 0.2392156863, alpha: 1)
+            
+        case .E:
+            return #colorLiteral(red: 0.9019607843, green: 0.4156862745, blue: 0.1607843137, alpha: 1)
+            
+        case .F:
+            return #colorLiteral(red: 0.5019607843, green: 0.3254901961, blue: 0.2235294118, alpha: 1)
+            
+        case .G:
+            return #colorLiteral(red: 0.9019607843, green: 0.6901960784, blue: 0, alpha: 1)
+            
+        case .H:
+            return #colorLiteral(red: 0.9019607843, green: 0.2705882353, blue: 0.8274509804, alpha: 1)
+            
+        case .I:
+            return #colorLiteral(red: 0.2784313725, green: 0.3294117647, blue: 1, alpha: 1)
+            
+        case .J:
+            return #colorLiteral(red: 0.4431372549, green: 0.7215686275, blue: 0, alpha: 1)
+            
+        case .K:
+            return #colorLiteral(red: 0.9333333333, green: 0.2196078431, blue: 0.3647058824, alpha: 1)
+            
+        case .L:
+            return #colorLiteral(red: 0.3294117647, green: 0.4509803922, blue: 0.2705882353, alpha: 1)
+        }
+    }
+}
+
