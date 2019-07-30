@@ -2,7 +2,7 @@
 //  UILabel+Extension.swift
 //  iconex_ios
 //
-//  Created by a1ahn on 29/07/2019.
+//  Created by sweeepty on 29/07/2019.
 //  Copyright © 2019 ICON Foundation. All rights reserved.
 //
 
@@ -45,5 +45,19 @@ extension UILabel {
         let attributedString = NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: color, .paragraphStyle: paragraphStyle])
         
         self.attributedText = attributedString
+    }
+    
+    func setLinespace(spacing: CGFloat) {
+        if let text = self.text {
+            let attributeString = NSMutableAttributedString(string: text)
+            let style = NSMutableParagraphStyle()
+            
+            style.lineSpacing = spacing
+            attributeString.addAttribute(NSAttributedString.Key.paragraphStyle,
+                                         value: style,
+                                         range: NSMakeRange(0, attributeString.length))
+            
+            self.attributedText = attributeString
+        }
     }
 }
