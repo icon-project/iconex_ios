@@ -22,7 +22,7 @@ struct DB {
             if walletModel.type == "icx" {
                 wallet = ICXWallet(model: walletModel)
             } else {
-                
+                wallet = ETHWallet(model: walletModel)
             }
             walletList.append(wallet)
         }

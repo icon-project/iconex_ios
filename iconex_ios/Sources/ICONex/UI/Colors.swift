@@ -53,3 +53,28 @@ enum SymbolColor {
     }
 }
 
+extension UIColor {
+    
+    /// (0, 162, 184)
+    static let mint1 = UIColor(0, 162, 184)
+    /// (0, 180, 204)
+    static let mint2 = UIColor(0, 180, 204)
+    /// (182, 235, 242)
+    static let mint3 = UIColor(182, 235, 242)
+    /// (245, 254, 255)
+    static let mint4 = UIColor(245, 254, 255)
+    
+    static let gray77 = UIColor(77, 77, 77)
+    static let gray128 = UIColor(128, 128, 128)
+    static let gray179 = UIColor(179, 179, 179)
+    static let gray230 = UIColor(230, 230, 230)
+    static let gray242 = UIColor(242, 242, 242)
+    static let gray250 = UIColor(250, 250, 250)
+    
+    /// (242, 88, 73)
+    static let error1 = UIColor(242, 88, 73)
+    /// (255, 239, 237)
+    static let error2 = UIColor(255, 239, 237)
+    /// (255, 248, 247)
+    static let error3 = UIColor(255, 248, 247)
+}

@@ -12,7 +12,6 @@ import RxSwift
 import BigInt
 import Web3swift
 import CryptoSwift
-import Toast_Swift
 import ICONKit
 
 struct Tool {
@@ -123,7 +122,7 @@ struct Tool {
         
         guard let window = app.window else { return }
         
-        window.makeToast(message)        
+//        window.makeToast(message)        
     }
 }
 

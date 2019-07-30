@@ -126,12 +126,13 @@ class ConnectSendViewController: BaseViewController {
         
         transaction = tx
         
-        guard let createdTx = transaction, let estimatedStepCost = stepLimitInputBox.textField.text, let step = BigUInt(estimatedStepCost) else {
-            stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)
-            return
-        }
-        
-        createdTx.stepLimit(step)
+        #warning("수정 필요")
+//        guard let createdTx = transaction, let estimatedStepCost = stepLimitInputBox.textField.text, let step = BigUInt(estimatedStepCost) else {
+//            stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)
+//            return
+//        }
+//
+//        createdTx.stepLimit(step)
     }
 
     func initialize() {
@@ -140,26 +141,28 @@ class ConnectSendViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
-            Alert.Confirm(message: "Alert.Connect.Send.Cancel".localized, handler: {
-                Conn.sendError(error: ConnectError.userCancel)
-            }).show(self)
+            #warning("Alert 수정")
+//            Alert.Confirm(message: "Alert.Connect.Send.Cancel".localized, handler: {
+//                Conn.sendError(error: ConnectError.userCancel)
+//            }).show(self)
         }).disposed(by: disposeBag)
         
         // developermode choose network button
         chooseNetworkButton.rx.controlEvent(.touchUpInside).subscribe(onNext: {
-            Alert.DeveloperNetworkProvider(source: self, completion: {
-                self.refreshNetwork()
-                self.sendButton.isEnabled = self.validateLimit()
-            })
+            #warning("Alert 수정")
+//            Alert.DeveloperNetworkProvider(source: self, completion: {
+//                self.refreshNetwork()
+//                self.sendButton.isEnabled = self.validateLimit()
+//            })
         }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
-            self.stepLimitInputBox.setState(.focus)
-        }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
-            self.sendButton.isEnabled = self.validateLimit()
-            self.stepLimitInputBox.textField.resignFirstResponder()
-        }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
+//        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
+//            self.stepLimitInputBox.setState(.focus)
+//        }).disposed(by: disposeBag)
+//        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
+//            self.sendButton.isEnabled = self.validateLimit()
+//            self.stepLimitInputBox.textField.resignFirstResponder()
+//        }).disposed(by: disposeBag)
+//        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
         scrollView.rx.didEndScrollingAnimation.subscribe(onNext: {
             self.view.endEditing(true)
@@ -170,7 +173,7 @@ class ConnectSendViewController: BaseViewController {
             let attr2 = NSAttributedString(string: "Transfer.Step.LimitInfo.Second".localized)
             let attr = NSMutableAttributedString(attributedString: attr1)
             attr.append(attr2)
-            Alert.Basic(attributed: attr).show(self)
+//            Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
         stepPriceInfoButton.rx.tap.asControlEvent().subscribe(onNext: { [unowned self] in
@@ -184,11 +187,11 @@ class ConnectSendViewController: BaseViewController {
             attr.append(attr2)
             attr.append(superscript)
             attr.append(attr3)
-            Alert.Basic(attributed: attr).show(self)
+//            Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
         estimatedFeeInfoButton.rx.tap.asControlEvent().subscribe(onNext: { (_) in
-            Alert.Basic(message: "Transfer.EstimatedStep".localized).show(self)
+//            Alert.Basic(message: "Transfer.EstimatedStep".localized).show(self)
         }).disposed(by: disposeBag)
         
         viewData.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {

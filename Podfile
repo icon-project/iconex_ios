@@ -6,10 +6,9 @@ def import_pods
   pod 'RxSwift'
   pod 'RealmSwift', '3.11.0'
   pod 'web3swift', :modular_headers => true
-  pod 'Toast-Swift', '~> 4.0.0'
   pod 'Alamofire'
-  pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit', :branch => 'develop'
-  pod 'LicensesViewController'
+  pod 'ICONKit'
+  pod 'PanModal'
 end
 
 inhibit_all_warnings!

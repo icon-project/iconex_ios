@@ -122,7 +122,7 @@ extension UIColor {
         var text: UIColor {
             switch self {
             case .checked:
-                return UIColor(hex: 0xFFFFFF, alpha: 0.5)
+                return UIColor(0xFFFFFF, alpha: 0.5)
                 
             case .current:
                 return UIColor.white
@@ -145,7 +145,7 @@ extension UIColor {
         self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: alpha)
     }
     
-    convenience init(hex: Int, alpha: CGFloat = 1.0) {
+    convenience init(_ hex: Int, alpha: CGFloat = 1.0) {
         self.init(red: CGFloat((hex >> 16) & 0xff), green: CGFloat((hex >> 8) & 0xff), blue: CGFloat(hex & 0xff), alpha: alpha)
     }
     

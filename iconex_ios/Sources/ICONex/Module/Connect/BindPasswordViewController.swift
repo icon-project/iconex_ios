@@ -57,24 +57,26 @@ class BindPasswordViewController: BaseViewController {
             }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
-            Alert.Confirm(message: "Alert.Connect.Password.Cancel".localized, handler: {
-                Conn.sendError(error: ConnectError.userCancel)
-            }).show(self)
+            #warning("수정 필요")
+//            Alert.Confirm(message: "Alert.Connect.Password.Cancel".localized, handler: {
+//                Conn.sendError(error: ConnectError.userCancel)
+//            }).show(self)
         }).disposed(by: disposeBag)
         
         scrollView.rx.didEndDecelerating.subscribe(onNext: {
             self.view.endEditing(true)
         }).disposed(by: disposeBag)
         
-        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
-            self.passwordInputBox.setState(.focus, "")
-        }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
-            self.confirmButton.isEnabled = self.validatePassword()
-        }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
-            
-        }).disposed(by: disposeBag)
+        #warning("수정 필요")
+//        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
+//            self.passwordInputBox.setState(.focus, "")
+//        }).disposed(by: disposeBag)
+//        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
+//            self.confirmButton.isEnabled = self.validatePassword()
+//        }).disposed(by: disposeBag)
+//        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
+//
+//        }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard Conn.received != nil else { return }
@@ -85,9 +87,10 @@ class BindPasswordViewController: BaseViewController {
     func initializeUI() {
         navTitle.text = "Alert.Wallet.RequestPassword".localized
         
-        passwordInputBox.setType(.password)
-        passwordInputBox.setState(.normal, "")
-        passwordInputBox.textField.placeholder = "Placeholder.InputWalletPassword".localized
+        #warning("수정 필요")
+//        passwordInputBox.setType(.password)
+//        passwordInputBox.setState(.normal, "")
+//        passwordInputBox.textField.placeholder = "Placeholder.InputWalletPassword".localized
         
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
         confirmButton.styleDark()
@@ -133,16 +136,17 @@ class BindPasswordViewController: BaseViewController {
     
     @discardableResult
     func validatePassword() -> Bool {
-        guard let wallet = selectedWallet as? ICXWallet else { return false }
-        guard let password = passwordInputBox.textField.text, password != "" else { return false }
-        
-        guard let prvKey = try? wallet.extractICXPrivateKey(password: password), let prvKeyData = prvKey.hexToData() else {
-            self.privateKey = nil
-            passwordInputBox.setState(.error, "Error.Password.Wrong".localized)
-            return false
-        }
-        
-        privateKey = PrivateKey(hex: prvKeyData)
+        #warning("수정 필요")
+//        guard let wallet = selectedWallet as? ICXWallet else { return false }
+//        guard let password = passwordInputBox.textField.text, password != "" else { return false }
+//
+//        guard let prvKey = try? wallet.extractICXPrivateKey(password: password), let prvKeyData = prvKey.hexToData() else {
+//            self.privateKey = nil
+//            passwordInputBox.setState(.error, "Error.Password.Wrong".localized)
+//            return false
+//        }
+//
+//        privateKey = PrivateKey(hex: prvKeyData)
         
         return true
     }

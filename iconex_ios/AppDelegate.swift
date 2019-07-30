@@ -15,38 +15,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    var connect: ConnectViewController?
+//    var connect: ConnectViewController?
 
     var all: String?
     var necessary: String?
     
     func setRedirect(source: URL) {
-        do {
-            guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
-                throw ConnectError.invalidRequest
-            }
-            guard let queries = components.queryItems else {
-                throw ConnectError.invalidRequest
-            }
-            guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
-                throw ConnectError.invalidRequest
-                
-            }
-            guard let data = Data(base64Encoded: dataParam) else {
-                throw ConnectError.invalidBase64
-            }
-            
-            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let redirect = json["redirect"] as? String else {
-                throw ConnectError.invalidJSON
-            }
-            guard let conURL = URL(string: redirect) else {
-                throw ConnectError.invalidJSON
-            }
-            
-            Conn.redirect = conURL
-        } catch {
-            
-        }
+//        do {
+//            guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
+//                throw ConnectError.invalidRequest
+//            }
+//            guard let queries = components.queryItems else {
+//                throw ConnectError.invalidRequest
+//            }
+//            guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
+//                throw ConnectError.invalidRequest
+//
+//            }
+//            guard let data = Data(base64Encoded: dataParam) else {
+//                throw ConnectError.invalidBase64
+//            }
+//
+//            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let redirect = json["redirect"] as? String else {
+//                throw ConnectError.invalidJSON
+//            }
+//            guard let conURL = URL(string: redirect) else {
+//                throw ConnectError.invalidJSON
+//            }
+//
+//            Conn.redirect = conURL
+//        } catch {
+//
+//        }
         
     }
     
@@ -126,12 +126,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard Configuration.systemCheck(), Configuration.integrityCheck(), Configuration.debuggerCheck() else {
             
             if let root = window?.rootViewController {
-                
-                let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized)
-                halt.handler = {
-                    exit(0)
-                }
-                root.present(halt, animated: false, completion: nil)
+                #warning("구현 필요")
+//                let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized)
+//                halt.handler = {
+//                    exit(0)
+//                }
+//                root.present(halt, animated: false, completion: nil)
                 
             }
             return
@@ -143,14 +143,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        setRedirect(source: url)
-        Conn.setMessage(source: url)
-        if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
-            Manager.exchange.getExchangeList()
-            Manager.balance.getAllBalances()
-            toConnect()
-        }
-        Conn.isConnect = true
+//        setRedirect(source: url)
+//        Conn.setMessage(source: url)
+//        if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
+//            Manager.exchange.getExchangeList()
+//            Manager.balance.getAllBalances()
+//            toConnect()
+//        }
+//        Conn.isConnect = true
         return true
     }
 
@@ -224,9 +224,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if Tool.isPasscode() {
                 let passcode = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "PasscodeView")
                 app.window?.rootViewController = passcode
-            } else if !Tool.isPasscode() && Conn.isConnect {
-                let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
-                app.window?.rootViewController = connect
+//            } else if !Tool.isPasscode() && Conn.isConnect {
+//                let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
+//                app.window?.rootViewController = connect
             } else {
                 let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
                 app.window?.rootViewController = main
@@ -243,13 +243,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 if version > myVersion {
                     let message = "Version.Message".localized
-                    Alert.Confirm(message: message, cancel: "Common.Cancel".localized, confirm: "Version.Update".localized, handler: {
-                        UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: { _ in
-                            exit(0)
-                        })
-                    }, {
-                        exit(0)
-                    }).show(self.window!.rootViewController!)
+//                    Alert.Confirm(message: message, cancel: "Common.Cancel".localized, confirm: "Version.Update".localized, handler: {
+//                        UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: { _ in
+//                            exit(0)
+//                        })
+//                    }, {
+//                        exit(0)
+//                    }).show(self.window!.rootViewController!)
                 } else {
                     
                     go()
@@ -298,23 +298,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func toMain() {
         self.window?.rootViewController?.dismiss(animated: false, completion: {
-            self.connect = nil
+//            self.connect = nil
         })
-        if Conn.isConnect {
-            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-            let app = UIApplication.shared.delegate as! AppDelegate
-            app.window?.rootViewController = main
-        }
+//        if Conn.isConnect {
+//            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+//            let app = UIApplication.shared.delegate as! AppDelegate
+//            app.window?.rootViewController = main
+//        }
     }
     
     func toConnect() {
-        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
-        
-        self.connect = connect
-        if let top = self.topViewController() {
-            Log("Present - \(top)")
-            top.present(connect!, animated: true, completion: nil)
-        }
+//        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
+//
+//        self.connect = connect
+//        if let top = self.topViewController() {
+//            Log("Present - \(top)")
+//            top.present(connect!, animated: true, completion: nil)
+//        }
+    }
+    
+    func change(root: UIViewController) {
+        self.window?.rootViewController = root
     }
 }
 
+let app = UIApplication.shared.delegate as! AppDelegate
