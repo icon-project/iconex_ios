@@ -55,7 +55,6 @@
 		D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49BB2043E6030064CFF4 /* ICXWallet.swift */; };
 		D4930131213E4E6500F83D26 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4930130213E4E6500F83D26 /* Tracker.swift */; };
 		D4944E71200C7FF0002D1870 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4944E70200C7FF0002D1870 /* extensions.swift */; };
-		D4B178EB206E0A5800F8CC35 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4B178EA206E0A5800F8CC35 /* Animator.swift */; };
 		D4BE74C92040046C00638E2E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* Util.swift */; };
 		D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C542CA22E995AF0099358D /* BaseViewController.swift */; };
 		D4EB066520C63730005AF9F1 /* ethToken.json in Resources */ = {isa = PBXBuildFile; fileRef = D4EB066420C63730005AF9F1 /* ethToken.json */; };
@@ -220,7 +219,6 @@
 		D4930130213E4E6500F83D26 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		D4944E70200C7FF0002D1870 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
-		D4B178EA206E0A5800F8CC35 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		D4BE74C82040046C00638E2E /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D4C542CA22E995AF0099358D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		D4EB066420C63730005AF9F1 /* ethToken.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ethToken.json; sourceTree = "<group>"; };
@@ -500,7 +498,6 @@
 				D44A94882019CA0100F60614 /* Cipher.swift */,
 				D4BE74C82040046C00638E2E /* Util.swift */,
 				D46CD8A822E045D00063BAA0 /* Validator.swift */,
-				D4B178EA206E0A5800F8CC35 /* Animator.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -767,7 +764,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4B178EB206E0A5800F8CC35 /* Animator.swift in Sources */,
 				D424B73522EEB7F200D9BD12 /* IXTextField.swift in Sources */,
 				D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */,
 				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
