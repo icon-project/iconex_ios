@@ -27,6 +27,8 @@
 		D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4277E7920746606006F3C95 /* ETHWallet.swift */; };
 		D427DCEA221117050098D852 /* Tokens.json in Resources */ = {isa = PBXBuildFile; fileRef = D427DCE9221117050098D852 /* Tokens.json */; };
 		D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D428A53D20201B2F005B14D8 /* Configurations.swift */; };
+		D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */; };
+		D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D42FF8D922F182E900268C29 /* Passcode.storyboard */; };
 		D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D434868820E6254500B7708F /* NanumSquareBold.ttf */; };
 		D43DB33822D6DB480029FFF0 /* Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DB33722D6DB480029FFF0 /* Managers.swift */; };
 		D446A07022E160540000D4CA /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D446A06F22E160540000D4CA /* String+Extension.swift */; };
@@ -185,6 +187,8 @@
 		D4277E7920746606006F3C95 /* ETHWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHWallet.swift; sourceTree = "<group>"; };
 		D427DCE9221117050098D852 /* Tokens.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Tokens.json; sourceTree = "<group>"; };
 		D428A53D20201B2F005B14D8 /* Configurations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configurations.swift; sourceTree = "<group>"; };
+		D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeViewController.swift; sourceTree = "<group>"; };
+		D42FF8D922F182E900268C29 /* Passcode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Passcode.storyboard; sourceTree = "<group>"; };
 		D434868820E6254500B7708F /* NanumSquareBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareBold.ttf; sourceTree = "<group>"; };
 		D43DB33722D6DB480029FFF0 /* Managers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers.swift; sourceTree = "<group>"; };
 		D446A06F22E160540000D4CA /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
@@ -417,6 +421,15 @@
 			path = Request;
 			sourceTree = "<group>";
 		};
+		D42FF8D622F182B200268C29 /* Passcode */ = {
+			isa = PBXGroup;
+			children = (
+				D42FF8D922F182E900268C29 /* Passcode.storyboard */,
+				D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */,
+			);
+			path = Passcode;
+			sourceTree = "<group>";
+		};
 		D435E78F2018243400F1E798 /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
@@ -568,6 +581,7 @@
 		D4C542C922E995A10099358D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D42FF8D622F182B200268C29 /* Passcode */,
 				D424B73A22EEE42000D9BD12 /* Intro */,
 				D4C542CA22E995AF0099358D /* BaseViewController.swift */,
 			);
@@ -681,6 +695,7 @@
 				D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */,
 				D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */,
 				BF2C562322B9DB1D002AD5CC /* san.dat in Resources */,
+				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
 				D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */,
 				BF2C561D22B9DB1D002AD5CC /* updateinfo.dat in Resources */,
 			);
@@ -796,6 +811,7 @@
 				D4143E042133BE79004212A9 /* Errors.swift in Sources */,
 				D424B73E22EEE85B00D9BD12 /* IntroViewController.swift in Sources */,
 				D4944E71200C7FF0002D1870 /* extensions.swift in Sources */,
+				D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */,
 				D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */,
 				D468CEF622F0380F0019D7BB /* PermissionViewController.swift in Sources */,
 			);
