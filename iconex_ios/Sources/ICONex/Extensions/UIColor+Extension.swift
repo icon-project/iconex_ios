@@ -11,92 +11,60 @@ import UIKit
 
 // MARK: UIColor
 extension UIColor {
-    public enum darkTheme {
-        case background
-        case text
+    enum mintButton {
+        case normal
+        case pressed
+        case disabled
         
-        var normal: UIColor {
+        var background: UIColor {
             switch self {
-            case .background:
-                return UIColor(38, 38, 38)
+            case .normal:
+                return .mint3
                 
-            case .text:
-                return UIColor(255, 255, 255)
+            case .pressed:
+                return .mint3
+                
+            case .disabled:
+                return .gray242
             }
         }
-        
-        var selected: UIColor {
+            
+        var text: UIColor {
             switch self {
-            case .background:
-                return UIColor(0, 0, 0)
+            case .normal:
+                return .mint1
                 
-            case .text:
-                return UIColor(255, 255, 255)
-            }
-        }
-        
-        var pressed: UIColor {
-            switch self {
-            case .background:
-                return UIColor(0, 0, 0)
+            case .pressed:
+                return .mint1
                 
-            case .text:
-                return UIColor(255, 255, 255)
-            }
-        }
-        
-        var disabled: UIColor {
-            switch self {
-            case .background:
-                return UIColor(230, 230, 230)
-                
-            case .text:
-                return UIColor(179, 179, 179)
+            case .disabled:
+                return .gray179
             }
         }
     }
     
-    public enum lightTheme {
-        case background
-        case text
+    enum darkButton {
+        case normal
+        case pressed
+        case disabled
         
-        var normal: UIColor {
+        var background: UIColor {
             switch self {
-            case .background:
-                return UIColor(26, 170, 186)
+            case .normal, .pressed:
+                return .gray77
                 
-            case .text:
-                return UIColor.white
+            case .disabled:
+                return .gray242
             }
         }
         
-        var selected: UIColor {
+        var text: UIColor {
             switch self {
-            case .background:
-                return UIColor(18, 117, 128)
+            case .normal, .pressed:
+                return .white
                 
-            case .text:
-                return UIColor.white
-            }
-        }
-        
-        var pressed: UIColor {
-            switch self {
-            case .background:
-                return UIColor(18, 117, 128)
-                
-            case .text:
-                return UIColor.white
-            }
-        }
-        
-        var disabled: UIColor {
-            switch self {
-            case .background:
-                return UIColor(230, 230, 230)
-                
-            case .text:
-                return UIColor(179, 179, 179)
+            case .disabled:
+                return .gray179
             }
         }
     }

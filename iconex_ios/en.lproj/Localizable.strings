@@ -46,14 +46,15 @@
 
 ///////////////////////////
 
+// MARK: PermissionViewController
 "Permission.Title" = "App Permissions";
-"Permission.Required.Title" = "[ Required ]";
+"Permission.Required.Title" = "Required";
 "Permission.None" = "None";
-"Permission.Optional.Title" = "[ Optional ]";
+"Permission.Optional.Title" = "Optional";
 "Permission.Camera.Title" = "Camera";
-"Permission.Camera.Desc" = "Read QR codes of wallet addresses or private keys.";
-"Permission.footer.desc1" = "If you deny this permission, you may no longer use some features of your device.";
-"Permission.footer.desc2" = "You can change this access permission in \"Setting\" > \"ICONex\"";
+"Permission.Camera.Desc" = "・ Read QR codes of wallet addresses or private keys.";
+"Permission.footer.desc1" = "・ If you deny this permission, you may no longer use some features of your device.";
+"Permission.footer.desc2" = "・ You can change this access permission in \"Setting\" > \"ICONex\"";
 
 "Welcome.Instruction.1" = "ICONex enables users to create and manage wallets for various cryptocurrencies that are connected to ICON Network including ICX and ETH.";
 "Welcome.Instruction.2" = "Convenient storage and transfer of ICX and other various cryptocurrencies connected with ICON are possible based on the Reserved Balance.";

@@ -10,12 +10,16 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class BaseViewController: UIViewController {
+class BaseViewController: UIViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        
         initializeComponents()
     }
     

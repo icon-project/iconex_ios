@@ -38,13 +38,11 @@ class IntroViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let perm = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "PermissionView") as! PopableViewController
-        perm.pop()
-//        startAlpha()
+        startAlpha()
     }
     
     func startAlpha() {
-        UIView.animate(withDuration: 2.2, delay: 0.5, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.45, delay: 0.5, options: .curveLinear, animations: {
             self.iconImage.alpha = 1.0
             self.satellite.alpha = 1.0
             self.logoLabel.alpha = 1.0
@@ -57,8 +55,27 @@ class IntroViewController: BaseViewController {
         UIView.animate(withDuration: 0.65, delay: 0.5, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.0, options: .curveEaseIn, animations: {
             self.iconImage.transform = CGAffineTransform(rotationAngle: .pi)
             self.satellite.transform = CGAffineTransform(rotationAngle: -3.14159256)
+        }, completion : { _ in
+            self.startHide()
         })
-        
+    }
+    
+    func startHide() {
+        UIView.animate(withDuration: 0.4, delay: 0.5, animations: {
+            self.iconImage.alpha = 0.0
+            self.satellite.alpha = 0.0
+            self.logoLabel.alpha = 0.0
+        }, completion: { _ in
+            self.iconImage.transform = .identity
+            self.satellite.transform = .identity
+            if !UserDefaults.standard.bool(forKey: "permission") {
+                let perm = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "PermissionView") as! PermissionViewController
+                perm.action = {
+                    
+                }
+                perm.pop()
+            }
+        })
     }
     
     func checkVersion(_ completion: (() -> Void)? = nil) {

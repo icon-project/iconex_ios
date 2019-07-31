@@ -41,25 +41,49 @@ extension UIButton {
         self.titleLabel?.font = UIFont.systemFont(ofSize: 14)
     }
     
-    func styleLight() {
-        self.setBackgroundImage(UIImage(color: UIColor.lightTheme.background.normal), for: .normal)
-        self.setTitleColor(UIColor.lightTheme.text.normal, for: .normal)
-        self.setBackgroundImage(UIImage(color: UIColor.lightTheme.background.pressed), for: .highlighted)
-        self.setTitleColor(UIColor.lightTheme.text.pressed, for: .highlighted)
-        self.setBackgroundImage(UIImage(color: UIColor.lightTheme.background.selected), for: .selected)
-        self.setTitleColor(UIColor.lightTheme.text.selected, for: .selected)
-        self.setBackgroundImage(UIImage(color: UIColor.lightTheme.background.disabled), for: .disabled)
-        self.setTitleColor(UIColor.lightTheme.text.disabled, for: .disabled)
+    func mintRounded() {
+        setBackgroundImage(UIImage(color: UIColor.mintButton.normal.background), for: .normal)
+        setTitleColor(UIColor.mintButton.normal.text, for: .normal)
+        setBackgroundImage(UIImage(color: UIColor.mintButton.disabled.background), for: .disabled)
+        setTitleColor(UIColor.mintButton.disabled.text, for: .disabled)
+        titleLabel?.font = .systemFont(ofSize: 16)
+        corner(12)
     }
     
-    func styleDark() {
-        self.setBackgroundImage(UIImage(color: UIColor.darkTheme.background.normal), for: .normal)
-        self.setTitleColor(UIColor.darkTheme.text.normal, for: .normal)
-        self.setBackgroundImage(UIImage(color: UIColor.darkTheme.background.pressed), for: .highlighted)
-        self.setTitleColor(UIColor.darkTheme.text.pressed, for: .highlighted)
-        self.setBackgroundImage(UIImage(color: UIColor.darkTheme.background.selected), for: .selected)
-        self.setTitleColor(UIColor.darkTheme.text.selected, for: .selected)
-        self.setBackgroundImage(UIImage(color: UIColor.darkTheme.background.disabled), for: .disabled)
-        self.setTitleColor(UIColor.darkTheme.text.disabled, for: .disabled)
+    func darkRounded() {
+        setBackgroundImage(UIImage(color: UIColor.darkButton.normal.background), for: .normal)
+        setTitleColor(UIColor.darkButton.normal.text, for: .normal)
+        setBackgroundImage(UIImage(color: UIColor.darkButton.disabled.background), for: .disabled)
+        setTitleColor(UIColor.darkButton.disabled.text, for: .disabled)
+        titleLabel?.font = .systemFont(ofSize: 16)
+        corner(12)
+    }
+    
+    func round02() {
+        setBackgroundImage(UIImage(color: .gray242), for: .normal)
+        setTitleColor(.gray77, for: .normal)
+        setBackgroundImage(UIImage(color: .gray230), for: .highlighted)
+        setBackgroundImage(UIImage(color: .gray242), for: .disabled)
+        setTitleColor(.gray179, for: .disabled)
+        titleLabel?.font = .systemFont(ofSize: 16)
+        corner(12)
+    }
+    
+    func line01() {
+        setBackgroundImage(UIImage(color: .white), for: .normal)
+        setTitleColor(.gray128, for: .normal)
+        setBackgroundImage(UIImage(color: .gray250), for: .highlighted)
+        setTitleColor(UIColor(217, 217, 217), for: .disabled)
+        border(1, .gray230)
+        titleLabel?.font = .systemFont(ofSize: 12)
+    }
+    
+    func line02() {
+        setBackgroundImage(UIImage(color: .white), for: .normal)
+        setTitleColor(.gray128, for: .normal)
+        setBackgroundImage(UIImage(color: .gray250), for: .highlighted)
+        setTitleColor(UIColor(217, 217, 217), for: .disabled)
+        border(1, .gray230)
+        titleLabel?.font = .systemFont(ofSize: 16)
     }
 }

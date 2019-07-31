@@ -10,26 +10,23 @@ import Foundation
 import UIKit
 
 extension UILabel {
-    func size12(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular) {
-        set(text: text, size: 12, height: 18/12, color: color, weight: weight)
+    func size12(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
+        set(text: text, size: 12, height: 18, color: color, weight: weight, align: align)
     }
     
-    func size14(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular) {
-        set(text: text, size: 14, height: 20/14, color: color, weight: weight)
+    func size14(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
+        set(text: text, size: 14, height: 20, color: color, weight: weight, align: align)
     }
     
-    func size16(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular) {
-        set(text: text, size: 16, height: 24/16, color: color, weight: weight)
+    func size16(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
+        set(text: text, size: 16, height: 24, color: color, weight: weight, align: align)
     }
     
-    func size18(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular) {
-        set(text: text, size: 18, height: 24/18, color: color, weight: weight)
+    func size18(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
+        set(text: text, size: 18, height: 24, color: color, weight: weight, align: align)
     }
     
-    func set(text: String, size: CGFloat, height: CGFloat, color: UIColor = .black, weight: UIFont.Weight = .regular) {
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = height
-        
+    func set(text: String, size: CGFloat, height: CGFloat, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
         var font: UIFont
         if text.rangeOfCharacter(from: CharacterSet.decimalDigits, options: .caseInsensitive, range: nil) != nil {
             Log("Contains number")
@@ -41,6 +38,9 @@ extension UILabel {
         } else {
             font = UIFont.systemFont(ofSize: size, weight: weight)
         }
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = height - size
+        paragraphStyle.alignment = align
         
         let attributedString = NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: color, .paragraphStyle: paragraphStyle])
         

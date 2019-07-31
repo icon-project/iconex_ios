@@ -11,13 +11,13 @@ import PanModal
 
 class PopableViewController: BaseViewController {
     @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet var bottomContainer: UIView!
+    @IBOutlet var actionContainer: UIView!
     
     override func initializeComponents() {
         super.initializeComponents()
         
-        bottomContainer.backgroundColor = .gray250
-        bottomContainer.alpha = 0.0
+        actionContainer.backgroundColor = .gray250
+        actionContainer.alpha = 0.0
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -28,7 +28,7 @@ class PopableViewController: BaseViewController {
     
     func showBottom() {
         UIView.animate(withDuration: 0.4) {
-            self.bottomContainer.alpha = 1.0
+            self.actionContainer.alpha = 1.0
         }
     }
     
@@ -50,8 +50,12 @@ extension PopableViewController: PanModalPresentable {
         return false
     }
     
-    var isUserInteractionEnabled: Bool {
-        return false    
+    func shouldRespond(to panModalGestureRecognizer: UIPanGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    var isHapticFeedbackEnabled: Bool {
+        return false
     }
     
     var topOffset: CGFloat {
