@@ -57,6 +57,7 @@
 		D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49BB2043E6030064CFF4 /* ICXWallet.swift */; };
 		D4930131213E4E6500F83D26 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4930130213E4E6500F83D26 /* Tracker.swift */; };
 		D4944E71200C7FF0002D1870 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4944E70200C7FF0002D1870 /* extensions.swift */; };
+		D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1E52722F2D20E00987D2C /* StartViewController.swift */; };
 		D4BE74C92040046C00638E2E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* Util.swift */; };
 		D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C542CA22E995AF0099358D /* BaseViewController.swift */; };
 		D4EB066520C63730005AF9F1 /* ethToken.json in Resources */ = {isa = PBXBuildFile; fileRef = D4EB066420C63730005AF9F1 /* ethToken.json */; };
@@ -222,6 +223,7 @@
 		D48E49BB2043E6030064CFF4 /* ICXWallet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICXWallet.swift; sourceTree = "<group>"; };
 		D4930130213E4E6500F83D26 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		D4944E70200C7FF0002D1870 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
+		D4A1E52722F2D20E00987D2C /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		D4BE74C82040046C00638E2E /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D4C542CA22E995AF0099358D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -389,8 +391,8 @@
 		D424B73022EEB7AE00D9BD12 /* IXInputBox */ = {
 			isa = PBXGroup;
 			children = (
-				D424B73122EEB7C200D9BD12 /* IXInputBox.swift */,
 				D424B73822EECA9900D9BD12 /* IXInputBox.xib */,
+				D424B73122EEB7C200D9BD12 /* IXInputBox.swift */,
 			);
 			path = IXInputBox;
 			sourceTree = "<group>";
@@ -409,6 +411,7 @@
 				D424B73B22EEE43100D9BD12 /* Intro.storyboard */,
 				D424B73D22EEE85B00D9BD12 /* IntroViewController.swift */,
 				D468CEF522F0380F0019D7BB /* PermissionViewController.swift */,
+				D4A1E52722F2D20E00987D2C /* StartViewController.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -428,6 +431,13 @@
 				D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */,
 			);
 			path = Passcode;
+			sourceTree = "<group>";
+		};
+		D42FF8DC22F1919600268C29 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		D435E78F2018243400F1E798 /* Wallet */ = {
@@ -528,6 +538,7 @@
 		D47E75A021104F7300ABC61B /* ICONex */ = {
 			isa = PBXGroup;
 			children = (
+				D42FF8DC22F1919600268C29 /* Protocols */,
 				D4944E6F200C7FCD002D1870 /* Extensions */,
 				D4C542C822E995940099358D /* UI */,
 				D4F657D022E541FD00FA5A26 /* Global */,
@@ -784,6 +795,7 @@
 				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D446A07022E160540000D4CA /* String+Extension.swift in Sources */,
+				D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */,
 				D424B73222EEB7C200D9BD12 /* IXInputBox.swift in Sources */,
 				D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */,
 				D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */,
@@ -975,7 +987,7 @@
 					"$(SRCROOT)/Pods/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1018,7 +1030,7 @@
 					"$(SRCROOT)/Pods/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

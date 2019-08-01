@@ -14,6 +14,8 @@ class IntroViewController: BaseViewController {
     @IBOutlet weak var satellite: UIImageView!
     @IBOutlet weak var logoLabel: UILabel!
     
+    private var _animated: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,8 +39,21 @@ class IntroViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        startAlpha()
+        if !UserDefaults.standard.bool(forKey: "permission") {
+            let perm = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "PermissionView") as! PermissionViewController
+            perm.action = {
+                
+            }
+            perm.pop()
+        } else {
+            if !_animated {
+                _animated = true
+                startAlpha()
+            } else {
+                let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+                app.change(root: start)
+            }
+        }
     }
     
     func startAlpha() {
@@ -68,13 +83,8 @@ class IntroViewController: BaseViewController {
         }, completion: { _ in
             self.iconImage.transform = .identity
             self.satellite.transform = .identity
-            if !UserDefaults.standard.bool(forKey: "permission") {
-                let perm = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "PermissionView") as! PermissionViewController
-                perm.action = {
-                    
-                }
-                perm.pop()
-            }
+            let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+            app.change(root: start)
         })
     }
     

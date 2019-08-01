@@ -41,21 +41,39 @@ extension UIButton {
         self.titleLabel?.font = UIFont.systemFont(ofSize: 14)
     }
     
-    func mintRounded() {
+    func mint() {
+        setBackgroundImage(UIImage(color: .mint2), for: .normal)
+        setTitleColor(.white, for: .normal)
+        setBackgroundImage(UIImage(color: UIColor.mintButton.disabled.background), for: .disabled)
+        setTitleColor(UIColor.mintButton.disabled.text, for: .disabled)
+        setTitleColor(UIColor(0, 135, 153), for: .highlighted)
+        setBackgroundImage(color: .mint2, state: .highlighted)
+        titleLabel?.font = .systemFont(ofSize: 16)
+    }
+    
+    func lightMint() {
         setBackgroundImage(UIImage(color: UIColor.mintButton.normal.background), for: .normal)
         setTitleColor(UIColor.mintButton.normal.text, for: .normal)
         setBackgroundImage(UIImage(color: UIColor.mintButton.disabled.background), for: .disabled)
         setTitleColor(UIColor.mintButton.disabled.text, for: .disabled)
         titleLabel?.font = .systemFont(ofSize: 16)
+    }
+    
+    func lightMintRounded() {
+        lightMint()
         corner(12)
     }
     
-    func darkRounded() {
+    func dark() {
         setBackgroundImage(UIImage(color: UIColor.darkButton.normal.background), for: .normal)
         setTitleColor(UIColor.darkButton.normal.text, for: .normal)
         setBackgroundImage(UIImage(color: UIColor.darkButton.disabled.background), for: .disabled)
         setTitleColor(UIColor.darkButton.disabled.text, for: .disabled)
         titleLabel?.font = .systemFont(ofSize: 16)
+    }
+    
+    func darkRounded() {
+        dark()
         corner(12)
     }
     

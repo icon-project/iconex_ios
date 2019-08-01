@@ -56,8 +56,11 @@
 "Permission.footer.desc1" = "・ If you deny this permission, you may no longer use some features of your device.";
 "Permission.footer.desc2" = "・ You can change this access permission in \"Setting\" > \"ICONex\"";
 
-"Welcome.Instruction.1" = "ICONex enables users to create and manage wallets for various cryptocurrencies that are connected to ICON Network including ICX and ETH.";
-"Welcome.Instruction.2" = "Convenient storage and transfer of ICX and other various cryptocurrencies connected with ICON are possible based on the Reserved Balance.";
+// MARK: StartViewController
+"Start.Instruction.1" = "ICONex enables users to create and manage wallets for various cryptocurrencies that are connected to ICON Network including ICX and ETH.";
+"Start.Instruction.2" = "Convenient storage and transfer of ICX and other various cryptocurrencies connected with ICON are possible based on the Reserved Balance.";
+"Start.CreateWallet" = "Create Wallet";
+"Start.LoadWallet" = "Load Wallet";
 
 "Passcode.Fingerprint.Instruction" = "Place your finger on the sensor to unlock the screen.";
 "Passcode.Unlock.Code" = "Unlock the screen lock with the passcode.";

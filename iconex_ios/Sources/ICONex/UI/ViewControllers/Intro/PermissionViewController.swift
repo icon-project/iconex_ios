@@ -35,6 +35,7 @@ class PermissionViewController: PopableViewController {
         super.initializeComponents()
         
         confirmButton.rx.tap.subscribe(onNext: { [unowned self] in
+            UserDefaults.standard.set(true, forKey: "permission")
             self.dismiss(animated: true, completion: {
                 if let comp = self.action {
                     comp()

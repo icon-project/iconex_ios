@@ -318,7 +318,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func change(root: UIViewController) {
-        self.window?.rootViewController = root
+        window?.backgroundColor = .mint1
+        UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.window?.rootViewController = root
+        }, completion: nil)
     }
 }
 

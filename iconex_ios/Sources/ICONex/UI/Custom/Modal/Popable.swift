@@ -10,7 +10,6 @@ import UIKit
 import PanModal
 
 class PopableViewController: BaseViewController {
-    @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var actionContainer: UIView!
     
     override func initializeComponents() {
