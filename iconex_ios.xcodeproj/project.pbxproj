@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
 		D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D424B72D22EEB0E600D9BD12 /* Colors.swift */; };
@@ -73,6 +74,7 @@
 		2E7BD58B66D88111B1FA0E1C /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		3E8D34438ACDAE074E8C6D6F /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		BF0B659222CB52E400E13200 /* Pods-iconex_ios-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Pods-iconex_ios-acknowledgements.plist"; sourceTree = "<group>"; };
+		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D41B430E207B71C60011DDB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/ahn/Documents/work/ios-iCONex/Info.plist"; sourceTree = "<absolute>"; };
@@ -192,6 +194,7 @@
 		D424B73A22EEE42000D9BD12 /* Intro */ = {
 			isa = PBXGroup;
 			children = (
+				BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */,
 				D424B73B22EEE43100D9BD12 /* Intro.storyboard */,
 				D468CEF522F0380F0019D7BB /* PermissionViewController.swift */,
 				D4A1E52722F2D20E00987D2C /* StartViewController.swift */,
@@ -596,6 +599,7 @@
 				D4719B22200F2796005F6BDA /* logger.swift in Sources */,
 				D43DB33822D6DB480029FFF0 /* Managers.swift in Sources */,
 				D471F202205A755C00F565EF /* Database.swift in Sources */,
+				BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */,
 				D446A07A22E163310000D4CA /* UIImage+Extension.swift in Sources */,
 				D46CD8A522E006C30063BAA0 /* Variables.swift in Sources */,
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
