@@ -41,7 +41,7 @@
 		D44A94892019CA0100F60614 /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44A94882019CA0100F60614 /* Cipher.swift */; };
 		D44A948B2019CB0D00F60614 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44A948A2019CB0D00F60614 /* Security.framework */; };
 		D468CEF622F0380F0019D7BB /* PermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CEF522F0380F0019D7BB /* PermissionViewController.swift */; };
-		D468CEF922F03CAB0019D7BB /* Popable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CEF822F03CAB0019D7BB /* Popable.swift */; };
+		D468CEF922F03CAB0019D7BB /* PopableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CEF822F03CAB0019D7BB /* PopableViewController.swift */; };
 		D468CF0222F062370019D7BB /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CF0122F062370019D7BB /* UILabel+Extension.swift */; };
 		D46CD8A522E006C30063BAA0 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46CD8A422E006C30063BAA0 /* Variables.swift */; };
 		D46CD8A922E045D00063BAA0 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46CD8A822E045D00063BAA0 /* Validator.swift */; };
@@ -58,11 +58,22 @@
 		D4930131213E4E6500F83D26 /* Tracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4930130213E4E6500F83D26 /* Tracker.swift */; };
 		D4944E71200C7FF0002D1870 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4944E70200C7FF0002D1870 /* extensions.swift */; };
 		D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1E52722F2D20E00987D2C /* StartViewController.swift */; };
+		D4A1E52B22F2E5DC00987D2C /* CreateWalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1E52A22F2E5DC00987D2C /* CreateWalletViewController.swift */; };
 		D4BE74C92040046C00638E2E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* Util.swift */; };
 		D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C542CA22E995AF0099358D /* BaseViewController.swift */; };
 		D4EB066520C63730005AF9F1 /* ethToken.json in Resources */ = {isa = PBXBuildFile; fileRef = D4EB066420C63730005AF9F1 /* ethToken.json */; };
 		D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4ECFE5522013FE4001644AF /* WalletKeystore.swift */; };
 		D4F657D222E5422200FA5A26 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F657D122E5422200FA5A26 /* Models.swift */; };
+		D4F7671D22F3C58500452DA7 /* CreateWallet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4F7671C22F3C58500452DA7 /* CreateWallet.storyboard */; };
+		D4F7671F22F3CCBE00452DA7 /* CreateSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7671E22F3CCBE00452DA7 /* CreateSelectViewController.swift */; };
+		D4F7672122F3CCE500452DA7 /* CreateKeystoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672022F3CCE500452DA7 /* CreateKeystoreViewController.swift */; };
+		D4F7672322F3CCFF00452DA7 /* CreateBackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672222F3CCFF00452DA7 /* CreateBackupViewController.swift */; };
+		D4F7672522F3CD0C00452DA7 /* CreateCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672422F3CD0C00452DA7 /* CreateCompleteViewController.swift */; };
+		D4F7672722F3E1A900452DA7 /* PopableTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672622F3E1A900452DA7 /* PopableTitleView.swift */; };
+		D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672822F3E46E00452DA7 /* PopableTitleView.xib */; };
+		D4F7672C22F41A6700452DA7 /* IXNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672B22F41A6700452DA7 /* IXNavigationController.swift */; };
+		D4F7672E22F41B3A00452DA7 /* IXNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */; };
+		D4F7673022F41B4900452DA7 /* IXNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */; };
 		DB4F6807B0B3AE955FDB8C51 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AF444A59B79C11441D2F46 /* Pods_iconex_ios.framework */; };
 /* End PBXBuildFile section */
 
@@ -203,7 +214,7 @@
 		D44A948A2019CB0D00F60614 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		D468298C206251AA00ECF68F /* iconex_ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iconex_ios.entitlements; sourceTree = "<group>"; };
 		D468CEF522F0380F0019D7BB /* PermissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionViewController.swift; sourceTree = "<group>"; };
-		D468CEF822F03CAB0019D7BB /* Popable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popable.swift; sourceTree = "<group>"; };
+		D468CEF822F03CAB0019D7BB /* PopableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopableViewController.swift; sourceTree = "<group>"; };
 		D468CF0122F062370019D7BB /* UILabel+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		D46CD8A422E006C30063BAA0 /* Variables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
 		D46CD8A822E045D00063BAA0 /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
@@ -224,12 +235,23 @@
 		D4930130213E4E6500F83D26 /* Tracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tracker.swift; sourceTree = "<group>"; };
 		D4944E70200C7FF0002D1870 /* extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		D4A1E52722F2D20E00987D2C /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		D4A1E52A22F2E5DC00987D2C /* CreateWalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateWalletViewController.swift; sourceTree = "<group>"; };
 		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		D4BE74C82040046C00638E2E /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D4C542CA22E995AF0099358D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		D4EB066420C63730005AF9F1 /* ethToken.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ethToken.json; sourceTree = "<group>"; };
 		D4ECFE5522013FE4001644AF /* WalletKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeystore.swift; sourceTree = "<group>"; };
 		D4F657D122E5422200FA5A26 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		D4F7671C22F3C58500452DA7 /* CreateWallet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CreateWallet.storyboard; sourceTree = "<group>"; };
+		D4F7671E22F3CCBE00452DA7 /* CreateSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSelectViewController.swift; sourceTree = "<group>"; };
+		D4F7672022F3CCE500452DA7 /* CreateKeystoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateKeystoreViewController.swift; sourceTree = "<group>"; };
+		D4F7672222F3CCFF00452DA7 /* CreateBackupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBackupViewController.swift; sourceTree = "<group>"; };
+		D4F7672422F3CD0C00452DA7 /* CreateCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompleteViewController.swift; sourceTree = "<group>"; };
+		D4F7672622F3E1A900452DA7 /* PopableTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopableTitleView.swift; sourceTree = "<group>"; };
+		D4F7672822F3E46E00452DA7 /* PopableTitleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopableTitleView.xib; sourceTree = "<group>"; };
+		D4F7672B22F41A6700452DA7 /* IXNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXNavigationController.swift; sourceTree = "<group>"; };
+		D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXNavigationView.swift; sourceTree = "<group>"; };
+		D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IXNavigationView.xib; sourceTree = "<group>"; };
 		D8AF444A59B79C11441D2F46 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -381,6 +403,7 @@
 		D424B72F22EEB73100D9BD12 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				D4F7672A22F41A4A00452DA7 /* Navigation */,
 				D468CEF722F03C730019D7BB /* Modal */,
 				D424B73322EEB7DE00D9BD12 /* IXTextField */,
 				D424B73022EEB7AE00D9BD12 /* IXInputBox */,
@@ -454,7 +477,9 @@
 		D468CEF722F03C730019D7BB /* Modal */ = {
 			isa = PBXGroup;
 			children = (
-				D468CEF822F03CAB0019D7BB /* Popable.swift */,
+				D468CEF822F03CAB0019D7BB /* PopableViewController.swift */,
+				D4F7672622F3E1A900452DA7 /* PopableTitleView.swift */,
+				D4F7672822F3E46E00452DA7 /* PopableTitleView.xib */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -568,6 +593,19 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D4A1E52922F2E5C300987D2C /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				D4F7671C22F3C58500452DA7 /* CreateWallet.storyboard */,
+				D4A1E52A22F2E5DC00987D2C /* CreateWalletViewController.swift */,
+				D4F7671E22F3CCBE00452DA7 /* CreateSelectViewController.swift */,
+				D4F7672022F3CCE500452DA7 /* CreateKeystoreViewController.swift */,
+				D4F7672222F3CCFF00452DA7 /* CreateBackupViewController.swift */,
+				D4F7672422F3CD0C00452DA7 /* CreateCompleteViewController.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
 		D4AC962221C39DB8000DFB33 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -592,6 +630,7 @@
 		D4C542C922E995A10099358D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D4A1E52922F2E5C300987D2C /* Create */,
 				D42FF8D622F182B200268C29 /* Passcode */,
 				D424B73A22EEE42000D9BD12 /* Intro */,
 				D4C542CA22E995AF0099358D /* BaseViewController.swift */,
@@ -613,6 +652,16 @@
 				D4F657D122E5422200FA5A26 /* Models.swift */,
 			);
 			path = Global;
+			sourceTree = "<group>";
+		};
+		D4F7672A22F41A4A00452DA7 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				D4F7672B22F41A6700452DA7 /* IXNavigationController.swift */,
+				D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */,
+				D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */,
+			);
+			path = Navigation;
 			sourceTree = "<group>";
 		};
 		E21AF62972AB4E5ECFA13B86 /* Pods */ = {
@@ -697,18 +746,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */,
+				D4F7673022F41B4900452DA7 /* IXNavigationView.xib in Resources */,
 				BF2C561F22B9DB1D002AD5CC /* ixShield_icon.foundation.iconex_license.txt in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
 				D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */,
 				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
 				D424B73922EECA9A00D9BD12 /* IXInputBox.xib in Resources */,
+				D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */,
 				D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */,
 				D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */,
 				BF2C562322B9DB1D002AD5CC /* san.dat in Resources */,
 				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
 				D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */,
 				BF2C561D22B9DB1D002AD5CC /* updateinfo.dat in Resources */,
+				D4F7671D22F3C58500452DA7 /* CreateWallet.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -793,18 +845,25 @@
 				D424B73522EEB7F200D9BD12 /* IXTextField.swift in Sources */,
 				D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */,
 				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
+				D4F7672C22F41A6700452DA7 /* IXNavigationController.swift in Sources */,
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D446A07022E160540000D4CA /* String+Extension.swift in Sources */,
+				D4F7672722F3E1A900452DA7 /* PopableTitleView.swift in Sources */,
 				D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */,
 				D424B73222EEB7C200D9BD12 /* IXInputBox.swift in Sources */,
 				D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */,
 				D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */,
 				D446A07C22E16A6F0000D4CA /* BigInt+Extension.swift in Sources */,
 				D446A07622E162EA0000D4CA /* UIView+Extension.swift in Sources */,
-				D468CEF922F03CAB0019D7BB /* Popable.swift in Sources */,
+				D4F7672E22F41B3A00452DA7 /* IXNavigationView.swift in Sources */,
+				D4F7672122F3CCE500452DA7 /* CreateKeystoreViewController.swift in Sources */,
+				D468CEF922F03CAB0019D7BB /* PopableViewController.swift in Sources */,
 				D446A07E22E16F230000D4CA /* Data+Extension.swift in Sources */,
 				D46CD8A922E045D00063BAA0 /* Validator.swift in Sources */,
 				D44A94892019CA0100F60614 /* Cipher.swift in Sources */,
+				D4F7672522F3CD0C00452DA7 /* CreateCompleteViewController.swift in Sources */,
+				D4F7672322F3CCFF00452DA7 /* CreateBackupViewController.swift in Sources */,
+				D4A1E52B22F2E5DC00987D2C /* CreateWalletViewController.swift in Sources */,
 				D4F657D222E5422200FA5A26 /* Models.swift in Sources */,
 				D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */,
 				D468CF0222F062370019D7BB /* UILabel+Extension.swift in Sources */,
@@ -815,6 +874,7 @@
 				D4BE74C92040046C00638E2E /* Util.swift in Sources */,
 				D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */,
 				D4719B22200F2796005F6BDA /* logger.swift in Sources */,
+				D4F7671F22F3CCBE00452DA7 /* CreateSelectViewController.swift in Sources */,
 				D43DB33822D6DB480029FFF0 /* Managers.swift in Sources */,
 				D471F202205A755C00F565EF /* Database.swift in Sources */,
 				D446A07A22E163310000D4CA /* UIImage+Extension.swift in Sources */,

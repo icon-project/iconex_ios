@@ -62,6 +62,23 @@
 "Start.CreateWallet" = "Create Wallet";
 "Start.LoadWallet" = "Load Wallet";
 
+// MARK: CreateWalletViewController
+"CreateWallet.Create" = "Create a Wallet";
+
+// MARK: CreateSelectViewController
+"CreateSelect.Main" = "Which coin would you like to add?";
+
+
+
+
+
+
+
+
+
+
+
+
 "Passcode.Fingerprint.Instruction" = "Place your finger on the sensor to unlock the screen.";
 "Passcode.Unlock.Code" = "Unlock the screen lock with the passcode.";
 
@@ -76,7 +93,6 @@
 "Create.Wallet.Step1.StepTitle" = "Select Coin";
 "Create.Wallet.Step1.CreateSelected" = "Select a wallet between ICX wallet and ETH wallet.";
 "Create.Wallet.Step1.Instruction" = "You can add ERC20 tokens using Ethereum wallet menu.";
-"Create.Wallet.Step1.SelectCoin" = "Which coin would you like to add?";
 
 "Create.Wallet.Step2.StepTitle" = "Wallet Info.";
 "Create.Wallet.Step2.Header1" = "You are responsible for keeping your password safe. DO NOT FORGET TO SAVE THIS. If you lose your password, you cannot restore it.";

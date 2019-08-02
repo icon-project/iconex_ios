@@ -50,8 +50,11 @@ extension UIColor {
         
         var background: UIColor {
             switch self {
-            case .normal, .pressed:
+            case .normal:
                 return .gray77
+                
+            case .pressed:
+                return UIColor(64, 64, 64)
                 
             case .disabled:
                 return .gray242

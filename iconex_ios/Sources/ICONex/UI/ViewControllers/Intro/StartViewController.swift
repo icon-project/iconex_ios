@@ -30,6 +30,11 @@ class StartViewController: BaseViewController {
         scroll.rx.didEndDecelerating.subscribe(onNext: { [unowned self] in
             self.page.currentPage = (Int)(self.scroll.contentOffset.x / self.scroll.frame.width)
         }).disposed(by: disposeBag)
+        
+        createButton.rx.tap.subscribe(onNext: {
+            let create = UIStoryboard(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
+            create.pop()
+        }).disposed(by: disposeBag)
     }
     
     override func refresh() {

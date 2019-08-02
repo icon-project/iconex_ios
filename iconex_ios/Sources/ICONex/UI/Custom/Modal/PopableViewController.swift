@@ -1,5 +1,5 @@
 //
-//  Popable.swift
+//  PopableViewController.swift
 //  iconex_ios
 //
 //  Created by a1ahn on 30/07/2019.
@@ -10,13 +10,23 @@ import UIKit
 import PanModal
 
 class PopableViewController: BaseViewController {
+    @IBOutlet var titleContainer: PopableTitleView!
     @IBOutlet var actionContainer: UIView!
     
     override func initializeComponents() {
         super.initializeComponents()
-        
         actionContainer.backgroundColor = .gray250
         actionContainer.alpha = 0.0
+        
+        let lineBar = UIView()
+        lineBar.backgroundColor = .gray230
+        lineBar.translatesAutoresizingMaskIntoConstraints = false
+        actionContainer.addSubview(lineBar)
+        lineBar.topAnchor.constraint(equalTo: actionContainer.topAnchor).isActive = true
+        lineBar.leadingAnchor.constraint(equalTo: actionContainer.leadingAnchor).isActive = true
+        lineBar.trailingAnchor.constraint(equalTo: actionContainer.trailingAnchor).isActive = true
+        lineBar.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,5 +73,9 @@ extension PopableViewController: PanModalPresentable {
     
     var backgroundAlpha: CGFloat {
         return 0.4
+    }
+    
+    var cornerRadius: CGFloat {
+        return 18.0
     }
 }

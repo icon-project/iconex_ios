@@ -63,6 +63,19 @@
 "Start.CreateWallet" = "지갑 만들기";
 "Start.LoadWallet" = "지갑 가져오기";
 
+// MARK: CreateWalletViewController
+"CreateWallet.Create" = "지갑 만들기";
+
+// MARK: CreateSelectViewController
+"CreateSelect.Main" = "어떤 코인 지갑을 추가하시겠습니까?";
+"CreateSelect.Instruction1" = "・ 지갑 만들기 완료 시 선택한 코인의 지갑이 생성됩니다.";
+"CreateSelect.Instruction2" = "・ 지갑 생성 후, 해당 코인 기반의 토큰을 추가할 수 있습니다.";
+
+
+
+
+
+
 "Passcode.Fingerprint.Instruction" = "잠금 해제를 위해\n지문 센서에 손가락을 올려주세요.";
 "Passcode.Unlock.Code" = "잠금 번호로 잠금 해제";
 
