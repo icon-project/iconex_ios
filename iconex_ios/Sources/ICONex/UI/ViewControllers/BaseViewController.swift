@@ -18,9 +18,8 @@ class BaseViewController: UIViewController, UINavigationControllerDelegate, UIGe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+//        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+//        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         
         setKeyboardListener()
         initializeComponents()

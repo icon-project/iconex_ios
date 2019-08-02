@@ -35,6 +35,11 @@ class StartViewController: BaseViewController {
             let create = UIStoryboard(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
             create.pop()
         }).disposed(by: disposeBag)
+        
+        loadButton.rx.tap.subscribe(onNext: {
+            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
+            self.present(main, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
     }
     
     override func refresh() {

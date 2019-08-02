@@ -71,9 +71,10 @@
 		D4F7672522F3CD0C00452DA7 /* CreateCompleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672422F3CD0C00452DA7 /* CreateCompleteViewController.swift */; };
 		D4F7672722F3E1A900452DA7 /* PopableTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672622F3E1A900452DA7 /* PopableTitleView.swift */; };
 		D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672822F3E46E00452DA7 /* PopableTitleView.xib */; };
-		D4F7672C22F41A6700452DA7 /* IXNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672B22F41A6700452DA7 /* IXNavigationController.swift */; };
 		D4F7672E22F41B3A00452DA7 /* IXNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */; };
 		D4F7673022F41B4900452DA7 /* IXNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */; };
+		D4F7673522F42D9600452DA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4F7673422F42D9600452DA7 /* Main.storyboard */; };
+		D4F7673722F42DA600452DA7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7673622F42DA600452DA7 /* MainViewController.swift */; };
 		DB4F6807B0B3AE955FDB8C51 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AF444A59B79C11441D2F46 /* Pods_iconex_ios.framework */; };
 /* End PBXBuildFile section */
 
@@ -249,9 +250,10 @@
 		D4F7672422F3CD0C00452DA7 /* CreateCompleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCompleteViewController.swift; sourceTree = "<group>"; };
 		D4F7672622F3E1A900452DA7 /* PopableTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopableTitleView.swift; sourceTree = "<group>"; };
 		D4F7672822F3E46E00452DA7 /* PopableTitleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopableTitleView.xib; sourceTree = "<group>"; };
-		D4F7672B22F41A6700452DA7 /* IXNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXNavigationController.swift; sourceTree = "<group>"; };
 		D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXNavigationView.swift; sourceTree = "<group>"; };
 		D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IXNavigationView.xib; sourceTree = "<group>"; };
+		D4F7673422F42D9600452DA7 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		D4F7673622F42DA600452DA7 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		D8AF444A59B79C11441D2F46 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -630,6 +632,7 @@
 		D4C542C922E995A10099358D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D4F7673322F42D8800452DA7 /* Main */,
 				D4A1E52922F2E5C300987D2C /* Create */,
 				D42FF8D622F182B200268C29 /* Passcode */,
 				D424B73A22EEE42000D9BD12 /* Intro */,
@@ -657,11 +660,19 @@
 		D4F7672A22F41A4A00452DA7 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D4F7672B22F41A6700452DA7 /* IXNavigationController.swift */,
-				D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */,
 				D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */,
+				D4F7672D22F41B3A00452DA7 /* IXNavigationView.swift */,
 			);
 			path = Navigation;
+			sourceTree = "<group>";
+		};
+		D4F7673322F42D8800452DA7 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D4F7673422F42D9600452DA7 /* Main.storyboard */,
+				D4F7673622F42DA600452DA7 /* MainViewController.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 		E21AF62972AB4E5ECFA13B86 /* Pods */ = {
@@ -751,6 +762,7 @@
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
 				D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */,
 				D427DCEA221117050098D852 /* Tokens.json in Resources */,
+				D4F7673522F42D9600452DA7 /* Main.storyboard in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
 				D424B73922EECA9A00D9BD12 /* IXInputBox.xib in Resources */,
 				D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */,
@@ -845,7 +857,6 @@
 				D424B73522EEB7F200D9BD12 /* IXTextField.swift in Sources */,
 				D4C542CB22E995AF0099358D /* BaseViewController.swift in Sources */,
 				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
-				D4F7672C22F41A6700452DA7 /* IXNavigationController.swift in Sources */,
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D446A07022E160540000D4CA /* String+Extension.swift in Sources */,
 				D4F7672722F3E1A900452DA7 /* PopableTitleView.swift in Sources */,
@@ -866,6 +877,7 @@
 				D4A1E52B22F2E5DC00987D2C /* CreateWalletViewController.swift in Sources */,
 				D4F657D222E5422200FA5A26 /* Models.swift in Sources */,
 				D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */,
+				D4F7673722F42DA600452DA7 /* MainViewController.swift in Sources */,
 				D468CF0222F062370019D7BB /* UILabel+Extension.swift in Sources */,
 				D446A07222E160AD0000D4CA /* UIColor+Extension.swift in Sources */,
 				D446A07422E162840000D4CA /* UIButton+Extension.swift in Sources */,
