@@ -1,11 +1,271 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PPf-Gz-Fd2">
+    <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <scenes/>
+    <customFonts key="customFonts">
+        <array key="NanumSquareRegular.ttf">
+            <string>NanumSquareR</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Passcode View Controller-->
+        <scene sceneID="CaA-d1-kZ5">
+            <objects>
+                <viewController storyboardIdentifier="PasscodeView" id="PPf-Gz-Fd2" customClass="PasscodeViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ApR-Yv-uxb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EPp-tH-DkG">
+                                <rect key="frame" x="0.0" y="44" width="375" height="324.66666666666669"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oBI-58-yad">
+                                        <rect key="frame" x="0.0" y="117.33333333333334" width="375" height="90"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tv9-Pz-b0e">
+                                                <rect key="frame" x="166.66666666666666" y="12" width="41.666666666666657" height="21"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="wtW-ni-MPq">
+                                                <rect key="frame" x="105.66666666666669" y="63" width="164" height="14"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9tv-DA-1X1">
+                                                        <rect key="frame" x="0.0" y="0.0" width="14" height="14"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="9tv-DA-1X1" secondAttribute="height" multiplier="1:1" id="EIW-uy-cFD"/>
+                                                            <constraint firstAttribute="height" constant="14" id="L1m-Bh-Rbk"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z8k-0G-4X2">
+                                                        <rect key="frame" x="29.999999999999986" y="0.0" width="14" height="14"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="z8k-0G-4X2" secondAttribute="height" multiplier="1:1" id="NBM-mw-AJx"/>
+                                                            <constraint firstAttribute="height" constant="14" id="dqO-Nh-Z3y"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g62-LR-uUV">
+                                                        <rect key="frame" x="59.999999999999986" y="0.0" width="14" height="14"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="g62-LR-uUV" secondAttribute="height" multiplier="1:1" id="bEN-cZ-cHl"/>
+                                                            <constraint firstAttribute="height" constant="14" id="pbT-cK-FAy"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vnr-1i-o1k">
+                                                        <rect key="frame" x="89.999999999999986" y="0.0" width="14" height="14"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="14" id="Yoh-Da-nmi"/>
+                                                            <constraint firstAttribute="width" secondItem="vnr-1i-o1k" secondAttribute="height" multiplier="1:1" id="duG-Lb-wEr"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RnY-Q0-ghn">
+                                                        <rect key="frame" x="119.99999999999999" y="0.0" width="14.000000000000014" height="14"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="14" id="NIe-ov-nFC"/>
+                                                            <constraint firstAttribute="width" secondItem="RnY-Q0-ghn" secondAttribute="height" multiplier="1:1" id="UyC-yM-itv"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ryj-Cm-zNE">
+                                                        <rect key="frame" x="150" y="0.0" width="14" height="14"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="14" id="W4R-FS-b6m"/>
+                                                            <constraint firstAttribute="width" secondItem="ryj-Cm-zNE" secondAttribute="height" multiplier="1:1" id="k8F-Vn-NWF"/>
+                                                        </constraints>
+                                                    </view>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="vnr-1i-o1k" firstAttribute="width" secondItem="vnr-1i-o1k" secondAttribute="height" multiplier="1:1" id="220-Ze-u2h"/>
+                                                    <constraint firstItem="ryj-Cm-zNE" firstAttribute="width" secondItem="ryj-Cm-zNE" secondAttribute="height" multiplier="1:1" id="3iF-4d-JcT"/>
+                                                    <constraint firstItem="RnY-Q0-ghn" firstAttribute="width" secondItem="RnY-Q0-ghn" secondAttribute="height" multiplier="1:1" id="99l-pc-I0c"/>
+                                                    <constraint firstItem="g62-LR-uUV" firstAttribute="width" secondItem="g62-LR-uUV" secondAttribute="height" multiplier="1:1" id="co3-cy-vEF"/>
+                                                    <constraint firstItem="z8k-0G-4X2" firstAttribute="width" secondItem="z8k-0G-4X2" secondAttribute="height" multiplier="1:1" id="k1i-P2-7SL"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="90" id="Vua-qF-Br3"/>
+                                            <constraint firstAttribute="bottom" secondItem="wtW-ni-MPq" secondAttribute="bottom" constant="13" id="eAH-LZ-1Il"/>
+                                            <constraint firstItem="wtW-ni-MPq" firstAttribute="centerX" secondItem="oBI-58-yad" secondAttribute="centerX" id="lbo-4f-XnQ"/>
+                                            <constraint firstItem="Tv9-Pz-b0e" firstAttribute="top" relation="lessThanOrEqual" secondItem="oBI-58-yad" secondAttribute="top" constant="12" id="psN-t0-vcK"/>
+                                            <constraint firstItem="wtW-ni-MPq" firstAttribute="top" secondItem="Tv9-Pz-b0e" secondAttribute="bottom" constant="30" id="qnw-QQ-TKr"/>
+                                            <constraint firstItem="Tv9-Pz-b0e" firstAttribute="centerX" secondItem="oBI-58-yad" secondAttribute="centerX" id="vdf-Ss-cpC"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="oBI-58-yad" firstAttribute="leading" secondItem="EPp-tH-DkG" secondAttribute="leading" id="6l0-de-kIP"/>
+                                    <constraint firstItem="oBI-58-yad" firstAttribute="centerY" secondItem="EPp-tH-DkG" secondAttribute="centerY" id="NaN-6j-kYF"/>
+                                    <constraint firstAttribute="trailing" secondItem="oBI-58-yad" secondAttribute="trailing" id="d9l-pG-iZd"/>
+                                </constraints>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="1fK-dn-Mz6">
+                                <rect key="frame" x="45" y="368.66666666666674" width="285" height="284.33333333333326"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="anK-uG-igr">
+                                        <rect key="frame" x="0.0" y="0.0" width="285" height="71.333333333333329"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IgE-fT-zTs">
+                                                <rect key="frame" x="0.0" y="0.0" width="71" height="71.333333333333329"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="IgE-fT-zTs" secondAttribute="height" multiplier="1:1" id="QGx-RH-oi3"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="1">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hc2-XA-IBF">
+                                                <rect key="frame" x="107" y="0.0" width="71" height="71.333333333333329"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="2">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DFV-D4-RIw">
+                                                <rect key="frame" x="214" y="0.0" width="71" height="71.333333333333329"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="3">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="cvR-65-eG1">
+                                        <rect key="frame" x="0.0" y="71.333333333333314" width="285" height="71"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I7f-tW-ZdZ">
+                                                <rect key="frame" x="0.0" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="4">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vVo-3D-udy">
+                                                <rect key="frame" x="107" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="5">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UFf-da-uU0">
+                                                <rect key="frame" x="214" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="6">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="W5U-aG-TJ2">
+                                        <rect key="frame" x="0.0" y="142.33333333333331" width="285" height="71"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eho-eP-ceI">
+                                                <rect key="frame" x="0.0" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="7">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2oh-xA-7Wi">
+                                                <rect key="frame" x="107" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="8">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="goO-xS-4dU">
+                                                <rect key="frame" x="214" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="9">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="etU-vm-xXM">
+                                        <rect key="frame" x="0.0" y="213.33333333333331" width="285" height="71"/>
+                                        <subviews>
+                                            <button opaque="NO" userInteractionEnabled="NO" tag="-1" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rON-cg-8q2">
+                                                <rect key="frame" x="0.0" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ed6-w0-Enu">
+                                                <rect key="frame" x="107" y="0.0" width="71" height="71"/>
+                                                <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="32"/>
+                                                <state key="normal" title="0">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                            </button>
+                                            <button opaque="NO" tag="99" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NUe-KE-2hV">
+                                                <rect key="frame" x="214" y="0.0" width="71" height="71"/>
+                                                <state key="normal" image="btnKeypadDelete"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6mb-qm-iEH">
+                                <rect key="frame" x="0.0" y="653" width="375" height="125"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GwJ-qh-1dh">
+                                        <rect key="frame" x="164.66666666666666" y="65" width="46" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="GwJ-qh-1dh" firstAttribute="centerX" secondItem="6mb-qm-iEH" secondAttribute="centerX" id="2Bx-5G-CmL"/>
+                                    <constraint firstAttribute="bottom" secondItem="GwJ-qh-1dh" secondAttribute="bottom" constant="30" id="dVs-EO-dfu"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="1fK-dn-Mz6" firstAttribute="height" secondItem="ApR-Yv-uxb" secondAttribute="height" multiplier="0.35" id="1k2-zl-Lol"/>
+                            <constraint firstItem="6mb-qm-iEH" firstAttribute="top" secondItem="1fK-dn-Mz6" secondAttribute="bottom" id="2Xa-SU-WeQ"/>
+                            <constraint firstItem="1fK-dn-Mz6" firstAttribute="top" secondItem="EPp-tH-DkG" secondAttribute="bottom" constant="5.6843418860808015e-14" id="3fg-wO-Gy6"/>
+                            <constraint firstItem="EPp-tH-DkG" firstAttribute="top" secondItem="Per-1k-nJi" secondAttribute="top" id="A01-Jk-igb"/>
+                            <constraint firstItem="EPp-tH-DkG" firstAttribute="width" secondItem="ApR-Yv-uxb" secondAttribute="width" id="QJE-oy-B2p"/>
+                            <constraint firstItem="EPp-tH-DkG" firstAttribute="height" secondItem="ApR-Yv-uxb" secondAttribute="height" multiplier="0.4" id="XEI-Xf-ffE"/>
+                            <constraint firstItem="6mb-qm-iEH" firstAttribute="leading" secondItem="Per-1k-nJi" secondAttribute="leading" id="Y6E-y6-Sdc"/>
+                            <constraint firstItem="1fK-dn-Mz6" firstAttribute="centerX" secondItem="Per-1k-nJi" secondAttribute="centerX" id="Yzb-Oc-TeI"/>
+                            <constraint firstItem="Per-1k-nJi" firstAttribute="trailing" secondItem="6mb-qm-iEH" secondAttribute="trailing" id="eAm-iR-Ccf"/>
+                            <constraint firstItem="EPp-tH-DkG" firstAttribute="leading" secondItem="Per-1k-nJi" secondAttribute="leading" id="gVG-Kn-GQm"/>
+                            <constraint firstItem="Per-1k-nJi" firstAttribute="bottom" secondItem="6mb-qm-iEH" secondAttribute="bottom" id="ubg-HY-TlA"/>
+                            <constraint firstItem="EPp-tH-DkG" firstAttribute="width" secondItem="ApR-Yv-uxb" secondAttribute="width" id="wod-Ht-OJR"/>
+                            <constraint firstItem="EPp-tH-DkG" firstAttribute="trailing" secondItem="Per-1k-nJi" secondAttribute="trailing" id="zCO-cg-CGD"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Per-1k-nJi"/>
+                    </view>
+                    <connections>
+                        <outlet property="bubbleStack" destination="wtW-ni-MPq" id="HDt-MH-Yje"/>
+                        <outlet property="forgotPasswordButton" destination="GwJ-qh-1dh" id="2ND-EH-ycg"/>
+                        <outlet property="numberStack" destination="1fK-dn-Mz6" id="vpq-mS-QIF"/>
+                        <outlet property="titleLabel" destination="Tv9-Pz-b0e" id="vpR-P4-b61"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PL5-nS-Xrn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-146.37681159420291" y="37.5"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="btnKeypadDelete" width="32" height="32"/>
+    </resources>
 </document>
