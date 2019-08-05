@@ -24,7 +24,8 @@ class MainViewController: BaseViewController {
         super.initializeComponents()
         
         testButton.rx.tap.subscribe(onNext: {
-            let main = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainView")
+            let main = UIStoryboard(name: "LoadWallet", bundle: nil).instantiateInitialViewController()!
+            
             self.navigationController?.pushViewController(main, animated: true)
         }).disposed(by: disposeBag)
     }
@@ -33,6 +34,11 @@ class MainViewController: BaseViewController {
         super.refresh()
         
         navBar.setTitle("타이틀")
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 }

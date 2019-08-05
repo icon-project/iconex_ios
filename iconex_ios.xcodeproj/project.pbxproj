@@ -65,6 +65,13 @@
 		D4F7673522F42D9600452DA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4F7673422F42D9600452DA7 /* Main.storyboard */; };
 		D4F7673722F42DA600452DA7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7673622F42DA600452DA7 /* MainViewController.swift */; };
 		D4F7673D22F43FAC00452DA7 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F7673C22F43FAC00452DA7 /* BaseViewController.swift */; };
+		D4FDCA6622F7C62200D6CDD4 /* LoadWallet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4FDCA6522F7C62200D6CDD4 /* LoadWallet.storyboard */; };
+		D4FDCA6822F7CAF500D6CDD4 /* LoadWalletViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FDCA6722F7CAF500D6CDD4 /* LoadWalletViewController.swift */; };
+		D4FDCA6A22F7FA2A00D6CDD4 /* LoadSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FDCA6922F7FA2A00D6CDD4 /* LoadSelectViewController.swift */; };
+		D4FDCA6C22F7FA3700D6CDD4 /* LoadFileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FDCA6B22F7FA3700D6CDD4 /* LoadFileViewController.swift */; };
+		D4FDCA6E22F7FA4800D6CDD4 /* LoadNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FDCA6D22F7FA4800D6CDD4 /* LoadNameViewController.swift */; };
+		D4FDCA7122F7FEBF00D6CDD4 /* SelectCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4FDCA7022F7FEBF00D6CDD4 /* SelectCardView.xib */; };
+		D4FDCA7322F7FFF400D6CDD4 /* SelectCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FDCA7222F7FFF400D6CDD4 /* SelectCardView.swift */; };
 		DB4F6807B0B3AE955FDB8C51 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8AF444A59B79C11441D2F46 /* Pods_iconex_ios.framework */; };
 /* End PBXBuildFile section */
 
@@ -153,6 +160,13 @@
 		D4F7673422F42D9600452DA7 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		D4F7673622F42DA600452DA7 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		D4F7673C22F43FAC00452DA7 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		D4FDCA6522F7C62200D6CDD4 /* LoadWallet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoadWallet.storyboard; sourceTree = "<group>"; };
+		D4FDCA6722F7CAF500D6CDD4 /* LoadWalletViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadWalletViewController.swift; sourceTree = "<group>"; };
+		D4FDCA6922F7FA2A00D6CDD4 /* LoadSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadSelectViewController.swift; sourceTree = "<group>"; };
+		D4FDCA6B22F7FA3700D6CDD4 /* LoadFileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadFileViewController.swift; sourceTree = "<group>"; };
+		D4FDCA6D22F7FA4800D6CDD4 /* LoadNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNameViewController.swift; sourceTree = "<group>"; };
+		D4FDCA7022F7FEBF00D6CDD4 /* SelectCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectCardView.xib; sourceTree = "<group>"; };
+		D4FDCA7222F7FFF400D6CDD4 /* SelectCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCardView.swift; sourceTree = "<group>"; };
 		D8AF444A59B79C11441D2F46 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -191,6 +205,7 @@
 		D424B72F22EEB73100D9BD12 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				D4FDCA6F22F7FC9000D6CDD4 /* SelectCard */,
 				D4F7672A22F41A4A00452DA7 /* Navigation */,
 				D468CEF722F03C730019D7BB /* Modal */,
 				D424B73322EEB7DE00D9BD12 /* IXTextField */,
@@ -418,11 +433,12 @@
 		D4C542C922E995A10099358D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				D4F7673C22F43FAC00452DA7 /* BaseViewController.swift */,
-				D4F7673322F42D8800452DA7 /* Main */,
+				D4FDCA6422F7BA3300D6CDD4 /* Load */,
 				D4A1E52922F2E5C300987D2C /* Create */,
+				D4F7673322F42D8800452DA7 /* Main */,
 				D42FF8D622F182B200268C29 /* Passcode */,
 				D424B73A22EEE42000D9BD12 /* Intro */,
+				D4F7673C22F43FAC00452DA7 /* BaseViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -459,6 +475,27 @@
 				D4F7673622F42DA600452DA7 /* MainViewController.swift */,
 			);
 			path = Main;
+			sourceTree = "<group>";
+		};
+		D4FDCA6422F7BA3300D6CDD4 /* Load */ = {
+			isa = PBXGroup;
+			children = (
+				D4FDCA6522F7C62200D6CDD4 /* LoadWallet.storyboard */,
+				D4FDCA6722F7CAF500D6CDD4 /* LoadWalletViewController.swift */,
+				D4FDCA6922F7FA2A00D6CDD4 /* LoadSelectViewController.swift */,
+				D4FDCA6B22F7FA3700D6CDD4 /* LoadFileViewController.swift */,
+				D4FDCA6D22F7FA4800D6CDD4 /* LoadNameViewController.swift */,
+			);
+			path = Load;
+			sourceTree = "<group>";
+		};
+		D4FDCA6F22F7FC9000D6CDD4 /* SelectCard */ = {
+			isa = PBXGroup;
+			children = (
+				D4FDCA7022F7FEBF00D6CDD4 /* SelectCardView.xib */,
+				D4FDCA7222F7FFF400D6CDD4 /* SelectCardView.swift */,
+			);
+			path = SelectCard;
 			sourceTree = "<group>";
 		};
 		E21AF62972AB4E5ECFA13B86 /* Pods */ = {
@@ -547,10 +584,12 @@
 				D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */,
 				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				D4F7673522F42D9600452DA7 /* Main.storyboard in Resources */,
+				D4FDCA6622F7C62200D6CDD4 /* LoadWallet.storyboard in Resources */,
 				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
 				D424B73922EECA9A00D9BD12 /* IXInputBox.xib in Resources */,
 				D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */,
 				D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */,
+				D4FDCA7122F7FEBF00D6CDD4 /* SelectCardView.xib in Resources */,
 				D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */,
 				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
 				D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */,
@@ -637,6 +676,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D424B73522EEB7F200D9BD12 /* IXTextField.swift in Sources */,
+				D4FDCA6822F7CAF500D6CDD4 /* LoadWalletViewController.swift in Sources */,
 				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D446A07022E160540000D4CA /* String+Extension.swift in Sources */,
@@ -658,6 +698,7 @@
 				D4F7672322F3CCFF00452DA7 /* CreateBackupViewController.swift in Sources */,
 				D4A1E52B22F2E5DC00987D2C /* CreateWalletViewController.swift in Sources */,
 				D4F657D222E5422200FA5A26 /* Models.swift in Sources */,
+				D4FDCA6E22F7FA4800D6CDD4 /* LoadNameViewController.swift in Sources */,
 				D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */,
 				D4F7673722F42DA600452DA7 /* MainViewController.swift in Sources */,
 				D468CF0222F062370019D7BB /* UILabel+Extension.swift in Sources */,
@@ -667,6 +708,7 @@
 				D4930131213E4E6500F83D26 /* Tracker.swift in Sources */,
 				D4BE74C92040046C00638E2E /* Util.swift in Sources */,
 				D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */,
+				D4FDCA7322F7FFF400D6CDD4 /* SelectCardView.swift in Sources */,
 				D4719B22200F2796005F6BDA /* logger.swift in Sources */,
 				D4F7671F22F3CCBE00452DA7 /* CreateSelectViewController.swift in Sources */,
 				D43DB33822D6DB480029FFF0 /* Managers.swift in Sources */,
@@ -677,7 +719,9 @@
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
 				D4143E042133BE79004212A9 /* Errors.swift in Sources */,
 				D4944E71200C7FF0002D1870 /* extensions.swift in Sources */,
+				D4FDCA6A22F7FA2A00D6CDD4 /* LoadSelectViewController.swift in Sources */,
 				D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */,
+				D4FDCA6C22F7FA3700D6CDD4 /* LoadFileViewController.swift in Sources */,
 				D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */,
 				D468CEF622F0380F0019D7BB /* PermissionViewController.swift in Sources */,
 			);

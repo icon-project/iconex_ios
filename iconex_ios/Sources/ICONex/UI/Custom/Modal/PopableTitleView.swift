@@ -53,4 +53,8 @@ class PopableTitleView: UIView {
     func set(title: String) {
         titleLabel.size18(text: title, weight: .medium, align: .center)
     }
+    
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIScreen.main.bounds.width, height: 60)
+    }
 }

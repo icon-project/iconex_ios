@@ -37,8 +37,8 @@ class StartViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         loadButton.rx.tap.subscribe(onNext: {
-            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
-            self.present(main, animated: true, completion: nil)
+            let load = UIStoryboard(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
+            load.pop()
         }).disposed(by: disposeBag)
     }
     

@@ -1,8 +1,8 @@
 //
-//  CreateWalletViewController.swift
+//  LoadWalletViewController.swift
 //  iconex_ios
 //
-//  Created by a1ahn on 01/08/2019.
+//  Created by a1ahn on 05/08/2019.
 //  Copyright © 2019 ICON Foundation. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class CreateWalletViewController: PopableViewController {
+class LoadWalletViewController: PopableViewController {
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
     
@@ -24,7 +24,7 @@ class CreateWalletViewController: PopableViewController {
             case 0:
                 leftTitle = "Common.Cancel".localized
                 
-            case 3:
+            case 2:
                 rightTitle = "Common.Complete".localized
                 
             default:
@@ -44,7 +44,6 @@ class CreateWalletViewController: PopableViewController {
     
     override func initializeComponents() {
         super.initializeComponents()
-        scrollIndex = 0
         
         stepScrollView.rx.didEndScrollingAnimation.subscribe(onNext: { [unowned self] in
             self.scrollIndex = (Int)(self.stepScrollView.contentOffset.x / self.view.frame.width)
@@ -64,7 +63,7 @@ class CreateWalletViewController: PopableViewController {
         
         rightButton.rx.tap.subscribe(onNext: { [unowned self] in
             switch self.scrollIndex {
-            case 3:
+            case 2:
                 self.dismiss(animated: true, completion: nil)
                 
             default:
@@ -73,19 +72,18 @@ class CreateWalletViewController: PopableViewController {
                 self.stepScrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
             }
         }).disposed(by: disposeBag)
+        scrollIndex = 0
     }
     
     override func refresh() {
         super.refresh()
-        
-        titleContainer.set(title: "Wallet.Create".localized)
+        titleContainer.set(title: "LoadWallet.Title".localized)
         titleContainer.actionHandler = {
             self.dismiss(animated: true, completion: nil)
         }
         
         leftButton.round02()
         rightButton.lightMintRounded()
-        
         
     }
 }
