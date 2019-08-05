@@ -241,14 +241,12 @@
                             <constraint firstItem="6mb-qm-iEH" firstAttribute="top" secondItem="1fK-dn-Mz6" secondAttribute="bottom" id="2Xa-SU-WeQ"/>
                             <constraint firstItem="1fK-dn-Mz6" firstAttribute="top" secondItem="EPp-tH-DkG" secondAttribute="bottom" constant="5.6843418860808015e-14" id="3fg-wO-Gy6"/>
                             <constraint firstItem="EPp-tH-DkG" firstAttribute="top" secondItem="Per-1k-nJi" secondAttribute="top" id="A01-Jk-igb"/>
-                            <constraint firstItem="EPp-tH-DkG" firstAttribute="width" secondItem="ApR-Yv-uxb" secondAttribute="width" id="QJE-oy-B2p"/>
                             <constraint firstItem="EPp-tH-DkG" firstAttribute="height" secondItem="ApR-Yv-uxb" secondAttribute="height" multiplier="0.4" id="XEI-Xf-ffE"/>
                             <constraint firstItem="6mb-qm-iEH" firstAttribute="leading" secondItem="Per-1k-nJi" secondAttribute="leading" id="Y6E-y6-Sdc"/>
                             <constraint firstItem="1fK-dn-Mz6" firstAttribute="centerX" secondItem="Per-1k-nJi" secondAttribute="centerX" id="Yzb-Oc-TeI"/>
                             <constraint firstItem="Per-1k-nJi" firstAttribute="trailing" secondItem="6mb-qm-iEH" secondAttribute="trailing" id="eAm-iR-Ccf"/>
                             <constraint firstItem="EPp-tH-DkG" firstAttribute="leading" secondItem="Per-1k-nJi" secondAttribute="leading" id="gVG-Kn-GQm"/>
                             <constraint firstItem="Per-1k-nJi" firstAttribute="bottom" secondItem="6mb-qm-iEH" secondAttribute="bottom" id="ubg-HY-TlA"/>
-                            <constraint firstItem="EPp-tH-DkG" firstAttribute="width" secondItem="ApR-Yv-uxb" secondAttribute="width" id="wod-Ht-OJR"/>
                             <constraint firstItem="EPp-tH-DkG" firstAttribute="trailing" secondItem="Per-1k-nJi" secondAttribute="trailing" id="zCO-cg-CGD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Per-1k-nJi"/>

@@ -88,13 +88,11 @@ class PasscodeViewController: BaseViewController {
                     
                 btn.rx.tap.asControlEvent()
                     .subscribe { _ in
-                        DispatchQueue.main.async {
-                            UIView.animate(withDuration: 0.05, delay: 0.0, options: .curveEaseInOut, animations: {
-                                btn.backgroundColor = .init(white: 1, alpha: 0.2)
-                            }, completion: { _ in
-                                btn.backgroundColor = .clear
-                            })
-                        }
+                        UIView.animate(withDuration: 0.05, delay: 0.0, options: .curveEaseInOut, animations: {
+                            btn.backgroundColor = .init(white: 1, alpha: 0.2)
+                        }, completion: { _ in
+                            btn.backgroundColor = .clear
+                        })
                         
                         if btn.tag == 99 && self.tmpPassword.count > 0 {
                             self.clearBubble(self.tmpPassword.count-1)
@@ -324,8 +322,8 @@ class PasscodeViewController: BaseViewController {
             case .check where status == .initial: return "Passcode.Code.Enter".localized
             case .check where status == .invalid: return "Passcode.Code.Retry".localized
                 
-            case .activate where status == .title: return "LockScreen.Setting.Title".localized
             case .activate where status == .initial: return "LockScreen.Setting.Passcode.Header".localized
+            case .activate where status == .title: return "LockScreen.Setting.Title".localized
             case .activate where status == .renewCheck: return "LockScreen.Setting.Passcode.Header_2".localized
             case .activate where status == .renewFail: return "LockScreen.Setting.Passcode.Change.Error".localized
                 
