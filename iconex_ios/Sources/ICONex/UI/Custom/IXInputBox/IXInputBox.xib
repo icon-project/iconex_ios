@@ -14,6 +14,7 @@
             <connections>
                 <outlet property="borderView" destination="jnz-bI-JvY" id="SvV-fx-Mrm"/>
                 <outlet property="coverView" destination="agb-F4-BIf" id="wg6-Oa-dfH"/>
+                <outlet property="forgotPasswordButton" destination="ojY-Lm-UTd" id="o1s-0D-V4X"/>
                 <outlet property="placeholderLabel" destination="m2Z-5I-BRJ" id="mFn-dk-Jxr"/>
                 <outlet property="subtitleLabel" destination="leb-0K-q4E" id="nok-aN-ce0"/>
                 <outlet property="textField" destination="Asu-7G-ctF" id="23q-WB-U6F"/>
@@ -32,7 +33,6 @@
                             <subviews>
                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Asu-7G-ctF" customClass="IXTextField" customModule="iconex_ios" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="388" height="48"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <nil key="textColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
@@ -60,11 +60,16 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="leb-0K-q4E">
-                    <rect key="frame" x="14" y="63" width="386" height="15"/>
+                    <rect key="frame" x="14" y="63" width="31" height="15"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ojY-Lm-UTd">
+                    <rect key="frame" x="367" y="63" width="35" height="15"/>
+                    <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="12"/>
+                    <state key="normal" title="Button"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -74,14 +79,17 @@
                 <constraint firstItem="m2Z-5I-BRJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="12" id="9jq-66-Iiq"/>
                 <constraint firstAttribute="trailing" secondItem="jnz-bI-JvY" secondAttribute="trailing" id="CeQ-hW-QVc"/>
                 <constraint firstItem="jnz-bI-JvY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="MCZ-oF-7q3"/>
+                <constraint firstItem="ojY-Lm-UTd" firstAttribute="top" secondItem="leb-0K-q4E" secondAttribute="top" id="MfJ-zM-Wwg"/>
+                <constraint firstAttribute="bottom" secondItem="ojY-Lm-UTd" secondAttribute="bottom" id="NSS-FO-xBx"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="m2Z-5I-BRJ" secondAttribute="trailing" constant="12" id="OI2-0J-1FC"/>
-                <constraint firstAttribute="trailing" secondItem="leb-0K-q4E" secondAttribute="trailing" constant="14" id="V09-hk-lIn"/>
                 <constraint firstItem="leb-0K-q4E" firstAttribute="top" secondItem="jnz-bI-JvY" secondAttribute="bottom" constant="5" id="YaF-0a-WgC"/>
                 <constraint firstItem="agb-F4-BIf" firstAttribute="trailing" secondItem="m2Z-5I-BRJ" secondAttribute="trailing" constant="2" id="av9-U7-mqa"/>
                 <constraint firstItem="agb-F4-BIf" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="2" id="bJx-cP-n4O"/>
                 <constraint firstItem="m2Z-5I-BRJ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="2" id="cs0-DV-nKS"/>
+                <constraint firstItem="ojY-Lm-UTd" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="leb-0K-q4E" secondAttribute="trailing" constant="10" id="gGc-uV-96l"/>
                 <constraint firstItem="agb-F4-BIf" firstAttribute="leading" secondItem="m2Z-5I-BRJ" secondAttribute="leading" constant="-2" id="hlI-6x-xlf"/>
                 <constraint firstItem="leb-0K-q4E" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="14" id="rS4-8X-eux"/>
+                <constraint firstItem="ojY-Lm-UTd" firstAttribute="trailing" secondItem="Asu-7G-ctF" secondAttribute="trailing" id="sbb-nA-XDq"/>
                 <constraint firstItem="jnz-bI-JvY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="u9T-qv-G7r"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>

@@ -30,11 +30,13 @@ enum IXInputBoxType {
 @IBDesignable class IXInputBox: UIView {
     private var contentView: UIView?
     
-    @IBOutlet private var textField: IXTextField!
+    @IBOutlet var textField: IXTextField!
     @IBOutlet private var borderView: UIView!
     @IBOutlet private weak var coverView: UIView!
     @IBOutlet private var subtitleLabel: UILabel!
     @IBOutlet private var placeholderLabel: UILabel!
+    
+    @IBOutlet weak var forgotPasswordButton: UIButton!
     
     private let disposeBag = DisposeBag()
     
@@ -85,6 +87,10 @@ enum IXInputBoxType {
             case .createPassword, .secure:
                 textField.isSecureTextEntry = true
                 textField.canPaste = false
+                forgotPasswordButton.isHidden = false
+                forgotPasswordButton.setTitle("비밀번호를 잊으셨나요?", for: .normal)
+                forgotPasswordButton.setTitleColor(.gray128, for: .normal)
+//                forgotPasswordButton.titleLabel?.size12(text: "Forgot password", color: .gray128, weight: .light, align: .left)
                 
             case .decimal:
                 textField.keyboardType = .decimalPad
@@ -165,6 +171,7 @@ enum IXInputBoxType {
         subtitleLabel.text = ""
         subtitleLabel.textColor = .error1
         borderView.corner(4)
+        forgotPasswordButton.isHidden = true
     }
     
     func set(state: IXInputBoxState = .normal) {

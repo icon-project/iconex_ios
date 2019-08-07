@@ -63,6 +63,10 @@ extension UIColor {
     static let mint3 = UIColor(182, 235, 242)
     /// (245, 254, 255)
     static let mint4 = UIColor(245, 254, 255)
+    /// (0, 135, 153)
+    static let mint5 = UIColor(0, 135, 153)
+    /// (182, 235, 242)
+    static let mint6 = UIColor(182, 235, 242)
     
     static let gray77 = UIColor(77, 77, 77)
     static let gray128 = UIColor(128, 128, 128)
