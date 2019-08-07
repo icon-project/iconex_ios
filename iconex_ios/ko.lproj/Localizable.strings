@@ -71,6 +71,9 @@
 "CreateSelect.Instruction1" = "・ 지갑 만들기 완료 시 선택한 코인의 지갑이 생성됩니다.";
 "CreateSelect.Instruction2" = "・ 지갑 생성 후, 해당 코인 기반의 토큰을 추가할 수 있습니다.";
 
+// MARK: AlertCustomView
+"Alert.Common.StepLimit" = "적정 Step 한도 / 가격 (ICX)";
+"Alert.Common.EstimatedFee" = "예상 최대 수수료 (ICX)";
 
 // MARK: LoadWalletViewController
 "LoadWallet.Title" = "지갑 가져오기";
@@ -82,7 +85,38 @@
 "LoadSelect.PrivateKey" = "개인 키";
 "LoadSelect.Desc1" = "・ 지갑 백업 파일(Keystore)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 비밀번호가 설정되어 있습니다.";
 "LoadSelect.Desc2" = "・ 개인 키(Private Key)는 지갑의 고유 정보이며, 비밀번호가 설정되어 있지 않습니다.";
+"Alert.Iscore.Header" = "I-Score Claim";
+"Alert.Iscore.Current" = "현재 I-Score (ISC)";
+"Alert.Iscore.Value" = "받을 수 있는 수량 (ICX)";
 
+"Alert.Address.Header" = "주소록 추가";
+"Alert.Address.Placeholder.Name" = "주소록 이름 입력 (8자)";
+"Alert.Address.Placeholder.ETH" = "ETH 주소 입력";
+"Alert.Address.Placeholder.ICX" = "ICX 주소 입력";
+
+"Alert.TxHash.Header" = "Tx Hash";
+"Alert.TxHash.Tracker" = "ICON Tracker로 이동";
+
+"Alert.Stake.Header" = "Stake";
+"Alert.Stake.Time" = "소요 시간";
+
+"Alert.UnStake.Header" = "UnStake";
+
+"Alert.UnStakeCancel.Header" = "UnStake 취소";
+"Alert.UnStakeCancel.Immediate" = "즉시 취소";
+"Alert.UnStakeCancel.Infomation" = "Unstake 취소 수수료가 발생합니다.\n취소하시겠습니까?";
+"Alert.UnStakeCancel.Done" = "Unstake 취소 실행이 완료되었습니다.";
+
+"Alert.Send.Header" = "전송";
+"Alert.Send.Value.ICX" = "전송 수량 (ICX)";
+"Alert.Send.Value.ETH" = "전송 수량 (ETH)";
+"Alert.Send.Address" = "받는 주소";
+
+"Alert.Password.Header" = "지갑 비밀번호 입력";
+"Alert.Password.Placeholder" = "비밀번호 입력";
+
+"Alert.WalletName.Header" = "지갑 이름 변경";
+"Alert.WalletName.Placeholder" = "지갑 이름";
 
 
 
@@ -468,7 +502,9 @@
 "Error.Letters&NumbersOnly" = "영문 또는 숫자로 입력해주세요.";
 "Error.Address.ETH.Invalid" = "올바른 ETH 주소가 아닙니다.";
 "Error.Address.ICX.Invalid" = "올바른 ICX 주소가 아닙니다.";
-"Error.Address.IRC.Invalid" = "올바른 형식의 주소가 아닙니다.";
+"Error.Address.ETH.Duplicated" = "같은 ETH 주소가 이미 존재 합니다.";
+"Error.Address.ICX.Duplicated" = "같은 ICX 주소가 이미 존재 합니다.";
+"Error.Address.Invalid" = "올바른 형식의 주소가 아닙니다.";
 "Error.Transfer.AboveMax" = "보유 수량보다 적게 입력해주세요.";
 "Error.Transfer.BelowZero" = "0 보다 큰 숫자를 입력해주세요.";
 "Error.Transfer.InsufficientFee" = "송금 수수료가 부족합니다.";
