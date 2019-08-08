@@ -1,19 +1,19 @@
 {
   "images" : [
     {
+      "filename" : "imgKeystoreNor.png",
       "idiom" : "universal",
-      "filename" : "icKeystorefileLoad.png",
       "scale" : "1x"
     },
     {
       "scale" : "2x",
       "idiom" : "universal",
-      "filename" : "icKeystorefileLoad@2x.png"
+      "filename" : "imgKeystoreNor@2x.png"
     },
     {
-      "idiom" : "universal",
+      "filename" : "imgKeystoreNor@3x.png",
       "scale" : "3x",
-      "filename" : "icKeystorefileLoad@3x.png"
+      "idiom" : "universal"
     }
   ],
   "info" : {

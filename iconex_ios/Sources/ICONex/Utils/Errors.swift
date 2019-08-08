@@ -29,7 +29,7 @@ enum WalletError: Error, CustomDebugStringConvertible {
     case noToken(String)
     
     var debugDescription: String {
-        return "Fata error. WalletError(\(self))"
+        return "Fatal error. WalletError(\(self))"
     }
 }
 

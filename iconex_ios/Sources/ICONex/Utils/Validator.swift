@@ -69,4 +69,47 @@ struct Validator {
         let result = NSPredicate(format: "SELF MATCHES %@", pattern)
         return result.evaluate(with: tempAddress)
     }
+    
+    static func validateKeystore(urlOfData: URL) throws -> ICONKeystore {
+        let content = try Data(contentsOf: urlOfData)
+        Log("content - \(String(describing: String(data: content, encoding: .utf8)))")
+        let decoder = JSONDecoder()
+        
+        let keystore = try decoder.decode(ICONKeystore.self, from: content)
+        
+        let wallet = ICXWallet(name: "temp", keystore: keystore)
+        guard wallet.canSave(address: keystore.address) else {
+            throw CommonError.duplicateAddress
+        }
+        
+        return keystore
+    }
+    
+    static func checkWalletBundle(url:URL) -> [[String: WalletBundle]]? {
+        do {
+            let content = try Data(contentsOf: url)
+            
+            let decoder = JSONDecoder()
+            let list = try decoder.decode([[String: WalletBundle]].self, from: content)
+            
+            return list
+        } catch {
+            return nil
+        }
+    }
+    
+    static func validateBundlePassword(bundle newBundle:[[String: WalletBundle]], password: String) -> Bool {
+        let item = newBundle.first!
+        let address = item.keys.first!
+        let bundle = item[address]!
+        let data = bundle.priv.data(using: .utf8)!
+        
+        if bundle.type == "icx" {
+            guard (ICXWallet(name: "temp", rawData: data) != nil) else { return false }
+        } else if bundle.type == "eth" {
+            guard (ETHWallet(name: "temp", rawData: data) != nil) else { return false }
+        }
+        
+        return true
+    }
 }

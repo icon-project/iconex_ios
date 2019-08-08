@@ -3,17 +3,17 @@
     {
       "scale" : "1x",
       "idiom" : "universal",
-      "filename" : "icInputDropEnabled.png"
+      "filename" : "imgLogoEthereumSel.png"
     },
     {
       "scale" : "2x",
-      "idiom" : "universal",
-      "filename" : "icInputDropEnabled@2x.png"
+      "filename" : "imgLogoEthereumSel@2x.png",
+      "idiom" : "universal"
     },
     {
-      "filename" : "icInputDropEnabled@3x.png",
+      "scale" : "3x",
       "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "imgLogoEthereumSel@3x.png"
     }
   ],
   "info" : {

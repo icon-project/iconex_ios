@@ -15,6 +15,8 @@ class LoadSelectViewController: BaseViewController {
     @IBOutlet weak var loadSelectDesc1: UILabel!
     @IBOutlet weak var loadSelectDesc2: UILabel!
     
+    var delegate: loadWalletSequence! = nil
+    
     private var _isKeystore: Bool = true {
         willSet {
             switch newValue {
@@ -26,6 +28,10 @@ class LoadSelectViewController: BaseViewController {
                 keystoreCard.mode = .normal
                 privateCard.mode = .selected
             }
+            
+            if let dg = delegate {
+                dg.set(mode: (newValue ? .loadFile : .loadPK))
+            }
         }
     }
     
@@ -33,10 +39,25 @@ class LoadSelectViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        _isKeystore = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
     }
     
     override func initializeComponents() {
         super.initializeComponents()
+        
+        loadSelectHeader.size16(text: "LoadSelect.Header".localized, color: .gray77, weight: .medium, align: .center)
+        keystoreCard.setTitle(main: "LoadSelect.Keystore".localized, sub: nil)
+        keystoreCard.setImage(normal: #imageLiteral(resourceName: "imgKeystore"))
+        privateCard.setTitle(main: "LoadSelect.PrivateKey".localized, sub: nil)
+        privateCard.setImage(normal: #imageLiteral(resourceName: "imgPrivatekey"))
+        loadSelectDesc1.size12(text: "LoadSelect.Desc1".localized, color: .mint2, weight: .light, align: .left)
+        loadSelectDesc2.size12(text: "LoadSelect.Desc2".localized, color: .mint2, weight: .light, align: .left)
         
         keystoreCard.button.rx.tap.subscribe(onNext: { [unowned self] in
             self._isKeystore = true
@@ -48,14 +69,5 @@ class LoadSelectViewController: BaseViewController {
     
     override func refresh() {
         super.refresh()
-        loadSelectHeader.size16(text: "LoadSelect.Header".localized, color: .gray77, weight: .medium, align: .center)
-        keystoreCard.setTitle(main: "LoadSelect.Keystore".localized, sub: nil)
-        keystoreCard.setImage(normal: #imageLiteral(resourceName: "imgKeystore"))
-        privateCard.setTitle(main: "LoadSelect.PrivateKey".localized, sub: nil)
-        privateCard.setImage(normal: #imageLiteral(resourceName: "imgPrivatekey"))
-        loadSelectDesc1.size12(text: "LoadSelect.Desc1".localized, color: .mint2, weight: .light, align: .left)
-        loadSelectDesc2.size12(text: "LoadSelect.Desc2".localized, color: .mint2, weight: .light, align: .left)
-        
-        _isKeystore = true
     }
 }

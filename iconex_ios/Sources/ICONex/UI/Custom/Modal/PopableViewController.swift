@@ -26,13 +26,19 @@ class PopableViewController: BaseViewController {
         lineBar.leadingAnchor.constraint(equalTo: actionContainer.leadingAnchor).isActive = true
         lineBar.trailingAnchor.constraint(equalTo: actionContainer.trailingAnchor).isActive = true
         lineBar.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        panModalSetNeedsLayoutUpdate()
         showBottom()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIView.animate(withDuration: 0.4) {
+            self.actionContainer.alpha = 0.0
+        }
     }
     
     func showBottom() {
@@ -68,7 +74,7 @@ extension PopableViewController: PanModalPresentable {
     }
     
     var topOffset: CGFloat {
-        return UIApplication.shared.statusBarFrame.height
+        return app.window!.safeAreaInsets.top
     }
     
     var backgroundAlpha: CGFloat {

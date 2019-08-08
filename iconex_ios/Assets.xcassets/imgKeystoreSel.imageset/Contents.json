@@ -1,17 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "imgKeystoreSel.png",
       "scale" : "1x",
-      "idiom" : "universal",
-      "filename" : "icInputDropEnabled.png"
+      "idiom" : "universal"
     },
     {
+      "filename" : "imgKeystoreSel@2x.png",
       "scale" : "2x",
-      "idiom" : "universal",
-      "filename" : "icInputDropEnabled@2x.png"
+      "idiom" : "universal"
     },
     {
-      "filename" : "icInputDropEnabled@3x.png",
+      "filename" : "imgKeystoreSel@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

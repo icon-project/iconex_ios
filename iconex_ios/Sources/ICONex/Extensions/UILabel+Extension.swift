@@ -39,7 +39,7 @@ extension UILabel {
             font = UIFont.systemFont(ofSize: size, weight: weight)
         }
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = height - size
+        paragraphStyle.lineSpacing = height - size - (font.lineHeight - font.pointSize)
         paragraphStyle.alignment = align
         
         let attributedString = NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: color, .paragraphStyle: paragraphStyle])

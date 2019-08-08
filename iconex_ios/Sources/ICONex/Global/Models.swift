@@ -105,6 +105,10 @@ struct Token {
 
 
 // MARK: Export Bundle
+
+/// [[String: WalletBundle]]
+typealias WalletBundleList = [[String: WalletBundle]]
+
 struct WalletBundle: Codable {
     var name: String
     var type: String
