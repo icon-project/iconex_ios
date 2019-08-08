@@ -91,7 +91,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0S1-np-HmF">
-                                    <rect key="frame" x="262.5" y="103.5" width="7.5" height="14.5"/>
+                                    <rect key="frame" x="259.5" y="104" width="7.5" height="13.5"/>
                                     <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="12"/>
                                     <color key="textColor" red="0.70196078431372544" green="0.70196078431372544" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -99,7 +99,7 @@
                             </subviews>
                             <constraints>
                                 <constraint firstAttribute="height" constant="148" id="0Q3-91-Ghc"/>
-                                <constraint firstItem="2LG-rB-FYV" firstAttribute="leading" secondItem="0S1-np-HmF" secondAttribute="trailing" id="1UH-Wm-ZGa"/>
+                                <constraint firstItem="2LG-rB-FYV" firstAttribute="leading" secondItem="0S1-np-HmF" secondAttribute="trailing" constant="3" id="1UH-Wm-ZGa"/>
                                 <constraint firstItem="7rV-SK-tA5" firstAttribute="trailing" secondItem="xXu-U3-oFK" secondAttribute="trailing" id="2di-Fz-K7y"/>
                                 <constraint firstItem="oM9-VH-Y0s" firstAttribute="top" secondItem="Gaj-YR-62F" secondAttribute="bottom" constant="13" id="93M-0Y-6PD"/>
                                 <constraint firstItem="oM9-VH-Y0s" firstAttribute="leading" secondItem="HdQ-uk-yP4" secondAttribute="leading" id="EOy-CA-8NB"/>
@@ -121,7 +121,6 @@
                                 <constraint firstAttribute="trailing" secondItem="Rat-Vr-pMv" secondAttribute="trailing" id="hod-ms-h0c"/>
                                 <constraint firstItem="xXu-U3-oFK" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Gaj-YR-62F" secondAttribute="trailing" constant="10" id="qDJ-lB-7ro"/>
                                 <constraint firstItem="PEy-Ip-2CP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="HdQ-uk-yP4" secondAttribute="trailing" constant="10" id="r28-XW-fq5"/>
-                                <constraint firstItem="0S1-np-HmF" firstAttribute="top" secondItem="2LG-rB-FYV" secondAttribute="top" id="sAL-kk-ABG"/>
                                 <constraint firstItem="HdQ-uk-yP4" firstAttribute="top" secondItem="UQI-Jz-fnL" secondAttribute="top" constant="30" id="wyk-8E-HF6"/>
                             </constraints>
                         </view>

@@ -9,6 +9,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="NanumSquareRegular.ttf">
+            <string>NanumSquareR</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SendAlertView" customModule="iconex_ios" customModuleProvider="target">
             <connections>
@@ -115,6 +120,12 @@
                                 <constraint firstAttribute="height" constant="0.5" id="QTp-YD-BRg"/>
                             </constraints>
                         </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A9U-eG-UVi">
+                            <rect key="frame" x="259" y="75" width="8" height="14"/>
+                            <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="12"/>
+                            <color key="textColor" red="0.70196078431372544" green="0.70196078431372544" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
@@ -133,7 +144,9 @@
                         <constraint firstItem="8Cb-tC-ywL" firstAttribute="top" secondItem="Oaz-bB-2tS" secondAttribute="bottom" constant="4" id="XDA-mc-lpp"/>
                         <constraint firstItem="UiX-iZ-qtq" firstAttribute="top" secondItem="zDp-4A-Cwz" secondAttribute="bottom" constant="11" id="bhJ-aE-s6w"/>
                         <constraint firstItem="UiX-iZ-qtq" firstAttribute="leading" secondItem="lgE-IJ-M0h" secondAttribute="leading" id="bpL-9F-MGy"/>
+                        <constraint firstItem="8Cb-tC-ywL" firstAttribute="leading" secondItem="A9U-eG-UVi" secondAttribute="trailing" constant="3" id="dee-ym-KKH"/>
                         <constraint firstItem="sYR-Pc-9J9" firstAttribute="leading" secondItem="lgE-IJ-M0h" secondAttribute="leading" id="g91-lV-dAf"/>
+                        <constraint firstItem="A9U-eG-UVi" firstAttribute="centerY" secondItem="8Cb-tC-ywL" secondAttribute="centerY" id="joA-vo-Aub"/>
                         <constraint firstItem="lgE-IJ-M0h" firstAttribute="leading" secondItem="6j9-M8-Bqu" secondAttribute="leading" constant="30" id="kMj-Jf-xRa"/>
                         <constraint firstItem="Oaz-bB-2tS" firstAttribute="trailing" secondItem="uZz-w6-WgD" secondAttribute="trailing" id="mOw-6P-ZeJ"/>
                         <constraint firstItem="sYR-Pc-9J9" firstAttribute="top" secondItem="lgE-IJ-M0h" secondAttribute="bottom" constant="11" id="nVT-H1-aWv"/>
