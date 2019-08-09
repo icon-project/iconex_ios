@@ -24,16 +24,20 @@ class WalletLoader {
         return .privateKey
     }
     
-    private var keystore: ICONKeystore?
-    private var bundle: WalletBundleList?
-    private var privateKeyHexString: String?
+    var keystore: ICONKeystore?
+    var password: String?
+    var bundle: WalletBundleList?
+    var privateKeyHexString: String?
+    var name: String?
     
-    init(keystore: ICONKeystore) {
+    init(keystore: ICONKeystore, password: String) {
         self.keystore = keystore
+        self.password = password
     }
     
-    init(bundle: WalletBundleList) {
+    init(bundle: WalletBundleList, password: String) {
         self.bundle = bundle
+        self.password = password
     }
     
     init(privateKey: String) {

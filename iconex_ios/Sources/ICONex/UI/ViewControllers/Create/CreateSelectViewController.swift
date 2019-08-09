@@ -55,9 +55,9 @@ class CreateSelectViewController: BaseViewController {
         bottomDescLabel1.size12(text: "CreateSelect.Instruction1".localized, color: .mint1, weight: .light)
         bottomDescLabel2.size12(text: "CreateSelect.Instruction2".localized, color: .mint1, weight: .light)
         
-        icxCard.setImage(normal: #imageLiteral(resourceName: "imgLogoIcon"))
+        icxCard.setImage(normal: #imageLiteral(resourceName: "imgLogoIconSel"))
         icxCard.setTitle(main: "ICX Wallet", sub: "ICON")
-        ethCard.setImage(normal: #imageLiteral(resourceName: "imgLogoEthereum"))
+        ethCard.setImage(normal: #imageLiteral(resourceName: "imgLogoEthereumSel"))
         ethCard.setTitle(main: "ETH Wallet", sub: "Ethereum")
         
         _isIcx = true

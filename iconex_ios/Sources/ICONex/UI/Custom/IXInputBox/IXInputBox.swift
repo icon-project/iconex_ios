@@ -83,6 +83,7 @@ enum IXInputBoxType {
             case .normal:
                 textField.keyboardType = .default
                 textField.canPaste = true
+                subtitleLabel.text = ""
                 
             case .email:
                 textField.keyboardType = .emailAddress

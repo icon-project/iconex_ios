@@ -94,7 +94,7 @@ class LoadFileViewController: BaseViewController {
             if self.viewMode == .loadFile {
                 return self.validatePassword()
             } else {
-                return nil
+                return self.validatePrivateKey()
             }
         })
         coinBackground.backgroundColor = .gray250
@@ -107,6 +107,14 @@ class LoadFileViewController: BaseViewController {
         descContainer2.corner(8)
         qrButton.border(1, .gray230)
         qrButton.corner(4)
+        qrButton.rx.tap.subscribe(onNext: { [unowned self] in
+            let reader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
+            reader.set(mode: .prvKey, handler: { code in
+                self.inputBox2.text = code
+                _ = self.validatePrivateKey()
+            })
+            self.present(reader, animated: true, completion: nil)
+        }).disposed(by: disposeBag)
         selectedType = "icx"
     }
     
@@ -165,6 +173,7 @@ extension LoadFileViewController {
     }
     
     func validatePassword() -> String? {
+        self.delegate.set(loader: nil)
         delegate.invalidated()
         let pwd = inputBox2.text
         guard pwd.count > 0 else { return nil }
@@ -175,7 +184,7 @@ extension LoadFileViewController {
         
         if let keystore = try? Validator.validateKeystore(urlOfData: url) {
             if let _ = try? keystore.extractPrivateKey(password: pwd) {
-                let loader = WalletLoader(keystore: keystore)
+                let loader = WalletLoader(keystore: keystore, password: pwd)
                 delegate.set(loader: loader)
                 delegate.validated()
                 return nil
@@ -185,7 +194,7 @@ extension LoadFileViewController {
         } else if let bundle = Validator.checkWalletBundle(url: url) {
             if Validator.validateBundlePassword(bundle: bundle, password: pwd) {
                 
-                let loader = WalletLoader(bundle: bundle)
+                let loader = WalletLoader(bundle: bundle, password: pwd)
                 delegate.set(loader: loader)
                 delegate.validated()
                 return nil
@@ -195,6 +204,25 @@ extension LoadFileViewController {
         } else {
             return "Error.Password.Wrong".localized
         }
+    }
+    
+    func validatePrivateKey() -> String? {
+        self.delegate.set(loader: nil)
+        delegate.invalidated()
+        let key = inputBox2.text
+        guard key.count > 0 else {
+            delegate.invalidated()
+            return nil
+        }
+        
+        guard key.hexToData() != nil, key.count == 64 else {
+            delegate.invalidated()
+            return "Error.PrivateKey".localized
+        }
+        let loader = WalletLoader(privateKey: key)
+        self.delegate.set(loader: loader)
+        delegate.validated()
+        return nil
     }
 }
 

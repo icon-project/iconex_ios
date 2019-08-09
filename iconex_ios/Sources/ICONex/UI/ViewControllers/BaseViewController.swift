@@ -49,7 +49,7 @@ extension Scrollable where Self: BaseViewController {
             if height == 0 {
                 self.scrollView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             } else {
-                let keyboardHeight = height - (self.view.safeAreaInsets.bottom)
+                let keyboardHeight = height - (self.view.safeAreaInsets.bottom + 54)
                 self.scrollView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
             }
         }).disposed(by: disposeBag)

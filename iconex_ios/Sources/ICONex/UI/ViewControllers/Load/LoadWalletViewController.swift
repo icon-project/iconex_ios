@@ -9,12 +9,15 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import ICONKit
+import Web3swift
 
 protocol loadWalletSequence {
     var loader: WalletLoader? { get }
     func selectedMode() -> LoadFileMode
     func set(mode: LoadFileMode)
-    func set(loader: WalletLoader)
+    func set(loader: WalletLoader?)
+    func set(name: String)
     func validated()
     func invalidated()
 }
@@ -98,7 +101,7 @@ class LoadWalletViewController: PopableViewController {
             self.name.refresh()
             switch self.scrollIndex {
             case 2:
-                self.dismiss(animated: true, completion: nil)
+                self.finish()
                 
             default:
                 let value = (CGFloat)(self.scrollIndex + 1)
@@ -152,11 +155,54 @@ extension LoadWalletViewController: loadWalletSequence {
         rightButton.isEnabled = true
     }
     
-    func set(loader: WalletLoader) {
+    func set(loader: WalletLoader?) {
         _loader = loader
     }
     
     func selectedMode() -> LoadFileMode {
         return _loadMode
+    }
+    
+    func set(name: String) {
+        _loader?.name = name
+    }
+}
+
+extension LoadWalletViewController {
+    func finish() {
+        guard let loader = _loader else { return }
+        do {
+            switch loader.type {
+            case .wallet:
+                guard let keystore = loader.keystore, let name = loader.name else { return }
+                var wallet: BaseWalletConvertible
+                if keystore.coinType != nil {
+                    wallet = ICXWallet(name: name, keystore: keystore)
+                } else {
+                    wallet = ETHWallet(name: name, keystore: keystore)
+                }
+                try wallet.save()
+                
+            case .privateKey:
+                guard let keyString = loader.value as? String, let name = loader.name, let pwd = loader.password else { return }
+                if file.selectedType == "icx" {
+                    
+                    let key = PrivateKey(hex: Data(hex: keyString))
+                    let icx = Wallet(privateKey: key)
+                    try icx.generateKeystore(password: pwd)
+                    let keystore = try icx.keystore!.convert()
+                    let icxWallet = ICXWallet(name: name, keystore: keystore)
+                    
+                    try icxWallet.save()
+                    
+                } else {
+                    
+                }
+                
+            case .bundle: break
+            }
+        } catch {
+            Log("Error - \(error)")
+        }
     }
 }

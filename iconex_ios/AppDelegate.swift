@@ -103,6 +103,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log("Stack trace ========================")
             Log("\(exception.callStackSymbols)")
         }
+        
+        Manager.wallet.walletList.forEach {
+            Log("Wallet - \($0.address) \($0.name)")
+        }
+        
         return true
     }
 
@@ -152,112 +157,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
 //        Conn.isConnect = true
         return true
-    }
-
-    func changeLanguage(language: String) {
-//        UserDefaults.standard.set([language], forKey: "AppleLanguages")
-        UserDefaults.standard.set(language, forKey: "selectedLanguage")
-        UserDefaults.standard.synchronize()
-        Bundle.setLanguage(language)
-        
-        NotificationCenter.default.post(name: NSNotification.Name("kNotificationLanguageDidChanged"), object: nil)
-    }
-
-    func checkVersion(_ completion: (() -> Void)? = nil) {
-        var tracker: Tracker {
-            switch Config.host {
-            case .main:
-                return Tracker.main()
-                
-            case .testnet:
-                return Tracker.dev()
-                
-            case .yeouido:
-                return Tracker.local()
-            }
-        }
-        let versionURL = URL(string: tracker.provider)!.appendingPathComponent("app/ios.json")
-        let request = URLRequest(url: versionURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
-        Alamofire.request(request).responseJSON(queue: DispatchQueue.global(qos: .utility)) { (dataResponse) in
-            
-            DispatchQueue.main.async {
-                switch dataResponse.result {
-                case .success:
-                    guard case let json as [String: Any] = dataResponse.result.value, let result = json["result"] as? String else {
-                        
-                        let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
-                        self.window?.rootViewController = retry
-                        return
-                    }
-                    Log("Version: \(json)")
-                    if result == "OK" {
-                        let data = json["data"] as! [String: String]
-                        self.all = data["all"]
-                        self.necessary = data["necessary"]
-                    }
-                    self.retry()
-                    
-                case .failure(let error):
-                    Log("Error \(error)")
-                    if let comp = completion {
-                        comp()
-                        return
-                    } else {
-                        let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
-                        self.window?.rootViewController = retry
-                        return
-                    }
-                }
-            }
-        }
-    }
-    
-    private func go() {
-        Manager.exchange.getExchangeList()
-        Manager.balance.getAllBalances()
-        
-        let list = Manager.wallet.walletList
-        
-        let app = UIApplication.shared.delegate as! AppDelegate
-        
-        if list.count > 0 {
-            if Tool.isPasscode() {
-                let passcode = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "PasscodeView")
-                app.window?.rootViewController = passcode
-//            } else if !Tool.isPasscode() && Conn.isConnect {
-//                let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
-//                app.window?.rootViewController = connect
-            } else {
-                let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-                app.window?.rootViewController = main
-            }
-        } else {
-            let welcome = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "WelcomeView")
-            app.window?.rootViewController = welcome
-        }
-    }
-    
-    private func retry() {
-            if let version = self.necessary {
-                let myVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
-                
-                if version > myVersion {
-                    let message = "Version.Message".localized
-//                    Alert.Confirm(message: message, cancel: "Common.Cancel".localized, confirm: "Version.Update".localized, handler: {
-//                        UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: { _ in
-//                            exit(0)
-//                        })
-//                    }, {
-//                        exit(0)
-//                    }).show(self.window!.rootViewController!)
-                } else {
-                    
-                    go()
-                    
-                }
-            } else {
-                
-            }
     }
     
     func fileShare(filepath: URL, _ sender: UIView? = nil) {

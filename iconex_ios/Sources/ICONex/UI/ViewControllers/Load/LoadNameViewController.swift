@@ -33,20 +33,21 @@ class LoadNameViewController: BaseViewController {
         super.refresh()
         
         guard let loader = delegate.loader else { return }
+        
+        inputBox1.set(state: .normal, placeholder: "Placeholder.WalletName".localized)
+        inputBox1.set(inputType: .name)
+        inputBox2.set(state: .normal, placeholder: "Placeholder.InputPassword".localized)
+        inputBox2.set(inputType: .createPassword)
+        inputBox3.set(state: .normal, placeholder: "Placeholder.ConfirmPassword".localized)
+        inputBox3.set(inputType: .confirmPassword)
+        
         switch delegate.selectedMode() {
         case .loadFile:
-            inputBox1.set(state: .normal, placeholder: "Placeholder.WalletName".localized)
-            inputBox1.set(inputType: .name)
-            inputBox2.set(state: .normal, placeholder: "Placeholder.InputPassword".localized)
-            inputBox2.set(inputType: .createPassword)
-            inputBox3.set(state: .normal, placeholder: "Placeholder.ConfirmPassword".localized)
-            inputBox3.set(inputType: .confirmPassword)
-            
             if loader.type == .wallet {
                 loadNameHeader.size16(text: "LoadName.Wallet.Header".localized, color: .gray77, weight: .medium, align: .center)
                 inputBox1.set(validator: { text in
                     if let nameError = self.validateName() {
-                        self.inputBox1.setError(message: nameError)
+                        return nameError
                     }
                     self.delegate.validated()
                     return nil
@@ -63,6 +64,7 @@ class LoadNameViewController: BaseViewController {
             
         case .loadPK:
             loadNameHeader.size16(text: "LoadName.PK.Header".localized, color: .gray77, weight: .medium, align: .center)
+            
             inputBox2.isHidden = false
             inputBox3.isHidden = false
             descContainer.isHidden = false
@@ -73,8 +75,12 @@ class LoadNameViewController: BaseViewController {
                 if let error = self.validateName() {
                     return error
                 }
-                if self.validatePassword() != nil, self.validateConfirm() != nil {
+                if self.delegate.selectedMode() == .loadFile {
                     self.delegate.validated()
+                } else {
+                    if self.validatePassword() == nil, self.validateConfirm() == nil {
+                        self.delegate.validated()
+                    }
                 }
                 return nil
             })
@@ -82,7 +88,7 @@ class LoadNameViewController: BaseViewController {
                 if let error = self.validatePassword() {
                     return error
                 }
-                if self.validateName() != nil, self.validateConfirm() != nil {
+                if self.validateName() == nil, self.validateConfirm() == nil {
                     self.delegate.validated()
                 }
                 return nil
@@ -91,7 +97,7 @@ class LoadNameViewController: BaseViewController {
                 if let error = self.validateConfirm() {
                     return error
                 }
-                if self.validateName() != nil, self.validatePassword() != nil {
+                if self.validateName() == nil, self.validatePassword() == nil {
                     self.delegate.validated()
                 }
                 return nil
@@ -111,12 +117,14 @@ extension LoadNameViewController {
             self.delegate.invalidated()
             return "Error.Wallet.Duplicated.Name".localized
         }
+        delegate.loader?.name = text
         return nil
     }
     
     func validatePassword() -> String? {
         let text = inputBox2.text
         guard text.count > 0 else {
+            self.delegate.invalidated()
             return text
         }
         guard text.count >= 8 else {
@@ -135,11 +143,12 @@ extension LoadNameViewController {
     }
     
     func validateConfirm() -> String? {
-        let text1 = inputBox1.text, text2 = inputBox2.text
+        let text1 = inputBox2.text, text2 = inputBox3.text
         guard text1 == text2 else {
             delegate.invalidated()
             return "Error.Password.Mismatch".localized
         }
+        delegate.loader?.password = text1
         return nil
     }
 }

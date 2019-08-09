@@ -66,7 +66,10 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ojY-Lm-UTd">
-                    <rect key="frame" x="367" y="63" width="35" height="15"/>
+                    <rect key="frame" x="367" y="62" width="35" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="ysG-SS-tjX"/>
+                    </constraints>
                     <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="12"/>
                     <state key="normal" title="Button"/>
                 </button>
@@ -79,7 +82,6 @@
                 <constraint firstItem="m2Z-5I-BRJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="12" id="9jq-66-Iiq"/>
                 <constraint firstAttribute="trailing" secondItem="jnz-bI-JvY" secondAttribute="trailing" id="CeQ-hW-QVc"/>
                 <constraint firstItem="jnz-bI-JvY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="MCZ-oF-7q3"/>
-                <constraint firstItem="ojY-Lm-UTd" firstAttribute="top" secondItem="leb-0K-q4E" secondAttribute="top" id="MfJ-zM-Wwg"/>
                 <constraint firstAttribute="bottom" secondItem="ojY-Lm-UTd" secondAttribute="bottom" id="NSS-FO-xBx"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="m2Z-5I-BRJ" secondAttribute="trailing" constant="12" id="OI2-0J-1FC"/>
                 <constraint firstItem="leb-0K-q4E" firstAttribute="top" secondItem="jnz-bI-JvY" secondAttribute="bottom" constant="5" id="YaF-0a-WgC"/>
@@ -91,6 +93,7 @@
                 <constraint firstItem="leb-0K-q4E" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="14" id="rS4-8X-eux"/>
                 <constraint firstItem="ojY-Lm-UTd" firstAttribute="trailing" secondItem="Asu-7G-ctF" secondAttribute="trailing" id="sbb-nA-XDq"/>
                 <constraint firstItem="jnz-bI-JvY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="u9T-qv-G7r"/>
+                <constraint firstItem="ojY-Lm-UTd" firstAttribute="top" secondItem="jnz-bI-JvY" secondAttribute="bottom" constant="4" id="xiL-NK-e7J"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
