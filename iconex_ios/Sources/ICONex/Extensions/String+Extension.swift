@@ -44,11 +44,16 @@ extension String {
     
     func generateQRCode() -> CIImage? {
         let data = self.data(using: .utf8)
-        let filter = CIFilter(name: "CIQRCodeGenerator")
-        filter?.setValue(data, forKey: "inputMessage")
-        filter?.setValue("H", forKey: "inputCorrectionLevel")
+        guard let filter = CIFilter(name: "CIQRCodeGenerator") else { return nil }
+        filter.setValue(data, forKey: "inputMessage")
+        filter.setValue("H", forKey: "inputCorrectionLevel")
         
-        return filter?.outputImage
+        let qrImage = filter.outputImage
+        let transform = CGAffineTransform(scaleX: 10, y: 10)
+        
+        guard let scaledImage = qrImage?.transformed(by: transform) else { return nil }
+        
+        return scaledImage
     }
 }
 

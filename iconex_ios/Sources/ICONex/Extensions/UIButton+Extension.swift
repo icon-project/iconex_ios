@@ -35,10 +35,10 @@ extension UIButton {
         self.titleLabel?.font = UIFont.systemFont(ofSize: 17)
     }
     
-    func cornered() {
+    func cornered(size: CGFloat = 14) {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 4
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        self.titleLabel?.font = UIFont.systemFont(ofSize: size)
     }
     
     func mint() {

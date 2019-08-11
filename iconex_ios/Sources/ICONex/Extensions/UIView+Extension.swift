@@ -22,6 +22,12 @@ extension UIView {
         self.layer.cornerRadius = radius
         self.layer.masksToBounds = true
     }
+    
+    func mintBox() {
+        self.corner(8)
+        self.border(0.5, .mint6)
+        self.backgroundColor = .mint4
+    }
 }
 
 extension UIView {

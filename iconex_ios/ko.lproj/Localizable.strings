@@ -59,11 +59,42 @@
 
 // MARK: CreateWalletViewController
 "CreateWallet.Create" = "지갑 만들기";
+"Create.Wallet.Cancel" = "지갑 만들기를 취소하시겠습니까?";
 
 // MARK: CreateSelectViewController
+"Create.Wallet.Step1.StepTitle" = "코인 선택";
 "CreateSelect.Main" = "어떤 코인 지갑을 추가하시겠습니까?";
 "CreateSelect.Instruction1" = "・ 지갑 만들기 완료 시 선택한 코인의 지갑이 생성됩니다.";
 "CreateSelect.Instruction2" = "・ 지갑 생성 후, 해당 코인 기반의 토큰을 추가할 수 있습니다.";
+
+// MARK: CreateKeystoreViewController
+"Create.Wallet.Step2.StepTitle" = "정보 입력";
+"Create.Wallet.Step2.Header" = "새 지갑의 이름과 비밀번호를 입력해주세요.";
+"Create.Wallet.Step2.WalletName.Placeholder" = "지갑 이름 (8자)";
+"Create.Wallet.Step2.Password.Placeholder" = "비밀번호";
+"Create.Wallet.Step2.Confirm.Placeholder" = "비밀번호 확인";
+"Create.Wallet.Step2.Footer" = "비밀번호의 관리는 사용자의 책임이며, 분실하면 다시 찾을 수 있는 방법이 없습니다.";
+"Create.Wallet.Step2.Desc" = "지갑 백업 파일(Keystore 파일)로 지갑을 복구하거나 실행하는 경우, 전송 시 비밀번호를 입력해야 합니다.";
+
+// MARK: BackupViewController
+"Create.Wallet.Step3.StepTitle" = "백업 파일\n다운로드";
+"Create.Wallet.Step3.Header" = "지갑 백업 파일을 다운로드 해주세요.";
+"Create.Wallet.Step3.Download" = "지갑 백업 파일 다운로드";
+"Create.Wallet.Step3.Footer" = "지갑 백업 파일(Keystore)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 비밀번호가 설정되어 있습니다.";
+"Create.Wallet.Step3.Desc.1_1" = "・ 지갑 백업 파일과 비밀번호가 있으면 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 수 있습니다.";
+"Create.Wallet.Step3.Desc.1_2" = "・ 지갑을 만든 후 ‘지갑 백업’에서도 다운로드할 수 있습니다.";
+"Create.Wallet.Step3.Alert.Info" = "ㆍ지갑 백업 파일은 어떠한 경우에도 외부 공유가 되어서는 안됩니다.\"나의 iPhone\"에 저장한 파일은 앱 삭제 시 함께 삭제될 수 있으므로, 반드시 안전한 저장 장소에 보관해주세요.";
+"Create.Wallet.Step3.Alert.Save" = "파일이 저장되었습니다.";
+"Create.Wallet.Step3.Alert.NotSaved" = "지갑 백업 파일을 다운로드 하지 않고 다음 단계로 진행하시겠습니까?";
+
+// MARK: CompleteViewController
+"Create.Wallet.Step4.StepTitle" = "개인 키 저장";
+"Create.Wallet.Step4.Header" = "개인 키를 저장해주세요.";
+"Create.Wallet.Step4.Copy" = "개인 키 복사";
+"Create.Wallet.Step4.WalletInfo" = "지갑 정보 보기";
+"Create.Wallet.Step4.Footer" = "개인 키(Private Key)는 지갑의 고유 정보이며, 비밀번호가 설정되어 있지 않습니다.";
+"Create.Wallet.Step4.Desc.1" = "・ 개인 키만 알고 있으면 지갑 실행 및 복구가 가능하므로 타인에게 노출되지 않도록 각별한 관리가 필요합니다.";
+"Create.Wallet.Step4.Desc.2" = "・ 지갑을 만든 후 '지갑 백업'에서도 확인할 수 있습니다.";
 
 // MARK: AlertCustomView
 "Alert.Common.StepLimit" = "적정 Step 한도 / 가격 (ICX)";
