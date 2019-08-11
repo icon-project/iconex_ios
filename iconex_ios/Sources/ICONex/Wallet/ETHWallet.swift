@@ -65,7 +65,8 @@ class ETHWallet: BaseWalletConvertible {
         
         guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
         
-        let raw = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+        let encoder = JSONEncoder()
+        let raw = try encoder.encode(params)
         
         let decoder = JSONDecoder()
         let keystore = try decoder.decode(ICONKeystore.self, from: raw)
@@ -77,7 +78,8 @@ class ETHWallet: BaseWalletConvertible {
         
         guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
         
-        let raw = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+        let encoder = JSONEncoder()
+        let raw = try encoder.encode(params)
         
         let decoder = JSONDecoder()
         let keystore = try decoder.decode(ICONKeystore.self, from: raw)
