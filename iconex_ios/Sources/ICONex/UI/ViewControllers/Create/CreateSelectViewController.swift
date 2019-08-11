@@ -17,17 +17,20 @@ class CreateSelectViewController: BaseViewController {
     @IBOutlet weak var bottomDescLabel1: UILabel!
     @IBOutlet weak var bottomDescLabel2: UILabel!
     
+    var delegate: createWalletSequence! = nil
+    
     private var _isIcx: Bool = true {
         willSet {
             switch newValue {
             case true:
                 icxCard.mode = .selected
                 ethCard.mode = .normal
-                
             case false:
                 icxCard.mode = .normal
                 ethCard.mode = .selected
             }
+            guard var delegate = self.delegate else { return }
+            delegate.isICX = newValue
         }
     }
     
