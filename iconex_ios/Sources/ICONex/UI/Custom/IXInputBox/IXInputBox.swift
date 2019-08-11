@@ -179,8 +179,11 @@ enum IXInputBoxType {
         
         textField.tintColor = .mint1
         
-        textField.rx.text.subscribe(onNext: { text in
-            if let input = text, input.count > 0 {
+        let textFieldShare = textField.rx.text.orEmpty.share(replay: 1)
+        
+        textFieldShare
+            .subscribe(onNext: { text in
+            if text.count > 0 {
                 self.placeholderLabel.isHidden = false
                 self.coverView.isHidden = false
                 self.placeholderLabel.text = self.placeholder
@@ -196,6 +199,21 @@ enum IXInputBoxType {
                 self.setError(message: validate(self.textField.text!))
             }
         }).disposed(by: disposeBag)
+        
+        
+        switch inputType {
+        case .name:
+            textFieldShare.scan("") { (previous, new) -> String in
+                guard !new.isEmpty else { return new }
+                if new.lengthOfBytes(using: .utf16) > 17 {
+                    return previous
+                } else {
+                    return new
+                }
+            }
+        default:
+            break
+        }
     }
     
     func xibSetup() {

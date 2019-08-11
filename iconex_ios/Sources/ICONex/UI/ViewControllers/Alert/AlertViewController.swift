@@ -49,8 +49,8 @@ class AlertViewController: BaseViewController {
     var pk: PrivateKey?
     var ethPkString: String = ""
     
-    var cancelHandler: ((String?) -> Void)?
-    var confirmHandler: ((String?) -> Void)?
+    var cancelHandler: (() -> Void)?
+    var confirmHandler: (() -> Void)?
     
     override func initializeComponents() {
         self.view.backgroundColor = UIColor.init(white: 1, alpha: 0)
@@ -449,7 +449,7 @@ class AlertViewController: BaseViewController {
         
     }
     
-    private func closer(_ closeAction: ((String?) -> Void)? = nil) {
+    private func closer(_ closeAction: (() -> Void)? = nil) {
         // move
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
             self.popView.frame.origin.y += 20
@@ -465,7 +465,7 @@ class AlertViewController: BaseViewController {
         }, completion: { _ in
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
-                    closeAct("confirm")
+                    closeAct()
                 }
             })
         })

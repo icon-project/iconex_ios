@@ -54,6 +54,11 @@ class PopableTitleView: UIView {
         titleLabel.size18(text: title, weight: .medium, align: .center)
     }
     
+    func setButtonImage(image: UIImage) {
+        leftButton.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
+        leftButton.tintColor = .darkGray
+    }
+    
     override var intrinsicContentSize: CGSize {
         return CGSize(width: UIScreen.main.bounds.width, height: 60)
     }

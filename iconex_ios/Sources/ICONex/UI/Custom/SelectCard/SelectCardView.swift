@@ -68,8 +68,12 @@ class SelectCardView: UIView {
         mode = .normal
     }
     
-    func setImage(normal: UIImage) {
-        self.iconView.image = normal.withRenderingMode(.alwaysTemplate)
+    func setImage(normal: UIImage, isLogo: Bool = false) {
+        if isLogo {
+            self.iconView.image = normal
+        } else {
+            self.iconView.image = normal.withRenderingMode(.alwaysTemplate)
+        }
     }
     
     func setTitle(main: String, sub: String?) {

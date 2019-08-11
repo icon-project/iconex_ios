@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class Alert {
-    static func basic(title: String, subtitle: String? = nil, hasHeaderTitle: Bool = false, isOnlyOneButton: Bool = true, leftButtonTitle: String? = nil, rightButtonTitle: String? = nil) -> AlertViewController {
+    static func basic(title: String, subtitle: String? = nil, hasHeaderTitle: Bool = false, isOnlyOneButton: Bool = true, leftButtonTitle: String? = nil, rightButtonTitle: String? = nil, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.titleText = title
         alertVC.subTitleText = subtitle ?? ""
@@ -23,6 +23,7 @@ class Alert {
         if let rightTitle = rightButtonTitle {
             alertVC.rightButtonTitle = rightTitle
         }
+        alertVC.confirmHandler = confirmAction
         
         return alertVC
     }
@@ -34,55 +35,55 @@ class Alert {
         return alertVC
     }
     
-    static func password(address: String) -> AlertViewController {
+    static func password(address: String, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .password
         alertVC.walletAddress = address
         return alertVC
     }
     
-    static func changeWalletName(walletName: String) -> AlertViewController {
+    static func changeWalletName(walletName: String, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .walletName
         alertVC.walletName = walletName
         return alertVC
     }
     
-    static func addAddress() -> AlertViewController {
+    static func addAddress(confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .addAddress
         return alertVC
     }
     
-    static func stake(stakeInfo: StakeInfo) -> AlertViewController {
+    static func stake(stakeInfo: StakeInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .stake
         alertVC.stakeInfo = stakeInfo
         return alertVC
     }
     
-    static func unstake(unstakeInfo: StakeInfo) -> AlertViewController {
+    static func unstake(unstakeInfo: StakeInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .unstake
         alertVC.stakeInfo = unstakeInfo
         return alertVC
     }
     
-    static func unstakeCancel(cancelInfo: StakeInfo) -> AlertViewController {
+    static func unstakeCancel(cancelInfo: StakeInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .unstakecancel
         alertVC.stakeInfo = cancelInfo
         return alertVC
     }
     
-    static func send(sendInfo: SendInfo) -> AlertViewController {
+    static func send(sendInfo: SendInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .send
         alertVC.sendInfo = sendInfo
         return alertVC
     }
     
-    static func iScore(iscoreInfo: IScoreClaimInfo) -> AlertViewController {
+    static func iScore(iscoreInfo: IScoreClaimInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .iscore
         alertVC.iscoreInfo = iscoreInfo
