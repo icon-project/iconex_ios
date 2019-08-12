@@ -31,7 +31,6 @@
 		BF78B36222FCFCD4002E34B3 /* CreateWallet.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF78B35C22FCFCD4002E34B3 /* CreateWallet.storyboard */; };
 		BF78B36322FCFCD4002E34B3 /* CreateBackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF78B35D22FCFCD4002E34B3 /* CreateBackupViewController.swift */; };
 		BF78B36B22FD4852002E34B3 /* CreateQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */; };
-		BF78B37122FD5887002E34B3 /* CreateNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF78B37022FD5887002E34B3 /* CreateNavigationViewController.swift */; };
 		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
@@ -138,7 +137,6 @@
 		BF78B35C22FCFCD4002E34B3 /* CreateWallet.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CreateWallet.storyboard; sourceTree = "<group>"; };
 		BF78B35D22FCFCD4002E34B3 /* CreateBackupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBackupViewController.swift; sourceTree = "<group>"; };
 		BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQRCodeViewController.swift; sourceTree = "<group>"; };
-		BF78B37022FD5887002E34B3 /* CreateNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNavigationViewController.swift; sourceTree = "<group>"; };
 		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -273,7 +271,6 @@
 			isa = PBXGroup;
 			children = (
 				BF78B35C22FCFCD4002E34B3 /* CreateWallet.storyboard */,
-				BF78B37022FD5887002E34B3 /* CreateNavigationViewController.swift */,
 				BF78B35A22FCFCD4002E34B3 /* CreateWalletViewController.swift */,
 				BF78B35922FCFCD4002E34B3 /* CreateSelectViewController.swift */,
 				BF78B35B22FCFCD4002E34B3 /* CreateKeystoreViewController.swift */,
@@ -833,7 +830,6 @@
 				BF6EFEC322FA5174003B6AF3 /* SendAlertView.swift in Sources */,
 				D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */,
 				D4FDCA6C22F7FA3700D6CDD4 /* LoadFileViewController.swift in Sources */,
-				BF78B37122FD5887002E34B3 /* CreateNavigationViewController.swift in Sources */,
 				D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */,
 				D468CEF622F0380F0019D7BB /* PermissionViewController.swift in Sources */,
 			);

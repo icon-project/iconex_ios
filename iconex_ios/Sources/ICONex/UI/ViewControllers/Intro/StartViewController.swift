@@ -32,7 +32,8 @@ class StartViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         createButton.rx.tap.subscribe(onNext: {
-            self.presentPanModal(CreateNavigationViewController())
+            let create = UIStoryboard(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
+            create.pop()
         }).disposed(by: disposeBag)
         
         loadButton.rx.tap.subscribe(onNext: {

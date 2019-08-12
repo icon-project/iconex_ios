@@ -84,17 +84,14 @@ class CreateCompleteViewController: BaseViewController {
                 let nextVC = self.storyboard?.instantiateViewController(withIdentifier: "QRCode") as! CreateQRCodeViewController
                 nextVC.address = self.delegate.newWallet?.address
                 nextVC.pk = self.privateKey
-                self.navigationController?.pushViewController(nextVC, animated: true)
+                self.presentPanModal(nextVC)
             }).disposed(by: disposeBag)
     }
     
     override func refresh() {
         super.refresh()
-        
         if let myWallet = self.delegate.newWallet {
-            
             guard let password = self.delegate.walletInfo?.password else { return }
-            
             do {
                 if let icx = myWallet as? ICXWallet {
                     self.privateKey = try icx.extractICXPrivateKey(password: password).hexEncoded
@@ -102,8 +99,8 @@ class CreateCompleteViewController: BaseViewController {
                     self.privateKey = try eth.extractETHPrivateKey(password: password)
                 }
                 privateKeyLabel.size16(text: String(repeating: "•", count: 62), color: .gray77, weight: .regular, align: .left)
-            } catch {
-
+            } catch let err {
+                Log(err, .error)
             }
         }
     }

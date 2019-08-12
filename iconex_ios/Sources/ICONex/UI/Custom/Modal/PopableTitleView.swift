@@ -55,8 +55,7 @@ class PopableTitleView: UIView {
     }
     
     func setButtonImage(image: UIImage) {
-        leftButton.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
-        leftButton.tintColor = .darkGray
+        leftButton.setImage(image, for: .normal)
     }
     
     override var intrinsicContentSize: CGSize {
