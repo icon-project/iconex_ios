@@ -38,12 +38,19 @@ class CreateQRCodeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    // ???
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIView.animate(withDuration: 0.4) {
+            self.view.alpha = 0.0
+        }
+    }
     
     override func initializeComponents() {
         super.initializeComponents()
         
         navTitleView.actionHandler = {
-            self.navigationController?.popToRootViewController(animated: true)
+            self.dismiss(animated: true, completion: nil)
         }
         
         scroll.rx.didEndDecelerating
@@ -52,7 +59,7 @@ class CreateQRCodeViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         navTitleView.set(title: "CreateWallet.Create".localized)
-        navTitleView.setButtonImage(image: #imageLiteral(resourceName: "icAppbarBack"))
+        navTitleView.setButtonImage(image: #imageLiteral(resourceName: "icAppbarClose"))
         
         // address
         headerLabel.size20(text: "Wallet.Address".localized, color: .gray77, weight: .medium, align: .center)
@@ -62,7 +69,7 @@ class CreateQRCodeViewController: BaseViewController {
         copyButton.setTitleColor(.gray128, for: .normal)
         
         // private key
-        headerLabel2.size20(text: "Wallet.Address".localized, color: .gray77, weight: .medium, align: .center)
+        headerLabel2.size20(text: "Wallet.PrivateKey".localized, color: .gray77, weight: .medium, align: .center)
         copyButton2.border(1, .gray230)
         copyButton2.setTitle("Wallet.PrivateKey.Copy".localized, for: .normal)
         copyButton2.setTitleColor(.gray128, for: .normal)
@@ -103,4 +110,35 @@ class CreateQRCodeViewController: BaseViewController {
             copyButton2.cornered(size: 12)
         }
     }
+}
+
+extension CreateQRCodeViewController: PanModalPresentable {
+    var panScrollable: UIScrollView? {
+        return nil
+    }
+    
+    var showDragIndicator: Bool {
+        return false
+    }
+    
+    func shouldRespond(to panModalGestureRecognizer: UIPanGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    var isHapticFeedbackEnabled: Bool {
+        return false
+    }
+    
+    var topOffset: CGFloat {
+        return app.window!.safeAreaInsets.top
+    }
+    
+    var backgroundAlpha: CGFloat {
+        return 0.4
+    }
+    
+    var cornerRadius: CGFloat {
+        return 18.0
+    }
+    
 }

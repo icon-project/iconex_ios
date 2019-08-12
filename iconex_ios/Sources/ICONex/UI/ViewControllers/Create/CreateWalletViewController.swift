@@ -223,7 +223,13 @@ class CreateWalletViewController: PopableViewController {
 
                 do {
                     try new.save()
-                    self.dismiss(animated: true, completion: nil)
+                    
+                    self.dismiss(animated: true, completion: {
+                        // to Main
+                        let mainVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainView")
+                        app.window?.rootViewController = mainVC
+                        
+                    })
                 } catch let err {
                     Alert.basic(title: err.localizedDescription).show()
                 }
@@ -234,6 +240,9 @@ class CreateWalletViewController: PopableViewController {
     }
     
     private func scrollNext() {
+        if self.scrollIndex == 2 {
+            self.completeVC.refresh()
+        }
         let value = (CGFloat)(self.scrollIndex + 1)
         let x = value * self.view.frame.width
         self.stepScrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
