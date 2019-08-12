@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF2D35AC2301576600EC2A35 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF2D35AA2301576600EC2A35 /* LaunchScreen.storyboard */; };
+		BF2D35AD230157C200EC2A35 /* IXNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */; };
 		BF6EFEBF22FA5174003B6AF3 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6EFEAD22FA5173003B6AF3 /* Alert.swift */; };
 		BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF6EFEAE22FA5173003B6AF3 /* Alert.storyboard */; };
 		BF6EFEC122FA5174003B6AF3 /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6EFEAF22FA5173003B6AF3 /* AlertViewController.swift */; };
@@ -67,7 +69,6 @@
 		D471F202205A755C00F565EF /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = D471F201205A755C00F565EF /* Database.swift */; };
 		D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4728A122007040B00E0A899 /* AppDelegate.swift */; };
 		D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4728A192007040B00E0A899 /* Assets.xcassets */; };
-		D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */; };
 		D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */ = {isa = PBXBuildFile; fileRef = D47A03DD20A2CEF5009A3A99 /* NSBundle+Language.m */; };
 		D48D181A2133E75E00BEAA2F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48D18192133E75E00BEAA2F /* Response.swift */; };
 		D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49B92043E5DD0064CFF4 /* WalletBase.swift */; };
@@ -114,6 +115,7 @@
 		2E7BD58B66D88111B1FA0E1C /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		3E8D34438ACDAE074E8C6D6F /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		BF0B659222CB52E400E13200 /* Pods-iconex_ios-acknowledgements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Pods-iconex_ios-acknowledgements.plist"; sourceTree = "<group>"; };
+		BF2D35AB2301576600EC2A35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF6EFEAD22FA5173003B6AF3 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		BF6EFEAE22FA5173003B6AF3 /* Alert.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Alert.storyboard; sourceTree = "<group>"; };
 		BF6EFEAF22FA5173003B6AF3 /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
@@ -179,7 +181,6 @@
 		D4728A0F2007040B00E0A899 /* iconex_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iconex_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4728A122007040B00E0A899 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4728A192007040B00E0A899 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D4728A1C2007040B00E0A899 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D4728A2A20073BDF00E0A899 /* iconex_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iconex_ios-Bridging-Header.h"; sourceTree = "<group>"; };
 		D47A03DC20A2CEF5009A3A99 /* NSBundle+Language.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Language.h"; sourceTree = "<group>"; };
 		D47A03DD20A2CEF5009A3A99 /* NSBundle+Language.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Language.m"; sourceTree = "<group>"; };
@@ -411,6 +412,7 @@
 		D4728A112007040B00E0A899 /* iconex_ios */ = {
 			isa = PBXGroup;
 			children = (
+				BF2D35AA2301576600EC2A35 /* LaunchScreen.storyboard */,
 				D4003BEF20E4CA9A0003F4CB /* Fonts */,
 				D468298C206251AA00ECF68F /* iconex_ios.entitlements */,
 				D4728A2420070C7D00E0A899 /* Sources */,
@@ -418,7 +420,6 @@
 				D4728A192007040B00E0A899 /* Assets.xcassets */,
 				BF0B659222CB52E400E13200 /* Pods-iconex_ios-acknowledgements.plist */,
 				D4EB066420C63730005AF9F1 /* ethToken.json */,
-				D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */,
 				D46DB4D620A1903500B632D9 /* Localizable.strings */,
 				D427DCE9221117050098D852 /* Tokens.json */,
 			);
@@ -669,6 +670,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF2D35AD230157C200EC2A35 /* IXNavigationView.xib in Resources */,
 				D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */,
 				D4F2EBE322FC01FA00EAC3B4 /* Camera.storyboard in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
@@ -678,9 +680,9 @@
 				D4F7673522F42D9600452DA7 /* Main.storyboard in Resources */,
 				D4FDCA6622F7C62200D6CDD4 /* LoadWallet.storyboard in Resources */,
 				BF6EFECD22FA5174003B6AF3 /* StakeAlertView.xib in Resources */,
+				BF2D35AC2301576600EC2A35 /* LaunchScreen.storyboard in Resources */,
 				BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */,
 				BF6EFECC22FA5174003B6AF3 /* IScoreAlertView.xib in Resources */,
-				D4728A1D2007040B00E0A899 /* LaunchScreen.storyboard in Resources */,
 				D424B73922EECA9A00D9BD12 /* IXInputBox.xib in Resources */,
 				BF6EFECE22FA5174003B6AF3 /* TxHashAlertView.xib in Resources */,
 				D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */,
@@ -842,6 +844,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		BF2D35AA2301576600EC2A35 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF2D35AB2301576600EC2A35 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		D46DB4D620A1903500B632D9 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -849,14 +859,6 @@
 				D46DB4D720A1903800B632D9 /* ko */,
 			);
 			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		D4728A1B2007040B00E0A899 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4728A1C2007040B00E0A899 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
