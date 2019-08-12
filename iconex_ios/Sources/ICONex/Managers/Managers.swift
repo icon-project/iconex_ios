@@ -159,6 +159,21 @@ extension ICONManager {
     
 }
 
+// IISS
+extension ICONManager {
+    func getStake(from: ICXWallet) -> PRepStakeResponse? {
+        let params = ["address": from.address]
+        
+        let call = Call<PRepStakeResponse>(from: from.address, to: CONST.scoreGovernance, method: "getStake", params: params)
+        let result = self.iconService.call(call).execute()
+        
+        return try? result.get()
+    }
+    
+    func setDelegation()
+}
+
+// MARK: BalanceManager
 class BalanceManager {
     static let shared = BalanceManager()
     

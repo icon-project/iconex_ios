@@ -60,6 +60,7 @@
 		D468CEF622F0380F0019D7BB /* PermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CEF522F0380F0019D7BB /* PermissionViewController.swift */; };
 		D468CEF922F03CAB0019D7BB /* PopableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CEF822F03CAB0019D7BB /* PopableViewController.swift */; };
 		D468CF0222F062370019D7BB /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D468CF0122F062370019D7BB /* UILabel+Extension.swift */; };
+		D46B158B2301279B001B5D48 /* IISS.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46B158A2301279B001B5D48 /* IISS.swift */; };
 		D46CD8A522E006C30063BAA0 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46CD8A422E006C30063BAA0 /* Variables.swift */; };
 		D46CD8A922E045D00063BAA0 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46CD8A822E045D00063BAA0 /* Validator.swift */; };
 		D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D46DB4D620A1903500B632D9 /* Localizable.strings */; };
@@ -170,6 +171,7 @@
 		D468CEF522F0380F0019D7BB /* PermissionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionViewController.swift; sourceTree = "<group>"; };
 		D468CEF822F03CAB0019D7BB /* PopableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopableViewController.swift; sourceTree = "<group>"; };
 		D468CF0122F062370019D7BB /* UILabel+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		D46B158A2301279B001B5D48 /* IISS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IISS.swift; sourceTree = "<group>"; };
 		D46CD8A422E006C30063BAA0 /* Variables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variables.swift; sourceTree = "<group>"; };
 		D46CD8A822E045D00063BAA0 /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		D46DB4D520A1903500B632D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 			isa = PBXGroup;
 			children = (
 				D48D18192133E75E00BEAA2F /* Response.swift */,
+				D46B158A2301279B001B5D48 /* IISS.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -805,6 +808,7 @@
 				D4F7673722F42DA600452DA7 /* MainViewController.swift in Sources */,
 				D468CF0222F062370019D7BB /* UILabel+Extension.swift in Sources */,
 				BF78B36122FCFCD4002E34B3 /* CreateKeystoreViewController.swift in Sources */,
+				D46B158B2301279B001B5D48 /* IISS.swift in Sources */,
 				D446A07222E160AD0000D4CA /* UIColor+Extension.swift in Sources */,
 				D4F2EBE122FBFA7C00EAC3B4 /* QRReaderViewController.swift in Sources */,
 				D446A07422E162840000D4CA /* UIButton+Extension.swift in Sources */,

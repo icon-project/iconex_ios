@@ -12,6 +12,9 @@ struct Configuration {
         case main = 0
         case testnet = 1
         case yeouido = 2
+        #if DEBUG
+        case localTest
+        #endif
         
         var provider: String {
             switch self {
@@ -23,6 +26,9 @@ struct Configuration {
                 
             case .yeouido:
                 return "https://bicon.net.solidwallet.io/api/v3"
+                
+            default:
+                return "http://20.20.7.156:9000/api/v3"
             }
         }
         
@@ -35,6 +41,9 @@ struct Configuration {
                 return "0x2"
                 
             case .yeouido:
+                return "0x3"
+                
+            default:
                 return "0x3"
             }
         }
@@ -148,6 +157,9 @@ extension Configuration.HOST {
             
         case .yeouido:
             return "Yeouido (여의도)"
+            
+        default:
+            return "내부 테스트"
         }
     }
 }
