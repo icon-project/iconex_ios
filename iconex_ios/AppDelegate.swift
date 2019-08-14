@@ -200,9 +200,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            self.connect = nil
         })
 //        if Conn.isConnect {
-//            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-//            let app = UIApplication.shared.delegate as! AppDelegate
-//            app.window?.rootViewController = main
+            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+            self.window?.rootViewController = main
 //        }
     }
     

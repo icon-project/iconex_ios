@@ -40,6 +40,7 @@ enum CommonError: Error, CustomDebugStringConvertible {
     case duplicateToken
     case emptyPrivateKey
     case saveData
+    case convertType(String)
     
     var debugDescription: String {
         return "Fatal error. CommonError(\(self))"

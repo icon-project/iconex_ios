@@ -35,6 +35,8 @@
 		BF78B36B22FD4852002E34B3 /* CreateQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */; };
 		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
+		D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40C2BB92303A557009782AA /* MainCardView.swift */; };
+		D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D40C2BBB2303A5B1009782AA /* MainCardView.xib */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
 		D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D424B72D22EEB0E600D9BD12 /* Colors.swift */; };
 		D424B73222EEB7C200D9BD12 /* IXInputBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D424B73122EEB7C200D9BD12 /* IXInputBox.swift */; };
@@ -69,6 +71,8 @@
 		D471F202205A755C00F565EF /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = D471F201205A755C00F565EF /* Database.swift */; };
 		D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4728A122007040B00E0A899 /* AppDelegate.swift */; };
 		D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4728A192007040B00E0A899 /* Assets.xcassets */; };
+		D472BA6D230299EA00E28E05 /* IScoreDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D472BA6C230299EA00E28E05 /* IScoreDetailViewController.swift */; };
+		D472BA6F230299FD00E28E05 /* IScore.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D472BA6E230299FD00E28E05 /* IScore.storyboard */; };
 		D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */ = {isa = PBXBuildFile; fileRef = D47A03DD20A2CEF5009A3A99 /* NSBundle+Language.m */; };
 		D48D181A2133E75E00BEAA2F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48D18192133E75E00BEAA2F /* Response.swift */; };
 		D48E49BA2043E5DD0064CFF4 /* WalletBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D48E49B92043E5DD0064CFF4 /* WalletBase.swift */; };
@@ -142,6 +146,8 @@
 		BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQRCodeViewController.swift; sourceTree = "<group>"; };
 		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
+		D40C2BB92303A557009782AA /* MainCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardView.swift; sourceTree = "<group>"; };
+		D40C2BBB2303A5B1009782AA /* MainCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainCardView.xib; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		D41B430E207B71C60011DDB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "/Users/ahn/Documents/work/ios-iCONex/Info.plist"; sourceTree = "<absolute>"; };
 		D424B72D22EEB0E600D9BD12 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -182,6 +188,8 @@
 		D4728A122007040B00E0A899 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D4728A192007040B00E0A899 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D4728A2A20073BDF00E0A899 /* iconex_ios-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iconex_ios-Bridging-Header.h"; sourceTree = "<group>"; };
+		D472BA6C230299EA00E28E05 /* IScoreDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IScoreDetailViewController.swift; sourceTree = "<group>"; };
+		D472BA6E230299FD00E28E05 /* IScore.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IScore.storyboard; sourceTree = "<group>"; };
 		D47A03DC20A2CEF5009A3A99 /* NSBundle+Language.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+Language.h"; sourceTree = "<group>"; };
 		D47A03DD20A2CEF5009A3A99 /* NSBundle+Language.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+Language.m"; sourceTree = "<group>"; };
 		D48D18192133E75E00BEAA2F /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -293,9 +301,19 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		D40C2BB42303A4AC009782AA /* MainCard */ = {
+			isa = PBXGroup;
+			children = (
+				D40C2BBB2303A5B1009782AA /* MainCardView.xib */,
+				D40C2BB92303A557009782AA /* MainCardView.swift */,
+			);
+			path = MainCard;
+			sourceTree = "<group>";
+		};
 		D424B72F22EEB73100D9BD12 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				D40C2BB42303A4AC009782AA /* MainCard */,
 				D4FDCA6F22F7FC9000D6CDD4 /* SelectCard */,
 				D4F7672A22F41A4A00452DA7 /* Navigation */,
 				D468CEF722F03C730019D7BB /* Modal */,
@@ -389,6 +407,14 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		D46B158C23015255001B5D48 /* IISS */ = {
+			isa = PBXGroup;
+			children = (
+				D472BA6B230299A700E28E05 /* IScore */,
+			);
+			path = IISS;
+			sourceTree = "<group>";
+		};
 		D4728A062007040B00E0A899 = {
 			isa = PBXGroup;
 			children = (
@@ -456,6 +482,15 @@
 			path = Objc;
 			sourceTree = "<group>";
 		};
+		D472BA6B230299A700E28E05 /* IScore */ = {
+			isa = PBXGroup;
+			children = (
+				D472BA6E230299FD00E28E05 /* IScore.storyboard */,
+				D472BA6C230299EA00E28E05 /* IScoreDetailViewController.swift */,
+			);
+			path = IScore;
+			sourceTree = "<group>";
+		};
 		D47E75A021104F7300ABC61B /* ICONex */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,6 +548,7 @@
 		D4C542C922E995A10099358D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				D46B158C23015255001B5D48 /* IISS */,
 				D4F2EBDF22FBFA5F00EAC3B4 /* Camera */,
 				D4FDCA6422F7BA3300D6CDD4 /* Load */,
 				BF6EFEAC22FA5173003B6AF3 /* Alert */,
@@ -671,6 +707,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF2D35AD230157C200EC2A35 /* IXNavigationView.xib in Resources */,
+				D472BA6F230299FD00E28E05 /* IScore.storyboard in Resources */,
 				D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */,
 				D4F2EBE322FC01FA00EAC3B4 /* Camera.storyboard in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
@@ -690,6 +727,7 @@
 				D4FDCA7122F7FEBF00D6CDD4 /* SelectCardView.xib in Resources */,
 				D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */,
 				BF6EFEC922FA5174003B6AF3 /* AddressAlertView.xib in Resources */,
+				D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */,
 				BF6EFEC822FA5174003B6AF3 /* PasswordAlertView.xib in Resources */,
 				BF78B36222FCFCD4002E34B3 /* CreateWallet.storyboard in Resources */,
 				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
@@ -783,12 +821,14 @@
 				D446A07022E160540000D4CA /* String+Extension.swift in Sources */,
 				D4F7672722F3E1A900452DA7 /* PopableTitleView.swift in Sources */,
 				D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */,
+				D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */,
 				BF6EFEC622FA5174003B6AF3 /* PasswordAlertView.swift in Sources */,
 				BF78B36B22FD4852002E34B3 /* CreateQRCodeViewController.swift in Sources */,
 				BF78B36322FCFCD4002E34B3 /* CreateBackupViewController.swift in Sources */,
 				D424B73222EEB7C200D9BD12 /* IXInputBox.swift in Sources */,
 				D47A03DE20A2CEF5009A3A99 /* NSBundle+Language.m in Sources */,
 				D42C3B9F22FA6EB00025F8AE /* WalletLoader.swift in Sources */,
+				D472BA6D230299EA00E28E05 /* IScoreDetailViewController.swift in Sources */,
 				D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */,
 				D446A07C22E16A6F0000D4CA /* BigInt+Extension.swift in Sources */,
 				D446A07622E162EA0000D4CA /* UIView+Extension.swift in Sources */,

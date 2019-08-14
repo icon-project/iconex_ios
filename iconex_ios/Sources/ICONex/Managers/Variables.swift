@@ -11,6 +11,7 @@ import Foundation
 struct CONST {
     static let governance = "hx0000000000000000000000000000000000000000"
     static let scoreGovernance = "cx0000000000000000000000000000000000000001"
+    static let iiss = "cx0000000000000000000000000000000000000000"
     
     enum METHOD: String {
         case getStepCosts

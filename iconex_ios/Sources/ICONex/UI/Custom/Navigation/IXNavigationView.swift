@@ -76,6 +76,7 @@ class IXNavigationView: UIView {
     }
     
     func setRight(image: UIImage?, action: (() -> Void)?) {
+        self.rightButton.setImage(image, for: .normal)
         self.rightAction = action
     }
     

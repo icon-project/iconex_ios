@@ -50,8 +50,7 @@ class IntroViewController: BaseViewController {
                 _animated = true
                 startAlpha()
             } else {
-                let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
-                app.change(root: start)
+                go()
             }
         }
     }
@@ -83,8 +82,8 @@ class IntroViewController: BaseViewController {
         }, completion: { _ in
             self.iconImage.transform = .identity
             self.satellite.transform = .identity
-            let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
-            app.change(root: start)
+            
+            self.go()
         })
     }
     
@@ -94,11 +93,14 @@ class IntroViewController: BaseViewController {
             case .main:
                 return Tracker.main()
                 
-            case .testnet:
-                return Tracker.dev()
+            case .euljiro:
+                return Tracker.euljiro()
                 
             case .yeouido:
-                return Tracker.local()
+                return Tracker.yeouido()
+                
+            default:
+                return Tracker.localTest()
             }
         }
         let versionURL = URL(string: tracker.provider)!.appendingPathComponent("app/ios.json")
@@ -139,7 +141,12 @@ class IntroViewController: BaseViewController {
         Manager.balance.getAllBalances()
         
         let list = Manager.wallet.walletList
-        
+        if list.count == 0 {
+            let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+            app.change(root: start)
+        } else {
+            app.toMain()
+        }
     }
     
     private func retry() {

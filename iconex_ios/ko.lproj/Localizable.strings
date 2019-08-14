@@ -163,6 +163,35 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// MARK: IScoreDetailViewController
+"IScoreDetail.Header1" = "현재 I-Score (ISC)";
+"IScoreDetail.Header2" = "받을 수 있는 수량 (ICX)";
+"IScoreDetail.DescHeader1" = "적정 Step 한도 / 가격 (ICX)";
+"IScoreDetail.DescHeader2" = "예상 최대 수수료 (ICX)";
+"IScoreDetail.Claim" = "Claim";
+
+
+
+
+
+
+
+
+
+
+
 "Passcode.Fingerprint.Instruction" = "잠금 해제를 위해\n지문 센서에 손가락을 올려주세요.";
 "Passcode.Unlock.Code" = "잠금 번호로 잠금 해제";
 

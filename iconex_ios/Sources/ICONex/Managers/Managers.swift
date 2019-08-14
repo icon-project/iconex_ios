@@ -164,13 +164,56 @@ extension ICONManager {
     func getStake(from: ICXWallet) -> PRepStakeResponse? {
         let params = ["address": from.address]
         
-        let call = Call<PRepStakeResponse>(from: from.address, to: CONST.scoreGovernance, method: "getStake", params: params)
+        let call = Call<PRepStakeResponse>(from: from.address, to: CONST.iiss, method: "getStake", params: params)
         let result = self.iconService.call(call).execute()
         
         return try? result.get()
     }
     
-    func setDelegation()
+    func setDelegation(from: ICXWallet, delegations: [PRepDelegation]) -> String? {
+        let params = ["delegations": delegations]
+        
+        let call = Call<String>(from: from.address, to: CONST.iiss, method: "setDelegation", params: params)
+        let result = self.iconService.call(call).execute()
+        
+        return try? result.get()
+    }
+    
+    func claimIScore(from: ICXWallet) -> String? {
+        let call = Call<String>(from: from.address, to: CONST.iiss, method: "claimIScore", params: nil)
+        let result = self.iconService.call(call).execute()
+        
+        return try? result.get()
+    }
+    
+    func queryIScore(from: ICXWallet) -> QueryIScoreResponse? {
+        let params = ["address": from.address]
+        
+        let call = Call<QueryIScoreResponse>(from: from.address, to: CONST.iiss, method: "queryIScore", params: params)
+        let result = self.iconService.call(call).execute()
+        
+        return try? result.get()
+    }
+    
+    func getPRepInfo(address: String) -> PRepInfoResponse? {
+        let params = ["address": address]
+        
+        let call = Call<PRepInfoResponse>(from: "", to: CONST.iiss, method: "getPRep", params: params)
+        let result = self.iconService.call(call).execute()
+        
+        return try? result.get()
+    }
+    
+    func getPreps(start: Int = 1, end: Int = -1) -> PRepListResponse? {
+        var params = ["startRanking": start]
+        if end > 0 {
+            params["endRanking"] = end
+        }
+        let call = Call<PRepListResponse>(from: "", to: CONST.iiss, method: "getPReps", params: params)
+        let result = self.iconService.call(call).execute()
+        
+        return try? result.get()
+    }
 }
 
 // MARK: BalanceManager
@@ -254,30 +297,35 @@ class ExchangeManager {
     private init () { }
     
     func getExchangeList() {
-        var tracker: Tracker {
-            switch Config.host {
-            case .main:
-                return Tracker.main()
-                
-            case .testnet:
-                return Tracker.dev()
-                
-            case .yeouido:
-                return Tracker.local()
+        DispatchQueue.global().async {
+            var tracker: Tracker {
+                switch Config.host {
+                case .main:
+                    return Tracker.main()
+                    
+                case .euljiro:
+                    return Tracker.euljiro()
+                    
+                case .yeouido:
+                    return Tracker.yeouido()
+                    
+                default:
+                    return Tracker.localTest()
+                }
             }
-        }
-        
-        guard let data = tracker.exchangeData(list: exchangeList) else { return }
-        
-        do {
-            let decoder = JSONDecoder()
-            let list = try decoder.decode([ExchangeInfo].self, from: data)
             
-            for info in list {
-                self.exchangeInfoList[info.tradeName] = info
+            guard let data = tracker.exchangeData(list: self.exchangeList) else { return }
+            
+            do {
+                let decoder = JSONDecoder()
+                let list = try decoder.decode([ExchangeInfo].self, from: data)
+                
+                for info in list {
+                    self.exchangeInfoList[info.tradeName] = info
+                }
+            } catch {
+                Log("Error - \(error)")
             }
-        } catch {
-            Log("Error - \(error)")
         }
     }
     
@@ -307,7 +355,8 @@ struct Ethereum {
         case .main:
             return URL(string: "https://eth.solidwallet.io/")!
             
-        case .testnet, .yeouido:
+//        case .testnet, .yeouido:
+        default:
             return URL(string: "https://ropsten.infura.io")!
         }
     }
@@ -317,7 +366,8 @@ struct Ethereum {
         case .main:
             return URL(string: "https://etherscan.io/address")!
             
-        case .testnet, .yeouido:
+//        case .testnet, .yeouido:
+        default:
             return URL(string: "https://ropsten.etherscan.io/address")!
         }
     }

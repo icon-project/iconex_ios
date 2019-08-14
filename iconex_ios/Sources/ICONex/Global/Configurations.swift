@@ -10,7 +10,7 @@ import Foundation
 struct Configuration {
     public enum HOST: Int {
         case main = 0
-        case testnet = 1
+        case euljiro = 1
         case yeouido = 2
         #if DEBUG
         case localTest
@@ -21,7 +21,7 @@ struct Configuration {
             case .main:
                 return "https://ctz.solidwallet.io/api/v3"
                 
-            case .testnet:
+            case .euljiro:
                 return "https://test-ctz.solidwallet.io/api/v3"
                 
             case .yeouido:
@@ -37,7 +37,7 @@ struct Configuration {
             case .main:
                 return "0x1"
                 
-            case .testnet:
+            case .euljiro:
                 return "0x2"
                 
             case .yeouido:
@@ -53,12 +53,16 @@ struct Configuration {
     static var general = Configuration()
     
     var host: HOST {
+        #if DEBUG
+        return .localTest
+        #else
         let save = UserDefaults.standard.integer(forKey: "Provider")
         if let provider = HOST(rawValue: save) {
             return provider
         } else {
             return .main
         }
+        #endif
     }
     var faqLink: String {
         return "https://docs.google.com/spreadsheets/d/1HiT98wqEpFgF2d98eJefQfH7xK4KPPxNDiiXg3AcJ7w/edit#gid=0"
@@ -152,8 +156,8 @@ extension Configuration.HOST {
         case .main:
             return "Mainnet"
             
-        case .testnet:
-            return "Testnet"
+        case .euljiro:
+            return "Euljiro (을지로)"
             
         case .yeouido:
             return "Yeouido (여의도)"

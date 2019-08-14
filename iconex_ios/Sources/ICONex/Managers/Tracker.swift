@@ -52,8 +52,9 @@ open class Tracker {
     
     public enum TrackerHost: String {
         case main = "https://tracker.icon.foundation"
-        case dev = "https://trackerdev.icon.foundation"
-        case local = "http://trackerlocaldev.icon.foundation"
+        case euljiro = "https://trackerdev.icon.foundation"
+        case yeouido = "https://bicon.tracker.solidwallet.io"
+        case localTest = "http://54.180.29.194"
     }
     
     enum Method: String {
@@ -77,12 +78,16 @@ open class Tracker {
         return Tracker(.main)
     }
     
-    public static func dev() -> Tracker {
-        return Tracker(.dev)
+    public static func euljiro() -> Tracker {
+        return Tracker(.euljiro)
     }
     
-    public static func local() -> Tracker {
-        return Tracker(.local)
+    public static func yeouido() -> Tracker {
+        return Tracker(.yeouido)
+    }
+    
+    static func localTest() -> Tracker {
+        return Tracker(.localTest)
     }
     
     func exchangeData(list: String) -> Data? {
