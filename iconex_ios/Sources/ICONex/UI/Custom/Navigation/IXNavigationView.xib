@@ -15,6 +15,8 @@
                 <outlet property="leftButton" destination="9xy-0t-wCv" id="wlQ-8o-GKq"/>
                 <outlet property="rightButton" destination="0Pa-Fp-QcJ" id="LHn-X7-jmq"/>
                 <outlet property="titleLabel" destination="xGU-d6-Fxv" id="s6k-2N-zVh"/>
+                <outlet property="toggleButton" destination="A1d-RW-Z99" id="8bD-io-GzH"/>
+                <outlet property="toggleImageView" destination="u1V-wt-aMU" id="Lvp-0k-08k"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -38,25 +40,42 @@
                                 <constraint firstAttribute="width" constant="32" id="JEo-86-vgj"/>
                             </constraints>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xGU-d6-Fxv">
-                            <rect key="frame" x="186" y="17.666666666666668" width="42" height="21.000000000000004"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VcW-Zp-4VP">
+                            <rect key="frame" x="176.33333333333334" y="18" width="61.666666666666657" height="20"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xGU-d6-Fxv">
+                                    <rect key="frame" x="0.0" y="0.0" width="41.666666666666664" height="20"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowToggle" translatesAutoresizingMaskIntoConstraints="NO" id="u1V-wt-aMU">
+                                    <rect key="frame" x="41.666666666666657" y="0.0" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="20" id="6Qy-NM-iZT"/>
+                                        <constraint firstAttribute="width" secondItem="u1V-wt-aMU" secondAttribute="height" multiplier="1:1" id="ot2-SJ-ehk"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                        </stackView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A1d-RW-Z99">
+                            <rect key="frame" x="171.33333333333334" y="13" width="71.666666666666657" height="30"/>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="0Pa-Fp-QcJ" firstAttribute="top" secondItem="tCB-Ab-fdE" secondAttribute="top" id="1PQ-67-fn3"/>
-                        <constraint firstItem="0Pa-Fp-QcJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="xGU-d6-Fxv" secondAttribute="trailing" constant="16" id="MHK-bm-MeK"/>
                         <constraint firstAttribute="bottom" secondItem="9xy-0t-wCv" secondAttribute="bottom" id="RCR-QS-uN5"/>
-                        <constraint firstItem="xGU-d6-Fxv" firstAttribute="centerX" secondItem="tCB-Ab-fdE" secondAttribute="centerX" id="SCp-Xa-0Sh"/>
+                        <constraint firstItem="A1d-RW-Z99" firstAttribute="top" secondItem="VcW-Zp-4VP" secondAttribute="top" constant="-5" id="S1W-WN-a6R"/>
                         <constraint firstAttribute="trailing" secondItem="0Pa-Fp-QcJ" secondAttribute="trailing" constant="10" id="Sfv-wS-xkd"/>
                         <constraint firstItem="9xy-0t-wCv" firstAttribute="top" secondItem="tCB-Ab-fdE" secondAttribute="top" id="TAL-f9-8yR"/>
                         <constraint firstItem="9xy-0t-wCv" firstAttribute="leading" secondItem="tCB-Ab-fdE" secondAttribute="leading" constant="10" id="a2f-H9-IJ4"/>
-                        <constraint firstItem="xGU-d6-Fxv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9xy-0t-wCv" secondAttribute="trailing" constant="16" id="brT-FO-hbN"/>
-                        <constraint firstItem="xGU-d6-Fxv" firstAttribute="centerY" secondItem="tCB-Ab-fdE" secondAttribute="centerY" id="czR-7X-ar0"/>
+                        <constraint firstItem="A1d-RW-Z99" firstAttribute="bottom" secondItem="VcW-Zp-4VP" secondAttribute="bottom" constant="5" id="b4p-Th-5Fu"/>
+                        <constraint firstItem="VcW-Zp-4VP" firstAttribute="centerY" secondItem="0Pa-Fp-QcJ" secondAttribute="centerY" id="cPT-fx-LCd"/>
+                        <constraint firstItem="VcW-Zp-4VP" firstAttribute="centerX" secondItem="tCB-Ab-fdE" secondAttribute="centerX" id="neL-Fk-PQr"/>
                         <constraint firstAttribute="bottom" secondItem="0Pa-Fp-QcJ" secondAttribute="bottom" id="oic-BK-n3t"/>
+                        <constraint firstItem="A1d-RW-Z99" firstAttribute="trailing" secondItem="VcW-Zp-4VP" secondAttribute="trailing" constant="5" id="quR-YN-abL"/>
+                        <constraint firstItem="A1d-RW-Z99" firstAttribute="leading" secondItem="VcW-Zp-4VP" secondAttribute="leading" constant="-5" id="vWi-9L-yOB"/>
                         <constraint firstAttribute="height" constant="56" id="wJu-ip-zhX"/>
                     </constraints>
                 </view>
@@ -74,5 +93,6 @@
     </objects>
     <resources>
         <image name="icAppbarBack" width="32" height="32"/>
+        <image name="icArrowToggle" width="20" height="20"/>
     </resources>
 </document>

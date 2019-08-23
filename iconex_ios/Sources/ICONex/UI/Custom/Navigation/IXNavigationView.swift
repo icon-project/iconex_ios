@@ -16,6 +16,8 @@ class IXNavigationView: UIView {
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var leftButton: UIButton!
     @IBOutlet private weak var rightButton: UIButton!
+    @IBOutlet weak var toggleButton: UIButton!
+    @IBOutlet weak var toggleImageView: UIImageView!
     
     private let disposeBag = DisposeBag()
     
@@ -29,10 +31,18 @@ class IXNavigationView: UIView {
             rightButton.isHidden = newValue == nil
         }
     }
+    private var toggleAction: (() -> Void)? {
+        willSet {
+            toggleButton.isHidden = newValue == nil
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         xibSetup()
+        
+        toggleButton.isHidden = true
+        
         leftButton.rx.tap.subscribe(onNext: { [unowned self] in
             if let action = self.leftAction {
                 action()
@@ -41,6 +51,12 @@ class IXNavigationView: UIView {
         
         rightButton.rx.tap.subscribe(onNext: { [unowned self] in
             if let action = self.rightAction {
+                action()
+            }
+        }).disposed(by: disposeBag)
+        
+        toggleButton.rx.tap.subscribe(onNext: { (_) in
+            if let action = self.toggleAction {
                 action()
             }
         }).disposed(by: disposeBag)
@@ -71,13 +87,28 @@ class IXNavigationView: UIView {
         self.titleLabel.size18(text: title, color: .white, weight: .medium, align: .center)
     }
     
-    func setLeft(action: (() -> Void)?) {
+    func setLeft(image: UIImage? = nil, action: (() -> Void)?) {
+        self.leftButton.setImage(image, for: .normal)
         self.leftAction = action
     }
     
-    func setRight(image: UIImage?, action: (() -> Void)?) {
+    func setRight(image: UIImage? = nil, action: (() -> Void)?) {
         self.rightButton.setImage(image, for: .normal)
         self.rightAction = action
+    }
+    
+    func hideToggleImageView(_ value: Bool? = nil) {
+        if let val = value {
+            self.toggleImageView.isHidden = val
+            self.toggleButton.isEnabled = val
+        } else {
+            self.toggleImageView.isHidden.toggle()
+            self.toggleButton.isEnabled.toggle()
+        }
+    }
+    
+    func setToggleButton(action: (() -> Void)?) {
+        self.toggleAction = action
     }
     
     override var intrinsicContentSize: CGSize {
