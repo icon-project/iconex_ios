@@ -39,6 +39,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .password
         alertVC.walletAddress = address
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
@@ -46,12 +47,14 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .walletName
         alertVC.walletName = walletName
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
     static func addAddress(confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .addAddress
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
@@ -59,6 +62,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .stake
         alertVC.stakeInfo = stakeInfo
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
@@ -66,6 +70,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .unstake
         alertVC.stakeInfo = unstakeInfo
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
@@ -73,6 +78,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .unstakecancel
         alertVC.stakeInfo = cancelInfo
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
@@ -80,6 +86,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .send
         alertVC.sendInfo = sendInfo
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
@@ -87,6 +94,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .iscore
         alertVC.iscoreInfo = iscoreInfo
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
