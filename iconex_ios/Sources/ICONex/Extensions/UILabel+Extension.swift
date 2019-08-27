@@ -35,15 +35,18 @@ extension UILabel {
     
     func set(text: String, size: CGFloat, height: CGFloat, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
         var font: UIFont
-        if text.rangeOfCharacter(from: CharacterSet.decimalDigits, options: .caseInsensitive, range: nil) != nil {
-            Log("Contains number")
+        
+        let digitSet = CharacterSet.decimalDigits
+        let charSet = digitSet.union(CharacterSet(charactersIn: ",."))
+        
+        if text.rangeOfCharacter(from: charSet.inverted, options: .caseInsensitive, range: nil) != nil {
+            font = UIFont.systemFont(ofSize: size, weight: weight)
+        } else {
             if weight == .regular {
                 font = UIFont(name: "NanumSquareR", size: size)!
             } else {
                 font = UIFont(name: "NanumSquareB", size: size)!
             }
-        } else {
-            font = UIFont.systemFont(ofSize: size, weight: weight)
         }
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = height - size - (font.lineHeight - font.pointSize)
