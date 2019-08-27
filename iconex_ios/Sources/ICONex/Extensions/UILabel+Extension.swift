@@ -33,6 +33,10 @@ extension UILabel {
         set(text: text, size: 20, height: 24, color: color, weight: weight, align: align)
     }
     
+    func setBalanceAttr(text: String, color: UIColor = .white, weight: UIFont.Weight = .light, align: NSTextAlignment = .center) {
+        set(text: text, size: 42, height: 47, color: color, weight: .light, align: align)
+    }
+
     func set(text: String, size: CGFloat, height: CGFloat, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
         var font: UIFont
         if text.rangeOfCharacter(from: CharacterSet.decimalDigits, options: .caseInsensitive, range: nil) != nil {

@@ -63,16 +63,13 @@ class CreateQRCodeViewController: BaseViewController {
         
         // address
         headerLabel.size20(text: "Wallet.Address".localized, color: .gray77, weight: .medium, align: .center)
-        copyButton.cornered(size: 12)
-        copyButton.border(1, .gray230)
+        copyButton.roundGray230()
         copyButton.setTitle("Wallet.Address.Copy".localized, for: .normal)
-        copyButton.setTitleColor(.gray128, for: .normal)
         
         // private key
         headerLabel2.size20(text: "Wallet.PrivateKey".localized, color: .gray77, weight: .medium, align: .center)
-        copyButton2.border(1, .gray230)
+        copyButton2.roundGray230()
         copyButton2.setTitle("Wallet.PrivateKey.Copy".localized, for: .normal)
-        copyButton2.setTitleColor(.gray128, for: .normal)
         
         pageControl.numberOfPages = 2
         pageControl.currentPageIndicatorTintColor = UIColor.init(white: 0, alpha: 0.7)
@@ -103,11 +100,9 @@ class CreateQRCodeViewController: BaseViewController {
             self.qrImageView2.image = UIImage(ciImage: qrCodeSource2)
             
             self.infoLabel.size12(text: address, color: .gray77, align: .center)
-            copyButton2.cornered(size: 12)
             self.infoLabel2.text = pk
             
             self.infoLabel2.size12(text: pk, color: .gray77, align: .center)
-            copyButton2.cornered(size: 12)
         }
     }
 }

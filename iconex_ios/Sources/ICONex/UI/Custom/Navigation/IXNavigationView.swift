@@ -83,8 +83,13 @@ class IXNavigationView: UIView {
         rightAction = nil
     }
     
-    func setTitle(_ title: String) {
+    func setTitle(_ title: String, isMain: Bool = false) {
         self.titleLabel.size18(text: title, color: .white, weight: .medium, align: .center)
+        if isMain {
+            self.toggleImageView.image = #imageLiteral(resourceName: "icArrowToggle")
+        } else {
+            self.toggleImageView.isHidden = true
+        }
     }
     
     func setLeft(image: UIImage? = nil, action: (() -> Void)?) {
@@ -95,6 +100,20 @@ class IXNavigationView: UIView {
     func setRight(image: UIImage? = nil, action: (() -> Void)?) {
         self.rightButton.setImage(image, for: .normal)
         self.rightAction = action
+    }
+    
+    func setRight(title: String? = nil, action: (() -> Void)?) {
+        self.rightButton.setTitle(title, for: .normal)
+        self.rightButton.setTitleColor(.white, for: .normal)
+        self.rightButton.setTitleColor(UIColor.init(white: 1, alpha: 0.6), for: .disabled)
+        
+        self.rightAction = action
+    }
+    
+    func setRight(title: String? = nil) {
+        self.rightButton.setTitle(title, for: .normal)
+        self.rightButton.setTitleColor(.white, for: .normal)
+        self.rightButton.setTitleColor(UIColor.init(white: 1, alpha: 0.6), for: .disabled)
     }
     
     func hideToggleImageView(_ value: Bool? = nil) {

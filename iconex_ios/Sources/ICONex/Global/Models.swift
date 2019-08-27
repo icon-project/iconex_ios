@@ -103,6 +103,37 @@ struct Token {
     }
 }
 
+// Token JSON File
+struct TokenFile: Decodable {
+    var name: String
+    var address: String
+    var symbol: String
+    var decimal: Int
+}
+
+struct NewToken {
+    var name: String
+    var parent: String
+    var contract: String
+    var parentType: String
+    var symbol: String
+    var decimal: Int
+    var created: Date = Date()
+    
+    init(token: TokenFile, parent: BaseWalletConvertible) {
+        self.name = token.name
+        self.parent = parent.address
+        self.contract = token.address
+        if let _ = parent as? ICXWallet {
+            self.parentType = "icx"
+        } else {
+            self.parentType = "eth"
+        }
+        self.symbol = token.symbol
+        self.decimal = token.decimal
+    }
+}
+
 
 // MARK: Export Bundle
 
@@ -206,5 +237,23 @@ struct TransactionInfo {
         self.date = date
         self.hexAmount = hexAmount
         self.tokenSymbol = tokenSymbol
+    }
+}
+
+public enum CoinType {
+    case icx, eth
+    
+    var fullName: String {
+        switch self {
+        case .icx: return "ICON"
+        case .eth: return "Etherenum"
+        }
+    }
+    
+    var symbol: String {
+        switch self {
+        case .icx: return "ICX"
+        case .eth: return "ETH"
+        }
     }
 }

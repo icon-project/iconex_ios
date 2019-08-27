@@ -49,7 +49,7 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowToggle" translatesAutoresizingMaskIntoConstraints="NO" id="u1V-wt-aMU">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="u1V-wt-aMU">
                                     <rect key="frame" x="41.666666666666657" y="0.0" width="20" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="20" id="6Qy-NM-iZT"/>
@@ -93,6 +93,5 @@
     </objects>
     <resources>
         <image name="icAppbarBack" width="32" height="32"/>
-        <image name="icArrowToggle" width="20" height="20"/>
     </resources>
 </document>

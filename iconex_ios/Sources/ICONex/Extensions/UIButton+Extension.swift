@@ -112,4 +112,10 @@ extension UIButton {
         border(1, .gray230)
         titleLabel?.font = .systemFont(ofSize: 16)
     }
+    
+    func roundGray230() {
+        self.border(1, .gray230)
+        self.cornered(size: 12)
+        self.setTitleColor(.gray128, for: .normal)
+    }
 }

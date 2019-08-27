@@ -11,6 +11,22 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+extension UIView {
+    func setCurrentPage() {
+        self.frame.size = CGSize(width: 14, height: 6)
+        self.corner(3)
+        self.backgroundColor = .white
+        self.clipsToBounds = false
+    }
+    
+    func setNonCurrentPage() {
+        self.frame.size = CGSize(width: 6, height: 6)
+        self.corner(3)
+        self.backgroundColor = UIColor.init(white: 1, alpha: 0.5)
+        self.clipsToBounds = false
+    }
+}
+
 // MARK : UIView
 extension UIView {
     func border(_ width: CGFloat, _ color: UIColor) {

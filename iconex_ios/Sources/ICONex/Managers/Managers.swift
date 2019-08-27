@@ -284,6 +284,21 @@ extension BalanceManager {
             return nil
         }
     }
+    
+    func getTotalBalance() -> BigUInt {
+        var total: BigUInt = 0
+        for i in walletBalances {
+            total += i.value
+        }
+        return total
+    }
+    
+    func getTokenBalance(address: String, contract: String) -> BigUInt {
+        guard let wallet = self.tokenBalances[address] else { return 0 }
+        let balance = wallet[address] ?? 0
+        
+        return balance
+    }
 }
 
 // MARK: ExchangeManager

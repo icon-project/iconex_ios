@@ -406,6 +406,28 @@ struct DB {
         }
     }
     
+    static func addToken(tokenInfo: NewToken) throws {
+        let realm = try Realm()
+
+        let token = TokenModel()
+
+        if let maxID = realm.objects(TokenModel.self).max(ofProperty: "id") as Int? {
+            token.id = maxID + 1
+        }
+
+        token.name = tokenInfo.name
+        token.contractAddress = tokenInfo.parent.hasPrefix("hx") ? tokenInfo.contract.lowercased() : tokenInfo.contract.add0xPrefix().lowercased()
+        token.decimal = tokenInfo.decimal
+        token.dependedAddress = tokenInfo.parent.add0xPrefix().lowercased()
+        token.defaultDecimal = tokenInfo.decimal
+        token.parentType = tokenInfo.parentType
+        token.symbol = tokenInfo.symbol
+
+        try realm.write {
+            realm.add(token)
+        }
+    }
+    
     static func modifyToken(tokenInfo: Token) throws {
         let realm = try Realm()
         let contract = tokenInfo.parent.hasPrefix("hx") ? tokenInfo.contract.lowercased() : tokenInfo.contract.add0xPrefix().lowercased()

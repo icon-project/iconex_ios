@@ -74,6 +74,10 @@ extension BaseWalletConvertible {
         try DB.addToken(tokenInfo: token)
     }
     
+    func addToken(token: NewToken) throws {
+        try DB.addToken(tokenInfo: token)
+    }
+    
     func deleteToken(token: Token) throws {
         try DB.removeToken(tokenInfo: token)
     }

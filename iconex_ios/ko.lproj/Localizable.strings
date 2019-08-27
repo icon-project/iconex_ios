@@ -187,6 +187,61 @@
 
 
 
+// MARK: MainViewController
+"Main.Nav.Title.1" = "지갑";
+"Main.Nav.Title.2" = "코인&토큰";
+"Main.Balance.Title" = "전체 자산 가치";
+"Main.Power.Title" = "전체 Voted Power";
+//"" = "";
+
+// MARK: SdieMenuViewController
+"Side.Create" = "지갑 만들기";
+"Side.Load" = "지갑 가져오기";
+"Side.Export" = "지갑 묶어서 내보내기";
+"Side.Lock" = "잠금 설정";
+"Side.Version" = "앱 버전\t%@";
+"Side.Disclaimer" = "ICONex 이용 면책 조항";
+
+
+// MARK: MainQRCodeViewController
+"Main.QRCode.InputBox.Placeholder" = "전송 요청 수량 (ICX)";
+"Main.QRCode.Request" = "전송 요청";
+"Main.QRCode.Description" = "・ 전송 요청 수량 입력 시, 입력한 수량 정보가 포함된 QR 코드로 변경됩니다.";
+
+
+// MARK: ManageWalletViewController
+"Manage.Title" = "지갑 관리";
+"Manage.Token" = "토큰 관리";
+"Manage.Backup" = "지갑 백업";
+"Manage.Change" = "지갑 비밀번호 변경";
+"Manage.Delete" = "지갑 삭제";
+"Manage.Alert.Wallet.Empty" = "지갑을 삭제하시겠습니까?";
+"Manage.Alert.Wallet" = "삭제하시려는 지갑에 잔액이 남아있습니다. 지갑 백업이 되어있지 않으면 잔액 복구가 불가능합니다. 그래도 삭제하시겠습니까?";
+
+// MARK: ManageTokenViewController
+"ManageToken.Title" = "토큰 관리";
+"ManageToken.Add" = "토큰 추가";
+"ManageToken.Empty" = "등록된 토큰이 없습니다.";
+
+
+// MARK: TokenDetailViewController
+"TokenDetail.Placeholder.Address" = "주소 (Address)";
+"TokenDetail.Placeholder.Name" = "토큰 이름 (Token Name)";
+"TokenDetail.Placeholder.Symbol" = "토큰 기호 (Token Symbol)";
+"TokenDetail.Placeholder.Decimal" = "소수 자리수 (Decimals)";
+"TokenDetail.Alert.Delete" = "%@을(를) 삭제하시겠습니까?";
+"TokenDetail.Alert.Cancel" = "토큰 정보 수정을 취소하시겠습니까?";
+
+"Token.Delete" = "토큰 삭제";
+"Token.Add" = "추가";
+
+// MARK: AddTokenViewController
+"Token.Add.Footer.Description" = "목록에 토큰이 없다면 직접 입력하여 추가해주세요.";
+"Token.Add.Footer.Button" = "토큰 정보 입력";
+
+// MARK: AddTokenInfoViewController
+"Token.Info.Error.Address" = "주소가 올바르지 않습니다. 다시 확인해주세요.";
+"Token.Info.Error.Symbol" = "영문 또는 숫자로 입력해주세요.";
 
 
 

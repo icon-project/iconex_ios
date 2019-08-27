@@ -15,6 +15,7 @@ enum IXInputBoxState {
     case error
     case focus
     case disable
+    case readOnly
 }
 
 enum IXInputBoxType {
@@ -71,6 +72,13 @@ enum IXInputBoxType {
                 if _type == .fileSelect {
                     textField.textColor = .error1
                 }
+            case .readOnly:
+                borderView.backgroundColor = .gray250
+                borderView.border(1.0, .gray230)
+                placeholderLabel.textColor = .gray77
+                placeholderLabel.isHidden = false
+                coverView.isHidden = false
+                textField.isEnabled = false
             }
         }
     }

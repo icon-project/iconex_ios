@@ -112,4 +112,10 @@ struct Validator {
         
         return true
     }
+    
+    static func validateTokenSymbol(symbol: String) -> Bool {
+        let pattern = "^[a-zA-Z0-9]*$"
+        let result = NSPredicate(format: "SELF MATCHES %@", pattern)
+        return result.evaluate(with: symbol)
+    }
 }
