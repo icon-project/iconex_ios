@@ -36,7 +36,6 @@ class AlertViewController: BaseViewController {
     
     var walletAddress: String?
     
-    var walletName: String?
     var originalWalletName: String?
     
     var isICX: Bool = true
@@ -52,7 +51,9 @@ class AlertViewController: BaseViewController {
     var cancelHandler: (() -> Void)?
     var confirmHandler: (() -> Void)?
     
-    override func initializeComponents() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.view.backgroundColor = UIColor.init(white: 1, alpha: 0)
         
         popView.layer.cornerRadius = 18
@@ -92,6 +93,7 @@ class AlertViewController: BaseViewController {
                     
                     do {
                         try DB.changeWalletName(former: formerName, newName: newName)
+                        self.closer(self.confirmHandler)
                     } catch {
                         sub.inputBoxView.setError(message: "Error.Wallet.Duplicated.Name".localized)
                     }
@@ -128,8 +130,23 @@ class AlertViewController: BaseViewController {
         setupAlertView()
     }
     
-    override func refresh() {
+    override func viewWillAppear(_ animated: Bool) {
         open()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        switch self.type {
+        case .password, .walletName:
+            let sub = self.contentView.subviews.first as! PasswordAlertView
+            sub.inputBoxView.textField.becomeFirstResponder()
+            
+        case .addAddress:
+            let sub = self.contentView.subviews.first as! AddressAlertView
+            sub.addressInputBox.textField.becomeFirstResponder()
+            
+        default: break
+            
+        }
     }
     
     func setButtonUI(isOne: Bool) {
@@ -141,21 +158,32 @@ class AlertViewController: BaseViewController {
         if isOne {
             rightButton.isHidden = true
             leftButton.setTitleColor(.gray77, for: .normal)
-            leftButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            
+            if #available(iOS 11.0, *){
+                leftButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            } else {
+                // fallback
+            }
+            
             
         } else {
             leftButton.setTitleColor(.gray77, for: .normal)
             leftButton.setTitleColor(.mint5, for: .disabled)
-            leftButton.layer.maskedCorners = [.layerMinXMaxYCorner]
             
             rightButton.backgroundColor = .mint2
             rightButton.setTitleColor(.white, for: .normal)
             rightButton.clipsToBounds = true
             rightButton.layer.cornerRadius = 18
             rightButton.setTitle(rightButtonTitle, for: .normal)
-            rightButton.layer.maskedCorners = [.layerMaxXMaxYCorner]
             
             rightButton.setTitleColor(.mint5, for: .disabled)
+            
+            if #available(iOS 11.0, *) {
+                leftButton.layer.maskedCorners = [.layerMinXMaxYCorner]
+                rightButton.layer.maskedCorners = [.layerMaxXMaxYCorner]
+            } else {
+                // fallback
+            }
         }
     }
     
@@ -229,8 +257,6 @@ class AlertViewController: BaseViewController {
             
             addSubviewWithConstraint(passwordView)
             
-            passwordView.inputBoxView.textField.becomeFirstResponder()
-            
             passwordView.inputBoxView.textField.rx.text.orEmpty
                 .subscribe(onNext: { (value) in
                     self.rightButton.isEnabled = value.count > 0
@@ -256,20 +282,19 @@ class AlertViewController: BaseViewController {
             passwordView.placeholder = "Alert.WalletName.Placeholder".localized
             passwordView.alertType = .walletName
             
-            passwordView.inputBoxView.textField.text = self.walletName
+            passwordView.inputBoxView.textField.text = self.originalWalletName
             passwordView.inputBoxView.set { (inputValue) -> String? in
+//                return inputValue
                 guard let formerName = self.originalWalletName else { return nil }
-                
+
                 if formerName == inputValue {
                     return nil
                 } else {
-                    return DB.canSaveWallet(name: inputValue) ? "Error.Wallet.Duplicated.Name".localized : nil
+                    return DB.canSaveWallet(name: inputValue) ? nil : "Error.Wallet.Duplicated.Name".localized
                 }
             }
             
             addSubviewWithConstraint(passwordView)
-            
-            passwordView.inputBoxView.textField.becomeFirstResponder()
             
             passwordView.inputBoxView.textField.rx.text.orEmpty
                 .scan("") { (previous, new) -> String in
@@ -326,8 +351,6 @@ class AlertViewController: BaseViewController {
             addressView.isICON = self.isICX
             
             addSubviewWithConstraint(addressView)
-            
-            addressView.addressNameInputBox.textField.becomeFirstResponder()
             
             addressView.addressNameInputBox.set { (inputValue) -> String? in
                 guard inputValue.count != 0 else { return nil }

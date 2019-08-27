@@ -46,7 +46,7 @@ class Alert {
     static func changeWalletName(walletName: String, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .walletName
-        alertVC.walletName = walletName
+        alertVC.originalWalletName = walletName
         alertVC.confirmHandler = confirmAction
         return alertVC
     }
