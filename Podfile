@@ -9,7 +9,7 @@ def import_pods
   pod 'RealmSwift', '3.11.0'
   pod 'web3swift', :modular_headers => true
   pod 'Alamofire'
-  pod 'ICONKit'
+  pod 'ICONKit', :path => '~/works/ICONKit'
   pod 'PanModal'
 end
 

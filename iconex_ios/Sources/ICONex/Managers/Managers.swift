@@ -150,7 +150,7 @@ extension ICONManager {
         return balance
     }
     
-    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, ICError> {
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, Error> {
         let call = Call<BigUInt>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
         let result = self.iconService.call(call).execute()
         
@@ -167,7 +167,28 @@ extension ICONManager {
         let call = Call<PRepStakeResponse>(from: from.address, to: CONST.iiss, method: "getStake", params: params)
         let result = self.iconService.call(call).execute()
         
-        return try? result.get()
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
+    }
+    
+    func getStake(from: ICXWallet, _ completion: @escaping ((PRepStakeResponse?) -> Void)) {
+        let params = ["address": from.address]
+        
+        let call = Call<PRepStakeResponse>(from: from.address, to: CONST.iiss, method: "getStake", params: params)
+        self.iconService.call(call).async({ result in
+            var response: PRepStakeResponse?
+            do {
+                response = try result.get()
+            } catch {
+                Log("Error - \(error)")
+                response = nil
+            }
+            completion(response)
+        })
     }
     
     func setDelegation(from: ICXWallet, delegations: [PRepDelegation]) -> String? {
@@ -176,14 +197,54 @@ extension ICONManager {
         let call = Call<String>(from: from.address, to: CONST.iiss, method: "setDelegation", params: params)
         let result = self.iconService.call(call).execute()
         
-        return try? result.get()
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
+    }
+    
+    func getDelegation(wallet: ICXWallet) -> TotalDelegation? {
+        let params = ["address": wallet.address]
+        
+        let call = Call<TotalDelegation>(from: wallet.address, to: CONST.iiss, method: "getDelegation", params: params)
+        let result = self.iconService.call(call).execute()
+        
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
+    }
+    
+    func getDelegation(wallet: ICXWallet, _ completion: @escaping ((TotalDelegation?) -> Void)) {
+        let params = ["address": wallet.address]
+        
+        let call = Call<TotalDelegation>(from: wallet.address, to: CONST.iiss, method: "getDelegation", params: params)
+        self.iconService.call(call).async { result in
+            var delegate: TotalDelegation?
+            do {
+                delegate = try result.get()
+            } catch {
+                Log("Error - \(error)")
+                delegate = nil
+            }
+            completion(delegate)
+        }
     }
     
     func claimIScore(from: ICXWallet) -> String? {
         let call = Call<String>(from: from.address, to: CONST.iiss, method: "claimIScore", params: nil)
         let result = self.iconService.call(call).execute()
         
-        return try? result.get()
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
     }
     
     func queryIScore(from: ICXWallet) -> QueryIScoreResponse? {
@@ -192,7 +253,12 @@ extension ICONManager {
         let call = Call<QueryIScoreResponse>(from: from.address, to: CONST.iiss, method: "queryIScore", params: params)
         let result = self.iconService.call(call).execute()
         
-        return try? result.get()
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
     }
     
     func getPRepInfo(address: String) -> PRepInfoResponse? {
@@ -201,7 +267,12 @@ extension ICONManager {
         let call = Call<PRepInfoResponse>(from: "", to: CONST.iiss, method: "getPRep", params: params)
         let result = self.iconService.call(call).execute()
         
-        return try? result.get()
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
     }
     
     func getPreps(start: Int = 1, end: Int = -1) -> PRepListResponse? {
@@ -212,7 +283,12 @@ extension ICONManager {
         let call = Call<PRepListResponse>(from: "", to: CONST.iiss, method: "getPReps", params: params)
         let result = self.iconService.call(call).execute()
         
-        return try? result.get()
+        do {
+            return try result.get()
+        } catch {
+            Log("Error - \(error)")
+            return nil
+        }
     }
 }
 
@@ -240,6 +316,7 @@ extension BalanceManager {
             for wallet in Manager.wallet.walletList {
                 if let icx = wallet as? ICXWallet {
                     if let balance = try? Manager.icon.iconService.getBalance(address: icx.address).execute().get() {
+                        Log("Wallet balance - \(wallet.name) , \(balance.toString(decimal: 18, 18, false))")
                         self.walletBalances[wallet.address] = balance
                         
                         guard let tokenList = wallet.tokens else { continue }

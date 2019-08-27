@@ -220,6 +220,7 @@
                         <outlet property="IScoreHeader2" destination="K9Q-fn-Whk" id="fUj-wR-7nB"/>
                         <outlet property="bottomContainer" destination="Rxz-Ob-ugA" id="UZb-vz-7Mu"/>
                         <outlet property="claimButton" destination="T21-Ji-yI7" id="JTM-nO-LBP"/>
+                        <outlet property="contentScroll" destination="We0-6i-FB9" id="mPW-ts-uJY"/>
                         <outlet property="currentIScoreValue" destination="VBU-Wo-Ydw" id="wqu-2N-AzU"/>
                         <outlet property="descContainer" destination="cYM-N4-KPE" id="gVO-gQ-KYe"/>
                         <outlet property="descHeader1" destination="kRA-pk-RqZ" id="3jD-VR-RLt"/>

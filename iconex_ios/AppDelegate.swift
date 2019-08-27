@@ -200,8 +200,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            self.connect = nil
         })
 //        if Conn.isConnect {
-            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-            self.window?.rootViewController = main
+            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
+//            self.window?.rootViewController = main
+        change(root: main)
 //        }
     }
     
@@ -213,6 +214,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            Log("Present - \(top)")
 //            top.present(connect!, animated: true, completion: nil)
 //        }
+    }
+    
+    func toTest() {
+        let test = UIStoryboard(name: "TEST", bundle: nil).instantiateInitialViewController()!
+        change(root: test)
     }
     
     func change(root: UIViewController) {

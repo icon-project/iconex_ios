@@ -68,12 +68,14 @@ struct PRepStakeResponse: Decodable {
 }
 
 // MARK: Delegation
-struct PRepDelegation: Codable {
+struct PRepDelegation: Decodable {
     var address: String
     var value: BigUInt
+    var status: Int
+    var fine: BigUInt?
     
     enum CodingKeys: String, CodingKey {
-        case address, value
+        case address, value, status, fine
     }
     
     public init(from decoder: Decoder) throws {
@@ -84,22 +86,35 @@ struct PRepDelegation: Codable {
             throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `value` to BigUInt"))
         }
         self.value = value
+        self.status = try container.decode(Int.self, forKey: .status)
+        
+        if container.contains(.fine) {
+            let fineString = try container.decode(String.self, forKey: .fine)
+            guard let fine = fineString.hexToBigUInt() else {
+                throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `fine` to BigUInt"))
+            }
+            self.fine = fine
+        }
     }
     
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(address, forKey: .address)
-        try container.encode(value.toHexString(), forKey: .value)
-    }
+//    public func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        try container.encode(address, forKey: .address)
+//        try container.encode(value.toHexString(), forKey: .value)
+//        if let status = self.status {
+//            try container.encode(status, forKey: .status)
+//        }
+//    }
 }
 
 struct TotalDelegation: Decodable {
     var totalDelegated: BigUInt
     var votingPower: BigUInt
+    var status: Int
     var delegations: [PRepDelegation]
     
     enum CodingKeys: String, CodingKey {
-        case totalDelegated, votingPower, delegations
+        case totalDelegated, votingPower, delegations, status
     }
     
     public init(from decoder: Decoder) throws {
@@ -117,6 +132,11 @@ struct TotalDelegation: Decodable {
         self.votingPower = voting
         
         self.delegations = try container.decode([PRepDelegation].self, forKey: .delegations)
+        if container.contains(.status) {
+            self.status = try container.decode(Int.self, forKey: .status)
+        } else {
+            self.status = 0
+        }
     }
 }
 

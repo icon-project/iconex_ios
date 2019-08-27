@@ -27,7 +27,7 @@ extension BaseWalletConvertible {
     }
     var decimal: Int { return 18 }
     var balance: BigUInt? {
-        return nil
+        return Manager.balance.getBalance(wallet: self)
     }
     var rawData: Data {
         let encoder = JSONEncoder()

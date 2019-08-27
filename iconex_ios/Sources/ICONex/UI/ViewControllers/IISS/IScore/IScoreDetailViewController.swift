@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import BigInt
 
 class IScoreDetailViewController: BaseViewController {
     @IBOutlet weak var navBar: IXNavigationView!
+    @IBOutlet weak var contentScroll: UIScrollView!
     @IBOutlet weak var IScoreHeader1: UILabel!
     @IBOutlet weak var currentIScoreValue: UILabel!
     @IBOutlet weak var IScoreHeader2: UILabel!
@@ -24,6 +26,8 @@ class IScoreDetailViewController: BaseViewController {
     @IBOutlet weak var claimButton: UIButton!
     
     var wallet: ICXWallet!
+    
+    var refreshControl: UIRefreshControl? = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,11 +51,49 @@ class IScoreDetailViewController: BaseViewController {
         navBar.setLeft {
             self.navigationController?.popViewController(animated: true)
         }
+        
+        currentIScoreValue.set(text: "-", size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+        receiveICXValue.set(text: "-", size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+        descValue1.size14(text: BigUInt(100_000).toString(decimal: 0).currencySeparated() + " / " + BigUInt(100_000).convert(unit: .gLoop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
+        descValue2.size14(text: "", color: UIColor(51, 51, 51), weight: .regular, align: .right)
+        exchangedValue.size12(text: "$", color: .gray179, weight: .regular, align: .right)
+        
+        claimButton.isEnabled = false
+        
+        contentScroll.refreshControl = refreshControl
+        refreshControl?.beginRefreshing()
+        
     }
     
     override func refresh() {
         super.refresh()
         
         navBar.setTitle(wallet.name)
+        if refreshControl != nil {
+            run()
+        }
+        let score = Manager.icon.iconService.getScoreAPI(scoreAddress: CONST.iiss).execute()
+        switch score {
+        case .success(let result):
+            result.forEach { Log("API - \($0.name)") }
+            
+        case .failure(let error):
+            Log("Error - \(error)")
+        }
+        
+    }
+    
+    func run() {
+        DispatchQueue.global().async {
+            let response = Manager.icon.queryIScore(from: self.wallet)
+            DispatchQueue.main.async { [weak self] in
+                if let resp = response {
+                    self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                }
+                self?.refreshControl?.endRefreshing()
+                self?.refreshControl = nil
+                self?.contentScroll.refreshControl = nil
+            }
+        }
     }
 }
