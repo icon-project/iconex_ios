@@ -209,6 +209,21 @@ func Localized(key: String) -> String {
     return NSLocalizedString(key, comment: "")
 }
 
+func bzz() {
+    let feedback = UIImpactFeedbackGenerator(style: .light)
+    feedback.impactOccurred()
+}
+
+func bzzz() {
+    let feedback = UIImpactFeedbackGenerator(style: .medium)
+    feedback.impactOccurred()
+}
+
+func bzzzz() {
+    let feedback = UIImpactFeedbackGenerator(style: .heavy)
+    feedback.impactOccurred()
+}
+
 //struct Alert {
 //    public enum EditingMode {
 //        case add, edit

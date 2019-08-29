@@ -145,8 +145,8 @@ class IntroViewController: BaseViewController {
             let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
             app.change(root: start)
         } else {
-//            app.toMain()
-            app.toTest()
+            app.toMain()
+//            app.toTest()
         }
     }
     

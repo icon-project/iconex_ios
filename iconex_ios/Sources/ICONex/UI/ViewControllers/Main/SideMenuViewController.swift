@@ -133,19 +133,19 @@ class SideMenuViewController: BaseViewController {
     }
     
     func showAnimate() {
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.2, animations: {
             self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
         }, completion: nil)
         
-        UIView.animate(withDuration: 0.3, delay: 0.3, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0.3, options: .curveEaseInOut, animations: {
             self.menuView.frame.origin.x = 0
         })
         
-        UIView.animate(withDuration: 0.3, delay: 0.7, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0.7, options: .curveEaseInOut, animations: {
             self.lineView.alpha = 0.5
         })
         
-        UIView.animate(withDuration: 0.4, delay: 0.6, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0.6, options: .curveEaseInOut, animations: {
             self.topStackView.frame.origin.y -= 10
             self.bottomStackView.frame.origin.y -= 10
             self.topStackView.alpha = 1
@@ -154,11 +154,22 @@ class SideMenuViewController: BaseViewController {
             self.logoSatellite.alpha = 1
         })
         
-        
-        UIView.animate(withDuration: 0.4, delay: 2.7, options: .curveEaseInOut, animations: {
+        loopLogo()
+    }
+    
+    func loopLogo() {
+        self.logoPlanet.transform = .identity
+        self.logoSatellite.transform = .identity
+        UIView.animate(withDuration: 0.25, delay: 2.7, options: .curveEaseInOut, animations: {
             self.logoPlanet.transform = CGAffineTransform(rotationAngle: .pi)
             self.logoSatellite.transform = CGAffineTransform(rotationAngle: -3.14159256)
-        })
+        }) { finished in
+            if finished {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                    self.loopLogo()
+                })
+            }
+        }
     }
 }
 

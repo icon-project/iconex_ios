@@ -261,10 +261,10 @@ extension ICONManager {
         }
     }
     
-    func getPRepInfo(address: String) -> PRepInfoResponse? {
+    func getPRepInfo(from: ICXWallet, address: String) -> PRepInfoResponse? {
         let params = ["address": address]
         
-        let call = Call<PRepInfoResponse>(from: "", to: CONST.iiss, method: "getPRep", params: params)
+        let call = Call<PRepInfoResponse>(from: from.address, to: CONST.iiss, method: "getPRep", params: params)
         let result = self.iconService.call(call).execute()
         
         do {
@@ -275,12 +275,15 @@ extension ICONManager {
         }
     }
     
-    func getPreps(start: Int = 1, end: Int = -1) -> PRepListResponse? {
-        var params = ["startRanking": start]
-        if end > 0 {
-            params["endRanking"] = end
+    func getPreps(from: ICXWallet, start: BigUInt?, end: BigUInt?) -> PRepListResponse? {
+        var params = [String: String]()
+        if let startIndex = start {
+            params["startRanking"] = startIndex.toHexString()
         }
-        let call = Call<PRepListResponse>(from: "", to: CONST.iiss, method: "getPReps", params: params)
+        if let endIndex = end {
+            params["endRanking"] = endIndex.toHexString()
+        }
+        let call = Call<PRepListResponse>(from: from.address, to: CONST.iiss, method: "getPReps", params: params)
         let result = self.iconService.call(call).execute()
         
         do {
@@ -351,15 +354,7 @@ extension BalanceManager {
     }
     
     func getBalance(wallet: BaseWalletConvertible) -> BigUInt? {
-        if let icx = wallet as? ICXWallet, let balance = Manager.icon.getBalance(wallet: icx) {
-            self.walletBalances[wallet.address] = balance
-            return balance
-        } else if let eth = wallet as? ETHWallet, let balance = Ethereum.requestBalance(address: eth.address) {
-            self.walletBalances[wallet.address] = balance
-            return balance
-        } else {
-            return nil
-        }
+        return walletBalances[wallet.address]
     }
     
     func getTotalBalance() -> BigUInt {

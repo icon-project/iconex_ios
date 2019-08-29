@@ -16,6 +16,9 @@ class MyVoteViewController: BaseViewController {
     @IBOutlet weak var headerFirstItem: UILabel!
     @IBOutlet weak var headerSecondItem: UIButton!
     
+    private var delegationInfo: TotalDelegation? = nil
+    private var refreshControl: UIRefreshControl? = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,6 +44,33 @@ class MyVoteViewController: BaseViewController {
                 self?.delegate.headerSelected(index: 1)
             }).disposed(by: disposeBag)
     }
+    
+    override func refresh() {
+        super.refresh()
+        loadData()
+    }
+}
+
+extension MyVoteViewController {
+    func loadData() {
+        guard refreshControl != nil else { return }
+        tableView.refreshControl = refreshControl
+        refreshControl?.beginRefreshing()
+        DispatchQueue.global().async {
+            let result = Manager.icon.getDelegation(wallet: self.delegate.wallet)
+            
+            DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
+                self.refreshControl = nil
+                self.tableView.refreshControl = nil
+                
+                if let info = result {
+                    self.delegationInfo = info
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
 }
 
 extension MyVoteViewController: UITableViewDataSource {
@@ -49,15 +79,28 @@ extension MyVoteViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if let delegateInfo = delegationInfo {
+            if section == 0 { return 1 }
+            return delegateInfo.delegations.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath)
+        let info = self.delegationInfo!
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath) as! MyVoteGeneralCell
         
+            cell.set(info: info)
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
+            
+            return cell
+        }
         
-        
-        return cell
     }
 }
 

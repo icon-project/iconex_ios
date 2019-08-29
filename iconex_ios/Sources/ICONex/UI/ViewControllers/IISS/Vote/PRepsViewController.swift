@@ -9,14 +9,21 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import PanModal
 
-class PRepsViewController: BaseViewController {
+class PRepsViewController: BaseViewController, Floatable {
     @IBOutlet weak var firstItem: UIButton!
     @IBOutlet weak var secondItem: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     var delegate: VoteMainDelegate!
     
+    var floater: Floater = {
+        return Floater(type: .search)
+    }()
+    
+    private var refreshControl: UIRefreshControl? = UIRefreshControl()
+    private var preps: PRepListResponse?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -38,6 +45,56 @@ class PRepsViewController: BaseViewController {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
+        
+        floater.button.rx.tap.subscribe(onNext: { [unowned self] in
+            let search = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepSearchView") as! PRepSearchViewController
+            search.delegate = self
+            search.pop(self)
+        }).disposed(by: disposeBag)
+    }
+    
+    override func refresh() {
+        super.refresh()
+        
+        loadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.view.bringSubviewToFront(floater.contentView)
+        attach()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        detach()
+    }
+}
+
+extension PRepsViewController {
+    func loadData() {
+        guard self.refreshControl != nil else { return }
+        
+        tableView.refreshControl = self.refreshControl
+        self.refreshControl?.beginRefreshing()
+        DispatchQueue.global().async {
+            guard let preps = Manager.icon.getPreps(from: self.delegate.wallet, start: nil, end: nil) else {
+                DispatchQueue.main.async {
+                    self.refreshControl?.endRefreshing()
+                    self.tableView.refreshControl = nil
+                    self.refreshControl = nil
+                }
+                return
+            }
+            self.preps = preps
+            DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
+                self.tableView.refreshControl = nil
+                self.refreshControl = nil
+                self.tableView.reloadData()
+            }
+        }
+        
     }
 }
 
@@ -47,13 +104,20 @@ extension PRepsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        if let list = preps?.preps {
+            return list.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepViewCell", for: indexPath) as! PRepViewCell
         
-        cell.active = indexPath.row % 2 == 0
+        let prep = preps!.preps[indexPath.row]
+        cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
+        cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
+        cell.active = true
         
         return cell
     }
@@ -105,5 +169,15 @@ extension PRepsViewController: UITableViewDelegate {
         
         
         return sectionHeader
+    }
+}
+
+extension PRepsViewController: PRepSearchDelegate {
+    var prepList: [PRepListResponse.PReps] {
+        if let list = preps?.preps {
+            return list
+        }
+        
+        return []
     }
 }

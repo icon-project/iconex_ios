@@ -172,17 +172,17 @@ struct QueryIScoreResponse: Decodable {
     }
 }
 
-enum PRepStatus: Int, Codable {
-    case active = 0
-    case unregistered = 1
-    case disqualification = 2
-    case lowProductivity = 3
+enum PRepStatus: String, Codable {
+    case active = "0x0"
+    case unregistered = "0x1"
+    case disqualification = "0x2"
+    case lowProductivity = "0x3"
 }
 
-enum PRepGrade: Int, Codable {
-    case main = 0
-    case sub = 1
-    case candidate = 2
+enum PRepGrade: String, Codable {
+    case main = "0x0"
+    case sub = "0x1"
+    case candidate = "0x2"
 }
 
 // MARK: P-REP
@@ -198,7 +198,7 @@ struct PRepInfoResponse: Decodable {
     var p2pEndpoint: String
     var irep: BigUInt
     var irepUpdateBlockHeight: BigUInt
-    var lastGenerateBlockHeight: BigUInt
+    var lastGenerateBlockHeight: BigUInt?
     var stake: BigUInt
     var delegated: BigUInt
     var totalBlocks: BigUInt
@@ -232,10 +232,11 @@ struct PRepInfoResponse: Decodable {
         self.irepUpdateBlockHeight = updateBlock
         
         let lastBlockString = try container.decode(String.self, forKey: .lastGenerateBlockHeight)
-        guard let lastBlock = lastBlockString.hexToBigUInt() else {
-            throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `lastGenerateBlockHeight` to BigUInt"))
+        if let lastBlock = lastBlockString.hexToBigUInt() {
+            self.lastGenerateBlockHeight = lastBlock
+        } else {
+            self.lastGenerateBlockHeight = nil
         }
-        self.lastGenerateBlockHeight = lastBlock
         
         let stakeString = try container.decode(String.self, forKey: .stake)
         guard let stake = stakeString.hexToBigUInt() else {
@@ -284,7 +285,7 @@ struct PRepListResponse: Decodable {
         var grade: PRepGrade
         var irep: BigUInt
         var irepUpdateBlockHeight: BigUInt
-        var lastGenerateBlockHeight: BigUInt
+        var lastGenerateBlockHeight: BigUInt?
         var totalBlocks: BigUInt
         var validatedBlocks: BigUInt
         
@@ -299,13 +300,13 @@ struct PRepListResponse: Decodable {
             self.city = try container.decode(String.self, forKey: .city)
             self.address = try container.decode(String.self, forKey: .address)
             let stakeString = try container.decode(String.self, forKey: .stake)
-            guard let stake = BigUInt(stakeString, radix: 16) else {
+            guard let stake = stakeString.hexToBigUInt() else {
                 throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `stake` to BigUInt"))
             }
             self.stake = stake
             
             let delegatedString = try container.decode(String.self, forKey: .delegated)
-            guard let delegated = BigUInt(delegatedString, radix: 16) else {
+            guard let delegated = delegatedString.hexToBigUInt() else {
                 throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `delegated` to BigUInt"))
             }
             self.delegated = delegated
@@ -324,11 +325,12 @@ struct PRepListResponse: Decodable {
             }
             self.irepUpdateBlockHeight = updatedBlockHeight
             
-            let lastBlockHeightString = try container.decode(String.self, forKey: .lastGenerateBlockHeight)
-            guard let lastGenerate = lastBlockHeightString.hexToBigUInt() else {
-                throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `lastGenerateBlockHeight` to BigUInt"))
+            let lastBlockString = try container.decode(String.self, forKey: .lastGenerateBlockHeight)
+            if let lastBlock = lastBlockString.hexToBigUInt() {
+                self.lastGenerateBlockHeight = lastBlock
+            } else {
+                self.lastGenerateBlockHeight = nil
             }
-            self.lastGenerateBlockHeight = lastGenerate
             
             let totalString = try container.decode(String.self, forKey: .totalBlocks)
             guard let totalBlocks = totalString.hexToBigUInt() else {

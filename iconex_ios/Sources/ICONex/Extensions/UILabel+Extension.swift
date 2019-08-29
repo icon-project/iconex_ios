@@ -37,7 +37,7 @@ extension UILabel {
         set(text: text, size: 42, height: 47, color: color, weight: .light, align: align)
     }
 
-    func set(text: String, size: CGFloat, height: CGFloat, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
+    func set(text: String, size: CGFloat, height: CGFloat, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreak: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
         var font: UIFont
         
         let digitSet = CharacterSet.decimalDigits
@@ -55,6 +55,7 @@ extension UILabel {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = height - size - (font.lineHeight - font.pointSize)
         paragraphStyle.alignment = align
+        paragraphStyle.lineBreakMode = lineBreak
         
         let attributedString = NSAttributedString(string: text, attributes: [.font: font, .foregroundColor: color, .paragraphStyle: paragraphStyle])
         

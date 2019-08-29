@@ -29,7 +29,7 @@ enum MainGesture {
 
 private let Header_Height: CGFloat = 148
 
-class MainViewController: BaseViewController {
+class MainViewController: BaseViewController, Floatable {
     @IBOutlet weak var navBar: IXNavigationView!
     @IBOutlet weak var backView: UIView!
     @IBOutlet weak var gradientView: UIView!
@@ -101,6 +101,11 @@ class MainViewController: BaseViewController {
     }
     
     var isCardUp: Bool = true
+    
+    // Floater
+    var floater: Floater = {
+        return Floater(type: .vote)
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -192,6 +197,11 @@ class MainViewController: BaseViewController {
         navBar.setRight(image: #imageLiteral(resourceName: "icInfoW")) {
             
         }
+        
+        floater.button.rx.tap
+            .subscribe(onNext: {
+                self.floater.pop()
+            }).disposed(by: disposeBag)
     }
     
     override func refresh() {
@@ -204,6 +214,14 @@ class MainViewController: BaseViewController {
         super.viewDidAppear(animated)
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        
+        // Floater
+        attach()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        detach()
     }
     
     override func viewDidLayoutSubviews() {
