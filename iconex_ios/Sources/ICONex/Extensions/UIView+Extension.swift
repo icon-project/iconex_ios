@@ -13,17 +13,27 @@ import RxCocoa
 
 extension UIView {
     func setCurrentPage() {
-        self.frame.size = CGSize(width: 14, height: 6)
+        self.constraints.forEach {
+            if $0.firstAttribute == .width {
+                $0.constant = 14
+            }
+        }
         self.corner(3)
         self.backgroundColor = .white
         self.clipsToBounds = false
+        self.layoutIfNeeded()
     }
     
     func setNonCurrentPage() {
-        self.frame.size = CGSize(width: 6, height: 6)
+        self.constraints.forEach {
+            if $0.firstAttribute == .width {
+                $0.constant = 6
+            }
+        }
         self.corner(3)
         self.backgroundColor = UIColor.init(white: 1, alpha: 0.5)
         self.clipsToBounds = false
+        self.layoutIfNeeded()
     }
 }
 

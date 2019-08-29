@@ -25,7 +25,10 @@ class FloatViewController: BaseViewController {
     
     var type: FloaterType = .wallet
     
-    var actionTarget: UIViewController? = nil
+    var headerAction: (() -> Void)?
+    var itemAction1: (() -> Void)?
+    var itemAction2: (() -> Void)?
+    var itemAction3: (() -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +67,12 @@ class FloatViewController: BaseViewController {
             menuButton2.setTitle("Floater.Vote.Vote".localized, for: .normal)
             menuButton3.setImage(nil, for: .normal)
             menuButton3.setTitle("Floater.Vote.IScore".localized, for: .normal)
+            headerButton.rx.tap
+                .subscribe(onNext: { [weak self] in
+                    self?.beginHide(action: {
+                        self?.headerAction?()
+                    })
+                }).disposed(by: disposeBag)
             
         case .wallet:
             headerButton.isHidden = true
@@ -76,6 +85,21 @@ class FloatViewController: BaseViewController {
         default:
             break
         }
+        menuButton1.rx.tap.subscribe(onNext: { [weak self] in
+            self?.beginHide(action: {
+                self?.itemAction1?()
+            })
+        }).disposed(by: disposeBag)
+        menuButton2.rx.tap.subscribe(onNext: { [weak self] in
+            self?.beginHide(action: {
+                self?.itemAction2?()
+            })
+        }).disposed(by: disposeBag)
+        menuButton3.rx.tap.subscribe(onNext: { [weak self] in
+            self?.beginHide(action: {
+                self?.itemAction3?()
+            })
+        }).disposed(by: disposeBag)
         
         dimView.alpha = 0.0
         menuContainer.alpha = 0.0
@@ -91,8 +115,7 @@ class FloatViewController: BaseViewController {
         gradient.frame = dimView.bounds
     }
     
-    func pop(actionTarget: UIViewController?) {
-        self.actionTarget = actionTarget
+    func pop() {
         app.topViewController()?.present(self, animated: false, completion: {
             self.beginShow()
         })

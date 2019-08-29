@@ -55,11 +55,6 @@
 		BF78B36322FCFCD4002E34B3 /* CreateBackupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF78B35D22FCFCD4002E34B3 /* CreateBackupViewController.swift */; };
 		BF78B36B22FD4852002E34B3 /* CreateQRCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */; };
 		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
-		BFC9A3CA23141451002E35F5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BFC9A2D123141450002E35F5 /* Localizable.strings */; };
-		BFC9A3CB23141451002E35F5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFC9A2D323141450002E35F5 /* Info.plist */; };
-		BFC9A3CE23141451002E35F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFC9A2DB23141450002E35F5 /* LaunchScreen.storyboard */; };
-		BFC9A3CF23141451002E35F5 /* Test.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFC9A2DD23141450002E35F5 /* Test.storyboard */; };
-		BFC9A49123141451002E35F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFC9A3C923141451002E35F5 /* Assets.xcassets */; };
 		BFC9A49C23141498002E35F5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49323141498002E35F5 /* UIColor+Extension.swift */; };
 		BFC9A49D23141498002E35F5 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49423141498002E35F5 /* UILabel+Extension.swift */; };
 		BFC9A49E23141498002E35F5 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49523141498002E35F5 /* UIButton+Extension.swift */; };
@@ -116,6 +111,7 @@
 		D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1E52722F2D20E00987D2C /* StartViewController.swift */; };
 		D4BE25E723165019002D697D /* FloatButton.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25E623165019002D697D /* FloatButton.storyboard */; };
 		D4BE25E923165469002D697D /* FloatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE25E823165469002D697D /* FloatViewController.swift */; };
+		D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */; };
 		D4BE74C92040046C00638E2E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* Util.swift */; };
 		D4BF98DB230F7BBA009D4632 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BF98DA230F7BBA009D4632 /* TestViewController.swift */; };
 		D4BF98DD230F7C65009D4632 /* TEST.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4BF98DC230F7C65009D4632 /* TEST.storyboard */; };
@@ -206,11 +202,6 @@
 		BF78B35D22FCFCD4002E34B3 /* CreateBackupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateBackupViewController.swift; sourceTree = "<group>"; };
 		BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateQRCodeViewController.swift; sourceTree = "<group>"; };
 		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
-		BFC9A2D223141450002E35F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
-		BFC9A2D423141450002E35F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = Info.plist; sourceTree = "<group>"; };
-		BFC9A2DC23141450002E35F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		BFC9A2DE23141450002E35F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Test.storyboard; sourceTree = "<group>"; };
-		BFC9A3C923141451002E35F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = iconex_ios/Assets.xcassets; sourceTree = "<group>"; };
 		BFC9A49323141498002E35F5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49423141498002E35F5 /* UILabel+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49523141498002E35F5 /* UIButton+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
@@ -275,6 +266,7 @@
 		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		D4BE25E623165019002D697D /* FloatButton.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FloatButton.storyboard; sourceTree = "<group>"; };
 		D4BE25E823165469002D697D /* FloatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatViewController.swift; sourceTree = "<group>"; };
+		D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepViewCell.xib; sourceTree = "<group>"; };
 		D4BE74C82040046C00638E2E /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D4BF98DA230F7BBA009D4632 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		D4BF98DC230F7C65009D4632 /* TEST.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TEST.storyboard; sourceTree = "<group>"; };
@@ -428,26 +420,6 @@
 				BF78B36A22FD4852002E34B3 /* CreateQRCodeViewController.swift */,
 			);
 			path = Create;
-			sourceTree = "<group>";
-		};
-		BFC9A2D023141450002E35F5 /* en.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				BFC9A2D123141450002E35F5 /* Localizable.strings */,
-				BFC9A2D323141450002E35F5 /* Info.plist */,
-			);
-			name = en.lproj;
-			path = iconex_ios/en.lproj;
-			sourceTree = "<group>";
-		};
-		BFC9A2DA23141450002E35F5 /* Base.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				BFC9A2DB23141450002E35F5 /* LaunchScreen.storyboard */,
-				BFC9A2DD23141450002E35F5 /* Test.storyboard */,
-			);
-			name = Base.lproj;
-			path = iconex_ios/Base.lproj;
 			sourceTree = "<group>";
 		};
 		BFC9A49223141498002E35F5 /* Extensions */ = {
@@ -607,9 +579,6 @@
 		D4728A062007040B00E0A899 = {
 			isa = PBXGroup;
 			children = (
-				BFC9A3C923141451002E35F5 /* Assets.xcassets */,
-				BFC9A2DA23141450002E35F5 /* Base.lproj */,
-				BFC9A2D023141450002E35F5 /* en.lproj */,
 				D4728A112007040B00E0A899 /* iconex_ios */,
 				D4728A102007040B00E0A899 /* Products */,
 				8D4DDEC28B4D9720DC645944 /* Frameworks */,
@@ -702,6 +671,7 @@
 				D4757454230E8FEA00C46FFE /* MyVoteGeneralCell.swift */,
 				D4DACDF42314FC1700CC8EA8 /* MyVoteDelegateCell.swift */,
 				D4DACDF02313D37400CC8EA8 /* PRepViewCell.swift */,
+				D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -927,7 +897,7 @@
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
 				D4BF98DD230F7C65009D4632 /* TEST.storyboard in Resources */,
 				D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */,
-				BFC9A3CE23141451002E35F5 /* LaunchScreen.storyboard in Resources */,
+				D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */,
 				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				BF6EFEC222FA5174003B6AF3 /* BasicAlertView.xib in Resources */,
 				BF0902792314B33C00B177F4 /* ManageWallet.storyboard in Resources */,
@@ -936,8 +906,6 @@
 				BF2D35AC2301576600EC2A35 /* LaunchScreen.storyboard in Resources */,
 				BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */,
 				BF6EFECC22FA5174003B6AF3 /* IScoreAlertView.xib in Resources */,
-				BFC9A3CF23141451002E35F5 /* Test.storyboard in Resources */,
-				BFC9A49123141451002E35F5 /* Assets.xcassets in Resources */,
 				D475744E230E765700C46FFE /* Vote.storyboard in Resources */,
 				BF6EFECE22FA5174003B6AF3 /* TxHashAlertView.xib in Resources */,
 				D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */,
@@ -948,13 +916,11 @@
 				BF6EFEC922FA5174003B6AF3 /* AddressAlertView.xib in Resources */,
 				D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */,
 				BF6EFEC822FA5174003B6AF3 /* PasswordAlertView.xib in Resources */,
-				BFC9A3CA23141451002E35F5 /* Localizable.strings in Resources */,
 				BF78B36222FCFCD4002E34B3 /* CreateWallet.storyboard in Resources */,
 				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
 				BF0902842314B6AE00B177F4 /* IXInputBox.xib in Resources */,
 				BF6EFECA22FA5174003B6AF3 /* SendAlertView.xib in Resources */,
 				D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */,
-				BFC9A3CB23141451002E35F5 /* Info.plist in Resources */,
 				D4682A16230B99AC00225C73 /* IXStakeProgressView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1142,38 +1108,6 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
-		BFC9A2D123141450002E35F5 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFC9A2D223141450002E35F5 /* en */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-		BFC9A2D323141450002E35F5 /* Info.plist */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFC9A2D423141450002E35F5 /* en */,
-			);
-			name = Info.plist;
-			sourceTree = "<group>";
-		};
-		BFC9A2DB23141450002E35F5 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFC9A2DC23141450002E35F5 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		BFC9A2DD23141450002E35F5 /* Test.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFC9A2DE23141450002E35F5 /* Base */,
-			);
-			name = Test.storyboard;
-			sourceTree = "<group>";
-		};
 		D46DB4D620A1903500B632D9 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1351,9 +1285,9 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 27F4PR54DX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
@@ -1378,7 +1312,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "9206590a-1a5b-408a-8716-9326fa1813b6";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ICONex AppStore";
 				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

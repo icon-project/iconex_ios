@@ -201,7 +201,8 @@
 // MARK: MyVoteViewController
 "MyVoteView.VoteReset" = "투표 수량 초기화";
 
-
+// MARK: PRepSearchViewController
+"PRepSearch.Placeholder" = "P-Rep 이름 검색";
 
 
 // MARK: MainViewController

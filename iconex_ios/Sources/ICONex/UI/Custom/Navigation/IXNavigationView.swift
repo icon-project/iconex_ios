@@ -92,7 +92,7 @@ class IXNavigationView: UIView {
         }
     }
     
-    func setLeft(image: UIImage? = nil, action: (() -> Void)?) {
+    func setLeft(image: UIImage? = #imageLiteral(resourceName: "icAppbarBack"), action: (() -> Void)?) {
         self.leftButton.setImage(image, for: .normal)
         self.leftAction = action
     }

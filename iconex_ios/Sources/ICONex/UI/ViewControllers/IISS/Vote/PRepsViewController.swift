@@ -22,6 +22,8 @@ class PRepsViewController: BaseViewController, Floatable {
         return Floater(type: .search)
     }()
     
+    var selectedWallet: ICXWallet? { return delegate.wallet }
+    
     private var refreshControl: UIRefreshControl? = UIRefreshControl()
     private var preps: PRepListResponse?
     override func viewDidLoad() {
@@ -32,6 +34,8 @@ class PRepsViewController: BaseViewController, Floatable {
     
     override func initializeComponents() {
         super.initializeComponents()
+        
+        tableView.register(UINib(nibName: "PRepViewCell", bundle: nil), forCellReuseIdentifier: "PRepViewCell")
         
         firstItem.setTitle("My Votes", for: .normal)
         firstItem.setTitleColor(.gray77, for: .normal)
