@@ -32,10 +32,23 @@ class MyVoteGeneralCell: UITableViewCell {
         availableValueLabel.size14(text: "-", color: .gray77, weight: .light, align: .right)
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    func set(info: TotalDelegation) {
+        voteHeader.size16(text: "Vote (\(info.delegations.count)/10)", color: .gray77, weight: .medium, align: .left)
+        let votingPower = info.votingPower
+        let voted = info.totalDelegated
+        let total = info.totalDelegated + votingPower
+        
+        Log("totalDelegated \(voted) power \(votingPower)")
+        
+        votedValueLabel.size14(text: voted.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+        availableValueLabel.size14(text: votingPower.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+        
+        guard votingPower != 0, total != 0 else {
+            votedWidth.constant = 0
+            return
+        }
+        let ratio = votingPower / total
+        Log("ration = \(ratio)")
+        
     }
-
 }

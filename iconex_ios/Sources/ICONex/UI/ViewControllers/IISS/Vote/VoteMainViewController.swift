@@ -61,6 +61,6 @@ extension VoteMainViewController {
     func headerSelected(index: Int) {
         prepContainer.isHidden = index == 0
         myvoteContainer.isHidden = index != 0
-        bottomHeight.constant = index == 0 ? 66 : 0
+        bottomHeight.constant = index == 0 ? 66 : 0 - view.safeAreaInsets.bottom
     }
 }

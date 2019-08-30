@@ -9,12 +9,13 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import PanModal
 
 protocol PRepSearchDelegate {
-    var prepList: [String] { get set }
+    var prepList: [PRepListResponse.PReps] { get }
 }
 
-class PRepSearchViewController: PopableViewController {
+class PRepSearchViewController: BaseViewController {
     @IBOutlet weak var searchField: UITextField!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -56,4 +57,42 @@ extension PRepSearchViewController: UITableViewDataSource {
 
 extension PRepSearchViewController: UITableViewDelegate {
     
+}
+
+extension PRepSearchViewController: PanModalPresentable {
+    var panScrollable: UIScrollView? {
+        return nil
+    }
+    
+    var showDragIndicator: Bool {
+        return false
+    }
+    
+    func shouldRespond(to panModalGestureRecognizer: UIPanGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    var isHapticFeedbackEnabled: Bool {
+        return false
+    }
+    
+    var topOffset: CGFloat {
+        return app.window!.safeAreaInsets.top
+    }
+    
+    var backgroundAlpha: CGFloat {
+        return 0.4
+    }
+    
+    var cornerRadius: CGFloat {
+        return 18.0
+    }
+    
+    func pop(_ viewController: UIViewController? = nil) {
+        if let source = viewController {
+            source.presentPanModal(self)
+        } else {
+            app.topViewController()?.presentPanModal(self)
+        }
+    }
 }

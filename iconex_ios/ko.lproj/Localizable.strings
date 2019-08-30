@@ -133,6 +133,14 @@
 "Alert.WalletName.Header" = "지갑 이름 변경";
 "Alert.WalletName.Placeholder" = "지갑 이름";
 
+// MARK: Floater
+"Floater.Vote.PReps" = "P-Reps";
+"Floater.Vote.Stake" = "Stake";
+"Floater.Vote.Vote" = "Vote";
+"Floater.Vote.IScore" = "I-Score";
+"Floater.Wallet.Deposit" = "입금";
+"Floater.Wallet.Send" = "전송";
+
 // MARK: QRReaderViewController
 "QRReader.Desc" = "QR 코드를 인식해서 주소 또는 개인키를 가져올 수 있습니다.";
 
