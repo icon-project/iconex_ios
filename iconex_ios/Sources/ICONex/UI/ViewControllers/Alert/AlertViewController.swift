@@ -45,11 +45,11 @@ class AlertViewController: BaseViewController {
     var sendInfo: SendInfo?
     var iscoreInfo: IScoreClaimInfo?
     
-    var pk: PrivateKey?
-    var ethPkString: String = ""
+    var privateKey: String = ""
     
     var cancelHandler: (() -> Void)?
     var confirmHandler: (() -> Void)?
+    var returnHandler: ((_ privateKey: String) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,12 +76,12 @@ class AlertViewController: BaseViewController {
                     do {
                         if self.isICX {
                             let loadWallet = Manager.wallet.walletBy(address: address, type: "icx") as! ICXWallet
-                            self.pk = try loadWallet.extractICXPrivateKey(password: inputValue)
+                            self.privateKey = try loadWallet.extractICXPrivateKey(password: inputValue).hexEncoded
                         } else {
                             let loadWallet = Manager.wallet.walletBy(address: address, type: "eth") as! ETHWallet
-                            self.ethPkString = try loadWallet.extractETHPrivateKey(password: inputValue)
+                            self.privateKey = try loadWallet.extractETHPrivateKey(password: inputValue)
                         }
-                        self.closer(self.confirmHandler)
+                        self.closer(self.returnHandler)
                     } catch {
                         sub.inputBoxView.setError(message: "Error.Password.Wrong".localized)
                     }
@@ -244,10 +244,10 @@ class AlertViewController: BaseViewController {
                 do {
                     if self.isICX {
                         let loadWallet = Manager.wallet.walletBy(address: address, type: "icx") as! ICXWallet
-                        self.pk = try loadWallet.extractICXPrivateKey(password: inputValue)
+                        self.privateKey = try loadWallet.extractICXPrivateKey(password: inputValue).hexEncoded
                     } else {
                         let loadWallet = Manager.wallet.walletBy(address: address, type: "eth") as! ETHWallet
-                        self.ethPkString = try loadWallet.extractETHPrivateKey(password: inputValue)
+                        self.privateKey = try loadWallet.extractETHPrivateKey(password: inputValue)
                     }
                     return nil
                 } catch {
@@ -316,9 +316,9 @@ class AlertViewController: BaseViewController {
         case .txHash:
             headerLabel.size18(text: "Alert.TxHash.Header".localized, color: .gray77, weight: .medium, align: .center)
             
-            setButtonUI(isOne: true)
-            leftButton.setTitle("닫기", for: .normal)
-            
+            setButtonUI(isOne: false)
+            leftButton.setTitle("Common.Close".localized, for: .normal)
+            rightButton.setTitle("Alert.Transaction.Copy".localized, for: .normal)
             let txHashView = TxHashAlertView()
             txHashView.info = self.txHashData
             
@@ -489,6 +489,28 @@ class AlertViewController: BaseViewController {
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct()
+                }
+            })
+        })
+    }
+    
+    private func closer(_ closeAction: ((_ pk: String) -> Void)? = nil) {
+        // move
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+            self.popView.frame.origin.y += 20
+        }, completion: nil)
+        
+        // opacity
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
+            self.popView.alpha = 0
+        }, completion: nil)
+        
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
+            self.view.alpha = 0
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                if let closeAct = closeAction {
+                    closeAct(self.privateKey)
                 }
             })
         })
