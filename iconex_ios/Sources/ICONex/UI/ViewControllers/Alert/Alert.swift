@@ -28,18 +28,19 @@ class Alert {
         return alertVC
     }
     
-    static func txHash(txData: AlertTxHashInfo) -> AlertViewController {
+    static func txHash(txData: AlertTxHashInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .txHash
         alertVC.txHashData = txData
+        alertVC.confirmHandler = confirmAction
         return alertVC
     }
     
-    static func password(address: String, confirmAction: (() -> Void)? = nil) -> AlertViewController {
+    static func password(address: String, returnAction: ((_ pk: String) -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .password
         alertVC.walletAddress = address
-        alertVC.confirmHandler = confirmAction
+        alertVC.returnHandler = returnAction
         return alertVC
     }
     
