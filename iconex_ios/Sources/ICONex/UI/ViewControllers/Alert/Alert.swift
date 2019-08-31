@@ -36,18 +36,18 @@ class Alert {
         return alertVC
     }
     
-    static func password(address: String, returnAction: ((_ pk: String) -> Void)? = nil) -> AlertViewController {
+    static func password(wallet: BaseWalletConvertible, returnAction: ((_ pk: String) -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .password
-        alertVC.walletAddress = address
+        alertVC.walletInfo = wallet
         alertVC.returnHandler = returnAction
         return alertVC
     }
     
-    static func changeWalletName(walletName: String, confirmAction: (() -> Void)? = nil) -> AlertViewController {
+    static func changeWalletName(wallet: BaseWalletConvertible, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .walletName
-        alertVC.originalWalletName = walletName
+        alertVC.walletInfo = wallet
         alertVC.confirmHandler = confirmAction
         return alertVC
     }
