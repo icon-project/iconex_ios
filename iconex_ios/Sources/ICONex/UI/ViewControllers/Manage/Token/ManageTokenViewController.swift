@@ -38,7 +38,7 @@ class ManageTokenViewController: UIViewController {
         
         setupBind()
         
-        navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
+        navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarCloseW")) {
             self.dismiss(animated: true, completion: {
                 if let handler = self.handler {
                     handler()
@@ -65,8 +65,9 @@ class ManageTokenViewController: UIViewController {
                     let addTokenVC = self.storyboard?.instantiateViewController(withIdentifier: "AddTokenList") as! AddTokenViewController
                     addTokenVC.walletInfo = self.walletInfo
                     self.navigationController?.pushViewController(addTokenVC, animated: true)
-                } else { // eth인 경우 또는 이미 제공된 토큰을 모두 추가한 경우.
-                    // eth는 manual 추가로... 바로~~~~ dk rmse
+                } else {
+                    let addTokenInfoVC =  self.storyboard?.instantiateViewController(withIdentifier: "AddTokenInfo") as! AddTokenInfoViewController
+                    self.navigationController?.pushViewController(addTokenInfoVC, animated: true)
                 }
                 
             }.disposed(by: disposeBag)
