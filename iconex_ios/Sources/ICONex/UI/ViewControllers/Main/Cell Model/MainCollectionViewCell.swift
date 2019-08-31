@@ -71,9 +71,9 @@ class MainCollectionViewCell: UICollectionViewCell {
         
         scanButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                guard let address = self.info?.address else { return }
+                guard let wallet = self.info else { return }
                 
-                Alert.password(address: address, confirmAction: {
+                Alert.password(wallet: wallet, returnAction: { (_) in
                     let scanVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                     app.topViewController()?.present(scanVC, animated: true, completion: nil)
                 }).show()
@@ -124,7 +124,6 @@ extension MainCollectionViewCell: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("symbol \(symbol)")
         // cell
         let coinCell: CoinTableViewCell = {
             let cell = tableView.dequeueReusableCell(withIdentifier: "coinCell") as! CoinTableViewCell
@@ -160,9 +159,12 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.logoImageView.image = #imageLiteral(resourceName: "imgLogoIconSel")
                     coinCell.symbolLabel.size16(text: CoinType.icx.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.icx.fullName, color: .gray179, weight: .light)
-                    coinCell.balanceLabel.size16(text: "\(icx.balance ?? 0)", color: .gray77, weight: .bold, align: .right)
                     
-                    let price = calculatePrice(currency: currencySymbol, balance: icx.balance ?? 0)
+                    let balance = icx.balance?.toString(decimal: 18, 4)
+                    coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
+                    
+                    
+                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: icx.balance ?? 0)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                     
                 } else if let eth = info as? ETHWallet {
@@ -170,16 +172,17 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.logoImageView.image = #imageLiteral(resourceName: "imgLogoEthereumNor")
                     coinCell.symbolLabel.size16(text: CoinType.eth.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.eth.fullName, color: .gray179, weight: .light)
-                    coinCell.balanceLabel.size16(text: "\(eth.balance ?? 0)", color: .gray77, weight: .bold, align: .right)
                     
-                    let price = calculatePrice(currency: currencySymbol, balance: eth.balance ?? 0)
+                    let balance = eth.balance?.toString(decimal: 18, 4)
+                    coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
+                    
+                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: eth.balance ?? 0)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                 }
                 return coinCell
                 
             } else { // total coin token info
                 let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
-                print(currencySymbol)
                 switch symbol {
                 case "icx":
                     coinCell.unitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
@@ -194,10 +197,11 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     for i in list {
                         totalBalance += i.balance ?? 0
                     }
+                    let balance = totalBalance.toString(decimal: 18, 4, false)
                     
-                    coinCell.balanceLabel.size16(text: String(totalBalance), color: .gray77, weight: .bold, align: .right)
+                    coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
-                    let price = calculatePrice(currency: currencySymbol , balance: totalBalance)
+                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light)
                     
                     return coinCell
@@ -218,7 +222,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     coinCell.balanceLabel.size16(text: String(totalBalance), color: .gray77, weight: .bold, align: .right)
                     
-                    let price = calculatePrice(currency: currencySymbol , balance: totalBalance)
+                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light)
                     
                     return coinCell
@@ -244,7 +248,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     tokenCell.balanceLabel.size16(text: String(totalBalance) , color: .gray77, weight: .bold, align: .right)
                     
-                    let price = calculatePrice(currency: currencySymbol, balance: totalBalance)
+                    let decimal = DB.tokenListBy(symbol: symbol).first?.decimal ?? 0
+                    let price = Tool.calculatePrice(decimal: decimal, currency: currencySymbol, balance: totalBalance)
                     tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                     
                     tokenCell.unitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
@@ -253,7 +258,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
             }
             
         } else {
-            if isWalletMode { // token token~~~
+            if isWalletMode { // token
                 guard let token = info?.tokens?[indexPath.row] else { return tokenCell }
                 
                 let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
@@ -263,9 +268,10 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 tokenCell.symbolLabel.size16(text: token.symbol, color: .gray77, weight: .semibold)
                 tokenCell.fullnameLabel.size12(text: token.name, color: .gray179, weight: .light)
                 
-                let tokenBalance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
-                tokenCell.balanceLabel.size16(text: "\(tokenBalance)", color: .gray77, weight: .bold, align: .right)
-                let price = calculatePrice(currency: currencySymbol, balance: tokenBalance)
+//                let tokenBalance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
+                let tokenBalance = Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
+                tokenCell.balanceLabel.size16(text: tokenBalance.toString(decimal: token.decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+                let price = Tool.calculatePrice(decimal: token.decimal, currency: currencySymbol, balance: tokenBalance)
                 tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                 
                 tokenCell.unitLabel.size12(text: currency.symbol, color: .gray179, weight: .light, align: .right)
@@ -274,14 +280,37 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 
             } else {
                 guard let val = self.coinTokens?[indexPath.row] else { return walletCell }
-                let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
-                walletCell.nicknameLabel.size16(text: val.name, color: .gray77, weight: .semibold)
-                walletCell.addressLabel.size12(text: val.address, color: .gray179, weight: .light)
-                walletCell.balanceLabel.size16(text: String(val.balance ?? 0), color: .gray77, weight: .bold, align: .right)
+                // icx eth 구분
+                let walletTypeCount = DB.walletTypes().count
                 
-                let price = calculatePrice(currency: currenySymbol, balance: val.balance ?? 0)
-                walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
-                walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
+                if indexPath.row < walletTypeCount { // coin
+                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+                    walletCell.nicknameLabel.size16(text: val.name, color: .gray77, weight: .semibold)
+                    walletCell.addressLabel.size12(text: val.address, color: .gray179, weight: .light)
+                    walletCell.balanceLabel.size16(text: val.balance?.toString(decimal: 18, 4).currencySeparated() ?? "0", color: .gray77, weight: .bold, align: .right)
+                    
+                    let price = Tool.calculatePrice(decimal: 18, currency: currenySymbol, balance: val.balance ?? 0)
+                    walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
+                    walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
+                    
+                } else { // token
+                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+                    print("우왓")
+                    print(DB.tokenListBy(symbol: symbol))
+                    
+                    guard let decimal = DB.tokenListBy(symbol: symbol).first?.decimal else { return walletCell }
+                    
+                    
+                    walletCell.nicknameLabel.size16(text: val.name, color: .gray77, weight: .semibold)
+                    walletCell.addressLabel.size12(text: val.address, color: .gray179, weight: .light)
+//                    walletCell.balanceLabel.size16(text: val.balance?.toString(decimal: decimal, 4).currencySeparated() ?? "0", color: .gray77, weight: .bold, align: .right)
+                    let tokenBalance = Manager.balance.getTokenBalance(address: val.address, contract: self.contractAddress)
+                    print("ㅇㅣ게 맞나 아닌거 같다 \(tokenBalance)")
+                    
+                    let price = Tool.calculatePrice(decimal: decimal, currency: currenySymbol, balance: tokenBalance)
+                    walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
+                    walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
+                }
                 return walletCell
             }
         }
@@ -296,20 +325,78 @@ extension MainCollectionViewCell: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableview.deselectRow(at: indexPath, animated: true)
         
-        if isWalletMode {
-//            guard let address = self.info?.address else { return }
+        guard let wallet = self.info else { return }
+        let detailVC = UIStoryboard.init(name: "Detail", bundle: nil).instantiateInitialViewController() as! DetailViewController
+        detailVC.walletInfo = wallet
+        
+        if indexPath.section == 0 {
+            guard isWalletMode else { return }
+//            self.performSegue(withIdentifier: "coinSegue", sender: self)
             
-//            let detailVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Detail")
+            if let _ = wallet as? ICXWallet {
+                detailViewModel.symbol.onNext(CoinType.icx.symbol)
+                detailVC.detailType = .icx
+            } else {
+                detailViewModel.symbol.onNext(CoinType.eth.symbol)
+                detailVC.detailType = .eth
+            }
+            detailViewModel.wallet.onNext(wallet)
+            
+        } else {
+            if isWalletMode {
+                guard let token = wallet.tokens?[indexPath.row] else { return }
+                detailViewModel.wallet.onNext(wallet)
+                detailViewModel.token.onNext(token)
+                detailViewModel.symbol.onNext(token.symbol)
+                detailVC.tokenInfo = token
+                
+                if let _ = wallet as? ICXWallet {
+                    detailVC.detailType = .irc
+                } else {
+                    detailVC.detailType = .erc
+                }
+            } else {
+                guard let selectedWallet = self.coinTokens?[indexPath.row] else { return }
+                detailViewModel.wallet.onNext(selectedWallet)
+                detailViewModel.symbol.onNext(symbol)
+                
+                if symbol != "" {
+                    guard let tokenList = selectedWallet.tokens else { return }
+                    
+                    for token in tokenList {
+                        if token.symbol == symbol {
+                            detailVC.tokenInfo = token
+                            detailViewModel.token.onNext(token)
+                            break
+                        }
+                    }
+                    if let _ = wallet as? ICXWallet {
+                        detailVC.detailType = .irc
+                    } else {
+                        detailVC.detailType = .erc
+                    }
+                } else {
+                    if let _ = wallet as? ICXWallet {
+                        detailVC.detailType = .icx
+                    } else {
+                        detailVC.detailType = .eth
+                    }
+                }
+            }
         }
         
+        // swipe 안됨
+//        if let navVC: UINavigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
+//            navVC.pushViewController(detailVC, animated: true)
+//        } else {
+//            print("불가해요?ㅠ")
+//        }
+        if let navVC: UINavigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
+            navVC.pushViewController(detailVC, animated: true)
+        } else {
+            print("불가해요?ㅠ")
+        }
     }
-}
-
-extension MainCollectionViewCell {
-    func calculatePrice(currency: String, balance: BigUInt) -> String { // icxusd, icxeth.....
-        guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return "-" }
-        let price = Float(exchange) ?? 0
-        let exchanged = Float(balance)*price
-        return String(exchanged)
-    }
+    
+//    override func preparefor
 }

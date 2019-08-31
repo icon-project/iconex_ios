@@ -60,7 +60,7 @@ class CreateBackupViewController: BaseViewController {
                         activity.completionWithItemsHandler = { type, completed, _, error in
                             if completed {
                                 self.delegate.isBackup = true
-                                Alert.basic(title: "Create.Wallet.Step3.Alert.Save".localized).show()
+                                Alert.basic(title: "Create.Wallet.Step3.Alert.Save".localized, leftButtonTitle: "Common.Confirm".localized).show()
                             }
                         }
                         self.present(activity, animated: true, completion: nil)

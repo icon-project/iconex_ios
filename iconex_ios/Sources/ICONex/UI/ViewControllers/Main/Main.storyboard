@@ -295,7 +295,7 @@
                                                                                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="aWc-uo-sIn">
                                                                                                         <rect key="frame" x="0.0" y="24.999999999999996" width="65" height="14.333333333333332"/>
                                                                                                         <subviews>
-                                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rbe-QD-bcI">
+                                                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rbe-QD-bcI">
                                                                                                                 <rect key="frame" x="0.0" y="0.0" width="31" height="14.333333333333334"/>
                                                                                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                                                                 <nil key="textColor"/>
@@ -974,7 +974,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pzq-hV-eH2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="908" y="793.5960591133005"/>
+            <point key="canvasLocation" x="3348" y="123"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="15e-E8-zOL">
@@ -992,58 +992,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eSB-8a-ec3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="908.69565217391312" y="124.55357142857142"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="36C-O6-Nrc">
-            <objects>
-                <viewController id="sWb-pG-Ahu" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Zom-Gi-BUW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XUg-GU-67k" customClass="IXNavigationView" customModule="iconex_ios" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="375" height="56"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="8lZ-M8-mj7"/>
-                                </constraints>
-                            </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="F9i-7t-1Z9">
-                                <rect key="frame" x="0.0" y="100" width="375" height="678"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <view key="tableHeaderView" contentMode="scaleToFill" id="XJF-FP-qYl">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="218"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </view>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="exW-j2-kdn">
-                                        <rect key="frame" x="0.0" y="246" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="exW-j2-kdn" id="nhJ-TX-esb">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="f4e-Qh-b8a" firstAttribute="bottom" secondItem="F9i-7t-1Z9" secondAttribute="bottom" id="6oj-ro-Mjs"/>
-                            <constraint firstItem="XUg-GU-67k" firstAttribute="leading" secondItem="f4e-Qh-b8a" secondAttribute="leading" id="NIP-S6-9CJ"/>
-                            <constraint firstItem="XUg-GU-67k" firstAttribute="top" secondItem="f4e-Qh-b8a" secondAttribute="top" id="OUr-12-RxD"/>
-                            <constraint firstItem="f4e-Qh-b8a" firstAttribute="trailing" secondItem="F9i-7t-1Z9" secondAttribute="trailing" id="bSs-aF-slu"/>
-                            <constraint firstItem="f4e-Qh-b8a" firstAttribute="trailing" secondItem="XUg-GU-67k" secondAttribute="trailing" id="dLR-Eq-Mlv"/>
-                            <constraint firstItem="F9i-7t-1Z9" firstAttribute="top" secondItem="XUg-GU-67k" secondAttribute="bottom" id="hrj-KB-q0z"/>
-                            <constraint firstItem="F9i-7t-1Z9" firstAttribute="leading" secondItem="f4e-Qh-b8a" secondAttribute="leading" id="rxq-Ux-aIY"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="f4e-Qh-b8a"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NiL-2u-42l" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3345" y="123"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="0hW-FD-uyP">

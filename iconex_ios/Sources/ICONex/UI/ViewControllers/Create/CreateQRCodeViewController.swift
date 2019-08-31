@@ -34,6 +34,7 @@ class CreateQRCodeViewController: BaseViewController {
     
     var address: String?
     var pk: String?
+    var walletName: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +59,8 @@ class CreateQRCodeViewController: BaseViewController {
                 self.pageControl.currentPage = Int(self.scroll.contentOffset.x / self.scroll.frame.width)
         }.disposed(by: disposeBag)
         
-        navTitleView.set(title: "CreateWallet.Create".localized)
+        guard let name = self.walletName else { return }
+        navTitleView.set(title: name)
         navTitleView.setButtonImage(image: #imageLiteral(resourceName: "icAppbarClose"))
         
         // address
