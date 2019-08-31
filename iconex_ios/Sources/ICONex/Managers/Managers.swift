@@ -150,7 +150,7 @@ extension ICONManager {
         return balance
     }
     
-    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, Error> {
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, ICError> {
         let call = Call<BigUInt>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
         let result = self.iconService.call(call).execute()
         
@@ -357,10 +357,10 @@ extension BalanceManager {
         return walletBalances[wallet.address]
     }
     
-    func getTotalBalance() -> BigUInt {
-        var total: BigUInt = 0
+    func getTotalBalance() -> Float {
+        var total: Float = 0
         for i in walletBalances {
-            total += i.value
+            total += Float(i.value)
         }
         return total
     }

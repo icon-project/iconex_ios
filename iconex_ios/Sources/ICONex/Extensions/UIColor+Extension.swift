@@ -104,6 +104,30 @@ extension UIColor {
         }
     }
     
+    enum pickerTab {
+        case selected, pressed, normal
+        
+        var background: UIColor {
+            switch self {
+            case .selected:
+                return .mint3
+            case .pressed:
+                return UIColor.black.withAlphaComponent(0.02)
+            case .normal:
+                return .gray242
+            }
+        }
+        
+        var text: UIColor {
+            switch self {
+            case .selected:
+                return .mint1
+            default:
+                return .gray77
+            }
+        }
+    }
+    
     static var warn: UIColor {
         return UIColor(242, 48, 48)
     }

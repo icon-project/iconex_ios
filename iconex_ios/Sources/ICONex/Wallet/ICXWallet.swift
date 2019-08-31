@@ -69,6 +69,7 @@ class ICXWallet: BaseWalletConvertible {
     func changePassword(oldPassword: String, newPassword: String) throws {
         let prv = try extractICXPrivateKey(password: oldPassword)
         let wallet = Wallet(privateKey: prv)
+        try wallet.generateKeystore(password: newPassword)
         self.keystore = try wallet.keystore!.convert()
     }
     

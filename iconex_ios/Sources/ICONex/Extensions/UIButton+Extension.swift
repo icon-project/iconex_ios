@@ -66,6 +66,16 @@ extension UIButton {
         corner(12)
     }
     
+    func pickerTab() {
+        setBackgroundImage(color: UIColor.pickerTab.normal.background, state: .normal)
+        setBackgroundImage(color: UIColor.pickerTab.pressed.background, state: .highlighted)
+        setBackgroundImage(color: UIColor.pickerTab.selected.background, state: .selected)
+        setTitleColor(UIColor.pickerTab.normal.text, for: .normal)
+        setTitleColor(UIColor.pickerTab.pressed.text, for: .highlighted)
+        setTitleColor(UIColor.pickerTab.selected.text, for: .selected)
+        titleLabel?.font = .systemFont(ofSize: 12)
+    }
+    
     func dark() {
         setBackgroundImage(UIImage(color: UIColor.darkButton.normal.background), for: .normal)
         setBackgroundImage(UIImage(color: UIColor.darkButton.pressed.background), for: .highlighted)
