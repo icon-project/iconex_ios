@@ -84,6 +84,7 @@ class CreateCompleteViewController: BaseViewController {
                 let nextVC = self.storyboard?.instantiateViewController(withIdentifier: "QRCode") as! CreateQRCodeViewController
                 nextVC.address = self.delegate.newWallet?.address
                 nextVC.pk = self.privateKey
+                nextVC.walletName = self.delegate.newWallet?.name
                 self.presentPanModal(nextVC)
             }).disposed(by: disposeBag)
     }

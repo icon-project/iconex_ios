@@ -63,6 +63,8 @@ class AddTokenInfoViewController: BaseViewController {
             return nil
         }
         
+//        addressBox.textField.rx.
+        
         qrCodeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let qrVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController

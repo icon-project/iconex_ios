@@ -246,7 +246,7 @@ public enum CoinType {
     var fullName: String {
         switch self {
         case .icx: return "ICON"
-        case .eth: return "Etherenum"
+        case .eth: return "Ethereum"
         }
     }
     
@@ -254,6 +254,19 @@ public enum CoinType {
         switch self {
         case .icx: return "ICX"
         case .eth: return "ETH"
+        }
+    }
+}
+
+public enum BalanceUnit {
+    case USD, BTC, ETH, ICX
+    
+    var symbol: String {
+        switch self {
+        case .USD: return "USD"
+        case .BTC: return "BTC"
+        case .ETH: return "ETH"
+        case .ICX: return "ICX"
         }
     }
 }

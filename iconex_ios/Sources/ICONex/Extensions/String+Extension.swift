@@ -155,3 +155,25 @@ extension String {
         return self
     }
 }
+
+extension String {
+    func toDate() -> Date? {
+        let dateformatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
+            formatter.timeZone = TimeZone(secondsFromGMT: 0)
+            return formatter
+        }()
+        
+        let date = dateformatter.date(from: self)
+        return date
+    }
+    
+    func yymmdd() -> String {
+        guard let date = self.toDate() else { return "-" }
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "yy-MM-dd HH:mm:ss"
+        let result = dateformatter.string(from: date)
+        return result
+    }
+}

@@ -47,8 +47,12 @@ class AddTokenTableViewCell: UITableViewCell {
         checkButton.setImage(#imageLiteral(resourceName: "btnCheckOn"), for: .selected)
         
         expandButton.setImage(#imageLiteral(resourceName: "icArrowListOpen"), for: .normal)
-        expandButton.setImage(#imageLiteral(resourceName: "icArrowUp"), for: .selected) // ?? highlighted or selected
-        
+        expandButton.setImage(#imageLiteral(resourceName: "icArrowUp"), for: .selected)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellBag = DisposeBag()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

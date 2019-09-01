@@ -111,6 +111,8 @@
 
 "Alert.TxHash.Header" = "Tx Hash";
 "Alert.TxHash.Tracker" = "ICON Tracker로 이동";
+"Alert.Transaction.Copy" = "복사";
+"Alert.Transaction.Copy.Complete" = "거래 ID가 복사되었습니다.";
 
 "Alert.Stake.Header" = "Stake";
 "Alert.Stake.Time" = "소요 시간";
@@ -261,8 +263,44 @@
 "Token.Info.Error.Address" = "주소가 올바르지 않습니다. 다시 확인해주세요.";
 "Token.Info.Error.Symbol" = "영문 또는 숫자로 입력해주세요.";
 
+// MARK: ManageBackUpViewController
+"Manage.Backup.NavBar.Title" = "지갑 백업";
+"Manage.Backup.Title" = "'지갑 백업 파일(Keystore 파일) 다운로드' 또는 '개인 키 저장'으로 백업을 진행할 수 있습니다.";
+"Manage.Backup.Download" = "지갑 백업 파일 다운로드";
+"Manage.Backup.Keystore.Desc1" = "지갑 백업 파일(Keystore)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 지갑 백업 파일에는 비밀번호가 설정되어 있습니다.";
+"Manage.Backup.Keystore.Desc2" = "・ 지갑 백업 파일과 비밀번호가 있으면 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 수 있습니다.";
+"Manage.Backup.PrivateKey.Desc1" = "개인 키(Private Key)는 지갑의 고유 정보이며, 비밀번호가 설정되어 있지 않습니다.";
+"Manage.Backup.PrivateKey.Desc2" = "・ 개인 키만 알고 있으면 지갑 실행 및 복구가 가능하므로 타인에게 노출되지 않도록 각별한 관리가 필요합니다.";
 
+// MARK: ChangePasswordViewController
+"ChangePassword.NavBar.Title" = "비밀번호 변경";
+"ChangePassword.Title" = "현재 비밀번호 & 변경할 비밀번호를 입력해주세요.";
+"ChangePassword.Password.Current" = "현재 비밀번호 입력";
+"ChangePassword.Password.New" = "새 비밀번호 입력";
+"ChangePassword.Password.Confirm" = "새 비밀번호 확인";
+"ChangePassword.Desc1" = "비밀번호의 관리는 사용자의 책임이며, 분실하면 다시 찾을 수 있는 방법이 없습니다.";
+"ChangePassword.Desc2" = "・ 지갑 백업 파일(Keystore 파일)로 지갑을 복구하거나 실행하는 경우, 전송 시 비밀번호를 입력해야 합니다.";
+"ChangePassword.Password.Error.SamePassword" = "현재 비밀번호와 동일합니다. 새 비밀번호를 입력해주세요.";
 
+// MARK: DetailViewController
+"Wallet.Detail.Section.Title" = "거래 내역";
+"Wallet.Detail.Alert.Info" = "ICX 출금 신청 후 처리되지 않은 거래는 자동 취소되며 출금액과 수수료는 모두 복구됩니다.";
+
+"Wallet.Detail.DepositCompleted" = "입금완료";
+"Wallet.Detail.TransferCompleted" = "송금완료";
+"Wallet.Detail.TransferPending" = "송금대기";
+"Wallet.Detail.ETHTransactions" = "이더리움 거래 내역";
+"Wallet.Detail.NoTxHistory" = "거래 내역이 없습니다.";
+
+// MARK: SelectCoinTokenViewController
+"Wallet.Detail.SelectCoinToken.Title" = "코인&토큰 선택";
+
+// MARK: DetailOptionViewController
+"Wallet.Detail.Option.Title" = "보기 옵션";
+"Wallet.Detail.Option.SubTitle" = "거래 유형";
+"Wallet.Detail.Option.All" = "전체";
+"Wallet.Detail.Option.Send" = "전송";
+"Wallet.Detail.Option.Deposit" = "입금";
 
 
 "Passcode.Fingerprint.Instruction" = "잠금 해제를 위해\n지문 센서에 손가락을 올려주세요.";

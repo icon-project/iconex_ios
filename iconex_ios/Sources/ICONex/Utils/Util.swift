@@ -15,6 +15,15 @@ import CryptoSwift
 import ICONKit
 
 struct Tool {
+    static func calculatePrice(decimal: Int, currency: String, balance: BigUInt) -> String {
+        guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return "-" }
+        let currencyPrice = Float(exchange) ?? 0
+        let calculated = Float(balance)*currencyPrice
+        let exchanged = BigUInt(calculated)
+        let price = exchanged.toString(decimal: decimal, 2).currencySeparated()
+        return price
+    }
+    
     static var decimalSeparator: String {
         var separator = "."
         let formatter = NumberFormatter()

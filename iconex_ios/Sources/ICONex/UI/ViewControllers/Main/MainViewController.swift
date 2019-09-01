@@ -11,18 +11,6 @@ import RxSwift
 import RxCocoa
 import BigInt
 
-public enum BalanceUnit {
-    case USD, BTC, ETH
-    
-    var symbol: String {
-        switch self {
-        case .USD: return "USD"
-        case .BTC: return "BTC"
-        case .ETH: return "ETH"
-        }
-    }
-}
-
 enum MainGesture {
     case cardUp, cardDown
 }
@@ -142,6 +130,8 @@ class MainViewController: BaseViewController, Floatable {
                     self.detach()
                 }
             }).disposed(by: disposeBag)
+        
+        self.collectionView.allowsSelection = false
     }
     
     override func initializeComponents() {
@@ -196,6 +186,7 @@ class MainViewController: BaseViewController, Floatable {
             case .USD: self.currencyUnit = .BTC
             case .BTC: self.currencyUnit = .ETH
             case .ETH: self.currencyUnit = .USD
+            default: return
             }
         }.disposed(by: disposeBag)
         
@@ -365,7 +356,7 @@ extension MainViewController: UICollectionViewDataSource {
             if let _ = wallet as? ETHWallet {
                 cell.scanButton.isEnabled = true
             }
-                        
+            
         } else {
             cell.buttonStack.isHidden = true
             // icx, eth, itd.....

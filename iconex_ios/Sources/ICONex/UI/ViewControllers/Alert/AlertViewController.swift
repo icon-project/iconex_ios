@@ -34,9 +34,15 @@ class AlertViewController: BaseViewController {
     var leftButtonTitle: String = "Common.Cancel".localized
     var rightButtonTitle: String = "Common.Confirm".localized
     
-    var walletAddress: String?
-    
-    var originalWalletName: String?
+    var walletInfo: BaseWalletConvertible? = nil {
+        willSet {
+            if let _ = newValue as? ICXWallet {
+                self.isICX = true
+            } else {
+                self.isICX = false
+            }
+        }
+    }
     
     var isICX: Bool = true
     
@@ -70,7 +76,9 @@ class AlertViewController: BaseViewController {
                 switch self.type {
                 case .password:
                     let sub = self.contentView.subviews.first as! PasswordAlertView
-                    guard let address = self.walletAddress else { return }
+                    
+                    guard let wallet = self.walletInfo else { return }
+                    let address = wallet.address
                     guard let inputValue = sub.inputBoxView.textField.text else { return }
                     
                     do {
@@ -89,7 +97,10 @@ class AlertViewController: BaseViewController {
                 case .walletName:
                     let sub = self.contentView.subviews.first as! PasswordAlertView
                     
-                    guard let formerName = self.originalWalletName, let newName = sub.inputBoxView.textField.text else { return }
+                    guard let wallet = self.walletInfo else { return }
+                    
+                    let formerName = wallet.name
+                    guard let newName = sub.inputBoxView.textField.text else { return }
                     
                     do {
                         try DB.changeWalletName(former: formerName, newName: newName)
@@ -188,6 +199,8 @@ class AlertViewController: BaseViewController {
     }
     
     func setupAlertView() {
+//        guard let wallet = self.walletInfo else { return }
+        
         switch type {
         case .basic, .allText:
             setButtonUI(isOne: self.isButtonOne)
@@ -237,16 +250,16 @@ class AlertViewController: BaseViewController {
             passwordView.placeholder = "Alert.Password.Placeholder".localized
             passwordView.alertType = .password
             
-            guard let address = self.walletAddress else { return }
+            guard let wallet = self.walletInfo else { return }
             
             passwordView.inputBoxView.set { (inputValue) -> String? in
                 guard !inputValue.isEmpty else { return nil }
                 do {
                     if self.isICX {
-                        let loadWallet = Manager.wallet.walletBy(address: address, type: "icx") as! ICXWallet
+                        let loadWallet = Manager.wallet.walletBy(address: wallet.address, type: "icx") as! ICXWallet
                         self.privateKey = try loadWallet.extractICXPrivateKey(password: inputValue).hexEncoded
                     } else {
-                        let loadWallet = Manager.wallet.walletBy(address: address, type: "eth") as! ETHWallet
+                        let loadWallet = Manager.wallet.walletBy(address: wallet.address, type: "eth") as! ETHWallet
                         self.privateKey = try loadWallet.extractETHPrivateKey(password: inputValue)
                     }
                     return nil
@@ -282,12 +295,11 @@ class AlertViewController: BaseViewController {
             passwordView.placeholder = "Alert.WalletName.Placeholder".localized
             passwordView.alertType = .walletName
             
-            passwordView.inputBoxView.textField.text = self.originalWalletName
+            guard let wallet = self.walletInfo else { return }
+            
+            passwordView.inputBoxView.textField.text = wallet.name
             passwordView.inputBoxView.set { (inputValue) -> String? in
-//                return inputValue
-                guard let formerName = self.originalWalletName else { return nil }
-
-                if formerName == inputValue {
+                if wallet.name == inputValue {
                     return nil
                 } else {
                     return DB.canSaveWallet(name: inputValue) ? nil : "Error.Wallet.Duplicated.Name".localized
