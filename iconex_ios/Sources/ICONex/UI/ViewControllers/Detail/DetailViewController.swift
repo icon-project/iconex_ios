@@ -20,8 +20,10 @@ public enum TxFilter {
     case all, send, deposit
 }
 
-class DetailViewController: UIViewController {
-
+class DetailViewController: BaseViewController, Floatable {
+    var ethSelectedWallet: ETHWallet?
+    var selectedWallet: ICXWallet?
+    
     @IBOutlet weak var navBar: IXNavigationView!
     @IBOutlet weak var tableView: UITableView!
     
@@ -39,9 +41,17 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var disposeBag = DisposeBag()
+    var walletInfo: BaseWalletConvertible? = nil {
+        willSet {
+            guard let wallet = newValue else { return }
+            if let icx = wallet as? ICXWallet {
+                selectedWallet = icx
+            } else if let eth = wallet as? ETHWallet {
+                ethSelectedWallet = eth
+            }
+        }
+    }
     
-    var walletInfo: BaseWalletConvertible? = nil
     var tokenInfo: Token? = nil {
         willSet {
             guard let token = newValue else { return }
@@ -74,6 +84,8 @@ class DetailViewController: UIViewController {
     let ixSectionHeader = IXSectionHeader(frame: CGRect.init(x: 0, y: 0, width: .max, height: 36))
     
     var etherscanButton = UIButton()
+    
+    var floater: Floater = Floater(type: .wallet)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,11 +124,34 @@ class DetailViewController: UIViewController {
                 let ethURL = Ethereum.etherScanURL.appendingPathComponent(wallet.address)
                 UIApplication.shared.open(ethURL, options: [:], completionHandler: nil)
         }.disposed(by: disposeBag)
+        
+        
+        floater.delegate = self
+        floater.button.rx.tap
+            .subscribe(onNext: {
+                if let wallet = self.selectedWallet {
+                    self.floater.showMenu(wallet: wallet, self)
+                }
+            }).disposed(by: disposeBag)
+        
+//        selectedWallet = walletList.first as? ICXWallet
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        attach()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        detach()
     }
     
     private func fetchBalance() {
         guard let wallet = self.walletInfo else { return }
-        
         DispatchQueue.main.async {
             if let token = self.tokenInfo {
                 let tokenBalance = Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0

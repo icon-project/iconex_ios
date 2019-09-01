@@ -30,6 +30,26 @@ struct DB {
         return walletList
     }
     
+    static func loadMyWallets(address: String, type: String) -> [BaseWalletConvertible] {
+        let realm = try! Realm()
+        
+        let list = realm.objects(WalletModel.self).sorted(byKeyPath: "createdDate").filter({ $0.type == type }).filter({ $0.address != address })
+        
+        var walletList = [BaseWalletConvertible]()
+        for walletModel in list {
+            var wallet: BaseWalletConvertible
+            if walletModel.type == "icx" {
+                wallet = ICXWallet(model: walletModel)
+            } else {
+                wallet = ETHWallet(model: walletModel)
+            }
+            walletList.append(wallet)
+        }
+        
+        return walletList
+    }
+    
+    
     static func walletTypes() -> [String] {
         let realm = try! Realm()
         

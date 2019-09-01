@@ -159,6 +159,40 @@ extension ICONManager {
         return result
     }
     
+    
+    public func sendTransaction(transaction: Transaction, privateKey: PrivateKey) throws -> String {
+        do {
+            let signed = try SignedTransaction(transaction: transaction, privateKey: privateKey)
+            let request = iconService.sendTransaction(signedTransaction: signed)
+            let response = request.execute()
+            
+            switch response {
+            case .success(let txHash):
+                return txHash
+                
+            case .failure(let error):
+                Log(error, .error)
+                return error.errorDescription ?? ""
+            }
+        } catch let err {
+            Log(err, .error)
+            return "\(err.localizedDescription)"
+        }
+    }
+    
+    public func getTransactionResult(txHash: String) -> Response.TransactionResult? {
+        let request = iconService.getTransactionResult(hash: txHash)
+        let response = request.execute()
+        
+        switch response {
+        case .success(let result):
+            return result
+        case .failure(let err):
+            Log(err, .error)
+            return nil
+        }
+    }
+    
 }
 
 // IISS

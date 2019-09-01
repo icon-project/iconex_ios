@@ -67,6 +67,8 @@ extension UIButton {
     }
     
     func pickerTab() {
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 4
         setBackgroundImage(color: UIColor.pickerTab.normal.background, state: .normal)
         setBackgroundImage(color: UIColor.pickerTab.pressed.background, state: .highlighted)
         setBackgroundImage(color: UIColor.pickerTab.selected.background, state: .selected)
@@ -102,6 +104,17 @@ extension UIButton {
     
     func round02() {
         gray()
+        corner(12)
+    }
+    
+    func gray77round() {
+        setBackgroundImage(UIImage(color: .gray77), for: .normal)
+        setBackgroundImage(UIImage(color: .gray64), for: .highlighted)
+        setBackgroundImage(UIImage(color: .gray242), for: .disabled)
+        setTitleColor(.white, for: .normal)
+        setTitleColor(.white, for: .highlighted)
+        setTitleColor(.gray179, for: .disabled)
+        titleLabel?.font = .systemFont(ofSize: 16)
         corner(12)
     }
     

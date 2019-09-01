@@ -305,6 +305,35 @@
 "Wallet.Detail.Option.Send" = "전송";
 "Wallet.Detail.Option.Deposit" = "입금";
 
+// MARK: SendICXViewController
+"Send.Balane.Avaliable" = "사용가능 잔액 (ICX)";
+"Send.InputBox.Amount" = "전송 수량";
+"Send.InputBox.Amount.Error" = "보유 수량보다 적게 입력해주세요.";
+"Send.InputBox.Address" = "받는 주소";
+"Send.InputBox.Address.Error" = "올바른 ICX 주소가 아닙니다.";
+"Send.InputBox.Data" = "데이터 (선택 입력)";
+"Send.Amount.Max" = "전액";
+"Send.Step" = "적정 Step 한도 / 가격";
+"Send.EstimatedMaxStep" = "예상 최대 수수료";
+"Send.SendButton" = "전송";
+"Send.AddressBook" = "주소 선택";
+"Send.ScanQRCode" = "QR코드 스캔";
+"Send.Success" = "전송 요청이 완료되었습니다.";
+
+// MARK: DataTypeViewController
+"Send.DataType.Title" = "데이터";
+"Send.DataType.Subtitle" = "입력 타입";
+
+// MARK: InputDataViewController
+"Send.InputData.Alert.Cancel" = "데이터 입력을 취소하시겠습니까?";
+
+// MARK: AddressBookViewController
+"AddressBook.Title" = "주소 선택";
+"AddressBook.Button.AddressBook" = "주소록";
+"AddressBook.Button.MyWallet" = "내 지갑";
+"AddressBook.NoAddedAddress" = "등록된 주소록이 없습니다.";
+"AddressBook.AddAddress" = "주소록 추가";
+
 
 "Passcode.Fingerprint.Instruction" = "잠금 해제를 위해\n지문 센서에 손가락을 올려주세요.";
 "Passcode.Unlock.Code" = "잠금 번호로 잠금 해제";
