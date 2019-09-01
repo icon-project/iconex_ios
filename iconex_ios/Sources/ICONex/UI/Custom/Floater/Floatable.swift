@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
+import ICONKit
+import BigInt
 
 enum FloaterType {
     case wallet
@@ -18,6 +20,7 @@ enum FloaterType {
 }
 
 protocol Floatable {
+    var selectedWallet: ICXWallet? { get }
     var floater: Floater { get }
 }
 
@@ -25,6 +28,15 @@ class Floater {
     let type: FloaterType
     let contentView: UIView
     let button: UIButton
+    
+    var isAttached: Bool {
+        return attached
+    }
+    private var attached: Bool = false
+    
+    private var targetAction: UIViewController?
+    
+    var delegate: Floatable!
     
     init(type: FloaterType) {
         self.type = type
@@ -77,37 +89,103 @@ class Floater {
         }
     }
     
-    func pop(_ controller: UIViewController? = nil) {
-        let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
-        bzz()
-        floatMenu.type = self.type
-        floatMenu.pop(actionTarget: controller)
-    }
-}
-extension Floatable where Self: BaseViewController {
-    func attach() {
-        self.view.addSubview(floater.contentView)
-        floater.contentView.frame = CGRect(x: view.frame.width - (25 + 50), y: view.frame.height - (45 + 50 + self.view.safeAreaInsets.bottom), width: 50, height: 50)
-        floater.contentView.transform = CGAffineTransform().scaledBy(x: 0.1, y: 0.1)
+    func addFloater(view: UIView) {
+        guard !isAttached else {
+            return
+        }
+        view.addSubview(contentView)
+        attached = true
+        contentView.frame = CGRect(x: view.frame.width - (25 + 50), y: view.frame.height - (45 + 50 + view.safeAreaInsets.bottom), width: 50, height: 50)
+        contentView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
-        Log("Attach - \(floater.contentView)")
         UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
-            self.floater.contentView.alpha = 1.0
-            self.floater.contentView.transform = .identity
-            Log("Attached - \(self.floater.contentView)")
+            self.contentView.alpha = 1.0
+            self.contentView.transform = .identity
         }, completion: { _ in
             
         })
     }
     
-    func detach() {
+    func removeFloater() {
+        guard isAttached else { return }
         UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
-            self.floater.contentView.alpha = 0.0
-            self.floater.contentView.transform = CGAffineTransform().scaledBy(x: 0.1, y: 0.1)
-        }, completion: { _ in
-            self.floater.contentView.removeFromSuperview()
-            self.floater.contentView.transform = .identity
+            self.contentView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            self.contentView.alpha = 0.0
+        }, completion: { finished in
+            if finished {
+                self.contentView.removeFromSuperview()
+                self.contentView.transform = .identity
+                self.attached = false
+            }
         })
+    }
+    
+    func showMenu(wallet: ICXWallet, _ controller: UIViewController? = nil) {
+        targetAction = controller
+        let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
+        
+        switch type {
+        case .vote:
+            floatMenu.headerAction = {
+                let prep = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepListView") as! PRepListViewController
+                prep.wallet = self.delegate.selectedWallet
+                self.targetAction?.navigationController?.pushViewController(prep, animated: true)
+            }
+            floatMenu.itemAction1 = {
+//                guard let balance = wallet.balance, balance >= BigUInt(5).convert(unit: ICONKit.Unit.icx) else {
+//                    Alert.basic(title: "Floater.Alert.Stake".localized, leftButtonTitle: "Common.Confirm".localized).show()
+//                    return }
+                
+                Alert.password(address: wallet.address, returnAction: { pk in
+                    let stake = UIStoryboard(name: "Stake", bundle: nil).instantiateInitialViewController() as! StakeViewController
+                    stake.wallet = self.delegate.selectedWallet
+                    stake.key = PrivateKey(hex: Data(hex: pk))
+                    self.targetAction?.show(stake, sender: self)
+                }).show()
+            }
+            floatMenu.itemAction2 = {
+                guard let votingPower = Manager.iiss.votingPower(icx: wallet), votingPower > 0 else {
+                    Alert.basic(title: "Floater.Alert.Vote".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
+                
+                Alert.password(address: wallet.address, returnAction: { pk in
+                    let vote = UIStoryboard(name: "Vote", bundle: nil).instantiateInitialViewController() as! VoteMainViewController
+                    vote.isPreps = false
+                    vote.wallet = self.delegate.selectedWallet
+                    vote.key = PrivateKey(hex: Data(hex: pk))
+                    self.targetAction?.show(vote, sender: self)
+                }).show()
+            }
+            floatMenu.itemAction3 = {
+                Alert.password(address: wallet.address, returnAction: { pk in
+                    let iscore = UIStoryboard(name: "IScore", bundle: nil).instantiateInitialViewController() as! IScoreDetailViewController
+                    iscore.wallet = self.delegate.selectedWallet
+                    iscore.key = PrivateKey(hex: Data(hex: pk))
+                    self.targetAction?.show(iscore, sender: self)
+                }).show()
+            }
+            
+        case .wallet:
+            break
+            
+        default:
+            break
+        }
+        
+        
+        bzz()
+        floatMenu.type = self.type
+        floatMenu.pop()
+    }
+}
+extension Floatable where Self: BaseViewController {
+    func attach() {
+        floater.addFloater(view: self.view)
+    }
+    
+    func detach() {
+        floater.removeFloater()
     }
 
 }
