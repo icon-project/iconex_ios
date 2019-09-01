@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import ICONKit
+import BigInt
 
 class Alert {
     static func basic(title: String, subtitle: String? = nil, hasHeaderTitle: Bool = false, isOnlyOneButton: Bool = true, leftButtonTitle: String? = nil, rightButtonTitle: String? = nil, confirmAction: (() -> Void)? = nil) -> AlertViewController {
@@ -83,11 +85,11 @@ class Alert {
         return alertVC
     }
     
-    static func send(sendInfo: SendInfo, confirmAction: (() -> Void)? = nil) -> AlertViewController {
+    static func send(sendInfo: SendInfo, confirmAction: ((_ isSuccess: Bool) -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .send
         alertVC.sendInfo = sendInfo
-        alertVC.confirmHandler = confirmAction
+        alertVC.successHandler = confirmAction
         return alertVC
     }
     
@@ -116,12 +118,64 @@ struct AlertTxHashInfo {
 }
 
 struct SendInfo {
-    var isICX: Bool
+    // ICX
+    var transaction: Transaction?
+    var privateKey: PrivateKey?
+    
+    // ETH
+    var ethTransaction: EthereumTransaction?
+    var ethPrivateKey: String?
+    
     var amount: String
     var stepLimit: String
     var estimatedFee: String
     var estimatedUSD: String
     var receivingAddress: String
+    
+    init(transaction: Transaction? = nil, ethTransaction: EthereumTransaction? = nil, privateKey: PrivateKey? = nil, ethPrivateKey: String? = nil, estimatedFee: String, estimatedUSD: String) {
+        if let icx = transaction {
+            self.transaction = icx
+            self.privateKey = privateKey
+            self.amount = String(icx.value ?? 0)
+            self.stepLimit = String(icx.stepLimit ?? 0)
+            self.receivingAddress = icx.to ?? ""
+            
+            self.ethTransaction = nil
+            self.ethPrivateKey = nil
+            
+        } else if let eth = ethTransaction {
+            self.ethTransaction = eth
+            self.ethPrivateKey = ethPrivateKey
+            self.amount = String(eth.value)
+            self.stepLimit = String(eth.gasLimit)
+            self.receivingAddress = eth.to
+            
+            self.transaction = nil
+            self.privateKey = nil
+        } else {
+            self.transaction = nil
+            self.privateKey = nil
+            self.amount = ""
+            self.stepLimit = ""
+            self.receivingAddress = ""
+            
+            self.ethTransaction = nil
+            self.ethPrivateKey = nil
+        }
+        
+        self.estimatedFee = estimatedFee
+        self.estimatedUSD = estimatedUSD
+    }
+}
+
+struct EthereumTransaction {
+    var privateKey: String
+    var gasPrice: BigUInt
+    var gasLimit: BigUInt
+    var from: String
+    var to: String
+    var value: BigUInt
+    var data: Data
 }
 
 struct IScoreClaimInfo {

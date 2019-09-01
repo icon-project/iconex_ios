@@ -24,13 +24,18 @@ class SendAlertView: UIView {
     
     var info: SendInfo? {
         willSet {
-            sendAmountTitleLabel.text = newValue!.isICX ? "Alert.Send.Value.ICX".localized : "Alert.Send.Value.ETH".localized
+            guard let info = newValue else { return }
+            if info.transaction == nil {
+                sendAmountTitleLabel.text = "Alert.Send.Value.ETH".localized
+            } else {
+                sendAmountTitleLabel.text = "Alert.Send.Value.ICX".localized
+            }
             
-            sendAmountLabel.size18(text: newValue!.amount, color: .mint1, weight: .regular, align: .right)
-            stepLimitLabel.size12(text: newValue!.stepLimit, color: .gray128, weight: .bold, align: .right)
-            estimateMaxLabel.size12(text: newValue!.estimatedFee, color: .gray77,  weight: .bold, align: .right)
-            estimateUSDLabel.size12(text: newValue!.estimatedUSD, color: .gray179,  weight: .regular, align: .right)
-            addressLabel.size12(text: newValue!.receivingAddress, color: .gray77,  weight: .bold, align: .left)
+            sendAmountLabel.size18(text: info.amount, color: .mint1, weight: .regular, align: .right)
+            stepLimitLabel.size12(text: info.stepLimit, color: .gray128, weight: .bold, align: .right)
+            estimateMaxLabel.size12(text: info.estimatedFee, color: .gray77,  weight: .bold, align: .right)
+            estimateUSDLabel.size12(text: info.estimatedUSD, color: .gray179,  weight: .regular, align: .right)
+            addressLabel.size12(text: info.receivingAddress, color: .gray77,  weight: .bold, align: .left)
         }
     }
     
