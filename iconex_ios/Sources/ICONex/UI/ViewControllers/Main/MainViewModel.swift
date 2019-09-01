@@ -18,7 +18,7 @@ class MainViewModel {
     
     var currencyUnit: BehaviorSubject<BalanceUnit>
     var currencyPrice: BehaviorSubject<String>
-    var totalICXBalance: BehaviorSubject<Float>
+    var totalICXBalance: BehaviorSubject<BigUInt>
     var totalBalance: PublishSubject<String>
     var reload: PublishSubject<Bool>
     
@@ -34,7 +34,7 @@ class MainViewModel {
         
         self.currencyPrice = BehaviorSubject<String>(value: Manager.exchange.exchangeInfoList["icx\(exchangeUnit ?? "")"]?.price ?? "")
         // ICX Balance
-        self.totalICXBalance = BehaviorSubject<Float>(value: Manager.balance.getTotalBalance())
+        self.totalICXBalance = BehaviorSubject<BigUInt>(value: Manager.balance.getTotalBalance())
         
         self.reload = PublishSubject<Bool>()
         
@@ -46,10 +46,9 @@ class MainViewModel {
         // reload
         
         Observable.combineLatest(self.reload, self.currencyPrice, self.totalICXBalance).flatMapLatest { (_, currencyPrice, totalBalance) -> Observable<String> in
-            let price = Float(currencyPrice) ?? 0
-//            let a = totalBalance
-            let totalPrice: Float = price*totalBalance
-            return Observable.just(String(totalPrice).currencySeparated())
+            let price = BigUInt(currencyPrice) ?? 0
+            let totalPrice: BigUInt = price*totalBalance
+            return Observable.just(totalPrice.toString(decimal: 18, 4).currencySeparated())
         }.bind(to: self.totalBalance)
         .disposed(by: disposeBag)
     }
