@@ -19,6 +19,8 @@ struct Manager {
     static let balance = BalanceManager.shared
     
     static let exchange = ExchangeManager.shared
+    
+    static let iiss = PRepManager.shared
 }
 
 
@@ -311,9 +313,8 @@ extension BalanceManager {
     func getAllBalances() {
         
         guard isWorking == false else { return }
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         DispatchQueue.global().async { [unowned self] in
-            
+            Manager.iiss.getPRepInfo()
             
             self.isWorking = true
             for wallet in Manager.wallet.walletList {
@@ -348,7 +349,6 @@ extension BalanceManager {
             }
             DispatchQueue.main.async {
                 self.isWorking = false
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         }
     }
@@ -357,11 +357,8 @@ extension BalanceManager {
         return walletBalances[wallet.address]
     }
     
-    func getTotalBalance() -> Float {
-        var total: Float = 0
-        for i in walletBalances {
-            total += Float(i.value)
-        }
+    func getTotalBalance() -> BigUInt {
+        let total: BigUInt = walletBalances.map { $0.value }.reduce(0, +)
         return total
     }
     
@@ -370,6 +367,43 @@ extension BalanceManager {
         let balance = wallet[address] ?? 0
         
         return balance
+    }
+}
+
+// MARK: PRepManager
+class PRepManager {
+    static let shared = PRepManager()
+    
+    private var walletInfo = [String: MyStakeInfo]()
+    private var service: ICONManager {
+        return Manager.icon
+    }
+    
+    private init() { }
+    
+    func getPRepInfo() {
+        DispatchQueue.global().async {
+            let icxList = Manager.wallet.walletList.compactMap { $0 as? ICXWallet }
+            for icx in icxList {
+                guard let stake = self.service.getStake(from: icx) else { continue }
+                guard let voting = self.service.getDelegation(wallet: icx) else { continue }
+                guard let iscore = self.service.queryIScore(from: icx) else { continue }
+                let myStake = MyStakeInfo(stake: stake.stake, votingPower: voting.votingPower, iscore: iscore.iscore)
+                self.walletInfo[icx.address] = myStake
+            }
+        }
+    }
+    
+    func votingPower(icx: ICXWallet) -> BigUInt? {
+        return walletInfo[icx.address]?.votingPower
+    }
+    
+    func stake(icx: ICXWallet) -> BigUInt? {
+        return walletInfo[icx.address]?.stake
+    }
+    
+    func iscore(icx: ICXWallet) -> BigUInt? {
+        return walletInfo[icx.address]?.iscore
     }
 }
 

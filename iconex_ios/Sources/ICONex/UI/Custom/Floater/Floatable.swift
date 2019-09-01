@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
+import ICONKit
+import BigInt
 
 enum FloaterType {
     case wallet
@@ -94,21 +96,21 @@ class Floater {
         view.addSubview(contentView)
         attached = true
         contentView.frame = CGRect(x: view.frame.width - (25 + 50), y: view.frame.height - (45 + 50 + view.safeAreaInsets.bottom), width: 50, height: 50)
-        contentView.transform = CGAffineTransform().scaledBy(x: 0.1, y: 0.1)
+        contentView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
         
         UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
             self.contentView.alpha = 1.0
             self.contentView.transform = .identity
-            Log("Attached - \(self.contentView)")
         }, completion: { _ in
             
         })
     }
     
     func removeFloater() {
+        guard isAttached else { return }
         UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+            self.contentView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
             self.contentView.alpha = 0.0
-            self.contentView.transform = CGAffineTransform().scaledBy(x: 0.1, y: 0.1)
         }, completion: { finished in
             if finished {
                 self.contentView.removeFromSuperview()
@@ -118,34 +120,50 @@ class Floater {
         })
     }
     
-    func showMenu(_ controller: UIViewController? = nil) {
+    func showMenu(wallet: ICXWallet, _ controller: UIViewController? = nil) {
         targetAction = controller
         let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
         
         switch type {
         case .vote:
             floatMenu.headerAction = {
-                let vote = UIStoryboard(name: "Vote", bundle: nil).instantiateInitialViewController() as! VoteMainViewController
-                vote.isPreps = true
-                vote.wallet = self.delegate.selectedWallet
-                self.targetAction?.navigationController?.pushViewController(vote, animated: true)
-//                self.targetAction?.show(vote, sender: self)
+                let prep = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepListView") as! PRepListViewController
+                prep.wallet = self.delegate.selectedWallet
+                self.targetAction?.navigationController?.pushViewController(prep, animated: true)
             }
             floatMenu.itemAction1 = {
-                let stake = UIStoryboard(name: "Stake", bundle: nil).instantiateInitialViewController() as! StakeViewController
-                stake.wallet = self.delegate.selectedWallet
-                self.targetAction?.show(stake, sender: self)
+//                guard let balance = wallet.balance, balance >= BigUInt(5).convert(unit: ICONKit.Unit.icx) else {
+//                    Alert.basic(title: "Floater.Alert.Stake".localized, leftButtonTitle: "Common.Confirm".localized).show()
+//                    return }
+                
+                Alert.password(address: wallet.address, returnAction: { pk in
+                    let stake = UIStoryboard(name: "Stake", bundle: nil).instantiateInitialViewController() as! StakeViewController
+                    stake.wallet = self.delegate.selectedWallet
+                    stake.key = PrivateKey(hex: Data(hex: pk))
+                    self.targetAction?.show(stake, sender: self)
+                }).show()
             }
             floatMenu.itemAction2 = {
-                let vote = UIStoryboard(name: "Vote", bundle: nil).instantiateInitialViewController() as! VoteMainViewController
-                vote.isPreps = false
-                vote.wallet = self.delegate.selectedWallet
-                self.targetAction?.show(vote, sender: self)
+                guard let votingPower = Manager.iiss.votingPower(icx: wallet), votingPower > 0 else {
+                    Alert.basic(title: "Floater.Alert.Vote".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
+                
+                Alert.password(address: wallet.address, returnAction: { pk in
+                    let vote = UIStoryboard(name: "Vote", bundle: nil).instantiateInitialViewController() as! VoteMainViewController
+                    vote.isPreps = false
+                    vote.wallet = self.delegate.selectedWallet
+                    vote.key = PrivateKey(hex: Data(hex: pk))
+                    self.targetAction?.show(vote, sender: self)
+                }).show()
             }
             floatMenu.itemAction3 = {
-                let iscore = UIStoryboard(name: "IScore", bundle: nil).instantiateInitialViewController() as! IScoreDetailViewController
-                iscore.wallet = self.delegate.selectedWallet
-                self.targetAction?.show(iscore, sender: self)
+                Alert.password(address: wallet.address, returnAction: { pk in
+                    let iscore = UIStoryboard(name: "IScore", bundle: nil).instantiateInitialViewController() as! IScoreDetailViewController
+                    iscore.wallet = self.delegate.selectedWallet
+                    iscore.key = PrivateKey(hex: Data(hex: pk))
+                    self.targetAction?.show(iscore, sender: self)
+                }).show()
             }
             
         case .wallet:

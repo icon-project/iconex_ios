@@ -120,8 +120,11 @@ class MainViewController: BaseViewController, Floatable {
         
         collectionView.rx.didEndDecelerating
             .subscribe(onNext: {
-                let path = self.collectionView.indexPathsForVisibleItems.first!
+                let items = self.collectionView.indexPathsForVisibleItems
                 
+                let x = self.collectionView.panGestureRecognizer.translation(in: self.collectionView.superview).x
+                let path = items.first!
+                Log("IndexPath - \(path) - \(self.floater.isAttached) \(x)")
                 if let icx = self.walletList[path.row] as? ICXWallet {
                     self.selectedWallet = icx
                     self.attach()
@@ -208,7 +211,9 @@ class MainViewController: BaseViewController, Floatable {
         floater.delegate = self
         floater.button.rx.tap
             .subscribe(onNext: {
-                self.floater.showMenu(self)
+                if let wallet = self.selectedWallet {
+                    self.floater.showMenu(wallet: wallet, self)
+                }
             }).disposed(by: disposeBag)
         
         selectedWallet = walletList.first as? ICXWallet

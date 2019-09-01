@@ -1,50 +1,46 @@
 //
-//  PRepsViewController.swift
+//  PRepListViewController.swift
 //  iconex_ios
 //
-//  Created by a1ahn on 23/08/2019.
+//  Created by a1ahn on 30/08/2019.
 //  Copyright © 2019 ICON Foundation. All rights reserved.
 //
+
 
 import UIKit
 import RxSwift
 import RxCocoa
 import PanModal
 
-class PRepsViewController: BaseViewController, Floatable {
-    @IBOutlet weak var firstItem: UIButton!
-    @IBOutlet weak var secondItem: UILabel!
+class PRepListViewController: BaseViewController, Floatable {
+    @IBOutlet weak var navBar: IXNavigationView!
     @IBOutlet weak var tableView: UITableView!
     
-    var delegate: VoteMainDelegate!
+    var wallet: ICXWallet!
     
     var floater: Floater = {
         return Floater(type: .search)
     }()
     
-    var selectedWallet: ICXWallet? { return delegate.wallet }
+    var selectedWallet: ICXWallet? { return wallet }
     
     private var refreshControl: UIRefreshControl? = UIRefreshControl()
     private var preps: PRepListResponse?
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
     
     override func initializeComponents() {
         super.initializeComponents()
         
+        navBar.setLeft {
+            self.navigationController?.popViewController(animated: true)
+        }
+        navBar.setTitle("P-Reps")
+        
         tableView.register(UINib(nibName: "PRepViewCell", bundle: nil), forCellReuseIdentifier: "PRepViewCell")
-        
-        firstItem.setTitle("My Votes", for: .normal)
-        firstItem.setTitleColor(.gray77, for: .normal)
-        firstItem.titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
-        secondItem.size14(text: "P-Reps", color: .gray77, weight: .bold, align: .center)
-        
-        firstItem.rx.tap.subscribe(onNext: { [weak self] in
-            self?.delegate.headerSelected(index: 0)
-        }).disposed(by: disposeBag)
         
         tableView.tableFooterView = UIView()
         tableView.delegate = self
@@ -75,14 +71,14 @@ class PRepsViewController: BaseViewController, Floatable {
     }
 }
 
-extension PRepsViewController {
+extension PRepListViewController {
     func loadData() {
         guard self.refreshControl != nil else { return }
         
         tableView.refreshControl = self.refreshControl
         self.refreshControl?.beginRefreshing()
         DispatchQueue.global().async {
-            guard let preps = Manager.icon.getPreps(from: self.delegate.wallet, start: nil, end: nil) else {
+            guard let preps = Manager.icon.getPreps(from: self.wallet, start: nil, end: nil) else {
                 DispatchQueue.main.async {
                     self.refreshControl?.endRefreshing()
                     self.tableView.refreshControl = nil
@@ -102,7 +98,7 @@ extension PRepsViewController {
     }
 }
 
-extension PRepsViewController: UITableViewDataSource {
+extension PRepListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90
     }
@@ -117,26 +113,18 @@ extension PRepsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepViewCell", for: indexPath) as! PRepViewCell
-        cell.addButton.isHidden = false
+        
         let prep = preps!.preps[indexPath.row]
+        cell.addButton.isHidden = true
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
         cell.active = true
-        cell.addButton.rx.tap
-            .subscribe(onNext: {
-//                if self.delegate.modifiedList.count < 10 {
-//                    
-//                } else {
-//                    let cellRect = tableView.rectForRow(at: indexPath)
-//                    tableView.showToolTip(sizeY: cellRect.origin.y)
-//                }
-            }).disposed(by: cell.disposeBag)
         
         return cell
     }
 }
 
-extension PRepsViewController: UITableViewDelegate {
+extension PRepListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 36
     }
@@ -185,7 +173,7 @@ extension PRepsViewController: UITableViewDelegate {
     }
 }
 
-extension PRepsViewController: PRepSearchDelegate {
+extension PRepListViewController: PRepSearchDelegate {
     var prepList: [PRepListResponse.PReps] {
         if let list = preps?.preps {
             return list

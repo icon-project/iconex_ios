@@ -59,7 +59,7 @@ extension MyVoteViewController {
         DispatchQueue.global().async {
             let result = Manager.icon.getDelegation(wallet: self.delegate.wallet)
             
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                 self.refreshControl?.endRefreshing()
                 self.refreshControl = nil
                 self.tableView.refreshControl = nil
@@ -97,6 +97,8 @@ extension MyVoteViewController: UITableViewDataSource {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
+            
+            
             
             return cell
         }

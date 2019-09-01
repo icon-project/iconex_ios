@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import ICONKit
 
 protocol VoteMainDelegate {
     var wallet: ICXWallet! { get set }
@@ -24,6 +25,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
     var wallet: ICXWallet!
+    var key: PrivateKey!
     
     var isPreps: Bool = false
     
