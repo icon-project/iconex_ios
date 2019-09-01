@@ -357,10 +357,10 @@ extension BalanceManager {
         return walletBalances[wallet.address]
     }
     
-    func getTotalBalance() -> Float {
-        var total: Float = 0
+    func getTotalBalance() -> BigUInt {
+        var total: BigUInt = 0
         for i in walletBalances {
-            total += Float(i.value)
+            total += i.value
         }
         return total
     }
