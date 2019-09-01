@@ -152,7 +152,7 @@ extension ICONManager {
         return balance
     }
     
-    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, ICError> {
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, Error> {
         let call = Call<BigUInt>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
         let result = self.iconService.call(call).execute()
         

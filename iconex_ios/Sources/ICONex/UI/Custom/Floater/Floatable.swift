@@ -136,7 +136,7 @@ class Floater {
 //                    Alert.basic(title: "Floater.Alert.Stake".localized, leftButtonTitle: "Common.Confirm".localized).show()
 //                    return }
                 
-                Alert.password(address: wallet.address, returnAction: { pk in
+                Alert.password(wallet: wallet, returnAction: { pk in
                     let stake = UIStoryboard(name: "Stake", bundle: nil).instantiateInitialViewController() as! StakeViewController
                     stake.wallet = self.delegate.selectedWallet
                     stake.key = PrivateKey(hex: Data(hex: pk))
@@ -149,7 +149,7 @@ class Floater {
                     return
                 }
                 
-                Alert.password(address: wallet.address, returnAction: { pk in
+                Alert.password(wallet: wallet, returnAction: { pk in
                     let vote = UIStoryboard(name: "Vote", bundle: nil).instantiateInitialViewController() as! VoteMainViewController
                     vote.isPreps = false
                     vote.wallet = self.delegate.selectedWallet
@@ -158,7 +158,7 @@ class Floater {
                 }).show()
             }
             floatMenu.itemAction3 = {
-                Alert.password(address: wallet.address, returnAction: { pk in
+                Alert.password(wallet: wallet, returnAction: { pk in
                     let iscore = UIStoryboard(name: "IScore", bundle: nil).instantiateInitialViewController() as! IScoreDetailViewController
                     iscore.wallet = self.delegate.selectedWallet
                     iscore.key = PrivateKey(hex: Data(hex: pk))
