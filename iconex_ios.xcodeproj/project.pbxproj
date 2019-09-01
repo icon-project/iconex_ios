@@ -132,6 +132,8 @@
 		D4DACDF32314259900CC8EA8 /* PRepSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DACDF22314259900CC8EA8 /* PRepSearchViewController.swift */; };
 		D4DACDF52314FC1700CC8EA8 /* MyVoteDelegateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DACDF42314FC1700CC8EA8 /* MyVoteDelegateCell.swift */; };
 		D4DACDFA231513F500CC8EA8 /* Floatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DACDF9231513F500CC8EA8 /* Floatable.swift */; };
+		D4E972CC231B9F1600C7B646 /* AppInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E972CB231B9F1600C7B646 /* AppInfoViewController.swift */; };
+		D4E972CE231B9FB300C7B646 /* AppInfo.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E972CD231B9FB300C7B646 /* AppInfo.storyboard */; };
 		D4EB066520C63730005AF9F1 /* ethToken.json in Resources */ = {isa = PBXBuildFile; fileRef = D4EB066420C63730005AF9F1 /* ethToken.json */; };
 		D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4ECFE5522013FE4001644AF /* WalletKeystore.swift */; };
 		D4F2EBE122FBFA7C00EAC3B4 /* QRReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F2EBE022FBFA7C00EAC3B4 /* QRReaderViewController.swift */; };
@@ -300,6 +302,8 @@
 		D4DACDF22314259900CC8EA8 /* PRepSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepSearchViewController.swift; sourceTree = "<group>"; };
 		D4DACDF42314FC1700CC8EA8 /* MyVoteDelegateCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyVoteDelegateCell.swift; sourceTree = "<group>"; };
 		D4DACDF9231513F500CC8EA8 /* Floatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Floatable.swift; sourceTree = "<group>"; };
+		D4E972CB231B9F1600C7B646 /* AppInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppInfoViewController.swift; sourceTree = "<group>"; };
+		D4E972CD231B9FB300C7B646 /* AppInfo.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AppInfo.storyboard; sourceTree = "<group>"; };
 		D4EB066420C63730005AF9F1 /* ethToken.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ethToken.json; sourceTree = "<group>"; };
 		D4ECFE5522013FE4001644AF /* WalletKeystore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletKeystore.swift; sourceTree = "<group>"; };
 		D4F2EBE022FBFA7C00EAC3B4 /* QRReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRReaderViewController.swift; sourceTree = "<group>"; };
@@ -363,6 +367,7 @@
 		BF4F6F452318A57D0098D303 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				D4E972C9231B9EF100C7B646 /* Side */,
 				BF4F6F5D2318A57D0098D303 /* Cell Model */,
 				BF4F6F482318A57D0098D303 /* Main.storyboard */,
 				BF4F6F472318A57D0098D303 /* MainViewController.swift */,
@@ -825,6 +830,23 @@
 			path = Module;
 			sourceTree = "<group>";
 		};
+		D4E972C9231B9EF100C7B646 /* Side */ = {
+			isa = PBXGroup;
+			children = (
+				D4E972CA231B9F0300C7B646 /* AppInfo */,
+			);
+			path = Side;
+			sourceTree = "<group>";
+		};
+		D4E972CA231B9F0300C7B646 /* AppInfo */ = {
+			isa = PBXGroup;
+			children = (
+				D4E972CD231B9FB300C7B646 /* AppInfo.storyboard */,
+				D4E972CB231B9F1600C7B646 /* AppInfoViewController.swift */,
+			);
+			path = AppInfo;
+			sourceTree = "<group>";
+		};
 		D4F2EBDF22FBFA5F00EAC3B4 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
@@ -964,6 +986,7 @@
 				D4BF98DD230F7C65009D4632 /* TEST.storyboard in Resources */,
 				D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */,
 				D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */,
+				D4E972CE231B9FB300C7B646 /* AppInfo.storyboard in Resources */,
 				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				BF7C61BE23194356001C8749 /* Detail.storyboard in Resources */,
 				BF4F6F662318A57D0098D303 /* Main.storyboard in Resources */,
@@ -1107,6 +1130,7 @@
 				D4DACDF12313D37400CC8EA8 /* PRepViewCell.swift in Sources */,
 				D4F7672E22F41B3A00452DA7 /* IXNavigationView.swift in Sources */,
 				D4F7673D22F43FAC00452DA7 /* BaseViewController.swift in Sources */,
+				D4E972CC231B9F1600C7B646 /* AppInfoViewController.swift in Sources */,
 				D468CEF922F03CAB0019D7BB /* PopableViewController.swift in Sources */,
 				BFC9A4A223141498002E35F5 /* extensions.swift in Sources */,
 				D4DACDF52314FC1700CC8EA8 /* MyVoteDelegateCell.swift in Sources */,
