@@ -23,7 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXL-Y8-q6R">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cXL-Y8-q6R">
                                 <rect key="frame" x="0.0" y="100" width="375" height="678"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pAz-6K-vFu">
@@ -51,7 +51,7 @@
                                     <constraint firstAttribute="trailing" secondItem="TNH-hS-7KJ" secondAttribute="trailing" id="y7B-Ma-Amd"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QtA-pN-wIo">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QtA-pN-wIo">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="i6u-fj-qFz">
@@ -69,7 +69,7 @@
                                     <constraint firstAttribute="height" constant="100" id="sZR-KC-gTc"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JE8-wH-3AW">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JE8-wH-3AW">
                                 <rect key="frame" x="0.0" y="100" width="375" height="678"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rx-ab-15J">
@@ -143,7 +143,7 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ihs-g5-uXM">
-                                                                        <rect key="frame" x="40" y="38.333333333333371" width="295" height="50.333333333333343"/>
+                                                                        <rect key="frame" x="40" y="38.333333333333343" width="295" height="50.333333333333343"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="42"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
@@ -170,7 +170,7 @@
                                                     <constraint firstItem="V1z-Ka-ngX" firstAttribute="leading" secondItem="2W9-uR-GQg" secondAttribute="leading" id="scV-cz-PoK"/>
                                                 </constraints>
                                             </scrollView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="25i-8M-Xum">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="25i-8M-Xum">
                                                 <rect key="frame" x="175.66666666666666" y="102" width="24" height="6"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0QK-3E-mm7">
@@ -204,7 +204,7 @@
                                             <constraint firstAttribute="trailing" secondItem="2W9-uR-GQg" secondAttribute="trailing" id="vwr-TV-iQD"/>
                                         </constraints>
                                     </view>
-                                    <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dan-G8-9v8">
+                                    <collectionView multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dan-G8-9v8">
                                         <rect key="frame" x="0.0" y="148" width="375" height="508"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="MDh-tI-t0J">
@@ -572,7 +572,7 @@
                                             <outlet property="delegate" destination="gJQ-X6-6Bb" id="JNi-BH-ZS7"/>
                                         </connections>
                                     </collectionView>
-                                    <pageControl opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Hwd-XN-90G">
+                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="Hwd-XN-90G">
                                         <rect key="frame" x="168" y="656" width="39" height="10"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="10" id="ufz-zX-lTc"/>
@@ -592,7 +592,7 @@
                                     <constraint firstItem="Hwd-XN-90G" firstAttribute="centerX" secondItem="JE8-wH-3AW" secondAttribute="centerX" id="xxO-po-bWR"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8GC-hz-Csp" customClass="IXNavigationView" customModule="iconex_ios" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8GC-hz-Csp" customClass="IXNavigationView" customModule="iconex_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="56"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>

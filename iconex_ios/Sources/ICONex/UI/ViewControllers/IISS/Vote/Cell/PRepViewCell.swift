@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class PRepViewCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
@@ -14,6 +16,8 @@ class PRepViewCell: UITableViewCell {
     @IBOutlet weak var prepNameLabel: UILabel!
     @IBOutlet weak var totalVoteLabel: UILabel!
     @IBOutlet weak var totalVoteValue: UILabel!
+    
+    var disposeBag = DisposeBag()
     
     var active: Bool = true {
         willSet {
@@ -32,6 +36,11 @@ class PRepViewCell: UITableViewCell {
         totalVoteLabel.size12(text: "Total Votes (VP)", color: .gray128, weight: .light, align: .left)
         statusView.corner(statusView.frame.height / 2)
         statusView.border(1.0, .mint2)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

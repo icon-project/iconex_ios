@@ -10,27 +10,27 @@ import Foundation
 import UIKit
 
 extension UILabel {
-    func size11(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
-        set(text: text, size: 11, height: 13, color: color, weight: weight, align: align)
+    func size11(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 11, height: 13, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }
-    func size12(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
-        set(text: text, size: 12, height: 18, color: color, weight: weight, align: align)
-    }
-    
-    func size14(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
-        set(text: text, size: 14, height: 20, color: color, weight: weight, align: align)
+    func size12(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 12, height: 18, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }
     
-    func size16(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
-        set(text: text, size: 16, height: 24, color: color, weight: weight, align: align)
+    func size14(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 14, height: 20, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }
     
-    func size18(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
-        set(text: text, size: 18, height: 24, color: color, weight: weight, align: align)
+    func size16(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 16, height: 24, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }
     
-    func size20(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left) {
-        set(text: text, size: 20, height: 24, color: color, weight: weight, align: align)
+    func size18(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 18, height: 24, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
+    }
+    
+    func size20(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 20, height: 24, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }
     
     func setBalanceAttr(text: String, color: UIColor = .white, weight: UIFont.Weight = .light, align: NSTextAlignment = .center) {

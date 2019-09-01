@@ -66,6 +66,8 @@ class MainViewController: BaseViewController, Floatable {
         }
     }
     
+    var selectedWallet: ICXWallet?
+    
     var coinTokenList = [String: [BaseWalletConvertible]]()
     
     var symbolList = [String]()
@@ -112,6 +114,23 @@ class MainViewController: BaseViewController, Floatable {
                 } else if offset.x == self.view.frame.width {
                     self.powerPageView.setCurrentPage()
                     self.balancePageView.setNonCurrentPage()
+                }
+                
+            }).disposed(by: disposeBag)
+        
+        collectionView.rx.didEndDecelerating
+            .subscribe(onNext: {
+                let items = self.collectionView.indexPathsForVisibleItems
+                
+                let x = self.collectionView.panGestureRecognizer.translation(in: self.collectionView.superview).x
+                let path = items.first!
+                Log("IndexPath - \(path) - \(self.floater.isAttached) \(x)")
+                if let icx = self.walletList[path.row] as? ICXWallet {
+                    self.selectedWallet = icx
+                    self.attach()
+                } else {
+                    self.selectedWallet = nil
+                    self.detach()
                 }
             }).disposed(by: disposeBag)
         
@@ -189,10 +208,15 @@ class MainViewController: BaseViewController, Floatable {
             
         }
         
+        floater.delegate = self
         floater.button.rx.tap
             .subscribe(onNext: {
-                self.floater.pop()
+                if let wallet = self.selectedWallet {
+                    self.floater.showMenu(wallet: wallet, self)
+                }
             }).disposed(by: disposeBag)
+        
+        selectedWallet = walletList.first as? ICXWallet
     }
     
     override func refresh() {
@@ -207,7 +231,9 @@ class MainViewController: BaseViewController, Floatable {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
         // Floater
-        attach()
+        if selectedWallet != nil {
+            attach()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

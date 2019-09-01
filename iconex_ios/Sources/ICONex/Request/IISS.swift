@@ -376,3 +376,9 @@ struct PRepListResponse: Decodable {
         self.preps = try container.decode([PReps].self, forKey: .preps)
     }
 }
+
+struct MyStakeInfo {
+    let stake: BigUInt
+    let votingPower: BigUInt
+    let iscore: BigUInt
+}

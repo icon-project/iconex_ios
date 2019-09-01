@@ -54,7 +54,7 @@ struct Configuration {
     
     var host: HOST {
         #if DEBUG
-        return .localTest
+        return .euljiro
         #else
         let save = UserDefaults.standard.integer(forKey: "Provider")
         if let provider = HOST(rawValue: save) {

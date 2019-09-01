@@ -8,6 +8,9 @@
 
 import UIKit
 import BigInt
+import ICONKit
+import RxSwift
+import RxCocoa
 
 class IScoreDetailViewController: BaseViewController {
     @IBOutlet weak var navBar: IXNavigationView!
@@ -27,7 +30,11 @@ class IScoreDetailViewController: BaseViewController {
     
     var wallet: ICXWallet!
     
+    var key: PrivateKey!
+    
     var refreshControl: UIRefreshControl? = UIRefreshControl()
+    
+    private var iscore: IScoreClaimInfo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,15 +61,24 @@ class IScoreDetailViewController: BaseViewController {
         
         currentIScoreValue.set(text: "-", size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
         receiveICXValue.set(text: "-", size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
-        descValue1.size14(text: BigUInt(100_000).toString(decimal: 0).currencySeparated() + " / " + BigUInt(100_000).convert(unit: .gLoop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
-        descValue2.size14(text: "", color: UIColor(51, 51, 51), weight: .regular, align: .right)
-        exchangedValue.size12(text: "$", color: .gray179, weight: .regular, align: .right)
+        descValue1.size14(text: BigUInt(100_000).toString(decimal: 0).currencySeparated() + " / " + BigUInt(100_000).convert(unit: .loop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
+        descValue1.adjustsFontSizeToFitWidth = true
+        descValue2.size14(text: "-", color: UIColor(51, 51, 51), weight: .regular, align: .right)
+        exchangedValue.size12(text: "$ -", color: .gray179, weight: .regular, align: .right)
         
         claimButton.isEnabled = false
         
+        refreshControl?.attributedTitle = NSAttributedString(string: "Common.Downloading".localized)
         contentScroll.refreshControl = refreshControl
         refreshControl?.beginRefreshing()
         
+        claimButton.rx.tap
+            .subscribe(onNext: { [unowned self] in
+                guard let info = self.iscore else { return }
+                Alert.iScore(iscoreInfo: info, confirmAction: {
+                    
+                }).show()
+            }).disposed(by: disposeBag)
     }
     
     override func refresh() {
@@ -72,27 +88,35 @@ class IScoreDetailViewController: BaseViewController {
         if refreshControl != nil {
             run()
         }
-        let score = Manager.icon.iconService.getScoreAPI(scoreAddress: CONST.iiss).execute()
-        switch score {
-        case .success(let result):
-            result.forEach { Log("API - \($0.name)") }
-            
-        case .failure(let error):
-            Log("Error - \(error)")
-        }
-        
     }
     
     func run() {
         DispatchQueue.global().async {
             let response = Manager.icon.queryIScore(from: self.wallet)
-            DispatchQueue.main.async { [weak self] in
-                if let resp = response {
-                    self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
-                }
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                [weak self] in
                 self?.refreshControl?.endRefreshing()
-                self?.refreshControl = nil
-                self?.contentScroll.refreshControl = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
+                    self?.refreshControl = nil
+                    self?.contentScroll.refreshControl = nil
+                })
+                if let resp = response {
+                    self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    
+                    self?.receiveICXValue.set(text: resp.iscore.toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    
+                    #warning("수수료 계산")
+                    
+                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: resp.iscore.toString(decimal: 18, 18, true), stepLimit: "-", estimatedFee: "-", estimateUSD: "-")
+                    
+                    self?.iscore = iscoreInfo
+                    
+                    self?.claimButton.isEnabled = true
+                } else {
+                    Alert.basic(title: "Error.Fail.Downloading".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    self?.claimButton.isEnabled = false
+                    
+                }
             }
         }
     }

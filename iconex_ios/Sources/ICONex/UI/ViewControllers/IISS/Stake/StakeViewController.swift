@@ -10,6 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 import BigInt
+import ICONKit
 
 class StakeViewController: BaseViewController {
     @IBOutlet weak var navBar: IXNavigationView!
@@ -40,6 +41,8 @@ class StakeViewController: BaseViewController {
     private var delegateInfo: TotalDelegation?
     
     var wallet: ICXWallet!
+    
+    var key: PrivateKey!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,12 +103,13 @@ class StakeViewController: BaseViewController {
                 let delegatedInfo = Manager.icon.getDelegation(wallet: self.wallet)
                 let stakedInfo = Manager.icon.getStake(from: self.wallet)
                 self.delegateInfo = delegatedInfo
-                DispatchQueue.main.async {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                     if let delegated = delegatedInfo, let staked = stakedInfo {
                         let totalValue = delegated.totalDelegated
                         let stakeValue = staked.stake
                         let votedValue = totalValue - delegated.votingPower
                         
+                        self.slider.isEnabled = true
                         self.slider.setRange(total: totalValue, staked: stakeValue, voted: votedValue)
                         self.unstakedLabel.size14(text: (balance - stakeValue).toString(decimal: 18, 4, false), color: .gray77, weight: .regular, align: .right)
                     } else {

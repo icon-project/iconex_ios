@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import ICONKit
 
 protocol VoteMainDelegate {
     var wallet: ICXWallet! { get set }
@@ -24,6 +25,9 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
     var wallet: ICXWallet!
+    var key: PrivateKey!
+    
+    var isPreps: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +43,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
             self.navigationController?.popViewController(animated: true)
         }
         
-        prepContainer.isHidden = true
-        myvoteContainer.isHidden = false
+        headerSelected(index: isPreps ? 1: 0)
         
         buttonConatiner.backgroundColor = .gray252
         voteButton.lightMintRounded()

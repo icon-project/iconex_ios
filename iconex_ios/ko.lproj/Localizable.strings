@@ -20,6 +20,7 @@
 "Common.Done" = "완료";
 "Common.Remove" = "삭제";
 "Common.Modify" = "수정";
+"Common.Downloading" = "가져오는 중...";
 
 
 "Wallet.Keystore" = "지갑 백업 파일(Keystore 파일)";
@@ -142,6 +143,8 @@
 "Floater.Vote.IScore" = "I-Score";
 "Floater.Wallet.Deposit" = "입금";
 "Floater.Wallet.Send" = "전송";
+"Floater.Alert.Stake" = "Stake 또는 Unstake 실행을 하려면 5 ICX 이상 잔액이 있어야 합니다.";
+"Floater.Alert.Vote" = "Voting Power가 없습니다 ICX를 Stake하면 1:1 비율로 Voting Power가 생성됩니다.";
 
 // MARK: QRReaderViewController
 "QRReader.Desc" = "QR 코드를 인식해서 주소 또는 개인키를 가져올 수 있습니다.";
@@ -203,7 +206,8 @@
 // MARK: MyVoteViewController
 "MyVoteView.VoteReset" = "투표 수량 초기화";
 
-
+// MARK: PRepSearchViewController
+"PRepSearch.Placeholder" = "P-Rep 이름 검색";
 
 
 // MARK: MainViewController
@@ -725,3 +729,4 @@
 "Error.Transfer.Limit.LessThen" = "%@ 이하로 입력해주세요.";
 "Error.Transfer.Limit.MoreThen" = "%@ 이상으로 입력해주세요.";
 "Error.Connect.Send.InsufficientFee" = "ICX 보유 수량이 부족합니다.";
+"Error.Fail.Downloading" = "데이터 가져오기에 실패했습니다.";
