@@ -68,6 +68,7 @@ extension UIColor {
     /// (182, 235, 242)
     static let mint6 = UIColor(182, 235, 242)
     
+    static let gray64 = UIColor(64, 64, 64)
     static let gray77 = UIColor(77, 77, 77)
     static let gray128 = UIColor(128, 128, 128)
     static let gray179 = UIColor(179, 179, 179)

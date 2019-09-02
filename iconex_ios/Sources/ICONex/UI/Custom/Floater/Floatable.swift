@@ -157,6 +157,7 @@ class Floater {
                     self.targetAction?.show(vote, sender: self)
                 }).show()
             }
+            
             floatMenu.itemAction3 = {
                 Alert.password(wallet: wallet, returnAction: { pk in
                     let iscore = UIStoryboard(name: "IScore", bundle: nil).instantiateInitialViewController() as! IScoreDetailViewController
@@ -167,7 +168,18 @@ class Floater {
             }
             
         case .wallet:
-            break
+            floatMenu.itemAction1 = {
+                
+            }
+            
+            floatMenu.itemAction2 = {
+                Alert.password(wallet: wallet, returnAction: { privateKey in
+                    let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
+                    send.walletInfo = self.delegate.selectedWallet
+                    send.privateKey = PrivateKey(hex: Data(hex: privateKey))
+                    app.topViewController()?.present(send, animated: true, completion: nil)
+                }).show()
+            }
             
         default:
             break

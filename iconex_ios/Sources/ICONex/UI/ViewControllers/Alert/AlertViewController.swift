@@ -11,6 +11,7 @@ import ICONKit
 import Web3swift
 import RxSwift
 import RxCocoa
+import BigInt
 
 class AlertViewController: BaseViewController {
     
@@ -53,9 +54,12 @@ class AlertViewController: BaseViewController {
     
     var privateKey: String = ""
     
+    var isSuccess: Bool = true
+    
     var cancelHandler: (() -> Void)?
     var confirmHandler: (() -> Void)?
     var returnHandler: ((_ privateKey: String) -> Void)?
+    var successHandler: ((_ isSuccess: Bool) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,6 +135,31 @@ class AlertViewController: BaseViewController {
                     } catch let err {
                         Log(err, .error)
                     }
+                    
+                case .send:
+                    guard let sendInfo = self.sendInfo else { return }
+                    
+                    // ICX
+                    if let tx = sendInfo.transaction, let pk = sendInfo.privateKey {
+                        do {
+                            let result = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
+                            Log(result, .info)
+                            
+                            self.isSuccess = true
+                        } catch {
+                            self.isSuccess = false
+                        }
+                    }
+                    
+                    // ETH
+                    if let ethTx = sendInfo.ethTransaction, let pk = sendInfo.ethPrivateKey {
+                        let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from, to: ethTx.to, value: ethTx.value, data: ethTx.data)
+                        
+                        self.isSuccess = sendETH.isSuccess
+                        
+                    }
+                    
+                    self.closer(self.successHandler)
                     
                 default:
                     self.closer(self.confirmHandler)
@@ -466,34 +495,17 @@ class AlertViewController: BaseViewController {
     }
     
     private func close() {
+        animateClose()
+        
         UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
             self.view.alpha = 0
         }, completion: { _ in
             self.dismiss(animated: false, completion: nil)
         })
-        
-        // move
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.frame.origin.y += 20
-        }, completion: nil)
-        
-        // opacity
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.alpha = 0
-        }, completion: nil)
-        
     }
     
     private func closer(_ closeAction: (() -> Void)? = nil) {
-        // move
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.frame.origin.y += 20
-        }, completion: nil)
-        
-        // opacity
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.alpha = 0
-        }, completion: nil)
+        animateClose()
         
         UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
             self.view.alpha = 0
@@ -507,15 +519,7 @@ class AlertViewController: BaseViewController {
     }
     
     private func closer(_ closeAction: ((_ pk: String) -> Void)? = nil) {
-        // move
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.frame.origin.y += 20
-        }, completion: nil)
-        
-        // opacity
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.alpha = 0
-        }, completion: nil)
+        animateClose()
         
         UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
             self.view.alpha = 0
@@ -526,6 +530,32 @@ class AlertViewController: BaseViewController {
                 }
             })
         })
+    }
+    
+    private func closer(_ closeAction: ((_ isSuccess: Bool) -> Void)? = nil) {
+        animateClose()
+        
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
+            self.view.alpha = 0
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                if let closeAct = closeAction {
+                    closeAct(self.isSuccess)
+                }
+            })
+        })
+    }
+    
+    private func animateClose() {
+        // move
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
+            self.popView.frame.origin.y += 20
+        }, completion: nil)
+        
+        // opacity
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
+            self.popView.alpha = 0
+        }, completion: nil)
     }
     
     func show() {

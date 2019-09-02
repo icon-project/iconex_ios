@@ -15,13 +15,45 @@ import CryptoSwift
 import ICONKit
 
 struct Tool {
-    static func calculatePrice(decimal: Int, currency: String, balance: BigUInt) -> String {
+    static func calculatePrice(decimal: Int = 18, currency: String, balance: BigUInt) -> String {
         guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return "-" }
-        let currencyPrice = Float(exchange) ?? 0
-        let calculated = Float(balance)*currencyPrice
-        let exchanged = BigUInt(calculated)
-        let price = exchanged.toString(decimal: decimal, 2).currencySeparated()
+        
+        let bigExchange = stringToBigUInt(inputText: exchange, decimal: decimal, fixed: true) ?? 0
+        let calculated = bigExchange * balance / BigUInt(10).power(decimal)
+        
+        let price = calculated.toString(decimal: decimal, 2).currencySeparated()
         return price
+    }
+    
+    static func stringToBigUInt(inputText: String, decimal: Int = 18, fixed: Bool = false) -> BigUInt? {
+        var groupingSeparator = Tool.groupingSeparator
+        var decimalSeparator = Tool.decimalSeparator
+        
+        if fixed {
+            groupingSeparator = ","
+            decimalSeparator = "."
+        }
+        
+        let strip = inputText.replacingOccurrences(of: groupingSeparator, with: "")
+        let comp = strip.components(separatedBy: decimalSeparator)
+        
+        var result: BigUInt?
+        if comp.count < 2 {
+            guard let first = comp.first, let quotient = BigUInt(first) else {
+                return nil
+            }
+            
+            let completed = quotient * BigUInt(10).power(decimal)
+            result = completed
+        } else {
+            guard let first = comp.first, let second = comp.last, let quotient = BigUInt(first, radix: 10), let remainder = BigUInt(second, radix: 10) else {
+                return nil
+            }
+            let completed = (quotient * BigUInt(10).power(decimal)) + (remainder * BigUInt(10).power(decimal - second.count))
+            result = completed
+        }
+        
+        return result
     }
     
     static var decimalSeparator: String {
