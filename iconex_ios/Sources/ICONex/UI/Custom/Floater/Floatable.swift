@@ -177,12 +177,46 @@ class Floater {
                     let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
                     send.walletInfo = self.delegate.selectedWallet
                     send.privateKey = PrivateKey(hex: Data(hex: privateKey))
+                    
+                    send.sendHandler = { isSuccess in
+                        app.topViewController()?.view.showToast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                    }
+                    
                     app.topViewController()?.present(send, animated: true, completion: nil)
                 }).show()
             }
             
         default:
             break
+        }
+        
+        
+        bzz()
+        floatMenu.type = self.type
+        floatMenu.pop()
+    }
+    
+    func showMenu(ethWallet: ETHWallet, _ controller: UIViewController? = nil) {
+        targetAction = controller
+        let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
+        
+        floatMenu.itemAction1 = {
+            
+        }
+        
+        floatMenu.itemAction2 = {
+            
+            Alert.password(wallet: ethWallet, returnAction: { privateKey in
+                let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendETH") as! SendETHViewController
+                send.walletInfo = ethWallet
+                send.privateKey = privateKey
+                
+                send.handler = { isSuccess in
+                    app.topViewController()?.view.showToast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                }
+                
+                app.topViewController()?.present(send, animated: true, completion: nil)
+            }).show()
         }
         
         

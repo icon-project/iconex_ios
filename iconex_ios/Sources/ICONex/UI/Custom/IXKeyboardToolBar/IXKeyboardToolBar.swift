@@ -20,7 +20,11 @@ class IXKeyboardToolBar: UIView {
     @IBOutlet weak var kbLabel: UILabel!
     @IBOutlet weak var kbTitleLabel: UILabel!
     
-    var dataType: Int = 0
+    var dataType: InputType = .utf8 {
+        willSet {
+            self.typeLabel.size14(text: newValue == .utf8 ? "UTF-8" : "HEX", color: .gray179)
+        }
+    }
     
     var disposeBag = DisposeBag()
     
@@ -48,8 +52,8 @@ class IXKeyboardToolBar: UIView {
         contentView = view
         
         completeButton.gray77round()
-        typeLabel.size14(text: self.dataType == 0 ? "UTF-8" : "HEX", color: .gray179)
+        completeButton.setTitle("Common.Complete".localized, for: .normal)
         kbTitleLabel.size14(text: "0", color: .gray77, align: .right)
-        kbTitleLabel.size14(text: "/500 KB", color: .gray77, align: .right)
+        kbTitleLabel.size14(text: "/ 512 KB", color: .gray77, align: .right)
     }
 }

@@ -12,8 +12,8 @@ import RxCocoa
 import BigInt
 import ICONKit
 
-protocol sendDelegate {
-    var data: String { get set }
+protocol SendDelegate {
+    var data: Data? { get set }
 }
 
 class SendICXViewController: BaseViewController {
@@ -57,12 +57,35 @@ class SendICXViewController: BaseViewController {
     
     var privateKey: PrivateKey?
     
-    var delegate: sendDelegate? = nil
+    var toAddress: String? = nil
     
-    var data: String = ""
+    var data: String? = nil {
+        willSet {
+            guard let value = newValue else { return }
+            
+            if !value.isEmpty {
+                self.stepLimit = 1000000
+                self.dataButton.isEnabled = false
+                self.viewDataButton.isHidden = false
+                self.dataInputBox.set(state: .readOnly)
+            } else {
+                self.stepLimit = 100000
+                self.dataButton.isEnabled = true
+                self.viewDataButton.isHidden = true
+            }
+        }
+    }
+    
+    var dataType: InputType = .utf8
+    
+    var sendHandler: ((_ isSuccess: Bool) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let toAddress = self.toAddress {
+            self.addressInputBox.text = toAddress
+        }
         
         setupUI()
         setupBind()
@@ -86,7 +109,7 @@ class SendICXViewController: BaseViewController {
             // TODO
         }
         
-        balanceTitleLabel.size12(text: "Send.Balane.Avaliable".localized, color: .gray77, weight: .medium)
+        balanceTitleLabel.size12(text: "Send.Balance.Avaliable".localized, color: .gray77, weight: .medium)
         amountInputBox.set(inputType: .decimal)
         amountInputBox.set(state: .normal, placeholder: "Send.InputBox.Amount".localized)
         
@@ -206,11 +229,45 @@ class SendICXViewController: BaseViewController {
         
         dataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                guard self.data == nil else { return }
+                
                 let dataVC = self.storyboard?.instantiateViewController(withIdentifier: "DataType") as! DataTypeViewController
                 dataVC.modalTransitionStyle = .crossDissolve
                 dataVC.modalPresentationStyle = .overFullScreen
+                dataVC.handler = { data, dataType in
+                    self.data = data
+                    self.dataType = dataType
+                    self.dataInputBox.text = data
+                }
                 
                 self.present(dataVC, animated: true, completion: nil)
+        }.disposed(by: disposeBag)
+        
+        viewDataButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                guard let data = self.data else { return }
+                
+                let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
+                inputDataVC.isEditMode = true
+                inputDataVC.data = data
+                inputDataVC.type = self.dataType
+                inputDataVC.completeHandler = { dataString, _ in
+                    
+                    if self.dataType == .hex {
+                        let hexData = Data(hex: dataString)
+                        let encodedAsData = hexData.base64EncodedString(options: .lineLength64Characters)
+                        let dataDecoded: Data = Data(base64Encoded: encodedAsData, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)!
+                        
+                        if let str = String(data: dataDecoded, encoding: .utf8) {
+                            self.data = str
+                        }
+                    } else {
+                        self.data = data
+                    }
+                }
+                
+                self.presentPanModal(inputDataVC)
+                
         }.disposed(by: disposeBag)
         
         amountInputBox.set { [unowned self] (value) -> String? in
@@ -259,6 +316,7 @@ class SendICXViewController: BaseViewController {
                 
                 addressBook.selectedHandler = { address in
                     self.addressInputBox.text = address
+                    self.addressInputBox.endEditing(true)
                 }
                 
                 self.presentPanModal(addressBook)
@@ -329,19 +387,56 @@ class SendICXViewController: BaseViewController {
                         let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                         let toAddress = self.addressInputBox.text
                         
-                        let tx = Transaction()
-                            .from(wallet.address)
-                            .to(toAddress)
-                            .value(amount)
-                            .stepLimit(self.stepLimit)
-                            .nid(Config.host.nid)
+                        let tx: Transaction = {
+                            if let dataString = self.data {
+                                let messageTx = MessageTransaction()
+                                    .from(wallet.address)
+                                    .to(toAddress)
+                                    .value(amount)
+                                    .stepLimit(self.stepLimit)
+                                    .nid(Config.host.nid)
+                                
+                                if self.dataType == .hex {
+                                    let hexData = Data(hex: dataString)
+                                    
+                                    let encodedAsData = hexData.base64EncodedString(options: .lineLength64Characters)
+                                    
+                                    let dataDecoded: Data = Data(base64Encoded: encodedAsData, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)!
+                                    
+                                    if let str = String(data: dataDecoded, encoding: .utf8) {
+                                        messageTx.message(str)
+                                    }
+                                    
+                                } else { // utf8
+                                    messageTx.message(dataString)
+                                }
+                                
+                                return messageTx
+                                
+                            } else {
+                                let tx = Transaction()
+                                    .from(wallet.address)
+                                    .to(toAddress)
+                                    .value(amount)
+                                    .stepLimit(self.stepLimit)
+                                    .nid(Config.host.nid)
+                                
+                                return tx
+                            }
+                        }()
                         
                         return SendInfo(transaction: tx, privateKey: pk, estimatedFee: "ESTIMATED FEE", estimatedUSD: self.priceLabel.text ?? "-")
                     }
                 }()
                 
                 Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess in
-                    self.view.showToast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                    
+                    self.dismiss(animated: true, completion: {
+                        if let handler = self.sendHandler {
+                            handler(isSuccess)
+                        }
+                    })
+                    
                 }).show()
                 
         }.disposed(by: disposeBag)

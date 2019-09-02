@@ -11,7 +11,11 @@ import RxSwift
 import RxCocoa
 import PanModal
 
-class InputDataViewController: UIViewController {
+enum InputType {
+    case utf8, hex
+}
+
+class InputDataViewController: BaseViewController {
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var confirmButton: UIButton!
@@ -19,14 +23,15 @@ class InputDataViewController: UIViewController {
     @IBOutlet weak var placeholderLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
     
-    var type: Int = 0
+    var type: InputType = .utf8
     var data: String = ""
     
     var isEditMode: Bool = false
+    var isEditingMode: Bool = false
     
-    var completeHandler: ((_ data: String) -> Void)?
+    var completeHandler: ((_ data: String, _ dataType: InputType) -> Void)?
     
-    var disposeBag = DisposeBag()
+    var delegate: SendDelegate!
     
     let toolBar: IXKeyboardToolBar = IXKeyboardToolBar(frame: CGRect(x: 0, y: 0, width: .max, height: 102))
 
@@ -35,6 +40,14 @@ class InputDataViewController: UIViewController {
         
         toolBar.dataType = self.type
         self.textView.inputAccessoryView = toolBar
+        
+        if !self.data.isEmpty {
+            self.textView.text = self.data
+        }
+        
+        if self.isEditMode {
+            self.textView.isUserInteractionEnabled = false
+        }
         
         setupUI()
         setupBind()
@@ -59,7 +72,7 @@ class InputDataViewController: UIViewController {
         confirmButton.isHidden = data.isEmpty
         confirmButton.setTitle("Common.Change".localized, for: .normal)
         
-        if self.type == 0 {
+        if self.type == .utf8 {
             self.placeholderLabel.text = "Hello ICON"
         } else {
             self.placeholderLabel.text = "0x1234…"
@@ -78,28 +91,17 @@ class InputDataViewController: UIViewController {
                 }
         }.disposed(by: disposeBag)
         
-        textView.rx.didBeginEditing.asControlEvent()
-            .subscribe { (_) in
-                self.placeholderLabel.isHidden = true
-        }.disposed(by: disposeBag)
-        
         let textViewShare = textView.rx.text.orEmpty.share(replay: 1)
-        
-        textViewShare.scan("") { (previous, new) -> String in
-            guard !new.isEmpty else { return new }
-            if new.lengthOfBytes(using: .utf8) > 500 {
-                return previous
-            } else {
-                return new
-            }
-        }.bind(to: textView.rx.text)
-        .disposed(by: disposeBag)
         
         textViewShare
             .subscribe(onNext: { (text) in
                 self.placeholderLabel.isHidden = !text.isEmpty
                 let textLength = text.utf8.count
                 self.toolBar.kbLabel.text = "\(textLength)"
+                
+                if textLength >= 512 {
+                    self.textView.text = String(text.utf8.prefix(513))
+                }
                 
             }).disposed(by: disposeBag)
         
@@ -109,15 +111,21 @@ class InputDataViewController: UIViewController {
         
         toolBar.completeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                
+                let text = self.textView.text ?? ""
+                if let handler = self.completeHandler {
+                    handler(text, self.type)
+                }
+                self.dismiss(animated: true, completion: nil)
             }.disposed(by: disposeBag)
         
         confirmButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                if self.isEditMode {
+                if self.isEditingMode {
                     self.textView.text = ""
                 }
-                self.isEditMode = true
+                self.textView.isUserInteractionEnabled = true
+                self.textView.becomeFirstResponder()
+                self.isEditingMode = true
                 self.confirmButton.setTitle("Common.Remove".localized, for: .normal)
                 
         }.disposed(by: disposeBag)

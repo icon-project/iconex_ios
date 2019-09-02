@@ -306,14 +306,21 @@
 "Wallet.Detail.Option.Deposit" = "입금";
 
 // MARK: SendICXViewController
-"Send.Balane.Avaliable" = "사용가능 잔액 (ICX)";
+"Send.Balance.Avaliable" = "사용가능 잔액 (ICX)";
+"Send.Balance.Avaliable.ETH" = "사용가능 잔액 (ETH)";
 "Send.InputBox.Amount" = "전송 수량";
 "Send.InputBox.Amount.Error" = "보유 수량보다 적게 입력해주세요.";
 "Send.InputBox.Address" = "받는 주소";
 "Send.InputBox.Address.Error" = "올바른 ICX 주소가 아닙니다.";
+"Send.InputBox.Address.Error.ETH" = "올바른 ETH 주소가 아닙니다.";
 "Send.InputBox.Data" = "데이터 (선택 입력)";
 "Send.Amount.Max" = "전액";
 "Send.Step" = "적정 Step 한도 / 가격";
+"Send.GasLimit" = "가스 한도";
+"Send.GasLimit.Error" = "21,000 이상으로 입력해주세요.";
+"Send.GasPrice" = "가스 가격";
+"Send.GasPrice.Slow" = "느림";
+"Send.GasPrice.Fast" = "빠름";
 "Send.EstimatedMaxStep" = "예상 최대 수수료";
 "Send.SendButton" = "전송";
 "Send.AddressBook" = "주소 선택";

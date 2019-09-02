@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import BigInt
+import ICONKit
 
 class MainCollectionViewCell: UICollectionViewCell {
     
@@ -45,7 +46,9 @@ class MainCollectionViewCell: UICollectionViewCell {
             tableview.reloadData()
         }
     }
-    var contractAddress: String = ""
+    
+    var contractAddress: String?
+    var tokenDecimal: Int?
     
     var isWalletMode: Bool = true
     
@@ -73,8 +76,20 @@ class MainCollectionViewCell: UICollectionViewCell {
             .subscribe { (_) in
                 guard let wallet = self.info else { return }
                 
-                Alert.password(wallet: wallet, returnAction: { (_) in
+                Alert.password(wallet: wallet, returnAction: { (privateKey) in
                     let scanVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
+                    
+                    scanVC.set(mode: .icx, handler: { (address) in
+                        let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
+                        send.walletInfo = self.info
+                        send.privateKey = PrivateKey(hex: Data(hex: privateKey))
+                        
+                        send.sendHandler = { isSuccess in
+                            app.topViewController()?.view.showToast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                        }
+                        
+                        app.topViewController()?.present(send, animated: true, completion: nil)
+                    })
                     app.topViewController()?.present(scanVC, animated: true, completion: nil)
                 }).show()
                 
@@ -220,7 +235,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                         totalBalance += i.balance ?? 0
                     }
                     
-                    coinCell.balanceLabel.size16(text: String(totalBalance), color: .gray77, weight: .bold, align: .right)
+                    let balance = totalBalance.toString(decimal: 18, 4, false)
+                    coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light)
@@ -232,12 +248,12 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     tokenCell.border(0.5, .gray230)
                     tokenCell.contentView.backgroundColor = .gray252
                     
-                    guard let list = self.coinTokens else { return tokenCell }
+                    guard let list = self.coinTokens, let contract = self.contractAddress else { return tokenCell }
                     
                     var totalBalance: BigUInt = 0
                     
                     for i in list {
-                        totalBalance += Manager.balance.getTokenBalance(address: i.address, contract: contractAddress)
+                        totalBalance += Manager.balance.getTokenBalance(address: i.address, contract: contract)
                     }
                     
                     guard let nickName = symbol.first?.uppercased() else { return tokenCell }
@@ -258,59 +274,57 @@ extension MainCollectionViewCell: UITableViewDataSource {
             }
             
         } else {
-            if isWalletMode { // token
+            if isWalletMode {
                 guard let token = info?.tokens?[indexPath.row] else { return tokenCell }
                 
                 let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
-                
+
                 tokenCell.symbolNicknameLabel.size16(text: "\(token.name.first?.uppercased() ?? "")" , color: .white, weight: .medium, align: .center)
                 tokenCell.symbolView.backgroundColor = colorList[indexPath.row%12].background
                 tokenCell.symbolLabel.size16(text: token.symbol, color: .gray77, weight: .semibold)
                 tokenCell.fullnameLabel.size12(text: token.name, color: .gray179, weight: .light)
                 
-//                let tokenBalance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
                 let tokenBalance = Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
                 tokenCell.balanceLabel.size16(text: tokenBalance.toString(decimal: token.decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+                
                 let price = Tool.calculatePrice(decimal: token.decimal, currency: currencySymbol, balance: tokenBalance)
                 tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
-                
+
                 tokenCell.unitLabel.size12(text: currency.symbol, color: .gray179, weight: .light, align: .right)
-                
+
                 return tokenCell
-                
+
             } else {
-                guard let val = self.coinTokens?[indexPath.row] else { return walletCell }
-                // icx eth 구분
-                let walletTypeCount = DB.walletTypes().count
-                
-                if indexPath.row < walletTypeCount { // coin
+                guard let wallet = self.coinTokens?[indexPath.row] else { return walletCell }
+
+                // token
+                if let contractAddress = self.contractAddress, let decimal = self.tokenDecimal {
+
                     let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
-                    walletCell.nicknameLabel.size16(text: val.name, color: .gray77, weight: .semibold)
-                    walletCell.addressLabel.size12(text: val.address, color: .gray179, weight: .light)
-                    walletCell.balanceLabel.size16(text: val.balance?.toString(decimal: 18, 4).currencySeparated() ?? "0", color: .gray77, weight: .bold, align: .right)
-                    
-                    let price = Tool.calculatePrice(decimal: 18, currency: currenySymbol, balance: val.balance ?? 0)
-                    walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
-                    walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
-                    
-                } else { // token
-                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
-                    print("우왓")
-                    print(DB.tokenListBy(symbol: symbol))
-                    
-                    guard let decimal = DB.tokenListBy(symbol: symbol).first?.decimal else { return walletCell }
-                    
-                    
-                    walletCell.nicknameLabel.size16(text: val.name, color: .gray77, weight: .semibold)
-                    walletCell.addressLabel.size12(text: val.address, color: .gray179, weight: .light)
-//                    walletCell.balanceLabel.size16(text: val.balance?.toString(decimal: decimal, 4).currencySeparated() ?? "0", color: .gray77, weight: .bold, align: .right)
-                    let tokenBalance = Manager.balance.getTokenBalance(address: val.address, contract: self.contractAddress)
-                    print("ㅇㅣ게 맞나 아닌거 같다 \(tokenBalance)")
-                    
+                    walletCell.nicknameLabel.size16(text: wallet.name, color: .gray77, weight: .semibold)
+                    walletCell.addressLabel.size12(text: wallet.address, color: .gray179, weight: .light)
+
+                    let tokenBalance = Manager.balance.getTokenBalance(address: wallet.address, contract: contractAddress)
+                    walletCell.balanceLabel.size16(text: tokenBalance.toString(decimal: decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+
                     let price = Tool.calculatePrice(decimal: decimal, currency: currenySymbol, balance: tokenBalance)
                     walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
+
+                } else { // coin
+                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+
+                    walletCell.nicknameLabel.size16(text: wallet.name, color: .gray77, weight: .semibold)
+                    walletCell.addressLabel.size12(text: wallet.address, color: .gray179, weight: .light)
+
+                    let balance = Manager.balance.getBalance(wallet: wallet) ?? 0
+                    walletCell.balanceLabel.size16(text: balance.toString(decimal: 18, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+
+                    let price = Tool.calculatePrice(decimal: 18, currency: currenySymbol, balance: balance)
+                    walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
+                    walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
                 }
+
                 return walletCell
             }
         }
@@ -331,7 +345,6 @@ extension MainCollectionViewCell: UITableViewDelegate {
         
         if indexPath.section == 0 {
             guard isWalletMode else { return }
-//            self.performSegue(withIdentifier: "coinSegue", sender: self)
             
             if let _ = wallet as? ICXWallet {
                 detailViewModel.symbol.onNext(CoinType.icx.symbol)
@@ -355,12 +368,12 @@ extension MainCollectionViewCell: UITableViewDelegate {
                 } else {
                     detailVC.detailType = .erc
                 }
-            } else {
+            } else { // coin token
                 guard let selectedWallet = self.coinTokens?[indexPath.row] else { return }
                 detailViewModel.wallet.onNext(selectedWallet)
                 detailViewModel.symbol.onNext(symbol)
                 
-                if symbol != "" {
+                if !symbol.isEmpty {
                     guard let tokenList = selectedWallet.tokens else { return }
                     
                     for token in tokenList {
@@ -384,19 +397,8 @@ extension MainCollectionViewCell: UITableViewDelegate {
                 }
             }
         }
-        
-        // swipe 안됨
-//        if let navVC: UINavigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
-//            navVC.pushViewController(detailVC, animated: true)
-//        } else {
-//            print("불가해요?ㅠ")
-//        }
         if let navVC: UINavigationController = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
             navVC.pushViewController(detailVC, animated: true)
-        } else {
-            print("불가해요?ㅠ")
         }
     }
-    
-//    override func preparefor
 }

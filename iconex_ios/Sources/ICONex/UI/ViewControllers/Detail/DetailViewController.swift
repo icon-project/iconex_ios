@@ -21,7 +21,6 @@ public enum TxFilter {
 }
 
 class DetailViewController: BaseViewController, Floatable {
-    var ethSelectedWallet: ETHWallet?
     var selectedWallet: ICXWallet?
     
     @IBOutlet weak var navBar: IXNavigationView!
@@ -46,8 +45,6 @@ class DetailViewController: BaseViewController, Floatable {
             guard let wallet = newValue else { return }
             if let icx = wallet as? ICXWallet {
                 selectedWallet = icx
-            } else if let eth = wallet as? ETHWallet {
-                ethSelectedWallet = eth
             }
         }
     }
@@ -129,13 +126,14 @@ class DetailViewController: BaseViewController, Floatable {
         floater.delegate = self
         floater.button.rx.tap
             .subscribe(onNext: {
+                if let eth = wallet as? ETHWallet {
+                    self.floater.showMenu(ethWallet: eth, self)
+                    return
+                }
                 if let wallet = self.selectedWallet {
                     self.floater.showMenu(wallet: wallet, self)
                 }
             }).disposed(by: disposeBag)
-        
-//        selectedWallet = walletList.first as? ICXWallet
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -152,14 +150,17 @@ class DetailViewController: BaseViewController, Floatable {
     
     private func fetchBalance() {
         guard let wallet = self.walletInfo else { return }
-        DispatchQueue.main.async {
-            if let token = self.tokenInfo {
-                let tokenBalance = Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
-                detailViewModel.balance.onNext(tokenBalance)
-            } else {
-                let coinBalance = Manager.balance.getBalance(wallet: wallet) ?? 0
-                detailViewModel.balance.onNext(coinBalance)
-            }
+        DispatchQueue.global().async {
+            let balance: BigUInt = {
+                if let token = self.tokenInfo {
+                    return Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
+                    
+                } else {
+                    return Manager.balance.getBalance(wallet: wallet) ?? 0
+                }
+            }()
+            
+            detailViewModel.balance.onNext(balance)
         }
     }
     
@@ -187,72 +188,78 @@ class DetailViewController: BaseViewController, Floatable {
         
         activityIndicator.startAnimating()
         
-        if let token = self.tokenInfo { //token
-            if let transactionList = tracker.tokenTxList(address: wallet.address, contractAddress: token.contract, page: self.pageIndex) {
-                if let list = transactionList["data"] as? [[String: Any]] {
-                    for i in list {
-                        let tx = Tracker.TxList.init(dic: i)
-                        switch self.filter {
-                        case .all:
-                            txList.append(tx)
-                        case .send:
-                            if tx.fromAddr == wallet.address {
-                                txList.append(tx)
+        DispatchQueue.global().async {
+            if let token = self.tokenInfo { //token
+                if let transactionList = self.tracker.tokenTxList(address: wallet.address, contractAddress: token.contract, page: self.pageIndex) {
+                    if let list = transactionList["data"] as? [[String: Any]] {
+                        for i in list {
+                            let tx = Tracker.TxList.init(dic: i)
+                            switch self.filter {
+                            case .all:
+                                self.txList.append(tx)
+                            case .send:
+                                if tx.fromAddr == wallet.address {
+                                    self.txList.append(tx)
+                                }
+                            case .deposit:
+                                if tx.toAddr == wallet.address {
+                                    self.txList.append(tx)
+                                }
                             }
-                        case .deposit:
-                            if tx.toAddr == wallet.address {
-                                txList.append(tx)
+                        }
+                    }
+                }
+            } else { // coin
+                if let transactionList = self.tracker.transactionList(address: wallet.address, page: self.pageIndex, txType: .icxTransfer) {
+                    if let list = transactionList["data"] as? [[String: Any]] {
+                        for i in list {
+                            let tx = Tracker.TxList.init(dic: i)
+                            switch self.filter {
+                            case .all:
+                                self.txList.append(tx)
+                            case .send:
+                                if tx.fromAddr == wallet.address {
+                                    self.txList.append(tx)
+                                }
+                            case .deposit:
+                                if tx.toAddr == wallet.address {
+                                    self.txList.append(tx)
+                                }
                             }
                         }
                     }
                 }
             }
-        } else { // coin
-            if let transactionList = tracker.transactionList(address: wallet.address, page: self.pageIndex, txType: .icxTransfer) {
-                if let list = transactionList["data"] as? [[String: Any]] {
-                    for i in list {
-                        let tx = Tracker.TxList.init(dic: i)
-                        switch self.filter {
-                        case .all:
-                            txList.append(tx)
-                        case .send:
-                            if tx.fromAddr == wallet.address {
-                                txList.append(tx)
-                            }
-                        case .deposit:
-                            if tx.toAddr == wallet.address {
-                                txList.append(tx)
-                            }
-                        }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                
+                if self.txList.isEmpty {
+                    let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+                    messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
+                    
+                    self.tableView.backgroundView = messageLabel
+                    self.tableView.separatorStyle = .none
+                    
+                } else {
+                    self.tableView.backgroundView = nil
+                    self.tableView.separatorStyle = .singleLine
+                }
+                
+                // coin type
+                if let token = self.tokenInfo {
+                    self.coinTypeLabel.size16(text: token.name, color: .white, weight: .medium, align: .right)
+                } else {
+                    if let _ = wallet as? ICXWallet {
+                        self.coinTypeLabel.size16(text: CoinType.icx.fullName, color: .white, weight: .medium, align: .right)
+                    } else {
+                        self.coinTypeLabel.size16(text: CoinType.eth.fullName, color: .white, weight: .medium, align: .right)
                     }
                 }
             }
         }
+        
         activityIndicator.stopAnimating()
-        
-        if txList.isEmpty {
-            let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-            messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
-            
-            self.tableView.backgroundView = messageLabel
-            self.tableView.separatorStyle = .none
-            
-        } else {
-            self.tableView.backgroundView = nil
-            self.tableView.separatorStyle = .singleLine
-        }
-        
-        // coin type
-        if let token = self.tokenInfo {
-            coinTypeLabel.size16(text: token.name, color: .white, weight: .medium, align: .right)
-        } else {
-            if let _ = wallet as? ICXWallet {
-                coinTypeLabel.size16(text: CoinType.icx.fullName, color: .white, weight: .medium, align: .right)
-            } else {
-                coinTypeLabel.size16(text: CoinType.eth.fullName, color: .white, weight: .medium, align: .right)
-            }
-        }
-        
     }
     
     private func setupUI() {

@@ -22,9 +22,11 @@ class DataTypeViewController: UIViewController {
     @IBOutlet weak var utf8Button: UIButton!
     @IBOutlet weak var hexButton: UIButton!
     
-    var isSelect: Int = 0
+    var isSelect: InputType = .utf8
     
     var disposeBag = DisposeBag()
+    
+    var handler: ((_ data: String, _ dataType: InputType) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +57,7 @@ class DataTypeViewController: UIViewController {
     private func setupBind() {
         utf8Button.rx.tap.asControlEvent()
             .subscribe { [unowned self] (_) in
-                self.isSelect = 0
+                self.isSelect = .utf8
                 if !self.utf8Button.isSelected {
                     self.utf8Button.isSelected = true
                     self.hexButton.isSelected = false
@@ -64,7 +66,7 @@ class DataTypeViewController: UIViewController {
         
         hexButton.rx.tap.asControlEvent()
             .subscribe { [unowned self] (_) in
-                self.isSelect = 1
+                self.isSelect = .hex
                 if !self.hexButton.isSelected {
                     self.hexButton.isSelected = true
                     self.utf8Button.isSelected = false
@@ -81,9 +83,17 @@ class DataTypeViewController: UIViewController {
             .subscribe { (_) in
                 let inputVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
                 inputVC.type = self.isSelect
+                
                 self.dismiss(animated: true, completion: {
                     app.topViewController()?.presentPanModal(inputVC)
+                    
+                    inputVC.completeHandler = { data, dataType in
+                        if let handler = self.handler {
+                            handler(data, dataType)
+                        }
+                    }
                 })
+                
         }.disposed(by: disposeBag)
     }
 }

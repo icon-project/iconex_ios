@@ -42,16 +42,16 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="81o-DN-hk9">
-                                            <rect key="frame" x="160.33333333333334" y="16" width="54.666666666666657" height="19"/>
+                                            <rect key="frame" x="153" y="16" width="69" height="19"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v8L-VQ-xXf">
-                                                    <rect key="frame" x="0.0" y="0.0" width="35.666666666666664" height="19"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v8L-VQ-xXf">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="19"/>
                                                     <fontDescription key="fontDescription" name="AppleSDGothicNeo-Medium" family="Apple SD Gothic Neo" pointSize="16"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icArrowDrop" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-Nf-adc">
-                                                    <rect key="frame" x="35.666666666666657" y="0.0" width="19" height="19"/>
+                                                    <rect key="frame" x="50" y="0.0" width="19" height="19"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="19" id="43I-9g-My1"/>
                                                         <constraint firstAttribute="width" secondItem="gaD-Nf-adc" secondAttribute="height" multiplier="1:1" id="uCI-GK-PR9"/>
@@ -63,9 +63,9 @@
                                             </constraints>
                                         </stackView>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YrU-c7-we2">
-                                            <rect key="frame" x="160.33333333333334" y="16" width="54.666666666666657" height="19"/>
+                                            <rect key="frame" x="153" y="16" width="69" height="19"/>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z05-tS-H2x">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z05-tS-H2x">
                                             <rect key="frame" x="20" y="50" width="335" height="46.666666666666657"/>
                                             <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="42"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
