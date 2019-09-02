@@ -76,7 +76,7 @@ class MainViewController: BaseViewController, Floatable {
     var isWalletMode: Bool = true {
         willSet {
             self.collectionView.reloadData()
-            navBar.setTitle(newValue ? "Main.Nav.Title.1".localized : "Main.Nav.Title.2".localized)
+            navBar.setTitle(newValue ? "Main.Nav.Title.1".localized : "Main.Nav.Title.2".localized, isMain: true)
             
             guard !walletList.isEmpty else { return }
             pageControl.rx.numberOfPages.onNext(newValue ? self.walletList.count : self.symbolList.count)
@@ -296,7 +296,7 @@ extension MainViewController {
                     self.cardTop.constant = -Header_Height
                     self.isBigCard = true
                     
-                    navBar.hideToggleImageView()
+                    navBar.hideToggleImageView(true)
                     
                 } else {
                     self.cardTop.constant = 0
@@ -315,7 +315,7 @@ extension MainViewController {
                         self.cardTop.constant = 0
                         self.isBigCard = false
                         
-                        navBar.hideToggleImageView()
+                        navBar.hideToggleImageView(false)
                         
                     } else {
                         self.cardTop.constant = -Header_Height
@@ -359,16 +359,23 @@ extension MainViewController: UICollectionViewDataSource {
             cell.info = wallet
             
             if let _ = wallet as? ETHWallet {
-                cell.scanButton.isEnabled = true
+                cell.scanButton.isHidden = true
+            } else {
+                cell.scanButton.isHidden = false
             }
             
         } else {
             cell.buttonStack.isHidden = true
-            // icx, eth, itd.....
+            // icx, eth, ITD
             let cellCoinToken = self.symbolList[indexPath.row]
+            
             cell.symbol = cellCoinToken
-            cell.contractAddress = DB.tokenListBy(symbol: cellCoinToken).first?.contractAddress ?? ""
-            // wallets...
+            
+            if let token = DB.tokenListBy(symbol: cellCoinToken).first {
+                cell.contractAddress = token.contractAddress
+                cell.tokenDecimal = token.decimal
+            }
+            
             cell.coinTokens = self.coinTokenList[cellCoinToken]
             
             switch indexPath.row {

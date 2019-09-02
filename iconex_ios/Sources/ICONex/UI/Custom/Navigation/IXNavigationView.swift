@@ -119,10 +119,7 @@ class IXNavigationView: UIView {
     func hideToggleImageView(_ value: Bool? = nil) {
         if let val = value {
             self.toggleImageView.isHidden = val
-            self.toggleButton.isEnabled = val
-        } else {
-            self.toggleImageView.isHidden.toggle()
-            self.toggleButton.isEnabled.toggle()
+            self.toggleButton.isEnabled = !val
         }
     }
     
