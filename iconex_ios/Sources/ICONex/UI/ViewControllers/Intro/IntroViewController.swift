@@ -83,11 +83,15 @@ class IntroViewController: BaseViewController {
             self.iconImage.transform = .identity
             self.satellite.transform = .identity
             
-            self.go()
+            
+            self.getVersion({
+                self.go()
+            })
+            
         })
     }
     
-    func checkVersion(_ completion: (() -> Void)? = nil) {
+    func getVersion(_ completion: (() -> Void)? = nil) {
         var tracker: Tracker {
             switch Config.host {
             case .main:
@@ -120,7 +124,7 @@ class IntroViewController: BaseViewController {
                         app.all = data["all"]
                         app.necessary = data["necessary"]
                     }
-                    self.retry()
+                    self.checkVersion()
                     
                 case .failure(let error):
                     Log("Error \(error)")
@@ -150,7 +154,7 @@ class IntroViewController: BaseViewController {
         }
     }
     
-    private func retry() {
+    private func checkVersion() {
         if let version = app.necessary {
             let myVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
             

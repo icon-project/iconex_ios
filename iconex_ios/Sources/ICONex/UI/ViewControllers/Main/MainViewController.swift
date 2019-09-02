@@ -201,6 +201,28 @@ class MainViewController: BaseViewController, Floatable {
             let menuVC = self.storyboard?.instantiateViewController(withIdentifier: "Menu") as! SideMenuViewController
             menuVC.modalPresentationStyle = .overFullScreen
             menuVC.modalTransitionStyle = .crossDissolve
+            menuVC.action1 = {
+                let createVC = UIStoryboard.init(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
+                createVC.pop()
+            }
+            menuVC.action2 = {
+                let loadVC = UIStoryboard.init(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
+                loadVC.pop()
+            }
+            menuVC.action3 = {
+                
+            }
+            menuVC.action4 = {
+                
+            }
+            menuVC.action5 = {
+                let version = UIStoryboard(name: "AppInfo", bundle: nil).instantiateInitialViewController()!
+                self.navigationController?.pushViewController(version, animated: true)
+            }
+            menuVC.action6 = {
+                let disclaimer = UIStoryboard(name: "Disclaimer", bundle: nil).instantiateInitialViewController() as! DisclaimerViewController
+                disclaimer.pop()
+            }
             self.present(menuVC, animated: true, completion: nil)
         }
         

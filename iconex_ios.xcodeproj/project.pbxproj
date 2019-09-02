@@ -95,6 +95,8 @@
 		D42C3B9F22FA6EB00025F8AE /* WalletLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C3B9E22FA6EB00025F8AE /* WalletLoader.swift */; };
 		D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */; };
 		D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D42FF8D922F182E900268C29 /* Passcode.storyboard */; };
+		D4304997231CA25100A8F540 /* Picker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4304996231CA25100A8F540 /* Picker.storyboard */; };
+		D4304999231CA26500A8F540 /* IXPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4304998231CA26500A8F540 /* IXPickerViewController.swift */; };
 		D434868920E6254500B7708F /* NanumSquareBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D434868820E6254500B7708F /* NanumSquareBold.ttf */; };
 		D43DB33822D6DB480029FFF0 /* Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D43DB33722D6DB480029FFF0 /* Managers.swift */; };
 		D44A94892019CA0100F60614 /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44A94882019CA0100F60614 /* Cipher.swift */; };
@@ -111,6 +113,9 @@
 		D46CD8A522E006C30063BAA0 /* Variables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46CD8A422E006C30063BAA0 /* Variables.swift */; };
 		D46CD8A922E045D00063BAA0 /* Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46CD8A822E045D00063BAA0 /* Validator.swift */; };
 		D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D46DB4D620A1903500B632D9 /* Localizable.strings */; };
+		D46E775C231BFB8B00AF332D /* DisclaimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46E775B231BFB8B00AF332D /* DisclaimerViewController.swift */; };
+		D46E775F231BFEE100AF332D /* Disclaimer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D46E775E231BFEE100AF332D /* Disclaimer.storyboard */; };
+		D46E7761231C0BB800AF332D /* DevelopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46E7760231C0BB800AF332D /* DevelopViewController.swift */; };
 		D4719B22200F2796005F6BDA /* logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4719B21200F2796005F6BDA /* logger.swift */; };
 		D471F202205A755C00F565EF /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = D471F201205A755C00F565EF /* Database.swift */; };
 		D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4728A122007040B00E0A899 /* AppDelegate.swift */; };
@@ -265,6 +270,8 @@
 		D42C3B9E22FA6EB00025F8AE /* WalletLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletLoader.swift; sourceTree = "<group>"; };
 		D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeViewController.swift; sourceTree = "<group>"; };
 		D42FF8D922F182E900268C29 /* Passcode.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Passcode.storyboard; sourceTree = "<group>"; };
+		D4304996231CA25100A8F540 /* Picker.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Picker.storyboard; sourceTree = "<group>"; };
+		D4304998231CA26500A8F540 /* IXPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXPickerViewController.swift; sourceTree = "<group>"; };
 		D434868820E6254500B7708F /* NanumSquareBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareBold.ttf; sourceTree = "<group>"; };
 		D43DB33722D6DB480029FFF0 /* Managers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Managers.swift; sourceTree = "<group>"; };
 		D44A94882019CA0100F60614 /* Cipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cipher.swift; sourceTree = "<group>"; };
@@ -283,6 +290,9 @@
 		D46CD8A822E045D00063BAA0 /* Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validator.swift; sourceTree = "<group>"; };
 		D46DB4D520A1903500B632D9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D46DB4D720A1903800B632D9 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		D46E775B231BFB8B00AF332D /* DisclaimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclaimerViewController.swift; sourceTree = "<group>"; };
+		D46E775E231BFEE100AF332D /* Disclaimer.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Disclaimer.storyboard; sourceTree = "<group>"; };
+		D46E7760231C0BB800AF332D /* DevelopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopViewController.swift; sourceTree = "<group>"; };
 		D4719B21200F2796005F6BDA /* logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = logger.swift; sourceTree = "<group>"; };
 		D471F201205A755C00F565EF /* Database.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		D4728A0F2007040B00E0A899 /* iconex_ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iconex_ios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -563,6 +573,7 @@
 		D424B72F22EEB73100D9BD12 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
+				D4304995231CA24500A8F540 /* Picker */,
 				D4DACDF6231513CE00CC8EA8 /* Floater */,
 				BF7FC19B2316B1E90095F1D5 /* IXSectionHeader */,
 				D4682A10230B93D200225C73 /* Slider */,
@@ -619,6 +630,15 @@
 			children = (
 			);
 			path = Protocols;
+			sourceTree = "<group>";
+		};
+		D4304995231CA24500A8F540 /* Picker */ = {
+			isa = PBXGroup;
+			children = (
+				D4304996231CA25100A8F540 /* Picker.storyboard */,
+				D4304998231CA26500A8F540 /* IXPickerViewController.swift */,
+			);
+			path = Picker;
 			sourceTree = "<group>";
 		};
 		D435E78F2018243400F1E798 /* Wallet */ = {
@@ -680,6 +700,15 @@
 				D472BA6B230299A700E28E05 /* IScore */,
 			);
 			path = IISS;
+			sourceTree = "<group>";
+		};
+		D46E775D231BFED000AF332D /* Disclaimer */ = {
+			isa = PBXGroup;
+			children = (
+				D46E775E231BFEE100AF332D /* Disclaimer.storyboard */,
+				D46E775B231BFB8B00AF332D /* DisclaimerViewController.swift */,
+			);
+			path = Disclaimer;
 			sourceTree = "<group>";
 		};
 		D4728A062007040B00E0A899 = {
@@ -870,6 +899,7 @@
 		D4E972C9231B9EF100C7B646 /* Side */ = {
 			isa = PBXGroup;
 			children = (
+				D46E775D231BFED000AF332D /* Disclaimer */,
 				D4E972CA231B9F0300C7B646 /* AppInfo */,
 			);
 			path = Side;
@@ -880,6 +910,7 @@
 			children = (
 				D4E972CD231B9FB300C7B646 /* AppInfo.storyboard */,
 				D4E972CB231B9F1600C7B646 /* AppInfoViewController.swift */,
+				D46E7760231C0BB800AF332D /* DevelopViewController.swift */,
 			);
 			path = AppInfo;
 			sourceTree = "<group>";
@@ -977,7 +1008,7 @@
 					D4728A0E2007040B00E0A899 = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 0920;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
@@ -1032,6 +1063,7 @@
 				D4FDCA6622F7C62200D6CDD4 /* LoadWallet.storyboard in Resources */,
 				1BB4C76C231B933600BA4138 /* Send.storyboard in Resources */,
 				BF6EFECD22FA5174003B6AF3 /* StakeAlertView.xib in Resources */,
+				D46E775F231BFEE100AF332D /* Disclaimer.storyboard in Resources */,
 				BF2D35AC2301576600EC2A35 /* LaunchScreen.storyboard in Resources */,
 				BF7FC19F2316B2170095F1D5 /* IXSectionHeader.xib in Resources */,
 				BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */,
@@ -1044,6 +1076,7 @@
 				D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */,
 				D4682A1A230BD7D600225C73 /* IXSlider.xib in Resources */,
 				BF6EFEC922FA5174003B6AF3 /* AddressAlertView.xib in Resources */,
+				D4304997231CA25100A8F540 /* Picker.storyboard in Resources */,
 				D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */,
 				BF6EFEC822FA5174003B6AF3 /* PasswordAlertView.xib in Resources */,
 				BF78B36222FCFCD4002E34B3 /* CreateWallet.storyboard in Resources */,
@@ -1147,6 +1180,8 @@
 				D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */,
 				BF4F6F762318A57D0098D303 /* MainQRCodeViewController.swift in Sources */,
 				BF4F6F7B2318A57D0098D303 /* TokenTableViewCell.swift in Sources */,
+				D46E7761231C0BB800AF332D /* DevelopViewController.swift in Sources */,
+				D4304999231CA26500A8F540 /* IXPickerViewController.swift in Sources */,
 				D4DACDF32314259900CC8EA8 /* PRepSearchViewController.swift in Sources */,
 				D4682A12230B93ED00225C73 /* IXSlider.swift in Sources */,
 				BF6EFEC622FA5174003B6AF3 /* PasswordAlertView.swift in Sources */,
@@ -1227,6 +1262,7 @@
 				D46CD8A522E006C30063BAA0 /* Variables.swift in Sources */,
 				BF6EFEC422FA5174003B6AF3 /* IScoreAlertView.swift in Sources */,
 				BF78B35E22FCFCD4002E34B3 /* CreateCompleteViewController.swift in Sources */,
+				D46E775C231BFB8B00AF332D /* DisclaimerViewController.swift in Sources */,
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
 				D4757455230E8FEA00C46FFE /* MyVoteGeneralCell.swift in Sources */,
 				D4757452230E8EBA00C46FFE /* MyVoteViewController.swift in Sources */,
@@ -1390,7 +1426,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 27F4PR54DX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1416,7 +1452,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1a0890d8-ae44-4ec0-b5a1-1707ed9d2ccc";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ICONex-Dev";
 				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1433,8 +1469,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 27F4PR54DX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1460,7 +1496,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "9206590a-1a5b-408a-8716-9326fa1813b6";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "ICONex AppStore";
 				SWIFT_INCLUDE_PATHS = "$(inherited)";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/iconex_ios/Sources/ICONex/Objc/iconex_ios-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

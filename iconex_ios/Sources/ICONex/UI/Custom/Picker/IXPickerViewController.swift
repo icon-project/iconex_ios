@@ -45,6 +45,8 @@ class IXPickerViewController: BaseViewController {
         } else {
             pickerHeight.constant = (CGFloat)(60 + 60 * items.count)
         }
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapClose))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -64,6 +66,10 @@ class IXPickerViewController: BaseViewController {
                 self.pickerContainer.transform = .identity
             })
         }, completion: nil)
+    }
+    
+    @objc func tapClose() {
+        close()
     }
     
     func close(_ row: Int? = nil, _ completion: ((Int) -> Void)? = nil) {

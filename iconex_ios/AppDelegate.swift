@@ -14,7 +14,9 @@ import ICONKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
+    var appVersion: String {
+        return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+    }
 //    var connect: ConnectViewController?
 
     var all: String?

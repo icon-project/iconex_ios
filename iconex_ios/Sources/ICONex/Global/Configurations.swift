@@ -53,16 +53,16 @@ struct Configuration {
     static var general = Configuration()
     
     var host: HOST {
-        #if DEBUG
-        return .euljiro
-        #else
+//        #if DEBUG
+//        return .euljiro
+//        #else
         let save = UserDefaults.standard.integer(forKey: "Provider")
         if let provider = HOST(rawValue: save) {
             return provider
         } else {
             return .main
         }
-        #endif
+//        #endif
     }
     var faqLink: String {
         return "https://docs.google.com/spreadsheets/d/1HiT98wqEpFgF2d98eJefQfH7xK4KPPxNDiiXg3AcJ7w/edit#gid=0"

@@ -172,7 +172,7 @@ extension ICONManager {
                 
             case .failure(let error):
                 Log(error, .error)
-                return error.errorDescription ?? ""
+                return error.localizedDescription
             }
         } catch let err {
             Log(err, .error)
