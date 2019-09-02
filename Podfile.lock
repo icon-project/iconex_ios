@@ -1,4 +1,5 @@
 PODS:
+  - AcknowList (1.9)
   - Alamofire (4.8.2)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
@@ -39,6 +40,7 @@ PODS:
     - Starscream (= 3.1.0)
 
 DEPENDENCIES:
+  - AcknowList
   - Alamofire
   - ICONKit (from `https://github.com/icon-project/ICONKit/`, branch `develop`)
   - PanModal
@@ -49,6 +51,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AcknowList
     - Alamofire
     - BigInt
     - CryptoSwift
@@ -71,10 +74,11 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ICONKit:
-    :commit: a0d927196f113236cf338651bd90b8996da18575
+    :commit: a30cd7b56970eb74336ff2573400a68c74650f2e
     :git: https://github.com/icon-project/ICONKit/
 
 SPEC CHECKSUMS:
+  AcknowList: 06fde3319971dfd517ea1b1c194d78eb8cd774a2
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
@@ -91,6 +95,6 @@ SPEC CHECKSUMS:
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 3c7043c4d0b778c7495867729da4dcb4a7b98d57
+PODFILE CHECKSUM: 03dbb518364e3c797bff2abd62816d316a0ef31e
 
 COCOAPODS: 1.7.3

@@ -47,6 +47,7 @@ class IXPickerViewController: BaseViewController {
         }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapClose))
+        gestureView.addGestureRecognizer(tap)
     }
     
     override func viewDidAppear(_ animated: Bool) {

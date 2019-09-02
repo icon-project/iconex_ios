@@ -11,6 +11,7 @@ def import_pods
   pod 'Alamofire'
   pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit/', :branch => 'develop'
   pod 'PanModal'
+  pod 'AcknowList'
 end
 
 inhibit_all_warnings!

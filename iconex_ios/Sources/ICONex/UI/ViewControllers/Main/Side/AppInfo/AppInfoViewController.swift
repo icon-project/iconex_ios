@@ -55,5 +55,10 @@ class AppInfoViewController: BaseViewController {
                 let develop = UIStoryboard(name: "AppInfo", bundle: nil).instantiateViewController(withIdentifier: "DevelopView")
                 self.navigationController?.pushViewController(develop, animated: true)
             }).disposed(by: disposeBag)
+        
+        opensourceButton.rx.tap.subscribe(onNext: { [unowned self] in
+            let opensource = UIStoryboard(name: "AppInfo", bundle: nil).instantiateViewController(withIdentifier: "License") as! LicenseViewController
+            self.presentPanModal(opensource)
+        }).disposed(by: disposeBag)
     }
 }
