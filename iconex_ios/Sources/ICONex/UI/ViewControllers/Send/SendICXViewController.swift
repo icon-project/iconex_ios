@@ -135,6 +135,7 @@ class SendICXViewController: BaseViewController {
         dataInputBox.set(state: .normal, placeholder: "Send.InputBox.Data".localized)
         viewDataButton.isHidden = true
         viewDataButton.roundGray230()
+        viewDataButton.setTitle("Send.InputBox.Data.View".localized, for: .normal)
         
         footerBox.corner(8)
         footerBox.border(0.5, .gray230)
@@ -229,8 +230,6 @@ class SendICXViewController: BaseViewController {
         
         dataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                guard self.data == nil else { return }
-                
                 let dataVC = self.storyboard?.instantiateViewController(withIdentifier: "DataType") as! DataTypeViewController
                 dataVC.modalTransitionStyle = .crossDissolve
                 dataVC.modalPresentationStyle = .overFullScreen
@@ -252,18 +251,8 @@ class SendICXViewController: BaseViewController {
                 inputDataVC.data = data
                 inputDataVC.type = self.dataType
                 inputDataVC.completeHandler = { dataString, _ in
-                    
-                    if self.dataType == .hex {
-                        let hexData = Data(hex: dataString)
-                        let encodedAsData = hexData.base64EncodedString(options: .lineLength64Characters)
-                        let dataDecoded: Data = Data(base64Encoded: encodedAsData, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)!
-                        
-                        if let str = String(data: dataDecoded, encoding: .utf8) {
-                            self.data = str
-                        }
-                    } else {
-                        self.data = data
-                    }
+                    self.data = dataString
+                    self.dataInputBox.text = dataString
                 }
                 
                 self.presentPanModal(inputDataVC)

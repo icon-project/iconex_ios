@@ -108,6 +108,17 @@ class DetailViewController: BaseViewController, Floatable {
         
         guard let wallet = self.walletInfo else { return }
         
+        // coin type
+        if let token = self.tokenInfo {
+            self.coinTypeLabel.size16(text: token.name, color: .white, weight: .medium, align: .right)
+        } else {
+            if let _ = wallet as? ICXWallet {
+                self.coinTypeLabel.size16(text: CoinType.icx.fullName, color: .white, weight: .medium, align: .right)
+            } else if let _ = wallet as? ETHWallet {
+                self.coinTypeLabel.size16(text: CoinType.eth.fullName, color: .white, weight: .medium, align: .right)
+            }
+        }
+        
         // balance
         fetchBalance()
         detailViewModel.currencyUnit.onNext(.USD)
@@ -230,36 +241,25 @@ class DetailViewController: BaseViewController, Floatable {
                     }
                 }
             }
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                
-                if self.txList.isEmpty {
-                    let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-                    messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
-                    
-                    self.tableView.backgroundView = messageLabel
-                    self.tableView.separatorStyle = .none
-                    
-                } else {
-                    self.tableView.backgroundView = nil
-                    self.tableView.separatorStyle = .singleLine
-                }
-                
-                // coin type
-                if let token = self.tokenInfo {
-                    self.coinTypeLabel.size16(text: token.name, color: .white, weight: .medium, align: .right)
-                } else {
-                    if let _ = wallet as? ICXWallet {
-                        self.coinTypeLabel.size16(text: CoinType.icx.fullName, color: .white, weight: .medium, align: .right)
-                    } else {
-                        self.coinTypeLabel.size16(text: CoinType.eth.fullName, color: .white, weight: .medium, align: .right)
-                    }
-                }
-            }
         }
         
         activityIndicator.stopAnimating()
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            
+            if self.txList.isEmpty {
+                let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+                messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
+                
+                self.tableView.backgroundView = messageLabel
+                self.tableView.separatorStyle = .none
+                
+            } else {
+                self.tableView.backgroundView = nil
+                self.tableView.separatorStyle = .singleLine
+            }
+        }
     }
     
     private func setupUI() {

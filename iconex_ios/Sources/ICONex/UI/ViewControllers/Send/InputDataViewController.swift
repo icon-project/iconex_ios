@@ -122,6 +122,10 @@ class InputDataViewController: BaseViewController {
             .subscribe { (_) in
                 if self.isEditingMode {
                     self.textView.text = ""
+                    if let handler = self.completeHandler {
+                        handler("", self.type)
+                    }
+                    self.dismiss(animated: true, completion: nil)
                 }
                 self.textView.isUserInteractionEnabled = true
                 self.textView.becomeFirstResponder()

@@ -330,6 +330,7 @@
 "Send.InputBox.Address.Error" = "올바른 ICX 주소가 아닙니다.";
 "Send.InputBox.Address.Error.ETH" = "올바른 ETH 주소가 아닙니다.";
 "Send.InputBox.Data" = "데이터 (선택 입력)";
+"Send.InputBox.Data.View" = "데이터 보기";
 "Send.Amount.Max" = "전액";
 "Send.Step" = "적정 Step 한도 / 가격";
 "Send.GasLimit" = "가스 한도";
