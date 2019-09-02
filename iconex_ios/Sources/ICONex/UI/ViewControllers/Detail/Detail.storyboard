@@ -25,7 +25,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="baI-9e-Na4">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                <color key="backgroundColor" red="0.0" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.0" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4o-a1-pu3" customClass="IXNavigationView" customModule="iconex_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="56"/>
@@ -104,7 +104,7 @@
                                             <rect key="frame" x="183" y="100.66666666666667" width="55.666666666666657" height="20"/>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" red="0.0" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                    <color key="backgroundColor" red="0.0" green="0.63529411759999999" blue="0.72156862749999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstItem="0Bj-Xb-RR3" firstAttribute="leading" secondItem="qzH-ei-YGh" secondAttribute="leading" id="1wo-0n-Jtf"/>
                                         <constraint firstAttribute="trailing" secondItem="z05-tS-H2x" secondAttribute="trailing" constant="20" id="3M3-fY-pqj"/>

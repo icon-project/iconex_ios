@@ -28,6 +28,13 @@ class SideMenuViewController: BaseViewController {
     @IBOutlet weak var button5: UIButton!
     @IBOutlet weak var button6: UIButton!
     
+    var action1: (() -> Void) = {}
+    var action2: (() -> Void) = {}
+    var action3: (() -> Void) = {}
+    var action4: (() -> Void) = {}
+    var action5: (() -> Void) = {}
+    var action6: (() -> Void) = {}
+    
     private var isAnimated: Bool = false
     
     let gradient = CAGradientLayer()
@@ -66,12 +73,8 @@ class SideMenuViewController: BaseViewController {
         self.dismissView.addGestureRecognizer(tapGesture)
         
         tapGesture.rx.event.subscribe { (_) in
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-                self.menuView.frame.origin.x = -self.menuView.frame.width
-                self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.0) // ??
-            }, completion: { (_) in
-                self.dismiss(animated: true, completion: nil)
-            })
+            
+            self.close(nil)
             
         }.disposed(by: disposeBag)
         
@@ -79,7 +82,7 @@ class SideMenuViewController: BaseViewController {
         button2.setTitle("Side.Load".localized, for: .normal)
         button3.setTitle("Side.Export".localized, for: .normal)
         button4.setTitle("Side.Lock".localized, for: .normal)
-        button5.setTitle("Side.Version".localized, for: .normal)
+        button5.setTitle("App Version \(app.appVersion)", for: .normal)
         button6.setTitle("Side.Disclaimer".localized, for: .normal)
         
         button1.setTitleColor(.white, for: .normal)
@@ -91,34 +94,45 @@ class SideMenuViewController: BaseViewController {
         
         // Create
         button1.rx.tap.asControlEvent().subscribe { (_) in
-            let createVC = UIStoryboard.init(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
-            createVC.pop()
+            self.close({
+                self.action1()
+            })
+            
         }.disposed(by: disposeBag)
         
         // Load
         button2.rx.tap.asControlEvent().subscribe { (_) in
-            let loadVC = UIStoryboard.init(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
-            loadVC.pop()
+            self.close({
+                self.action2()
+            })
         }.disposed(by: disposeBag)
         
         // Export
         button3.rx.tap.asControlEvent().subscribe { (_) in
-            
+            self.close({
+                self.action3()
+            })
         }.disposed(by: disposeBag)
         
         // Lock
         button4.rx.tap.asControlEvent().subscribe { (_) in
-            
+            self.close({
+                self.action4()
+            })
         }.disposed(by: disposeBag)
         
         // Version
         button5.rx.tap.asControlEvent().subscribe { (_) in
-            
+            self.close({
+                self.action5()
+            })
         }.disposed(by: disposeBag)
         
         // Disclaimer
         button6.rx.tap.asControlEvent().subscribe { (_) in
-            
+            self.close({
+                self.action6()
+            })
         }.disposed(by: disposeBag)
         
     }
@@ -170,6 +184,19 @@ class SideMenuViewController: BaseViewController {
                 })
             }
         }
+    }
+    
+    func close(_ handler: (() -> Void)?) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+            self.menuView.frame.origin.x = -self.menuView.frame.width
+            self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.0) // ??
+        }, completion: { (_) in
+            self.dismiss(animated: true, completion: {
+                if let completion = handler {
+                    completion()
+                }
+            })
+        })
     }
 }
 
