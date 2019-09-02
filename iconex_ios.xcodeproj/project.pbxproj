@@ -73,6 +73,7 @@
 		BF7FC19D2316B2070095F1D5 /* IXSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7FC19C2316B2070095F1D5 /* IXSectionHeader.swift */; };
 		BF7FC19F2316B2170095F1D5 /* IXSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF7FC19E2316B2170095F1D5 /* IXSectionHeader.xib */; };
 		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
+		BF8AF6B3231C9B5B0071C7F9 /* SendETHViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */; };
 		BFC9A49C23141498002E35F5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49323141498002E35F5 /* UIColor+Extension.swift */; };
 		BFC9A49D23141498002E35F5 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49423141498002E35F5 /* UILabel+Extension.swift */; };
 		BFC9A49E23141498002E35F5 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49523141498002E35F5 /* UIButton+Extension.swift */; };
@@ -239,6 +240,7 @@
 		BF7FC19C2316B2070095F1D5 /* IXSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXSectionHeader.swift; sourceTree = "<group>"; };
 		BF7FC19E2316B2170095F1D5 /* IXSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IXSectionHeader.xib; sourceTree = "<group>"; };
 		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendETHViewController.swift; sourceTree = "<group>"; };
 		BFC9A49323141498002E35F5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49423141498002E35F5 /* UILabel+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49523141498002E35F5 /* UIButton+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
@@ -351,6 +353,7 @@
 			children = (
 				1BB4C767231A9D9F00BA4138 /* Send.storyboard */,
 				1BB4C76A231A9DD600BA4138 /* SendICXViewController.swift */,
+				BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */,
 				1BB4C76F231BE15300BA4138 /* DataTypeViewController.swift */,
 				1BB4C773231BE97800BA4138 /* InputDataViewController.swift */,
 				1BB4C780231C1EBB00BA4138 /* AddressBookViewController.swift */,
@@ -1140,6 +1143,7 @@
 				BF4F6F682318A57D0098D303 /* DetailViewController.swift in Sources */,
 				D42C3B9F22FA6EB00025F8AE /* WalletLoader.swift in Sources */,
 				BFC9A4A123141498002E35F5 /* BigInt+Extension.swift in Sources */,
+				BF8AF6B3231C9B5B0071C7F9 /* SendETHViewController.swift in Sources */,
 				D472BA6D230299EA00E28E05 /* IScoreDetailViewController.swift in Sources */,
 				BF4F6F7A2318A57D0098D303 /* WalletTableViewCell.swift in Sources */,
 				1BB4C781231C1EBB00BA4138 /* AddressBookViewController.swift in Sources */,

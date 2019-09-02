@@ -588,7 +588,7 @@ struct Ethereum {
         return estimated
     }
     
-    static func requestSendTransaction(privateKey: String, gasPrice: BigUInt, gasLimit: BigUInt, from: String, to: String, value: BigUInt, data: Data) -> (isSuccess: Bool, reason: Int) {
+    static func requestSendTransaction(privateKey: String, gasPrice: BigUInt, gasLimit: BigUInt, from: String, to: String, value: BigUInt, data: Data? = nil) -> (isSuccess: Bool, reason: Int) {
         
         guard let web3 = try? Web3.new(Ethereum.provider) else {
             return (false, -99)
@@ -602,7 +602,7 @@ struct Ethereum {
         let manager = KeystoreManager([keystore!])
         web3.addKeystoreManager(manager)
         
-        let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data, transactionOptions: options)
+        let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data ?? Data(), transactionOptions: options)
         
         if let estimated = try? intermediate!.estimateGas(transactionOptions: nil) {
             Log("estimated: \(estimated), gasLimit: \(gasLimit)")
