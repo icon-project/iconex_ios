@@ -40,7 +40,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - ICONKit (from `~/works/ICONKit`)
+  - ICONKit (from `https://github.com/icon-project/ICONKit/`, branch `develop`)
   - PanModal
   - RealmSwift (= 3.11.0)
   - RxCocoa
@@ -66,7 +66,13 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   ICONKit:
-    :path: "~/works/ICONKit"
+    :branch: develop
+    :git: https://github.com/icon-project/ICONKit/
+
+CHECKOUT OPTIONS:
+  ICONKit:
+    :commit: a0d927196f113236cf338651bd90b8996da18575
+    :git: https://github.com/icon-project/ICONKit/
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
@@ -85,6 +91,6 @@ SPEC CHECKSUMS:
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 4b17b52679e7c6e66c680a02b652981831f8ea9f
+PODFILE CHECKSUM: 3c7043c4d0b778c7495867729da4dcb4a7b98d57
 
 COCOAPODS: 1.7.3
