@@ -135,16 +135,17 @@ struct SendInfo {
     var receivingAddress: String
     
     init(transaction: Transaction? = nil, ethTransaction: EthereumTransaction? = nil, privateKey: PrivateKey? = nil, ethPrivateKey: String? = nil, stepLimitPrice: String, estimatedFee: String, estimatedUSD: String, token: Token? = nil, tokenAmount: BigUInt? = nil, tokenToAddress: String? = nil) {
+        
         if let icx = transaction {
             self.transaction = icx
             self.privateKey = privateKey
             
             self.token = token
             if let tokenInfo = token, let tokenValue = tokenAmount, let toAddr = tokenToAddress {
-                self.amount = tokenValue.toString(decimal: tokenInfo.decimal)
+                self.amount = tokenValue.toString(decimal: tokenInfo.decimal, tokenInfo.decimal, false)
                 self.receivingAddress = toAddr
             } else {
-                self.amount = icx.value?.toString(decimal: 18) ?? "0"
+                self.amount = icx.value?.toString(decimal: 18, 18, false) ?? "0"
                 self.receivingAddress = icx.to ?? ""
             }
             
