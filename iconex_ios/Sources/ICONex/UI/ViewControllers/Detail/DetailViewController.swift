@@ -91,7 +91,7 @@ class DetailViewController: BaseViewController, Floatable {
         setupUI()
         
         // refresh control
-        let refreshControl = UIRefreshControl()
+        let refreshControl = MintRefreshControl()
         refreshControl.tintColor = .white
         refreshControl.backgroundColor = .mint1
         refreshControl.rx.controlEvent(.valueChanged)
@@ -100,8 +100,10 @@ class DetailViewController: BaseViewController, Floatable {
                 self.pageIndex = 1
                 self.fetchBalance()
                 self.fetchTxList()
-                refreshControl.endRefreshing()
-                self.tableView.reloadData()
+                
+                DispatchQueue.main.async {
+                    refreshControl.endRefreshing()
+                }
             }.disposed(by: disposeBag)
         
         self.tableView.refreshControl = refreshControl
@@ -470,5 +472,39 @@ extension DetailViewController: UITableViewDelegate {
         Alert.txHash(txData: txInfo, confirmAction: {
             self.view.showToast(message: "Alert.Transaction.Copy.Complete".localized)
         }).show()
+    }
+}
+
+// https://stackoverflow.com/a/50670500
+class MintRefreshControl: UIRefreshControl {
+    override var isHidden: Bool {
+        get {
+            return super.isHidden
+        }
+        set(hiding) {
+            if hiding {
+                guard frame.origin.y >= 0 else { return }
+                super.isHidden = hiding
+            } else {
+                guard frame.origin.y < 0 else { return }
+                super.isHidden = hiding
+            }
+        }
+    }
+    
+    override var frame: CGRect {
+        didSet {
+            if frame.origin.y < 0 {
+                isHidden = false
+            } else {
+                isHidden = true
+            }
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let originalFrame = frame
+        frame = originalFrame
     }
 }
