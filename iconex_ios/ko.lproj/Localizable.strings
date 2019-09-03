@@ -137,6 +137,8 @@
 "Alert.WalletName.Header" = "지갑 이름 변경";
 "Alert.WalletName.Placeholder" = "지갑 이름";
 
+"Alert.QRCode.PrivateKey" = "개인 키 만으로 지갑 실행, 전송이 가능하므로 어떠한 경우에도 외부 공유가 되어서는 안됩니다.";
+
 // MARK: Floater
 "Floater.Vote.PReps" = "P-Reps";
 "Floater.Vote.Stake" = "Stake";

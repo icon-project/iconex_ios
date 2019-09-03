@@ -36,6 +36,8 @@ class CreateQRCodeViewController: BaseViewController {
     var pk: String?
     var walletName: String?
     
+    var isfirstTime: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -57,6 +59,11 @@ class CreateQRCodeViewController: BaseViewController {
         scroll.rx.didEndDecelerating
             .subscribe { (_) in
                 self.pageControl.currentPage = Int(self.scroll.contentOffset.x / self.scroll.frame.width)
+                
+                if self.pageControl.currentPage == 1 && self.isfirstTime {
+                    self.isfirstTime = false
+                    Alert.basic(title: "Alert.QRCode.PrivateKey".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                }
         }.disposed(by: disposeBag)
         
         guard let name = self.walletName else { return }
