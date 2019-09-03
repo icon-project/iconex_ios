@@ -179,8 +179,15 @@ class SendICXViewController: BaseViewController {
     private func setupBind() {
         guard let wallet = self.walletInfo else { return }
         
+        self.scrollView?.rx.didScroll
+            .subscribe({ (_) in
+                self.view.endEditing(true)
+        }).disposed(by: disposeBag)
+        
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 if let token = self.token {
                     let power = BigUInt(10) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
@@ -194,11 +201,14 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, false)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
         }.disposed(by: disposeBag)
         
         plus100Button.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 if let token = self.token {
                     let power = BigUInt(100) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
@@ -212,10 +222,14 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, false)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                
             }.disposed(by: disposeBag)
         
         plus1000Button.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 if let token = self.token {
                     let power = BigUInt(1000) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
@@ -229,20 +243,28 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, false)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                
             }.disposed(by: disposeBag)
         
         maxButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 if let token = self.token {
                     self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, false)
                 } else {
                     let maxBalance = self.balance - self.stepLimit
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, false)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                
             }.disposed(by: disposeBag)
         
         dataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 let dataVC = self.storyboard?.instantiateViewController(withIdentifier: "DataType") as! DataTypeViewController
                 dataVC.modalTransitionStyle = .crossDissolve
                 dataVC.modalPresentationStyle = .overFullScreen
@@ -257,6 +279,8 @@ class SendICXViewController: BaseViewController {
         
         viewDataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 guard let data = self.data else { return }
                 
                 let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
@@ -309,6 +333,8 @@ class SendICXViewController: BaseViewController {
         // ADDRESS BOOK
         addressBookButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 let addressBook = self.storyboard?.instantiateViewController(withIdentifier: "AddressBook") as! AddressBookViewController
                 addressBook.myAddress = wallet.address
                 
@@ -318,7 +344,7 @@ class SendICXViewController: BaseViewController {
                 
                 addressBook.selectedHandler = { address in
                     self.addressInputBox.text = address
-                    self.addressInputBox.endEditing(true)
+                    self.addressInputBox.textField.sendActions(for: .valueChanged)
                 }
                 
                 self.presentPanModal(addressBook)
@@ -329,6 +355,8 @@ class SendICXViewController: BaseViewController {
         // QR CODE
         qrCodeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                 
                 qrCodeReader.set(mode: .icx, handler: { (address) in
@@ -343,7 +371,7 @@ class SendICXViewController: BaseViewController {
         // send
         Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty)
             .flatMapLatest { [unowned self] (value, address) -> Observable<Bool> in
-                guard !value.isEmpty || !address.isEmpty else { return Observable.just(false) }
+                guard !value.isEmpty && !address.isEmpty else { return Observable.just(false) }
                 
                 // address
                 guard Validator.validateICXAddress(address: address) || Validator.validateIRCAddress(address: address) else {

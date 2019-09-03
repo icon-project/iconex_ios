@@ -312,6 +312,7 @@
                         <outlet property="plus10Button" destination="l2a-hB-HU4" id="Jqu-ut-wxT"/>
                         <outlet property="priceLabel" destination="1PM-vZ-cIb" id="Y69-Rm-11e"/>
                         <outlet property="qrCodeButton" destination="Pzb-PP-FlZ" id="V6L-Ju-vsF"/>
+                        <outlet property="scrollView" destination="cCA-Q7-HsT" id="ukG-em-k4I"/>
                         <outlet property="sendButton" destination="fO8-3k-yn0" id="82A-hz-zpJ"/>
                         <outlet property="stepLimitLabel" destination="Q0H-qD-5Vz" id="AHi-LD-1lH"/>
                         <outlet property="stepLimitTitleLabel" destination="jC3-JC-jvU" id="TI4-i4-GIw"/>
