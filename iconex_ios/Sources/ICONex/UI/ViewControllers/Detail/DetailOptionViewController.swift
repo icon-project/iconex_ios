@@ -67,10 +67,8 @@ class DetailOptionViewController: UIViewController {
         allButton.clipsToBounds = true
         depositButton.clipsToBounds = true
         
-        allButton.layer.cornerRadius = 4
-        depositButton.layer.cornerRadius = 4
-        
         allButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+        sendButton.layer.maskedCorners = []
         depositButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
     }
     

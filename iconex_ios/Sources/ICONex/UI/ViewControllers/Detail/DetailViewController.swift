@@ -98,6 +98,7 @@ class DetailViewController: BaseViewController, Floatable {
             .subscribe { (_) in
                 self.txList.removeAll()
                 self.pageIndex = 1
+                self.fetchBalance()
                 self.fetchTxList()
                 refreshControl.endRefreshing()
                 self.tableView.reloadData()
@@ -167,11 +168,14 @@ class DetailViewController: BaseViewController, Floatable {
                     return Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
                     
                 } else {
-                    return Manager.balance.getBalance(wallet: wallet) ?? 0
+                    guard let icx = wallet as? ICXWallet else { return 0 }
+                    return Manager.icon.getBalance(wallet: icx) ?? 0
                 }
             }()
             
-            detailViewModel.balance.onNext(balance)
+            DispatchQueue.main.async {
+                detailViewModel.balance.onNext(balance)
+            }
         }
     }
     
@@ -241,25 +245,25 @@ class DetailViewController: BaseViewController, Floatable {
                     }
                 }
             }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                
+                if self.txList.isEmpty {
+                    let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+                    messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
+                    
+                    self.tableView.backgroundView = messageLabel
+                    self.tableView.separatorStyle = .none
+                    
+                } else {
+                    self.tableView.backgroundView = nil
+                    self.tableView.separatorStyle = .singleLine
+                }
+            }
         }
         
         activityIndicator.stopAnimating()
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            
-            if self.txList.isEmpty {
-                let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-                messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
-                
-                self.tableView.backgroundView = messageLabel
-                self.tableView.separatorStyle = .none
-                
-            } else {
-                self.tableView.backgroundView = nil
-                self.tableView.separatorStyle = .singleLine
-            }
-        }
     }
     
     private func setupUI() {
@@ -321,7 +325,8 @@ class DetailViewController: BaseViewController, Floatable {
             .bind(to: self.currencyLabel.rx.text)
             .disposed(by: disposeBag)
         
-        detailViewModel.balance.flatMapLatest { (value) -> Observable<String> in
+        detailViewModel.balance.observeOn(MainScheduler.instance)
+            .flatMapLatest { (value) -> Observable<String> in
             guard let token = self.tokenInfo else {
                 return Observable.just(value.toString(decimal: wallet.decimal, 4).currencySeparated())
             }
@@ -370,11 +375,12 @@ class DetailViewController: BaseViewController, Floatable {
                 }
         }.disposed(by: disposeBag)
         
-        detailViewModel.filter.subscribe(onNext: { (filter) in
-            self.txList.removeAll()
-            self.filter = filter
-            self.fetchTxList()
-            self.tableView.reloadData()
+        detailViewModel.filter.observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (filter) in
+                self.txList.removeAll()
+                self.filter = filter
+                self.fetchTxList()
+                self.tableView.reloadData()
         }).disposed(by: disposeBag)
         
         tableView.rx.didEndDragging.subscribe { (_) in
