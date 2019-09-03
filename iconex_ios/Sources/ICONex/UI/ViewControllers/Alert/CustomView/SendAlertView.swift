@@ -25,10 +25,15 @@ class SendAlertView: UIView {
     var info: SendInfo? {
         willSet {
             guard let info = newValue else { return }
-            if info.transaction == nil {
-                sendAmountTitleLabel.text = "Alert.Send.Value.ETH".localized
+            
+            if let token = info.token {
+                sendAmountTitleLabel.text = String(format: "Alert.Send.Value.Token".localized, token.symbol)
             } else {
-                sendAmountTitleLabel.text = "Alert.Send.Value.ICX".localized
+                if info.transaction == nil {
+                    sendAmountTitleLabel.text = "Alert.Send.Value.ETH".localized
+                } else {
+                    sendAmountTitleLabel.text = "Alert.Send.Value.ICX".localized
+                }
             }
             
             sendAmountLabel.size18(text: info.amount, color: .mint1, weight: .regular, align: .right)

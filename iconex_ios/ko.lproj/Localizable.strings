@@ -128,6 +128,7 @@
 "Alert.Send.Header" = "전송";
 "Alert.Send.Value.ICX" = "전송 수량 (ICX)";
 "Alert.Send.Value.ETH" = "전송 수량 (ETH)";
+"Alert.Send.Value.Token" = "전송 수량 (%@)";
 "Alert.Send.Address" = "받는 주소";
 
 "Alert.Password.Header" = "지갑 비밀번호 입력";
@@ -324,6 +325,7 @@
 // MARK: SendICXViewController
 "Send.Balance.Avaliable" = "사용가능 잔액 (ICX)";
 "Send.Balance.Avaliable.ETH" = "사용가능 잔액 (ETH)";
+"Send.Balance.Avaliable.Token" = "사용가능 잔액 (%@)";
 "Send.InputBox.Amount" = "전송 수량";
 "Send.InputBox.Amount.Error" = "보유 수량보다 적게 입력해주세요.";
 "Send.InputBox.Address" = "받는 주소";

@@ -38,6 +38,8 @@ class Floater {
     
     var delegate: Floatable!
     
+    var token: Token? = nil
+    
     init(type: FloaterType) {
         self.type = type
         
@@ -120,7 +122,7 @@ class Floater {
         })
     }
     
-    func showMenu(wallet: ICXWallet, _ controller: UIViewController? = nil) {
+    func showMenu(wallet: ICXWallet, token: Token? = nil, _ controller: UIViewController? = nil) {
         targetAction = controller
         let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
         
@@ -175,7 +177,8 @@ class Floater {
             floatMenu.itemAction2 = {
                 Alert.password(wallet: wallet, returnAction: { privateKey in
                     let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
-                    send.walletInfo = self.delegate.selectedWallet
+                    send.walletInfo = wallet
+                    send.token = token
                     send.privateKey = PrivateKey(hex: Data(hex: privateKey))
                     
                     send.sendHandler = { isSuccess in

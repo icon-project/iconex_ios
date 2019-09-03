@@ -55,8 +55,8 @@ class SendICXViewController: BaseViewController {
     var balance: BigUInt = 0
     var stepLimit: BigUInt = 100000
     
+    var stepPrice = Manager.icon.getStepPrice() ?? 0
     var privateKey: PrivateKey?
-    
     var toAddress: String? = nil
     
     var data: String? = nil {
@@ -65,6 +65,7 @@ class SendICXViewController: BaseViewController {
             
             if !value.isEmpty {
                 self.stepLimit = 1000000
+                setFooterBox()
                 self.dataButton.isEnabled = false
                 self.viewDataButton.isHidden = false
                 self.dataInputBox.set(state: .readOnly)
@@ -87,13 +88,18 @@ class SendICXViewController: BaseViewController {
             self.addressInputBox.text = toAddress
         }
         
+        if self.token != nil {
+            self.stepLimit = 1000000
+            self.dataInputBox.isHidden = true
+            self.dataButton.isHidden = true
+        }
+        
         setupUI()
         setupBind()
-        setKeyboardListener()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillDisappear(animated)
         
         self.view.endEditing(true)
     }
@@ -109,7 +115,14 @@ class SendICXViewController: BaseViewController {
             // TODO
         }
         
-        balanceTitleLabel.size12(text: "Send.Balance.Avaliable".localized, color: .gray77, weight: .medium)
+        setFooterBox()
+        
+        if let token = self.token {
+            balanceTitleLabel.size12(text: String(format: "Send.Balance.Avaliable.Token".localized, token.symbol) , color: .gray77, weight: .medium)
+        } else {
+            balanceTitleLabel.size12(text: "Send.Balance.Avaliable".localized, color: .gray77, weight: .medium)
+        }
+        
         amountInputBox.set(inputType: .decimal)
         amountInputBox.set(state: .normal, placeholder: "Send.InputBox.Amount".localized)
         
@@ -169,7 +182,7 @@ class SendICXViewController: BaseViewController {
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if let token = self.token {
-                    let power = BigUInt(10).power(token.decimal)
+                    let power = BigUInt(10) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
@@ -187,7 +200,7 @@ class SendICXViewController: BaseViewController {
         plus100Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if let token = self.token {
-                    let power = BigUInt(100).power(token.decimal)
+                    let power = BigUInt(100) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
@@ -204,7 +217,7 @@ class SendICXViewController: BaseViewController {
         plus1000Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if let token = self.token {
-                    let power = BigUInt(1000).power(token.decimal)
+                    let power = BigUInt(1000) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
@@ -358,10 +371,14 @@ class SendICXViewController: BaseViewController {
             .subscribe { (_) in
                 guard let pk = self.privateKey else { return }
                 
+                let toAddress = self.addressInputBox.text
+                let stepLimitPrice = self.stepLimitLabel.text ?? ""
+                let estimatedFee = self.estimateFeeLabel.text ?? ""
+                let estimatedUSD = self.feePriceLabel.text ?? ""
+                
                 let sendInfo: SendInfo = {
                     if let token = self.token {
                         let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
-                        let toAddress = self.addressInputBox.text
                         
                         let callTx = CallTransaction()
                             .from(wallet.address)
@@ -371,10 +388,10 @@ class SendICXViewController: BaseViewController {
                             .method("transfer")
                             .params(["_to": toAddress, "_value": amount.toHexString()])
                         
-                        return SendInfo(transaction: callTx, privateKey: pk, estimatedFee: "ESTIMATED FEE", estimatedUSD: self.priceLabel.text ?? "-")
+                        return SendInfo(transaction: callTx, privateKey: pk, stepLimitPrice: stepLimitPrice, estimatedFee: estimatedFee, estimatedUSD: estimatedUSD, token: token, tokenAmount: amount, tokenToAddress: toAddress)
+                        
                     } else {
                         let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
-                        let toAddress = self.addressInputBox.text
                         
                         let tx: Transaction = {
                             if let dataString = self.data {
@@ -387,9 +404,7 @@ class SendICXViewController: BaseViewController {
                                 
                                 if self.dataType == .hex {
                                     let hexData = Data(hex: dataString)
-                                    
                                     let encodedAsData = hexData.base64EncodedString(options: .lineLength64Characters)
-                                    
                                     let dataDecoded: Data = Data(base64Encoded: encodedAsData, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)!
                                     
                                     if let str = String(data: dataDecoded, encoding: .utf8) {
@@ -414,7 +429,7 @@ class SendICXViewController: BaseViewController {
                             }
                         }()
                         
-                        return SendInfo(transaction: tx, privateKey: pk, estimatedFee: "ESTIMATED FEE", estimatedUSD: self.priceLabel.text ?? "-")
+                        return SendInfo(transaction: tx, privateKey: pk, stepLimitPrice: stepLimitPrice, estimatedFee: estimatedFee, estimatedUSD: estimatedUSD)
                     }
                 }()
                 
@@ -429,5 +444,19 @@ class SendICXViewController: BaseViewController {
                 }).show()
                 
         }.disposed(by: disposeBag)
+    }
+    
+    private func setFooterBox() {
+        let separated = String(self.stepLimit).currencySeparated()
+        let priceToICX = self.stepPrice.toString(decimal: 18, 9, false)
+        
+        let stepLimitString = separated + " / " + priceToICX
+        stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
+        
+        let calculated = self.stepLimit * stepPrice
+        let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
+        
+        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 9, false), color: .gray77, align: .right)
+        feePriceLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
     }
 }

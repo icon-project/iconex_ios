@@ -137,12 +137,12 @@ class DetailViewController: BaseViewController, Floatable {
         floater.delegate = self
         floater.button.rx.tap
             .subscribe(onNext: {
+                if let wallet = self.selectedWallet {
+                    self.floater.showMenu(wallet: wallet, token: self.tokenInfo, self)
+                }
                 if let eth = wallet as? ETHWallet {
                     self.floater.showMenu(ethWallet: eth, self)
                     return
-                }
-                if let wallet = self.selectedWallet {
-                    self.floater.showMenu(wallet: wallet, self)
                 }
             }).disposed(by: disposeBag)
     }

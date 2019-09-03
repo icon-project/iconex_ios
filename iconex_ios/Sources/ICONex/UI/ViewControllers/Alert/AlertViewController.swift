@@ -189,6 +189,12 @@ class AlertViewController: BaseViewController {
         }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.view.endEditing(true)
+    }
+    
     func setButtonUI(isOne: Bool) {
         leftButton.layer.cornerRadius = 18
         leftButton.clipsToBounds = true
@@ -310,7 +316,12 @@ class AlertViewController: BaseViewController {
                         self.popView.alpha = 0.0
                     }, completion: { _ in
                         self.dismiss(animated: false, completion: {
-                            Alert.basic(title: "비밀번호를 잊으셨나요?", subtitle: "저장해 놓은 개인 키로 지갑을 다시 불러온 후,\n비밀번호를 재설정 할 수 있습니다.", isOnlyOneButton: false, rightButtonTitle: "지갑 가져오기").show()
+                            Alert.basic(title: "비밀번호를 잊으셨나요?", subtitle: "저장해 놓은 개인 키로 지갑을 다시 불러온 후,\n비밀번호를 재설정 할 수 있습니다.", isOnlyOneButton: false, rightButtonTitle: "지갑 가져오기", confirmAction: {
+                                
+                                let loadWallet = UIStoryboard(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
+                                
+                                loadWallet.pop()
+                            }).show()
                         })
                     })
                 }).disposed(by: disposeBag)

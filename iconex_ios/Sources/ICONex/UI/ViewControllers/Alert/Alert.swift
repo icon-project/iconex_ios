@@ -126,19 +126,29 @@ struct SendInfo {
     var ethTransaction: EthereumTransaction?
     var ethPrivateKey: String?
     
+    var token: Token?
+    
     var amount: String
     var stepLimit: String
     var estimatedFee: String
     var estimatedUSD: String
     var receivingAddress: String
     
-    init(transaction: Transaction? = nil, ethTransaction: EthereumTransaction? = nil, privateKey: PrivateKey? = nil, ethPrivateKey: String? = nil, estimatedFee: String, estimatedUSD: String) {
+    init(transaction: Transaction? = nil, ethTransaction: EthereumTransaction? = nil, privateKey: PrivateKey? = nil, ethPrivateKey: String? = nil, stepLimitPrice: String, estimatedFee: String, estimatedUSD: String, token: Token? = nil, tokenAmount: BigUInt? = nil, tokenToAddress: String? = nil) {
         if let icx = transaction {
             self.transaction = icx
             self.privateKey = privateKey
-            self.amount = String(icx.value ?? 0)
-            self.stepLimit = String(icx.stepLimit ?? 0)
-            self.receivingAddress = icx.to ?? ""
+            
+            self.token = token
+            if let tokenInfo = token, let tokenValue = tokenAmount, let toAddr = tokenToAddress {
+                self.amount = tokenValue.toString(decimal: tokenInfo.decimal)
+                self.receivingAddress = toAddr
+            } else {
+                self.amount = icx.value?.toString(decimal: 18) ?? "0"
+                self.receivingAddress = icx.to ?? ""
+            }
+            
+            self.stepLimit = stepLimitPrice
             
             self.ethTransaction = nil
             self.ethPrivateKey = nil
@@ -146,7 +156,11 @@ struct SendInfo {
         } else if let eth = ethTransaction {
             self.ethTransaction = eth
             self.ethPrivateKey = ethPrivateKey
-            self.amount = String(eth.value)
+            if let tokenInfo = token, let tokenValue = tokenAmount {
+                self.amount = tokenValue.toString(decimal: tokenInfo.decimal)
+            } else {
+                self.amount = eth.value.toString(decimal: 18)
+            }
             self.stepLimit = String(eth.gasLimit)
             self.receivingAddress = eth.to
             
@@ -162,7 +176,6 @@ struct SendInfo {
             self.ethTransaction = nil
             self.ethPrivateKey = nil
         }
-        
         self.estimatedFee = estimatedFee
         self.estimatedUSD = estimatedUSD
     }

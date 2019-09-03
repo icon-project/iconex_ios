@@ -321,11 +321,11 @@ class SendETHViewController: BaseViewController {
                     
                     if let token = self.token {
                         let estimatedCalculated = estimatedFeeUSD.toString(decimal: token.decimal, token.decimal, false)
-                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, estimatedFee: "ESTIMATED FEE", estimatedUSD: estimatedCalculated)
+                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, stepLimitPrice: String(gasPrice), estimatedFee: "ESTIMATED FEE", estimatedUSD: estimatedCalculated)
                         
                     } else {
                         let estimatedCalculated = estimatedFeeUSD.toString(decimal: 18, 18, false)
-                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, estimatedFee: "ESTIMATED FEE", estimatedUSD: estimatedCalculated)
+                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, stepLimitPrice: String(gasPrice), estimatedFee: "ESTIMATED FEE", estimatedUSD: estimatedCalculated)
                     }
                 }()
                 
