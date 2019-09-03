@@ -61,7 +61,7 @@ class CreateKeystoreViewController: BaseViewController {
         
         passwordInputBox.set { (value) -> String? in
             guard value.count != 0 else { return nil }
-            guard value.count > 8 else {
+            guard value.count >= 8 else {
                 return "Error.Password.Length".localized
             }
             guard Validator.validateSequenceNumber(password: value) else {
@@ -93,7 +93,7 @@ class CreateKeystoreViewController: BaseViewController {
                     self.delegate.invalidated()
                     return
                 }
-                guard password.count > 8 else {
+                guard password.count >= 8 else {
                     self.delegate.invalidated()
                     return
                 }

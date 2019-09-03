@@ -76,7 +76,7 @@ class ChangePasswordViewController: BaseViewController {
         
         newBox.set { (password) -> String? in
             guard !password.isEmpty else { return nil }
-            guard password.count > 8 else {
+            guard password.count >= 8 else {
                 return "Error.Password.Length".localized
             }
             guard Validator.validateSequenceNumber(password: password) else {
@@ -85,7 +85,7 @@ class ChangePasswordViewController: BaseViewController {
             guard Validator.validateCharacterSet(password: password) else {
                 return "Error.Password.CharacterSet".localized
             }
-            // 현재 비밀번호 입력이 올바르게 된 경우에 체크.
+            
             let currentPassword = self.currentBox.text
             do {
                 if let icx = wallet as? ICXWallet {
@@ -116,10 +116,8 @@ class ChangePasswordViewController: BaseViewController {
         
         
         Observable.combineLatest(self.currentBox.textField.rx.text.orEmpty, self.newBox.textField.rx.text.orEmpty, self.confirmBox.textField.rx.text.orEmpty).flatMapLatest { (current, new, confirm) -> Observable<Bool> in
-            // 하나라도 안적었은 경우
             guard !current.isEmpty && !new.isEmpty && !confirm.isEmpty else { return Observable.just(false) }
             
-            // 현재 비밀번호가 올바른지 확인하자
             do {
                 if let icx = wallet as? ICXWallet {
                     let _ = try icx.extractICXPrivateKey(password: current)
@@ -130,13 +128,13 @@ class ChangePasswordViewController: BaseViewController {
                 return Observable.just(false)
             }
             
-            // 현재 비번과 동일한 경우
+            // same
             guard current != new else { return Observable.just(false) }
             
-            // 최소 길이 충족
-            guard new.count > 8 else { return Observable.just(false) }
+            // minimum length
+            guard new.count >= 8 else { return Observable.just(false) }
             
-            // 올바른 비번인지 체크하자
+            // correct
             guard Validator.validateCharacterSet(password: new) && Validator.validateSequenceNumber(password: new) else {
                 return Observable.just(false)
             }
