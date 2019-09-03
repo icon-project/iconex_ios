@@ -398,7 +398,7 @@ extension BalanceManager {
     
     func getTokenBalance(address: String, contract: String) -> BigUInt {
         guard let wallet = self.tokenBalances[address] else { return 0 }
-        let balance = wallet[address] ?? 0
+        let balance = wallet[contract] ?? 0
         
         return balance
     }
