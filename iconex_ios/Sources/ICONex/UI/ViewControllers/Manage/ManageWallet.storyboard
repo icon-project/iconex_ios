@@ -158,11 +158,7 @@
                                                         </constraints>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6uM-77-0GQ">
-                                                        <rect key="frame" x="14" y="18" width="24" height="24"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="24" id="8NL-gI-F2m"/>
-                                                            <constraint firstAttribute="width" secondItem="6uM-77-0GQ" secondAttribute="height" multiplier="1:1" id="NJv-xJ-nFa"/>
-                                                        </constraints>
+                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
                                                         <state key="normal" image="icAppbarClose"/>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EEW-3b-usB">
@@ -174,12 +170,14 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
+                                                    <constraint firstItem="6uM-77-0GQ" firstAttribute="width" secondItem="L5r-mQ-7Fv" secondAttribute="height" multiplier="1:1" id="5mu-0j-bWk"/>
                                                     <constraint firstItem="Z7m-Vz-yOA" firstAttribute="leading" secondItem="L5r-mQ-7Fv" secondAttribute="leading" id="Olw-go-eQ0"/>
+                                                    <constraint firstItem="6uM-77-0GQ" firstAttribute="height" secondItem="L5r-mQ-7Fv" secondAttribute="height" id="UXK-Sj-vwE"/>
                                                     <constraint firstAttribute="bottom" secondItem="Z7m-Vz-yOA" secondAttribute="bottom" id="UZk-SW-JOk"/>
                                                     <constraint firstItem="EEW-3b-usB" firstAttribute="centerY" secondItem="L5r-mQ-7Fv" secondAttribute="centerY" id="Vj3-1w-7OU"/>
                                                     <constraint firstItem="6uM-77-0GQ" firstAttribute="centerY" secondItem="L5r-mQ-7Fv" secondAttribute="centerY" id="de3-19-LAe"/>
                                                     <constraint firstAttribute="trailing" secondItem="Z7m-Vz-yOA" secondAttribute="trailing" id="eb6-j8-lnM"/>
-                                                    <constraint firstItem="6uM-77-0GQ" firstAttribute="leading" secondItem="L5r-mQ-7Fv" secondAttribute="leading" constant="14" id="kTp-Tk-nAH"/>
+                                                    <constraint firstItem="6uM-77-0GQ" firstAttribute="leading" secondItem="L5r-mQ-7Fv" secondAttribute="leading" id="kTp-Tk-nAH"/>
                                                     <constraint firstAttribute="height" constant="60" id="wR3-ZD-boG"/>
                                                     <constraint firstItem="EEW-3b-usB" firstAttribute="centerX" secondItem="L5r-mQ-7Fv" secondAttribute="centerX" id="y8Z-ca-Qph"/>
                                                 </constraints>

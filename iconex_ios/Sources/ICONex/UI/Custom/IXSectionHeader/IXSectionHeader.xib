@@ -31,9 +31,8 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2go-6T-l9y">
-                    <rect key="frame" x="52.666666666666657" y="5.6666666666666679" width="25" height="25"/>
+                    <rect key="frame" x="52.666666666666657" y="0.0" width="36" height="36"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="25" id="98O-Qu-OqL"/>
                         <constraint firstAttribute="width" secondItem="2go-6T-l9y" secondAttribute="height" multiplier="1:1" id="Zkg-JV-Jmo"/>
                     </constraints>
                     <state key="normal" image="icInfoG"/>
@@ -57,25 +56,26 @@
                     </subviews>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dBY-j5-9RN">
-                    <rect key="frame" x="343" y="6" width="51" height="24"/>
+                    <rect key="frame" x="328" y="0.0" width="81" height="36"/>
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="dBY-j5-9RN" firstAttribute="trailing" secondItem="lRS-xC-d9W" secondAttribute="trailing" id="3vD-sf-xWB"/>
-                <constraint firstItem="dBY-j5-9RN" firstAttribute="leading" secondItem="lRS-xC-d9W" secondAttribute="leading" id="4cY-jY-M6k"/>
+                <constraint firstItem="dBY-j5-9RN" firstAttribute="trailing" secondItem="lRS-xC-d9W" secondAttribute="trailing" constant="15" id="3vD-sf-xWB"/>
+                <constraint firstItem="dBY-j5-9RN" firstAttribute="leading" secondItem="lRS-xC-d9W" secondAttribute="leading" constant="-15" id="4cY-jY-M6k"/>
                 <constraint firstItem="2go-6T-l9y" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="JdG-9O-zhb"/>
                 <constraint firstItem="lRS-xC-d9W" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="P23-4o-39X"/>
+                <constraint firstItem="2go-6T-l9y" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="Pu1-8T-xDv"/>
                 <constraint firstItem="2go-6T-l9y" firstAttribute="leading" secondItem="8ug-qu-BQA" secondAttribute="trailing" constant="6" id="RmO-Xa-rST"/>
-                <constraint firstItem="dBY-j5-9RN" firstAttribute="top" secondItem="lRS-xC-d9W" secondAttribute="top" id="b9q-cS-6Rn"/>
+                <constraint firstItem="dBY-j5-9RN" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="SYY-WK-exE"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="lRS-xC-d9W" secondAttribute="trailing" constant="20" id="cac-ez-5Ov"/>
+                <constraint firstAttribute="bottom" secondItem="dBY-j5-9RN" secondAttribute="bottom" id="lvF-p5-aUv"/>
                 <constraint firstItem="8ug-qu-BQA" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="20" id="m00-2r-CcG"/>
                 <constraint firstItem="8ug-qu-BQA" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="tcf-gq-5tJ"/>
-                <constraint firstItem="dBY-j5-9RN" firstAttribute="bottom" secondItem="lRS-xC-d9W" secondAttribute="bottom" id="xxD-2I-ah0"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <point key="canvasLocation" x="58" y="-35"/>
+            <point key="canvasLocation" x="57.600000000000001" y="-35.467980295566505"/>
         </view>
     </objects>
     <resources>

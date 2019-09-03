@@ -78,7 +78,7 @@
 "Create.Wallet.Step2.Desc" = "지갑 백업 파일(Keystore 파일)로 지갑을 복구하거나 실행하는 경우, 전송 시 비밀번호를 입력해야 합니다.";
 
 // MARK: BackupViewController
-"Create.Wallet.Step3.StepTitle" = "백업 파일\n다운로드";
+"Create.Wallet.Step3.StepTitle" = "백업 파일 다운로드";
 "Create.Wallet.Step3.Header" = "지갑 백업 파일을 다운로드 해주세요.";
 "Create.Wallet.Step3.Download" = "지갑 백업 파일 다운로드";
 "Create.Wallet.Step3.Footer" = "지갑 백업 파일(Keystore)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 비밀번호가 설정되어 있습니다.";
@@ -220,7 +220,7 @@
 "Main.Power.Title" = "전체 Voted Power";
 //"" = "";
 
-// MARK: SdieMenuViewController
+// MARK: SideMenuViewController
 "Side.Create" = "지갑 만들기";
 "Side.Load" = "지갑 가져오기";
 "Side.Export" = "지갑 묶어서 내보내기";
@@ -373,31 +373,6 @@
 "Passcode.Reset" = "잠금 번호 재설정";
 "Passcode.Reset.withWallet" = "지갑을 선택하면 비밀번호 확인 후 잠금 번호를 재설정할 수 있습니다.";
 "Password.Enter" = "비밀번호 입력";
-
-"Create.Wallet.Step1.StepTitle" = "코인 선택";
-"Create.Wallet.Step1.CreateSelected" = "선택한 코인의 지갑이 생성됩니다.";
-"Create.Wallet.Step1.Instruction" = "지갑 생성 후, 해당 코인 기반의 토큰을 추가하실 수 있습니다.";
-"Create.Wallet.Step1.SelectCoin" = "코인 종류 선택";
-
-"Create.Wallet.Step2.StepTitle" = "정보 입력";
-"Create.Wallet.Step2.Header1" = "비밀번호의 관리는 사용자의 책임이며, 분실하면 다시 찾을 수 있는 방법이 없습니다.";
-"Create.Wallet.Step2.Desc1" = "지갑 백업 파일(Keystore 파일)로 지갑을 복구하거나 실행하는 경우, 송금 시 비밀번호를 입력해야 합니다.";
-"Create.Wallet.Step2.Header2" = "새 지갑의 이름과 비밀번호를 입력해주세요.";
-"Create.Wallet.Step2.WalletName.Placeholder" = "지갑 이름 입력";
-"Create.Wallet.Step2.Password.Placeholder" = "비밀번호 입력";
-"Create.Wallet.Step2.Confirm.Placeholder" = "비밀번호 확인";
-
-"Create.Wallet.Step3.StepTitle" = "백업 파일\n다운로드";
-"Create.Wallet.Step3.Header.1" = "지갑 백업 파일(Keystore)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 비밀번호가 설정되어 있습니다.";
-"Create.Wallet.Step3.Desc.1_1" = "지갑 백업 파일과 비밀번호가 있으면 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 수 있습니다.";
-"Create.Wallet.Step3.Desc.1_2" = "지갑을 만든 후 ‘지갑 백업’에서도 다운로드할 수 있습니다.";
-"Create.Wallet.Step3.Header.2" = "지갑 백업 파일(Keystore 파일) 다운로드";
-"Create.Wallet.Step3.Download" = "지갑 백업 파일 다운로드";
-
-"Create.Wallet.Step4.StepTitle" = "개인 키\n저장";
-"Create.Wallet.Step4.Header.1" = "개인 키(Private Key)는 지갑의 고유 정보이며, 비밀번호가 설정되어 있지 않습니다.";
-"Create.Wallet.Step4.Desc.1_1" = "개인 키만 알고 있으면 지갑 실행 및 복구가 가능하므로 타인에게 노출되지 않도록 각별한 관리가 필요합니다.";
-"Create.Wallet.Step4.Desc.1_2" = "지갑을 만든 후 ‘지갑 백업’에서도 확인할 수 있습니다.";
 
 "Import.Step1.Header" = "지갑을 가져올 방법을 선택하세요.";
 
