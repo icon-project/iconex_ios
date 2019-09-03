@@ -193,10 +193,11 @@ extension AddressBookViewController: UITableViewDataSource {
             cell.nameLabel.size14(text: item.name, color: .gray77, weight: .semibold)
             
             if let token = self.token {
-                cell.balanceLabel.size12(text: "TODO", color: .gray77, weight: .bold)
+                let tokenBalance = Manager.balance.getTokenBalance(address: item.address, contract: token.contract)
+                cell.balanceLabel.size12(text: tokenBalance.toString(decimal: token.decimal, token.decimal, false), color: .gray77, weight: .bold)
                 cell.symbolLabel.size12(text: token.symbol, color: .gray77, weight: .bold)
             } else {
-                cell.balanceLabel.size12(text: item.balance?.toString(decimal: 18) ?? "0", color: .gray77, weight: .bold)
+                cell.balanceLabel.size12(text: item.balance?.toString(decimal: 18, 18, false) ?? "0", color: .gray77, weight: .bold)
                 cell.symbolLabel.size12(text: self.isICX ? CoinType.icx.symbol : CoinType.eth.symbol, color: .gray77, weight: .bold)
             }
             
