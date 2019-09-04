@@ -55,7 +55,7 @@ class CreateBackupViewController: BaseViewController {
                         }
 
                         let activity = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
-                        activity.excludedActivityTypes = [.postToFacebook, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToTencentWeibo, .addToReadingList, .airDrop, .markupAsPDF, .openInIBooks, .print]
+                        activity.excludedActivityTypes = [.postToFacebook, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToTencentWeibo]
 
                         activity.completionWithItemsHandler = { type, completed, _, error in
                             if completed {
