@@ -49,6 +49,8 @@ class MainViewController: BaseViewController, Floatable {
     @IBOutlet weak var assetScrollView: UIScrollView!
     @IBOutlet weak var activityControl: UIActivityIndicatorView!
     
+    @IBOutlet weak var balanceActivityIndicator: UIActivityIndicatorView!
+    
     private var startPoint: CGPoint = .zero
     private var beforePoint: CGPoint = .zero
     private var isBigCard: Bool = false
@@ -57,12 +59,9 @@ class MainViewController: BaseViewController, Floatable {
     
     var walletList = [BaseWalletConvertible]() {
         didSet {
-            self.activityControl.stopAnimating()
             contentTop.constant = 0
             backHeight.constant = Header_Height
             contentBottom.constant = 0
-            
-            self.collectionView.reloadData()
         }
     }
     
@@ -99,6 +98,13 @@ class MainViewController: BaseViewController, Floatable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        balanceActivityIndicator.startAnimating()
+        
+        self.walletList = Manager.wallet.walletList
+        
+//        self.balanceLabel.text = ""
+        self.balanceLabel.alpha = 0
         
         balancePageView.setCurrentPage()
         powerPageView.setNonCurrentPage()
@@ -156,11 +162,35 @@ class MainViewController: BaseViewController, Floatable {
             self.isWalletMode.toggle()
         }
         
-        self.walletList = Manager.wallet.walletList
+        mainViewModel.reload
+            .subscribe { (_) in
+                DispatchQueue.main.async {
+                    self.balanceActivityIndicator.startAnimating()
+                }
         
-        mainViewModel.totalBalance
+            self.walletList = Manager.wallet.walletList
+                DispatchQueue.global().async {
+                    Manager.balance.getAllBalances()
+                }
+        }.disposed(by: disposeBag)
+        
+        mainViewModel.noti
+            .observeOn(MainScheduler.instance)
+            .subscribe { (_) in
+                self.collectionView.reloadData()
+        }.disposed(by: disposeBag)
+        
+        mainViewModel.totalExchangedBalance
+            .distinctUntilChanged()
             .bind(to: balanceLabel.rx.text)
             .disposed(by: disposeBag)
+        
+        mainViewModel.totalExchangedBalance
+            .observeOn(MainScheduler.instance)
+            .subscribe { (_) in
+                self.balanceLabel.alpha = 1
+                self.balanceActivityIndicator.stopAnimating()
+        }.disposed(by: disposeBag)
         
         // COIN
         for type in Manager.wallet.types { // icx, eth....
@@ -239,12 +269,6 @@ class MainViewController: BaseViewController, Floatable {
             }).disposed(by: disposeBag)
         
         selectedWallet = walletList.first as? ICXWallet
-    }
-    
-    override func refresh() {
-        super.refresh()
-        mainViewModel.reload.onNext(true)
-        self.walletList = Manager.wallet.walletList
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -329,7 +353,8 @@ extension MainViewController {
             } else { // down
                 // refresh
                 if cardTop.constant == 0 {
-                    self.refresh()
+                    mainViewModel.reload.onNext(true)
+                    self.walletList = Manager.wallet.walletList
                     self.activityControl.stopAnimating()
 
                 } else {

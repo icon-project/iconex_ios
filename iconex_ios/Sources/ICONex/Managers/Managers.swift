@@ -106,6 +106,8 @@ extension ICONManager {
         
         switch result {
         case .success(let balance):
+            // update
+            Manager.balance.updateWalletBalance(address: wallet.address, balance: balance)
             return balance
             
         case .failure(let error):
@@ -155,6 +157,14 @@ extension ICONManager {
     public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, Error> {
         let call = Call<BigUInt>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
         let result = self.iconService.call(call).execute()
+        
+        switch result {
+        case .success(let balance):
+            Manager.balance.updateTokenBalance(address: dependedAddress, contract: contractAddress, balance: balance)
+            
+        case .failure:
+            break
+        }
         
         return result
     }
@@ -380,7 +390,9 @@ extension BalanceManager {
                         self.tokenBalances[wallet.address] = tokenBalances
                     }
                 }
+                mainViewModel.noti.onNext(true)
             }
+            mainViewModel.reload.onNext(true)
             DispatchQueue.main.async {
                 self.isWorking = false
             }
@@ -401,6 +413,14 @@ extension BalanceManager {
         let balance = wallet[contract] ?? 0
         
         return balance
+    }
+    
+    func updateWalletBalance(address: String, balance: BigUInt) {
+        walletBalances[address] = balance
+    }
+    
+    func updateTokenBalance(address: String, contract: String, balance: BigUInt) {
+        tokenBalances[address]?.updateValue(balance, forKey: contract)
     }
 }
 

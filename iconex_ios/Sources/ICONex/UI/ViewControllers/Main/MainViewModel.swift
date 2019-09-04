@@ -17,10 +17,12 @@ class MainViewModel {
     static let shared = MainViewModel()
     
     var currencyUnit: BehaviorSubject<BalanceUnit>
-    var currencyPrice: BehaviorSubject<String>
+    
     var totalICXBalance: BehaviorSubject<BigUInt>
-    var totalBalance: PublishSubject<String>
+    var totalExchangedBalance: PublishSubject<String>
+    
     var reload: PublishSubject<Bool>
+    var noti: PublishSubject<Bool>
     
     var isBigCard: BehaviorSubject<Bool>
     
@@ -29,27 +31,29 @@ class MainViewModel {
     init() {
         self.currencyUnit = BehaviorSubject<BalanceUnit>(value: .USD)
         
-        // BTC, ETH, USD
-        let exchangeUnit = try? self.currencyUnit.value().symbol
-        
-        self.currencyPrice = BehaviorSubject<String>(value: Manager.exchange.exchangeInfoList["icx\(exchangeUnit ?? "")"]?.price ?? "")
-        // ICX Balance
         self.totalICXBalance = BehaviorSubject<BigUInt>(value: Manager.balance.getTotalBalance())
+        self.totalExchangedBalance = PublishSubject<String>()
         
         self.reload = PublishSubject<Bool>()
-        
-        // exchanged price
-        self.totalBalance = PublishSubject<String>()
+        self.noti = PublishSubject<Bool>()
         
         self.isBigCard = BehaviorSubject<Bool>(value: false)
         
-        // reload
+        Observable.combineLatest(self.noti, self.reload)
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
+            .flatMapLatest { (_, _) -> Observable<BigUInt> in
+                
+                let balance = Manager.balance.getTotalBalance()
+                return Observable.just(balance)
+                
+        }.bind(to: self.totalICXBalance)
+        .disposed(by: disposeBag)
         
-        Observable.combineLatest(self.reload, self.currencyPrice, self.totalICXBalance).flatMapLatest { (_, currencyPrice, totalBalance) -> Observable<String> in
-            let price = BigUInt(currencyPrice) ?? 0
-            let totalPrice: BigUInt = price*totalBalance
-            return Observable.just(totalPrice.toString(decimal: 18, 4).currencySeparated())
-        }.bind(to: self.totalBalance)
+        Observable.combineLatest(self.currencyUnit, self.totalICXBalance).flatMapLatest { (unit, totalBalance) -> Observable<String> in
+            let unitSymbol = unit.symbol
+            let price = Tool.calculatePrice(decimal: 18, currency: "icx\(unitSymbol.lowercased())", balance: totalBalance)
+            return Observable.just(price)
+        }.bind(to: self.totalExchangedBalance)
         .disposed(by: disposeBag)
     }
 }
