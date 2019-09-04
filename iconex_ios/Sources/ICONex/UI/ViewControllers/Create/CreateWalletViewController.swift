@@ -229,12 +229,7 @@ class CreateWalletViewController: PopableViewController {
                 do {
                     try new.save()
                     
-                    self.dismiss(animated: true, completion: {
-                        // to Main
-                        let mainVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainView")
-                        app.window?.rootViewController = mainVC
-                        
-                    })
+                    self.dismiss(animated: true, completion: nil)
                 } catch let err {
                     Alert.basic(title: err.localizedDescription).show()
                 }
