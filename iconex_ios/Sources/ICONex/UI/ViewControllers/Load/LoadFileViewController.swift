@@ -189,6 +189,7 @@ extension LoadFileViewController {
                 delegate.validated()
                 return nil
             } else {
+                delegate.set(loader: nil)
                 return "Error.Password.Wrong".localized
             }
         } else if let bundle = Validator.checkWalletBundle(url: url) {
@@ -199,9 +200,11 @@ extension LoadFileViewController {
                 delegate.validated()
                 return nil
             } else {
+                delegate.set(loader: nil)
                 return "Error.Password.Wrong".localized
             }
         } else {
+            delegate.set(loader: nil)
             return "Error.Password.Wrong".localized
         }
     }
@@ -212,11 +215,13 @@ extension LoadFileViewController {
         let key = inputBox2.text
         guard key.count > 0 else {
             delegate.invalidated()
+            delegate.set(loader: nil)
             return nil
         }
         
         guard key.hexToData() != nil, key.count == 64 else {
             delegate.invalidated()
+            delegate.set(loader: nil)
             return "Error.PrivateKey".localized
         }
         let loader = WalletLoader(privateKey: key)

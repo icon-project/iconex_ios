@@ -104,7 +104,7 @@ class IntroViewController: BaseViewController {
                 return Tracker.yeouido()
                 
             default:
-                return Tracker.localTest()
+                return Tracker.euljiro()
             }
         }
         let versionURL = URL(string: tracker.provider)!.appendingPathComponent("app/ios.json")

@@ -10,9 +10,14 @@ import Foundation
 import UIKit
 
 extension UILabel {
+    func size10(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
+        set(text: text, size: 10, height: 13, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
+    }
+    
     func size11(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
         set(text: text, size: 11, height: 13, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }
+    
     func size12(text: String, color: UIColor = .black, weight: UIFont.Weight = .regular, align: NSTextAlignment = .left, lineBreakMode: NSLineBreakMode = NSLineBreakMode.byTruncatingTail) {
         set(text: text, size: 12, height: 18, color: color, weight: weight, align: align, lineBreak: lineBreakMode)
     }

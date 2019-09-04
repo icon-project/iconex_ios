@@ -24,14 +24,18 @@ class ETHWallet: BaseWalletConvertible {
         self.created = created
     }
     
-    init?(name: String, rawData: Data, created: Date = Date()) {
+    init?(name: String, rawData: Data, created: Date? = nil) {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let keystore = try? decoder.decode(ICONKeystore.self, from: rawData) else { return nil }
         
         self.name = name
         self.keystore = keystore
-        self.created = created
+        if let createdData = created {
+            self.created = createdData
+        } else {
+            self.created = Date()
+        }
     }
     
     init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil, created: Date = Date()) {
@@ -60,7 +64,7 @@ class ETHWallet: BaseWalletConvertible {
         return eth
     }
     
-    static fileprivate func generateETHKeyStore(password: String) throws -> ICONKeystore {
+    static func generateETHKeyStore(password: String) throws -> ICONKeystore {
         let generator = try EthereumKeystoreV3(password: password, aesMode: "aes-128-ctr")
         
         guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
@@ -73,7 +77,7 @@ class ETHWallet: BaseWalletConvertible {
         return keystore
     }
     
-    static fileprivate func generateETHKeyStore(privateKey: PrivateKey, password: String) throws -> ICONKeystore {
+    static func generateETHKeyStore(privateKey: PrivateKey, password: String) throws -> ICONKeystore {
         let generator = try EthereumKeystoreV3(privateKey: privateKey.data, password: password, aesMode: "aes-128-ctr")
         
         guard let params = generator?.keystoreParams else { throw CryptError.generateKey }

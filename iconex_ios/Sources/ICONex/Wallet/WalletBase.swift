@@ -31,8 +31,6 @@ extension BaseWalletConvertible {
     }
     var rawData: Data {
         let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        
         return try! encoder.encode(keystore)
     }
 }

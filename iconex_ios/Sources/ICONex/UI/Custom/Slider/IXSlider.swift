@@ -69,8 +69,18 @@ class IXSlider: UIView {
     
     var current: Float = 0.0 {
         willSet {
-            guard newValue >= minimum else { return }
+            guard newValue >= minimum else {
+                
+                return }
             minWidth.constant = barContainer.frame.width * CGFloat(newValue)
+            guard let total = totalValue else { return }
+            let divided = newValue * 10000
+            let multiflied = total.multiplied(by: BigUInt(divided))
+            let result = multiflied.quotientAndRemainder(dividingBy: 10000)
+            
+            Log("result - \(newValue) , \(result)")
+            textField.text = result.quotient.toString(decimal: 18, 4, false)
+            innerLabel.size12(text: String(format: "%.1f", current * 100) + " %")
         }
     }
     
@@ -79,7 +89,6 @@ class IXSlider: UIView {
             if !newValue {
                 current = 0.0
                 slider.isHidden = true
-                innerLabel.size12(text: "-")
                 votedContainer.isHidden = true
                 textField.isEnabled = false
             } else {
@@ -161,10 +170,12 @@ class IXSlider: UIView {
         self.staked = staked
         self.voted = voted
         if total == 0 {
-            self.slider.value = 0.0
+            current = 0
+            slider.value = 0
             isEnabled = false
         } else {
-            self.slider.value = Float(staked / total)
+            current = Float(staked / total)
+            slider.value = Float(staked / total)
             isEnabled = true
         }
     }
@@ -194,4 +205,8 @@ class IXSlider: UIView {
             .bind(to: self.innerLabel.rx.text)
         .disposed(by: disposeBag)
     }
+}
+
+extension IXSlider {
+    
 }

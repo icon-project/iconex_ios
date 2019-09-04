@@ -56,10 +56,13 @@ class ICONManager {
     }
     
     var service: ICONService { return self.iconService }
+    
+    var stepCost: Response.StepCosts?
+    var stepPrice: BigUInt?
 }
 
 extension ICONManager {
-    func getStepCosts() -> ICONKit.Response.StepCosts? {
+    func getStepCosts() -> Response.StepCosts? {
         let call = Call<Response.StepCosts>(from: CONST.governance, to: CONST.scoreGovernance, method: "getStepCosts", params: nil)
         let result = self.iconService.call(call).execute()
         
@@ -102,7 +105,11 @@ extension ICONManager {
     }
     
     func getBalance(wallet: ICXWallet) -> BigUInt? {
-        let result = self.iconService.getBalance(address: wallet.address).execute()
+        return getBalance(address: wallet.address)
+    }
+    
+    func getBalance(address: String) -> BigUInt? {
+        let result = self.iconService.getBalance(address: address).execute()
         
         switch result {
         case .success(let balance):
@@ -358,8 +365,6 @@ extension BalanceManager {
         
         guard isWorking == false else { return }
         DispatchQueue.global().async { [unowned self] in
-            Manager.iiss.getPRepInfo()
-            
             self.isWorking = true
             for wallet in Manager.wallet.walletList {
                 if let icx = wallet as? ICXWallet {
@@ -393,6 +398,11 @@ extension BalanceManager {
                 mainViewModel.noti.onNext(true)
             }
             mainViewModel.reload.onNext(true)
+            
+            Manager.icon.stepCost = Manager.icon.getStepCosts()
+            Manager.icon.stepPrice = Manager.icon.getStepPrice()
+            Manager.iiss.getPRepInfo()
+            
             DispatchQueue.main.async {
                 self.isWorking = false
             }

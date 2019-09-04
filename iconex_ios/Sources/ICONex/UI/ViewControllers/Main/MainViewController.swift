@@ -126,18 +126,7 @@ class MainViewController: BaseViewController, Floatable {
         
         collectionView.rx.didEndDecelerating
             .subscribe(onNext: {
-                let items = self.collectionView.indexPathsForVisibleItems
-                
-                let x = self.collectionView.panGestureRecognizer.translation(in: self.collectionView.superview).x
-                let path = items.first!
-                Log("IndexPath - \(path) - \(self.floater.isAttached) \(x)")
-                if let icx = self.walletList[path.row] as? ICXWallet {
-                    self.selectedWallet = icx
-                    self.attach()
-                } else {
-                    self.selectedWallet = nil
-                    self.detach()
-                }
+                self.checkFloater()
             }).disposed(by: disposeBag)
         
         self.collectionView.allowsSelection = false
@@ -240,7 +229,8 @@ class MainViewController: BaseViewController, Floatable {
                 loadVC.pop()
             }
             menuVC.action3 = {
-                
+                let exportVC = UIStoryboard(name: "Export", bundle: nil).instantiateInitialViewController() as! ExportMainViewController
+                exportVC.pop()
             }
             menuVC.action4 = {
                 
@@ -292,6 +282,20 @@ class MainViewController: BaseViewController, Floatable {
         gradient.frame = gradientView.bounds
     }
 
+    func checkFloater() {
+        let items = self.collectionView.indexPathsForVisibleItems
+        
+        let x = self.collectionView.panGestureRecognizer.translation(in: self.collectionView.superview).x
+        let path = items.first!
+        Log("IndexPath - \(path) - \(self.floater.isAttached) \(x)")
+        if let icx = self.walletList[path.row] as? ICXWallet {
+            self.selectedWallet = icx
+            self.attach()
+        } else {
+            self.selectedWallet = nil
+            self.detach()
+        }
+    }
 }
 
 extension MainViewController {

@@ -154,6 +154,9 @@
 
 // MARK: LoadWalletViewController
 "LoadWallet.Title" = "지갑 가져오기";
+"LoadWallet.Display.Step1.Title" = "방법 선택";
+"LoadWallet.Display.Step2.Title" = "파일 선택 또는 개인 키 입력";
+"LoadWallet.Display.Step3.Title" = "지갑 정보";
 
 
 // MARK: LoadSelectViewController
@@ -176,12 +179,31 @@
 "LoadName.PK.Header" = "새 지갑의 이름과 비밀번호를 입력해주세요.";
 "LoadName.PK.Desc1" = "비밀번호의 관리는 사용자의 책임이며, 분실하면 다시 찾을 수 있는 방법이 없습니다.";
 "LoadName.PK.Desc2" = "지갑 백업 파일(Keystore 파일)로 지갑을 복구하거나 실행하는 경우, 송금 시 비밀번호를 입력해야 합니다.";
+"LoadName.Bundle.DuplicatedAddress" = "등록된 지갑";
+"LoadName.Bundle.HeaderView.Header" = "묶음 지갑을 가져오시겠습니까?";
+"LoadName.Bundle.Desc1" = "・ 묶음 지갑을 가져오는 경우, 이미 등록된 지갑은 제외하고 지갑들이 추가됩니다.";
+"LoadName.Bundle.Desc2" = "・ 새로 추가되는 지갑들의 비밀번호는 묶음 지갑 비밀번호와 동일합니다.";
 
+// MARK: ExportMainViewController
+"ExportMain.Title" = "지갑 묶어서 내보내기";
+"ExportMain.Display.Step1.Title" = "지갑 선택";
+"ExportMain.Display.Step2.Title" = "백업 파일\n다운로드";
+"ExportMain.Button.BackupDownload" = "백업 파일 다운로드";
+"ExportMain.Alert.WarnPassword" = "묶어서 내보낼 때, 묶음 지갑 비밀번호를 새로 만들어야 합니다.\n기존 지갑들의 비밀번호는 묶음 지갑의 비밀번호로 바뀝니다.\n계속 진행하시겠습니까?";
+"ExportMain.Alert.BackedUp" = "파일이 저장되었습니다.";
+"ExportMain.Alert.DownloadKeystore" = "지갑 백업 파일은 어떠한 경우에도 외부 공유가 되어서는 안됩니다.\n다운로드 하시겠습니까?";
 
+// MARK: ExportListViewController
+"ExportList.TableHeader.Header" = "묶어서 내보낼 지갑들을 선택해주세요. 선택 시 비밀번호 확인이 필요합니다.";
+"ExportList.TableHeader.Desc1" = "・ 지갑 묶어서 내보내기는 선택한 지갑 파일들을 묶어서 하나의 파일로 백업하는 기능입니다.";
+"ExportList.TableHeader.Desc2" = "・ 지갑을 다른 디바이스에서 실행하거나, 삭제된 지갑을 복구할 경우 지갑 백업파일이 필요합니다.";
+"ExportList.SectionHeader.SelectedWallet" = "%d 개 지갑 선택";
+"ExportList.Next.Alert" = "묶어서 내보낼 때, 묶음 지갑 비밀번호를 새로 만들어야 합니다.\n기존 지갑들의 비밀번호는 묶음 지갑의 비밀번호로 바뀝니다.\n계속 진행하시겠습니까?";
 
-
-
-
+// MARK: ExportPasswordViewController
+"ExportPassword.Header" = "묶음 지갑의 비밀번호를 생성하고 묶음 지갑 백업 파일을 다운로드 해주세요.";
+"ExportPassword.Desc" = "비밀번호의 관리는 사용자의 책임이며, 분실하면 다시 찾을 수 있는 방법이 없습니다.";
+"ExportPassword.PostScript" = "・ 지갑 백업 파일(Keystore)은 지갑의 고유 정보인 개인 키(Private Key)를 담고 있는 파일이며, 사용을 위해서는 설정한 비밀번호를 입력해야 합니다.";
 
 
 
@@ -202,6 +224,8 @@
 "Stake.Desc1.Stake" = "・ Stake 되어 있는 수량 중, 이미 투표에 사용된 수량은 Unstake 할 수 없습니다.";
 "Stake.Desc2.Stake" = "・ Unstaked 최소 수량은 3 ICX 입니다. 최소 수량이 확보되어야 추후 Voting 등의 수수료를 지불할 수 있습니다.";
 "Stake.Header.TimeRequired" = "소요 시간";
+"Stake.Value.TimeRequired.Stake" = "즉시 Stake";
+"Stake.Value.TimeRequired.Unstake" = "72시간 후 Unstake";
 "Stake.Header.StepLimit" = "적정 Step 한도 / 가격 (ICX)";
 "Stake.Header.EstimatedFee" = "예상 최대 수수료 (ICX)";
 "Stake.Button.Submit" = "Submit";

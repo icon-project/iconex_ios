@@ -60,10 +60,10 @@ class SideMenuViewController: BaseViewController {
         menuView.layer.insertSublayer(gradient, at: 0)
         gradient.frame = menuView.bounds
         
-        self.menuView.frame.origin.x = -self.menuView.frame.width
+        menuView.transform = CGAffineTransform(translationX: -self.menuView.frame.width, y: 0)
+        topStackView.transform = CGAffineTransform(translationX: 0, y: 10)
+        bottomStackView.transform = CGAffineTransform(translationX: 0, y: 10)
         self.lineView.alpha = 0
-        self.topStackView.frame.origin.y += 10
-        self.bottomStackView.frame.origin.y += 10
         self.topStackView.alpha = 0
         self.bottomStackView.alpha = 0
         self.logoPlanet.alpha = 0
@@ -147,28 +147,27 @@ class SideMenuViewController: BaseViewController {
     }
     
     func showAnimate() {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
-        }, completion: nil)
-        
-        UIView.animate(withDuration: 0.2, delay: 0.3, options: .curveEaseInOut, animations: {
-            self.menuView.frame.origin.x = 0
-        })
-        
-        UIView.animate(withDuration: 0.2, delay: 0.7, options: .curveEaseInOut, animations: {
-            self.lineView.alpha = 0.5
-        })
-        
-        UIView.animate(withDuration: 0.25, delay: 0.6, options: .curveEaseInOut, animations: {
-            self.topStackView.frame.origin.y -= 10
-            self.bottomStackView.frame.origin.y -= 10
-            self.topStackView.alpha = 1
-            self.bottomStackView.alpha = 1
-            self.logoPlanet.alpha = 1
-            self.logoSatellite.alpha = 1
-        })
-        
-        loopLogo()
+        UIView.animateKeyframes(withDuration: 0.75, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
+            })
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.menuView.transform = .identity
+            })
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25, animations: {
+                self.lineView.alpha = 0.5
+                self.topStackView.transform = .identity
+                self.bottomStackView.transform = .identity
+                self.topStackView.alpha = 1
+                self.bottomStackView.alpha = 1
+                self.logoPlanet.alpha = 1
+                self.logoSatellite.alpha = 1
+            })
+        }) { (finished) in
+            if finished {
+                self.loopLogo()
+            }
+        }
     }
     
     func loopLogo() {
@@ -187,11 +186,11 @@ class SideMenuViewController: BaseViewController {
     }
     
     func close(_ handler: (() -> Void)?) {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
             self.menuView.frame.origin.x = -self.menuView.frame.width
             self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.0) // ??
         }, completion: { (_) in
-            self.dismiss(animated: true, completion: {
+            self.dismiss(animated: false, completion: {
                 if let completion = handler {
                     completion()
                 }

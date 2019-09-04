@@ -105,9 +105,11 @@ struct Validator {
         let data = bundle.priv.data(using: .utf8)!
         
         if bundle.type == "icx" {
-            guard (ICXWallet(name: "temp", rawData: data) != nil) else { return false }
+            guard let icx = ICXWallet(name: bundle.name, rawData: data) else { return false }
+            guard ((try? icx.extractICXPrivateKey(password: password)) != nil) else { return false }
         } else if bundle.type == "eth" {
-            guard (ETHWallet(name: "temp", rawData: data) != nil) else { return false }
+            guard let eth = ETHWallet(name: bundle.name, rawData: data) else { return false }
+            guard ((try? eth.extractETHPrivateKey(password: password)) != nil) else { return false }
         }
         
         return true

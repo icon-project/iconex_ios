@@ -161,27 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func fileShare(filepath: URL, _ sender: UIView? = nil) {
-        
-        let activity = UIActivityViewController(activityItems: [filepath], applicationActivities: nil)
-        activity.excludedActivityTypes = [.postToFacebook, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToTencentWeibo, .addToReadingList]
-        if let top = topViewController() {
-            DispatchQueue.main.async {
-                
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    activity.popoverPresentationController?.sourceView = sender
-                    activity.popoverPresentationController?.permittedArrowDirections = .up
-                    if let originSource = sender {
-                        activity.popoverPresentationController?.sourceRect = originSource.bounds
-                    }
-                }
-                
-                top.present(activity, animated: true, completion: nil)
-                
-            }
-        }
-    }
-    
     func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let navigationController = controller as? UINavigationController {
             return topViewController(controller: navigationController.visibleViewController)

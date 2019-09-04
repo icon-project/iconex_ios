@@ -23,14 +23,19 @@ class ICXWallet: BaseWalletConvertible {
         self.created = created
     }
     
-    init?(name: String, rawData: Data, created: Date = Date()) {
+    init?(name: String, rawData: Data, created: Date? = nil) {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         guard let keystore = try? decoder.decode(ICONKeystore.self, from: rawData) else { return nil }
         
         self.name = name
         self.keystore = keystore
-        self.created = created
+        if let createdDate = created {
+            self.created = createdDate
+        } else {
+            self.created = Date()
+        }
+        
     }
     
     init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil, created: Date = Date()) {
@@ -59,7 +64,7 @@ class ICXWallet: BaseWalletConvertible {
         return icx
     }
     
-    static fileprivate func generateICXKeystore(_ privateKey: PrivateKey? = nil, password: String) throws -> ICONKeystore {
+    static func generateICXKeystore(_ privateKey: PrivateKey? = nil, password: String) throws -> ICONKeystore {
         let wallet = Wallet(privateKey: privateKey)
         try wallet.generateKeystore(password: password)
         
@@ -97,7 +102,7 @@ class ICXWallet: BaseWalletConvertible {
     
     func exportBundle() -> WalletBundle {
         let priv = String(data: rawData, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
-        
+        Log("rawData - \(priv)")
         var export = WalletBundle(name: self.name, type: "icx", priv: priv, tokens: nil, createdAt: self.created.millieTimestamp, coinType: "icx")
         
         var datas = [TokenBundle]()

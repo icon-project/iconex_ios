@@ -33,7 +33,7 @@ enum WalletError: Error, CustomDebugStringConvertible {
     }
 }
 
-enum CommonError: Error, CustomDebugStringConvertible {
+enum CommonError: Error {
     case invalidFiles
     case duplicateAddress
     case duplicateName
@@ -42,7 +42,4 @@ enum CommonError: Error, CustomDebugStringConvertible {
     case saveData
     case convertType(String)
     
-    var debugDescription: String {
-        return "Fatal error. CommonError(\(self))"
-    }
 }

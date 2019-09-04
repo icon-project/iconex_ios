@@ -25,6 +25,16 @@ protocol loadWalletSequence {
 class LoadWalletViewController: PopableViewController {
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
+    
+    @IBOutlet weak var stepImage1: UIImageView!
+    @IBOutlet weak var stepLabel1: UILabel!
+    @IBOutlet weak var leftLine: UIView!
+    @IBOutlet weak var stepImage2: UIImageView!
+    @IBOutlet weak var stepLabel2: UILabel!
+    @IBOutlet weak var rightLine: UIView!
+    @IBOutlet weak var stepImage3: UIImageView!
+    @IBOutlet weak var stepLabel3: UILabel!
+    
     @IBOutlet weak var contentStack: UIStackView!
     
     @IBOutlet weak var stepScrollView: UIScrollView!
@@ -51,15 +61,44 @@ class LoadWalletViewController: PopableViewController {
             case 0:
                 leftTitle = "Common.Cancel".localized
                 self.rightButton.isEnabled = true
+                stepImage1.image = #imageLiteral(resourceName: "icStep01On")
+                stepLabel1.textColor = .mint1
+                stepLabel2.textColor = .gray230
+                stepLabel3.textColor = .gray230
+                stepImage2.image = #imageLiteral(resourceName: "icStep02Off")
+                stepImage3.image = #imageLiteral(resourceName: "icStep03Off")
+                leftLine.backgroundColor = .gray230
+                rightLine.backgroundColor = .gray230
                 
             case 2:
                 rightTitle = "Common.Complete".localized
-                self.rightButton.isEnabled = false
+                if self._loadMode == .loadFile && self._loader?.bundle != nil {
+                    self.rightButton.isEnabled = true
+                } else {
+                    self.rightButton.isEnabled = false
+                }
+                stepLabel1.textColor = .mint1
+                stepLabel2.textColor = .mint1
+                stepLabel3.textColor = .mint1
+                stepImage1.image = #imageLiteral(resourceName: "icStepCheck")
+                stepImage2.image = #imageLiteral(resourceName: "icStepCheck")
+                stepImage3.image = #imageLiteral(resourceName: "icStep03On")
+                leftLine.backgroundColor = .mint1
+                rightLine.backgroundColor = .mint1
                 
             default:
                 leftTitle = "Common.Back".localized
                 rightTitle = "Common.Next".localized
                 self.rightButton.isEnabled = false
+                stepLabel1.textColor = .mint1
+                stepLabel2.textColor = .mint1
+                stepLabel3.textColor = .gray230
+                stepImage1.image = #imageLiteral(resourceName: "icStepCheck")
+                stepImage2.image = #imageLiteral(resourceName: "icStep02On")
+                stepImage3.image = #imageLiteral(resourceName: "icStep03Off")
+                leftLine.backgroundColor = .mint1
+                rightLine.backgroundColor = .gray230
+                
             }
             leftButton.setTitle(leftTitle, for: .normal)
             rightButton.setTitle(rightTitle, for: .normal)
@@ -74,6 +113,9 @@ class LoadWalletViewController: PopableViewController {
     
     override func initializeComponents() {
         super.initializeComponents()
+        self.stepLabel1.text = "LoadWallet.Display.Step1.Title".localized
+        self.stepLabel2.text = "LoadWallet.Display.Step2.Title".localized
+        self.stepLabel3.text = "LoadWallet.Display.Step3.Title".localized
         
         stepScrollView.rx.didEndScrollingAnimation.subscribe(onNext: { [unowned self] in
             self.scrollIndex = (Int)(self.stepScrollView.contentOffset.x / self.view.frame.width)
@@ -100,14 +142,15 @@ class LoadWalletViewController: PopableViewController {
             self.file.refresh()
             self.name.refresh()
             switch self.scrollIndex {
+            case 1:
+                guard self._loader != nil else { return }
+                self.scrollNext()
+                
             case 2:
                 self.finish()
                 
-            default:
-                let value = (CGFloat)(self.scrollIndex + 1)
-                let x = value * self.view.frame.width
-                self.stepScrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
-                self.file.resetData()
+            default: self.scrollNext()
+                
             }
         }).disposed(by: disposeBag)
         
@@ -124,8 +167,14 @@ class LoadWalletViewController: PopableViewController {
             }
         }
         
-        
         scrollIndex = 0
+    }
+    
+    func scrollNext() {
+        let value = (CGFloat)(self.scrollIndex + 1)
+        let x = value * self.view.frame.width
+        self.stepScrollView.setContentOffset(CGPoint(x: x, y: 0), animated: true)
+        self.file.resetData()
     }
     
     override func refresh() {
@@ -196,10 +245,38 @@ extension LoadWalletViewController {
                     try icxWallet.save()
                     
                 } else {
-                    
+                    let keystore = try ETHWallet.generateETHKeyStore(privateKey: PrivateKey(hex: Data(hex: keyString)), password: pwd)
+                    let eth = ETHWallet(name: name, keystore: keystore)
+                    try eth.save()
                 }
+                self.dismiss(animated: true, completion: nil)
                 
-            case .bundle: break
+            case .bundle:
+                guard let bundleList = loader.bundle else { return }
+                for bundleSet in bundleList {
+                    let address = bundleSet.keys.first!
+                    let bundle = bundleSet[address]!
+                    let data = bundle.priv.data(using: .utf8)!
+                    if bundle.type == "icx" {
+                        guard let icx = ICXWallet(name: bundle.name, rawData: data, created: bundle.createdAt?.toDate()) else { continue }
+                        do {
+                            try icx.save()
+                        } catch {
+                            Log(error)
+                            Log("Error occurred while save icx wallet...")
+                        }
+                    } else {
+                        guard let eth = ETHWallet(name: bundle.name, rawData: data, created: bundle.createdAt?.toDate()) else { continue }
+                        do {
+                            try eth.save()
+                        } catch {
+                            Log(error)
+                            Log("Error occurred while save eth wallet...")
+                        }
+                    }
+                }
+                Manager.balance.getAllBalances()
+                self.dismiss(animated: true, completion: nil)
             }
         } catch {
             Log("Error - \(error)")

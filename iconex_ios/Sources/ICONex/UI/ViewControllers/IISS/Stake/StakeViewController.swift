@@ -61,6 +61,7 @@ class StakeViewController: BaseViewController {
         stakeHeader1.size16(text: "Stake", color: .gray77, weight: .medium, align: .left)
         balanceHeader.size12(text: "Balance (ICX)", color: .gray77, weight: .light, align: .left)
         unstakedHeader.size12(text: "Unstaked (ICX)", color: .gray77, weight: .light, align: .left)
+        unstakedLabel.size12(text: "-", color: .gray77, weight: .light, align: .right)
         
         slider.firstHeader = "Stake (ICX)"
         slider.secondHeader = "→ Voted"
@@ -88,6 +89,8 @@ class StakeViewController: BaseViewController {
         
         scrollView?.refreshControl = self.refreshControl
         refreshControl?.beginRefreshing()
+        
+        
     }
     
     override func refresh() {
@@ -97,7 +100,7 @@ class StakeViewController: BaseViewController {
                 balanceLabel.size14(text: "-")
                 return
             }
-            balanceLabel.size14(text: balance.toString(decimal: 18, 4, false), color: .gray77, weight: .regular, align: .right)
+            balanceLabel.size14(text: balance.toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
             
             DispatchQueue.global().async {
                 let delegatedInfo = Manager.icon.getDelegation(wallet: self.wallet)
@@ -105,13 +108,13 @@ class StakeViewController: BaseViewController {
                 self.delegateInfo = delegatedInfo
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                     if let delegated = delegatedInfo, let staked = stakedInfo {
-                        let totalValue = delegated.totalDelegated
+                        let totalDelegated = delegated.totalDelegated
                         let stakeValue = staked.stake
-                        let votedValue = totalValue - delegated.votingPower
+                        let votedValue = totalDelegated - delegated.votingPower
                         
                         self.slider.isEnabled = true
-                        self.slider.setRange(total: totalValue, staked: stakeValue, voted: votedValue)
-                        self.unstakedLabel.size14(text: (balance - stakeValue).toString(decimal: 18, 4, false), color: .gray77, weight: .regular, align: .right)
+                        self.slider.setRange(total: balance - totalDelegated, staked: stakeValue, voted: votedValue)
+                        self.unstakedLabel.size14(text: (balance - stakeValue).toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
                     } else {
                         self.slider.isEnabled = false
                     }
