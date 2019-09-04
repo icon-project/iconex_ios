@@ -84,7 +84,7 @@ class MainViewController: BaseViewController, Floatable {
     
     var currencyUnit: BalanceUnit = .USD {
         willSet {
-            self.unitLabel.size16(text: newValue.symbol, color: .white, weight: .medium, align: .right)
+            self.unitLabel.text = newValue.symbol
             mainViewModel.currencyUnit.onNext(newValue)
         }
     }
@@ -153,15 +153,40 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
+                self.symbolList.removeAll()
+                self.coinTokenList.removeAll()
                 DispatchQueue.main.async {
+                    self.balanceLabel.alpha = 0
                     self.balanceActivityIndicator.startAnimating()
                 }
-        
-            self.walletList = Manager.wallet.walletList
+                
+                self.walletList = Manager.wallet.walletList
+                
                 DispatchQueue.global().async {
                     Manager.balance.getAllBalances()
                 }
-        }.disposed(by: disposeBag)
+                
+                let list = Manager.balance.calculateExchangeTotalBalance()
+                mainViewModel.balaneList.onNext(list)
+                
+                // COIN
+                for type in Manager.wallet.types { // icx, eth....
+                    guard let wallet = DB.walletListBy(type: type) else { return }
+                    self.coinTokenList[type] = wallet
+                    self.symbolList.append(type)
+                }
+                
+                // TOKEN
+                for token in self.tokenList {
+                    self.coinTokenList[token.symbol] = DB.walletListBy(token: token)
+                    self.symbolList.append(token.symbol)
+                }
+                
+                DispatchQueue.main.async {
+                    self.activityControl.stopAnimating()
+                }
+                
+            }.disposed(by: disposeBag)
         
         mainViewModel.noti
             .observeOn(MainScheduler.instance)
@@ -169,35 +194,26 @@ class MainViewController: BaseViewController, Floatable {
                 self.collectionView.reloadData()
         }.disposed(by: disposeBag)
         
-        mainViewModel.totalExchangedBalance
+        let balanceObservable = mainViewModel.totalExchangedBalance.share(replay: 1)
+        
+        balanceObservable
             .distinctUntilChanged()
             .bind(to: balanceLabel.rx.text)
             .disposed(by: disposeBag)
         
-        mainViewModel.totalExchangedBalance
+        balanceObservable
             .observeOn(MainScheduler.instance)
             .subscribe { (_) in
-                self.balanceLabel.alpha = 1
-                self.balanceActivityIndicator.stopAnimating()
+                DispatchQueue.main.async {
+                    self.balanceLabel.alpha = 1
+                    self.balanceActivityIndicator.stopAnimating()
+                }
         }.disposed(by: disposeBag)
-        
-        // COIN
-        for type in Manager.wallet.types { // icx, eth....
-            guard let wallet = DB.walletListBy(type: type) else { return }
-            self.coinTokenList[type] = wallet
-            self.symbolList.append(type)
-        }
-        
-        // TOKEN
-        for token in self.tokenList {
-            self.coinTokenList[token.symbol] = DB.walletListBy(token: token)
-            self.symbolList.append(token.symbol)
-        }
         
         // scrollview
         // 1
-        balanceAssetTitle.size16(text: "Main.Balance.Title".localized, color: .init(white: 1, alpha: 0.6), weight: .light, align: .right)
-        unitLabel.size16(text: "USD", color: .white, weight: .medium, align: .right)
+        balanceAssetTitle.text = "Main.Balance.Title".localized
+        unitLabel.text = "USD"
         
         // 2
         powerAssetTitle.size16(text: "Main.Power.Title".localized, color: .init(white: 1, alpha: 0.6), weight: .light, align: .right)
@@ -358,8 +374,7 @@ extension MainViewController {
                 // refresh
                 if cardTop.constant == 0 {
                     mainViewModel.reload.onNext(true)
-                    self.walletList = Manager.wallet.walletList
-                    self.activityControl.stopAnimating()
+//                    self.activityControl.stopAnimating()
 
                 } else {
                     if cardTop.constant > -Header_Height/2 {

@@ -413,9 +413,21 @@ extension BalanceManager {
         return walletBalances[wallet.address]
     }
     
-    func getTotalBalance() -> BigUInt {
-        let total: BigUInt = walletBalances.map { $0.value }.reduce(0, +)
-        return total
+    func calculateExchangeTotalBalance() -> [BigUInt] {
+        var icxBalance: BigUInt = 0
+        var ethBalance: BigUInt = 0
+        
+        for wallet in Manager.wallet.walletList {
+            let address = wallet.address
+            
+            if wallet is ICXWallet {
+                icxBalance += walletBalances[address] ?? 0
+            } else {
+                ethBalance += walletBalances[address] ?? 0
+            }
+        }
+        
+        return [icxBalance, ethBalance]
     }
     
     func getTokenBalance(address: String, contract: String) -> BigUInt {

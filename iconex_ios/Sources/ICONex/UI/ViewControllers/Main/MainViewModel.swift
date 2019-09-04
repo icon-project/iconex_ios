@@ -18,8 +18,9 @@ class MainViewModel {
     
     var currencyUnit: BehaviorSubject<BalanceUnit>
     
-    var totalICXBalance: BehaviorSubject<BigUInt>
     var totalExchangedBalance: PublishSubject<String>
+    
+    var balaneList: PublishSubject<[BigUInt]>
     
     var reload: PublishSubject<Bool>
     var noti: PublishSubject<Bool>
@@ -31,28 +32,30 @@ class MainViewModel {
     init() {
         self.currencyUnit = BehaviorSubject<BalanceUnit>(value: .USD)
         
-        self.totalICXBalance = BehaviorSubject<BigUInt>(value: Manager.balance.getTotalBalance())
         self.totalExchangedBalance = PublishSubject<String>()
+        
+        self.balaneList = PublishSubject<[BigUInt]>()
         
         self.reload = PublishSubject<Bool>()
         self.noti = PublishSubject<Bool>()
         
         self.isBigCard = BehaviorSubject<Bool>(value: false)
         
-        Observable.combineLatest(self.noti, self.reload)
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
-            .flatMapLatest { (_, _) -> Observable<BigUInt> in
-                
-                let balance = Manager.balance.getTotalBalance()
-                return Observable.just(balance)
-                
-        }.bind(to: self.totalICXBalance)
-        .disposed(by: disposeBag)
-        
-        Observable.combineLatest(self.currencyUnit, self.totalICXBalance).flatMapLatest { (unit, totalBalance) -> Observable<String> in
+        Observable.combineLatest(self.currencyUnit, self.balaneList).flatMapLatest { (unit, totalBalance) -> Observable<String> in
             let unitSymbol = unit.symbol
-            let price = Tool.calculatePrice(decimal: 18, currency: "icx\(unitSymbol.lowercased())", balance: totalBalance)
-            return Observable.just(price)
+            
+            let icxPrice = Tool.calculate(currency: "icx\(unitSymbol.lowercased())", balance: totalBalance[0])
+            let ethPrice = Tool.calculate(currency: "eth\(unitSymbol.lowercased())", balance: totalBalance[1])
+            
+            let totalPrice = icxPrice + ethPrice
+            let result = totalPrice.toString(decimal: 18, 4, true).currencySeparated()
+            
+            print("ICX \(icxPrice)")
+            print("ETH \(ethPrice)")
+            print("Balance: \(result)")
+            
+            return Observable.just(result)
+            
         }.bind(to: self.totalExchangedBalance)
         .disposed(by: disposeBag)
     }
