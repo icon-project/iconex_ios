@@ -68,6 +68,7 @@ class CreateWalletViewController: PopableViewController {
                 step3Label.textColor = .gray128
                 step4Label.textColor = .gray128
                 
+                step1ImageView.image = #imageLiteral(resourceName: "icStep01On")
                 step2ImageView.image = #imageLiteral(resourceName: "icStep02Off")
                 step3ImageView.image = #imageLiteral(resourceName: "icStep03Off")
                 step4ImageView.image = #imageLiteral(resourceName: "icStep04Off")
@@ -86,6 +87,7 @@ class CreateWalletViewController: PopableViewController {
                 step3Label.textColor = .gray128
                 step4Label.textColor = .gray128
                 
+                step1ImageView.image = #imageLiteral(resourceName: "icStepCheck")
                 step3ImageView.image = #imageLiteral(resourceName: "icStep03Off")
                 step4ImageView.image = #imageLiteral(resourceName: "icStep04Off")
                 
@@ -100,12 +102,15 @@ class CreateWalletViewController: PopableViewController {
                 line2.backgroundColor = .mint1
                 
                 step4Label.textColor = .gray128
+                
+                step2ImageView.image = #imageLiteral(resourceName: "icStepCheck")
                 step4ImageView.image = #imageLiteral(resourceName: "icStep04Off")
                 line3.backgroundColor = .gray230
             case 3:
                 rightTitle = "Common.Complete".localized
                 rightButton.isEnabled = true
                 
+                step3ImageView.image = #imageLiteral(resourceName: "icStepCheck")
                 step4ImageView.image = #imageLiteral(resourceName: "icStep04On")
                 step4Label.textColor = .mint1
                 line3.backgroundColor = .mint1
