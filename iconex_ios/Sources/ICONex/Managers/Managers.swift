@@ -114,7 +114,7 @@ extension ICONManager {
         switch result {
         case .success(let balance):
             // update
-            Manager.balance.updateWalletBalance(address: wallet.address, balance: balance)
+            Manager.balance.updateWalletBalance(address: address, balance: balance)
             return balance
             
         case .failure(let error):
