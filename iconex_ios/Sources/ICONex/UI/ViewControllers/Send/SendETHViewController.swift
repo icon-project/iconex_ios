@@ -31,7 +31,25 @@ class SendETHViewController: BaseViewController {
     @IBOutlet weak var scanButton: UIButton!
     
     @IBOutlet weak var gasLimitInputBox: IXInputBox!
-    @IBOutlet weak var gasPriceSlider: IXSlider!
+    
+    @IBOutlet weak var gasPriceSlider: UIView!
+    
+    @IBOutlet weak var gasPriceTitleLabel: UILabel!
+    
+    @IBOutlet weak var gweiLabel: UILabel!
+    @IBOutlet weak var gweiTitleLabel: UILabel!
+    
+    @IBOutlet weak var slowLabel: UILabel!
+    @IBOutlet weak var fastLabel: UILabel!
+    
+    @IBOutlet weak var sliderContainer: UIView!
+    @IBOutlet weak var minView: UIView!
+    @IBOutlet weak var maxView: UIView!
+    
+    @IBOutlet weak var minWidth: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var slider: UISlider!
     
     @IBOutlet weak var dataInputBox: IXInputBox!
     @IBOutlet weak var inputDataButton: UIButton!
@@ -49,17 +67,35 @@ class SendETHViewController: BaseViewController {
     var token: Token? = nil {
         willSet {
             // send token
-            self.gasPrice = 55000
+            self.gasLimit = 55000
         }
     }
     
     var balance: BigUInt = 0
     var gasLimit: BigUInt = 21000
-    var gasPrice: BigUInt = 21
+    var gasPrice: Int = 21
     
-    var data: Data? = nil
+    var data: String? = nil {
+        willSet {
+            guard let value = newValue else { return }
+            guard let wallet = self.walletInfo else { return }
+            
+            if !value.isEmpty {
+                self.inputDataButton.isEnabled = false
+                self.viewDataButton.isHidden = false
+                self.dataInputBox.set(state: .readOnly)
+            } else {
+                self.gasLimit = 21000
+                self.gasLimitInputBox.text = "21000"
+                self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
+                
+                self.inputDataButton.isEnabled = true
+                self.viewDataButton.isHidden = true
+            }
+        }
+    }
     
-    var handler: ((_ isSuccess: Bool) -> Void)?
+    var sendHandler: ((_ isSuccess: Bool) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +108,6 @@ class SendETHViewController: BaseViewController {
                 }
             } else {
                 guard let wallet = self.walletInfo else { return }
-                // ??
                 self.balance = Manager.balance.getBalance(wallet: wallet) ?? 0
                 DispatchQueue.main.async {
                     self.balanceLabel.size24(text: self.balance.toString(decimal: 18, 5).currencySeparated(), color: .mint1, align: .right)
@@ -82,10 +117,40 @@ class SendETHViewController: BaseViewController {
         
         setupUI()
         setupBind()
+        
+        self.scrollView?.rx.didScroll
+            .subscribe({ (_) in
+                self.view.endEditing(true)
+            }).disposed(by: disposeBag)
     }
     
     private func setupUI() {
         guard let wallet = self.walletInfo else { return }
+        
+        // set up slider
+        self.minView.layer.cornerRadius = 4
+        self.minView.clipsToBounds = true
+        self.maxView.layer.cornerRadius = 4
+        self.maxView.clipsToBounds = true
+        
+        self.minView.backgroundColor = .mint2
+        self.maxView.backgroundColor = .gray77
+        
+        slider.minimumValue = 1.0
+        slider.maximumValue = 99.0
+        slider.setThumbImage(#imageLiteral(resourceName: "icControlerEnabled"), for: .normal)
+        slider.setThumbImage(#imageLiteral(resourceName: "icControlerAtive"), for: .highlighted)
+        
+        slider.value = Float(self.gasPrice)
+        
+        slider.rx.value.subscribe(onNext: { (value) in
+            let percent = value / 99.0
+            self.minWidth.constant = (self.sliderContainer.frame.width - 2) * CGFloat(percent)
+            
+            let rounded = Int(value)
+            self.gasPrice = rounded
+            self.gweiLabel.text = "\(rounded)"
+        }).disposed(by: disposeBag)
         
         navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarCloseW")) {
             self.dismiss(animated: true, completion: nil)
@@ -118,7 +183,6 @@ class SendETHViewController: BaseViewController {
         
         gasLimitInputBox.text = String(self.gasLimit)
         
-        gasPriceSlider.showSliderOnly()
         
         dataInputBox.set(inputType: .normal)
         dataInputBox.set(state: .normal, placeholder: "Send.InputBox.Data".localized)
@@ -134,6 +198,20 @@ class SendETHViewController: BaseViewController {
         sendButton.lightMintRounded()
         sendButton.setTitle("Send.SendButton".localized, for: .normal)
         sendButton.isEnabled = false
+        
+        if let token = self.token {
+            balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
+            balanceLabel.size24(text: balance.toString(decimal: token.decimal, 5).currencySeparated(), color: .mint1, align: .right)
+            
+            let price = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: balance)
+            exchangeLabel .size12(text: price, color: .gray179, align: .right)
+        } else {
+            balance = Manager.balance.getBalance(wallet: wallet) ?? 0
+            balanceLabel.size24(text: balance.toString(decimal: 18, 5).currencySeparated() , color: .mint1, align: .right)
+            
+            let price = Tool.calculatePrice(currency: "ethusd", balance: balance)
+            exchangeLabel.size12(text: price, color: .gray179, align: .right)
+        }
     }
     
     private func setupBind() {
@@ -142,7 +220,7 @@ class SendETHViewController: BaseViewController {
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if let token = self.token {
-                    let power = BigUInt(10).power(token.decimal)
+                    let power = BigUInt(10) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
@@ -160,7 +238,7 @@ class SendETHViewController: BaseViewController {
         plus100Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if let token = self.token {
-                    let power = BigUInt(100).power(token.decimal)
+                    let power = BigUInt(100) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
@@ -177,7 +255,7 @@ class SendETHViewController: BaseViewController {
         plus1000Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if let token = self.token {
-                    let power = BigUInt(1000).power(token.decimal)
+                    let power = BigUInt(1000) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
@@ -203,12 +281,33 @@ class SendETHViewController: BaseViewController {
         
         inputDataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                let dataVC = self.storyboard?.instantiateViewController(withIdentifier: "DataType") as! DataTypeViewController
-                dataVC.modalTransitionStyle = .crossDissolve
-                dataVC.modalPresentationStyle = .overFullScreen
+                let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
+                inputDataVC.type = .hex
+                inputDataVC.completeHandler = { data, _ in
+                    self.data = data
+                    self.dataInputBox.text = data
+                    self.dataInputBox.textField.sendActions(for: .valueChanged)
+                }
                 
-                self.present(dataVC, animated: true, completion: nil)
+                self.presentPanModal(inputDataVC)
+                
             }.disposed(by: disposeBag)
+        
+        viewDataButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                guard let dataValue = self.data else { return }
+                
+                let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
+                inputDataVC.type = .hex
+                inputDataVC.data = dataValue
+                inputDataVC.completeHandler = { data, _ in
+                    self.data = data
+                    self.dataInputBox.text = data
+                    self.dataInputBox.textField.sendActions(for: .valueChanged)
+                }
+                
+                self.presentPanModal(inputDataVC)
+        }.disposed(by: disposeBag)
         
         amountInputBox.set { [unowned self] (value) -> String? in
             guard !value.isEmpty else { return nil }
@@ -255,6 +354,7 @@ class SendETHViewController: BaseViewController {
                 
                 addressBook.selectedHandler = { address in
                     self.addressInputBox.text = address
+                    self.addressInputBox.textField.sendActions(for: .valueChanged)
                 }
                 
                 self.presentPanModal(addressBook)
@@ -267,16 +367,42 @@ class SendETHViewController: BaseViewController {
                 
                 qrCodeReader.set(mode: .icx, handler: { (address) in
                     self.addressInputBox.text = address
+                    self.addressInputBox.textField.sendActions(for: .valueChanged)
                 })
                 
                 self.present(qrCodeReader, animated: true, completion: nil)
                 
             }.disposed(by: disposeBag)
         
+        Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty, self.dataInputBox.textField.rx.text.orEmpty)
+            .subscribe(onNext: { (amount, address, data) in
+
+                guard !amount.isEmpty && !address.isEmpty else { return }
+                
+                if data.isEmpty {
+                    self.gasLimit = 21000
+                    self.gasLimitInputBox.text = "21000"
+                    
+                } else {
+                    let value = Tool.stringToBigUInt(inputText: amount, decimal: 18, fixed: true) ?? 0
+                    guard let wallet = self.walletInfo else { return }
+                    
+                    DispatchQueue.global().async {
+                        self.gasLimit = Ethereum.requestETHEstimatedGas(value: value, data: data.prefix0xRemoved().hexToData() ?? Data(), from: wallet.address, to: address) ?? 0
+                        
+                        DispatchQueue.main.async {
+                            self.gasLimitInputBox.textField.text = "\(self.gasLimit)"
+                            
+                            self.estimatedFeeLabel.size14(text: self.gasLimit.toString(decimal: 9, 9), color: .gray77, align: .right)
+                        }
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
         // send
         Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty)
             .flatMapLatest { [unowned self] (value, address) -> Observable<Bool> in
-                guard !value.isEmpty || !address.isEmpty else { return Observable.just(false) }
+                guard !value.isEmpty && !address.isEmpty else { return Observable.just(false) }
                 
                 // address
                 guard Validator.validateETHAddress(address: address) else {
@@ -296,11 +422,6 @@ class SendETHViewController: BaseViewController {
                     return Observable.just(false)
                 }
                 
-                // estimated Gas
-                let toAddress = self.addressInputBox.text
-                let estimatedGas = Ethereum.requestETHEstimatedGas(value: amount, data: self.data ?? Data(), from: wallet.address, to: toAddress)?.toString(decimal: 18, 9) ?? "-"
-                self.estimatedFeeLabel.size14(text: estimatedGas, color: .gray77, align: .right)
-                
                 return Observable.just(true)
             }.bind(to: self.sendButton.rx.isEnabled)
             .disposed(by: disposeBag)
@@ -314,24 +435,24 @@ class SendETHViewController: BaseViewController {
                     let toAddress = self.addressInputBox.text
                     let gasPrice = self.gasPrice
                     let gasLimit = self.gasLimit
-                    let data = self.data
-                    let estimatedFeeUSD = self.gasPrice * self.gasLimit
+                    let data = self.data?.prefix0xRemoved().hexToData() ?? Data()
+                    let estimatedGas = BigUInt(self.gasPrice) * self.gasLimit
                     
-                    let ethTx = EthereumTransaction(privateKey: pk, gasPrice: gasPrice, gasLimit: gasLimit, from: wallet.address, to: toAddress, value: amount, data: data ?? Data())
+                    let ethTx = EthereumTransaction(privateKey: pk, gasPrice: BigUInt(self.gasPrice), gasLimit: gasLimit, from: wallet.address, to: toAddress, value: amount, data: data)
                     
                     if let token = self.token {
-                        let estimatedCalculated = estimatedFeeUSD.toString(decimal: token.decimal, token.decimal, false)
-                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, stepLimitPrice: String(gasPrice), estimatedFee: "ESTIMATED FEE", estimatedUSD: estimatedCalculated)
+                        let usd = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: estimatedGas)
+                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, stepLimitPrice: String(gasPrice), estimatedFee: "\(estimatedGas)", estimatedUSD: usd)
                         
                     } else {
-                        let estimatedCalculated = estimatedFeeUSD.toString(decimal: 18, 18, false)
-                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, stepLimitPrice: String(gasPrice), estimatedFee: "ESTIMATED FEE", estimatedUSD: estimatedCalculated)
+                        let usd = Tool.calculatePrice(currency: "ethusd", balance: estimatedGas)
+                        return SendInfo(ethTransaction: ethTx, ethPrivateKey: pk, stepLimitPrice: String(gasPrice), estimatedFee: "\(estimatedGas)", estimatedUSD: usd)
                     }
                 }()
                 
                 Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess in
                     self.dismiss(animated: true, completion: {
-                        if let handler = self.handler {
+                        if let handler = self.sendHandler {
                             handler(isSuccess)
                         }
                     })

@@ -179,32 +179,6 @@ class IXSlider: UIView {
             isEnabled = true
         }
     }
-    
-    func showSliderOnly() {
-        self.firstLabel.size14(text: "Send.GasPrice".localized, color: .gray77)
-        self.innerLabel.size14(text: "21 GWei", color: .mint1, weight: .bold, align: .right)
-        // 원본 유지 current만 하면 된당^~^
-        self.slider.minimumValue = 1.0
-        self.slider.maximumValue = 99.0
-        
-        
-        // test
-        self.current = 21.0
-        
-        
-        self.fieldContainer.border(0, .clear)
-        self.fieldContainer.backgroundColor = .clear
-        self.textField.isHidden = true
-        self.votedContainer.isHidden = true
-        
-        self.slider.rx.value.map {
-                let rounded = roundf($0)
-                self.slider.value = rounded
-                return "\(rounded) Gwei"
-            }
-            .bind(to: self.innerLabel.rx.text)
-        .disposed(by: disposeBag)
-    }
 }
 
 extension IXSlider {
