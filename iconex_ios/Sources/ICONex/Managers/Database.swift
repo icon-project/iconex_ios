@@ -426,6 +426,15 @@ struct DB {
         }
     }
     
+    static func canSaveToken(contract: String) -> Bool {
+        let realm = try! Realm()
+        guard let _ = realm.objects(TokenModel.self).filter({ $0.contractAddress == contract }).first else {
+            return true
+        }
+        
+        return false
+    }
+    
     static func addToken(tokenInfo: NewToken) throws {
         let realm = try Realm()
 

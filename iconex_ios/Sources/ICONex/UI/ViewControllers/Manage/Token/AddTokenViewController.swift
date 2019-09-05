@@ -112,7 +112,9 @@ class AddTokenViewController: UIViewController {
         addTokenInfoButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let addTokenInfoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddTokenInfo") as! AddTokenInfoViewController
+                addTokenInfoVC.walletInfo = self.walletInfo
                 self.navigationController?.pushViewController(addTokenInfoVC, animated: true)
+                
         }.disposed(by: disposeBag)
     }
 }

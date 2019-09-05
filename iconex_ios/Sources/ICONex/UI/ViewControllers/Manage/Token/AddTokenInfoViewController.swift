@@ -22,12 +22,20 @@ class AddTokenInfoViewController: BaseViewController {
     
     @IBOutlet weak var addButton: UIButton!
     
+    var walletInfo: BaseWalletConvertible? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
-            self.navigationController?.popViewController(animated: true)
+            if !self.addressBox.text.isEmpty || !self.nameBox.text.isEmpty {
+                Alert.basic(title: "Token.Add.Cancel".localized, isOnlyOneButton: false, confirmAction: {
+                    self.navigationController?.popViewController(animated: true)
+                }).show()
+                
+            } else {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
         navBar.setTitle("ManageToken.Add".localized)
         
@@ -40,6 +48,8 @@ class AddTokenInfoViewController: BaseViewController {
         self.addressBox.set(inputType: .normal)
         
         qrCodeButton.roundGray230()
+        
+        addButton.setTitle("Common.Add".localized, for: .normal)
         addButton.lightMintRounded()
         addButton.isEnabled = false
         
@@ -47,6 +57,8 @@ class AddTokenInfoViewController: BaseViewController {
     }
     
     private func setupBind() {
+        guard let wallet = self.walletInfo else { return }
+        
         addressBox.set { (address) -> String? in
             guard !address.isEmpty else { return nil }
             if !Validator.validateIRCAddress(address: address) {
@@ -57,13 +69,29 @@ class AddTokenInfoViewController: BaseViewController {
         
         nameBox.set { (name) -> String? in
             guard !name.isEmpty else { return nil }
-            if !Validator.validateTokenSymbol(symbol: name) {
+            if !Validator.validateTokenName(name: name) {
                 return "Token.Info.Error.Symbol".localized
             }
             return nil
         }
         
-//        addressBox.textField.rx.
+        let addressObservable = addressBox.textField.rx.controlEvent(.editingDidEndOnExit)
+        
+        addressObservable.subscribe { (_) in
+            let contract = self.addressBox.text
+            
+            if Validator.validateIRCAddress(address: contract) {
+                guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else { return }
+                self.nameBox.text = request.name
+                self.symbolBox.text = request.symbol
+                self.decimalBox.text = String(request.decimal.hexToBigUInt() ?? 0)
+                
+                self.nameBox.textField.sendActions(for: .valueChanged)
+                self.symbolBox.textField.sendActions(for: .valueChanged)
+                self.decimalBox.textField.sendActions(for: .valueChanged)
+            }
+        }.disposed(by: disposeBag)
+        
         
         qrCodeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
@@ -71,16 +99,36 @@ class AddTokenInfoViewController: BaseViewController {
                 self.present(qrVC, animated: true, completion: nil)
         }.disposed(by: disposeBag)
         
-        Observable.combineLatest(addressBox.textField.rx.text.orEmpty, nameBox.textField.rx.text.orEmpty)
-            .flatMapLatest { (address, name) -> Observable<Bool> in
-                let result = Validator.validateIRCAddress(address: address) && Validator.validateTokenSymbol(symbol: name)
-                return Observable.just(result)
+        Observable.combineLatest(addressBox.textField.rx.text.orEmpty, nameBox.textField.rx.text.orEmpty, symbolBox.textField.rx.text.orEmpty, decimalBox.textField.rx.text.orEmpty)
+            .flatMapLatest { (address, name, symbol, decimal) -> Observable<Bool> in
+                return Observable.just(!address.isEmpty && !name.isEmpty && !symbol.isEmpty && !decimal.isEmpty)
+                
             }.bind(to: addButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         addButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                print("tap tap")
+                let name = self.nameBox.text
+                let address = self.addressBox.text
+                let symbol = self.symbolBox.text
+                let decimal = Int(self.decimalBox.text) ?? 0
+                
+                let token = TokenFile(name: name, address: address, symbol: symbol, decimal: decimal)
+                let newToken = NewToken(token: token, parent: wallet)
+                
+                guard DB.canSaveToken(contract: address) else {
+                    self.navigationController?.popToRootViewController(animated: true)
+                    return
+                }
+                
+                do {
+                    try DB.addToken(tokenInfo: newToken)
+                    self.navigationController?.popToRootViewController(animated: true)
+                    
+                } catch {
+                    self.view.showToast(message: "Common.Error".localized)
+                }
+                
         }.disposed(by: disposeBag)
     }
 }
