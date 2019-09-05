@@ -75,8 +75,8 @@ class MainViewController: BaseViewController, Floatable {
     var isWalletMode: Bool = true {
         willSet {
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
                 self.collectionView.setContentOffset(CGPoint.zero, animated: true)
+                self.collectionView.reloadData()
             }
             
             navBar.setTitle(newValue ? "Main.Nav.Title.1".localized : "Main.Nav.Title.2".localized, isMain: true)
@@ -121,8 +121,6 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
-//                self.symbolList.removeAll()
-//                self.coinTokenList.removeAll()
                 var tmp = [String]()
                 DispatchQueue.main.async {
                     self.balanceLabel.alpha = 0
@@ -274,6 +272,13 @@ class MainViewController: BaseViewController, Floatable {
         self.collectionView.allowsSelection = false
         
         self.pageControl.rx.numberOfPages.onNext(self.walletList.count)
+        
+        collectionView.rx.didScroll.asControlEvent()
+            .subscribe { (_) in
+                let pageWidth = self.collectionView.frame.width
+                let currentPage = Int((self.collectionView.contentOffset.x + pageWidth / 2) / pageWidth)
+                self.pageControl.rx.currentPage.onNext(currentPage)
+        }.disposed(by: disposeBag)
         
         floater.delegate = self
         floater.button.rx.tap
