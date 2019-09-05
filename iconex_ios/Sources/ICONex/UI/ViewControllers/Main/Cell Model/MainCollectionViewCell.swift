@@ -367,7 +367,6 @@ extension MainCollectionViewCell: UITableViewDelegate {
                 detailViewModel.symbol.onNext(CoinType.eth.symbol)
                 detailVC.detailType = .eth
             }
-            detailViewModel.symbol
             
             
         } else {
