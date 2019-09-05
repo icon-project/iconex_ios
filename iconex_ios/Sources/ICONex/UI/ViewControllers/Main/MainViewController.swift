@@ -74,7 +74,11 @@ class MainViewController: BaseViewController, Floatable {
     
     var isWalletMode: Bool = true {
         willSet {
-            self.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                self.collectionView.setContentOffset(CGPoint.zero, animated: true)
+            }
+            
             navBar.setTitle(newValue ? "Main.Nav.Title.1".localized : "Main.Nav.Title.2".localized, isMain: true)
             
             guard !walletList.isEmpty else { return }
@@ -95,42 +99,6 @@ class MainViewController: BaseViewController, Floatable {
     var floater: Floater = {
         return Floater(type: .vote)
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        balanceActivityIndicator.startAnimating()
-        
-        self.walletList = Manager.wallet.walletList
-        
-//        self.balanceLabel.text = ""
-        self.balanceLabel.alpha = 0
-        
-        balancePageView.setCurrentPage()
-        powerPageView.setNonCurrentPage()
-        
-        // custom pageControl
-        assetScrollView.rx.contentOffset
-            .subscribe(onNext: { (offset) in
-                if offset.x == 0 {
-                    self.balancePageView.setCurrentPage()
-                    self.powerPageView.setNonCurrentPage()
-                    
-                    
-                } else if offset.x == self.view.frame.width {
-                    self.powerPageView.setCurrentPage()
-                    self.balancePageView.setNonCurrentPage()
-                }
-                
-            }).disposed(by: disposeBag)
-        
-        collectionView.rx.didEndDecelerating
-            .subscribe(onNext: {
-                self.checkFloater()
-            }).disposed(by: disposeBag)
-        
-        self.collectionView.allowsSelection = false
-    }
     
     override func initializeComponents() {
         super.initializeComponents()
@@ -153,8 +121,9 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
-                self.symbolList.removeAll()
-                self.coinTokenList.removeAll()
+//                self.symbolList.removeAll()
+//                self.coinTokenList.removeAll()
+                var tmp = [String]()
                 DispatchQueue.main.async {
                     self.balanceLabel.alpha = 0
                     self.balanceActivityIndicator.startAnimating()
@@ -173,14 +142,18 @@ class MainViewController: BaseViewController, Floatable {
                 for type in Manager.wallet.types { // icx, eth....
                     guard let wallet = DB.walletListBy(type: type) else { return }
                     self.coinTokenList[type] = wallet
-                    self.symbolList.append(type)
+//                    self.symbolList.append(type)
+                    tmp.append(type)
                 }
                 
                 // TOKEN
                 for token in self.tokenList {
                     self.coinTokenList[token.symbol] = DB.walletListBy(token: token)
-                    self.symbolList.append(token.symbol)
+//                    self.symbolList.append(token.symbol)
+                    tmp.append(token.symbol)
                 }
+                
+                self.symbolList = tmp
                 
                 DispatchQueue.main.async {
                     self.activityControl.stopAnimating()
@@ -265,6 +238,42 @@ class MainViewController: BaseViewController, Floatable {
         navBar.setRight(image: #imageLiteral(resourceName: "icInfoW")) {
             
         }
+        
+        balanceActivityIndicator.startAnimating()
+        
+        self.walletList = Manager.wallet.walletList
+        
+        self.balanceLabel.alpha = 0
+        
+        balancePageView.setCurrentPage()
+        powerPageView.setNonCurrentPage()
+        
+        // custom pageControl
+        assetScrollView.rx.contentOffset
+            .subscribe(onNext: { (offset) in
+                if offset.x == 0 {
+                    self.balancePageView.setCurrentPage()
+                    self.powerPageView.setNonCurrentPage()
+                    
+                    
+                } else if offset.x == self.view.frame.width {
+                    self.powerPageView.setCurrentPage()
+                    self.balancePageView.setNonCurrentPage()
+                }
+                
+            }).disposed(by: disposeBag)
+        
+        collectionView.rx.didEndDecelerating
+            .subscribe(onNext: {
+                if self.isWalletMode {
+                    self.checkFloater()
+                }
+                
+            }).disposed(by: disposeBag)
+        
+        self.collectionView.allowsSelection = false
+        
+        self.pageControl.rx.numberOfPages.onNext(self.walletList.count)
         
         floater.delegate = self
         floater.button.rx.tap
@@ -420,12 +429,12 @@ extension MainViewController: UICollectionViewDataSource {
         if isWalletMode {
             let wallet = walletList[indexPath.row]
             cell.buttonStack.isHidden = false
-            cell.scanButton.isEnabled = true
             cell.nicknameLabel.text = wallet.name
             cell.info = wallet
             
             if let _ = wallet as? ETHWallet {
                 cell.scanButton.isHidden = true
+//                cell.symbol
             } else {
                 cell.scanButton.isHidden = false
             }
@@ -457,7 +466,7 @@ extension MainViewController: UICollectionViewDataSource {
         }
         
         cell.handler = {
-            self.refresh()
+//            self.refresh()
         }
         return cell
     }

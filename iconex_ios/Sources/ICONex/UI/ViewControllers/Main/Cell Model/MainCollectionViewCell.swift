@@ -119,6 +119,15 @@ class MainCollectionViewCell: UICollectionViewCell {
             }.disposed(by: disposeBag)
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.info = nil
+        self.symbol = ""
+        self.contractAddress = nil
+        self.tokenDecimal = nil
+    }
+    
 }
 
 extension MainCollectionViewCell: UITableViewDataSource {
@@ -262,7 +271,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     tokenCell.symbolLabel.size16(text: symbol, color: .gray77, weight: .semibold)
                     tokenCell.fullnameLabel.size12(text: fullName, color: .gray179, weight: .light)
                     
-                    tokenCell.balanceLabel.size16(text: String(totalBalance) , color: .gray77, weight: .bold, align: .right)
+                    let balance = totalBalance.toString(decimal: 18, 4).currencySeparated()
+                    tokenCell.balanceLabel.size16(text: balance , color: .gray77, weight: .bold, align: .right)
                     
                     let decimal = DB.tokenListBy(symbol: symbol).first?.decimal ?? 0
                     let price = Tool.calculatePrice(decimal: decimal, currency: currencySymbol, balance: totalBalance)
@@ -339,13 +349,17 @@ extension MainCollectionViewCell: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableview.deselectRow(at: indexPath, animated: true)
         
-        guard let wallet = self.info else { return }
+//        guard let wallet = self.info else { return }
         let detailVC = UIStoryboard.init(name: "Detail", bundle: nil).instantiateInitialViewController() as! DetailViewController
-        detailVC.walletInfo = wallet
+//        detailVC.walletInfo = wallet
         
         if indexPath.section == 0 {
+            guard let wallet = self.info else { return }
             guard isWalletMode else { return }
             
+            detailVC.walletInfo = wallet
+            
+            detailViewModel.wallet.onNext(wallet)
             if let _ = wallet as? ICXWallet {
                 detailViewModel.symbol.onNext(CoinType.icx.symbol)
                 detailVC.detailType = .icx
@@ -353,15 +367,19 @@ extension MainCollectionViewCell: UITableViewDelegate {
                 detailViewModel.symbol.onNext(CoinType.eth.symbol)
                 detailVC.detailType = .eth
             }
-            detailViewModel.wallet.onNext(wallet)
+            detailViewModel.symbol
+            
             
         } else {
             if isWalletMode {
+                guard let wallet = self.info else { return }
                 guard let token = wallet.tokens?[indexPath.row] else { return }
+                
                 detailViewModel.wallet.onNext(wallet)
                 detailViewModel.token.onNext(token)
-                detailViewModel.symbol.onNext(token.symbol)
+                detailViewModel.symbol.onNext(token.symbol.uppercased())
                 detailVC.tokenInfo = token
+                detailVC.walletInfo = wallet
                 
                 if let _ = wallet as? ICXWallet {
                     detailVC.detailType = .irc
@@ -371,7 +389,8 @@ extension MainCollectionViewCell: UITableViewDelegate {
             } else { // coin token
                 guard let selectedWallet = self.coinTokens?[indexPath.row] else { return }
                 detailViewModel.wallet.onNext(selectedWallet)
-                detailViewModel.symbol.onNext(symbol)
+                detailViewModel.symbol.onNext(symbol.uppercased())
+                detailVC.walletInfo = selectedWallet
                 
                 if !symbol.isEmpty {
                     guard let tokenList = selectedWallet.tokens else { return }
@@ -383,13 +402,13 @@ extension MainCollectionViewCell: UITableViewDelegate {
                             break
                         }
                     }
-                    if let _ = wallet as? ICXWallet {
+                    if let _ = selectedWallet as? ICXWallet {
                         detailVC.detailType = .irc
                     } else {
                         detailVC.detailType = .erc
                     }
                 } else {
-                    if let _ = wallet as? ICXWallet {
+                    if let _ = selectedWallet as? ICXWallet {
                         detailVC.detailType = .icx
                     } else {
                         detailVC.detailType = .eth
