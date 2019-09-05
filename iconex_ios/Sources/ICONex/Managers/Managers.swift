@@ -601,14 +601,11 @@ struct Ethereum {
         options.to = EthereumAddress(to)
         options.value = value
         
-        let contract = web3.contract(Web3.Utils.coldWalletABI, at: EthereumAddress(to))
-        let intermediate = contract?.method(transactionOptions: options)
-        
+        let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data, transactionOptions: options)
         
         guard let estimatedGas = try? intermediate?.estimateGas(transactionOptions: nil) else {
             return nil
         }
-        
         return estimatedGas
     }
     
