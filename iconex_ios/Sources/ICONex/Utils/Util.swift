@@ -13,8 +13,21 @@ import BigInt
 import Web3swift
 import CryptoSwift
 import ICONKit
+import LocalAuthentication
 
 struct Tool {
+    public enum LAStatus {
+        case success
+        case failed
+        case userCancel
+        case locked
+        case notUsed
+        case notSupported
+        case userFallback
+        case notAvailable
+        case passcodeNotSet
+    }
+    
     static func calculatePrice(decimal: Int = 18, currency: String, balance: BigUInt) -> String {
         guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return "-" }
         
@@ -154,16 +167,145 @@ struct Tool {
         return false
     }
     
+    static func bioVerification(message: String, completion: @escaping ((_ state: LAStatus) -> Void)) {
+        let context = LAContext()
+        var reason = ""
+        
+        switch context.biometricType {
+        case .touchID:
+            reason = "LockScreen.Setting.Bio.Use.FaceID".localized
+        case .faceID:
+            reason = "LockScreen.Setting.Bio.Use.FaceID".localized
+        case .none:
+            break
+            
+        }
+        
+        context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (isSuccess, error) in
+            
+            var state = LAStatus.success
+            
+            if isSuccess {
+                if let domain = context.evaluatedPolicyDomainState {
+                    UserDefaults.standard.set(domain, forKey: "domain")
+                    UserDefaults.standard.synchronize()
+                    
+                    Log("save users domain.", .debug)
+                }
+            } else {
+                switch error!._code {
+                case LAError.Code.systemCancel.rawValue, LAError.Code.userCancel.rawValue:
+                    state = .userCancel
+                    break
+                    
+                case LAError.Code.authenticationFailed.rawValue:
+                    state = .failed
+                    break
+                    
+                case LAError.Code.passcodeNotSet.rawValue, LAError.Code.biometryNotEnrolled.rawValue:
+                    state = .notUsed
+                    break
+                    
+                case LAError.Code.biometryNotAvailable.rawValue:
+                    state = .notSupported
+                    break
+                    
+                case LAError.Code.userFallback.rawValue:
+                    state = .userFallback
+                    break
+                    
+                default:
+                    if (error!._code == LAError.Code.appCancel.rawValue) {
+                        state = .userCancel
+                    } else if (error!._code == LAError.Code.biometryLockout.rawValue) {
+                        state = .locked
+                    } else {
+                        state = .userCancel
+                    }
+                    
+                    break
+                }
+            }
+            DispatchQueue.main.async {
+                completion(state)
+            }
+        }
+    }
+    
+    static func canVerificateBiometry() -> LAStatus {
+        let context = LAContext()
+        
+        var errorPointer: NSError?
+        let _ = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &errorPointer)
+        
+        guard let error = errorPointer as? LAError else {
+            return .success
+        }
+        
+        switch error {
+        case LAError.biometryLockout:
+            return LAStatus.locked
+            
+        case LAError.biometryNotEnrolled:
+            return LAStatus.notUsed
+            
+        case LAError.biometryNotAvailable:
+            return LAStatus.notAvailable
+            
+        case LAError.passcodeNotSet:
+            return LAStatus.passcodeNotSet
+            
+        default:
+            return LAStatus.notSupported
+        }
+    }
+    
+    
+    static func bioMetryChanged() -> Bool {
+        let context = LAContext()
+        
+        context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        
+        guard let oldDomain = UserDefaults.standard.data(forKey: "domain") else {
+            return false
+        }
+        
+        guard let newDomain = context.evaluatedPolicyDomainState else {
+            return false
+        }
+        
+        let changed = oldDomain != newDomain
+        
+        Log("TouchID domain status: \(changed)", .debug)
+        
+        return changed
+    }
+    
+    static func invalidateBiometry() {
+        let context = LAContext()
+        
+        context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+        
+        guard let newDomain = context.evaluatedPolicyDomainState else {
+            return
+        }
+        
+        UserDefaults.standard.set(newDomain, forKey: "domain")
+        UserDefaults.standard.synchronize()
+        
+        Log("TouchID domain saved.", .debug)
+    }
+    
+    static func removeBio() {
+        UserDefaults.standard.removeObject(forKey: "domain")
+        UserDefaults.standard.removeObject(forKey: "useBio")
+        UserDefaults.standard.synchronize()
+    }
+    
     static func removePasscode() {
         UserDefaults.standard.removeObject(forKey: "u8djdnuEe2xIddfkD")
         UserDefaults.standard.removeObject(forKey: "aExd73E0dxvdQrx")
         UserDefaults.standard.removeObject(forKey: "useLock")
-        UserDefaults.standard.synchronize()
-    }
-    
-    static func removeTouchID() {
-        UserDefaults.standard.removeObject(forKey: "domain")
-        UserDefaults.standard.removeObject(forKey: "useBio")
         UserDefaults.standard.synchronize()
     }
     
@@ -273,113 +415,3 @@ func bzzzz() {
     let feedback = UIImpactFeedbackGenerator(style: .heavy)
     feedback.impactOccurred()
 }
-
-//struct Alert {
-//    public enum EditingMode {
-//        case add, edit
-//    }
-//    
-//    static func Basic(message: String, alignment: NSTextAlignment = .center) -> BasicActionViewController {
-//        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
-//        basic.message = message
-//        basic.setAlignment(alignment)
-//        return basic
-//    }
-//    
-//    static func Basic(attributed: NSAttributedString) -> BasicActionViewController {
-//        let basic = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "BasicActionView") as! BasicActionViewController
-//        basic.attrMessage = attributed
-//        
-//        return basic
-//    }
-//    
-//    static func Confirm(message: String, cancel: String? = "Common.No".localized, confirm: String? = "Common.Yes".localized, handler: (() -> Void)?, _ cancelHandler: (() -> Void)? = nil) -> ConfirmActionViewController {
-//        let confirmAction = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "ConfirmActionView") as! ConfirmActionViewController
-//        confirmAction.message = message
-//        confirmAction.addConfirm(action: handler)
-//        confirmAction.cancel = cancelHandler
-//        confirmAction.confirmTitle = confirm
-//        confirmAction.cancelTitle = cancel
-//        return confirmAction
-//    }
-//    
-//    static func shareBackup(filePath: URL) {
-//        
-//    }
-//    
-//    static func editingAddress(name: String? = nil, address: String? = nil, mode: EditingMode, type: String, handler: (() -> Void)?) -> EditingAddressViewController {
-//        let add = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "EditingAddressView") as! EditingAddressViewController
-//        add.name = name
-//        add.address = address
-//        add.type = type
-//        add.mode = mode
-//        add.handler = handler
-//        
-//        return add
-//    }
-//    
-//    static func transactionDetail(txHash: String) -> TransactionDetailViewController {
-//        let detail = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "TransactionDetailView") as! TransactionDetailViewController
-//        detail.txHash = txHash
-//        
-//        return detail
-//    }
-//    
-//    static func checkPassword(walletInfo: WalletInfo, action: @escaping (_ isSuccess: Bool, _ privateKey: String) -> Void) -> WalletPasswordViewController{
-//        let auth = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "WalletPasswordView") as! WalletPasswordViewController
-//        auth.walletInfo = walletInfo
-//        auth.addConfirm(completion: action)
-//        
-//        return auth
-//    }
-//    
-//    static func TokenManage(walletInfo: WalletInfo) -> UINavigationController {
-//        let token = UIStoryboard(name: "Menu", bundle: nil).instantiateViewController(withIdentifier: "TokenListNav") as! TokenListViewController
-//        token.walletInfo = walletInfo
-//        
-//        let nav = UINavigationController(rootViewController: token)
-//        nav.isNavigationBarHidden = true
-//        return nav
-//    }
-//    
-//    static func PrivateInfo(walletInfo: WalletInfo) -> WalletPrivateInfoViewController {
-//        let info = UIStoryboard(name: "Side", bundle: nil).instantiateViewController(withIdentifier: "WalletPrivateInfo") as! WalletPrivateInfoViewController
-//        info.wallet = WManager.loadWalletBy(info: walletInfo)
-//        
-//        return info
-//    }
-//    
-//    static func NetworkProvider(source: UIViewController, completion: (() -> Void)?) {
-//        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
-//        selectable.handler = { index in
-//            UserDefaults.standard.set(index, forKey: "Provider")
-//            UserDefaults.standard.synchronize()
-//            
-//            if let compl = completion {
-//                compl()
-//            }
-//        }
-//        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
-//    }
-//    
-//    static func DeveloperNetworkProvider(source: UIViewController, completion: (() -> Void)?) {
-//        let selectable = UIStoryboard(name: "ActionControls", bundle: nil).instantiateViewController(withIdentifier: "SelectableActionController") as! SelectableActionController
-//        selectable.handler = { index in
-//            switch index {
-//            case 0:
-//                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
-//            case 1:
-//                ConnManager.provider = ICONService(provider: "https://testwallet.icon.foundation/api/v3", nid: "0x2")
-//            case 2:
-//                ConnManager.provider = ICONService(provider: "https://bicon.net.solidwallet.io/api/v3", nid: "0x3")
-//            default:
-//                ConnManager.provider = ICONService(provider: "https://wallet.icon.foundation/api/v3", nid: "0x1")
-//            }
-//            
-//            if let compl = completion {
-//                compl()
-//            }
-//        }
-//        selectable.present(from: source, title: "AppInfo.SelectNetwork".localized, items: ["Mainnet", "Testnet", "Yeouido (여의도)"])
-//    }
-//}

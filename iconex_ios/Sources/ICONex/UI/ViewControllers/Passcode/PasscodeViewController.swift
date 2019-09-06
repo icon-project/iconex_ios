@@ -8,8 +8,13 @@
 
 import UIKit
 import AudioToolbox
+import LocalAuthentication
+import CryptoSwift
 
 class PasscodeViewController: BaseViewController {
+    
+    @IBOutlet weak var statusCoverView: UIView!
+    @IBOutlet weak var navBar: IXNavigationView!
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bubbleStack: UIStackView!
@@ -30,6 +35,29 @@ class PasscodeViewController: BaseViewController {
     
     override func initializeComponents() {
         super.initializeComponents()
+        
+        if self.lockType == .check {
+            self.statusCoverView.isHidden = true
+            self.navBar.isHidden = true
+            
+        } else {
+            self.statusCoverView.isHidden = false
+            self.navBar.isHidden = false
+        }
+        
+        navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        
+        switch self.lockType {
+        case .activate:
+            navBar.setTitle("LockSetting.Activate.NavBar.Title".localized)
+        case .change:
+            navBar.setTitle("LockSetting.Change.NavBar.Title".localized)
+        case .deactivate:
+            navBar.setTitle("LockSetting.Deactivate.NavBar.Title".localized)
+        default: break
+        }
         
         self.titleLabel.numberOfLines = 2
         
@@ -190,10 +218,6 @@ class PasscodeViewController: BaseViewController {
         }
     }
     
-    private func setPasscode() {
-        UserDefaults.standard.set(self.passcode, forKey: "testPasscode")
-    }
-    
     private func validatePasscode() {
         guard tmpPassword.count == 6 else { return }
         
@@ -208,11 +232,10 @@ class PasscodeViewController: BaseViewController {
                 
             } else {
                 if tmpPassword == self.passcode {
-                    self.setPasscode()
-                    UserDefaults.standard.set(true, forKey: "usePasscode")
-                    self.reset()
-                    
-                    self.dismiss(animated: false, completion: nil)
+                    if Tool.createPasscode(code: self.passcode) {
+                        self.reset()
+                    }
+                    self.navigationController?.popToRootViewController(animated: true)
                 } else {
                     self.setPassStatus(status: .renewFail)
                     
@@ -220,10 +243,8 @@ class PasscodeViewController: BaseViewController {
                 }
             }
         case .change:
-            guard let userdefaultPasscode = UserDefaults.standard.string(forKey: "testPasscode") else { return }
-            
             if self.isChecked {
-                if tmpPassword == userdefaultPasscode {
+                if Tool.verifyPasscode(code: tmpPassword) {
                     self.setPassStatus(status: .new)
                     self.isChecked.toggle()
                 } else {
@@ -233,7 +254,8 @@ class PasscodeViewController: BaseViewController {
             } else {
                 if !self.isConfirm {
                     self.clearBubbleAll()
-                    if tmpPassword == userdefaultPasscode {
+                    
+                    if Tool.verifyPasscode(code: tmpPassword) {
                         self.setPassStatus(status: .same)
                     } else {
                         self.setPassStatus(status: .renewCheck)
@@ -242,12 +264,12 @@ class PasscodeViewController: BaseViewController {
                         self.isConfirm.toggle()
                     }
                     
-                    
                 } else {
                     if self.passcode == tmpPassword {
-                        self.setPasscode()
-                        self.reset()
-                        self.dismiss(animated: false, completion: nil)
+                        if Tool.createPasscode(code: self.passcode) {
+                            self.reset()
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
                     } else {
                         self.setPassStatus(status: .renewFail)
                         clearBubbleAll()
@@ -256,22 +278,20 @@ class PasscodeViewController: BaseViewController {
                     }
                 }
             }
+            
         case .deactivate:
-            guard let userdefaultPasscode = UserDefaults.standard.string(forKey: "testPasscode") else { return }
-            if tmpPassword == userdefaultPasscode {
-                UserDefaults.standard.set(false, forKey: "usePasscode")
-                self.dismiss(animated: false, completion: nil)
+            if Tool.verifyPasscode(code: tmpPassword) {
+                Tool.removePasscode()
+                Tool.removeBio()
+                self.navigationController?.popToRootViewController(animated: true)
             } else {
                 self.setPassStatus(status: .invalid)
                 self.reset()
             }
         case .check:
-            guard let userdefaultPasscode = UserDefaults.standard.string(forKey: "testPasscode") else { return }
-            
-            if tmpPassword == userdefaultPasscode {
+            if Tool.verifyPasscode(code: tmpPassword) {
                 self.reset()
-                self.dismiss(animated: false, completion: nil)
-                
+                self.navigationController?.popToRootViewController(animated: true)
             } else {
                 self.setPassStatus(status: .invalid)
                 

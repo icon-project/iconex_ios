@@ -387,6 +387,37 @@
 "AddressBook.AddAddress" = "주소록 추가";
 
 
+// MARK: LockSettingViewController
+"LockSetting.NavBar.Title" = "잠금 설정";
+"LockSetting.Activate.NavBar.Title" = "잠금 번호 설정";
+"LockSetting.Change.NavBar.Title" = "잠금 번호 변경";
+"LockSetting.Deactivate.NavBar.Title" = "잠금 번호 입력";
+
+"LockSetting.Header.Title" = "잠금 번호를 사용하시겠습니까?";
+"LockSetting.Footer.Title" = "잠금 번호 사용 시 ICONex를 실행할 때마다 잠금 번호를 확인하여, 내 지갑 정보가 노출되는 것을 방지합니다.\n잠금 번호를 잊은 경우, 지갑 비밀번호 확인 후 잠금 번호를 재설정 할 수 있습니다.";
+"LockSetting.Activate" = "잠금 번호 사용";
+"LockSetting.Change" = "잠금 번호 변경";
+"LockSetting.TouchID" = "Touch ID로 잠금 해제";
+"LockSetting.FaceID" = "Face ID로 잠금 해제";
+"LockSetting.Alert.TouchID" = "Touch ID가 등록되어 있지 않습니다.\n휴대폰의 설정화면에서 Touch ID 등록 후 다시 시도해주세요.";
+"LockSetting.Alert.FaceID" = "Face ID가 등록되어 있지 않습니다.\n휴대폰의 설정화면에서 Face ID 등록 후 다시 시도해주세요.";
+"LockSetting.Alert.Password" = "휴대폰의 설정화면에서 \"암호 켜기\" 설정 후 다시 시도해주세요.";
+
+"LockSetting.TouchID.NavBar.Title" = "Touch ID로 잠금 해제 안내";
+"LockSetting.FaceID.NavBar.Title" = "Face ID로 잠금 해제 안내";
+
+"LockSetting.TouchID.Title" = "Touch ID로 잠금 해제를 하시겠습니까?";
+"LockSetting.FaceID.Title" = "Face ID로 잠금 해제를 하시겠습니까?";
+
+"LockSetting.TouchID.SubTitle" = "ICONex 앱을 실행할 때 Touch ID를 사용하여 빠르게 잠금 해제가 가능합니다.";
+"LockSetting.FaceID.SubTitle" = "ICONex 앱을 실행할 때 Face ID를 사용하여 빠르게 잠금 해제가 가능합니다.";
+"LockSetting.TouchID.Description" = "휴대폰에 등록되어 있는 모든 지문으로 잠금 해제를 할 수 있습니다.\n다른 사람의 지문이 등록되어 있는지 확인해주세요.";
+"LockSetting.TouchID.Locked" = "Touch ID가 잠겨있습니다. 휴대폰의 잠금해제 화면에서 암호 입력으로 활성화 할 수 있습니다.";
+"LockSetting.FaceID.Locked" = "Face ID가 잠겨있습니다. 휴대폰의 잠금해제 화면에서 암호 입력으로 활성화 할 수 있습니다.";
+
+"LockSetting.TouchID.Button" = "Touch ID로 해제";
+"LockSetting.FaceID.Button" = "Face ID로 해제";
+
 "Passcode.Fingerprint.Instruction" = "잠금 해제를 위해\n지문 센서에 손가락을 올려주세요.";
 "Passcode.Unlock.Code" = "잠금 번호로 잠금 해제";
 

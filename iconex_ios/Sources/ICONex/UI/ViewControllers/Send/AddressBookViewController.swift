@@ -158,10 +158,13 @@ class AddressBookViewController: BaseViewController {
                 } else {
                     // Add Address
                     Alert.addAddress(confirmAction: {
-                        self.tableView.separatorStyle = .singleLine
-                        self.tableView.backgroundView = nil
                         self.addressBookList = try! DB.addressBookList(by: self.isICX ? "icx" : "eth")
-                        self.tableView.reloadData()
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.separatorStyle = .singleLine
+                            self.tableView.backgroundView = nil
+                            self.tableView.reloadData()
+                        }
                     }).show()
                 }
         }.disposed(by: disposeBag)

@@ -220,6 +220,11 @@ class MainViewController: BaseViewController, Floatable {
                 exportVC.pop()
             }
             menuVC.action4 = {
+                let lockVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "LockSetting") as! LockSettingViewController
+                
+                let navRootVC = UINavigationController(rootViewController: lockVC)
+                navRootVC.isNavigationBarHidden = true
+                app.topViewController()?.present(navRootVC, animated: true, completion: nil)
                 
             }
             menuVC.action5 = {

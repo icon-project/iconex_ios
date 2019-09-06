@@ -17,6 +17,8 @@
 		1CB6C68FC514FE27C287FE76 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3276D03C1014536CB4B68E7 /* Pods_iconex_ios.framework */; };
 		BF0902842314B6AE00B177F4 /* IXInputBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF0902822314B6AE00B177F4 /* IXInputBox.xib */; };
 		BF0902852314B6AE00B177F4 /* IXInputBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0902832314B6AE00B177F4 /* IXInputBox.swift */; };
+		BF206C64232144B700ECD982 /* LockSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206C63232144B700ECD982 /* LockSettingViewController.swift */; };
+		BF206C66232232D000ECD982 /* BioAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206C65232232D000ECD982 /* BioAuthViewController.swift */; };
 		BF29F60E2319116F00EBD1F1 /* DetailOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */; };
 		BF2D35AC2301576600EC2A35 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF2D35AA2301576600EC2A35 /* LaunchScreen.storyboard */; };
 		BF2D35AD230157C200EC2A35 /* IXNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */; };
@@ -198,6 +200,8 @@
 		38C44C1EF18D757D4C7B0C04 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		BF0902822314B6AE00B177F4 /* IXInputBox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IXInputBox.xib; sourceTree = "<group>"; };
 		BF0902832314B6AE00B177F4 /* IXInputBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IXInputBox.swift; sourceTree = "<group>"; };
+		BF206C63232144B700ECD982 /* LockSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSettingViewController.swift; sourceTree = "<group>"; };
+		BF206C65232232D000ECD982 /* BioAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioAuthViewController.swift; sourceTree = "<group>"; };
 		BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOptionViewController.swift; sourceTree = "<group>"; };
 		BF2D35AB2301576600EC2A35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF4F6F462318A57D0098D303 /* SideMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
@@ -638,7 +642,9 @@
 			isa = PBXGroup;
 			children = (
 				D42FF8D922F182E900268C29 /* Passcode.storyboard */,
+				BF206C63232144B700ECD982 /* LockSettingViewController.swift */,
 				D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */,
+				BF206C65232232D000ECD982 /* BioAuthViewController.swift */,
 			);
 			path = Passcode;
 			sourceTree = "<group>";
@@ -1217,6 +1223,7 @@
 				D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */,
 				BF4F6F762318A57D0098D303 /* MainQRCodeViewController.swift in Sources */,
 				BF4F6F7B2318A57D0098D303 /* TokenTableViewCell.swift in Sources */,
+				BF206C66232232D000ECD982 /* BioAuthViewController.swift in Sources */,
 				D46E7761231C0BB800AF332D /* DevelopViewController.swift in Sources */,
 				D4304999231CA26500A8F540 /* IXPickerViewController.swift in Sources */,
 				D4DACDF32314259900CC8EA8 /* PRepSearchViewController.swift in Sources */,
@@ -1291,6 +1298,7 @@
 				BF6EFECF22FA5174003B6AF3 /* TxHashAlertView.swift in Sources */,
 				1BB4C774231BE97800BA4138 /* InputDataViewController.swift in Sources */,
 				BF4F6F722318A57D0098D303 /* ManageBackUpViewController.swift in Sources */,
+				BF206C64232144B700ECD982 /* LockSettingViewController.swift in Sources */,
 				BF4F6F6A2318A57D0098D303 /* SelectCoinTokenViewController.swift in Sources */,
 				D43DB33822D6DB480029FFF0 /* Managers.swift in Sources */,
 				D471F202205A755C00F565EF /* Database.swift in Sources */,
