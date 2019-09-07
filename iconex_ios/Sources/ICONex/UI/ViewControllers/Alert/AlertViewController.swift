@@ -72,6 +72,8 @@ class AlertViewController: BaseViewController {
         
         leftButton.rx.tap
             .subscribe({ (_) in
+                self.view.endEditing(true)
+                
                 self.closer(self.cancelHandler)
             }).disposed(by: disposeBag)
         
@@ -191,12 +193,6 @@ class AlertViewController: BaseViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        self.view.endEditing(true)
-    }
-    
     func setButtonUI(isOne: Bool) {
         leftButton.layer.cornerRadius = 18
         leftButton.clipsToBounds = true
@@ -236,8 +232,6 @@ class AlertViewController: BaseViewController {
     }
     
     func setupAlertView() {
-//        guard let wallet = self.walletInfo else { return }
-        
         switch type {
         case .basic, .allText:
             setButtonUI(isOne: self.isButtonOne)
@@ -314,13 +308,15 @@ class AlertViewController: BaseViewController {
             
             passwordView.inputBoxView.forgotPasswordButton.rx.tap.asControlEvent()
                 .subscribe({ (_) in
+                    self.view.endEditing(true)
+                    
                     UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
                         self.popView.alpha = 0.0
                     }, completion: { _ in
                         self.dismiss(animated: false, completion: {
-                            Alert.basic(title: "비밀번호를 잊으셨나요?", subtitle: "저장해 놓은 개인 키로 지갑을 다시 불러온 후,\n비밀번호를 재설정 할 수 있습니다.", isOnlyOneButton: false, rightButtonTitle: "지갑 가져오기", confirmAction: {
+                            Alert.basic(title: "Alert.ForgotPasscode.Title".localized, subtitle: "Alert.ForgotPasscode.SubTitle".localized, isOnlyOneButton: false, rightButtonTitle: "Side.Load".localized, confirmAction: {
                                 
-                                let loadWallet = UIStoryboard(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
+                                let loadWallet = UIStoryboard(name: "LoadWallet".localized, bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
                                 
                                 loadWallet.pop()
                             }).show()
