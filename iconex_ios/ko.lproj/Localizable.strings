@@ -357,6 +357,7 @@
 "Send.InputBox.Address" = "받는 주소";
 "Send.InputBox.Address.Error" = "올바른 ICX 주소가 아닙니다.";
 "Send.InputBox.Address.Error.ETH" = "올바른 ETH 주소가 아닙니다.";
+"Send.InputBox.Address.Error.SameAddress" = "같은 주소로 송금할 수 없습니다.";
 "Send.InputBox.Data" = "데이터 (선택 입력)";
 "Send.InputBox.Data.View" = "데이터 보기";
 "Send.Amount.Max" = "전액";
@@ -371,6 +372,9 @@
 "Send.AddressBook" = "주소 선택";
 "Send.ScanQRCode" = "QR코드 스캔";
 "Send.Success" = "전송 요청이 완료되었습니다.";
+"Send.Error.InsufficientFee.ICX" = "수수료를 지불할 ICX가 부족합니다.";
+"Send.Error.InsufficientFee.ETH" = "수수료를 지불할 ETH가 부족합니다.";
+
 
 // MARK: DataTypeViewController
 "Send.DataType.Title" = "데이터";

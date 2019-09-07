@@ -435,6 +435,30 @@ class AlertViewController: BaseViewController {
                 }
                 return nil
             }
+            
+            addressView.qrcodeScanButton.rx.tap.asControlEvent()
+                .subscribe { (_) in
+                    self.view.endEditing(true)
+                    
+                    let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
+                    
+                    if self.isICX {
+                        qrCodeReader.set(mode: .icx, handler: { (address) in
+                            addressView.addressInputBox.text = address
+                            addressView.addressInputBox.textField.sendActions(for: .valueChanged)
+                        })
+                        
+                    } else {
+                        qrCodeReader.set(mode: .eth, handler: { (address) in
+                            addressView.addressInputBox.text = address
+                            addressView.addressInputBox.textField.sendActions(for: .valueChanged)
+                        })
+                    }
+                    
+                    app.topViewController()?.present(qrCodeReader, animated: true, completion: nil)
+                    
+            }.disposed(by: disposeBag)
+            
             Observable.combineLatest(addressView.addressNameInputBox.textField.rx.text.orEmpty, addressView.addressInputBox.textField.rx.text.orEmpty)
                 .map { name, address in
                     

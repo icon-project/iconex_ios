@@ -219,6 +219,8 @@ class SendETHViewController: BaseViewController {
         
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.amountInputBox.textField.becomeFirstResponder()
+                
                 if let token = self.token {
                     let power = BigUInt(10) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
@@ -237,6 +239,8 @@ class SendETHViewController: BaseViewController {
         
         plus100Button.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.amountInputBox.textField.becomeFirstResponder()
+                
                 if let token = self.token {
                     let power = BigUInt(100) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
@@ -254,6 +258,8 @@ class SendETHViewController: BaseViewController {
         
         plus1000Button.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.amountInputBox.textField.becomeFirstResponder()
+                
                 if let token = self.token {
                     let power = BigUInt(1000) * BigUInt(10).power(token.decimal)
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
@@ -271,6 +277,8 @@ class SendETHViewController: BaseViewController {
         
         maxButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.amountInputBox.textField.becomeFirstResponder()
+                
                 if let token = self.token {
                     self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, false)
                 } else {
@@ -281,6 +289,8 @@ class SendETHViewController: BaseViewController {
         
         inputDataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
                 inputDataVC.type = .hex
                 inputDataVC.completeHandler = { data, _ in
@@ -296,6 +306,8 @@ class SendETHViewController: BaseViewController {
         viewDataButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 guard let dataValue = self.data else { return }
+                
+                self.view.endEditing(true)
                 
                 let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
                 inputDataVC.type = .hex
@@ -344,6 +356,8 @@ class SendETHViewController: BaseViewController {
         
         addressButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 let addressBook = self.storyboard?.instantiateViewController(withIdentifier: "AddressBook") as! AddressBookViewController
                 addressBook.myAddress = wallet.address
                 addressBook.isICX = false
@@ -363,11 +377,17 @@ class SendETHViewController: BaseViewController {
         
         scanButton.rx.tap.asControlEvent()
             .subscribe { (_) in
+                self.view.endEditing(true)
+                
                 let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                 
-                qrCodeReader.set(mode: .icx, handler: { (address) in
+                qrCodeReader.set(mode: .eth, handler: { (address) in
                     self.addressInputBox.text = address
                     self.addressInputBox.textField.sendActions(for: .valueChanged)
+                    
+                    if address == wallet.address {
+                        self.addressInputBox.setError(message: "Send.InputBox.Address.Error.SameAddress".localized)
+                    }
                 })
                 
                 self.present(qrCodeReader, animated: true, completion: nil)
@@ -404,6 +424,8 @@ class SendETHViewController: BaseViewController {
             .flatMapLatest { [unowned self] (value, address) -> Observable<Bool> in
                 guard !value.isEmpty && !address.isEmpty else { return Observable.just(false) }
                 
+                guard address != wallet.address else { return Observable.just(false) }
+                
                 // address
                 guard Validator.validateETHAddress(address: address) else {
                     return Observable.just(false)
@@ -430,14 +452,19 @@ class SendETHViewController: BaseViewController {
             .subscribe { (_) in
                 guard let pk = self.privateKey else { return }
                 
+                let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
+                let toAddress = self.addressInputBox.text
+                let gasPrice = self.gasPrice
+                let gasLimit = self.gasLimit
+                let data = self.data?.prefix0xRemoved().hexToData() ?? Data()
+                let estimatedGas = BigUInt(self.gasPrice) * self.gasLimit
+                
+                if self.balance < estimatedGas {
+                    Alert.basic(title: "Send.Error.InsufficientFee.ETH".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
+                
                 let sendInfo: SendInfo = {
-                    let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
-                    let toAddress = self.addressInputBox.text
-                    let gasPrice = self.gasPrice
-                    let gasLimit = self.gasLimit
-                    let data = self.data?.prefix0xRemoved().hexToData() ?? Data()
-                    let estimatedGas = BigUInt(self.gasPrice) * self.gasLimit
-                    
                     let ethTx = EthereumTransaction(privateKey: pk, gasPrice: BigUInt(self.gasPrice), gasLimit: gasLimit, from: wallet.address, to: toAddress, value: amount, data: data)
                     
                     if let token = self.token {

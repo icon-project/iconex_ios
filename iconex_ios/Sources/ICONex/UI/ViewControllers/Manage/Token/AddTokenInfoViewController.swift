@@ -59,12 +59,22 @@ class AddTokenInfoViewController: BaseViewController {
     private func setupBind() {
         guard let wallet = self.walletInfo else { return }
         
-        addressBox.set { (address) -> String? in
-            guard !address.isEmpty else { return nil }
-            if !Validator.validateIRCAddress(address: address) {
-                return "Token.Info.Error.Address".localized
+        if let _ = wallet as? ICXWallet {
+            addressBox.set { (address) -> String? in
+                guard !address.isEmpty else { return nil }
+                if !Validator.validateIRCAddress(address: address) {
+                    return "Token.Info.Error.Address".localized
+                }
+                return nil
             }
-            return nil
+        } else {
+            addressBox.set { (address) -> String? in
+                guard !address.isEmpty else { return nil }
+                if !Validator.validateETHAddress(address: address) {
+                    return "Token.Info.Error.Address".localized
+                }
+                return nil
+            }
         }
         
         nameBox.set { (name) -> String? in
@@ -81,14 +91,35 @@ class AddTokenInfoViewController: BaseViewController {
             let contract = self.addressBox.text
             
             if Validator.validateIRCAddress(address: contract) {
-                guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else { return }
-                self.nameBox.text = request.name
-                self.symbolBox.text = request.symbol
-                self.decimalBox.text = String(request.decimal.hexToBigUInt() ?? 0)
+                DispatchQueue.global().async {
+                    guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else { return }
+                    
+                    DispatchQueue.main.async {
+                        self.nameBox.text = request.name
+                        self.symbolBox.text = request.symbol
+                        self.decimalBox.text = String(request.decimal.hexToBigUInt() ?? 0)
+                        
+                        self.nameBox.textField.sendActions(for: .valueChanged)
+                        self.symbolBox.textField.sendActions(for: .valueChanged)
+                        self.decimalBox.textField.sendActions(for: .valueChanged)
+                    }
+                }
                 
-                self.nameBox.textField.sendActions(for: .valueChanged)
-                self.symbolBox.textField.sendActions(for: .valueChanged)
-                self.decimalBox.textField.sendActions(for: .valueChanged)
+            } else if Validator.validateETHAddress(address: contract) {
+                DispatchQueue.global().async {
+                    guard let ercInfo = Ethereum.requestTokenInformation(tokenContractAddress: contract, myAddress: wallet.address) else { return }
+                    
+                    DispatchQueue.main.async {
+                        self.nameBox.text = ercInfo.name
+                        self.symbolBox.text = ercInfo.symbol
+                        self.decimalBox.text = String(ercInfo.decimal)
+                        
+                        self.nameBox.textField.sendActions(for: .valueChanged)
+                        self.symbolBox.textField.sendActions(for: .valueChanged)
+                        self.decimalBox.textField.sendActions(for: .valueChanged)
+                    }
+                }
+                
             }
         }.disposed(by: disposeBag)
         
@@ -96,6 +127,18 @@ class AddTokenInfoViewController: BaseViewController {
         qrCodeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let qrVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
+                
+                if let _ = self.walletInfo as? ICXWallet {
+                    qrVC.set(mode: .irc, handler: { (contract) in
+                        self.addressBox.textField.text = contract
+                        self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
+                    })
+                } else {
+                    qrVC.set(mode: .eth, handler: { (contract) in
+                        self.addressBox.textField.text = contract
+                        self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
+                    })
+                }
                 self.present(qrVC, animated: true, completion: nil)
         }.disposed(by: disposeBag)
         

@@ -67,6 +67,7 @@ class ManageTokenViewController: UIViewController {
                     self.navigationController?.pushViewController(addTokenVC, animated: true)
                 } else {
                     let addTokenInfoVC =  self.storyboard?.instantiateViewController(withIdentifier: "AddTokenInfo") as! AddTokenInfoViewController
+                    addTokenInfoVC.walletInfo = self.walletInfo
                     self.navigationController?.pushViewController(addTokenInfoVC, animated: true)
                 }
                 

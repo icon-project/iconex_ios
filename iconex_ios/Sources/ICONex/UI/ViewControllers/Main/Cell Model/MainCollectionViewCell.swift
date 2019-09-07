@@ -83,8 +83,7 @@ class MainCollectionViewCell: UICollectionViewCell {
                         let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
                         send.walletInfo = self.info
                         send.privateKey = PrivateKey(hex: Data(hex: privateKey))
-                        send.addressInputBox.text = address
-                        send.addressInputBox.textField.sendActions(for: .valueChanged)
+                        send.toAddress = address
                         
                         send.sendHandler = { isSuccess in
                             app.topViewController()?.view.showToast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)

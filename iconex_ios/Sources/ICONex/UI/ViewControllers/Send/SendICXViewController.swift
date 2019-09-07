@@ -55,7 +55,7 @@ class SendICXViewController: BaseViewController {
     var balance: BigUInt = 0
     var stepLimit: BigUInt = 100000
     
-    var stepPrice = Manager.icon.getStepPrice() ?? 0
+    var stepPrice = Manager.icon.stepPrice ?? 0
     var privateKey: PrivateKey?
     var toAddress: String? = nil
     
@@ -86,6 +86,7 @@ class SendICXViewController: BaseViewController {
         
         if let toAddress = self.toAddress {
             self.addressInputBox.text = toAddress
+            self.addressInputBox.textField.sendActions(for: .valueChanged)
         }
         
         if self.token != nil {
@@ -186,7 +187,7 @@ class SendICXViewController: BaseViewController {
         
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.view.endEditing(true)
+                self.amountInputBox.textField.becomeFirstResponder()
                 
                 if let token = self.token {
                     let power = BigUInt(10) * BigUInt(10).power(token.decimal)
@@ -207,7 +208,7 @@ class SendICXViewController: BaseViewController {
         
         plus100Button.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.view.endEditing(true)
+                self.amountInputBox.textField.becomeFirstResponder()
                 
                 if let token = self.token {
                     let power = BigUInt(100) * BigUInt(10).power(token.decimal)
@@ -228,7 +229,7 @@ class SendICXViewController: BaseViewController {
         
         plus1000Button.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.view.endEditing(true)
+                self.amountInputBox.textField.becomeFirstResponder()
                 
                 if let token = self.token {
                     let power = BigUInt(1000) * BigUInt(10).power(token.decimal)
@@ -249,11 +250,17 @@ class SendICXViewController: BaseViewController {
         
         maxButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.view.endEditing(true)
+                self.amountInputBox.textField.becomeFirstResponder()
                 
                 if let token = self.token {
                     self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, false)
+                    
                 } else {
+                    guard self.balance >= self.stepLimit else {
+                        self.amountInputBox.text = "0"
+                        return
+                    }
+                    
                     let maxBalance = self.balance - self.stepLimit
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, false)
                 }
@@ -323,6 +330,10 @@ class SendICXViewController: BaseViewController {
         addressInputBox.set { (address) -> String? in
             guard !address.isEmpty else { return nil }
             
+            guard address != wallet.address else {
+                return "Send.InputBox.Address.Error.SameAddress".localized
+            }
+            
             if Validator.validateICXAddress(address: address) || Validator.validateIRCAddress(address: address) {
                 return nil
             } else {
@@ -361,6 +372,11 @@ class SendICXViewController: BaseViewController {
                 
                 qrCodeReader.set(mode: .icx, handler: { (address) in
                     self.addressInputBox.text = address
+                    self.addressInputBox.textField.sendActions(for: .valueChanged)
+                    
+                    if address == wallet.address {
+                        self.addressInputBox.setError(message: "Send.InputBox.Address.Error.SameAddress".localized)
+                    }
                 })
                 
                 self.present(qrCodeReader, animated: true, completion: nil)
@@ -372,6 +388,8 @@ class SendICXViewController: BaseViewController {
         Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty)
             .flatMapLatest { [unowned self] (value, address) -> Observable<Bool> in
                 guard !value.isEmpty && !address.isEmpty else { return Observable.just(false) }
+                
+                guard address != wallet.address else { return Observable.just(false) }
                 
                 // address
                 guard Validator.validateICXAddress(address: address) || Validator.validateIRCAddress(address: address) else {
@@ -398,6 +416,13 @@ class SendICXViewController: BaseViewController {
         sendButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 guard let pk = self.privateKey else { return }
+                
+                let estimatedStep: BigUInt = self.stepLimit * self.stepPrice
+                
+                if self.balance < estimatedStep {
+                    Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
                 
                 let toAddress = self.addressInputBox.text
                 let stepLimitPrice = self.stepLimitLabel.text ?? ""
