@@ -127,6 +127,10 @@ extension LockSettingViewController: UITableViewDataSource {
             
             activateCell.switchControl.isOn = UserDefaults.standard.bool(forKey: "useBio")
             
+            if Tool.canVerificateBiometry() == .notAvailable {
+                activateCell.switchControl.isOn = false
+            }
+            
             activateCell.switchControl.rx.controlEvent(.valueChanged)
                 .subscribe { (_) in
                     if activateCell.switchControl.isOn {
@@ -145,7 +149,7 @@ extension LockSettingViewController: UITableViewDataSource {
                                     }
                                 }()
                                 
-                                Alert.basic(title: title, leftButtonTitle: "OKOK").show()
+                                Alert.basic(title: title, leftButtonTitle: "Common.Confirm".localized).show()
                                 
                             } else if status == Tool.LAStatus.notUsed {
                                 let title: String = {
@@ -156,10 +160,13 @@ extension LockSettingViewController: UITableViewDataSource {
                                     }
                                 }()
                                 
-                                Alert.basic(title: title, leftButtonTitle: "OKOK").show()
+                                Alert.basic(title: title, leftButtonTitle: "Common.Confirm".localized).show()
                                 
                             } else if status == Tool.LAStatus.passcodeNotSet {
-                                Alert.basic(title: "LockSetting.Alert.Password".localized).show()
+                                Alert.basic(title: "LockSetting.Alert.Password".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                                
+                            } else if status == Tool.LAStatus.notAvailable {
+                                Alert.basic(title: "LockSetting.Alert.Password".localized, leftButtonTitle: "Common.Confirm".localized).show()
                             }
                             activateCell.switchControl.isOn = false
                         }

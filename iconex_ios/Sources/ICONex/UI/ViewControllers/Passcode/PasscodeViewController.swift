@@ -29,10 +29,6 @@ class PasscodeViewController: BaseViewController {
     var isChecked: Bool = true
     var isConfirm: Bool = false
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     override func initializeComponents() {
         super.initializeComponents()
         
@@ -63,6 +59,23 @@ class PasscodeViewController: BaseViewController {
         
         setUpBindNumberView()
         setBubbleView()
+        
+        if self.lockType == .check && UserDefaults.standard.bool(forKey: "useBio") {
+            if Tool.canVerificateBiometry() == .success {
+                Tool.bioVerification(message: "", completion: { (state) in
+                    switch state {
+                    case .success:
+                        app.toMain()
+                        
+                    case .locked:
+                        Alert.basic(title: LAContext().biometricType == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
+                        
+                    default:
+                        break
+                    }
+                })
+            }
+        }
     }
     
     override func refresh() {
@@ -117,7 +130,12 @@ class PasscodeViewController: BaseViewController {
                 btn.rx.tap.asControlEvent()
                     .subscribe { _ in
                         UIView.animate(withDuration: 0.05, delay: 0.0, options: .curveEaseInOut, animations: {
-                            btn.backgroundColor = .init(white: 1, alpha: 0.2)
+                            if self.lockType == .check {
+                                btn.backgroundColor = .init(white: 1, alpha: 0.2)
+                            } else {
+                                btn.backgroundColor = UIColor.init(38, 38, 38, 0.03)
+                            }
+                            
                         }, completion: { _ in
                             btn.backgroundColor = .clear
                         })
@@ -291,7 +309,8 @@ class PasscodeViewController: BaseViewController {
         case .check:
             if Tool.verifyPasscode(code: tmpPassword) {
                 self.reset()
-                self.navigationController?.popToRootViewController(animated: true)
+                app.toMain()
+                
             } else {
                 self.setPassStatus(status: .invalid)
                 

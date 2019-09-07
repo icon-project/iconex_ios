@@ -149,8 +149,13 @@ class IntroViewController: BaseViewController {
             let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
             app.change(root: start)
         } else {
-            app.toMain()
-//            app.toTest()
+            if Tool.isPasscode() {
+                let passcodeVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
+                passcodeVC.lockType = .check
+                app.change(root: passcodeVC)
+            } else {
+                app.toMain()
+            }
         }
     }
     
