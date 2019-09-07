@@ -77,6 +77,8 @@ class AlertViewController: BaseViewController {
         
         rightButton.rx.tap
             .subscribe(onNext: { [unowned self] in
+                self.view.endEditing(true)
+                
                 switch self.type {
                 case .password:
                     let sub = self.contentView.subviews.first as! PasswordAlertView
@@ -182,7 +184,7 @@ class AlertViewController: BaseViewController {
             
         case .addAddress:
             let sub = self.contentView.subviews.first as! AddressAlertView
-            sub.addressInputBox.textField.becomeFirstResponder()
+            sub.addressNameInputBox.textField.becomeFirstResponder()
             
         default: break
             
