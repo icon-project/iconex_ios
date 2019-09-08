@@ -1,10 +1,10 @@
 PODS:
   - AcknowList (1.9)
-  - Alamofire (4.8.2)
+  - Alamofire (4.9.0)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (1.0.0)
-  - ICONKit (0.4.0):
+  - ICONKit (0.4.1):
     - BigInt
     - CryptoSwift
     - secp256k1_swift
@@ -42,7 +42,7 @@ PODS:
 DEPENDENCIES:
   - AcknowList
   - Alamofire
-  - ICONKit (from `https://github.com/icon-project/ICONKit/`, branch `develop`)
+  - ICONKit
   - PanModal
   - RealmSwift (= 3.11.0)
   - RxCocoa
@@ -55,6 +55,7 @@ SPEC REPOS:
     - Alamofire
     - BigInt
     - CryptoSwift
+    - ICONKit
     - PanModal
     - PromiseKit
     - Realm
@@ -67,22 +68,12 @@ SPEC REPOS:
     - Starscream
     - web3swift
 
-EXTERNAL SOURCES:
-  ICONKit:
-    :branch: develop
-    :git: https://github.com/icon-project/ICONKit/
-
-CHECKOUT OPTIONS:
-  ICONKit:
-    :commit: a30cd7b56970eb74336ff2573400a68c74650f2e
-    :git: https://github.com/icon-project/ICONKit/
-
 SPEC CHECKSUMS:
   AcknowList: 06fde3319971dfd517ea1b1c194d78eb8cd774a2
-  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  ICONKit: 08650679326508d1e425323f6554b1f34c7a3108
+  ICONKit: a7ed1fe7988b1403d65989c678daf07e176fd105
   PanModal: 275f6d4d07565ddf4ed16d7be5d9cd275682d80d
   PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
   Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
@@ -95,6 +86,6 @@ SPEC CHECKSUMS:
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 03dbb518364e3c797bff2abd62816d316a0ef31e
+PODFILE CHECKSUM: 9c092e14981bfe505b5fc61959528d24790b1f6d
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.7.1

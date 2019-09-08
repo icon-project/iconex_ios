@@ -207,21 +207,6 @@ enum IXInputBoxType {
                 self.setError(message: validate(self.textField.text!))
             }
         }).disposed(by: disposeBag)
-        
-        
-        switch inputType {
-        case .name:
-            textFieldShare.scan("") { (previous, new) -> String in
-                guard !new.isEmpty else { return new }
-                if new.lengthOfBytes(using: .utf16) > 17 {
-                    return previous
-                } else {
-                    return new
-                }
-            }
-        default:
-            break
-        }
     }
     
     func xibSetup() {

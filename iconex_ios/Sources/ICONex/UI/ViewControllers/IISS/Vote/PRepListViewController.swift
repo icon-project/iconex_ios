@@ -24,7 +24,7 @@ class PRepListViewController: BaseViewController, Floatable {
     
     var selectedWallet: ICXWallet? { return wallet }
     
-    private var refreshControl: UIRefreshControl? = UIRefreshControl()
+    private var refreshControl: UIRefreshControl = UIRefreshControl()
     private var preps: PRepListResponse?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,6 +45,7 @@ class PRepListViewController: BaseViewController, Floatable {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.refreshControl = self.refreshControl
         
         floater.button.rx.tap.subscribe(onNext: { [unowned self] in
             let search = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepSearchView") as! PRepSearchViewController
@@ -73,26 +74,13 @@ class PRepListViewController: BaseViewController, Floatable {
 
 extension PRepListViewController {
     func loadData() {
-        guard self.refreshControl != nil else { return }
+        guard self.refreshControl.isRefreshing == false else { return }
         
-        tableView.refreshControl = self.refreshControl
-        self.refreshControl?.beginRefreshing()
-        DispatchQueue.global().async {
-            guard let preps = Manager.icon.getPreps(from: self.wallet, start: nil, end: nil) else {
-                DispatchQueue.main.async {
-                    self.refreshControl?.endRefreshing()
-                    self.tableView.refreshControl = nil
-                    self.refreshControl = nil
-                }
-                return
-            }
+        self.refreshControl.beginRefreshing()
+        Manager.voteList.loadPrepList(from: wallet) { preps in
+            self.refreshControl.endRefreshing()
             self.preps = preps
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.refreshControl?.endRefreshing()
-                self.tableView.refreshControl = nil
-                self.refreshControl = nil
-                self.tableView.reloadData()
-            })
+            self.tableView.reloadData()
         }
         
     }

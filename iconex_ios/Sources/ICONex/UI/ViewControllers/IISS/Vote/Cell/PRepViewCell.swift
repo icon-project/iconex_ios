@@ -33,7 +33,7 @@ class PRepViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        totalVoteLabel.size12(text: "Total Votes (VP)", color: .gray128, weight: .light, align: .left)
+        totalVoteLabel.size12(text: "Total Votes (%)", color: .gray128, weight: .light, align: .left)
         statusView.corner(statusView.frame.height / 2)
         statusView.border(1.0, .mint2)
     }

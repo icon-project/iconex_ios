@@ -357,6 +357,8 @@
                                                                                 <constraint firstAttribute="width" constant="60" id="FiV-Px-Z9F"/>
                                                                             </constraints>
                                                                             <state key="normal" image="icAddListEnabled"/>
+                                                                            <state key="disabled" image="icAddListDisabled"/>
+                                                                            <state key="selected" image="icAddListPressed"/>
                                                                         </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -450,6 +452,13 @@
                                                 <constraint firstAttribute="bottom" secondItem="hS8-68-iJJ" secondAttribute="bottom" id="yxt-uv-Dgw"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="addButton" destination="TnV-oe-xAG" id="ucd-75-mQA"/>
+                                            <outlet property="prepName" destination="xrQ-vI-12S" id="hPy-ih-xuK"/>
+                                            <outlet property="slider" destination="Xb3-Fv-TCO" id="neq-Hs-V0q"/>
+                                            <outlet property="subtitleLabel" destination="g4l-JE-eDk" id="U89-lU-OC8"/>
+                                            <outlet property="totalVotedValue" destination="E6O-6e-Lsh" id="IAf-SV-f44"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
@@ -716,7 +725,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="icAddListDisabled" width="20" height="20"/>
         <image name="icAddListEnabled" width="20" height="20"/>
+        <image name="icAddListPressed" width="20" height="20"/>
         <image name="icAppbarSearch" width="24" height="24"/>
     </resources>
 </document>

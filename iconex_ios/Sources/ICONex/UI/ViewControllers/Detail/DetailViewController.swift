@@ -66,9 +66,10 @@ class DetailViewController: BaseViewController, Floatable {
             
         case .yeouido:
             return Tracker.yeouido()
-            
+            #if DEBUG
         case .localTest:
             return Tracker.localTest()
+            #endif
         }
     }
     

@@ -58,28 +58,23 @@ class IXSlider: UIView {
     }
     var minText: String = "Min"
     var maxText: String = "Max"
-    var minimum: Float = 0.0 {
-        willSet {
-            current = newValue
-            slider.minimumValue = newValue
-            slider.value = 0.0
-            sliderLeading.constant = 1 + (self.frame.width - 40 + 4) * CGFloat(newValue)
-        }
-    }
     
-    var current: Float = 0.0 {
+    private var current: Float = 0.0 {
         willSet {
-            guard newValue >= minimum else {
+            guard newValue >= 0.0 else {
                 
                 return }
             minWidth.constant = barContainer.frame.width * CGFloat(newValue)
-            guard let total = totalValue else { return }
-            let divided = newValue * 10000
-            let multiflied = total.multiplied(by: BigUInt(divided))
-            let result = multiflied.quotientAndRemainder(dividingBy: 10000)
+            guard let totalNum = self.totalValue?.decimalNumber, let voted = self.voted?.decimalNumber else { return }
+            let totalValue = totalNum - voted
+            let rateValueNum = totalValue * NSDecimalNumber(value: newValue).decimalValue
+            let rateValue = BigUInt(rateValueNum.floatValue)
+            Log("newValue - \(newValue)")
+            Log("rateNum - \(rateValueNum)")
+            Log("rateBig - \(rateValue))")
+            currentValue.onNext(rateValue)
             
-            Log("result - \(newValue) , \(result)")
-            textField.text = result.quotient.toString(decimal: 18, 4, false)
+            textField.text = rateValue.toString(decimal: 18, 4, false)
             innerLabel.size12(text: String(format: "%.1f", current * 100) + " %")
         }
     }
@@ -98,6 +93,8 @@ class IXSlider: UIView {
             }
         }
     }
+    
+    var currentValue: PublishSubject<BigUInt> = PublishSubject<BigUInt>()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -136,7 +133,14 @@ class IXSlider: UIView {
         fieldContainer.corner(4)
         fieldContainer.border(1, .gray230)
         
+        textField.keyboardType = .decimalPad
         textField.tintColor = .mint1
+        let bar = UIToolbar()
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(resign))
+        done.tintColor = .mint1
+        bar.items = [UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil), done]
+        bar.sizeToFit()
+        textField.inputAccessoryView = bar
         
         slider.rx.value.subscribe(onNext: { value in
             self.current = value
@@ -174,13 +178,18 @@ class IXSlider: UIView {
             slider.value = 0
             isEnabled = false
         } else {
-            current = Float(staked / total)
-            slider.value = Float(staked / total)
+            let crtNum = staked.decimalNumber! - (voted?.decimalNumber ?? 0) / total.decimalNumber!
+            
+            Log("current = \(crtNum.floatValue)")
+            current = crtNum.floatValue
+            slider.value = crtNum.floatValue
             isEnabled = true
         }
     }
 }
 
 extension IXSlider {
-    
+    @objc func resign() {
+        textField.resignFirstResponder()
+    }
 }

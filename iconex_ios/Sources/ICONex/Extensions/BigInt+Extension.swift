@@ -40,3 +40,9 @@ extension BigUInt {
         return self * rate / BigUInt(10).power(decimal)
     }
 }
+
+extension BigUInt {
+    var decimalNumber: Decimal? {
+        return Decimal(string: self.toString(decimal: 0))
+    }
+}

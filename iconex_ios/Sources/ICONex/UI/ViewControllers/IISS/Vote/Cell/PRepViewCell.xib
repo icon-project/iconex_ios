@@ -28,7 +28,8 @@
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="-20" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" image="icAddListEnabled"/>
-                                <state key="selected" image="icAddListDisabled"/>
+                                <state key="disabled" image="icAddListDisabled"/>
+                                <state key="selected" image="icAddListPressed"/>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GmJ-vm-oxl">
                                 <rect key="frame" x="40" y="0.0" width="315" height="89.5"/>
@@ -97,5 +98,6 @@
     <resources>
         <image name="icAddListDisabled" width="20" height="20"/>
         <image name="icAddListEnabled" width="20" height="20"/>
+        <image name="icAddListPressed" width="20" height="20"/>
     </resources>
 </document>

@@ -47,9 +47,10 @@ class DetailViewModel {
             
         case .yeouido:
             return Tracker.yeouido()
-            
+            #if DEBUG
         case .localTest:
             return Tracker.localTest()
+            #endif
         }
     }
     
