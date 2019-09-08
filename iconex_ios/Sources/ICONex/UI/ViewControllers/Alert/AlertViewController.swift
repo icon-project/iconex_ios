@@ -55,11 +55,12 @@ class AlertViewController: BaseViewController {
     var privateKey: String = ""
     
     var isSuccess: Bool = true
+    var txHash: String?
     
     var cancelHandler: (() -> Void)?
     var confirmHandler: (() -> Void)?
     var returnHandler: ((_ privateKey: String) -> Void)?
-    var successHandler: ((_ isSuccess: Bool) -> Void)?
+    var successHandler: ((_ isSuccess: Bool, _ txHash: String?) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,11 +146,27 @@ class AlertViewController: BaseViewController {
                     
                     // ICX
                     if let tx = sendInfo.transaction, let pk = sendInfo.privateKey {
+//                        do {
+//                            let result = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
+//                            Log(result, .info)
+//
+//                            self.isSuccess = true
+//                            self.txHash = result
+//                        } catch {
+//                            self.isSuccess = false
+//                        }
                         do {
-                            let result = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
-                            Log(result, .info)
+                            let request = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
                             
-                            self.isSuccess = true
+                            switch request {
+                            case .success(let txHash):
+                                self.isSuccess = true
+                                self.txHash = txHash
+                                
+                            case .failure(let err):
+                                self.isSuccess = false
+                                self.txHash = err.localizedDescription
+                            }
                         } catch {
                             self.isSuccess = false
                         }
@@ -565,7 +582,7 @@ class AlertViewController: BaseViewController {
         })
     }
     
-    private func closer(_ closeAction: ((_ isSuccess: Bool) -> Void)? = nil) {
+    private func closer(_ closeAction: ((_ isSuccess: Bool, _ txHash: String?) -> Void)? = nil) {
         animateClose()
         
         UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
@@ -573,7 +590,7 @@ class AlertViewController: BaseViewController {
         }, completion: { _ in
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
-                    closeAct(self.isSuccess)
+                    closeAct(self.isSuccess, self.txHash)
                 }
             })
         })

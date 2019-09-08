@@ -12,7 +12,7 @@ import ICONKit
 import BigInt
 
 class Alert {
-    static func basic(title: String, subtitle: String? = nil, hasHeaderTitle: Bool = false, isOnlyOneButton: Bool = true, leftButtonTitle: String? = nil, rightButtonTitle: String? = nil, confirmAction: (() -> Void)? = nil) -> AlertViewController {
+    static func basic(title: String, subtitle: String? = nil, hasHeaderTitle: Bool = false, isOnlyOneButton: Bool = true, leftButtonTitle: String? = nil, rightButtonTitle: String? = nil, cancelAction: (() -> Void)? = nil, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.titleText = title
         alertVC.subTitleText = subtitle ?? ""
@@ -25,8 +25,9 @@ class Alert {
         if let rightTitle = rightButtonTitle {
             alertVC.rightButtonTitle = rightTitle
         }
+        alertVC.cancelHandler = cancelAction
         alertVC.confirmHandler = confirmAction
-        
+    
         return alertVC
     }
     
@@ -85,7 +86,7 @@ class Alert {
         return alertVC
     }
     
-    static func send(sendInfo: SendInfo, confirmAction: ((_ isSuccess: Bool) -> Void)? = nil) -> AlertViewController {
+    static func send(sendInfo: SendInfo, confirmAction: ((_ isSuccess: Bool, _ txHash: String?) -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .send
         alertVC.sendInfo = sendInfo

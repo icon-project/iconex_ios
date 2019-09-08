@@ -17,38 +17,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var appVersion: String {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
     }
-//    var connect: ConnectViewController?
 
     var all: String?
     var necessary: String?
     
     func setRedirect(source: URL) {
-//        do {
-//            guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
-//                throw ConnectError.invalidRequest
-//            }
-//            guard let queries = components.queryItems else {
-//                throw ConnectError.invalidRequest
-//            }
-//            guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
-//                throw ConnectError.invalidRequest
-//
-//            }
-//            guard let data = Data(base64Encoded: dataParam) else {
-//                throw ConnectError.invalidBase64
-//            }
-//
-//            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let redirect = json["redirect"] as? String else {
-//                throw ConnectError.invalidJSON
-//            }
-//            guard let conURL = URL(string: redirect) else {
-//                throw ConnectError.invalidJSON
-//            }
-//
-//            Conn.redirect = conURL
-//        } catch {
-//
-//        }
+        do {
+            guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
+                throw ConnectError.invalidRequest
+            }
+            guard let queries = components.queryItems else {
+                throw ConnectError.invalidRequest
+            }
+            guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
+                throw ConnectError.invalidRequest
+
+            }
+            guard let data = Data(base64Encoded: dataParam) else {
+                throw ConnectError.invalidBase64
+            }
+
+            guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let redirect = json["redirect"] as? String else {
+                throw ConnectError.invalidJSON
+            }
+            guard let conURL = URL(string: redirect) else {
+                throw ConnectError.invalidJSON
+            }
+
+            Conn.redirect = conURL
+            Conn.isConnect = true
+        } catch {
+
+        }
         
     }
     
@@ -150,14 +150,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-//        setRedirect(source: url)
-//        Conn.setMessage(source: url)
-//        if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
-//            Manager.exchange.getExchangeList()
-//            Manager.balance.getAllBalances()
-//            toConnect()
-//        }
-//        Conn.isConnect = true
+        setRedirect(source: url)
+        Conn.setMessage(source: url)
+        if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
+            Manager.exchange.getExchangeList()
+            Manager.balance.getAllBalances()
+            toConnect()
+        }
+        Conn.isConnect = true
         return true
     }
     
@@ -188,13 +188,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func toConnect() {
-//        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
-//
-//        self.connect = connect
-//        if let top = self.topViewController() {
-//            Log("Present - \(top)")
-//            top.present(connect!, animated: true, completion: nil)
-//        }
+        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as! ConnectViewController
+        if let top = self.topViewController() {
+            Log("Present - \(top)")
+            top.present(connect, animated: true, completion: nil)
+        }
+        // app.topViewController()?.present(connect, animated: true, completion: nil)
     }
     
     func toTest() {

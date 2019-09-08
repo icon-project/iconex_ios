@@ -177,24 +177,12 @@ extension ICONManager {
     }
     
     
-    public func sendTransaction(transaction: Transaction, privateKey: PrivateKey) throws -> String {
-        do {
-            let signed = try SignedTransaction(transaction: transaction, privateKey: privateKey)
-            let request = iconService.sendTransaction(signedTransaction: signed)
-            let response = request.execute()
-            
-            switch response {
-            case .success(let txHash):
-                return txHash
-                
-            case .failure(let error):
-                Log(error, .error)
-                return error.localizedDescription
-            }
-        } catch let err {
-            Log(err, .error)
-            return "\(err.localizedDescription)"
-        }
+    public func sendTransaction(transaction: Transaction, privateKey: PrivateKey) throws -> Result<String, Error> {
+        let signed = try SignedTransaction(transaction: transaction, privateKey: privateKey)
+        let request = iconService.sendTransaction(signedTransaction: signed)
+        let response = request.execute()
+        
+        return response
     }
     
     public func getTransactionResult(txHash: String) -> Response.TransactionResult? {

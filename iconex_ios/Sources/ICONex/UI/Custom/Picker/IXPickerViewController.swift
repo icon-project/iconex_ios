@@ -48,6 +48,11 @@ class IXPickerViewController: BaseViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapClose))
         gestureView.addGestureRecognizer(tap)
+        
+        closeButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                self.close()
+        }.disposed(by: disposeBag)
     }
     
     override func viewDidAppear(_ animated: Bool) {

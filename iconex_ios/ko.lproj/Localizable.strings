@@ -703,10 +703,15 @@
 "Alert.Wallet.RequestPassword" = "지갑 비밀번호 입력";
 "Alert.Wallet.Remove.UnknownBalance" = "지갑의 보유금액을 확인 할 수 없습니다.\n정말 삭제하시겠습니까?";
 "Alert.Permission.Camera" = "카메라에 대한 권한을 허용하지 않으면 QR코드 스캔을 사용할 수 없습니다.\n(휴대폰의 설정>앱 권한 설정에서 카메라 권한을 허용할 수 있습니다.)";
-"Alert.Connect.Select.Cancel" = "지갑 선택을 취소하시겠습니까?\n이용 중이던 앱으로 돌아갑니다.";
-"Alert.Connect.Password.Cancel" = "지갑 비밀번호 입력을 취소하시겠습니까?\n이용 중이던 앱으로 돌아갑니다.";
-"Alert.Connect.Send.Cancel" = "송금을 취소하시겠습니까?\n이용 중이던 앱으로 돌아갑니다.";
+"Alert.Connect.Select.Cancel1" = "지갑 선택을 취소하시겠습니까?";
+"Alert.Connect.Select.Cancel2" = "이용 중이던 앱으로 돌아갑니다.";
+"Alert.Connect.Password.Cancel1" = "지갑 비밀번호 입력을 취소하시겠습니까?";
+"Alert.Connect.Password.Cancel2" = "이용 중이던 앱으로 돌아갑니다.";
+"Alert.Connect.Send.Cancel1" = "송금을 취소하시겠습니까?";
+"Alert.Connect.Send.Cancel2" = "이용 중이던 앱으로 돌아갑니다.";
 "Alert.Connect.Send.Completed" = "송금 요청이 완료되었습니다.\n거래내역은 내 지갑 상세페이지 또는 ICON Tracker에서 조회 가능합니다.";
+"Alert.Connect.Send.Completed1" = "송금 요청이 완료되었습니다.";
+"Alert.Connect.Send.Completed2" = "거래내역은 내 지갑 상세페이지 또는 ICON Tracker에서 조회 가능합니다.";
 
 "Error.Swap.NoICX" = "스왑 가능한 ICX 토큰이 없습니다.";
 "Error.Swap.NoETH" = "스왑 수수료 지불을 위한 ETH 잔액이 없습니다. 입금 후 진행해 주세요.";

@@ -14,6 +14,13 @@
 		1BB4C77C231BFB7300BA4138 /* IXKeyboardToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1BB4C778231BFABD00BA4138 /* IXKeyboardToolBar.xib */; };
 		1BB4C77D231BFB7600BA4138 /* IXKeyboardToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB4C77B231BFADD00BA4138 /* IXKeyboardToolBar.swift */; };
 		1BB4C781231C1EBB00BA4138 /* AddressBookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BB4C780231C1EBB00BA4138 /* AddressBookViewController.swift */; };
+		1BBEC3C42324DB5D00B69C22 /* ConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B952CC52323FE0200CA04A2 /* ConnectViewController.swift */; };
+		1BBEC3C52324DB6100B69C22 /* BindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEC3BD2324D25500B69C22 /* BindViewController.swift */; };
+		1BBEC3C62324DB6300B69C22 /* BindPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEC3C02324D27100B69C22 /* BindPasswordViewController.swift */; };
+		1BBEC3C72324DB6600B69C22 /* ConnectSendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBEC3C32324D31000B69C22 /* ConnectSendViewController.swift */; };
+		1BBEC3C82324DB7C00B69C22 /* Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8E54CE232493B200F85EAC /* Connect.swift */; };
+		1BBEC3C92324DB8000B69C22 /* Connect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B952CC22323FDE700CA04A2 /* Connect.storyboard */; };
+		1BBFFCEF232538A300957E5F /* ConnectDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFFCEE232538A300957E5F /* ConnectDataViewController.swift */; };
 		1CB6C68FC514FE27C287FE76 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3276D03C1014536CB4B68E7 /* Pods_iconex_ios.framework */; };
 		BF0902842314B6AE00B177F4 /* IXInputBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF0902822314B6AE00B177F4 /* IXInputBox.xib */; };
 		BF0902852314B6AE00B177F4 /* IXInputBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0902832314B6AE00B177F4 /* IXInputBox.swift */; };
@@ -190,6 +197,9 @@
 
 /* Begin PBXFileReference section */
 		075E80F5EC9628AE75A5FCA6 /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
+		1B8E54CE232493B200F85EAC /* Connect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connect.swift; sourceTree = "<group>"; };
+		1B952CC22323FDE700CA04A2 /* Connect.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Connect.storyboard; sourceTree = "<group>"; };
+		1B952CC52323FE0200CA04A2 /* ConnectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectViewController.swift; sourceTree = "<group>"; };
 		1BB4C767231A9D9F00BA4138 /* Send.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Send.storyboard; sourceTree = "<group>"; };
 		1BB4C76A231A9DD600BA4138 /* SendICXViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendICXViewController.swift; sourceTree = "<group>"; };
 		1BB4C76F231BE15300BA4138 /* DataTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypeViewController.swift; sourceTree = "<group>"; };
@@ -197,6 +207,10 @@
 		1BB4C778231BFABD00BA4138 /* IXKeyboardToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IXKeyboardToolBar.xib; sourceTree = "<group>"; };
 		1BB4C77B231BFADD00BA4138 /* IXKeyboardToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXKeyboardToolBar.swift; sourceTree = "<group>"; };
 		1BB4C780231C1EBB00BA4138 /* AddressBookViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBookViewController.swift; sourceTree = "<group>"; };
+		1BBEC3BD2324D25500B69C22 /* BindViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindViewController.swift; sourceTree = "<group>"; };
+		1BBEC3C02324D27100B69C22 /* BindPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindPasswordViewController.swift; sourceTree = "<group>"; };
+		1BBEC3C32324D31000B69C22 /* ConnectSendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSendViewController.swift; sourceTree = "<group>"; };
+		1BBFFCEE232538A300957E5F /* ConnectDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataViewController.swift; sourceTree = "<group>"; };
 		38C44C1EF18D757D4C7B0C04 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
 		BF0902822314B6AE00B177F4 /* IXInputBox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IXInputBox.xib; sourceTree = "<group>"; };
 		BF0902832314B6AE00B177F4 /* IXInputBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IXInputBox.swift; sourceTree = "<group>"; };
@@ -381,6 +395,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1B952CBF2323FDB100CA04A2 /* Connect */ = {
+			isa = PBXGroup;
+			children = (
+				1B952CC22323FDE700CA04A2 /* Connect.storyboard */,
+				1B8E54CE232493B200F85EAC /* Connect.swift */,
+				1B952CC52323FE0200CA04A2 /* ConnectViewController.swift */,
+				1BBEC3BD2324D25500B69C22 /* BindViewController.swift */,
+				1BBEC3C02324D27100B69C22 /* BindPasswordViewController.swift */,
+				1BBEC3C32324D31000B69C22 /* ConnectSendViewController.swift */,
+				1BBFFCEE232538A300957E5F /* ConnectDataViewController.swift */,
+			);
+			path = Connect;
+			sourceTree = "<group>";
+		};
 		1BB4C757231A951700BA4138 /* Send */ = {
 			isa = PBXGroup;
 			children = (
@@ -899,6 +927,7 @@
 		D4C542C922E995A10099358D /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				1B952CBF2323FDB100CA04A2 /* Connect */,
 				1BB4C757231A951700BA4138 /* Send */,
 				D4BF98D9230F7BA8009D4632 /* TEST */,
 				D46B158C23015255001B5D48 /* IISS */,
@@ -1114,6 +1143,7 @@
 				D4728A1A2007040B00E0A899 /* Assets.xcassets in Resources */,
 				D4FDCA7122F7FEBF00D6CDD4 /* SelectCardView.xib in Resources */,
 				D46DB4D420A1903500B632D9 /* Localizable.strings in Resources */,
+				1BBEC3C92324DB8000B69C22 /* Connect.storyboard in Resources */,
 				D462F9D7231E3B7F00602D83 /* Export.storyboard in Resources */,
 				D4682A1A230BD7D600225C73 /* IXSlider.xib in Resources */,
 				BF6EFEC922FA5174003B6AF3 /* AddressAlertView.xib in Resources */,
@@ -1226,6 +1256,7 @@
 				BF206C66232232D000ECD982 /* BioAuthViewController.swift in Sources */,
 				D46E7761231C0BB800AF332D /* DevelopViewController.swift in Sources */,
 				D4304999231CA26500A8F540 /* IXPickerViewController.swift in Sources */,
+				1BBEC3C42324DB5D00B69C22 /* ConnectViewController.swift in Sources */,
 				D4DACDF32314259900CC8EA8 /* PRepSearchViewController.swift in Sources */,
 				D4682A12230B93ED00225C73 /* IXSlider.swift in Sources */,
 				BF6EFEC622FA5174003B6AF3 /* PasswordAlertView.swift in Sources */,
@@ -1248,6 +1279,7 @@
 				BF4F6F7A2318A57D0098D303 /* WalletTableViewCell.swift in Sources */,
 				1BB4C781231C1EBB00BA4138 /* AddressBookViewController.swift in Sources */,
 				D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */,
+				1BBFFCEF232538A300957E5F /* ConnectDataViewController.swift in Sources */,
 				BF6EFEC122FA5174003B6AF3 /* AlertViewController.swift in Sources */,
 				D4DACDF12313D37400CC8EA8 /* PRepViewCell.swift in Sources */,
 				D4F7672E22F41B3A00452DA7 /* IXNavigationView.swift in Sources */,
@@ -1270,7 +1302,9 @@
 				BF4F6F742318A57D0098D303 /* ManageTokenTableViewCell.swift in Sources */,
 				BF4F6F692318A57D0098D303 /* DetailViewModel.swift in Sources */,
 				D4CD0AA0231EC607000E8EA8 /* Exportable.swift in Sources */,
+				1BBEC3C52324DB6100B69C22 /* BindViewController.swift in Sources */,
 				D462F9DD231E3CB200602D83 /* ExportPasswordViewController.swift in Sources */,
+				1BBEC3C82324DB7C00B69C22 /* Connect.swift in Sources */,
 				D4FDCA6E22F7FA4800D6CDD4 /* LoadNameViewController.swift in Sources */,
 				D4277E7A20746606006F3C95 /* ETHWallet.swift in Sources */,
 				BF4F6F702318A57D0098D303 /* ManageWalletViewController.swift in Sources */,
@@ -1323,6 +1357,8 @@
 				BF6EFEC322FA5174003B6AF3 /* SendAlertView.swift in Sources */,
 				BF4F6F6B2318A57D0098D303 /* MainViewModel.swift in Sources */,
 				BF4F6F652318A57D0098D303 /* MainViewController.swift in Sources */,
+				1BBEC3C62324DB6300B69C22 /* BindPasswordViewController.swift in Sources */,
+				1BBEC3C72324DB6600B69C22 /* ConnectSendViewController.swift in Sources */,
 				D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */,
 				D4FDCA6C22F7FA3700D6CDD4 /* LoadFileViewController.swift in Sources */,
 				BF4F6F6E2318A57D0098D303 /* TokenDetailViewController.swift in Sources */,
