@@ -17,7 +17,7 @@ class MyVoteViewController: BaseViewController {
     @IBOutlet weak var headerSecondItem: UIButton!
     
     private var delegationInfo: TotalDelegation? = nil
-    private var refreshControl: UIRefreshControl? = UIRefreshControl()
+    private var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +43,9 @@ class MyVoteViewController: BaseViewController {
             .subscribe(onNext: { [weak self] in
                 self?.delegate.headerSelected(index: 1)
             }).disposed(by: disposeBag)
+        
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
     }
     
     override func refresh() {
@@ -52,23 +55,14 @@ class MyVoteViewController: BaseViewController {
 }
 
 extension MyVoteViewController {
-    func loadData() {
-        guard refreshControl != nil else { return }
-        tableView.refreshControl = refreshControl
-        refreshControl?.beginRefreshing()
-        DispatchQueue.global().async {
-            let result = Manager.icon.getDelegation(wallet: self.delegate.wallet)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                self.refreshControl?.endRefreshing()
-                self.refreshControl = nil
-                self.tableView.refreshControl = nil
-                
-                if let info = result {
-                    self.delegationInfo = info
-                    self.tableView.reloadData()
-                }
-            }
+    @objc func loadData() {
+        guard refreshControl.isRefreshing == false else { return }
+        refreshControl.beginRefreshing()
+        
+        Manager.voteList.loadMyVotes(from: delegate.wallet) { voteList in
+            self.refreshControl.endRefreshing()
+            self.delegationInfo = voteList
+            self.tableView.reloadData()
         }
     }
 }
@@ -83,7 +77,7 @@ extension MyVoteViewController: UITableViewDataSource {
             if section == 0 { return 1 }
             return delegateInfo.delegations.count
         } else {
-            return 0
+            return Manager.voteList.votesCount
         }
     }
     
@@ -91,14 +85,20 @@ extension MyVoteViewController: UITableViewDataSource {
         let info = self.delegationInfo!
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath) as! MyVoteGeneralCell
-        
+            
             cell.set(info: info)
             
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
-            
-            
+            let myList = Manager.voteList.myVotesList
+            if let delInfo = myList[indexPath.row] as? PRepDelegation {
+                cell.prepName.size12(text: delInfo.address, color: .gray77, weight: .semibold)
+                cell.addButton.isEnabled = false
+            } else if let prepInfo = myList[indexPath.row] as? PRepListResponse.PReps {
+                cell.addButton.isEnabled = true
+                cell.prepName.size12(text: prepInfo.name, color: .gray77, weight: .semibold)
+            }
             
             return cell
         }

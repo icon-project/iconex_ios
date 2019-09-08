@@ -21,6 +21,8 @@ struct Manager {
     static let exchange = ExchangeManager.shared
     
     static let iiss = PRepManager.shared
+    
+    static let voteList = VoteListManager.shared
 }
 
 
@@ -244,18 +246,33 @@ extension ICONManager {
         })
     }
     
-    func setDelegation(from: ICXWallet, delegations: [PRepDelegation]) -> String? {
+    func setStake(from: ICXWallet, value: BigUInt, stepLimit: BigUInt) -> CallTransaction {
+        let params = ["value": value.toHexString()]
+        
+        let call = CallTransaction()
+            .method("setStake")
+            .from(from.address)
+            .to(CONST.iiss)
+            .nid(Manager.icon.iconService.nid)
+            .stepLimit(stepLimit)
+            .params(params)
+            
+        Log("transaction \(try? call.toDic())")
+        
+        return call
+    }
+    
+    func setDelegation(from: ICXWallet, delegations: [PRepDelegation]) -> CallTransaction {
         let params = ["delegations": delegations]
         
-        let call = Call<String>(from: from.address, to: CONST.iiss, method: "setDelegation", params: params)
-        let result = self.iconService.call(call).execute()
+        let call = CallTransaction()
+        call.from = from.address
+        call.to = CONST.iiss
+        call.method("setDelegation")
+        call.params(params)
+        call.nid = Manager.icon.iconService.nid
         
-        do {
-            return try result.get()
-        } catch {
-            Log("Error - \(error)")
-            return nil
-        }
+        return call
     }
     
     func getDelegation(wallet: ICXWallet) -> TotalDelegation? {

@@ -24,7 +24,7 @@ class PRepsViewController: BaseViewController, Floatable {
     
     var selectedWallet: ICXWallet? { return delegate.wallet }
     
-    private var refreshControl: UIRefreshControl? = UIRefreshControl()
+    private var refreshControl: UIRefreshControl = UIRefreshControl()
     private var preps: PRepListResponse?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +49,9 @@ class PRepsViewController: BaseViewController, Floatable {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.refreshControl = refreshControl
+        
+        refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
         
         floater.button.rx.tap.subscribe(onNext: { [unowned self] in
             let search = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepSearchView") as! PRepSearchViewController
@@ -76,29 +79,17 @@ class PRepsViewController: BaseViewController, Floatable {
 }
 
 extension PRepsViewController {
-    func loadData() {
-        guard self.refreshControl != nil else { return }
+    @objc func loadData() {
+        guard self.refreshControl.isRefreshing == false else { return }
         
-        tableView.refreshControl = self.refreshControl
-        self.refreshControl?.beginRefreshing()
-        DispatchQueue.global().async {
-            guard let preps = Manager.icon.getPreps(from: self.delegate.wallet, start: nil, end: nil) else {
-                DispatchQueue.main.async {
-                    self.refreshControl?.endRefreshing()
-                    self.tableView.refreshControl = nil
-                    self.refreshControl = nil
-                }
-                return
-            }
+        self.refreshControl.beginRefreshing()
+        
+        Manager.voteList.loadPrepList(from: delegate.wallet) { preps in
+            self.refreshControl.endRefreshing()
+            
             self.preps = preps
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                self.refreshControl?.endRefreshing()
-                self.tableView.refreshControl = nil
-                self.refreshControl = nil
-                self.tableView.reloadData()
-            })
+            self.tableView.reloadData()
         }
-        
     }
 }
 
@@ -124,13 +115,18 @@ extension PRepsViewController: UITableViewDataSource {
         cell.active = true
         cell.addButton.rx.tap
             .subscribe(onNext: {
-//                if self.delegate.modifiedList.count < 10 {
-//                    
-//                } else {
-//                    let cellRect = tableView.rectForRow(at: indexPath)
-//                    tableView.showToolTip(sizeY: cellRect.origin.y)
-//                }
+                if Manager.voteList.contains(address: prep.address) {
+                    Manager.voteList.remove(prep: prep)
+                } else {
+                    if Manager.voteList.add(prep: prep) {
+                    } else {
+                        let cellRect = tableView.rectForRow(at: indexPath)
+                        tableView.showToolTip(sizeY: cellRect.origin.y)
+                    }
+                }
+                tableView.reloadData()
             }).disposed(by: cell.disposeBag)
+        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address)
         
         return cell
     }

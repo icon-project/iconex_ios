@@ -314,7 +314,7 @@ struct Tool {
         
         guard let window = app.window else { return }
         
-//        window.makeToast(message)        
+        window.showToast(message: message)
     }
     
     static func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {

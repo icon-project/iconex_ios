@@ -9,7 +9,12 @@
 import UIKit
 
 class MyVoteDelegateCell: UITableViewCell {
-
+    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var prepName: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
+    @IBOutlet weak var totalVotedValue: UILabel!
+    @IBOutlet weak var slider: IXSlider!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
