@@ -56,3 +56,13 @@ extension UIImage {
         self.init(cgImage: cgImage, scale: UIScreen.main.nativeScale, orientation: .up)
     }
 }
+
+extension CIImage {
+    func convertCIImageToCGImage() -> CGImage? {
+        let context = CIContext(options: nil)
+        if let cgImage = context.createCGImage(self, from: self.extent) {
+            return cgImage
+        }
+        return nil
+    }
+}

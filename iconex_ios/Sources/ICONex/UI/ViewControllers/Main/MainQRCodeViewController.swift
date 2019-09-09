@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+//import MessageUI
 
 class MainQRCodeViewController: BaseViewController {
 
@@ -68,19 +69,44 @@ class MainQRCodeViewController: BaseViewController {
         
         dismissButton.rounded()
         
-        // keyboard
+        if !isICX {
+            inputBox.isHidden = true
+            sendButton.isHidden = true
+            descLabel.isHidden = true
+        }
         
         // copy
         copyButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 UIPasteboard.general.string = self.wallet?.address ?? ""
-                self.view.showToast(message: "Wallet.Address.CopyComplete".localized)
+                app.window?.showToast(message: "Wallet.Address.CopyComplete".localized)
         }.disposed(by: disposeBag)
         
-        sendButton.rx.tap.asControlEvent()
-            .subscribe { (_) in
-                // TODO
-        }.disposed(by: disposeBag)
+//        sendButton.rx.tap.asControlEvent()
+//            .subscribe { (_) in
+//                if MFMessageComposeViewController.canSendText() {
+//                    let messageVC = MFMessageComposeViewController()
+//                    messageVC.delegate = self
+//                    messageVC.body = "\(self.inputBox.text)ICX를 ICONex 지갑으로 보내주세요."
+//
+//                    // Add PNG
+//                    if MFMessageComposeViewController.canSendAttachments() {
+//                        guard let wallet = self.wallet else { return }
+//                        guard let qrCodeSource = wallet.address.generateQRCode() else { return }
+//
+//                        guard let cgImageSource = qrCodeSource.convertCIImageToCGImage() else { return }
+//                        let image = UIImage(cgImage: cgImageSource)
+//
+//                        // scale
+//                        if let dataImage = image.pngData() {
+//                            messageVC.addAttachmentData(dataImage, typeIdentifier: "image/png", filename: "ImageData.png")
+//                        }
+//
+//                    }
+//
+//                    self.present(messageVC, animated: true, completion: nil)
+//                }
+//        }.disposed(by: disposeBag)
         
         dismissButton.rx.tap.asControlEvent()
             .subscribe { (_) in
@@ -90,6 +116,7 @@ class MainQRCodeViewController: BaseViewController {
         inputBox.setError(message: "$\t0.000")
         
         inputBox.set { (value) -> String? in
+            guard !value.isEmpty else { return nil }
             let exchangedInfo = self.isICX ? "icxusd" : "ethusd"
             let usdPrice = Manager.exchange.exchangeInfoList[exchangedInfo]?.price
             
@@ -121,3 +148,23 @@ class MainQRCodeViewController: BaseViewController {
         
     }
 }
+
+//extension MainQRCodeViewController: MFMessageComposeViewControllerDelegate {
+//    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+//        switch result {
+//        case .cancelled:
+//            print("cancelled")
+//            break
+//        case .failed:
+//            print("failed")
+//            break
+//        case .sent:
+//            print("sent")
+//            break
+//        default:
+//            print("err")
+//            break
+//        }
+//        controller.dismiss(animated: true, completion: nil)
+//    }
+//}
