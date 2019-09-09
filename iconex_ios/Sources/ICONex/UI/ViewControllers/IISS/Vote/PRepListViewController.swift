@@ -77,12 +77,11 @@ extension PRepListViewController {
         guard self.refreshControl.isRefreshing == false else { return }
         
         self.refreshControl.beginRefreshing()
-        Manager.voteList.loadPrepList(from: wallet) { preps in
+        Manager.voteList.loadPrepList(from: wallet) { preps, _ in
             self.refreshControl.endRefreshing()
             self.preps = preps
             self.tableView.reloadData()
         }
-        
     }
 }
 

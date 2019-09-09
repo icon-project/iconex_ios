@@ -8,6 +8,8 @@
 
 import Foundation
 import BigInt
+import RxSwift
+import RxCocoa
 
 struct MyVoteEditInfo {
     var prepName: String
@@ -15,7 +17,7 @@ struct MyVoteEditInfo {
     var totalDelegate: BigUInt
     var myDelegate: BigUInt?
     var editedDelegate: BigUInt?
-    var isAdded: Bool
+    var isMyVote: Bool
 }
 
 class VoteListManager {
@@ -23,58 +25,109 @@ class VoteListManager {
     
     private init () { }
     
-    private var myVotes: TotalDelegation?
+    var myVotes: TotalDelegation?
     
-    private var preps: PRepListResponse?
+    var preps: PRepListResponse?
     
-    private var addedList = [PRepListResponse.PReps]()
+    var myAddList = [MyVoteEditInfo]()
+    
+    var currentAddedList = PublishSubject<[MyVoteEditInfo]>()
     
     var votesCount: Int {
-        return (myVotes?.delegations.count ?? 0) + (preps?.preps.count ?? 0)
+        return (myVotes?.delegations.count ?? 0) + myAddList.count
     }
     
-    var myVotesList: [Any] {
-        return (myVotes?.delegations ?? []) + (preps?.preps ?? [])
-    }
-    
-    func add(prep: PRepListResponse.PReps) -> Bool {
-        guard (myVotes?.delegations.count ?? 0) + addedList.count < 10 else { return false }
+    func loadPrepList(from: ICXWallet) -> (PRepListResponse?, [MyVoteEditInfo]?) {
+        let preps = Manager.icon.getPreps(from: from, start: nil, end: nil)
+        self.preps = preps
         
-        addedList.append(prep)
-        Log("added List - \(addedList)")
-        return true
-    }
-    
-    func remove(prep: PRepListResponse.PReps) {
-        let filtered = addedList.enumerated().filter { $0.element.address == prep.address }
-        
-        if let index = filtered.first?.offset {
-            _ = addedList.remove(at: index)
-            Log("added List - \(addedList)")
+        var myList: [MyVoteEditInfo]? = nil
+        if let response = preps {
+            myList = [MyVoteEditInfo]()
+            for prep in response.preps {
+                let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false)
+                myList?.append(editInfo)
+            }
         }
+        return (preps, myList)
     }
     
-    func loadPrepList(from: ICXWallet, _ completion: ((PRepListResponse?) -> Void)? = nil) {
+    func loadPrepList(from: ICXWallet, _ completion: ((PRepListResponse?, [MyVoteEditInfo]?) -> Void)? = nil) {
         DispatchQueue.global().async {
             let preps = Manager.icon.getPreps(from: from, start: nil, end: nil)
             self.preps = preps
+            
+            var myList: [MyVoteEditInfo]? = nil
+            if let response = preps {
+                myList = [MyVoteEditInfo]()
+                for prep in response.preps {
+                    let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false)
+                    myList?.append(editInfo)
+                }
+            }
+            
             DispatchQueue.main.async {
-                completion?(preps)
+                completion?(preps, myList)
             }
         }
     }
     
-    func loadMyVotes(from: ICXWallet, _ completion: ((TotalDelegation?) -> Void)? = nil) {
+    func loadMyVotes(from: ICXWallet) -> (TotalDelegation?, [MyVoteEditInfo]?) {
+        let result = Manager.icon.getDelegation(wallet: from)
+        self.myVotes = result
+        var myList: [MyVoteEditInfo]? = nil
+        if let response = result {
+            myList = [MyVoteEditInfo]()
+            for prep in response.delegations {
+                guard let prepInfo = Manager.icon.getPRepInfo(from: from, address: prep.address) else { continue }
+                let myInfo = MyVoteEditInfo(prepName: prepInfo.name, address: prep.address, totalDelegate: prepInfo.delegated, myDelegate: prep.value, editedDelegate: nil, isMyVote: true)
+                myList?.append(myInfo)
+            }
+        }
+        return (result, myList)
+    }
+    
+    func loadMyVotes(from: ICXWallet, _ completion: ((TotalDelegation?, [MyVoteEditInfo]?) -> Void)? = nil) {
         DispatchQueue.global().async {
             let result = Manager.icon.getDelegation(wallet: from)
             self.myVotes = result
+            
+            var myList: [MyVoteEditInfo]? = nil
+            if let response = result {
+                myList = [MyVoteEditInfo]()
+                for prep in response.delegations {
+                    guard let prepInfo = Manager.icon.getPRepInfo(from: from, address: prep.address) else { continue }
+                    let myInfo = MyVoteEditInfo(prepName: prepInfo.name, address: prep.address, totalDelegate: prepInfo.delegated, myDelegate: prep.value, editedDelegate: nil, isMyVote: true)
+                    myList?.append(myInfo)
+                }
+            }
+            
             DispatchQueue.main.async {
-                completion?(result)
+                completion?(result, myList)
             }
         }
     }
     
     func contains(address: String) -> Bool {
-        return addedList.filter { $0.address == address }.count != 0
+        return myAddList.filter { $0.address == address }.count != 0
+    }
+    
+    func add(prep: MyVoteEditInfo) -> Bool {
+        guard (myVotes?.delegations.count ?? 0) + myAddList.count < 10 else { return false }
+        
+        myAddList.append(prep)
+        Log("added List - \(myAddList)")
+        currentAddedList.onNext(myAddList)
+        return true
+    }
+    
+    func remove(prep: MyVoteEditInfo) {
+        let filtered = myAddList.enumerated().filter { $0.element.address == prep.address }
+        
+        if let index = filtered.first?.offset {
+            _ = myAddList.remove(at: index)
+            Log("added List - \(myAddList)")
+            currentAddedList.onNext(myAddList)
+        }
     }
 }
