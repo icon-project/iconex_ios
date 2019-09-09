@@ -131,7 +131,7 @@ class StakeViewController: BaseViewController {
                 
                 if staked > modified {
                     // unstake
-                    let unstake = StakeInfo(timeRequired: "Stake.Value.TimeRequired.Untake".localized, stepLimit: limit.toString(decimal: 0, 0, false).currencySeparated(), estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
+                    let unstake = StakeInfo(timeRequired: "Stake.Value.TimeRequired.Unstake".localized, stepLimit: limit.toString(decimal: 0, 0, false).currencySeparated(), estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
                     Alert.unstake(unstakeInfo: unstake, confirmAction: {
                         self.setStake(value: modified, stepLimit: limit)
                     }).show()
