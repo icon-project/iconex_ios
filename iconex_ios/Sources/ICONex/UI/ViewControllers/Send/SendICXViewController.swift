@@ -486,7 +486,7 @@ class SendICXViewController: BaseViewController {
                     }
                 }()
                 
-                Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess in
+                Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess, txHash in
                     
                     self.dismiss(animated: true, completion: {
                         if let handler = self.sendHandler {

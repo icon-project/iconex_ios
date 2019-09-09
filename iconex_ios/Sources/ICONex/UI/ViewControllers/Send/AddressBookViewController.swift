@@ -82,7 +82,6 @@ class AddressBookViewController: BaseViewController {
         addressBookButton.setTitle("AddressBook.Button.AddressBook".localized, for: .normal)
         myWalletButton.setTitle("AddressBook.Button.MyWallet".localized, for: .normal)
         
-        addressBookButton.isSelected = true
 
         addressBookButton.titleLabel?.size14(text: "AddressBook.Button.AddressBook".localized, color: .gray77, weight: .bold, align: .center)
         myWalletButton.titleLabel?.size14(text: "AddressBook.Button.MyWallet".localized, color: .gray77, align: .center)
@@ -149,6 +148,16 @@ class AddressBookViewController: BaseViewController {
         cancelButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 self.dismiss(animated: true, completion: nil)
+        }.disposed(by: disposeBag)
+        
+        rightButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                self.tableView.isEditing.toggle()
+                if self.tableView.isEditing {
+                    self.rightButton.setTitle("Common.Complete".localized, for: .normal)
+                } else {
+                    self.rightButton.setTitle("Common.Edit".localized, for: .normal)
+                }
         }.disposed(by: disposeBag)
         
         footerRightButton.rx.tap.asControlEvent()
@@ -230,6 +239,20 @@ extension AddressBookViewController: UITableViewDelegate {
                     let address = self.myWalletList[indexPath.row].address
                     handler(address)
                 }
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            do {
+                let addressName = addressBookList[indexPath.row].name
+                try DB.deleteAddressBook(name: addressName)
+                
+                addressBookList.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            } catch {
+                
             }
         }
     }

@@ -153,10 +153,16 @@ class IntroViewController: BaseViewController {
                 let passcodeVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
                 passcodeVC.lockType = .check
                 app.change(root: passcodeVC)
+            } else if !Tool.isPasscode() && Conn.isConnect {
+                let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as! ConnectViewController
+                app.window?.rootViewController = connect
+//                app.change(root: connect)
             } else {
                 app.toMain()
             }
         }
+        
+        
     }
     
     private func checkVersion() {

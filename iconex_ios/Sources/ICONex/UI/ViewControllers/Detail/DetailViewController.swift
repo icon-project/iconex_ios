@@ -168,11 +168,24 @@ class DetailViewController: BaseViewController, Floatable {
         DispatchQueue.global().async {
             let balance: BigUInt = {
                 if let token = self.tokenInfo {
-                    return Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
+                    if let _ = wallet as? ICXWallet {
+                        return Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
+                        
+                    } else if let _ = wallet as? ETHWallet {
+                        return Ethereum.requestTokenBalance(token: token) ?? 0
+                    } else {
+                        return 0
+                    }
                     
                 } else {
-                    guard let icx = wallet as? ICXWallet else { return 0 }
-                    return Manager.icon.getBalance(wallet: icx) ?? 0
+                    if let icx = wallet as? ICXWallet {
+                        return Manager.icon.getBalance(wallet: icx) ?? 0
+                        
+                    } else if let eth = wallet as? ETHWallet {
+                        return Ethereum.requestBalance(address: eth.address) ?? 0
+                    } else {
+                        return 0
+                    }
                 }
             }()
             
