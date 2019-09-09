@@ -92,7 +92,7 @@
 		BFC9A4A223141498002E35F5 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49923141498002E35F5 /* extensions.swift */; };
 		BFC9A4A323141498002E35F5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49A23141498002E35F5 /* String+Extension.swift */; };
 		BFC9A4A423141498002E35F5 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49B23141498002E35F5 /* Data+Extension.swift */; };
-		CDF18CD86D630FBC13118222 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		CDF18CD86D630FBC13118222 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40C2BB92303A557009782AA /* MainCardView.swift */; };
 		D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D40C2BBB2303A5B1009782AA /* MainCardView.xib */; };
@@ -393,7 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D44A948B2019CB0D00F60614 /* Security.framework in Frameworks */,
-				CDF18CD86D630FBC13118222 /* (null) in Frameworks */,
+				CDF18CD86D630FBC13118222 /* BuildFile in Frameworks */,
 				6A243FC3455D3A25F1E3000D /* Pods_iconex_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1518,6 +1518,7 @@
 		};
 		D4728A222007040B00E0A899 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CFEFAE5B5EA66A6D5004187B /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1561,6 +1562,7 @@
 		};
 		D4728A232007040B00E0A899 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A18D0965DC391E5907AF62C0 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
