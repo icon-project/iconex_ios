@@ -16,8 +16,12 @@ class MyVoteViewController: BaseViewController {
     @IBOutlet weak var headerFirstItem: UILabel!
     @IBOutlet weak var headerSecondItem: UIButton!
     
-    private var delegationInfo: TotalDelegation? = nil
+    private var myVoteList = [MyVoteEditInfo]()
+    private var totalDelegation: TotalDelegation?
+    
     private var refreshControl = UIRefreshControl()
+    
+    private var selectedIndexPath: IndexPath? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +50,11 @@ class MyVoteViewController: BaseViewController {
         
         tableView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
+        
+        Manager.voteList.currentAddedList.subscribe(onNext: { addedList in
+            self.myVoteList = addedList
+            self.tableView.reloadData()
+        }).disposed(by: disposeBag)
     }
     
     override func refresh() {
@@ -59,9 +68,13 @@ extension MyVoteViewController {
         guard refreshControl.isRefreshing == false else { return }
         refreshControl.beginRefreshing()
         
-        Manager.voteList.loadMyVotes(from: delegate.wallet) { voteList in
+        Manager.voteList.loadMyVotes(from: delegate.wallet) { totalDelegation, myVotes in
             self.refreshControl.endRefreshing()
-            self.delegationInfo = voteList
+            self.totalDelegation = totalDelegation
+            self.myVoteList.removeAll()
+            if let votes = myVotes {
+                self.myVoteList.append(contentsOf: votes)
+            }
             self.tableView.reloadData()
         }
     }
@@ -73,31 +86,57 @@ extension MyVoteViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let delegateInfo = delegationInfo {
-            if section == 0 { return 1 }
-            return delegateInfo.delegations.count
+        if section == 0 {
+            if totalDelegation == nil {
+                return 0
+            }
+            return 1
         } else {
             return Manager.voteList.votesCount
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let info = self.delegationInfo!
         if indexPath.section == 0 {
+            let info = self.totalDelegation!
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath) as! MyVoteGeneralCell
             
             cell.set(info: info)
             
             return cell
         } else {
+            let total = totalDelegation!.delegations
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
-            let myList = Manager.voteList.myVotesList
-            if let delInfo = myList[indexPath.row] as? PRepDelegation {
-                cell.prepName.size12(text: delInfo.address, color: .gray77, weight: .semibold)
+            if indexPath.row < total.count {
+                let info = myVoteList[indexPath.row]
+                cell.prepName.size12(text: info.prepName, color: .gray77, weight: .semibold)
+                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
+                cell.addButton.isSelected = false
                 cell.addButton.isEnabled = false
-            } else if let prepInfo = myList[indexPath.row] as? PRepListResponse.PReps {
+            } else {
+                let info = Manager.voteList.myAddList[indexPath.row - total.count]
+                cell.prepName.size12(text: info.prepName, color: .gray77, weight: .semibold)
+                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
+                cell.addButton.isSelected = true
                 cell.addButton.isEnabled = true
-                cell.prepName.size12(text: prepInfo.name, color: .gray77, weight: .semibold)
+                cell.addButton.rx.tap
+                    .subscribe(onNext: {
+                        Manager.voteList.remove(prep: info)
+                        tableView.reloadData()
+                    }).disposed(by: disposeBag)
+                cell.slider.rx.value.subscribe(onNext: { value in
+                    cell.current = value
+                }).disposed(by: cell.disposeBag)
+                
+//                cell.currentValue
+//                    .observeOn(MainScheduler.asyncInstance)
+//                    .distinctUntilChanged()
+//                    .debounce(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
+//                    .subscribe(onNext: { current in
+//
+//                        Log("CURRENT \(current)")
+//
+//                    }).disposed(by: cell.disposeBag)
             }
             
             return cell
@@ -160,4 +199,17 @@ extension MyVoteViewController: UITableViewDelegate {
             return sectionHeader
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            selectedIndexPath = indexPath
+            tableView.beginUpdates()
+            tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+            tableView.endUpdates()
+        }
+    }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        guard let selected = selectedIndexPath else { return }
+//    }
 }

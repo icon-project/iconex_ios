@@ -26,6 +26,7 @@ class PRepsViewController: BaseViewController, Floatable {
     
     private var refreshControl: UIRefreshControl = UIRefreshControl()
     private var preps: PRepListResponse?
+    private var editInfoList: [MyVoteEditInfo]?
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -84,10 +85,11 @@ extension PRepsViewController {
         
         self.refreshControl.beginRefreshing()
         
-        Manager.voteList.loadPrepList(from: delegate.wallet) { preps in
+        Manager.voteList.loadPrepList(from: delegate.wallet) { preps, editInfoList in
             self.refreshControl.endRefreshing()
             
             self.preps = preps
+            self.editInfoList = editInfoList
             self.tableView.reloadData()
         }
     }
@@ -115,10 +117,11 @@ extension PRepsViewController: UITableViewDataSource {
         cell.active = true
         cell.addButton.rx.tap
             .subscribe(onNext: {
-                if Manager.voteList.contains(address: prep.address) {
-                    Manager.voteList.remove(prep: prep)
+                let editInfo = self.editInfoList![indexPath.row]
+                if Manager.voteList.contains(address: editInfo.address) {
+                    Manager.voteList.remove(prep: editInfo)
                 } else {
-                    if Manager.voteList.add(prep: prep) {
+                    if Manager.voteList.add(prep: editInfo) {
                     } else {
                         let cellRect = tableView.rectForRow(at: indexPath)
                         tableView.showToolTip(sizeY: cellRect.origin.y)

@@ -125,7 +125,7 @@ class IXSlider: UIView {
         maxBar.backgroundColor = .gray77
         
         slider.setThumbImage(#imageLiteral(resourceName: "icControlerEnabled"), for: .normal)
-        slider.setThumbImage(#imageLiteral(resourceName: "icControlerEnabled"), for: .highlighted)
+        slider.setThumbImage(#imageLiteral(resourceName: "icControlerAtive"), for: .highlighted)
         minLabel.size12(text: "Min", color: .gray77, weight: .light, align: .left)
         maxLabel.size12(text: "Max", color: .gray77, weight: .light, align: .right)
         
