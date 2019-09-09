@@ -74,11 +74,11 @@ class SendETHViewController: BaseViewController {
     var balance: BigUInt = 0
     var gasLimit: BigUInt = 21000
     var gasPrice: Int = 21
+    var estimatedGas: BigUInt = 0
     
     var data: String? = nil {
         willSet {
             guard let value = newValue else { return }
-            guard let wallet = self.walletInfo else { return }
             
             if !value.isEmpty {
                 self.inputDataButton.isEnabled = false
@@ -92,6 +92,8 @@ class SendETHViewController: BaseViewController {
                 self.inputDataButton.isEnabled = true
                 self.viewDataButton.isHidden = true
             }
+            
+            self.estimatedGas = self.gasLimit * BigUInt(self.gasPrice)
         }
     }
     
@@ -128,6 +130,10 @@ class SendETHViewController: BaseViewController {
         guard let wallet = self.walletInfo else { return }
         
         // set up slider
+        gasPriceSlider.corner(8)
+        gasPriceSlider.border(0.5, .gray230)
+        gasPriceSlider.backgroundColor = .gray252
+        
         self.minView.layer.cornerRadius = 4
         self.minView.clipsToBounds = true
         self.maxView.layer.cornerRadius = 4
@@ -140,6 +146,11 @@ class SendETHViewController: BaseViewController {
         slider.maximumValue = 99.0
         slider.setThumbImage(#imageLiteral(resourceName: "icControlerEnabled"), for: .normal)
         slider.setThumbImage(#imageLiteral(resourceName: "icControlerAtive"), for: .highlighted)
+        
+        gasPriceTitleLabel.text = "Send.GasPrice".localized
+        gweiTitleLabel.text = "GWei"
+        slowLabel.text = "Send.GasPrice.Slow".localized
+        fastLabel.text = "Send.GasPrice.Fast".localized
         
         slider.value = Float(self.gasPrice)
         
@@ -182,7 +193,7 @@ class SendETHViewController: BaseViewController {
         scanButton.setTitle("Send.ScanQRCode".localized, for: .normal)
         
         gasLimitInputBox.text = String(self.gasLimit)
-        
+        gasLimitInputBox.set(state: .normal, placeholder: "Send.GasLimit".localized)
         
         dataInputBox.set(inputType: .normal)
         dataInputBox.set(state: .normal, placeholder: "Send.InputBox.Data".localized)
@@ -394,6 +405,22 @@ class SendETHViewController: BaseViewController {
                 
             }.disposed(by: disposeBag)
         
+        Observable.combineLatest(gasLimitInputBox.textField.rx.text.orEmpty, slider.rx.value).flatMapLatest { (limit, price) -> Observable<String> in
+            let gasLimit = BigUInt(limit) ?? 0
+            let gasPrice = BigUInt(price)
+            
+            let gas = gasLimit * gasPrice
+            let wei = gas * BigUInt(10).power(9)
+            
+            let result = wei.toString(decimal: 18, 6).currencySeparated()
+            
+            let price = Tool.calculatePrice(currency: "ethusd", balance: wei)
+            self.estimatedExchangedLabel.text = price
+            
+            return Observable.just(result)
+        }.bind(to: self.estimatedFeeLabel.rx.text)
+        .disposed(by: disposeBag)
+        
         Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty, self.dataInputBox.textField.rx.text.orEmpty)
             .subscribe(onNext: { (amount, address, data) in
 
@@ -402,6 +429,7 @@ class SendETHViewController: BaseViewController {
                 if data.isEmpty {
                     self.gasLimit = 21000
                     self.gasLimitInputBox.text = "21000"
+                    self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
                     
                 } else {
                     let value = Tool.stringToBigUInt(inputText: amount, decimal: 18, fixed: true) ?? 0
@@ -409,11 +437,9 @@ class SendETHViewController: BaseViewController {
                     
                     DispatchQueue.global().async {
                         self.gasLimit = Ethereum.requestETHEstimatedGas(value: value, data: data.prefix0xRemoved().hexToData() ?? Data(), from: wallet.address, to: address) ?? 0
-                        
                         DispatchQueue.main.async {
                             self.gasLimitInputBox.textField.text = "\(self.gasLimit)"
-                            
-                            self.estimatedFeeLabel.size14(text: self.gasLimit.toString(decimal: 9, 9), color: .gray77, align: .right)
+                            self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
                         }
                     }
                 }

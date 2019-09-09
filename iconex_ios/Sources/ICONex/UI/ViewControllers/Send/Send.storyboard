@@ -453,7 +453,7 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YE8-cB-IaL">
-                                                        <rect key="frame" x="308.33333333333331" y="55.666666666666629" width="26.666666666666686" height="14.666666666666671"/>
+                                                        <rect key="frame" x="308.33333333333331" y="61.999999999999993" width="26.666666666666686" height="14.666666666666664"/>
                                                         <fontDescription key="fontDescription" name="AppleSDGothicNeo-Light" family="Apple SD Gothic Neo" pointSize="12"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
@@ -504,13 +504,13 @@
                                                     <constraint firstAttribute="height" constant="128" id="9cY-jy-TA6"/>
                                                     <constraint firstItem="jhh-ib-sRc" firstAttribute="top" secondItem="HhF-xb-7gP" secondAttribute="top" constant="25" id="Oee-Nx-9PU"/>
                                                     <constraint firstItem="Gfa-Wn-O1F" firstAttribute="leading" secondItem="g2G-ZK-Caf" secondAttribute="leading" id="Stw-Yn-VbK"/>
+                                                    <constraint firstItem="YE8-cB-IaL" firstAttribute="top" secondItem="Gfa-Wn-O1F" secondAttribute="top" id="Ueu-il-Wbr"/>
                                                     <constraint firstItem="mEq-Zd-ksY" firstAttribute="leading" secondItem="Gfa-Wn-O1F" secondAttribute="leading" id="UgR-Jd-4Gb"/>
                                                     <constraint firstItem="YE8-cB-IaL" firstAttribute="trailing" secondItem="jhh-ib-sRc" secondAttribute="trailing" id="YCy-Mb-zKc"/>
                                                     <constraint firstItem="Gfa-Wn-O1F" firstAttribute="top" secondItem="g2G-ZK-Caf" secondAttribute="bottom" constant="20" id="oKY-Tp-Rg5"/>
                                                     <constraint firstItem="mEq-Zd-ksY" firstAttribute="top" secondItem="Gfa-Wn-O1F" secondAttribute="bottom" constant="4" id="rSy-cf-Mir"/>
                                                     <constraint firstItem="jhh-ib-sRc" firstAttribute="leading" secondItem="3qj-tM-G5x" secondAttribute="trailing" constant="5" id="tAf-Ep-cwq"/>
                                                     <constraint firstItem="3qj-tM-G5x" firstAttribute="centerY" secondItem="jhh-ib-sRc" secondAttribute="centerY" id="vXx-ql-9vQ"/>
-                                                    <constraint firstItem="YE8-cB-IaL" firstAttribute="top" secondItem="jhh-ib-sRc" secondAttribute="bottom" constant="11.666666666666671" id="wER-MO-yZR"/>
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="0So-H9-p6B">
@@ -540,7 +540,7 @@
                                                 <rect key="frame" x="30" y="721" width="335" height="58"/>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h19-bZ-eDg">
-                                                <rect key="frame" x="20" y="875" width="335" height="104.66666666666663"/>
+                                                <rect key="frame" x="20" y="875" width="335" height="93"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5h-zy-Qzz">
                                                         <rect key="frame" x="19.999999999999996" y="30" width="41.666666666666657" height="20.333333333333329"/>
@@ -549,19 +549,19 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WpQ-Oz-qJ6">
-                                                        <rect key="frame" x="273.33333333333331" y="30" width="41.666666666666686" height="20.333333333333329"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                        <rect key="frame" x="281" y="30.000000000000004" width="34" height="15.666666666666668"/>
+                                                        <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="14"/>
+                                                        <color key="textColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXR-Pw-WD7">
-                                                        <rect key="frame" x="273.33333333333331" y="54.333333333333265" width="41.666666666666686" height="20.333333333333336"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <nil key="textColor"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXR-Pw-WD7">
+                                                        <rect key="frame" x="286" y="49.666666666666742" width="29" height="13.333333333333336"/>
+                                                        <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="12"/>
+                                                        <color key="textColor" red="0.70196078431372544" green="0.70196078431372544" blue="0.70196078431372544" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wN-yZ-zTn">
-                                                        <rect key="frame" x="261" y="58.000000000000007" width="7.3333333333333144" height="13.333333333333336"/>
+                                                        <rect key="frame" x="273.66666666666669" y="49.666666666666742" width="7.3333333333333144" height="13.333333333333336"/>
                                                         <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="12"/>
                                                         <color key="textColor" red="0.70196078429999997" green="0.70196078429999997" blue="0.70196078429999997" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
