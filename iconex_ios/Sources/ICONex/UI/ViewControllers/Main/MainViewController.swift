@@ -27,6 +27,7 @@ class MainViewController: BaseViewController, Floatable {
     @IBOutlet weak var contentHeight: NSLayoutConstraint!
     @IBOutlet weak var contentBottom: NSLayoutConstraint!
     @IBOutlet weak var cardTop: NSLayoutConstraint!
+    @IBOutlet weak var indicatorHeight: NSLayoutConstraint!
     
     // balance and power
     @IBOutlet weak var balanceAssetTitle: UILabel!
@@ -59,9 +60,9 @@ class MainViewController: BaseViewController, Floatable {
     
     var walletList = [BaseWalletConvertible]() {
         didSet {
-            contentTop.constant = 0
-            backHeight.constant = Header_Height
-            contentBottom.constant = 0
+//            contentTop.constant = 0
+//            backHeight.constant = Header_Height
+//            contentBottom.constant = 0
         }
     }
     
@@ -129,8 +130,13 @@ class MainViewController: BaseViewController, Floatable {
                 
                 self.walletList = Manager.wallet.walletList
                 
-                DispatchQueue.global().async {
-                    Manager.balance.getAllBalances()
+                Manager.balance.getAllBalances {
+                    self.contentTop.constant = 0
+                    self.backHeight.constant = Header_Height
+                    self.contentBottom.constant = 0
+                    UIView.animate(withDuration: 0.25, animations: {
+                        self.view.layoutIfNeeded()
+                    })
                 }
                 
                 let list = Manager.balance.calculateExchangeTotalBalance()
@@ -152,10 +158,6 @@ class MainViewController: BaseViewController, Floatable {
                 }
                 
                 self.symbolList = tmp
-                
-                DispatchQueue.main.async {
-                    self.activityControl.stopAnimating()
-                }
                 
             }.disposed(by: disposeBag)
         
@@ -360,7 +362,7 @@ extension MainViewController {
                         activityControl.startAnimating()
                     }
                     
-                    if offset.y > -100 {
+                    if offset.y >= -indicatorHeight.constant {
                         contentTop.constant = abs(offset.y)
                         backHeight.constant = Header_Height + abs(offset.y)
                         contentBottom.constant = abs(offset.y)
@@ -392,9 +394,22 @@ extension MainViewController {
             } else { // down
                 // refresh
                 if cardTop.constant == 0 {
-                    mainViewModel.reload.onNext(true)
-//                    self.activityControl.stopAnimating()
-
+                    if contentTop.constant >= indicatorHeight.constant - 10 {
+                        contentTop.constant = indicatorHeight.constant
+                        bzz()
+                        UIView.animate(withDuration: 0.25, animations: {
+                            self.view.layoutIfNeeded()
+                        }) { _ in
+                            mainViewModel.reload.onNext(true)
+                        }
+                    } else {
+                        contentTop.constant = 0
+                        backHeight.constant = Header_Height
+                        contentBottom.constant = 0
+                        UIView.animate(withDuration: 0.25) {
+                            self.view.layoutIfNeeded()
+                        }
+                    }
                 } else {
                     if cardTop.constant > -Header_Height/2 {
                         self.cardTop.constant = 0

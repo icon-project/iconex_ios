@@ -120,7 +120,7 @@
                                                                         <rect key="frame" x="172" y="6" width="75.666666666666686" height="42"/>
                                                                     </button>
                                                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="ogJ-4i-663">
-                                                                        <rect key="frame" x="177.66666666666666" y="55.333333333333329" width="20" height="20"/>
+                                                                        <rect key="frame" x="177.66666666666666" y="55.333333333333371" width="20" height="20"/>
                                                                     </activityIndicatorView>
                                                                 </subviews>
                                                                 <constraints>
@@ -148,7 +148,7 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ihs-g5-uXM">
-                                                                        <rect key="frame" x="40" y="38.333333333333329" width="295" height="50.333333333333329"/>
+                                                                        <rect key="frame" x="40" y="38.333333333333371" width="295" height="50.333333333333343"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="42"/>
                                                                         <nil key="textColor"/>
                                                                         <nil key="highlightedColor"/>
@@ -657,6 +657,7 @@
                         <outlet property="contentTop" destination="ugm-JS-JCq" id="91q-g9-dIe"/>
                         <outlet property="contentView" destination="JE8-wH-3AW" id="HEm-lv-ynQ"/>
                         <outlet property="gradientView" destination="TNH-hS-7KJ" id="jgN-3s-OHB"/>
+                        <outlet property="indicatorHeight" destination="sZR-KC-gTc" id="PeX-3w-99b"/>
                         <outlet property="navBar" destination="8GC-hz-Csp" id="4vS-hY-M2q"/>
                         <outlet property="pageControl" destination="Hwd-XN-90G" id="2Eq-Hx-qUK"/>
                         <outlet property="powerAssetTitle" destination="Rt2-Ls-9P7" id="3AY-OA-Mam"/>
