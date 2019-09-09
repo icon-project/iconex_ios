@@ -55,9 +55,10 @@ class Alert {
         return alertVC
     }
     
-    static func addAddress(confirmAction: (() -> Void)? = nil) -> AlertViewController {
+    static func addAddress(isICX: Bool = true, confirmAction: (() -> Void)? = nil) -> AlertViewController {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .addAddress
+        alertVC.isICX = isICX
         alertVC.confirmHandler = confirmAction
         return alertVC
     }

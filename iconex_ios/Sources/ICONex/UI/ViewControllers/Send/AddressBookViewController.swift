@@ -69,11 +69,6 @@ class AddressBookViewController: BaseViewController {
         
         addressBookList = try! DB.addressBookList(by: self.isICX ? "icx" : "eth")
         myWalletList = DB.loadMyWallets(address: self.myAddress, type: self.isICX ? "icx" : "eth")
-        
-        if addressBookList.isEmpty {
-            self.tableView.backgroundView = messageLabel
-            self.tableView.separatorStyle = .none
-        }
     }
     
     private func setupUI() {
@@ -122,6 +117,9 @@ class AddressBookViewController: BaseViewController {
         myWalletButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 self.rightButton.isHidden = true
+                self.tableView.isEditing = false
+                self.rightButton.setTitle("Common.Edit".localized, for: .normal)
+                
                 self.addressBookButton.titleLabel?.size14(text: "AddressBook.Button.AddressBook".localized, color: .gray77, weight: .regular, align: .center)
                 self.myWalletButton.titleLabel?.size14(text: "AddressBook.Button.MyWallet".localized, color: .gray77, weight: .bold, align: .center)
                 
@@ -166,7 +164,7 @@ class AddressBookViewController: BaseViewController {
                     
                 } else {
                     // Add Address
-                    Alert.addAddress(confirmAction: {
+                    Alert.addAddress(isICX: self.isICX, confirmAction: {
                         self.addressBookList = try! DB.addressBookList(by: self.isICX ? "icx" : "eth")
                         
                         DispatchQueue.main.async {
@@ -182,6 +180,14 @@ class AddressBookViewController: BaseViewController {
 
 extension AddressBookViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if addressBookList.isEmpty {
+            self.tableView.backgroundView = messageLabel
+            self.tableView.separatorStyle = .none
+        } else {
+            self.tableView.backgroundView = nil
+            self.tableView.separatorStyle = .singleLine
+        }
+        
         if self.selected == 0 {
             return addressBookList.count
         } else {
