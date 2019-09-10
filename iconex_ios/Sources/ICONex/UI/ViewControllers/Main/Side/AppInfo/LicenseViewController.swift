@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import AcknowList
+import PanModal
 
 class LicenseViewController: PopableViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -66,7 +67,37 @@ extension LicenseViewController: UITableViewDataSource {
 extension LicenseViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let ack = AcknowViewController(acknowledgement: list[indexPath.row])
-        
+        let ack = PanAcknowViewController(acknowledgement: list[indexPath.row])
+        self.presentPanModal(ack)
     }
+}
+
+class PanAcknowViewController: AcknowViewController, PanModalPresentable {
+    var panScrollable: UIScrollView? {
+        return textView
+    }
+    
+    var showDragIndicator: Bool {
+        return true
+    }
+    
+    var isHapticFeedbackEnabled: Bool {
+        return false
+    }
+    
+//    var topOffset: CGFloat {
+//        return app.window!.safeAreaInsets.top
+//    }
+    var longFormHeight: PanModalHeight {
+        return .maxHeightWithTopInset(20)
+    }
+    
+    var backgroundAlpha: CGFloat {
+        return 0.7
+    }
+    
+    var cornerRadius: CGFloat {
+        return 18.0
+    }
+
 }
