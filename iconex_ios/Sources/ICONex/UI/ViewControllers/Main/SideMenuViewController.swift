@@ -186,7 +186,7 @@ class SideMenuViewController: BaseViewController {
     }
     
     func close(_ handler: (() -> Void)?) {
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
             self.menuView.frame.origin.x = -self.menuView.frame.width
             self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.0) // ??
         }, completion: { (_) in

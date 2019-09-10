@@ -69,7 +69,8 @@ class AlertViewController: BaseViewController {
         
         popView.layer.cornerRadius = 18
         popView.alpha = 0
-        popView.frame.origin.y += 20
+//        popView.frame.origin.y += 20
+        popView.transform = CGAffineTransform(translationX: 0, y: 20)
         
         leftButton.rx.tap
             .subscribe({ (_) in
@@ -528,84 +529,68 @@ class AlertViewController: BaseViewController {
     }
     
     func open() {
-        UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseInOut, animations: {
-            self.view.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0, options: [.calculationModeCubic], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2, animations: {
+                self.view.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.2, animations: {
+                self.popView.transform = .identity
+                self.popView.alpha = 1
+            })
+            
         }, completion: nil)
-        
-        // move
-        UIView.animate(withDuration: 0.25, delay: 0.2, options: .curveEaseInOut, animations: {
-            self.popView.frame.origin.y -= 20
-        }, completion: nil)
-        
-        // opacity
-        UIView.animate(withDuration: 0.24, delay: 0.2, options: .curveEaseInOut, animations: {
-            self.popView.alpha = 1
-        }, completion: nil)
-        
     }
     
     private func close() {
-        animateClose()
-        
-        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
-            self.view.alpha = 0
-        }, completion: { _ in
+        animateClose {
             self.dismiss(animated: false, completion: nil)
-        })
+        }
     }
     
     private func closer(_ closeAction: (() -> Void)? = nil) {
-        animateClose()
-        
-        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
-            self.view.alpha = 0
-        }, completion: { _ in
+        animateClose {
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct()
                 }
             })
-        })
+        }
     }
     
     private func closer(_ closeAction: ((_ pk: String) -> Void)? = nil) {
-        animateClose()
-        
-        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
-            self.view.alpha = 0
-        }, completion: { _ in
+        animateClose {
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct(self.privateKey)
                 }
             })
-        })
+        }
     }
     
     private func closer(_ closeAction: ((_ isSuccess: Bool, _ txHash: String?) -> Void)? = nil) {
-        animateClose()
-        
-        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
-            self.view.alpha = 0
-        }, completion: { _ in
+        animateClose {
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct(self.isSuccess, self.txHash)
                 }
             })
-        })
+        }
     }
     
-    private func animateClose() {
-        // move
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.frame.origin.y += 20
-        }, completion: nil)
-        
-        // opacity
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseInOut, animations: {
-            self.popView.alpha = 0
-        }, completion: nil)
+    private func animateClose(_ completion: (() -> Void)? = nil) {
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2, animations: {
+                self.popView.transform = CGAffineTransform(translationX: 0, y: 20)
+                self.popView.alpha = 0
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.2, animations: {
+                self.view.alpha = 0.0
+            })
+        }, completion: { _ in
+            completion?()
+        })
     }
     
     func show() {
