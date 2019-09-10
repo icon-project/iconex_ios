@@ -58,6 +58,8 @@ class MainViewController: BaseViewController, Floatable {
     
     private let gradient = CAGradientLayer()
     
+    private var horizontalVelocity: CGPoint = .zero
+    
     var walletList = [BaseWalletConvertible]() {
         didSet {
 //            contentTop.constant = 0
@@ -84,6 +86,12 @@ class MainViewController: BaseViewController, Floatable {
             
             guard !walletList.isEmpty else { return }
             pageControl.rx.numberOfPages.onNext(newValue ? self.walletList.count : self.symbolList.count)
+            
+            if newValue {
+                checkFloater()
+            } else {
+                detach()
+            }
         }
     }
     
@@ -273,6 +281,15 @@ class MainViewController: BaseViewController, Floatable {
                 if self.isWalletMode {
                     self.checkFloater()
                 }
+            }).disposed(by: disposeBag)
+        
+        collectionView.rx.willBeginDragging
+            .subscribe(onNext: {
+                let velocity = self.collectionView.panGestureRecognizer.velocity(in: self.collectionView.superview)
+                Log("Scrolling - \(velocity))")
+                if velocity != .zero {
+                    self.horizontalVelocity = velocity
+                }
                 
             }).disposed(by: disposeBag)
         
@@ -320,10 +337,20 @@ class MainViewController: BaseViewController, Floatable {
     }
 
     func checkFloater() {
-        let items = self.collectionView.indexPathsForVisibleItems
         
+        let items = self.collectionView.indexPathsForVisibleItems
+        Log("items - \(items)")
         let x = self.collectionView.panGestureRecognizer.translation(in: self.collectionView.superview).x
-        let path = items.first!
+        let path: IndexPath = {
+            if items.count == 1 {
+                return items.first!
+            }
+            if horizontalVelocity.x < 0 {
+                return items.first!
+            } else {
+                return items.last!
+            }
+        }()
         Log("IndexPath - \(path) - \(self.floater.isAttached) \(x)")
         if let icx = self.walletList[path.row] as? ICXWallet {
             self.selectedWallet = icx
