@@ -42,7 +42,7 @@ PODS:
 DEPENDENCIES:
   - AcknowList
   - Alamofire
-  - ICONKit
+  - ICONKit (from `https://github.com/icon-project/iconkit`, branch `develop`)
   - PanModal
   - RealmSwift (= 3.11.0)
   - RxCocoa
@@ -55,7 +55,6 @@ SPEC REPOS:
     - Alamofire
     - BigInt
     - CryptoSwift
-    - ICONKit
     - PanModal
     - PromiseKit
     - Realm
@@ -67,6 +66,16 @@ SPEC REPOS:
     - SipHash
     - Starscream
     - web3swift
+
+EXTERNAL SOURCES:
+  ICONKit:
+    :branch: develop
+    :git: https://github.com/icon-project/iconkit
+
+CHECKOUT OPTIONS:
+  ICONKit:
+    :commit: 28fb37a574a037ac48dbb6e6aab7a4e65f4bc9cb
+    :git: https://github.com/icon-project/iconkit
 
 SPEC CHECKSUMS:
   AcknowList: 06fde3319971dfd517ea1b1c194d78eb8cd774a2
@@ -86,6 +95,6 @@ SPEC CHECKSUMS:
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 2466739b0a35af3b4ab99a1908dc476015ce78e6
+PODFILE CHECKSUM: 238fcff3da521127cbbf113ccd34533c2c4894f6
 
 COCOAPODS: 1.7.2
