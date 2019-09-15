@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class MyVoteGeneralCell: UITableViewCell {
     @IBOutlet private weak var voteHeader: UILabel!
@@ -18,6 +20,8 @@ class MyVoteGeneralCell: UITableViewCell {
     @IBOutlet private weak var availableICXLabel: UILabel!
     @IBOutlet private weak var votedValueLabel: UILabel!
     @IBOutlet private weak var availableValueLabel: UILabel!
+    
+    var disposeBag = DisposeBag()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -40,18 +44,17 @@ class MyVoteGeneralCell: UITableViewCell {
         
         Log("totalDelegated \(voted) power \(votingPower)")
         
-        if voted == 0 {
-            votedWidth.constant = 0
-            votedLabel.size14(text: "Voted 0.0%", color: .mint1, weight: .light)
-            availableLabel.size14(text: "Available 100.0%", color: .gray77, weight: .light)
-        } else {
-            let rate = voted.decimalNumber! / total.decimalNumber!
-            votedWidth.constant = slideView.frame.width * CGFloat(rate.floatValue)
-            votedLabel.size14(text: "Voted " + String(format: "%.1f", rate.floatValue), color: .mint1, weight: .light)
-            availableLabel.size14(text: "Available " + String(format: "%.1f", 1.0 - rate.floatValue), color: .gray77, weight: .light)
-        }
-        
-        
+        voteViewModel.available.subscribe(onNext: { (availablePower) in
+            let powerDecimal = availablePower.decimalNumber ?? 0
+            let totalDecimal = total.decimalNumber ?? 0
+            let rate = powerDecimal / totalDecimal
+            
+            self.votedWidth.constant = self.slideView.frame.width * CGFloat(1.0 - rate.floatValue)
+            
+            let percent = rate * 100
+            self.votedLabel.size14(text: "Voted " + String(format: "%.1f", 100.0 - percent.floatValue) + "%", color: .mint1, weight: .light)
+            self.availableLabel.size14(text: "Available " + String(format: "%.1f", percent.floatValue) + "%", color: .gray77, weight: .light)
+        }).disposed(by: disposeBag)
         
         votedValueLabel.size14(text: voted.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
         availableValueLabel.size14(text: votingPower.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)

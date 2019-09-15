@@ -103,10 +103,18 @@ class Alert {
         return alertVC
     }
     
+    static func vote(voteInfo: VoteInfo, confirmAction: ((_ isSuccess: Bool, _ txHash: String?) -> Void)? = nil) -> AlertViewController {
+        let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
+        alertVC.type = .vote
+        alertVC.voteInfo = voteInfo
+        
+        return alertVC
+    }
+    
 }
 
 enum AlertType {
-    case basic, txHash, password, walletName, allText, stake, unstake, send, iscore, unstakecancel, addAddress
+    case basic, txHash, password, walletName, allText, stake, unstake, send, iscore, unstakecancel, addAddress, vote
 }
 
 struct AlertBasicInfo {
@@ -182,6 +190,16 @@ struct SendInfo {
         self.estimatedFee = estimatedFee
         self.estimatedUSD = estimatedUSD
     }
+}
+
+struct VoteInfo {
+    var count: Int
+    var estimatedFee: String
+    var maxFee: String
+    
+    var wallet: ICXWallet
+    var delegationList: [[String: Any]]
+    var privateKey: PrivateKey
 }
 
 struct EthereumTransaction {

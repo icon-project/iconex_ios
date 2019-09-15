@@ -112,6 +112,10 @@ extension PRepsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepViewCell", for: indexPath) as! PRepViewCell
         cell.addButton.isHidden = false
         let prep = preps!.preps[indexPath.row]
+        
+        if Manager.voteList.contains(address: prep.address) {
+            cell.addButton.isSelected = true
+        }
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
         cell.active = true

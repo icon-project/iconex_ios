@@ -17,11 +17,13 @@ class MyVoteDelegateCell: UITableViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var totalVotedValue: UILabel!
     
+    @IBOutlet weak var sliderBoxView: UIView!
     @IBOutlet weak var sliderContainer: UIView!
     @IBOutlet weak var myVotesLabel: UILabel!
     @IBOutlet weak var fieldContainer: UIView!
     @IBOutlet weak var myVotesField: UITextField!
     @IBOutlet weak var myVotesUnitLabel: UILabel!
+    @IBOutlet weak var maxTitleLabel: UILabel!
     @IBOutlet weak var myVotesMax: UILabel!
     
     @IBOutlet weak var barContainer: UIView!
@@ -36,6 +38,12 @@ class MyVoteDelegateCell: UITableViewCell {
         willSet {
             guard newValue >= 0.0 else { return }
             minWidth.constant = barContainer.frame.width * CGFloat(newValue)
+        }
+    }
+    
+    var myVoteMaxValue: String = "0%" {
+        willSet {
+            myVotesMax.text = newValue
         }
     }
     
@@ -58,6 +66,8 @@ class MyVoteDelegateCell: UITableViewCell {
         
         myVotesField.tintColor = .mint1
         myVotesField.textColor = .mint1
+        
+        maxTitleLabel.text = "MAX"
         myVotesMax.textColor = .mint1
         myVotesMax.text = "0 %"
         
@@ -68,6 +78,16 @@ class MyVoteDelegateCell: UITableViewCell {
         
         slider.setThumbImage(#imageLiteral(resourceName: "icControlerEnabled"), for: .normal)
         slider.setThumbImage(#imageLiteral(resourceName: "icControlerAtive"), for: .highlighted)
+        
+        addButton.setImage(#imageLiteral(resourceName: "icDeleteListDisabled"), for: .normal)
+        addButton.setImage(#imageLiteral(resourceName: "icDeleteList"), for: .highlighted)
+        
+//        addButton.rx.tap.asControlEvent()
+//            .subscribe { (_) in
+//                if !self.addButton.isHighlighted {
+//                    app.topViewController()?.view.showToolTip(sizeY: <#T##CGFloat#>)
+//                }
+//        }.disposed(by: disposeBag)
         
         current = 0
     }

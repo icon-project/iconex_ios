@@ -181,6 +181,7 @@ extension ICONManager {
     
     public func sendTransaction(transaction: Transaction, privateKey: PrivateKey) throws -> Result<String, Error> {
         let signed = try SignedTransaction(transaction: transaction, privateKey: privateKey)
+        Log("dic - \(try? transaction.toDic())")
         let request = iconService.sendTransaction(signedTransaction: signed)
         let response = request.execute()
         
@@ -247,15 +248,23 @@ extension ICONManager {
         return call
     }
     
-    func setDelegation(from: ICXWallet, delegations: [PRepDelegation]) -> CallTransaction {
-        let params = ["delegations": delegations]
+    func setDelegation(from: ICXWallet, delegations: [[String: Any]]) -> CallTransaction {
+        let del = ["delegations": delegations]
         
         let call = CallTransaction()
         call.from = from.address
         call.to = CONST.iiss
         call.method("setDelegation")
-        call.params(params)
+        call.params(del)
         call.nid = Manager.icon.iconService.nid
+        
+        do {
+            let estimatedStep = try Manager.icon.service.estimateStep(transaction: call).execute().get()
+            call.stepLimit(estimatedStep)
+            
+        } catch {
+            print("없다")
+        }
         
         return call
     }

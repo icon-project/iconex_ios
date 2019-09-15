@@ -171,8 +171,22 @@ class StakeViewController: BaseViewController {
                         Log("Total = \(totalValue)\nStaked = \(stakeValue)\nVoted = \(delegated.totalDelegated)")
                         
                         if let totalNum = totalValue.decimalNumber ,let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber {
-                            let stakeRate = stakeNum / totalNum
-                            let voteRate = votedNum / stakeNum
+                            
+                            let stakeRate: Decimal = {
+                                if stakeNum == 0 {
+                                    return 0
+                                } else {
+                                    return stakeNum / totalNum
+                                }
+                            }()
+
+                            let voteRate: Decimal = {
+                                if votedNum == 0 {
+                                    return 0
+                                } else {
+                                    return votedNum / stakeNum
+                                }
+                            }()
                             
                             self.slider.isEnabled = true
                             

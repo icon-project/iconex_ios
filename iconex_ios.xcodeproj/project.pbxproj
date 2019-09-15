@@ -21,9 +21,9 @@
 		1BBEC3C82324DB7C00B69C22 /* Connect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B8E54CE232493B200F85EAC /* Connect.swift */; };
 		1BBEC3C92324DB8000B69C22 /* Connect.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1B952CC22323FDE700CA04A2 /* Connect.storyboard */; };
 		1BBFFCEF232538A300957E5F /* ConnectDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BBFFCEE232538A300957E5F /* ConnectDataViewController.swift */; };
-		6A243FC3455D3A25F1E3000D /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5539534098946EB1A7613AD0 /* Pods_iconex_ios.framework */; };
 		BF0902842314B6AE00B177F4 /* IXInputBox.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF0902822314B6AE00B177F4 /* IXInputBox.xib */; };
 		BF0902852314B6AE00B177F4 /* IXInputBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0902832314B6AE00B177F4 /* IXInputBox.swift */; };
+		BF10BDBF23266F9A00DA2751 /* VoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10BDBE23266F9A00DA2751 /* VoteViewModel.swift */; };
 		BF206C64232144B700ECD982 /* LockSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206C63232144B700ECD982 /* LockSettingViewController.swift */; };
 		BF206C66232232D000ECD982 /* BioAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206C65232232D000ECD982 /* BioAuthViewController.swift */; };
 		BF29F60E2319116F00EBD1F1 /* DetailOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */; };
@@ -54,6 +54,8 @@
 		BF4F6F7A2318A57D0098D303 /* WalletTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F612318A57D0098D303 /* WalletTableViewCell.swift */; };
 		BF4F6F7B2318A57D0098D303 /* TokenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F622318A57D0098D303 /* TokenTableViewCell.swift */; };
 		BF4F6F7C2318A57D0098D303 /* CoinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F632318A57D0098D303 /* CoinTableViewCell.swift */; };
+		BF61DF77232B908A00F6CEA2 /* VoteAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF61DF76232B908A00F6CEA2 /* VoteAlertView.xib */; };
+		BF61DF79232B90A100F6CEA2 /* VoteAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF61DF78232B90A100F6CEA2 /* VoteAlertView.swift */; };
 		BF6EFEBF22FA5174003B6AF3 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6EFEAD22FA5173003B6AF3 /* Alert.swift */; };
 		BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF6EFEAE22FA5173003B6AF3 /* Alert.storyboard */; };
 		BF6EFEC122FA5174003B6AF3 /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6EFEAF22FA5173003B6AF3 /* AlertViewController.swift */; };
@@ -92,7 +94,7 @@
 		BFC9A4A223141498002E35F5 /* extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49923141498002E35F5 /* extensions.swift */; };
 		BFC9A4A323141498002E35F5 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49A23141498002E35F5 /* String+Extension.swift */; };
 		BFC9A4A423141498002E35F5 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49B23141498002E35F5 /* Data+Extension.swift */; };
-		CDF18CD86D630FBC13118222 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		CEC503A6CF4EFB4177CE52F9 /* Pods_iconex_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A644F5D9813EF65157607210 /* Pods_iconex_ios.framework */; };
 		D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */; };
 		D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40C2BB92303A557009782AA /* MainCardView.swift */; };
 		D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D40C2BBB2303A5B1009782AA /* MainCardView.xib */; };
@@ -211,10 +213,11 @@
 		1BBEC3C02324D27100B69C22 /* BindPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindPasswordViewController.swift; sourceTree = "<group>"; };
 		1BBEC3C32324D31000B69C22 /* ConnectSendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSendViewController.swift; sourceTree = "<group>"; };
 		1BBFFCEE232538A300957E5F /* ConnectDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectDataViewController.swift; sourceTree = "<group>"; };
-		5539534098946EB1A7613AD0 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A18D0965DC391E5907AF62C0 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
+		89FDF85051A38AED138631F4 /* Pods-iconex_ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.release.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.release.xcconfig"; sourceTree = "<group>"; };
+		A644F5D9813EF65157607210 /* Pods_iconex_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iconex_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF0902822314B6AE00B177F4 /* IXInputBox.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IXInputBox.xib; sourceTree = "<group>"; };
 		BF0902832314B6AE00B177F4 /* IXInputBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IXInputBox.swift; sourceTree = "<group>"; };
+		BF10BDBE23266F9A00DA2751 /* VoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViewModel.swift; sourceTree = "<group>"; };
 		BF206C63232144B700ECD982 /* LockSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSettingViewController.swift; sourceTree = "<group>"; };
 		BF206C65232232D000ECD982 /* BioAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioAuthViewController.swift; sourceTree = "<group>"; };
 		BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOptionViewController.swift; sourceTree = "<group>"; };
@@ -244,6 +247,8 @@
 		BF4F6F612318A57D0098D303 /* WalletTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WalletTableViewCell.swift; sourceTree = "<group>"; };
 		BF4F6F622318A57D0098D303 /* TokenTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenTableViewCell.swift; sourceTree = "<group>"; };
 		BF4F6F632318A57D0098D303 /* CoinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoinTableViewCell.swift; sourceTree = "<group>"; };
+		BF61DF76232B908A00F6CEA2 /* VoteAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoteAlertView.xib; sourceTree = "<group>"; };
+		BF61DF78232B90A100F6CEA2 /* VoteAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteAlertView.swift; sourceTree = "<group>"; };
 		BF6EFEAD22FA5173003B6AF3 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		BF6EFEAE22FA5173003B6AF3 /* Alert.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Alert.storyboard; sourceTree = "<group>"; };
 		BF6EFEAF22FA5173003B6AF3 /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
@@ -282,7 +287,6 @@
 		BFC9A49923141498002E35F5 /* extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extensions.swift; sourceTree = "<group>"; };
 		BFC9A49A23141498002E35F5 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49B23141498002E35F5 /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
-		CFEFAE5B5EA66A6D5004187B /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
 		D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareRegular.ttf; sourceTree = "<group>"; };
 		D40C2BB92303A557009782AA /* MainCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardView.swift; sourceTree = "<group>"; };
 		D40C2BBB2303A5B1009782AA /* MainCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainCardView.xib; sourceTree = "<group>"; };
@@ -381,6 +385,7 @@
 		D4FDCA6D22F7FA4800D6CDD4 /* LoadNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadNameViewController.swift; sourceTree = "<group>"; };
 		D4FDCA7022F7FEBF00D6CDD4 /* SelectCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectCardView.xib; sourceTree = "<group>"; };
 		D4FDCA7222F7FFF400D6CDD4 /* SelectCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCardView.swift; sourceTree = "<group>"; };
+		EA9194C3C975F468000CAD5E /* Pods-iconex_ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iconex_ios.debug.xcconfig"; path = "Target Support Files/Pods-iconex_ios/Pods-iconex_ios.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -389,8 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D44A948B2019CB0D00F60614 /* Security.framework in Frameworks */,
-				CDF18CD86D630FBC13118222 /* (null) in Frameworks */,
-				6A243FC3455D3A25F1E3000D /* Pods_iconex_ios.framework in Frameworks */,
+				CEC503A6CF4EFB4177CE52F9 /* Pods_iconex_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,7 +451,7 @@
 			children = (
 				D44A948A2019CB0D00F60614 /* Security.framework */,
 				D4A8C08321BE437500B41B36 /* NotificationCenter.framework */,
-				5539534098946EB1A7613AD0 /* Pods_iconex_ios.framework */,
+				A644F5D9813EF65157607210 /* Pods_iconex_ios.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -561,6 +565,8 @@
 				BF6EFEB322FA5173003B6AF3 /* IScoreAlertView.swift */,
 				BF6EFEBC22FA5173003B6AF3 /* StakeAlertView.xib */,
 				BF6EFEBA22FA5173003B6AF3 /* StakeAlertView.swift */,
+				BF61DF76232B908A00F6CEA2 /* VoteAlertView.xib */,
+				BF61DF78232B90A100F6CEA2 /* VoteAlertView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -865,6 +871,7 @@
 				D4BF98DE230FA7B4009D4632 /* PRepsViewController.swift */,
 				D49470A72318F8E000236288 /* PRepListViewController.swift */,
 				D4DACDF22314259900CC8EA8 /* PRepSearchViewController.swift */,
+				BF10BDBE23266F9A00DA2751 /* VoteViewModel.swift */,
 			);
 			path = Vote;
 			sourceTree = "<group>";
@@ -1028,8 +1035,8 @@
 		E21AF62972AB4E5ECFA13B86 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CFEFAE5B5EA66A6D5004187B /* Pods-iconex_ios.debug.xcconfig */,
-				A18D0965DC391E5907AF62C0 /* Pods-iconex_ios.release.xcconfig */,
+				EA9194C3C975F468000CAD5E /* Pods-iconex_ios.debug.xcconfig */,
+				89FDF85051A38AED138631F4 /* Pods-iconex_ios.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -1041,12 +1048,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D4728A212007040B00E0A899 /* Build configuration list for PBXNativeTarget "iconex_ios" */;
 			buildPhases = (
-				F20BF0102C02C4C924AE5A31 /* [CP] Check Pods Manifest.lock */,
+				1492DDF4E41EABB16D1A0F3A /* [CP] Check Pods Manifest.lock */,
 				D4728A0B2007040B00E0A899 /* Sources */,
 				D4728A0C2007040B00E0A899 /* Frameworks */,
 				D4728A0D2007040B00E0A899 /* Resources */,
 				D4A8C09221BE437500B41B36 /* Embed App Extensions */,
-				113C58952DBB6DF2B5472800 /* [CP] Embed Pods Frameworks */,
+				983AB1CD308E6C88BD308D62 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1130,6 +1137,7 @@
 				BF7FC19F2316B2170095F1D5 /* IXSectionHeader.xib in Resources */,
 				BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */,
 				BF6EFECC22FA5174003B6AF3 /* IScoreAlertView.xib in Resources */,
+				BF61DF77232B908A00F6CEA2 /* VoteAlertView.xib in Resources */,
 				D475744E230E765700C46FFE /* Vote.storyboard in Resources */,
 				BF6EFECE22FA5174003B6AF3 /* TxHashAlertView.xib in Resources */,
 				D4F7672922F3E46E00452DA7 /* PopableTitleView.xib in Resources */,
@@ -1157,7 +1165,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		113C58952DBB6DF2B5472800 /* [CP] Embed Pods Frameworks */ = {
+		1492DDF4E41EABB16D1A0F3A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iconex_ios-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		983AB1CD308E6C88BD308D62 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1205,28 +1235,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iconex_ios/Pods-iconex_ios-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F20BF0102C02C4C924AE5A31 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-iconex_ios-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1258,6 +1266,7 @@
 				BF4F6F712318A57D0098D303 /* ChangePasswordViewController.swift in Sources */,
 				BF78B36322FCFCD4002E34B3 /* CreateBackupViewController.swift in Sources */,
 				BF4F6F6D2318A57D0098D303 /* AddTokenViewController.swift in Sources */,
+				BF10BDBF23266F9A00DA2751 /* VoteViewModel.swift in Sources */,
 				BFC9A49E23141498002E35F5 /* UIButton+Extension.swift in Sources */,
 				BF4F6F6F2318A57D0098D303 /* AddTokenInfoViewController.swift in Sources */,
 				BFC9A49F23141498002E35F5 /* UIView+Extension.swift in Sources */,
@@ -1321,6 +1330,7 @@
 				D49470A82318F8E000236288 /* PRepListViewController.swift in Sources */,
 				D428A53E20201B2F005B14D8 /* Configurations.swift in Sources */,
 				D4FDCA7322F7FFF400D6CDD4 /* SelectCardView.swift in Sources */,
+				BF61DF79232B90A100F6CEA2 /* VoteAlertView.swift in Sources */,
 				D4719B22200F2796005F6BDA /* logger.swift in Sources */,
 				BF6EFECF22FA5174003B6AF3 /* TxHashAlertView.swift in Sources */,
 				1BB4C774231BE97800BA4138 /* InputDataViewController.swift in Sources */,
@@ -1502,7 +1512,7 @@
 		};
 		D4728A222007040B00E0A899 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CFEFAE5B5EA66A6D5004187B /* Pods-iconex_ios.debug.xcconfig */;
+			baseConfigurationReference = EA9194C3C975F468000CAD5E /* Pods-iconex_ios.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1546,7 +1556,7 @@
 		};
 		D4728A232007040B00E0A899 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A18D0965DC391E5907AF62C0 /* Pods-iconex_ios.release.xcconfig */;
+			baseConfigurationReference = 89FDF85051A38AED138631F4 /* Pods-iconex_ios.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

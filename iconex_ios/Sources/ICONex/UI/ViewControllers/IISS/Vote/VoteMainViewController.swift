@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import ICONKit
+import BigInt
 
 protocol VoteMainDelegate {
     var wallet: ICXWallet! { get set }
@@ -29,6 +30,9 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     
     var isPreps: Bool = false
     
+    var votedList: [MyVoteEditInfo] = [MyVoteEditInfo]()
+    var votingList: [MyVoteEditInfo] = [MyVoteEditInfo]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,7 +44,13 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         
         navBar.setTitle(wallet.name)
         navBar.setLeft {
-            self.navigationController?.popViewController(animated: true)
+            if self.voteButton.isEnabled {
+                Alert.basic(title: "MyVoteView.Alert.Back".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                    self.navigationController?.popViewController(animated: true)
+                }).show()
+            } else {
+                self.navigationController?.popViewController(animated: true)
+            }
         }
         
         headerSelected(index: isPreps ? 1: 0)
@@ -48,7 +58,31 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         buttonConatiner.backgroundColor = .gray252
         voteButton.lightMintRounded()
         voteButton.setTitle("Vote", for: .normal)
+        
         voteButton.isEnabled = false
+        
+        Observable.merge(voteViewModel.myList, voteViewModel.newList)
+            .subscribe(onNext: { (list) in
+                for i in list {
+                    if i.editedDelegate != nil {
+                        self.voteButton.rx.isEnabled.onNext(true)
+                        return
+                    }
+                }
+                
+                self.voteButton.rx.isEnabled.onNext(false)
+                return
+        }).disposed(by: disposeBag)
+        
+        voteViewModel.myList
+            .subscribe(onNext: { (list) in
+                self.votedList = list
+            }).disposed(by: disposeBag)
+        
+        voteViewModel.newList
+            .subscribe(onNext: { (list) in
+                self.votingList = list
+            }).disposed(by: disposeBag)
         
         children.forEach({
             if let myVote = $0 as? MyVoteViewController {
@@ -57,6 +91,80 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 prep.delegate = self
             }
         })
+        
+        voteButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                guard let pk = self.key else { return }
+                
+                var delList = [[String: Any]]()
+                
+                for i in self.votedList {
+                    let value: String = {
+                        if let edit = i.editedDelegate {
+                            return edit.toHexString()
+                        } else if let myDelegate = i.myDelegate {
+                            return myDelegate.toHexString()
+                        } else {
+                            return "0x0"
+                        }
+                    }()
+                    
+                    let info = ["address": i.address, "value": value]
+                    delList.append(info)
+
+                    print("voted List \(i)")
+                }
+                
+                // 새로 추가한 리스트
+                for i in self.votingList {
+                    let info = ["address": i.address, "value": i.editedDelegate?.toHexString() ?? "0x0"]
+                    delList.append(info)
+                    
+                    print("new voting list \(i)")
+                    
+                }
+                let voteInfo = VoteInfo(count: delList.count, estimatedFee: "-", maxFee: "-", wallet: self.wallet, delegationList: delList, privateKey: pk)
+                
+                Alert.vote(voteInfo: voteInfo, confirmAction: { isSuccess, txHash in
+                    if isSuccess {
+                        app.window?.showToast(message: "MyVoteView.Toast".localized)
+                    } else {
+                        app.window?.showToast(message: txHash ?? "Common.Error".localized)
+                    }
+                    
+                }).show()
+                
+        }.disposed(by: disposeBag)
+        
+        
+        voteViewModel.isChanged.subscribe { (_) in
+            let votedListPower: BigUInt = self.votedList.map {
+                if $0.editedDelegate == nil {
+                    return $0.myDelegate ?? 0
+                } else {
+                    return $0.editedDelegate ?? 0
+                }
+            }.reduce(0, +)
+            
+            let votingListPower: BigUInt = self.votingList.map {
+                if $0.editedDelegate == nil {
+                    return $0.myDelegate ?? 0
+                } else {
+                    return $0.editedDelegate ?? 0
+                }
+                }.reduce(0, +)
+            
+            let power = Manager.voteList.myVotes?.votingPower ?? 0
+            let delegated = Manager.voteList.myVotes?.totalDelegated ?? 0
+            let total = power + delegated
+            let plus = votedListPower + votingListPower
+            
+            guard plus <= total else { return voteViewModel.available.onNext(0) }
+            
+            let result = total - plus
+            
+            voteViewModel.available.onNext(result)
+        }.disposed(by: disposeBag)
     }
 }
 
