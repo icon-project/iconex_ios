@@ -244,9 +244,6 @@ extension ICONManager {
             .nid(Manager.icon.iconService.nid)
             .stepLimit(stepLimit)
             .params(params)
-            
-        Log("transaction \(try? call.toDic())")
-        
         return call
     }
     

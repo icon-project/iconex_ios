@@ -135,11 +135,17 @@ class ManageWalletViewController: BaseViewController {
                             Alert.basic(title: "Manage.Alert.Wallet.Empty".localized, isOnlyOneButton: false, confirmAction: {
                                 do {
                                     try DB.deleteWallet(wallet: wallet)
-                                    self.dismiss(animated: true, completion: {
-                                        if let handler = self.handler {
-                                            handler()
-                                        }
-                                    })
+                                    mainViewModel.reload.onNext(true)
+                                    if Manager.wallet.walletList.count > 0 {
+                                        self.dismiss(animated: true, completion: {
+                                            if let handler = self.handler {
+                                                handler()
+                                            }
+                                        })
+                                    } else {
+                                        let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+                                        app.change(root: start)
+                                    }
                                 } catch {
                                     print("err")
                                 }
@@ -148,11 +154,11 @@ class ManageWalletViewController: BaseViewController {
                         } else {
                             Alert.basic(title: "Manage.Alert.Wallet".localized, isOnlyOneButton: false, confirmAction: {
                                 do {
-                                    self.dismiss(animated: true, completion: {
+                                    if Manager.wallet.walletList.count > 0 {
                                         Alert.password(wallet: wallet, returnAction: { (_) in
                                             do {
                                                 try DB.deleteWallet(wallet: wallet)
-                                                
+                                                mainViewModel.reload.onNext(true)
                                                 self.dismiss(animated: true, completion: {
                                                     if let handler = self.handler {
                                                         handler()
@@ -161,7 +167,10 @@ class ManageWalletViewController: BaseViewController {
                                             } catch {
                                             }
                                         }).show()
-                                    })
+                                    } else {
+                                        let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+                                        app.change(root: start)
+                                    }
                                 }
                             }).show()
                         }

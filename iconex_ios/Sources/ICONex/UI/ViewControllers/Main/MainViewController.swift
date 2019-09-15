@@ -43,7 +43,6 @@ class MainViewController: BaseViewController, Floatable {
     @IBOutlet weak var powerPageView: UIView!
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var collectionFlowLayout: UICollectionViewFlowLayout!
     
     @IBOutlet weak var pageControl: UIPageControl!
     

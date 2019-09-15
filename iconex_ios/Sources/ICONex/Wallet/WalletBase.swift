@@ -52,7 +52,7 @@ extension BaseWalletConvertible {
     func save() throws {
         guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
         guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
-        try DB.saveWallet(name: name, address: address, type: address.hasPrefix("0x") ? "eth" : "icx", rawData: rawData)
+        try DB.saveWallet(name: name, address: address, type: address.hasPrefix("hx") ? "icx" : "eth", rawData: rawData)
     }
     
     func changeName(older: String, newer: String) throws {

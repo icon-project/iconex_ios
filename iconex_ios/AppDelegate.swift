@@ -196,11 +196,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // app.topViewController()?.present(connect, animated: true, completion: nil)
     }
     
-    func toTest() {
-        let test = UIStoryboard(name: "TEST", bundle: nil).instantiateInitialViewController()!
-        change(root: test)
-    }
-    
     func change(root: UIViewController) {
         window?.backgroundColor = .mint1
         UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
