@@ -10,6 +10,7 @@ import UIKit
 
 class ManageWalletViewController: BaseViewController {
 
+    @IBOutlet weak var menuContainer: UIView!
     @IBOutlet weak var titleBar: UIView!
     @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -30,7 +31,7 @@ class ManageWalletViewController: BaseViewController {
         
         dismissButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.dismiss(animated: true, completion: nil)
+                self.beginClose(nil)
         }.disposed(by: disposeBag)
         
         guard let wallet = self.walletInfo else { return }
@@ -54,135 +55,148 @@ class ManageWalletViewController: BaseViewController {
         changePasswordButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         removeButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 0)
         
+        view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+        menuContainer.alpha = 0.0
+        menuContainer.transform = CGAffineTransform(translationX: 0, y: 50)
         
         editButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                UIView.animate(withDuration: 0.2, animations: {
+                self.beginClose {
+                    guard let wallet = self.walletInfo else { return }
                     
-                    self.dismiss(animated: true, completion: {
-                        guard let wallet = self.walletInfo else { return }
-                        
-                        Alert.changeWalletName(wallet: wallet, confirmAction: {
-                            self.dismiss(animated: true, completion: {
-                                if let handler = self.handler {
-                                    handler()
-                                }
-                            })
-                        }).show()
-                    })
-                }, completion: nil)
+                    Alert.changeWalletName(wallet: wallet, confirmAction: {
+                        mainViewModel.reload.onNext(true)
+                        self.handler?()
+                    }).show()
+                }
             }.disposed(by: disposeBag)
         
         addTokenButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.dismiss(animated: true, completion: {
-                        let tokenVC = UIStoryboard.init(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "TokenList") as! ManageTokenViewController
-                        tokenVC.walletInfo = wallet
-                        
-                        tokenVC.handler = {
-                            if let handler = self.handler {
-                                handler()
-                            }
-                        }
-                        let navRootVC = UINavigationController(rootViewController: tokenVC)
-                        navRootVC.isNavigationBarHidden = true
-                        app.topViewController()?.present(navRootVC, animated: true, completion: nil)
-                    })
+                self.beginClose {
+                    let tokenVC = UIStoryboard.init(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "TokenList") as! ManageTokenViewController
+                    tokenVC.walletInfo = wallet
                     
-                }, completion: nil)
-
-                
+                    tokenVC.handler = {
+                        if let handler = self.handler {
+                            handler()
+                        }
+                    }
+                    let navRootVC = UINavigationController(rootViewController: tokenVC)
+                    navRootVC.isNavigationBarHidden = true
+                    app.topViewController()?.present(navRootVC, animated: true, completion: nil)
+                }
         }.disposed(by: disposeBag)
         
         backupButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 guard let wallet = self.walletInfo else { return }
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.dismiss(animated: true, completion: {
-                        
-                        Alert.password(wallet: wallet, returnAction: { (privateKey) in
-                            let backUpVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "BackUp") as! ManageBackUpViewController
-                            backUpVC.wallet = self.walletInfo
-                            backUpVC.pk = privateKey
-                            app.topViewController()?.present(backUpVC, animated: true, completion: nil)
-                        }).show()
-                    })
-                }, completion: nil)
+                self.beginClose {
+                    Alert.password(wallet: wallet, returnAction: { (privateKey) in
+                        let backUpVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "BackUp") as! ManageBackUpViewController
+                        backUpVC.wallet = self.walletInfo
+                        backUpVC.pk = privateKey
+                        app.topViewController()?.present(backUpVC, animated: true, completion: nil)
+                    }).show()
+                }
                 
         }.disposed(by: disposeBag)
         
         changePasswordButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.dismiss(animated: true, completion: {
-                        let changePasswordVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "ChangePassword") as! ChangePasswordViewController
-                        changePasswordVC.wallet = self.walletInfo
-                        
-                        app.topViewController()?.present(changePasswordVC, animated: true, completion: nil)
-                    })
-                }, completion: nil)
+                self.beginClose {
+                    let changePasswordVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "ChangePassword") as! ChangePasswordViewController
+                    changePasswordVC.wallet = self.walletInfo
+                    
+                    app.topViewController()?.present(changePasswordVC, animated: true, completion: nil)
+                }
             }.disposed(by: disposeBag)
         
         
         // Delete wallet
         removeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                UIView.animate(withDuration: 0.2, animations: {
-                    self.dismiss(animated: true, completion: {
-                        if wallet.balance == 0 || wallet.balance == nil {
-                            Alert.basic(title: "Manage.Alert.Wallet.Empty".localized, isOnlyOneButton: false, confirmAction: {
-                                do {
-                                    try DB.deleteWallet(wallet: wallet)
-                                    mainViewModel.reload.onNext(true)
-                                    if Manager.wallet.walletList.count > 0 {
-                                        self.dismiss(animated: true, completion: {
-                                            if let handler = self.handler {
-                                                handler()
-                                            }
-                                        })
-                                    } else {
-                                        let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
-                                        app.change(root: start)
-                                    }
-                                } catch {
-                                    print("err")
+                self.beginClose {
+                    if wallet.balance == 0 || wallet.balance == nil {
+                        Alert.basic(title: "Manage.Alert.Wallet.Empty".localized, isOnlyOneButton: false, confirmAction: {
+                            do {
+                                try DB.deleteWallet(wallet: wallet)
+                                mainViewModel.reload.onNext(true)
+                                if Manager.wallet.walletList.count > 0 {
+                                    self.handler?()
+                                } else {
+                                    let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+                                    app.change(root: start)
                                 }
-                            }).show()
-                            
-                        } else {
-                            Alert.basic(title: "Manage.Alert.Wallet".localized, isOnlyOneButton: false, confirmAction: {
-                                do {
-                                    if Manager.wallet.walletList.count > 0 {
-                                        Alert.password(wallet: wallet, returnAction: { (_) in
-                                            do {
-                                                try DB.deleteWallet(wallet: wallet)
-                                                mainViewModel.reload.onNext(true)
-                                                self.dismiss(animated: true, completion: {
-                                                    if let handler = self.handler {
-                                                        handler()
-                                                    }
-                                                })
-                                            } catch {
-                                            }
-                                        }).show()
-                                    } else {
-                                        let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
-                                        app.change(root: start)
-                                    }
+                            } catch {
+                                print("err")
+                            }
+                        }).show()
+                        
+                    } else {
+                        Alert.basic(title: "Manage.Alert.Wallet".localized, isOnlyOneButton: false, confirmAction: {
+                            do {
+                                if Manager.wallet.walletList.count > 0 {
+                                    Alert.password(wallet: wallet, returnAction: { (_) in
+                                        do {
+                                            try DB.deleteWallet(wallet: wallet)
+                                            mainViewModel.reload.onNext(true)
+                                            self.handler?()
+                                        } catch {
+                                        }
+                                    }).show()
+                                } else {
+                                    let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+                                    app.change(root: start)
                                 }
-                            }).show()
-                        }
-                    })
-                }, completion: nil)
+                            }
+                        }).show()
+                    }
+                }
                 
             }.disposed(by: disposeBag)
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        beginShow()
     }
+}
 
+extension ManageWalletViewController {
+    private func beginShow() {
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.menuContainer.alpha = 1.0
+                self.menuContainer.transform = .identity
+            })
+        }, completion: nil)
+    }
+    
+    private func beginClose(_ completion: (() -> Void)?) {
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.menuContainer.transform = CGAffineTransform(translationX: 0, y: 50)
+                self.menuContainer.alpha = 0.0
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+            })
+            
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                completion?()
+            })
+        })
+    }
+    
+    func show() {
+        app.topViewController()?.present(self, animated: false, completion: nil)
+    }
 }

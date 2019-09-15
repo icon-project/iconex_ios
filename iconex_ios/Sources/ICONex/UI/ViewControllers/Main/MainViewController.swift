@@ -218,10 +218,16 @@ class MainViewController: BaseViewController, Floatable {
             menuVC.modalTransitionStyle = .crossDissolve
             menuVC.action1 = {
                 let createVC = UIStoryboard.init(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
+                createVC.doneAction = {
+                    mainViewModel.reload.onNext(true)
+                }
                 createVC.pop()
             }
             menuVC.action2 = {
                 let loadVC = UIStoryboard.init(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
+                loadVC.doneAction = {
+                    mainViewModel.reload.onNext(true)
+                }
                 loadVC.pop()
             }
             menuVC.action3 = {

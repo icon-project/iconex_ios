@@ -119,10 +119,8 @@ class MainCollectionViewCell: UICollectionViewCell {
             .subscribe { (_) in
                 let manageVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "Manage") as! ManageWalletViewController
                 manageVC.walletInfo = self.info
-                manageVC.modalPresentationStyle = .overFullScreen
-                manageVC.modalTransitionStyle = .crossDissolve
                 manageVC.handler = self.handler
-                app.topViewController()?.present(manageVC, animated: true, completion: nil)
+                manageVC.show()
 
             }.disposed(by: disposeBag)
     }

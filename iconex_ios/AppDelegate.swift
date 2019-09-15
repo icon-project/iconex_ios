@@ -131,16 +131,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         guard Configuration.systemCheck(), Configuration.integrityCheck(), Configuration.debuggerCheck() else {
-            
-            if let root = window?.rootViewController {
-                #warning("구현 필요")
-//                let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized)
-//                halt.handler = {
-//                    exit(0)
-//                }
-//                root.present(halt, animated: false, completion: nil)
-                
-            }
+
+            Alert.basic(title: "Error.SystemCheck.Failed".localized, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: true, leftButtonTitle: nil, rightButtonTitle: "Common.Confirm".localized, cancelAction: nil) {
+                exit(0)
+                }.show()
             return
         }
     }

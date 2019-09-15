@@ -294,9 +294,7 @@ class DetailViewController: BaseViewController, Floatable {
         navBar.setRight(image: #imageLiteral(resourceName: "icWalletMoreEnabled")) {
             let manageVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "Manage") as! ManageWalletViewController
             manageVC.walletInfo = wallet
-            manageVC.modalPresentationStyle = .overFullScreen
-            manageVC.modalTransitionStyle = .crossDissolve
-            self.present(manageVC, animated: true, completion: nil)
+            manageVC.show()
         }
     }
     
@@ -324,11 +322,7 @@ class DetailViewController: BaseViewController, Floatable {
                     self.fetchBalance()
                     self.tableView.reloadData()
                 }
-                
-                selectVC.modalPresentationStyle = .overFullScreen
-                selectVC.modalTransitionStyle = .crossDissolve
-                
-                self.present(selectVC, animated: true, completion: nil)
+                selectVC.show()
                 
         }.disposed(by: disposeBag)
         

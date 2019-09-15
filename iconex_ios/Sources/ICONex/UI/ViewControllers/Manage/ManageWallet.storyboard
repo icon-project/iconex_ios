@@ -136,7 +136,7 @@
         <!--Manage Wallet View Controller-->
         <scene sceneID="0gB-8k-23s">
             <objects>
-                <viewController storyboardIdentifier="Manage" id="lZx-se-GkK" customClass="ManageWalletViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Manage" modalPresentationStyle="overFullScreen" id="lZx-se-GkK" customClass="ManageWalletViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XUy-Tg-Hus">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -328,7 +328,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="5pd-xc-yRv" secondAttribute="bottom" id="X8r-lk-Zgo"/>
                                     <constraint firstAttribute="trailing" secondItem="5pd-xc-yRv" secondAttribute="trailing" id="pdf-LK-Zti"/>
@@ -359,6 +359,7 @@
                         <outlet property="changePasswordButton" destination="NZz-kq-I2A" id="uYt-rB-Pkp"/>
                         <outlet property="dismissButton" destination="6uM-77-0GQ" id="F6y-23-yAZ"/>
                         <outlet property="editButton" destination="8fJ-da-tRK" id="OJW-oY-Sdk"/>
+                        <outlet property="menuContainer" destination="5pd-xc-yRv" id="YpX-kC-CZh"/>
                         <outlet property="removeButton" destination="Sax-rL-2Kl" id="lp8-ix-PDo"/>
                         <outlet property="titleBar" destination="L5r-mQ-7Fv" id="uJu-w0-LDD"/>
                         <outlet property="titleLabel" destination="EEW-3b-usB" id="23c-ib-bKl"/>
