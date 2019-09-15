@@ -51,6 +51,7 @@ class AlertViewController: BaseViewController {
     var stakeInfo: StakeInfo?
     var sendInfo: SendInfo?
     var iscoreInfo: IScoreClaimInfo?
+    var voteInfo: VoteInfo?
     
     var privateKey: String = ""
     
@@ -178,6 +179,33 @@ class AlertViewController: BaseViewController {
                         
                         self.isSuccess = sendETH.isSuccess
                         
+                    }
+                    
+                    self.closer(self.successHandler)
+                    
+                case .vote:
+                    guard let info = self.voteInfo else { return }
+                    
+                    let delegationCall = Manager.icon.setDelegation(from: info.wallet, delegations: info.delegationList)
+                    
+                    
+                    do {
+                        let response = try Manager.icon.sendTransaction(transaction: delegationCall, privateKey: info.privateKey)
+                        
+                        switch response {
+                        case .success(let txHash):
+                            Log(txHash, .debug)
+                            self.isSuccess = true
+                            self.txHash = txHash
+                            
+                        case .failure(let error):
+                            Log(error.localizedDescription, .error)
+                            self.isSuccess = false
+                            self.txHash = error.localizedDescription
+                        }
+                    } catch {
+                        self.isSuccess = false
+                        self.txHash = "Common.Error".localized
                     }
                     
                     self.closer(self.successHandler)
@@ -399,6 +427,15 @@ class AlertViewController: BaseViewController {
             sendView.info = self.sendInfo
             
             addSubviewWithConstraint(sendView)
+            
+        case .vote:
+            headerLabel.size18(text: "Alert.Vote.Header".localized, color: .gray77, weight: .medium, align: .center)
+            setButtonUI(isOne: false)
+            
+            let voteView = VoteAlertView()
+            voteView.voteInfo = self.voteInfo
+            
+            addSubviewWithConstraint(voteView)
             
         case .iscore:
             headerLabel.size18(text: "Alert.Iscore.Header".localized, color: .gray77, weight: .medium, align: .center)

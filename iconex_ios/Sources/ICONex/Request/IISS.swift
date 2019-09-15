@@ -67,11 +67,17 @@ struct PRepStakeResponse: Decodable {
     }
 }
 
+// Test
+struct DelegationInfo: Codable {
+    var address: String
+    var value: String
+}
+
 // MARK: Delegation
 struct PRepDelegation: Decodable {
     var address: String
     var value: BigUInt
-    var status: Int
+//    var status: Int?
     var fine: BigUInt?
     
     enum CodingKeys: String, CodingKey {
@@ -86,7 +92,7 @@ struct PRepDelegation: Decodable {
             throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `value` to BigUInt"))
         }
         self.value = value
-        self.status = try container.decode(Int.self, forKey: .status)
+//        self.status = try container.decode(Int.self, forKey: .status)
         
         if container.contains(.fine) {
             let fineString = try container.decode(String.self, forKey: .fine)
@@ -108,9 +114,16 @@ struct PRepDelegation: Decodable {
 }
 
 struct TotalDelegation: Decodable {
+    /// 특정 주소가 p-rep에게 voting한 수량 (즉, voted)
     var totalDelegated: BigUInt
+    
+    /// 특정 주소의 voting 가능한 수량 (즉, avaliable)
     var votingPower: BigUInt
-    var status: Int
+    
+    /// 이거 현재 안내려옴
+    var status: Int?
+
+    /// 특정 주소가 delegation한 p-rep 리스트
     var delegations: [PRepDelegation]
     
     enum CodingKeys: String, CodingKey {
@@ -205,7 +218,7 @@ struct PRepInfoResponse: Decodable {
     var validatedBlocks: BigUInt
     
     enum CodingKeys: String, CodingKey {
-        case status, grade, name, country, city, email, website, details, p2pEndpoint, irep, irepUpdateBlockHeight, lastGenerateBlockHeight, stake, delegated, totalBlocks, validateBlocks
+        case status, grade, name, country, city, email, website, details, p2pEndpoint, irep, irepUpdateBlockHeight, lastGenerateBlockHeight, stake, delegated, totalBlocks, validatedBlocks
     }
     
     public init(from decoder: Decoder) throws {
@@ -256,7 +269,7 @@ struct PRepInfoResponse: Decodable {
         }
         self.totalBlocks = total
         
-        let validatedString = try container.decode(String.self, forKey: .validateBlocks)
+        let validatedString = try container.decode(String.self, forKey: .validatedBlocks)
         guard let validate = validatedString.hexToBigUInt() else {
             throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `validatedBlocks` to BigUInt"))
         }

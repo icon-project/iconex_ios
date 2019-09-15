@@ -178,7 +178,7 @@ class IXSlider: UIView {
             slider.value = 0
             isEnabled = false
         } else {
-            let crtNum = staked.decimalNumber! - (voted?.decimalNumber ?? 0) / total.decimalNumber!
+            let crtNum = (staked.decimalNumber! - (voted?.decimalNumber ?? 0)) / total.decimalNumber!
             
             Log("current = \(crtNum.floatValue)")
             current = crtNum.floatValue
