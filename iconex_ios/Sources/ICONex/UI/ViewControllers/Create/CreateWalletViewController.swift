@@ -55,6 +55,8 @@ class CreateWalletViewController: PopableViewController {
     private var _walletInfo: WalletInfo?
     private var _isBackup: Bool = false
     
+    var doneAction: (() -> Void)? = nil
+    
     var scrollIndex: Int = 0 {
         willSet {
             var leftTitle: String = "Common.Back".localized
@@ -229,7 +231,9 @@ class CreateWalletViewController: PopableViewController {
                 do {
                     try new.save()
                     
-                    self.dismiss(animated: true, completion: nil)
+                    self.dismiss(animated: true, completion: {
+                        self.doneAction?()
+                    })
                 } catch let err {
                     Alert.basic(title: err.localizedDescription).show()
                 }

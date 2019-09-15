@@ -33,11 +33,18 @@ class StartViewController: BaseViewController {
         
         createButton.rx.tap.subscribe(onNext: {
             let create = UIStoryboard(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
+            create.doneAction = {
+                Manager.balance.getAllBalances()
+                app.toMain()
+            }
             create.pop()
         }).disposed(by: disposeBag)
         
         loadButton.rx.tap.subscribe(onNext: {
             let load = UIStoryboard(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
+            load.doneAction = {
+                app.toMain()
+            }
             load.pop()
         }).disposed(by: disposeBag)
     }

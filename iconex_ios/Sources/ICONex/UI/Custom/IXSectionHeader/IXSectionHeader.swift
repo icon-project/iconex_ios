@@ -72,9 +72,7 @@ class IXSectionHeader: UIView {
         toggleButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let optionVC = UIStoryboard(name: "Detail", bundle: nil).instantiateViewController(withIdentifier: "DetailOption") as! DetailOptionViewController
-                optionVC.modalTransitionStyle = .crossDissolve
-                optionVC.modalPresentationStyle = .overFullScreen
-                app.topViewController()?.present(optionVC, animated: true, completion: nil)
+                optionVC.show()
                 
             }.disposed(by: disposeBag)
     }

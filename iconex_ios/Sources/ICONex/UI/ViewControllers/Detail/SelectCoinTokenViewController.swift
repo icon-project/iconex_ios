@@ -34,6 +34,10 @@ class SelectCoinTokenViewController: UIViewController {
         setupBind()
         
         self.tableView.tableFooterView = UIView()
+        
+        dimmView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+        contentView.alpha = 0.0
+        contentView.transform = CGAffineTransform(translationX: 0, y: 50)
     }
     
     private func setupUI() {
@@ -43,9 +47,14 @@ class SelectCoinTokenViewController: UIViewController {
     private func setupBind() {
         dismissButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.dismiss(animated: true, completion: nil)
+                self.beginClose()
         }.disposed(by: disposeBag)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        beginShow()
     }
 }
 
@@ -81,7 +90,7 @@ extension SelectCoinTokenViewController: UITableViewDelegate {
             }
         }
         
-        self.dismiss(animated: true, completion: nil)
+        self.beginClose()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -138,4 +147,40 @@ extension SelectCoinTokenViewController: UITableViewDataSource {
         return cell
     }
 
+}
+
+extension SelectCoinTokenViewController {
+    func show() {
+        app.topViewController()?.present(self, animated: false, completion: nil)
+    }
+    
+    private func beginShow() {
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.dimmView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.contentView.alpha = 1.0
+                self.contentView.transform = .identity
+            })
+        }, completion: nil)
+    }
+    
+    private func beginClose(_ completion: (() -> Void)? = nil) {
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.contentView.alpha = 0.0
+                self.contentView.transform = CGAffineTransform(translationX: 0, y: 50)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.dimmView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+            })
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                completion?()
+            })
+        })
+    }
 }

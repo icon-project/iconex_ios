@@ -70,13 +70,17 @@ class DetailOptionViewController: UIViewController {
         allButton.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
         sendButton.layer.maskedCorners = []
         depositButton.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        
+        view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+        contentView.alpha = 0.0
+        contentView.transform = CGAffineTransform(translationX: 0, y: 50)
     }
     
     private func setupBind() {
         
         closeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.dismiss(animated: true, completion: nil)
+                self.beginClose()
         }.disposed(by: disposeBag)
         
         allButton.rx.tap.asControlEvent()
@@ -106,7 +110,48 @@ class DetailOptionViewController: UIViewController {
         confirmButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 detailViewModel.filter.onNext(self.filter)
-                self.dismiss(animated: true, completion: nil)
+                self.beginClose()
         }.disposed(by: disposeBag)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        beginShow()
+    }
+}
+
+extension DetailOptionViewController {
+    func show() {
+        app.topViewController()?.present(self, animated: false, completion: nil)
+    }
+    
+    private func beginShow() {
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.contentView.alpha = 1.0
+                self.contentView.transform = .identity
+            })
+        }, completion: nil)
+    }
+    
+    private func beginClose(_ completion: (() -> Void)? = nil) {
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
+                self.contentView.transform = CGAffineTransform(translationX: 0, y: 50)
+                self.contentView.alpha = 0.0
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+            })
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                completion?()
+            })
+        })
     }
 }

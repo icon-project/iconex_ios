@@ -157,8 +157,6 @@
 		D4BE25E923165469002D697D /* FloatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE25E823165469002D697D /* FloatViewController.swift */; };
 		D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */; };
 		D4BE74C92040046C00638E2E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* Util.swift */; };
-		D4BF98DB230F7BBA009D4632 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BF98DA230F7BBA009D4632 /* TestViewController.swift */; };
-		D4BF98DD230F7C65009D4632 /* TEST.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4BF98DC230F7C65009D4632 /* TEST.storyboard */; };
 		D4BF98DF230FA7B4009D4632 /* PRepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BF98DE230FA7B4009D4632 /* PRepsViewController.swift */; };
 		D4CD0AA0231EC607000E8EA8 /* Exportable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CD0A9F231EC607000E8EA8 /* Exportable.swift */; };
 		D4CD0AA2231F5BB9000E8EA8 /* BundleExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CD0AA1231F5BB9000E8EA8 /* BundleExport.swift */; };
@@ -359,8 +357,6 @@
 		D4BE25E823165469002D697D /* FloatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatViewController.swift; sourceTree = "<group>"; };
 		D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepViewCell.xib; sourceTree = "<group>"; };
 		D4BE74C82040046C00638E2E /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
-		D4BF98DA230F7BBA009D4632 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
-		D4BF98DC230F7C65009D4632 /* TEST.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TEST.storyboard; sourceTree = "<group>"; };
 		D4BF98DE230FA7B4009D4632 /* PRepsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepsViewController.swift; sourceTree = "<group>"; };
 		D4C542CA22E995AF0099358D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		D4CD0A9F231EC607000E8EA8 /* Exportable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exportable.swift; sourceTree = "<group>"; };
@@ -920,15 +916,6 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
-		D4BF98D9230F7BA8009D4632 /* TEST */ = {
-			isa = PBXGroup;
-			children = (
-				D4BF98DA230F7BBA009D4632 /* TestViewController.swift */,
-				D4BF98DC230F7C65009D4632 /* TEST.storyboard */,
-			);
-			path = TEST;
-			sourceTree = "<group>";
-		};
 		D4C542C822E995940099358D /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -944,7 +931,6 @@
 			children = (
 				1B952CBF2323FDB100CA04A2 /* Connect */,
 				1BB4C757231A951700BA4138 /* Send */,
-				D4BF98D9230F7BA8009D4632 /* TEST */,
 				D46B158C23015255001B5D48 /* IISS */,
 				D4F2EBDF22FBFA5F00EAC3B4 /* Camera */,
 				D4FDCA6422F7BA3300D6CDD4 /* Load */,
@@ -1136,7 +1122,6 @@
 				D4BE25E723165019002D697D /* FloatButton.storyboard in Resources */,
 				D430499E231D002100A8F540 /* Pods-iconex_ios-acknowledgements.plist in Resources */,
 				D4EB066520C63730005AF9F1 /* ethToken.json in Resources */,
-				D4BF98DD230F7C65009D4632 /* TEST.storyboard in Resources */,
 				D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */,
 				D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */,
 				D4E972CE231B9FB300C7B646 /* AppInfo.storyboard in Resources */,
@@ -1313,7 +1298,6 @@
 				D462F9D9231E3BAD00602D83 /* ExportMainViewController.swift in Sources */,
 				BF4F6F772318A57D0098D303 /* MainCollectionViewCell.swift in Sources */,
 				D44A94892019CA0100F60614 /* Cipher.swift in Sources */,
-				D4BF98DB230F7BBA009D4632 /* TestViewController.swift in Sources */,
 				BF6EFEBF22FA5174003B6AF3 /* Alert.swift in Sources */,
 				BF78B35F22FCFCD4002E34B3 /* CreateSelectViewController.swift in Sources */,
 				D4F657D222E5422200FA5A26 /* Models.swift in Sources */,

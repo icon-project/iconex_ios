@@ -246,7 +246,7 @@
         <!--Select Coin Token View Controller-->
         <scene sceneID="gL1-zq-BKb">
             <objects>
-                <viewController storyboardIdentifier="SelectCoinToken" id="EVz-Qt-oFl" customClass="SelectCoinTokenViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelectCoinToken" modalPresentationStyle="overFullScreen" id="EVz-Qt-oFl" customClass="SelectCoinTokenViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="P2y-Cy-ok6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -297,6 +297,8 @@
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="G88-kJ-4K8">
                                                 <rect key="frame" x="0.0" y="60" width="375" height="346"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="separatorColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <inset key="separatorInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                 <prototypes>
                                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="selectCell" rowHeight="80" id="I0H-PJ-bZ5" customClass="SelectCoinTokenTableViewCell" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="28" width="375" height="80"/>
@@ -420,7 +422,7 @@
         <!--Detail Option View Controller-->
         <scene sceneID="Ygq-aI-tcE">
             <objects>
-                <viewController storyboardIdentifier="DetailOption" id="f23-4A-Pfc" customClass="DetailOptionViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailOption" modalPresentationStyle="overFullScreen" id="f23-4A-Pfc" customClass="DetailOptionViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NzP-Nl-B5r">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -520,7 +522,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.40000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="7Pp-7A-iVh" secondAttribute="bottom" id="ORv-kw-6Yr"/>
                                     <constraint firstItem="7Pp-7A-iVh" firstAttribute="height" secondItem="8RN-Ou-EHW" secondAttribute="height" multiplier="0.25" id="VHe-HQ-Hit"/>

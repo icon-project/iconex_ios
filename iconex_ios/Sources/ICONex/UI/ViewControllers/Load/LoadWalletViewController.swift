@@ -53,6 +53,8 @@ class LoadWalletViewController: PopableViewController {
     
     var loader: WalletLoader? { return _loader }
     
+    var doneAction: (() -> Void)? = nil
+    
     var scrollIndex: Int = 0 {
         willSet {
             var leftTitle: String = "Common.Back".localized
@@ -249,7 +251,6 @@ extension LoadWalletViewController {
                     let eth = ETHWallet(name: name, keystore: keystore)
                     try eth.save()
                 }
-                self.dismiss(animated: true, completion: nil)
                 
             case .bundle:
                 guard let bundleList = loader.bundle else { return }
@@ -275,11 +276,14 @@ extension LoadWalletViewController {
                         }
                     }
                 }
-                Manager.balance.getAllBalances()
-                self.dismiss(animated: true, completion: nil)
+                
             }
         } catch {
             Log("Error - \(error)")
         }
+        Manager.balance.getAllBalances()
+        self.dismiss(animated: true, completion: {
+            self.doneAction?()
+        })
     }
 }

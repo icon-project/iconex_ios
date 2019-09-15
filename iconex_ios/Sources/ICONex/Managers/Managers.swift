@@ -245,9 +245,6 @@ extension ICONManager {
             .nid(Manager.icon.iconService.nid)
             .stepLimit(stepLimit)
             .params(params)
-            
-        Log("transaction \(try? call.toDic())")
-        
         return call
     }
     
@@ -375,7 +372,7 @@ class BalanceManager {
 }
 
 extension BalanceManager {
-    func getAllBalances() {
+    func getAllBalances(_ completion: (() -> Void)? = nil) {
         
         guard isWorking == false else { return }
         DispatchQueue.global().async { [unowned self] in
@@ -409,16 +406,19 @@ extension BalanceManager {
                         self.tokenBalances[wallet.address] = tokenBalances
                     }
                 }
-                mainViewModel.noti.onNext(true)
+                DispatchQueue.main.async {
+                    mainViewModel.noti.onNext(true)
+                }
             }
-            mainViewModel.reload.onNext(true)
             
             Manager.icon.stepCost = Manager.icon.getStepCosts()
             Manager.icon.stepPrice = Manager.icon.getStepPrice()
             Manager.iiss.getPRepInfo()
             
             DispatchQueue.main.async {
+                mainViewModel.reload.onNext(true)
                 self.isWorking = false
+                completion?()
             }
         }
     }

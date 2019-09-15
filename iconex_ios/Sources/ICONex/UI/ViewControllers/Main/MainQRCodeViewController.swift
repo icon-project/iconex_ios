@@ -25,6 +25,9 @@ class MainQRCodeViewController: BaseViewController {
     @IBOutlet weak var cardView: UIView!
     @IBOutlet weak var contentView: UIView!
     
+    @IBOutlet weak var fakeView: UIView!
+    @IBOutlet weak var fakeImageView: UIImageView!
+    @IBOutlet weak var fakeTop: NSLayoutConstraint!
     var wallet: BaseWalletConvertible? = nil {
         willSet {
             self.isICX = newValue is ICXWallet
@@ -33,6 +36,10 @@ class MainQRCodeViewController: BaseViewController {
     
     var isICX: Bool = true
     
+    var fakeImage: UIImage?
+    var dismissAction: (() -> Void)?
+    let topOffset: CGFloat = 56
+    var startHeight: CGFloat = 56
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +75,8 @@ class MainQRCodeViewController: BaseViewController {
         descLabel.size12(text: "Main.QRCode.Description".localized, color: .mint1, weight: .light)
         
         dismissButton.rounded()
+        
+        fakeView.corner(18)
         
         if !isICX {
             inputBox.isHidden = true
@@ -110,7 +119,7 @@ class MainQRCodeViewController: BaseViewController {
         
         dismissButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                self.dismiss(animated: true, completion: nil)
+                self.beginClose()
         }.disposed(by: disposeBag)
         
         inputBox.setError(message: "$\t0.000")
@@ -128,6 +137,9 @@ class MainQRCodeViewController: BaseViewController {
             return priceString
         }
 
+        fakeTop.constant = startHeight
+        cardView.layer.transform = CATransform3DMakeRotation(.pi / 2, 0.0, 1.0, 0.0)
+        fakeImageView.image = fakeImage
     }
     
     override func refresh() {
@@ -146,6 +158,42 @@ class MainQRCodeViewController: BaseViewController {
         inputBox.set(inputType: .decimal)
         inputBox.set(state: .normal, placeholder: "Main.QRCode.InputBox.Placeholder".localized)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        beginShow()
+    }
+    
+    func beginShow() {
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0, options: [], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2, animations: {
+                self.fakeView.layer.transform = CATransform3DMakeRotation(-.pi / 2, 0.0, 1.0, 0.0)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.2, animations: {
+                self.cardView.layer.transform = CATransform3DMakeRotation(0.0, 0.0, 1.0, 0.0)
+            })
+        }, completion: { _ in
+            self.fakeView.isHidden = true
+        })
+    }
+    
+    func beginClose() {
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0, options: [], animations: {
+            self.fakeView.isHidden = false
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2, animations: {
+                self.cardView.layer.transform = CATransform3DMakeRotation(.pi / 2, 0, 1, 0)
+            })
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.2, animations: {
+                self.fakeView.layer.transform = CATransform3DMakeRotation(0, 0, 1, 0)
+            })
+        }, completion: { _ in
+            self.dismiss(animated: false, completion: {
+                self.dismissAction?()
+            })
+        })
     }
 }
 

@@ -101,9 +101,16 @@ class MainCollectionViewCell: UICollectionViewCell {
                 let qrVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "QRCode") as! MainQRCodeViewController
                 qrVC.wallet = self.info
                 qrVC.modalPresentationStyle = .overFullScreen
-                qrVC.modalTransitionStyle = .flipHorizontal
+                qrVC.dismissAction = {
+                    self.isHidden = false
+                }
+                let snapshot = self.cardView.asImage()
+                qrVC.fakeImage = snapshot
+                qrVC.startHeight = self.tableview.isScrollEnabled ? 56 : 148 + 56
                 
-                app.topViewController()?.present(qrVC, animated: true, completion: nil)
+                app.topViewController()?.present(qrVC, animated: false, completion: {
+                    self.isHidden = true
+                })
 
                 
             }.disposed(by: disposeBag)
@@ -112,10 +119,8 @@ class MainCollectionViewCell: UICollectionViewCell {
             .subscribe { (_) in
                 let manageVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "Manage") as! ManageWalletViewController
                 manageVC.walletInfo = self.info
-                manageVC.modalPresentationStyle = .overFullScreen
-                manageVC.modalTransitionStyle = .crossDissolve
                 manageVC.handler = self.handler
-                app.topViewController()?.present(manageVC, animated: true, completion: nil)
+                manageVC.show()
 
             }.disposed(by: disposeBag)
     }
