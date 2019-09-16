@@ -6,4 +6,5 @@
 
 #ifndef DEBUG
 #import "iX.h"
+#import "iXInfoUtil.h"
 #endif
