@@ -159,7 +159,7 @@ class ChangePasswordViewController: BaseViewController {
                         try eth.changePassword(oldPassword: currentPassword, newPassword: newPassword)
                     }
                     
-                    Alert.basic(title: "Alert.Password.Changed".localized, confirmAction: {
+                    Alert.basic(title: "Alert.Password.Changed".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: {
                         self.dismiss(animated: true, completion: nil)
                     }).show()
                     

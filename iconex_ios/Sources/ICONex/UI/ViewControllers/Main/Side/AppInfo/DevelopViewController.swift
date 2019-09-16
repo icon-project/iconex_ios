@@ -57,6 +57,7 @@ class DevelopViewController: BaseViewController {
             picker.selectedAction = { index in
                 UserDefaults.standard.set(index, forKey: "Provider")
                 self.refresh()
+                Manager.balance.getAllBalances()
             }
             picker.pop()
         }).disposed(by: disposeBag)

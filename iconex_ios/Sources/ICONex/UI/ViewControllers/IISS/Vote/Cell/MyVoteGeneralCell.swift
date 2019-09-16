@@ -42,18 +42,17 @@ class MyVoteGeneralCell: UITableViewCell {
         let voted = info.totalDelegated
         let total = info.totalDelegated + votingPower
         
-        Log("totalDelegated \(voted) power \(votingPower)")
-        
-        voteViewModel.available.subscribe(onNext: { (availablePower) in
+        voteViewModel.available.subscribe(onNext: { [weak self] (availablePower) in
             let powerDecimal = availablePower.decimalNumber ?? 0
             let totalDecimal = total.decimalNumber ?? 0
+            
             let rate = powerDecimal / totalDecimal
             
-            self.votedWidth.constant = self.slideView.frame.width * CGFloat(1.0 - rate.floatValue)
+            self?.votedWidth.constant = self?.slideView.frame.width ?? 0 * CGFloat(1.0 - rate.floatValue)
             
             let percent = rate * 100
-            self.votedLabel.size14(text: "Voted " + String(format: "%.1f", 100.0 - percent.floatValue) + "%", color: .mint1, weight: .light)
-            self.availableLabel.size14(text: "Available " + String(format: "%.1f", percent.floatValue) + "%", color: .gray77, weight: .light)
+            self?.votedLabel.size14(text: "Voted " + String(format: "%.1f", 100.0 - percent.floatValue) + "%", color: .mint1, weight: .light)
+            self?.availableLabel.size14(text: "Available " + String(format: "%.1f", percent.floatValue) + "%", color: .gray77, weight: .light)
         }).disposed(by: disposeBag)
         
         votedValueLabel.size14(text: voted.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)

@@ -146,10 +146,10 @@ class Floater {
                 }).show()
             }
             floatMenu.itemAction2 = {
-//                guard let votingPower = Manager.iiss.votingPower(icx: wallet), votingPower > 0 else {
-//                    Alert.basic(title: "Floater.Alert.Vote".localized, leftButtonTitle: "Common.Confirm".localized).show()
-//                    return
-//                }
+                guard let votingPower = Manager.iiss.votingPower(icx: wallet), votingPower > 0 else {
+                    Alert.basic(title: "Floater.Alert.Vote".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
                 
                 Alert.password(wallet: wallet, returnAction: { pk in
                     let vote = UIStoryboard(name: "Vote", bundle: nil).instantiateInitialViewController() as! VoteMainViewController
