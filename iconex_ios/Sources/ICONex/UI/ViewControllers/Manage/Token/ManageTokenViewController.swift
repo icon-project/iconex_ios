@@ -81,6 +81,8 @@ class ManageTokenViewController: UIViewController {
                 
                 self.tableView.backgroundView = messageLabel
                 self.tableView.separatorStyle = .none
+            } else {
+                self.tableView.backgroundView = nil
             }
         }).disposed(by: disposeBag)
         
