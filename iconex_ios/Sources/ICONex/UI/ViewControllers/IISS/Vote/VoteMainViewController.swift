@@ -47,9 +47,11 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
             if self.voteButton.isEnabled {
                 Alert.basic(title: "MyVoteView.Alert.Back".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.navigationController?.popViewController(animated: true)
+                    Manager.voteList.reset()
                 }).show()
             } else {
                 self.navigationController?.popViewController(animated: true)
+                Manager.voteList.reset()
             }
         }
         
@@ -145,6 +147,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     return $0.editedDelegate ?? 0
                 }
             }.reduce(0, +)
+            Log("voted \(votedListPower)")
             
             let votingListPower: BigUInt = self.votingList.map {
                 if $0.editedDelegate == nil {
@@ -153,11 +156,14 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     return $0.editedDelegate ?? 0
                 }
                 }.reduce(0, +)
+            Log("voting \(votingListPower)")
             
             let power = Manager.voteList.myVotes?.votingPower ?? 0
             let delegated = Manager.voteList.myVotes?.totalDelegated ?? 0
             let total = power + delegated
             let plus = votedListPower + votingListPower
+            
+            Log("Power \(power) delegated \(delegated) total \(total) plus \(plus)")
             
             guard plus <= total else { return voteViewModel.available.onNext(0) }
             

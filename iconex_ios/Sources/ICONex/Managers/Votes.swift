@@ -130,4 +130,9 @@ class VoteListManager {
             currentAddedList.onNext(myAddList)
         }
     }
+    
+    func reset() {
+        myAddList.removeAll()
+        currentAddedList.onNext(myAddList)
+    }
 }
