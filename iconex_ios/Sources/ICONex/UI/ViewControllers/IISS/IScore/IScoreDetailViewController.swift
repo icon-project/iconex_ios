@@ -68,9 +68,10 @@ class IScoreDetailViewController: BaseViewController {
         
         claimButton.isEnabled = false
         
-        refreshControl?.attributedTitle = NSAttributedString(string: "Common.Downloading".localized)
+//        refreshControl?.attributedTitle = NSAttributedString(string: "Common.Downloading".localized)
         contentScroll.refreshControl = refreshControl
         refreshControl?.beginRefreshing()
+        refreshControl?.addTarget(self, action: #selector(run), for: .valueChanged)
         
         claimButton.rx.tap
             .subscribe(onNext: { [unowned self] in
@@ -90,24 +91,46 @@ class IScoreDetailViewController: BaseViewController {
         }
     }
     
-    func run() {
+    @objc func run() {
         DispatchQueue.global().async {
             let response = Manager.icon.queryIScore(from: self.wallet)
+            
+            
+            let call = CallTransaction()
+            call.from = self.wallet.address
+            call.to = CONST.iiss
+            call.method("claimIScore")
+            call.params([:])
+            call.nid = Manager.icon.iconService.nid
+            
+            let result = Manager.icon.iconService.estimateStep(transaction: call).execute()
+            let estimatedStep: BigUInt? = {
+                do {
+                    let value = try result.get()
+                    return value
+                } catch {
+                    Log("Error - \(error)")
+                    return nil
+                }
+            }()
+            
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
                 [weak self] in
                 self?.refreshControl?.endRefreshing()
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-                    self?.refreshControl = nil
-                    self?.contentScroll.refreshControl = nil
-                })
+                
                 if let resp = response {
                     self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
                     
-                    self?.receiveICXValue.set(text: resp.iscore.toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    self?.receiveICXValue.set(text: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
                     
-                    #warning("수수료 계산")
+                    let estimated = (estimatedStep ?? 0) * (Manager.icon.stepPrice ?? 0)
                     
-                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: resp.iscore.toString(decimal: 18, 18, true), stepLimit: "-", estimatedFee: "-", estimateUSD: "-")
+                    self?.descValue1.size14(text: (estimatedStep ?? 0).toString(decimal: 0).currencySeparated() + " / " + (estimatedStep ?? 0).convert(unit: .loop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
+                    self?.descValue2.size14(text: estimated.toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
+                    self?.exchangedValue.size12(text: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"), color: .gray179, weight: .regular, align: .right)
+                    
+                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), stepLimit: (estimatedStep ?? 0).toString(decimal: 0), estimatedFee: estimated.toString(decimal: 18, 18, true), estimateUSD: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
                     
                     self?.iscore = iscoreInfo
                     
