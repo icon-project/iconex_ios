@@ -68,7 +68,7 @@ class MyVoteDelegateCell: UITableViewCell {
         myVotesField.textColor = .mint1
         
         maxTitleLabel.text = "MAX"
-        myVotesMax.textColor = .mint1
+        myVotesMax.textColor = .gray77
         myVotesMax.text = "0 %"
         
         minBar.corner(minBar.frame.height / 2)

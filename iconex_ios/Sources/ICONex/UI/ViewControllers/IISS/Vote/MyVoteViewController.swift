@@ -197,7 +197,6 @@ extension MyVoteViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath) as! MyVoteGeneralCell
             
             cell.set(info: info)
-            voteViewModel.available.onNext(self.totalDelegation?.votingPower ?? 0)
             
             return cell
         } else {
@@ -246,21 +245,25 @@ extension MyVoteViewController: UITableViewDataSource {
                 let parentDecimal = stakedTotalValue.decimalNumber ?? 0.0
                 let percent = (child / parentDecimal) * 100
                 let percentFloat = percent.floatValue
+                cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
                 
-                cell.myVoteMaxValue = "\(percentFloat)%"
+                let myDelegateDecimal = my.decimalNumber ?? 0.0
+                let sliderDecimal = sliderMaxValue.decimalNumber ?? 0.0
                 
-                if let myDelegateInfo = info.myDelegate {
-                    let myDelegateDecimal = myDelegateInfo.decimalNumber ?? 0.0
-                    let sliderDecimal = sliderMaxValue.decimalNumber ?? 0.0
-
-                    let calculated = myDelegateDecimal / sliderDecimal
-                    let sliderPercent = calculated.floatValue
-                    cell.current = sliderPercent
-                    cell.slider.value = sliderPercent
-                    
-                    let currentICXValue = myDelegateInfo.toString(decimal: 18, 4).currencySeparated()
-                    cell.myVotesField.text = currentICXValue
-
+                let calculated = myDelegateDecimal / sliderDecimal
+                let sliderPercent = calculated.floatValue
+                cell.current = sliderPercent
+                cell.slider.value = sliderPercent
+                
+                let currentICXValue = my.toString(decimal: 18, 4).currencySeparated()
+                cell.myVotesField.text = currentICXValue
+                
+                cell.myVotesUnitLabel.text = String(format: "%.1f", calculated.floatValue * 100) + "%"
+                
+                if sliderMaxValue == 0 {
+                    cell.slider.isEnabled = false
+                } else {
+                    cell.slider.isEnabled = true
                 }
                 
                 cell.slider.rx.value.skip(1).distinctUntilChanged()
@@ -280,8 +283,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         let currentICXValue = rateValue.toString(decimal: 18, 4).currencySeparated()
                         cell.myVotesField.text = currentICXValue
                         
-//                        let voteUnit = rateValueNum.floatValue
-//                        cell.myVotesUnitLabel.text = "(\(voteUnit)%)"
+                        cell.myVotesUnitLabel.text = String(format: "%.1f", valueDecimal.floatValue * 100) + "%"
                         
                         self.myVoteList[indexPath.row] = this
                         
@@ -311,7 +313,10 @@ extension MyVoteViewController: UITableViewDataSource {
                 let percent = (child / parentDecimal) * 100
                 let percentFloat = percent.floatValue
                 
-                cell.myVoteMaxValue = "\(percentFloat)%"
+                Log("sliderMaxValue \(sliderMaxValue)", .debug)
+                Log("stakedTotalValue \(stakedTotalValue)", .debug)
+//                cell.myVoteMaxValue = "\(percentFloat)%"
+                cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
                 
                 if let value = info.editedDelegate {
                     let sliderValue = value.decimalNumber ?? 0
@@ -321,9 +326,17 @@ extension MyVoteViewController: UITableViewDataSource {
                     let currentICXValue = value.toString(decimal: 18, 4).currencySeparated()
                     cell.myVotesField.text = currentICXValue
                     
+                    cell.myVotesUnitLabel.text = String(format: "%.1f", calculated.floatValue * 100) + "%"
+                    
                     voteViewModel.isChanged.onNext(true)
                 } else {
                     cell.slider.value = 0.0
+                }
+                
+                if sliderMaxValue == 0 {
+                    cell.slider.isEnabled = false
+                } else {
+                    cell.slider.isEnabled = true
                 }
                 
                 cell.slider.rx.value.skip(1).distinctUntilChanged()
@@ -339,6 +352,8 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         let currentICXValue = rateValue.toString(decimal: 18, 4).currencySeparated()
                         cell.myVotesField.text = currentICXValue
+                        
+                        cell.myVotesUnitLabel.text = String(format: "%.1f", valueDecimal.floatValue * 100) + "%"
                         
                         self.newList[indexPath.row - totalDelegationList.count] = info
                         

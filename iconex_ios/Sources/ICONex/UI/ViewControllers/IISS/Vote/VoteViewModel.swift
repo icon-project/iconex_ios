@@ -19,7 +19,7 @@ class VoteViewModel {
     
     var isChanged: PublishSubject<Bool>
     
-    var available: PublishSubject<BigUInt>
+    var available: BehaviorSubject<BigUInt>
     
     var myList: PublishSubject<[MyVoteEditInfo]>
     var newList: PublishSubject<[MyVoteEditInfo]>
@@ -32,7 +32,7 @@ class VoteViewModel {
     
         
         self.isChanged = PublishSubject<Bool>()
-        self.available = PublishSubject<BigUInt>()
+        self.available = BehaviorSubject<BigUInt>(value: Manager.voteList.myVotes?.votingPower ?? 0)
         self.myList = PublishSubject<[MyVoteEditInfo]>()
         self.newList = PublishSubject<[MyVoteEditInfo]>()
         
