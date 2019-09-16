@@ -171,7 +171,9 @@ class Floater {
             
         case .wallet:
             floatMenu.itemAction1 = {
-                
+                let deposit = UIStoryboard(name: "Detail", bundle: nil).instantiateViewController(withIdentifier: "Deposit") as! DepositViewController
+                deposit.wallet = wallet
+                app.topViewController()?.presentPanModal(deposit)
             }
             
             floatMenu.itemAction2 = {

@@ -158,6 +158,7 @@
 		D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */; };
 		D4BE74C92040046C00638E2E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE74C82040046C00638E2E /* Util.swift */; };
 		D4BF98DF230FA7B4009D4632 /* PRepsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BF98DE230FA7B4009D4632 /* PRepsViewController.swift */; };
+		D4C1A5BC232F51C7004071C7 /* DepositViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C1A5BB232F51C7004071C7 /* DepositViewController.swift */; };
 		D4CD0AA0231EC607000E8EA8 /* Exportable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CD0A9F231EC607000E8EA8 /* Exportable.swift */; };
 		D4CD0AA2231F5BB9000E8EA8 /* BundleExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4CD0AA1231F5BB9000E8EA8 /* BundleExport.swift */; };
 		D4DACDF12313D37400CC8EA8 /* PRepViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4DACDF02313D37400CC8EA8 /* PRepViewCell.swift */; };
@@ -359,6 +360,7 @@
 		D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepViewCell.xib; sourceTree = "<group>"; };
 		D4BE74C82040046C00638E2E /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		D4BF98DE230FA7B4009D4632 /* PRepsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepsViewController.swift; sourceTree = "<group>"; };
+		D4C1A5BB232F51C7004071C7 /* DepositViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositViewController.swift; sourceTree = "<group>"; };
 		D4C542CA22E995AF0099358D /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		D4CD0A9F231EC607000E8EA8 /* Exportable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Exportable.swift; sourceTree = "<group>"; };
 		D4CD0AA1231F5BB9000E8EA8 /* BundleExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BundleExport.swift; sourceTree = "<group>"; };
@@ -488,6 +490,7 @@
 				BF4F6F4C2318A57D0098D303 /* DetailViewModel.swift */,
 				BF4F6F4D2318A57D0098D303 /* SelectCoinTokenViewController.swift */,
 				BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */,
+				D4C1A5BB232F51C7004071C7 /* DepositViewController.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -1291,6 +1294,7 @@
 				D468CEF922F03CAB0019D7BB /* PopableViewController.swift in Sources */,
 				BFC9A4A223141498002E35F5 /* extensions.swift in Sources */,
 				D4DACDF52314FC1700CC8EA8 /* MyVoteDelegateCell.swift in Sources */,
+				D4C1A5BC232F51C7004071C7 /* DepositViewController.swift in Sources */,
 				BF4F6F782318A57D0098D303 /* SelectCoinTokenTableViewCell.swift in Sources */,
 				D4682A14230B940B00225C73 /* IXStakeProgressView.swift in Sources */,
 				BF7FC19D2316B2070095F1D5 /* IXSectionHeader.swift in Sources */,

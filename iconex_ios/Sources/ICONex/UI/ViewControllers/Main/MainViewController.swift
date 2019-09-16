@@ -165,7 +165,7 @@ class MainViewController: BaseViewController, Floatable {
                 }
                 
                 self.symbolList = tmp
-                
+                self.pageControl.rx.numberOfPages.onNext(self.isWalletMode ? self.walletList.count : self.symbolList.count)
             }.disposed(by: disposeBag)
         
         mainViewModel.noti
@@ -299,8 +299,6 @@ class MainViewController: BaseViewController, Floatable {
             }).disposed(by: disposeBag)
         
         self.collectionView.allowsSelection = false
-        
-        self.pageControl.rx.numberOfPages.onNext(self.walletList.count)
         
         collectionView.rx.didScroll.asControlEvent()
             .subscribe { (_) in

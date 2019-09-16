@@ -54,6 +54,10 @@ class PRepsViewController: BaseViewController, Floatable {
         
         refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
         
+        voteViewModel.newList.subscribe { _ in
+            self.tableView.reloadData()
+        }.disposed(by: disposeBag)
+        
         floater.button.rx.tap.subscribe(onNext: { [unowned self] in
             let search = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepSearchView") as! PRepSearchViewController
             search.delegate = self
@@ -113,9 +117,6 @@ extension PRepsViewController: UITableViewDataSource {
         cell.addButton.isHidden = false
         let prep = preps!.preps[indexPath.row]
         
-        if Manager.voteList.contains(address: prep.address) {
-            cell.addButton.isSelected = true
-        }
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
         cell.active = true
