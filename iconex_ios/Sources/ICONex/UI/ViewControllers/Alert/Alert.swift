@@ -107,7 +107,7 @@ class Alert {
         let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
         alertVC.type = .vote
         alertVC.voteInfo = voteInfo
-        
+        alertVC.successHandler = confirmAction
         return alertVC
     }
     

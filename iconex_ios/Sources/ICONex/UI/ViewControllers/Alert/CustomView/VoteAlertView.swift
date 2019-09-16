@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import BigInt
 
 class VoteAlertView: UIView {
     
@@ -30,8 +31,8 @@ class VoteAlertView: UIView {
         willSet {
             guard let info = newValue else { return }
             votedPrep.text = "\(info.count)"
-            estimatedStepLabel.text = info.estimatedFee
-            stepPriceLabel.text = info.maxFee
+            estimatedStepLabel.size12(text: info.estimatedFee, color: .gray77, align: .right)
+            stepPriceLabel.size12(text: info.maxFee, color: .gray77, align: .right)
         }
     }
     

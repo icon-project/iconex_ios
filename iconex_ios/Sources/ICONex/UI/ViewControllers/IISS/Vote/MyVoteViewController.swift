@@ -17,6 +17,16 @@ class MyVoteViewController: BaseViewController {
     @IBOutlet weak var headerFirstItem: UILabel!
     @IBOutlet weak var headerSecondItem: UIButton!
     
+    
+    @IBOutlet weak var footerBox: UIView!
+    @IBOutlet weak var stepLimitTitleLabel: UILabel!
+    @IBOutlet weak var estimatedFeeTitleLabel: UILabel!
+    
+    @IBOutlet weak var stepLimitLabel: UILabel!
+    @IBOutlet weak var estimatedFeeLabel: UILabel!
+    @IBOutlet weak var exchangedLabel: UILabel!
+    
+    
     private var myVoteList = [MyVoteEditInfo]()
     private var newList = [MyVoteEditInfo]()
     
@@ -32,6 +42,28 @@ class MyVoteViewController: BaseViewController {
     
     private var scrollPoint: CGFloat = 0
     
+    private var stepPrice: BigUInt = Manager.icon.stepPrice ?? 0
+    
+    private var estimatedStep: BigUInt = 0 {
+        willSet {
+            let separated = String(newValue).currencySeparated()
+            let priceToICX = self.stepPrice.toString(decimal: 18, 9, false)
+            
+            let stepLimitString = separated + " / " + priceToICX
+            stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
+            
+            let calculated = newValue * self.stepPrice
+            let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
+            
+            stepLimitLabel.size14(text: stepLimitString, color: .gray179, align: .right)
+            estimatedFeeLabel.size14(text: calculated.toString(decimal: 18, 9, false), color: .gray179, align: .right)
+            exchangedLabel.size14(text: calculatedPrice, color: .gray179, align: .right)
+            
+            self.delegate.stepLimit = stepLimitLabel.text ?? ""
+            self.delegate.maxFee = estimatedFeeLabel.text ?? ""
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,7 +73,15 @@ class MyVoteViewController: BaseViewController {
     override func initializeComponents() {
         super.initializeComponents()
         
-        tableView.tableFooterView = UIView()
+        footerBox.layer.cornerRadius = 8
+        footerBox.clipsToBounds = true
+        footerBox.backgroundColor = .gray250
+        footerBox.layer.borderColor = UIColor.gray230.cgColor
+        footerBox.layer.borderWidth = 1
+        
+        stepLimitTitleLabel.size12(text: "Alert.Common.StepLimit".localized, color: .gray77, align: .right)
+        estimatedFeeTitleLabel.size12(text: "Alert.Common.EstimatedFee".localized, color: .gray77, align: .right)
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.estimatedRowHeight = 262
@@ -143,6 +183,38 @@ class MyVoteViewController: BaseViewController {
                     
                 }).show()
             }.disposed(by: disposeBag)
+        
+        // TEST
+        Observable.merge(voteViewModel.myList, voteViewModel.newList)
+            .subscribe(onNext: { (list) in
+                
+                print("ESTIMATE!!!!!")
+                var delList = [[String: Any]]()
+                
+                for i in list {
+                    let value: String = {
+                        if let edit = i.editedDelegate {
+                            return edit.toHexString()
+                        } else if let myDelegate = i.myDelegate {
+                            return myDelegate.toHexString()
+                        } else {
+                            return "0x0"
+                        }
+                    }()
+                    
+                    let info = ["address": i.address, "value": value]
+                    delList.append(info)
+                }
+                
+                DispatchQueue.global().async {
+                    let delegationCall = Manager.icon.setDelegation(from: self.delegate.wallet, delegations: delList)
+                    
+                    DispatchQueue.main.async {
+                        self.estimatedStep = delegationCall.stepLimit ?? 0
+                    }
+                }
+                
+            }).disposed(by: disposeBag)
     }
     
     override func refresh() {
@@ -185,7 +257,10 @@ extension MyVoteViewController: UITableViewDataSource {
             }
             return 1
         } else {
-            return Manager.voteList.votesCount
+            let count = self.myVoteList.count + self.newList.count
+            self.footerBox.isHidden = count == 0
+            
+            return count
         }
     }
     
@@ -202,11 +277,6 @@ extension MyVoteViewController: UITableViewDataSource {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
             
-            guard let totalDelegationList = totalDelegation?.delegations else {
-                Log("totaldelegation is empty", .debug)
-                return cell
-            }
-            
             if selectedIndexPath == indexPath {
                 cell.sliderBoxView.isHidden = false
             } else {
@@ -219,7 +289,7 @@ extension MyVoteViewController: UITableViewDataSource {
             
             let fixedAvailable = self.available
             
-            if indexPath.row < totalDelegationList.count {
+            if indexPath.row < myVoteList.count {
                 let info = myVoteList[indexPath.row]
                 
                 let my: BigUInt = {
@@ -236,7 +306,13 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.addButton.isHighlighted = false
                 cell.addButton.rx.tap.asControlEvent()
                     .subscribe { (_) in
-                        self.tableView.showToolTip(sizeY: cell.frame.origin.y-self.scrollPoint)
+                        guard cell.slider.value == 0 else { return self.tableView.showToolTip(sizeY: cell.frame.origin.y-self.scrollPoint) }
+                        
+                        Manager.voteList.remove(prep: info)
+                        self.myVoteList.remove(at: indexPath.row)
+                        voteViewModel.myList.onNext(self.myVoteList)
+                        tableView.reloadData()
+                        
                     }.disposed(by: cell.disposeBag)
                 
                 let sliderMaxValue = fixedAvailable + my
@@ -293,15 +369,16 @@ extension MyVoteViewController: UITableViewDataSource {
                     }).disposed(by: cell.disposeBag)
                 
             } else {
-                var info = self.newList[indexPath.row - totalDelegationList.count]
+                var info = self.newList[indexPath.row - myVoteList.count]
                 cell.prepName.size12(text: info.prepName, color: .gray77, weight: .semibold)
                 cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
-//                cell.addButton.isSelected = true
-//                cell.addButton.isEnabled = true
+                
                 cell.addButton.isHighlighted = true
                 cell.addButton.rx.tap
                     .subscribe(onNext: {
+                        self.newList.remove(at: indexPath.row - self.myVoteList.count)
                         Manager.voteList.remove(prep: info)
+                        voteViewModel.newList.onNext(self.newList)
                         tableView.reloadData()
                     }).disposed(by: cell.disposeBag)
                 
@@ -313,9 +390,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 let percent = (child / parentDecimal) * 100
                 let percentFloat = percent.floatValue
                 
-                Log("sliderMaxValue \(sliderMaxValue)", .debug)
-                Log("stakedTotalValue \(stakedTotalValue)", .debug)
-//                cell.myVoteMaxValue = "\(percentFloat)%"
                 cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
                 
                 if let value = info.editedDelegate {
@@ -355,7 +429,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         cell.myVotesUnitLabel.text = String(format: "%.1f", valueDecimal.floatValue * 100) + "%"
                         
-                        self.newList[indexPath.row - totalDelegationList.count] = info
+                        self.newList[indexPath.row - self.myVoteList.count] = info
                         
                         voteViewModel.newList.onNext(self.newList)
                         voteViewModel.isChanged.onNext(true)
@@ -408,4 +482,20 @@ extension MyVoteViewController: UITableViewDelegate {
         }
     }
 
+}
+
+extension MyVoteViewController {
+//    func estimateStep() {
+//        let separated = String(self.stepLimit).currencySeparated()
+//        let priceToICX = self.stepPrice.toString(decimal: 18, 9, false)
+//        
+//        let stepLimitString = separated + " / " + priceToICX
+//        stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
+//        
+//        let calculated = self.stepLimit * stepPrice
+//        let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
+//        
+//        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 9, false), color: .gray77, align: .right)
+//        feePriceLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
+//    }
 }

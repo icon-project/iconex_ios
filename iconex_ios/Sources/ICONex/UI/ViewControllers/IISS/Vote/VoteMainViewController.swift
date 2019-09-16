@@ -15,6 +15,9 @@ import BigInt
 protocol VoteMainDelegate {
     var wallet: ICXWallet! { get set }
     func headerSelected(index: Int)
+    var stepLimit: String { get set }
+    var maxFee: String { get set }
+    
 }
 
 class VoteMainViewController: BaseViewController, VoteMainDelegate {
@@ -27,6 +30,10 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     
     var wallet: ICXWallet!
     var key: PrivateKey!
+    
+    var stepLimit: String = ""
+    var maxFee: String = ""
+    
     
     var isPreps: Bool = false
     
@@ -114,7 +121,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     let info = ["address": i.address, "value": value]
                     delList.append(info)
 
-                    print("voted List \(i)")
+//                    print("voted List \(i)")
                 }
                 
                 // 새로 추가한 리스트
@@ -122,10 +129,10 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     let info = ["address": i.address, "value": i.editedDelegate?.toHexString() ?? "0x0"]
                     delList.append(info)
                     
-                    print("new voting list \(i)")
+//                    print("new voting list \(i)")
                     
                 }
-                let voteInfo = VoteInfo(count: delList.count, estimatedFee: "-", maxFee: "-", wallet: self.wallet, delegationList: delList, privateKey: pk)
+                let voteInfo = VoteInfo(count: delList.count, estimatedFee: self.stepLimit, maxFee: self.maxFee, wallet: self.wallet, delegationList: delList, privateKey: pk)
                 
                 Alert.vote(voteInfo: voteInfo, confirmAction: { isSuccess, txHash in
                     if isSuccess {
