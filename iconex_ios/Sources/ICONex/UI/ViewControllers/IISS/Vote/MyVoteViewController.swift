@@ -215,6 +215,11 @@ class MyVoteViewController: BaseViewController {
                 }
                 
             }).disposed(by: disposeBag)
+        
+        self.scrollView?.rx.didScroll
+            .subscribe({ (_) in
+                self.view.endEditing(true)
+            }).disposed(by: disposeBag)
     }
     
     override func refresh() {
@@ -334,7 +339,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 let currentICXValue = my.toString(decimal: 18, 4).currencySeparated()
                 cell.myVotesField.text = currentICXValue
                 
-                cell.myVotesUnitLabel.text = String(format: "%.1f", calculated.floatValue * 100) + "%"
+                cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculated.floatValue * 100) + "%)"
                 
                 if sliderMaxValue == 0 {
                     cell.slider.isEnabled = false
@@ -359,7 +364,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         let currentICXValue = rateValue.toString(decimal: 18, 4).currencySeparated()
                         cell.myVotesField.text = currentICXValue
                         
-                        cell.myVotesUnitLabel.text = String(format: "%.1f", valueDecimal.floatValue * 100) + "%"
+                        cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valueDecimal.floatValue * 100) + "%)"
                         
                         self.myVoteList[indexPath.row] = this
                         
@@ -367,6 +372,48 @@ extension MyVoteViewController: UITableViewDataSource {
                         voteViewModel.isChanged.onNext(true)
                         
                     }).disposed(by: cell.disposeBag)
+                
+                // textfield
+                cell.myVotesField.rx.text.orEmpty.subscribe(onNext: { (value) in
+                    guard let bigValue = Tool.stringToBigUInt(inputText: value) else { return }
+                    
+                    var this = self.myVoteList[indexPath.row]
+                    
+                    guard bigValue <= sliderMaxValue else {
+                        bzz()
+                        
+                        cell.myVotesField.text = sliderMaxValue.toString(decimal: 18, 4).currencySeparated()
+                        cell.current = 1.0
+                        cell.slider.value = 1.0
+                        cell.myVotesUnitLabel.text = "(100 %)"
+                        
+                        // update
+                        this.editedDelegate = sliderMaxValue
+                        self.myVoteList[indexPath.row] = this
+                        voteViewModel.myList.onNext(self.myVoteList)
+                        
+                        return
+                    }
+                    
+                    guard let bigValueDecimal = bigValue.decimalNumber, let maxValueDecimal = sliderMaxValue.decimalNumber else { return }
+                    let percent = bigValueDecimal / maxValueDecimal
+                    let sliderPercent = (bigValueDecimal / maxValueDecimal) * 100
+                    
+                    
+                    let percentFloat = sliderPercent.floatValue
+                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", percentFloat) + " %)"
+                    
+                    cell.current = percent.floatValue
+                    cell.slider.value = percent.floatValue
+                    
+                    this.editedDelegate = bigValue
+                    
+                    self.myVoteList[indexPath.row] = this
+                    voteViewModel.myList.onNext(self.myVoteList)
+                    
+                    print("얼마? \(bigValue)")
+                    
+                }).disposed(by: disposeBag)
                 
             } else {
                 var info = self.newList[indexPath.row - myVoteList.count]
@@ -400,7 +447,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     let currentICXValue = value.toString(decimal: 18, 4).currencySeparated()
                     cell.myVotesField.text = currentICXValue
                     
-                    cell.myVotesUnitLabel.text = String(format: "%.1f", calculated.floatValue * 100) + "%"
+                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculated.floatValue * 100) + "%)"
                     
                     voteViewModel.isChanged.onNext(true)
                 } else {
@@ -427,7 +474,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         let currentICXValue = rateValue.toString(decimal: 18, 4).currencySeparated()
                         cell.myVotesField.text = currentICXValue
                         
-                        cell.myVotesUnitLabel.text = String(format: "%.1f", valueDecimal.floatValue * 100) + "%"
+                        cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valueDecimal.floatValue * 100) + "%)"
                         
                         self.newList[indexPath.row - self.myVoteList.count] = info
                         
@@ -435,6 +482,41 @@ extension MyVoteViewController: UITableViewDataSource {
                         voteViewModel.isChanged.onNext(true)
                         
                     }).disposed(by: cell.disposeBag)
+                
+                cell.myVotesField.rx.text.orEmpty.subscribe(onNext: { (value) in
+                    guard let bigValue = Tool.stringToBigUInt(inputText: value) else { return }
+                    
+                    var this = self.newList[indexPath.row - self.myVoteList.count]
+                    
+                    guard bigValue <= sliderMaxValue else {
+                        bzz()
+                        cell.myVotesField.text = sliderMaxValue.toString(decimal: 18, 4).currencySeparated()
+                        cell.current = 1.0
+                        cell.slider.value = 1.0
+                        cell.myVotesUnitLabel.text = "(100 %)"
+                        
+                        this.editedDelegate = sliderMaxValue
+                        self.newList[indexPath.row - self.myVoteList.count] = this
+                        voteViewModel.newList.onNext(self.newList)
+                        return
+                    }
+                    
+                    guard let bigValueDecimal = bigValue.decimalNumber, let maxValueDecimal = sliderMaxValue.decimalNumber else { return }
+                    let percent = bigValueDecimal / maxValueDecimal
+                    let sliderPercent = (bigValueDecimal / maxValueDecimal) * 100
+                    
+                    
+                    let percentFloat = sliderPercent.floatValue
+                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", percentFloat) + " %)"
+                    
+                    cell.current = percent.floatValue
+                    cell.slider.value = percent.floatValue
+                    
+                    this.editedDelegate = bigValue
+                    self.newList[indexPath.row - self.myVoteList.count] = this
+                    voteViewModel.newList.onNext(self.newList)
+                    
+                }).disposed(by: disposeBag)
             }
             
             return cell
@@ -482,20 +564,4 @@ extension MyVoteViewController: UITableViewDelegate {
         }
     }
 
-}
-
-extension MyVoteViewController {
-//    func estimateStep() {
-//        let separated = String(self.stepLimit).currencySeparated()
-//        let priceToICX = self.stepPrice.toString(decimal: 18, 9, false)
-//        
-//        let stepLimitString = separated + " / " + priceToICX
-//        stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
-//        
-//        let calculated = self.stepLimit * stepPrice
-//        let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
-//        
-//        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 9, false), color: .gray77, align: .right)
-//        feePriceLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
-//    }
 }
