@@ -171,7 +171,7 @@ class MyVoteViewController: BaseViewController {
                         var item = list
                         item.editedDelegate = 0
                         
-                        self.myVoteList[index] = item
+                        self.newList[index] = item
                     }
                     
                     voteViewModel.myList.onNext(self.myVoteList)
