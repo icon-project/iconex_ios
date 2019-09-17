@@ -14,8 +14,10 @@ class PRepViewCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var statusView: UIView!
     @IBOutlet weak var prepNameLabel: UILabel!
+    @IBOutlet weak var prepTypeLabel: UILabel!
     @IBOutlet weak var totalVoteLabel: UILabel!
     @IBOutlet weak var totalVoteValue: UILabel!
+    @IBOutlet weak var totalVotePercent: UILabel!
     
     var disposeBag = DisposeBag()
     
@@ -33,12 +35,9 @@ class PRepViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        totalVoteLabel.size12(text: "Total Votes (%)", color: .gray128, weight: .light, align: .left)
+        totalVoteLabel.size12(text: "Total Votes (VP)", color: .gray128, weight: .light, align: .left)
         statusView.corner(statusView.frame.height / 2)
         statusView.border(1.0, .mint2)
-        
-//        addButton.setImage(#imageLiteral(resourceName: "icAddListEnabled"), for: .normal)
-//        addButton.setImage(#imageLiteral(resourceName: "icAddListPressed"), for: .highlighted)
     }
     
     override func prepareForReuse() {
