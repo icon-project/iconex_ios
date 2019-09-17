@@ -27,6 +27,10 @@ class PRepsViewController: BaseViewController, Floatable {
     private var refreshControl: UIRefreshControl = UIRefreshControl()
     private var preps: PRepListResponse?
     private var editInfoList: [MyVoteEditInfo]?
+    
+    private var myvoteList: [MyVoteEditInfo]?
+    private var newList: [MyVoteEditInfo]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -54,7 +58,12 @@ class PRepsViewController: BaseViewController, Floatable {
         
         refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
         
-        voteViewModel.newList.subscribe { _ in
+        voteViewModel.myList.subscribe(onNext: { (list) in
+            self.myvoteList = list
+            self.tableView.reloadData()
+        }).disposed(by: disposeBag)
+        
+        voteViewModel.newList.subscribe { (_) in
             self.tableView.reloadData()
         }.disposed(by: disposeBag)
         
@@ -129,12 +138,14 @@ extension PRepsViewController: UITableViewDataSource {
                     if Manager.voteList.add(prep: editInfo) {
                     } else {
                         let cellRect = tableView.rectForRow(at: indexPath)
-                        tableView.showToolTip(sizeY: cellRect.origin.y)
+                        self.tableView.showToolTip(sizeY: cellRect.origin.y)
                     }
                 }
-                tableView.reloadData()
             }).disposed(by: cell.disposeBag)
-        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address)
+        
+        guard let checker = self.myvoteList?.filter({ $0.address == prep.address }).count else { return cell }
+        
+        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address) || checker != 0
         
         return cell
     }
