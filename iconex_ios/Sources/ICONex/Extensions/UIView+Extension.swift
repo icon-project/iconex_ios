@@ -133,12 +133,12 @@ extension UIView {
     }
     
     // big tooltip
-    func showToolTip(sizeY: CGFloat) {
+    func showToolTip(positionY: CGFloat, text: String) {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = UIFont(name: "AppleSDGothicNeo-Light", size: 12)
         label.textColor = .white
-        label.text = "이미 투표가 반영된 P-Rep은 삭제가 불가능합니다.\nVoting Power를 0으로 설정 후, Vote 버튼을 클릭해주세요."
+        label.text = text
         label.setLinespace(spacing: 3.5)
         label.sizeToFit()
         
@@ -172,7 +172,7 @@ extension UIView {
         
         outgoingMessageLayer.fillColor = UIColor(white: 38.0 / 255.0, alpha: 0.9).cgColor
         
-        let popView = UIView(frame: CGRect(origin: CGPoint(x: 16, y: sizeY+mySafeAreaInsets.top-label.frame.height), size: CGSize(width: bubbleWidth, height: bubbleHeight)))
+        let popView = UIView(frame: CGRect(origin: CGPoint(x: 16, y: positionY+mySafeAreaInsets.top-label.frame.height), size: CGSize(width: bubbleWidth, height: bubbleHeight)))
         popView.layer.addSublayer(outgoingMessageLayer)
         popView.backgroundColor = .clear
         
@@ -254,23 +254,23 @@ extension UIView {
         let label1 = UILabel()
         label1.text = "\(count)"
         label1.textColor = .white
-        label1.font = UIFont(name: "NanumSquareOTF", size: 14)
+        label1.font = UIFont(name: "NanumSquareBold", size: 14)
         label1.sizeToFit()
         
         let label2 = UILabel()
         label2.text = " / "
         label2.textColor = UIColor.init(white: 1, alpha: 0.5)
-        label2.font = UIFont(name: "NanumSquareOTF", size: 14)
+        label2.font = UIFont(name: "NanumSquareBold", size: 14)
         label2.sizeToFit()
         
         let label3 = UILabel()
         label3.text = "10"
         label3.textColor = UIColor.init(white: 1, alpha: 0.5)
-        label3.font = UIFont(name: "NanumSquareOTF", size: 14)
+        label3.font = UIFont(name: "NanumSquareBold", size: 14)
         label3.sizeToFit()
         
         let label4 = UILabel()
-        label4.text = "My Votes에 추가 완료"
+        label4.text = "PRepView.Toast.MyVotes".localized
         label4.textColor = .white
         label4.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
         label4.sizeToFit()

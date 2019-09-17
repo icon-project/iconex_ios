@@ -311,7 +311,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.addButton.isHighlighted = false
                 cell.addButton.rx.tap.asControlEvent()
                     .subscribe { (_) in
-                        guard cell.slider.value == 0 else { return self.tableView.showToolTip(sizeY: cell.frame.origin.y-self.scrollPoint) }
+                        guard cell.slider.value == 0 else { return self.tableView.showToolTip(positionY: cell.frame.origin.y-self.scrollPoint, text: "MyVoteView.ToolTip.Delete".localized) }
                         
                         Manager.voteList.remove(prep: info)
                         self.myVoteList.remove(at: indexPath.row)
