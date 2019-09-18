@@ -514,7 +514,7 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="0So-H9-p6B">
-                                                <rect key="frame" x="20" y="711" width="335" height="124"/>
+                                                <rect key="frame" x="20" y="711" width="335" height="114"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PbV-9P-EFI" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="335" height="78"/>
@@ -524,9 +524,9 @@
                                                         </constraints>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jd5-39-7Iw">
-                                                        <rect key="frame" x="0.0" y="84" width="335" height="40"/>
+                                                        <rect key="frame" x="0.0" y="84" width="335" height="30"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="u1V-Zh-j8f"/>
+                                                            <constraint firstAttribute="height" constant="30" id="u1V-Zh-j8f"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
                                                     </button>
@@ -540,7 +540,7 @@
                                                 <rect key="frame" x="30" y="721" width="335" height="58"/>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h19-bZ-eDg">
-                                                <rect key="frame" x="20" y="875" width="335" height="93"/>
+                                                <rect key="frame" x="20" y="865" width="335" height="93"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N5h-zy-Qzz">
                                                         <rect key="frame" x="19.999999999999996" y="30" width="41.666666666666657" height="20.333333333333329"/>
@@ -555,13 +555,13 @@
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aXR-Pw-WD7">
-                                                        <rect key="frame" x="286" y="49.666666666666742" width="29" height="13.333333333333336"/>
+                                                        <rect key="frame" x="286" y="49.666666666666629" width="29" height="13.333333333333336"/>
                                                         <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="12"/>
                                                         <color key="textColor" red="0.70196078431372544" green="0.70196078431372544" blue="0.70196078431372544" alpha="0.84705882352941175" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wN-yZ-zTn">
-                                                        <rect key="frame" x="273.66666666666669" y="49.666666666666742" width="7.3333333333333144" height="13.333333333333336"/>
+                                                        <rect key="frame" x="273.66666666666669" y="49.666666666666629" width="7.3333333333333144" height="13.333333333333336"/>
                                                         <fontDescription key="fontDescription" name="NanumSquareR" family="NanumSquare" pointSize="12"/>
                                                         <color key="textColor" red="0.70196078429999997" green="0.70196078429999997" blue="0.70196078429999997" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>

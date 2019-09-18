@@ -409,6 +409,7 @@
 
 // MARK: InputDataViewController
 "Send.InputData.Alert.Cancel" = "데이터 입력을 취소하시겠습니까?";
+"Send.InputData.Alert.Delete" = "입력된 데이터를 삭제하시겠습니까?";
 
 // MARK: AddressBookViewController
 "AddressBook.Title" = "주소 선택";
