@@ -40,18 +40,12 @@ extension BaseWalletConvertible {
         return DB.canSaveWallet(name: name)
     }
     
-    func canSave(address: String) -> Bool {
-        return DB.canSaveWallet(address: address)
-    }
-    
     func canSave() throws {
         guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
-        guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
     }
     
     func save() throws {
         guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
-        guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
         try DB.saveWallet(name: name, address: address, type: address.hasPrefix("hx") ? "icx" : "eth", rawData: rawData)
     }
     

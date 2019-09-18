@@ -189,7 +189,7 @@ class LoadNameViewController: BaseViewController {
                         guard let balance = Manager.icon.getBalance(address: address) else { continue }
                         self.bundleBalances[address] = balance
                     } else {
-                        guard let balance = Ethereum.requestBalance(address: address.prefix0xRemoved()) else { continue }
+                        guard let balance = Ethereum.requestBalance(address: address) else { continue }
                         self.bundleBalances[address] = balance
                     }
                     
@@ -275,24 +275,14 @@ extension LoadNameViewController: UITableViewDataSource {
         let key = bundleDic.keys.first!
         let bundle = bundleDic[key]!
         
-        let canSave = DB.canSaveWallet(address: key)
-        if DB.canSaveWallet(address: key) {
-            cell.walletNameLabel.size14(text: bundle.name, color: .gray77, weight: .semibold)
-            cell.subtitleLabel.size10(text: key, color: .gray179, weight: .light, align: .left)
-        } else {
-            cell.walletNameLabel.size14(text: bundle.name, color: .gray179, weight: .semibold)
-            cell.subtitleLabel.size10(text: "LoadName.Bundle.DuplicatedAddress".localized + " - \(key)", color: .mint1, weight: .light)
-        }
+        cell.walletNameLabel.size14(text: bundle.name, color: .gray77, weight: .semibold)
+        cell.subtitleLabel.size10(text: key, color: .gray179, weight: .light, align: .left)
         cell.valueLabel.size14(text: "-")
         
         if let balance = bundleBalances[key] {
             cell.valueLabel.isHidden = false
             cell.indicator.isHidden = true
-            if canSave {
-                cell.valueLabel.size14(text: balance.toString(decimal: 18, 4, false) + " ICX", color: .gray77, weight: .bold)
-            } else {
-                cell.valueLabel.size14(text: balance.toString(decimal: 18, 4, false) + " ICX", color: .gray179, weight: .bold)
-            }
+            cell.valueLabel.size14(text: balance.toString(decimal: 18, 4, false) + (bundle.type == "icx" ? " ICX" : " ETH"), color: .gray77, weight: .bold)
         } else {
             if isWorking {
                 cell.valueLabel.isHidden = true
@@ -300,11 +290,7 @@ extension LoadNameViewController: UITableViewDataSource {
             } else {
                 cell.valueLabel.isHidden = false
                 cell.indicator.isHidden = true
-                if canSave {
-                    cell.valueLabel.size14(text: "-", color: .gray77, weight: .bold)
-                } else {
-                    cell.valueLabel.size14(text: "-", color: .gray179, weight: .bold)
-                }
+                cell.valueLabel.size14(text: "-", color: .gray77, weight: .bold)
             }
         }
         

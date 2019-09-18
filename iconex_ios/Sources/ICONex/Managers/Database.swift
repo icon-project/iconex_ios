@@ -84,25 +84,28 @@ struct DB {
         return true
     }
     
-    static func canSaveWallet(address: String) -> Bool {
-        let realm = try! Realm()
-        
-        let wallet = realm.objects(WalletModel.self).filter( { $0.address.lowercased() == address.lowercased() })
-        if wallet.count > 0 {
-            return false
-        }
-        
-        return true
-    }
+//    static func canSaveWallet(address: String) -> Bool {
+//        let realm = try! Realm()
+//
+//        let wallet = realm.objects(WalletModel.self).filter( { $0.address.lowercased() == address.lowercased() })
+//        if wallet.count > 0 {
+//            return false
+//        }
+//
+//        return true
+//    }
     
     static func saveWallet(name: String, address: String, type: String, rawData: Data?) throws {
         let realm = try Realm()
         
-        guard realm.objects(WalletModel.self).filter({ $0.address == address }).first == nil else {
-            throw CommonError.duplicateAddress
-        }
         guard realm.objects(WalletModel.self).filter({ $0.name == name }).first == nil else {
             throw CommonError.duplicateName
+        }
+        
+        if let dupAddr = realm.objects(WalletModel.self).filter({ $0.address == address }).first {
+            try realm.write {
+                realm.delete(dupAddr)
+            }
         }
         
         let wallet = WalletModel()
