@@ -111,10 +111,18 @@ class Alert {
         return alertVC
     }
     
+    static func prepDetail(prepInfo: PRepInfoResponse) -> AlertViewController {
+        let alertVC = UIStoryboard(name: "Alert", bundle: nil).instantiateViewController(withIdentifier: "AlertView") as! AlertViewController
+        alertVC.type = .prepDetail
+        alertVC.prepInfo = prepInfo
+        return alertVC
+    }
+    
 }
 
 enum AlertType {
-    case basic, txHash, password, walletName, allText, stake, unstake, send, iscore, unstakecancel, addAddress, vote
+    case basic, txHash, password, walletName, allText, stake, unstake,
+        send, iscore, unstakecancel, addAddress, vote, prepDetail
 }
 
 struct AlertBasicInfo {

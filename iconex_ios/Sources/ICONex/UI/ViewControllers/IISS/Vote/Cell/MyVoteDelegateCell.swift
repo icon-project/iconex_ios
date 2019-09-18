@@ -59,17 +59,21 @@ class MyVoteDelegateCell: UITableViewCell {
         subtitleLabel.size12(text: "Total Votes (%)", color: .gray128, weight: .light, align: .left)
         
         sliderContainer.border(0.5, .gray230)
+        sliderContainer.corner(8)
         sliderContainer.backgroundColor = .gray252
+        
         myVotesLabel.size14(text: "My Votes (%)", color: .mint1)
         
         fieldContainer.border(0.5, .gray230)
+        fieldContainer.corner(4)
         
         myVotesField.tintColor = .mint1
         myVotesField.textColor = .mint1
+        myVotesField.keyboardType = .decimalPad
         
         maxTitleLabel.text = "MAX"
         myVotesMax.textColor = .gray77
-        myVotesMax.text = "0 %"
+        myVotesMax.text = "(0 %)"
         
         minBar.corner(minBar.frame.height / 2)
         minBar.backgroundColor = .mint2
@@ -81,13 +85,6 @@ class MyVoteDelegateCell: UITableViewCell {
         
         addButton.setImage(#imageLiteral(resourceName: "icDeleteListDisabled"), for: .normal)
         addButton.setImage(#imageLiteral(resourceName: "icDeleteList"), for: .highlighted)
-        
-//        addButton.rx.tap.asControlEvent()
-//            .subscribe { (_) in
-//                if !self.addButton.isHighlighted {
-//                    app.topViewController()?.view.showToolTip(sizeY: <#T##CGFloat#>)
-//                }
-//        }.disposed(by: disposeBag)
         
         current = 0
     }

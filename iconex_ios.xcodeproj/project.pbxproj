@@ -30,6 +30,8 @@
 		BF29F60E2319116F00EBD1F1 /* DetailOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */; };
 		BF2D35AC2301576600EC2A35 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF2D35AA2301576600EC2A35 /* LaunchScreen.storyboard */; };
 		BF2D35AD230157C200EC2A35 /* IXNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */; };
+		BF4183ED2330BEA4004FCC61 /* PRepDetailAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF4183EC2330BEA4004FCC61 /* PRepDetailAlertView.xib */; };
+		BF4183EF2330BEB6004FCC61 /* PRepDetailAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4183EE2330BEB6004FCC61 /* PRepDetailAlertView.swift */; };
 		BF4F6F642318A57D0098D303 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F462318A57D0098D303 /* SideMenuViewController.swift */; };
 		BF4F6F652318A57D0098D303 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F472318A57D0098D303 /* MainViewController.swift */; };
 		BF4F6F662318A57D0098D303 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF4F6F482318A57D0098D303 /* Main.storyboard */; };
@@ -224,6 +226,8 @@
 		BF206C65232232D000ECD982 /* BioAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioAuthViewController.swift; sourceTree = "<group>"; };
 		BF29F60D2319116F00EBD1F1 /* DetailOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailOptionViewController.swift; sourceTree = "<group>"; };
 		BF2D35AB2301576600EC2A35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BF4183EC2330BEA4004FCC61 /* PRepDetailAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepDetailAlertView.xib; sourceTree = "<group>"; };
+		BF4183EE2330BEB6004FCC61 /* PRepDetailAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepDetailAlertView.swift; sourceTree = "<group>"; };
 		BF4F6F462318A57D0098D303 /* SideMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		BF4F6F472318A57D0098D303 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		BF4F6F482318A57D0098D303 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -570,6 +574,8 @@
 				BF6EFEBA22FA5173003B6AF3 /* StakeAlertView.swift */,
 				BF61DF76232B908A00F6CEA2 /* VoteAlertView.xib */,
 				BF61DF78232B90A100F6CEA2 /* VoteAlertView.swift */,
+				BF4183EC2330BEA4004FCC61 /* PRepDetailAlertView.xib */,
+				BF4183EE2330BEB6004FCC61 /* PRepDetailAlertView.swift */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -1154,6 +1160,7 @@
 				D4304997231CA25100A8F540 /* Picker.storyboard in Resources */,
 				D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */,
 				BF6EFEC822FA5174003B6AF3 /* PasswordAlertView.xib in Resources */,
+				BF4183ED2330BEA4004FCC61 /* PRepDetailAlertView.xib in Resources */,
 				BF78B36222FCFCD4002E34B3 /* CreateWallet.storyboard in Resources */,
 				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
 				BF0902842314B6AE00B177F4 /* IXInputBox.xib in Resources */,
@@ -1268,6 +1275,7 @@
 				BFC9A49C23141498002E35F5 /* UIColor+Extension.swift in Sources */,
 				BF4F6F712318A57D0098D303 /* ChangePasswordViewController.swift in Sources */,
 				BF78B36322FCFCD4002E34B3 /* CreateBackupViewController.swift in Sources */,
+				BF4183EF2330BEB6004FCC61 /* PRepDetailAlertView.swift in Sources */,
 				BF4F6F6D2318A57D0098D303 /* AddTokenViewController.swift in Sources */,
 				BF10BDBF23266F9A00DA2751 /* VoteViewModel.swift in Sources */,
 				BFC9A49E23141498002E35F5 /* UIButton+Extension.swift in Sources */,

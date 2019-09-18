@@ -52,6 +52,7 @@ class AlertViewController: BaseViewController {
     var sendInfo: SendInfo?
     var iscoreInfo: IScoreClaimInfo?
     var voteInfo: VoteInfo?
+    var prepInfo: PRepInfoResponse?
     
     var privateKey: String = ""
     
@@ -533,6 +534,17 @@ class AlertViewController: BaseViewController {
                 }
                 .subscribe(addressView.addressNameInputBox.textField.rx.text)
                 .disposed(by: disposeBag)
+            
+        case .prepDetail:
+            headerLabel.size18(text: "Alert.PrepDetail.Header".localized, color: .gray77, weight: .medium, align: .center)
+            
+            setButtonUI(isOne: true)
+            leftButton.setTitle("Common.Close".localized, for: .normal)
+            
+            let prepDetailView = PRepDetailAlertView()
+            prepDetailView.prepInfo = self.prepInfo
+            
+            addSubviewWithConstraint(prepDetailView)
         }
         
         switch self.type {

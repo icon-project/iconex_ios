@@ -27,6 +27,10 @@ class PRepsViewController: BaseViewController, Floatable {
     private var refreshControl: UIRefreshControl = UIRefreshControl()
     private var preps: PRepListResponse?
     private var editInfoList: [MyVoteEditInfo]?
+    
+    private var myvoteList: [MyVoteEditInfo]?
+    private var newList: [MyVoteEditInfo]?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -54,7 +58,12 @@ class PRepsViewController: BaseViewController, Floatable {
         
         refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
         
-        voteViewModel.newList.subscribe { _ in
+        voteViewModel.myList.subscribe(onNext: { (list) in
+            self.myvoteList = list
+            self.tableView.reloadData()
+        }).disposed(by: disposeBag)
+        
+        voteViewModel.newList.subscribe { (_) in
             self.tableView.reloadData()
         }.disposed(by: disposeBag)
         
@@ -117,24 +126,51 @@ extension PRepsViewController: UITableViewDataSource {
         cell.addButton.isHidden = false
         let prep = preps!.preps[indexPath.row]
         
+        guard let checker = self.myvoteList?.filter({ $0.address == prep.address }).count else { return cell }
+        
+        let grade: String = {
+            switch prep.grade {
+            case .main: return "P-Rep"
+            case .sub: return "Sub P-Rep"
+            case .candidate: return "Candidate"
+            }
+        }()
+        
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
+        
+        if let checker = self.myvoteList?.filter({ $0.address == prep.address }).count, checker > 0 {
+            cell.prepTypeLabel.size12(text: "(" + grade + " / Voted)", color: .gray77)
+        } else {
+            cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
+        }
+        
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
+        cell.totalVotePercent.size12(text: "(TDB%)", color: .gray77, weight: .semibold, align: .right)
         cell.active = true
+        
+        
+        
         cell.addButton.rx.tap
             .subscribe(onNext: {
                 let editInfo = self.editInfoList![indexPath.row]
-                if Manager.voteList.contains(address: editInfo.address) {
-                    Manager.voteList.remove(prep: editInfo)
+                if Manager.voteList.contains(address: editInfo.address) || checker > 0 {
+                    let cellRect = tableView.rectForRow(at: indexPath)
+                    self.tableView.showToolTip(positionY: cellRect.origin.y-14, text: "PRepView.ToolTip.Exist".localized)
                 } else {
                     if Manager.voteList.add(prep: editInfo) {
+                        let myVoteCount = self.myvoteList?.count ?? 0
+                        let newVoteCount = Manager.voteList.myAddList.count
+                        
+                        let total = myVoteCount + newVoteCount
+                        app.window?.showVoteToast(count: total)
                     } else {
                         let cellRect = tableView.rectForRow(at: indexPath)
-                        tableView.showToolTip(sizeY: cellRect.origin.y)
+                        self.tableView.showToolTip(positionY: cellRect.origin.y-14, text: "PRepView.ToolTip.Maximum".localized)
                     }
                 }
-                tableView.reloadData()
             }).disposed(by: cell.disposeBag)
-        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address)
+        
+        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address) || checker > 0
         
         return cell
     }
@@ -143,6 +179,20 @@ extension PRepsViewController: UITableViewDataSource {
 extension PRepsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 36
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let wallet = self.selectedWallet, let prepInfo = self.preps?.preps[indexPath.row] else { return }
+        
+        DispatchQueue.global().async {
+            guard let prep = Manager.icon.getPRepInfo(from: wallet, address: prepInfo.address) else { return }
+            
+            DispatchQueue.main.async {
+                Alert.prepDetail(prepInfo: prep).show()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
