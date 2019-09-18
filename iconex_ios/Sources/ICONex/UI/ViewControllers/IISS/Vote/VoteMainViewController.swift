@@ -46,6 +46,10 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        Manager.voteList.reset()
+    }
+    
     override func initializeComponents() {
         super.initializeComponents()
         
@@ -54,11 +58,9 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
             if self.voteButton.isEnabled {
                 Alert.basic(title: "MyVoteView.Alert.Back".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.navigationController?.popViewController(animated: true)
-                    Manager.voteList.reset()
                 }).show()
             } else {
                 self.navigationController?.popViewController(animated: true)
-                Manager.voteList.reset()
             }
         }
         
@@ -75,10 +77,11 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 for i in list {
                     if i.editedDelegate != nil {
                         self.voteButton.rx.isEnabled.onNext(true)
+                        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
                         return
                     }
                 }
-                
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
                 self.voteButton.rx.isEnabled.onNext(false)
                 return
         }).disposed(by: disposeBag)
@@ -120,16 +123,11 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     
                     let info = ["address": i.address, "value": value]
                     delList.append(info)
-
-//                    print("voted List \(i)")
                 }
                 
-                // 새로 추가한 리스트
                 for i in self.votingList {
                     let info = ["address": i.address, "value": i.editedDelegate?.toHexString() ?? "0x0"]
                     delList.append(info)
-                    
-//                    print("new voting list \(i)")
                     
                 }
                 let voteInfo = VoteInfo(count: delList.count, estimatedFee: self.stepLimit, maxFee: self.maxFee, wallet: self.wallet, delegationList: delList, privateKey: pk)

@@ -14,9 +14,6 @@ import BigInt
 class VoteViewModel {
     static let shared = VoteViewModel()
     
-    var totalDelegated: BehaviorSubject<BigUInt>
-    var votingPower: BehaviorSubject<BigUInt>
-    
     var isChanged: PublishSubject<Bool>
     
     var available: BehaviorSubject<BigUInt>
@@ -24,22 +21,25 @@ class VoteViewModel {
     var myList: PublishSubject<[MyVoteEditInfo]>
     var newList: PublishSubject<[MyVoteEditInfo]>
     
+    var voteCount: BehaviorSubject<Int>
+    
     var disposeBag = DisposeBag()
     
     init() {
-        self.totalDelegated = BehaviorSubject<BigUInt>(value: Manager.voteList.myVotes?.totalDelegated ?? 0)
-        self.votingPower = BehaviorSubject<BigUInt>(value: Manager.voteList.myVotes?.votingPower ?? 0)
-    
-        
         self.isChanged = PublishSubject<Bool>()
         self.available = BehaviorSubject<BigUInt>(value: Manager.voteList.myVotes?.votingPower ?? 0)
         self.myList = PublishSubject<[MyVoteEditInfo]>()
         self.newList = PublishSubject<[MyVoteEditInfo]>()
+        self.voteCount = BehaviorSubject<Int>(value: Manager.voteList.votesCount)
         
-        
-        
+        Observable.combineLatest(self.myList, self.newList).flatMapLatest { (myList, newList) -> Observable<Int> in
+            let total = myList + newList
+            return Observable.just(total.count)
+        }.bind(to: self.voteCount)
+        .disposed(by: disposeBag)
     }
 }
 
 let voteViewModel = VoteViewModel.shared
 
+let sharedAvailable = voteViewModel.available.share(replay: 1, scope: .forever)

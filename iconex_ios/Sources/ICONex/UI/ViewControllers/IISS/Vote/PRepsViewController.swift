@@ -138,7 +138,7 @@ extension PRepsViewController: UITableViewDataSource {
         
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         
-        if let checker = self.myvoteList?.filter({ $0.address == prep.address }).count, checker > 0 {
+        if let checker = Manager.voteList.myVotes?.delegations.filter({ $0.address == prep.address }).count, checker > 0 {
             cell.prepTypeLabel.size12(text: "(" + grade + " / Voted)", color: .gray77)
         } else {
             cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
@@ -147,8 +147,6 @@ extension PRepsViewController: UITableViewDataSource {
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
         cell.totalVotePercent.size12(text: "(TDB%)", color: .gray77, weight: .semibold, align: .right)
         cell.active = true
-        
-        
         
         cell.addButton.rx.tap
             .subscribe(onNext: {
