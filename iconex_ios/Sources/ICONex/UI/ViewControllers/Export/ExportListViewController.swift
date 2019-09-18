@@ -118,7 +118,14 @@ extension ExportListViewController: UITableViewDataSource {
         
         let wallet = Manager.wallet.walletList[indexPath.row]
         cell.walletName.text = wallet.name
-        cell.walletBalance.text = wallet.balance?.toString(decimal: 18, 4, false)
+        let balance: String = {
+            if let bString = wallet.balance?.toString(decimal: 18, 4, false) {
+                return bString + (wallet.address.hasPrefix("hx") ? " ICX" : " ETH")
+            } else {
+                return "-"
+            }
+        }()
+        cell.walletBalance.text = balance
         cell.checkImage.isHighlighted = selected[wallet.address] != nil
         Log("Wallet address \(wallet.address)")
         return cell
