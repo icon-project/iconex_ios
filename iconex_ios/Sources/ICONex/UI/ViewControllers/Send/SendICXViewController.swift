@@ -279,6 +279,7 @@ class SendICXViewController: BaseViewController {
                     self.data = data
                     self.dataType = dataType
                     self.dataInputBox.text = data
+                    self.dataInputBox.textField.sendActions(for: .valueChanged)
                 }
                 
                 self.present(dataVC, animated: true, completion: nil)
@@ -291,12 +292,13 @@ class SendICXViewController: BaseViewController {
                 guard let data = self.data else { return }
                 
                 let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
-                inputDataVC.isEditMode = true
+                inputDataVC.isViewMode = true
                 inputDataVC.data = data
                 inputDataVC.type = self.dataType
                 inputDataVC.completeHandler = { dataString, _ in
                     self.data = dataString
                     self.dataInputBox.text = dataString
+                    self.dataInputBox.textField.sendActions(for: .valueChanged)
                 }
                 
                 self.presentPanModal(inputDataVC)

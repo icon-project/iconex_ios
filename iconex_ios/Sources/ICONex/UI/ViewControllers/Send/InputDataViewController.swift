@@ -26,7 +26,7 @@ class InputDataViewController: BaseViewController {
     var type: InputType = .utf8
     var data: String = ""
     
-    var isEditMode: Bool = false
+    var isViewMode: Bool = false
     var isEditingMode: Bool = false
     
     var completeHandler: ((_ data: String, _ dataType: InputType) -> Void)?
@@ -45,7 +45,7 @@ class InputDataViewController: BaseViewController {
             self.textView.text = self.data
         }
         
-        if self.isEditMode {
+        if self.isViewMode {
             self.textView.isUserInteractionEnabled = false
         }
         
@@ -82,7 +82,7 @@ class InputDataViewController: BaseViewController {
     private func setupBind() {
         closeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                if self.textView.text.isEmpty {
+                if self.textView.text.isEmpty || self.isEditingMode || self.isViewMode {
                    self.dismiss(animated: true, completion: nil)
                 } else {
                     Alert.basic(title: "Send.InputData.Alert.Cancel".localized, isOnlyOneButton: false, confirmAction: {
@@ -121,11 +121,13 @@ class InputDataViewController: BaseViewController {
         confirmButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if self.isEditingMode {
-                    self.textView.text = ""
-                    if let handler = self.completeHandler {
-                        handler("", self.type)
-                    }
-                    self.dismiss(animated: true, completion: nil)
+                    Alert.basic(title: "Send.InputData.Alert.Delete".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                        self.textView.text = ""
+                        if let handler = self.completeHandler {
+                            handler("", self.type)
+                        }
+                        self.dismiss(animated: true, completion: nil)
+                    }).show()
                 }
                 self.textView.isUserInteractionEnabled = true
                 self.textView.becomeFirstResponder()

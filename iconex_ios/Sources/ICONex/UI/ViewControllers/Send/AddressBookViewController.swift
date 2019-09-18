@@ -45,7 +45,18 @@ class AddressBookViewController: BaseViewController {
     var selected: Int = 0
     
     var myAddress: String = ""
-    var addressBookList = [AddressBookModel]()
+    var addressBookList = [AddressBookModel]() {
+        willSet {
+            if newValue.isEmpty {
+                self.tableView.isEditing = false
+                self.rightButton.isEnabled = false
+                self.rightButton.setTitle("Common.Edit".localized, for: .normal)
+            } else {
+                self.rightButton.isEnabled = true
+            }
+            
+        }
+    }
     var myWalletList = [BaseWalletConvertible]()
     
     var token: Token? = nil
@@ -69,6 +80,10 @@ class AddressBookViewController: BaseViewController {
         
         addressBookList = try! DB.addressBookList(by: self.isICX ? "icx" : "eth")
         myWalletList = DB.loadMyWallets(address: self.myAddress, type: self.isICX ? "icx" : "eth")
+        
+        if self.addressBookList.isEmpty {
+            rightButton.isEnabled = false
+        }
     }
     
     private func setupUI() {
@@ -82,7 +97,8 @@ class AddressBookViewController: BaseViewController {
         myWalletButton.titleLabel?.size14(text: "AddressBook.Button.MyWallet".localized, color: .gray77, align: .center)
         
         rightButton.setTitle("Common.Edit".localized, for: .normal)
-        
+        rightButton.setTitleColor(.gray128, for: .normal)
+        rightButton.setTitleColor(.gray217, for: .disabled)
         cancelButton.round02()
         footerRightButton.round02()
         

@@ -199,6 +199,7 @@ class SendETHViewController: BaseViewController {
         dataInputBox.set(state: .normal, placeholder: "Send.InputBox.Data".localized)
         viewDataButton.isHidden = true
         viewDataButton.roundGray230()
+        viewDataButton.setTitle("Send.InputBox.Data.View".localized, for: .normal)
         
         footerBox.corner(8)
         footerBox.border(0.5, .gray230)
@@ -323,6 +324,7 @@ class SendETHViewController: BaseViewController {
                 let inputDataVC = self.storyboard?.instantiateViewController(withIdentifier: "InputData") as! InputDataViewController
                 inputDataVC.type = .hex
                 inputDataVC.data = dataValue
+                inputDataVC.isViewMode = true
                 inputDataVC.completeHandler = { data, _ in
                     self.data = data
                     self.dataInputBox.text = data
