@@ -75,7 +75,7 @@ class AlertViewController: BaseViewController {
         popView.transform = CGAffineTransform(translationX: 0, y: 20)
         
         leftButton.rx.tap
-            .subscribe({ (_) in
+            .subscribe({ [unowned self] (_) in
                 self.view.endEditing(true)
                 
                 self.closer(self.cancelHandler)
@@ -222,10 +222,14 @@ class AlertViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        Log("PREPARING OPEN!!!")
         open()
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Log("DID APPEAR!!!")
         switch self.type {
         case .password, .walletName:
             let sub = self.contentView.subviews.first as! PasswordAlertView
@@ -330,7 +334,7 @@ class AlertViewController: BaseViewController {
             
             guard let wallet = self.walletInfo else { return }
             
-            passwordView.inputBoxView.set { (inputValue) -> String? in
+            passwordView.inputBoxView.set { [unowned self] (inputValue) -> String? in
                 guard !inputValue.isEmpty else { return nil }
                 do {
                     if self.isICX {
@@ -349,12 +353,12 @@ class AlertViewController: BaseViewController {
             addSubviewWithConstraint(passwordView)
             
             passwordView.inputBoxView.textField.rx.text.orEmpty
-                .subscribe(onNext: { (value) in
+                .subscribe(onNext: { [unowned self] (value) in
                     self.rightButton.isEnabled = value.count > 0
                 }).disposed(by: disposeBag)
             
             passwordView.inputBoxView.forgotPasswordButton.rx.tap.asControlEvent()
-                .subscribe({ (_) in
+                .subscribe({ [unowned self] (_) in
                     self.view.endEditing(true)
                     
                     UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
@@ -394,7 +398,7 @@ class AlertViewController: BaseViewController {
             addSubviewWithConstraint(passwordView)
             
             passwordView.inputBoxView.textField.rx.text.orEmpty
-                .scan("") { (previous, new) -> String in
+                .scan("") { [unowned self] (previous, new) -> String in
                     if new.count > 0 {
                         self.rightButton.isEnabled = true
                         if new.utf8.count > 24 {
@@ -466,7 +470,7 @@ class AlertViewController: BaseViewController {
                 return nil
             }
             
-            addressView.addressInputBox.set { (inputValue) -> String? in
+            addressView.addressInputBox.set { [unowned self] (inputValue) -> String? in
                 guard !inputValue.isEmpty else {
                     return nil
                 }
@@ -491,7 +495,7 @@ class AlertViewController: BaseViewController {
             }
             
             addressView.qrcodeScanButton.rx.tap.asControlEvent()
-                .subscribe { (_) in
+                .subscribe { [unowned self] (_) in
                     self.view.endEditing(true)
                     
                     let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
@@ -592,13 +596,13 @@ class AlertViewController: BaseViewController {
     }
     
     private func close() {
-        animateClose {
+        animateClose { [unowned self] in
             self.dismiss(animated: false, completion: nil)
         }
     }
     
     private func closer(_ closeAction: (() -> Void)? = nil) {
-        animateClose {
+        animateClose { [unowned self] in
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct()
@@ -608,7 +612,7 @@ class AlertViewController: BaseViewController {
     }
     
     private func closer(_ closeAction: ((_ pk: String) -> Void)? = nil) {
-        animateClose {
+        animateClose { [unowned self] in
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct(self.privateKey)
@@ -618,7 +622,7 @@ class AlertViewController: BaseViewController {
     }
     
     private func closer(_ closeAction: ((_ isSuccess: Bool, _ txHash: String?) -> Void)? = nil) {
-        animateClose {
+        animateClose { [unowned self] in
             self.dismiss(animated: false, completion: {
                 if let closeAct = closeAction {
                     closeAct(self.isSuccess, self.txHash)
@@ -628,14 +632,14 @@ class AlertViewController: BaseViewController {
     }
     
     private func animateClose(_ completion: (() -> Void)? = nil) {
-        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0, options: [], animations: {
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0.0, options: [], animations: { [weak self] in
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2, animations: {
-                self.popView.transform = CGAffineTransform(translationX: 0, y: 20)
-                self.popView.alpha = 0
+                self?.popView.transform = CGAffineTransform(translationX: 0, y: 20)
+                self?.popView.alpha = 0
             })
             
             UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.2, animations: {
-                self.view.alpha = 0.0
+                self?.view.alpha = 0.0
             })
         }, completion: { _ in
             completion?()
@@ -643,6 +647,8 @@ class AlertViewController: BaseViewController {
     }
     
     func show() {
+        Log("Now show!!!!!!!!!!")
         Tool.topViewController()?.present(self, animated: false, completion: nil)
+        Log("Showed!!!!!!!!!!!!!!!")
     }
 }
