@@ -256,12 +256,13 @@ class SendICXViewController: BaseViewController {
                     self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, false)
                     
                 } else {
-                    guard self.balance >= self.stepLimit else {
+                    let fee: BigUInt = self.stepLimit * self.stepPrice
+                    guard self.balance >= fee else {
                         self.amountInputBox.text = "0"
                         return
                     }
                     
-                    let maxBalance = self.balance - self.stepLimit
+                    let maxBalance = self.balance - fee
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, false)
                 }
                 self.amountInputBox.textField.sendActions(for: .valueChanged)
@@ -308,10 +309,12 @@ class SendICXViewController: BaseViewController {
         amountInputBox.set { [unowned self] (value) -> String? in
             guard !value.isEmpty else { return nil }
             
+            let fee = self.stepLimit * self.stepPrice
+            
             if let token = self.token {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: token.decimal, fixed: true) ?? 0
                 
-                if amount > self.balance + self.stepLimit {
+                if amount + fee > self.balance {
                     return "Send.InputBox.Amount.Error".localized
                 }
                 return nil
@@ -319,7 +322,7 @@ class SendICXViewController: BaseViewController {
             } else {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: true) ?? 0
                 
-                if amount > self.balance + self.stepLimit {
+                if amount + fee > self.balance {
                     return "Send.InputBox.Amount.Error".localized
                 }
                 
@@ -407,8 +410,16 @@ class SendICXViewController: BaseViewController {
                     }
                 }()
                 
-                if amount > self.balance + self.stepLimit {
-                    return Observable.just(false)
+                let fee = self.stepLimit * self.stepPrice
+                
+                if self.token == nil {
+                    if amount + fee > self.balance {
+                        return Observable.just(false)
+                    }
+                } else {
+                    if amount > self.balance {
+                        return Observable.just(false)
+                    }
                 }
                 
                 return Observable.just(true)

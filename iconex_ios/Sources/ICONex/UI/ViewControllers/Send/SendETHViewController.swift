@@ -294,7 +294,9 @@ class SendETHViewController: BaseViewController {
                 if let token = self.token {
                     self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, false)
                 } else {
-                    let maxBalance = self.balance - self.gasLimit
+                    let gwei = self.gasLimit * BigUInt(10).power(9)
+                    let gas = gwei * BigUInt(self.gasPrice)
+                    let maxBalance = self.balance - gas
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, false)
                 }
             }.disposed(by: disposeBag)
@@ -337,10 +339,13 @@ class SendETHViewController: BaseViewController {
         amountInputBox.set { [unowned self] (value) -> String? in
             guard !value.isEmpty else { return nil }
             
+            let gwei = self.gasLimit * BigUInt(10).power(9)
+            let gas = gwei * BigUInt(self.gasPrice)
+            
             if let token = self.token {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: token.decimal, fixed: true) ?? 0
                 
-                if amount > self.balance + self.gasLimit {
+                if amount > self.balance {
                     return "Send.InputBox.Amount.Error".localized
                 }
                 return nil
@@ -348,7 +353,7 @@ class SendETHViewController: BaseViewController {
             } else {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: true) ?? 0
                 
-                if amount > self.balance + self.gasLimit {
+                if amount + gas > self.balance {
                     return "Send.InputBox.Amount.Error".localized
                 }
                 return nil
@@ -468,8 +473,17 @@ class SendETHViewController: BaseViewController {
                     }
                 }()
                 
-                if amount > self.balance + self.gasLimit {
-                    return Observable.just(false)
+                let gwei = self.gasLimit * BigUInt(10).power(9)
+                let gas = gwei * BigUInt(self.gasPrice)
+                
+                if self.token == nil {
+                    if amount + gas > self.balance {
+                        return Observable.just(false)
+                    }
+                } else {
+                    if amount > self.balance {
+                        return Observable.just(false)
+                    }
                 }
                 
                 return Observable.just(true)
