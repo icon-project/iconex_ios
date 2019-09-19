@@ -164,7 +164,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 }
                 self.dismiss(animated: true, completion: nil)
             } else {
-                
+                app.window?.showToast(message: "QRReader.Error.PrivateKey".localized)
             }
             
         case .icx:
@@ -176,9 +176,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                         handle(code)
                     }
                 })
-            }
-            
-            if Validator.validateIRCAddress(address: code) {
+            } else if Validator.validateIRCAddress(address: code) {
                 captureSession.stopRunning()
                 Log("Code - \(code)")
                 self.dismiss(animated: true, completion: {
@@ -186,8 +184,9 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                         handle(code)
                     }
                 })
-            }
-            
+            } else {
+                app.window?.showToast(message: "QRReader.Error.ICX".localized)
+            }            
             
         case .eth:
             if Validator.validateETHAddress(address: code) {
@@ -198,6 +197,8 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                         handle(code)
                     }
                 })
+            } else {
+                app.window?.showToast(message: "QRReader.Error.ETH".localized)
             }
             
         case .irc:
@@ -209,6 +210,8 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                         handle(code)
                     }
                 })
+            } else {
+                app.window?.showToast(message: "QRReader.Error.ICX".localized)
             }
         }
     }
