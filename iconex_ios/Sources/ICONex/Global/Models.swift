@@ -82,7 +82,6 @@ class TokenListModel: Object {
 
 
 struct Token {
-    private var id: Int
     var name: String
     var parent: String
     var contract: String
@@ -92,14 +91,23 @@ struct Token {
     var created: Date = Date()
     
     init(model: TokenModel) {
-        self.id = model.id
         self.name = model.name
-        self.parent = model.dependedAddress
+        self.parent = model.dependedAddress.prefix0xRemoved()
         self.contract = model.contractAddress
         self.parentType = model.parentType
         self.symbol = model.symbol
         self.decimal = model.defaultDecimal
         self.created = model.createdDate
+    }
+    
+    init(name: String, parent: String, contract: String, parentType: String, symbol: String, decimal: Int, created: Date) {
+        self.name = name
+        self.parent = parent
+        self.contract = contract
+        self.parentType = parentType
+        self.symbol = symbol
+        self.decimal = decimal
+        self.created = created
     }
 }
 

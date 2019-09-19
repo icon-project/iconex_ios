@@ -95,13 +95,8 @@ extension ICONKeystore {
             guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw CryptError.invalidPassword }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
-            let prvKeyStr = decrypted.decryptText
-            let privateKey = PrivateKey(hex: prvKeyStr.hexToData()!)
             
-            let wallet = Wallet(privateKey: privateKey)
-            let newAddress = wallet.address
-            
-            if newAddress == self.address {
+            if self.crypto.mac == decrypted.mac {
                 return true
             }
             
@@ -117,15 +112,10 @@ extension ICONKeystore {
                 else { throw WalletError.invalidKeystore }
             
             guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: self.crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw CryptError.invalidPassword }
-            let decryptionKey = devKey[0...15]
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw CryptError.invalidPassword }
-            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw CryptError.invalidPassword }
-            let decrypted = Data(decryptedBytes)
-            let prvKey = PrivateKey(hex: decrypted)
-            let wallet = Wallet(privateKey: prvKey)
-            let newAddress = wallet.address
             
-            if newAddress == self.address {
+            let decrypted = try Cipher.decrypt(devKey: devKey, enc: cipherText, dkLen: PBE_DKLEN, iv: iv)
+            
+            if self.crypto.mac == decrypted.mac {
                 return true
             }
             
@@ -154,12 +144,8 @@ extension ICONKeystore {
             guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw CryptError.invalidPassword }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
-            let prvKey = PrivateKey(hex: decrypted.decryptText.hexToData()!)
-            let pubKey = Cipher.createPublicKey(privateKey: prvKey)!
-            let publicKey = PublicKey(hex: pubKey.hexToData()!)
-            let newAddress = Cipher.makeAddress(prvKey, publicKey)
             
-            if newAddress == self.address {
+            if self.crypto.mac == decrypted.mac {
                 return PrivateKey(hex: Data(hex: decrypted.decryptText))
             }
             
@@ -175,18 +161,11 @@ extension ICONKeystore {
                 else { throw CryptError.keyMalformed }
             
             guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw CryptError.invalidPassword }
-            let decryptionKey = devKey[0...15]
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw CryptError.invalidPassword }
-            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw CryptError.invalidPassword }
-            let decrypted = Data(decryptedBytes)
-            let privateKey = PrivateKey(hex: decrypted)
             
-            let pubKey = Cipher.createPublicKey(privateKey: privateKey)
-            let publicKey = PublicKey(hex: pubKey!.hexToData()!)
-            let newAddress = Cipher.makeAddress(privateKey, publicKey)
+            let decrypted = try Cipher.decrypt(devKey: devKey, enc: cipherText, dkLen: PBE_DKLEN, iv: iv)
             
-            if newAddress == self.address {
-                return privateKey
+            if self.crypto.mac == decrypted.mac {
+                return PrivateKey(hex: Data(hex: decrypted.decryptText))
             }
             
             throw CryptError.keyMalformed

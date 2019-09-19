@@ -296,6 +296,4 @@ extension LoadNameViewController: UITableViewDataSource {
         
         return cell
     }
-    
-    
 }

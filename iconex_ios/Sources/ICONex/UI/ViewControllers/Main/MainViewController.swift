@@ -291,7 +291,6 @@ class MainViewController: BaseViewController, Floatable {
         collectionView.rx.willBeginDragging
             .subscribe(onNext: {
                 let velocity = self.collectionView.panGestureRecognizer.velocity(in: self.collectionView.superview)
-                Log("Scrolling - \(velocity))")
                 if velocity != .zero {
                     self.horizontalVelocity = velocity
                 }
@@ -342,8 +341,7 @@ class MainViewController: BaseViewController, Floatable {
     func checkFloater() {
         
         let items = self.collectionView.indexPathsForVisibleItems
-        Log("items - \(items)")
-        let x = self.collectionView.panGestureRecognizer.translation(in: self.collectionView.superview).x
+        
         let path: IndexPath = {
             if items.count == 1 {
                 return items.first!
@@ -354,7 +352,7 @@ class MainViewController: BaseViewController, Floatable {
                 return items.last!
             }
         }()
-        Log("IndexPath - \(path) - \(self.floater.isAttached) \(x)")
+        
         if let icx = self.walletList[path.row] as? ICXWallet {
             self.selectedWallet = icx
             self.attach()

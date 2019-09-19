@@ -126,7 +126,7 @@ class LoadFileViewController: BaseViewController {
             if let url = self.selectedFile {
                 inputBox1.text = " " + url.lastPathComponent
                 
-                if let keystore = try? Validator.validateKeystore(urlOfData: url) {
+                if let _ = try? Validator.validateKeystore(urlOfData: url) {
                     let left = UIImageView(image: UIImage(named: "icKeystorefileLoad"))
                     left.contentMode = .left
                     left.frame = CGRect(x: 0, y: 0, width: 24, height: 24)

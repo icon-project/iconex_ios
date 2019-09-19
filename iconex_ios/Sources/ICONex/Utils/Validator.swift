@@ -77,8 +77,6 @@ struct Validator {
         
         let keystore = try decoder.decode(ICONKeystore.self, from: content)
         
-        let wallet = ICXWallet(name: "temp", keystore: keystore)
-        
         return keystore
     }
     

@@ -300,7 +300,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 tokenCell.symbolLabel.size16(text: token.symbol, color: .gray77, weight: .semibold)
                 tokenCell.fullnameLabel.size12(text: token.name, color: .gray179, weight: .light)
                 
-                let tokenBalance = Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
+                let tokenBalance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
                 tokenCell.balanceLabel.size16(text: tokenBalance.toString(decimal: token.decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
                 
                 let price = Tool.calculatePrice(decimal: token.decimal, currency: currencySymbol, balance: tokenBalance)
