@@ -67,8 +67,8 @@ class ManageBackUpViewController: BaseViewController {
         pkTitleLabel.size12(text: "Wallet.PrivateKey".localized, color: .gray77)
         pkLabel.size16(text: String(repeating: "•", count: 62), color: .gray77)
         
-        pkToggleButton.setImage(#imageLiteral(resourceName: "icInputEyeOff"), for: .normal)
-        pkToggleButton.setImage(#imageLiteral(resourceName: "icInputEyeOn"), for: .selected)
+        pkToggleButton.setImage(#imageLiteral(resourceName: "icInputEyeOn"), for: .normal)
+        pkToggleButton.setImage(#imageLiteral(resourceName: "icInputEyeOff"), for: .selected)
         
         pkToggleButton.isSelected = false
         
