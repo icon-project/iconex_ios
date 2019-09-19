@@ -178,6 +178,16 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 })
             }
             
+            if Validator.validateIRCAddress(address: code) {
+                captureSession.stopRunning()
+                Log("Code - \(code)")
+                self.dismiss(animated: true, completion: {
+                    if let handle = self.handler {
+                        handle(code)
+                    }
+                })
+            }
+            
             
         case .eth:
             if Validator.validateETHAddress(address: code) {
