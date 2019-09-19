@@ -158,10 +158,8 @@ class ChangePasswordViewController: BaseViewController {
                     } else if let eth = wallet as? ETHWallet {
                         try eth.changePassword(oldPassword: currentPassword, newPassword: newPassword)
                     }
-                    
-                    Alert.basic(title: "Alert.Password.Changed".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: {
-                        self.dismiss(animated: true, completion: nil)
-                    }).show()
+                    app.window?.showToast(message: "Alert.Password.Changed".localized)
+                    self.dismiss(animated: true, completion: nil)
                     
                 } catch let err {
                     Log(err)
