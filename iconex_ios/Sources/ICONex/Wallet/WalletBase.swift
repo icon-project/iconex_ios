@@ -10,7 +10,7 @@ import BigInt
 
 protocol BaseWalletConvertible {
     var name: String { get set }
-    var tokens: [Token]? { get }
+    var tokens: [Token]? { get set }
     var created: Date { get set }
     var keystore: ICONKeystore { get set }
     
@@ -40,19 +40,17 @@ extension BaseWalletConvertible {
         return DB.canSaveWallet(name: name)
     }
     
-    func canSave(address: String) -> Bool {
-        return DB.canSaveWallet(address: address)
-    }
-    
     func canSave() throws {
         guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
-        guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
     }
     
     func save() throws {
-        guard DB.canSaveWallet(name: name) else { throw CommonError.duplicateName }
-        guard DB.canSaveWallet(address: address) else { throw CommonError.duplicateAddress }
         try DB.saveWallet(name: name, address: address, type: address.hasPrefix("hx") ? "icx" : "eth", rawData: rawData)
+        if let tokens = self.tokens {
+            for token in tokens {
+                try addToken(token: token)
+            }
+        }
     }
     
     func changeName(older: String, newer: String) throws {

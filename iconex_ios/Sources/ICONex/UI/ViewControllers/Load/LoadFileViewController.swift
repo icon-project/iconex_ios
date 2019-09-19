@@ -126,21 +126,12 @@ class LoadFileViewController: BaseViewController {
             if let url = self.selectedFile {
                 inputBox1.text = " " + url.lastPathComponent
                 
-                if let keystore = try? Validator.validateKeystore(urlOfData: url) {
-                    let wallet = ICXWallet(name: "temp", keystore: keystore)
-                    if wallet.canSave(address: keystore.address) {
-                        let left = UIImageView(image: UIImage(named: "icKeystorefileLoad"))
-                        left.contentMode = .left
-                        left.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-                        inputBox1.leftAccessory = left
-                        inputBox1.set(state: .focus)
-                    } else {
-                        let left = UIImageView(image: UIImage(named: "icKeystorefileError"))
-                        left.contentMode = .left
-                        left.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
-                        inputBox1.leftAccessory = left
-                        inputBox1.setError(message: "Error.Wallet.Duplicated.Address".localized)
-                    }
+                if let _ = try? Validator.validateKeystore(urlOfData: url) {
+                    let left = UIImageView(image: UIImage(named: "icKeystorefileLoad"))
+                    left.contentMode = .left
+                    left.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
+                    inputBox1.leftAccessory = left
+                    inputBox1.set(state: .focus)
                 } else if Validator.checkWalletBundle(url: url) != nil {
                     let left = UIImageView(image: UIImage(named: "icKeystorefileLoad"))
                     left.contentMode = .left

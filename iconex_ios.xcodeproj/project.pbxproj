@@ -907,7 +907,6 @@
 				D4C542C822E995940099358D /* UI */,
 				D4F657D022E541FD00FA5A26 /* Global */,
 				D4AC962221C39DB8000DFB33 /* Managers */,
-				D4E3E0E121916AFE0026FEDC /* Module */,
 				D4728A2920073B9B00E0A899 /* Objc */,
 				D435E78F2018243400F1E798 /* Wallet */,
 				D428A53A202013C3005B14D8 /* Request */,
@@ -967,13 +966,6 @@
 				D4BE25E823165469002D697D /* FloatViewController.swift */,
 			);
 			path = Floater;
-			sourceTree = "<group>";
-		};
-		D4E3E0E121916AFE0026FEDC /* Module */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Module;
 			sourceTree = "<group>";
 		};
 		D4E972C9231B9EF100C7B646 /* Side */ = {

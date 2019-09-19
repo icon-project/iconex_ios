@@ -159,7 +159,7 @@ class AddTokenInfoViewController: BaseViewController {
                 let token = TokenFile(name: name, address: address, symbol: symbol, decimal: decimal)
                 let newToken = NewToken(token: token, parent: wallet)
                 
-                guard DB.canSaveToken(contract: address) else {
+                guard DB.canSaveToken(depended: wallet.address, contract: address) else {
                     self.navigationController?.popToRootViewController(animated: true)
                     return
                 }

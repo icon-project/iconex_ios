@@ -14,9 +14,7 @@ class ETHWallet: BaseWalletConvertible {
     var created: Date
     var keystore: ICONKeystore
     
-    var tokens: [Token]? {
-        return try? DB.tokenList(dependedAddress: address)
-    }
+    var tokens: [Token]?
     
     init(name: String, keystore: ICONKeystore, created: Date = Date()) {
         self.name = name
@@ -42,20 +40,14 @@ class ETHWallet: BaseWalletConvertible {
         self.name = name
         self.keystore = keystore
         self.created = created
-        
-        if let list = tokens {
-            for token in list {
-                if canSaveToken(contractAddress: token.contract) {
-                    try? addToken(token: token)
-                }
-            }
-        }
+        self.tokens = tokens
     }
     
     init(model: WalletModel) {
         self.name = model.name
         self.created = model.createdDate
         self.keystore = try! JSONDecoder().decode(ICONKeystore.self, from: model.rawData!)
+        self.tokens = try? DB.tokenList(dependedAddress: address)
     }
     
     static func new(name: String, password: String) throws -> ETHWallet {

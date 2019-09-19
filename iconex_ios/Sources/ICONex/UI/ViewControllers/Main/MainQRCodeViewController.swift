@@ -149,11 +149,12 @@ class MainQRCodeViewController: BaseViewController {
         nameLabel.size20(text: wallet.name, color: .gray77, weight: .medium, align: .center)
         
         DispatchQueue.main.async {
-            guard let qrCodeSource = wallet.address.generateQRCode() else { return }
+            guard let qrCodeSource = wallet.address.add0xPrefix().generateQRCode() else { return }
             self.qrImageView.image = UIImage(ciImage: qrCodeSource)
         }
         
-        addressLabel.size12(text: wallet.address, color: .gray77, align: .center)
+        addressLabel.size12(text: wallet.address.add0xPrefix(), color: .gray77, align: .center)
+        addressLabel.adjustsFontSizeToFitWidth = true
         
         inputBox.set(inputType: .decimal)
         inputBox.set(state: .normal, placeholder: "Main.QRCode.InputBox.Placeholder".localized)

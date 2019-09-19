@@ -118,7 +118,14 @@ extension ExportListViewController: UITableViewDataSource {
         
         let wallet = Manager.wallet.walletList[indexPath.row]
         cell.walletName.text = wallet.name
-        cell.walletBalance.text = wallet.balance?.toString(decimal: 18, 4, false)
+        let balance: String = {
+            if let bString = wallet.balance?.toString(decimal: 18, 4, false) {
+                return bString + (wallet.address.hasPrefix("hx") ? " ICX" : " ETH")
+            } else {
+                return "-"
+            }
+        }()
+        cell.walletBalance.text = balance
         cell.checkImage.isHighlighted = selected[wallet.address] != nil
         Log("Wallet address \(wallet.address)")
         return cell
@@ -128,7 +135,7 @@ extension ExportListViewController: UITableViewDataSource {
 extension ExportListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let wallet = Manager.wallet.walletList[indexPath.row]
-        
+        Log("Selected \(indexPath)")
         if self.selected[wallet.address] != nil {
             self.selected[wallet.address] = nil
             if self.selected.count == 0 {
@@ -159,5 +166,39 @@ extension ExportListViewController: UITableViewDelegate {
                 tableView.reloadData()
                 }.show()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 36))
+        headerView.backgroundColor = .gray250
+
+        let line1 = UIView()
+        line1.backgroundColor = .gray230
+        headerView.addSubview(line1)
+        line1.translatesAutoresizingMaskIntoConstraints = false
+        line1.topAnchor.constraint(equalTo: headerView.topAnchor).isActive = true
+        line1.leadingAnchor.constraint(equalTo: headerView.leadingAnchor).isActive = true
+        line1.trailingAnchor.constraint(equalTo: headerView.trailingAnchor).isActive = true
+        line1.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+
+        let line2 = UIView()
+        line2.backgroundColor = .gray230
+        headerView.addSubview(line2)
+        line2.translatesAutoresizingMaskIntoConstraints = false
+        line2.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        line2.leadingAnchor.constraint(equalTo: headerView.leadingAnchor).isActive = true
+        line2.trailingAnchor.constraint(equalTo: headerView.trailingAnchor).isActive = true
+        line2.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+
+        let label = UILabel()
+        headerView.addSubview(label)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.topAnchor.constraint(equalTo: headerView.topAnchor).isActive = true
+        label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20).isActive = true
+        label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -20).isActive = true
+        label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        label.size12(text: "(\(selected.count))" + "BundleExport.Step1.Selected".localized, color: .gray128, weight: .light)
+
+        return headerView
     }
 }

@@ -33,7 +33,7 @@ struct DB {
     static func loadMyWallets(address: String, type: String) -> [BaseWalletConvertible] {
         let realm = try! Realm()
         
-        let list = realm.objects(WalletModel.self).sorted(byKeyPath: "createdDate").filter({ $0.type == type }).filter({ $0.address != address })
+        let list = realm.objects(WalletModel.self).sorted(byKeyPath: "createdDate").filter({ $0.type == type }).filter({ $0.address.add0xPrefix() != address.add0xPrefix() })
         
         var walletList = [BaseWalletConvertible]()
         for walletModel in list {
@@ -84,30 +84,20 @@ struct DB {
         return true
     }
     
-    static func canSaveWallet(address: String) -> Bool {
-        let realm = try! Realm()
-        
-        let wallet = realm.objects(WalletModel.self).filter( { $0.address.lowercased() == address.lowercased() })
-        if wallet.count > 0 {
-            return false
-        }
-        
-        return true
-    }
-    
     static func saveWallet(name: String, address: String, type: String, rawData: Data?) throws {
         let realm = try Realm()
         
-        guard realm.objects(WalletModel.self).filter({ $0.address == address }).first == nil else {
-            throw CommonError.duplicateAddress
-        }
-        guard realm.objects(WalletModel.self).filter({ $0.name == name }).first == nil else {
-            throw CommonError.duplicateName
+        let dupAddr = realm.objects(WalletModel.self).filter({ $0.address.add0xPrefix() == address.add0xPrefix() })
+        
+        if dupAddr.count > 0 {
+            try realm.write {
+                realm.delete(dupAddr)
+            }
         }
         
         let wallet = WalletModel()
         wallet.name = name
-        wallet.address = address
+        wallet.address = address.add0xPrefix()
         wallet.type = type
         wallet.rawData = rawData
         
@@ -231,13 +221,11 @@ struct DB {
             guard let model = realm.objects(WalletModel.self).filter({ $0.type == type.lowercased() && $0.address.lowercased() == address.lowercased() }).first else { return nil }
             
             if type == "icx" {
-                guard let icx = ICXWallet(name: model.name, rawData: model.rawData!) else { return nil }
-                icx.created = model.createdDate
+                let icx = ICXWallet(model: model)
                 
                 return icx
             } else {
-                guard let eth = ETHWallet(name: model.name, rawData: model.rawData!) else { return nil }
-                eth.created = model.createdDate
+                let eth = ETHWallet(model: model)
                 
                 return eth
             }
@@ -385,7 +373,7 @@ struct DB {
     static func tokenList(dependedAddress: String) throws -> [Token] {
         let realm = try Realm()
         
-        let list = realm.objects(TokenModel.self).sorted(byKeyPath: "id").filter({ $0.dependedAddress.lowercased() == dependedAddress.lowercased() })
+        let list = realm.objects(TokenModel.self).sorted(byKeyPath: "id").filter({ $0.dependedAddress.add0xPrefix().lowercased() == dependedAddress.add0xPrefix().lowercased() })
         
         var infoList = [Token]()
         for model in list {
@@ -407,6 +395,14 @@ struct DB {
     static func addToken(tokenInfo: Token) throws {
         let realm = try Realm()
         
+        let exist = realm.objects(TokenModel.self).filter({ $0.dependedAddress == tokenInfo.parent && $0.contractAddress == tokenInfo.contract })
+        
+        for item in exist {
+            try realm.write {
+                realm.delete(item)
+            }
+        }
+        
         let token = TokenModel()
         
         if let maxID = realm.objects(TokenModel.self).max(ofProperty: "id") as Int? {
@@ -426,9 +422,9 @@ struct DB {
         }
     }
     
-    static func canSaveToken(contract: String) -> Bool {
+    static func canSaveToken(depended: String, contract: String) -> Bool {
         let realm = try! Realm()
-        guard let _ = realm.objects(TokenModel.self).filter({ $0.contractAddress == contract }).first else {
+        guard let _ = realm.objects(TokenModel.self).filter({ $0.contractAddress == contract && $0.dependedAddress.add0xPrefix() == depended.add0xPrefix() }).first else {
             return true
         }
         
@@ -438,6 +434,14 @@ struct DB {
     static func addToken(tokenInfo: NewToken) throws {
         let realm = try Realm()
 
+        let exist = realm.objects(TokenModel.self).filter({ $0.dependedAddress == tokenInfo.parent && $0.contractAddress == tokenInfo.contract })
+        
+        for item in exist {
+            try realm.write {
+                realm.delete(item)
+            }
+        }
+        
         let token = TokenModel()
 
         if let maxID = realm.objects(TokenModel.self).max(ofProperty: "id") as Int? {

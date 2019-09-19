@@ -260,8 +260,16 @@ extension LoadWalletViewController {
                     let data = bundle.priv.data(using: .utf8)!
                     if bundle.type == "icx" {
                         guard let icx = ICXWallet(name: bundle.name, rawData: data, created: bundle.createdAt?.toDate()) else { continue }
+                        
                         do {
                             try icx.save()
+                            
+                            if let tokensBundle = bundle.tokens {
+                                for tk in tokensBundle {
+                                    let token = Token(name: tk.name, parent: address, contract: tk.address, parentType: "icx", symbol: tk.symbol, decimal: tk.decimals, created: tk.createdAt.toDate() ?? Date())
+                                    try icx.addToken(token: token)
+                                }
+                            }
                         } catch {
                             Log(error)
                             Log("Error occurred while save icx wallet...")
@@ -270,6 +278,13 @@ extension LoadWalletViewController {
                         guard let eth = ETHWallet(name: bundle.name, rawData: data, created: bundle.createdAt?.toDate()) else { continue }
                         do {
                             try eth.save()
+                            
+                            if let tokensBundle = bundle.tokens {
+                                for tk in tokensBundle {
+                                    let token = Token(name: tk.name, parent: address, contract: tk.address, parentType: "eth", symbol: tk.symbol, decimal: tk.decimals, created: tk.createdAt.toDate() ?? Date())
+                                    try eth.addToken(token: token)
+                                }
+                            }
                         } catch {
                             Log(error)
                             Log("Error occurred while save eth wallet...")
