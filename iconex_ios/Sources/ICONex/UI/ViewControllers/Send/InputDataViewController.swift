@@ -70,7 +70,7 @@ class InputDataViewController: BaseViewController {
         titleLabel.size18(text: "Send.DataType.Title".localized, color: .gray77, weight: .medium, align: .center)
         
         confirmButton.isHidden = data.isEmpty
-        confirmButton.setTitle("Common.Change".localized, for: .normal)
+        confirmButton.setTitle("Common.Modify".localized, for: .normal)
         
         if self.type == .utf8 {
             self.placeholderLabel.text = "Hello ICON"
