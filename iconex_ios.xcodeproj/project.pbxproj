@@ -88,6 +88,7 @@
 		BF7FC19F2316B2170095F1D5 /* IXSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF7FC19E2316B2170095F1D5 /* IXSectionHeader.xib */; };
 		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
 		BF8AF6B3231C9B5B0071C7F9 /* SendETHViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */; };
+		BFA5C3CD2332227600664A11 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA5C3CC2332227600664A11 /* ResetPasswordViewController.swift */; };
 		BFC9A49C23141498002E35F5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49323141498002E35F5 /* UIColor+Extension.swift */; };
 		BFC9A49D23141498002E35F5 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49423141498002E35F5 /* UILabel+Extension.swift */; };
 		BFC9A49E23141498002E35F5 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49523141498002E35F5 /* UIButton+Extension.swift */; };
@@ -284,6 +285,7 @@
 		BF7FC19E2316B2170095F1D5 /* IXSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IXSectionHeader.xib; sourceTree = "<group>"; };
 		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendETHViewController.swift; sourceTree = "<group>"; };
+		BFA5C3CC2332227600664A11 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		BFC9A49323141498002E35F5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49423141498002E35F5 /* UILabel+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		BFC9A49523141498002E35F5 /* UIButton+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
@@ -691,6 +693,7 @@
 				BF206C63232144B700ECD982 /* LockSettingViewController.swift */,
 				D42FF8D722F182DD00268C29 /* PasscodeViewController.swift */,
 				BF206C65232232D000ECD982 /* BioAuthViewController.swift */,
+				BFA5C3CC2332227600664A11 /* ResetPasswordViewController.swift */,
 			);
 			path = Passcode;
 			sourceTree = "<group>";
@@ -1258,6 +1261,7 @@
 				BF4F6F7B2318A57D0098D303 /* TokenTableViewCell.swift in Sources */,
 				BF206C66232232D000ECD982 /* BioAuthViewController.swift in Sources */,
 				D46E7761231C0BB800AF332D /* DevelopViewController.swift in Sources */,
+				BFA5C3CD2332227600664A11 /* ResetPasswordViewController.swift in Sources */,
 				D4304999231CA26500A8F540 /* IXPickerViewController.swift in Sources */,
 				1BBEC3C42324DB5D00B69C22 /* ConnectViewController.swift in Sources */,
 				D4DACDF32314259900CC8EA8 /* PRepSearchViewController.swift in Sources */,

@@ -37,15 +37,16 @@ class MyVoteGeneralCell: UITableViewCell {
     }
 
     func set(info: TotalDelegation) {
-        voteHeader.size16(text: "Vote (\(info.delegations.count)/10)", color: .gray77, weight: .medium, align: .left)
-        let votingPower = info.votingPower
-        let voted = info.totalDelegated
-        let total = info.totalDelegated + votingPower
+        voteViewModel.voteCount.subscribe(onNext: { (count) in
+            self.voteHeader.size16(text: "Vote (\(count)/10)", color: .gray77, weight: .medium, align: .left)
+        }).disposed(by: disposeBag)
         
-        voteViewModel.available.subscribe(onNext: { (availablePower) in
+        let votingPower = info.votingPower
+        let total = info.totalDelegated + votingPower
+        let totalDecimal = total.decimalNumber ?? 0
+        
+        sharedAvailable.subscribe(onNext: { (availablePower) in
             let powerDecimal = availablePower.decimalNumber ?? 0
-            let totalDecimal = total.decimalNumber ?? 0
-            
             let rate = powerDecimal / totalDecimal
             
             self.votedWidth.constant = self.slideView.frame.width * CGFloat(1.0 - rate.floatValue)
@@ -53,10 +54,12 @@ class MyVoteGeneralCell: UITableViewCell {
             let percent = rate * 100
             self.votedLabel.size14(text: "Voted " + String(format: "%.1f", 100.0 - percent.floatValue) + "%", color: .mint1, weight: .light)
             self.availableLabel.size14(text: "Available " + String(format: "%.1f", percent.floatValue) + "%", color: .gray77, weight: .light)
+            
+            let delegated = total - availablePower
+            self.votedValueLabel.size14(text: delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+            self.availableValueLabel.size14(text: availablePower.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+            
         }).disposed(by: disposeBag)
-        
-        votedValueLabel.size14(text: voted.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
-        availableValueLabel.size14(text: votingPower.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
         
         guard votingPower != 0, total != 0 else {
             votedWidth.constant = 0

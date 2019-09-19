@@ -10,6 +10,7 @@ import UIKit
 import AudioToolbox
 import LocalAuthentication
 import CryptoSwift
+import PanModal
 
 class PasscodeViewController: BaseViewController {
     
@@ -59,6 +60,13 @@ class PasscodeViewController: BaseViewController {
         
         setUpBindNumberView()
         setBubbleView()
+        
+        forgotPasswordButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                let resetPassword = self.storyboard?.instantiateViewController(withIdentifier: "Reset") as! ResetPasswordViewController
+                self.presentPanModal(resetPassword)
+                
+        }.disposed(by: disposeBag)
         
         if self.lockType == .check && UserDefaults.standard.bool(forKey: "useBio") {
             if Tool.canVerificateBiometry() == .success {
@@ -113,7 +121,7 @@ class PasscodeViewController: BaseViewController {
             self.numberStack.alpha = 1.0
         }, completion: nil)
         
-        UIView.animate(withDuration: 0.6, delay: 1.0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.6, delay: 0.1, options: .curveEaseInOut, animations: {
             self.forgotPasswordButton.alpha = 1.0
         }, completion: nil)
     }
@@ -253,7 +261,13 @@ class PasscodeViewController: BaseViewController {
                     if Tool.createPasscode(code: self.passcode) {
                         self.reset()
                     }
-                    self.navigationController?.popToRootViewController(animated: true)
+                    if let navigationController = self.navigationController {
+                        navigationController.popToRootViewController(animated: true)
+                        
+                    } else { // reset
+                        mainViewModel.reload.onNext(true)
+                        app.toMain()
+                    }
                 } else {
                     self.setPassStatus(status: .renewFail)
                     
