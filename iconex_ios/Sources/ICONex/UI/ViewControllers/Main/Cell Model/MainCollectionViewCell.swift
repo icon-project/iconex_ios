@@ -397,27 +397,16 @@ extension MainCollectionViewCell: UITableViewDelegate {
                 detailViewModel.symbol.onNext(symbol.uppercased())
                 detailVC.walletInfo = selectedWallet
                 
-                if !symbol.isEmpty {
+                switch symbol {
+                case "icx":
+                    detailVC.detailType = .icx
+                case "eth":
+                    detailVC.detailType = .eth
+                default:
                     guard let tokenList = selectedWallet.tokens else { return }
-                    
-                    for token in tokenList {
-                        if token.symbol == symbol {
-                            detailVC.tokenInfo = token
-                            detailViewModel.token.onNext(token)
-                            break
-                        }
-                    }
-                    if let _ = selectedWallet as? ICXWallet {
-                        detailVC.detailType = .irc
-                    } else {
-                        detailVC.detailType = .erc
-                    }
-                } else {
-                    if let _ = selectedWallet as? ICXWallet {
-                        detailVC.detailType = .icx
-                    } else {
-                        detailVC.detailType = .eth
-                    }
+                    guard let tokenInfo = tokenList.filter({ $0.symbol == symbol }).first else { return }
+                    detailVC.tokenInfo = tokenInfo
+                    detailViewModel.token.onNext(tokenInfo)
                 }
             }
         }
