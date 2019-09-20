@@ -462,6 +462,11 @@ extension DetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        switch self.detailType {
+        case .eth, .erc:
+            ixSectionHeader.infoButton.isHidden = true
+        default: break
+        }
         return ixSectionHeader
     }
     
