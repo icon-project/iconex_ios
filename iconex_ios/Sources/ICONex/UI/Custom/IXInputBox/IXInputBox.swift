@@ -110,7 +110,7 @@ enum IXInputBoxType {
                 textField.isSecureTextEntry = true
                 textField.canPaste = false
                 forgotPasswordButton.isHidden = false
-                forgotPasswordButton.setTitle("비밀번호를 잊으셨나요?", for: .normal)
+                forgotPasswordButton.setTitle("Alert.ForgotPasscode.Title".localized, for: .normal)
                 forgotPasswordButton.setTitleColor(.gray128, for: .normal)
                 
             case .decimal:
@@ -119,7 +119,7 @@ enum IXInputBoxType {
                 
             case .integer:
                 textField.keyboardType = .numberPad
-                textField.canPaste = true
+                textField.canPaste = false
                 
             case .fileSelect:
                 textField.isEnabled = false

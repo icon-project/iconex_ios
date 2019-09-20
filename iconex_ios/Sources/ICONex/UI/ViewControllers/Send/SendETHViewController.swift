@@ -412,6 +412,21 @@ class SendETHViewController: BaseViewController {
                 
             }.disposed(by: disposeBag)
         
+        gasLimitInputBox.set(inputType: .integer)
+        gasLimitInputBox.set { (gasLimit) -> String? in
+            guard !gasLimit.isEmpty else { return "Send.GasLimit.Error".localized }
+            guard let gas = BigUInt(gasLimit) else {
+                return "Send.GasLimit.Error".localized
+            }
+            
+            if gas < 21000 {
+                return "Send.GasLimit.Error".localized
+            } else {
+                self.gasLimit = gas
+                return nil
+            }
+        }
+        
         Observable.combineLatest(gasLimitInputBox.textField.rx.text.orEmpty, slider.rx.value).flatMapLatest { (limit, price) -> Observable<String> in
             let gasLimit = BigUInt(limit) ?? 0
             let gasPrice = BigUInt(price)
@@ -453,11 +468,13 @@ class SendETHViewController: BaseViewController {
             }).disposed(by: disposeBag)
         
         // send
-        Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty)
-            .flatMapLatest { [unowned self] (value, address) -> Observable<Bool> in
+        Observable.combineLatest(self.amountInputBox.textField.rx.text.orEmpty, self.addressInputBox.textField.rx.text.orEmpty, self.gasLimitInputBox.textField.rx.text.orEmpty)
+            .flatMapLatest { [unowned self] (value, address, gasLimit) -> Observable<Bool> in
                 guard !value.isEmpty && !address.isEmpty else { return Observable.just(false) }
                 
                 guard address != wallet.address else { return Observable.just(false) }
+                
+                guard let gasLimitBigValue = BigUInt(gasLimit), gasLimitBigValue >= 21000 else { return Observable.just(false) }
                 
                 // address
                 guard Validator.validateETHAddress(address: address) else {
