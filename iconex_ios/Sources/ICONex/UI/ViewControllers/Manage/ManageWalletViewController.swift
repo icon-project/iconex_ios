@@ -10,7 +10,9 @@ import UIKit
 
 class ManageWalletViewController: BaseViewController {
 
+    @IBOutlet weak var dismissView: UIView!
     @IBOutlet weak var menuContainer: UIView!
+    @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var titleBar: UIView!
     @IBOutlet weak var dismissButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -58,6 +60,8 @@ class ManageWalletViewController: BaseViewController {
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
         menuContainer.alpha = 0.0
         menuContainer.transform = CGAffineTransform(translationX: 0, y: 50)
+        bottomView.alpha = 0.0
+        bottomView.transform = CGAffineTransform(translationX: 0, y: 50)
         
         editButton.rx.tap.asControlEvent()
             .subscribe { (_) in
@@ -156,6 +160,14 @@ class ManageWalletViewController: BaseViewController {
                 
             }.disposed(by: disposeBag)
         
+        let tapGesture = UITapGestureRecognizer()
+        
+        self.dismissView.addGestureRecognizer(tapGesture)
+        
+        tapGesture.rx.event.bind { (recognizer) in
+            self.beginClose(nil)
+        }.disposed(by: disposeBag)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -174,6 +186,8 @@ extension ManageWalletViewController {
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
                 self.menuContainer.alpha = 1.0
                 self.menuContainer.transform = .identity
+                self.bottomView.alpha = 1.0
+                self.bottomView.transform = .identity
             })
         }, completion: nil)
     }
@@ -183,6 +197,8 @@ extension ManageWalletViewController {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
                 self.menuContainer.transform = CGAffineTransform(translationX: 0, y: 50)
                 self.menuContainer.alpha = 0.0
+                self.bottomView.transform = CGAffineTransform(translationX: 0, y: 50)
+                self.bottomView.alpha = 0.0
             })
             
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
