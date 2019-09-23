@@ -145,7 +145,14 @@ extension PRepsViewController: UITableViewDataSource {
         }
         
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
-        cell.totalVotePercent.size12(text: "(TDB%)", color: .gray77, weight: .semibold, align: .right)
+        
+        let totalDelegated = self.preps?.totalDelegated ?? 0
+        let totalDelegatedDecimal = totalDelegated.decimalNumber ?? 0
+        let prepDelegated = prep.delegated.decimalNumber ?? 0
+        
+        let delegatedPercent = (prepDelegated / totalDelegatedDecimal).floatValue * 100
+        
+        cell.totalVotePercent.size12(text: "(" + String(format: "%.1f", delegatedPercent) + "%)", color: .gray77, weight: .semibold, align: .right)
         cell.active = true
         
         cell.addButton.rx.tap
