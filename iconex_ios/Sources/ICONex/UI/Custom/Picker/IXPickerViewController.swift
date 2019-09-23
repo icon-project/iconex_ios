@@ -23,6 +23,7 @@ class IXPickerViewController: BaseViewController {
     @IBOutlet weak var pickerHeight: NSLayoutConstraint!
     @IBOutlet weak var gestureView: UIView!
     
+    var headerTitle: String?
     var items: [String]!
     var selectedAction: ((Int) -> Void)?
     
@@ -48,6 +49,12 @@ class IXPickerViewController: BaseViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapClose))
         gestureView.addGestureRecognizer(tap)
+        
+        if let header = headerTitle {
+            pickerTitle.size18(text: header, color: .gray77, weight: .medium)
+        } else {
+            pickerTitle.text = ""
+        }
         
         closeButton.rx.tap.asControlEvent()
             .subscribe { (_) in

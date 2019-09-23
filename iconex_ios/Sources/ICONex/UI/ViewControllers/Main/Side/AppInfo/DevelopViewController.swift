@@ -41,7 +41,7 @@ class DevelopViewController: BaseViewController {
     override func initializeComponents() {
         super.initializeComponents()
         
-        navBar.setTitle("AppInfo.Title".localized)
+        navBar.setTitle("AppInfo.DeveloperMode".localized)
         navBar.setLeft {
             self.navigationController?.popViewController(animated: true)
         }
@@ -53,6 +53,7 @@ class DevelopViewController: BaseViewController {
         
         selectButton.rx.tap.subscribe(onNext: {
             let picker = UIStoryboard(name: "Picker", bundle: nil).instantiateInitialViewController() as! IXPickerViewController
+            picker.headerTitle = "Connect.Send.Developer.Title".localized
             picker.items = ["Mainnet", "Euljiro", "Yeouido"]
             picker.selectedAction = { index in
                 UserDefaults.standard.set(index, forKey: "Provider")

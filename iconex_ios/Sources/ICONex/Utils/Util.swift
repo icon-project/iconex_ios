@@ -38,8 +38,8 @@ struct Tool {
         return price
     }
     
-    static func calculate(decimal: Int = 18, currency: String, balance: BigUInt) -> BigUInt {
-        guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return "-" }
+    static func calculate(decimal: Int = 18, currency: String, balance: BigUInt) -> BigUInt? {
+        guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return nil }
 
         let bigExchange = stringToBigUInt(inputText: exchange, decimal: decimal, fixed: true) ?? 0
         let calculated = bigExchange * balance / BigUInt(10).power(decimal)

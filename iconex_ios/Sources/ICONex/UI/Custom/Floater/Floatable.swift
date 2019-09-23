@@ -206,7 +206,9 @@ class Floater {
         let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
         
         floatMenu.itemAction1 = {
-            
+            let deposit = UIStoryboard(name: "Detail", bundle: nil).instantiateViewController(withIdentifier: "Deposit") as! DepositViewController
+            deposit.wallet = ethWallet
+            app.topViewController()?.presentPanModal(deposit)
         }
         
         floatMenu.itemAction2 = {

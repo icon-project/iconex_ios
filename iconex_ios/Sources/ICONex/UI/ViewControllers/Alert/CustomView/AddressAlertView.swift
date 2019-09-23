@@ -43,7 +43,9 @@ class AddressAlertView: UIView {
         addSubview(view)
         contentView = view
         
+        addressNameInputBox.set(inputType: .name)
         addressNameInputBox.set(state: .normal, placeholder: "Alert.Address.Placeholder.Name".localized)
+        addressInputBox.set(inputType: .normal)
         qrcodeScanButton.layer.cornerRadius = 4
         qrcodeScanButton.border(1, .gray230)
         qrcodeScanButton.layer.shadowColor = UIColor.init(white: 0, alpha: 0.03).cgColor

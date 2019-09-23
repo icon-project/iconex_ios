@@ -84,6 +84,17 @@ struct DB {
         return true
     }
     
+    static func canSaveWallet(address: String) -> Bool {
+        let realm = try! Realm()
+        
+        let wallet = realm.objects(WalletModel.self).filter( { $0.address.lowercased() == address.lowercased() })
+        if wallet.count > 0 {
+            return false
+        }
+        
+        return true
+    }
+    
     static func saveWallet(name: String, address: String, type: String, rawData: Data?) throws {
         let realm = try Realm()
         

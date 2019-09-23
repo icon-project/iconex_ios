@@ -134,6 +134,7 @@ class LoadNameViewController: BaseViewController {
                 scrollView?.isHidden = true
                 tableView.isHidden = false
                 tableView.dataSource = self
+                tableView.delegate = self
             }
             
         case .loadPK:
@@ -275,14 +276,22 @@ extension LoadNameViewController: UITableViewDataSource {
         let key = bundleDic.keys.first!
         let bundle = bundleDic[key]!
         
-        cell.walletNameLabel.size14(text: bundle.name, color: .gray77, weight: .semibold)
-        cell.subtitleLabel.size10(text: key, color: .gray179, weight: .light, align: .left)
+        let canSave = DB.canSaveWallet(address: key)
+        let textColor: (UIColor, UIColor) = {
+            return canSave ? (.gray77, .gray179) : (.gray179, .mint1)
+        }()
+        let subtitle: String = {
+            return canSave ? key : "LoadName.Bundle.DuplicatedAddress".localized + " - \(key)"
+        }()
+        
+        cell.walletNameLabel.size14(text: bundle.name, color: textColor.0, weight: .semibold)
+        cell.subtitleLabel.size10(text: subtitle, color: textColor.1, weight: .light, align: .left)
         cell.valueLabel.size14(text: "-")
         
         if let balance = bundleBalances[key] {
             cell.valueLabel.isHidden = false
             cell.indicator.isHidden = true
-            cell.valueLabel.size14(text: balance.toString(decimal: 18, 4, false) + (bundle.type == "icx" ? " ICX" : " ETH"), color: .gray77, weight: .bold)
+            cell.valueLabel.size14(text: balance.toString(decimal: 18, 4, false) + (bundle.type == "icx" ? " ICX" : " ETH"), color: textColor.0, weight: .bold)
         } else {
             if isWorking {
                 cell.valueLabel.isHidden = true
@@ -290,10 +299,63 @@ extension LoadNameViewController: UITableViewDataSource {
             } else {
                 cell.valueLabel.isHidden = false
                 cell.indicator.isHidden = true
-                cell.valueLabel.size14(text: "-", color: .gray77, weight: .bold)
+                cell.valueLabel.size14(text: "-", color: textColor.0, weight: .bold)
             }
         }
         
         return cell
+    }
+}
+
+extension LoadNameViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 36))
+        headerView.backgroundColor = .gray250
+        
+        let line1 = UIView()
+        line1.backgroundColor = .gray230
+        headerView.addSubview(line1)
+        line1.translatesAutoresizingMaskIntoConstraints = false
+        line1.topAnchor.constraint(equalTo: headerView.topAnchor).isActive = true
+        line1.leadingAnchor.constraint(equalTo: headerView.leadingAnchor).isActive = true
+        line1.trailingAnchor.constraint(equalTo: headerView.trailingAnchor).isActive = true
+        line1.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        
+        let line2 = UIView()
+        line2.backgroundColor = .gray230
+        headerView.addSubview(line2)
+        line2.translatesAutoresizingMaskIntoConstraints = false
+        line2.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        line2.leadingAnchor.constraint(equalTo: headerView.leadingAnchor).isActive = true
+        line2.trailingAnchor.constraint(equalTo: headerView.trailingAnchor).isActive = true
+        line2.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        
+        if let loader = delegate.loader, let bundleList = loader.bundle {
+            let label = UILabel()
+            headerView.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.topAnchor.constraint(equalTo: headerView.topAnchor).isActive = true
+            label.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20).isActive = true
+            label.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -20).isActive = true
+            label.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+            label.size12(text: String(format: "LoadName.Bundle.TotalWallets".localized, "\(bundleList.count)"), color: .gray128, weight: .light)
+            
+            let loaded = bundleList.map { DB.canSaveWallet(address: $0.keys.first!) ? 0 : 1 }.reduce(0, +)
+            if loaded > 0 {
+                let loadedWallet = UILabel()
+                headerView.addSubview(loadedWallet)
+                loadedWallet.translatesAutoresizingMaskIntoConstraints = false
+                loadedWallet.topAnchor.constraint(equalTo: headerView.topAnchor).isActive = true
+                loadedWallet.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -20).isActive = true
+                loadedWallet.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+                loadedWallet.size12(text: String(format: "LoadName.Bundle.AlreadyLoaded".localized, "\(loaded)"), color: .mint1)
+            }
+        }
+        
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 36
     }
 }

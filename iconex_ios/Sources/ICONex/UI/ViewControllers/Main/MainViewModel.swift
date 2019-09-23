@@ -44,8 +44,7 @@ class MainViewModel {
         Observable.combineLatest(self.currencyUnit, self.balaneList).flatMapLatest { (unit, totalBalance) -> Observable<String> in
             let unitSymbol = unit.symbol
             
-            let icxPrice = Tool.calculate(currency: "icx\(unitSymbol.lowercased())", balance: totalBalance[0])
-            let ethPrice = Tool.calculate(currency: "eth\(unitSymbol.lowercased())", balance: totalBalance[1])
+            guard let icxPrice = Tool.calculate(currency: "icx\(unitSymbol.lowercased())", balance: totalBalance[0]), let ethPrice = Tool.calculate(currency: "eth\(unitSymbol.lowercased())", balance: totalBalance[1]) else { return Observable.just("-") }
             
             let totalPrice = icxPrice + ethPrice
             let result = totalPrice.toString(decimal: 18, 4, true).currencySeparated()

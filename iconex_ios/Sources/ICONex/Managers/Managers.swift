@@ -373,7 +373,6 @@ class BalanceManager {
 
 extension BalanceManager {
     func getAllBalances(_ completion: (() -> Void)? = nil) {
-        
         guard isWorking == false else { return }
         DispatchQueue.global().async { [unowned self] in
             self.isWorking = true

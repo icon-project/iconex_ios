@@ -88,6 +88,16 @@ class LoadFileViewController: BaseViewController {
             self.pickerSelected()
         }).disposed(by: disposeBag)
         
+        coinSelectButton.rx.tap.subscribe(onNext: { [unowned self] in
+            let picker = UIStoryboard(name: "Picker", bundle: nil).instantiateInitialViewController() as! IXPickerViewController
+            picker.headerTitle = "LoadFile.SelectCoin".localized
+            picker.items = ["ICON (ICX)", "Ethereum (ETH)"]
+            picker.selectedAction = { index in
+                self.selectedType = index == 0 ? "icx" : "eth"
+            }
+            picker.pop()
+        }).disposed(by: disposeBag)
+        
         inputBox1.set(state: .normal, placeholder: "LoadFile.File.SelectFile".localized)
         inputBox1.set(inputType: .fileSelect)
         inputBox2.set(validator: { _ in

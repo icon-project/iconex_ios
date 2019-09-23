@@ -107,12 +107,12 @@ class ExportMainViewController: PopableViewController, Exportable {
             
             switch self.scrollIndex {
             case 0:
-                Alert.basic(title: "", subtitle: "ExportMain.Alert.WarnPassword".localized, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.Cancel".localized, rightButtonTitle: "Common.Confirm".localized, confirmAction: {
+                Alert.basic(title: "", subtitle: "ExportMain.Alert.WarnPassword".localized, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.scrollNext()
                 }).show()
                 
             default:
-                Alert.basic(title: "ExportMain.Alert.DownloadKeystore".localized, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.Cancel".localized, rightButtonTitle: "Common.Confirm".localized, confirmAction: {
+                Alert.basic(title: "ExportMain.Alert.DownloadKeystore".localized, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.backupBundles()
                 }).show()
                 

@@ -297,6 +297,17 @@ extension LoadWalletViewController {
             Log("Error - \(error)")
         }
         Manager.balance.getAllBalances()
+        
+        if loader.type == .bundle {
+            Alert.basic(title: "Alert.Bundle.Import.Success".localized, leftButtonTitle: "Common.Confirm".localized, cancelAction: {
+                self.close()
+            }).show()
+        } else {
+            close()
+        }
+    }
+    
+    func close() {
         self.dismiss(animated: true, completion: {
             self.doneAction?()
         })

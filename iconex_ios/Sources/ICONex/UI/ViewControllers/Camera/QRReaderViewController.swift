@@ -45,7 +45,6 @@ class QRReaderViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        showQR()
     }
     
     override func initializeComponents() {
@@ -70,7 +69,6 @@ class QRReaderViewController: BaseViewController {
         backgroundView.backgroundColor = UIColor(0, 0, 0, 0.8)
         
         setCaptureSession()
-        captureSession.startRunning()
     }
     
     func showQR() {
@@ -130,8 +128,13 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
             captureSession.addOutput(captureMetadataOutput)
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
             captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
-        } catch {
             
+            captureSession.startRunning()
+            showQR()
+        } catch {
+            Alert.basic(title: "Alert.Permission.Camera".localized, leftButtonTitle: "Common.Confirm".localized, cancelAction: {
+                self.dismiss(animated: true, completion: nil)
+            }).show()
         }
         
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)

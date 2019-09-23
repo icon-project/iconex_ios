@@ -196,6 +196,8 @@
 "LoadName.Bundle.HeaderView.Header" = "묶음 지갑을 가져오시겠습니까?";
 "LoadName.Bundle.Desc1" = "・ 묶음 지갑을 가져오는 경우, 이미 등록된 지갑은 제외하고 지갑들이 추가됩니다.";
 "LoadName.Bundle.Desc2" = "・ 새로 추가되는 지갑들의 비밀번호는 묶음 지갑 비밀번호와 동일합니다.";
+"LoadName.Bundle.TotalWallets" = "총 %@개의 지갑";
+"LoadName.Bundle.AlreadyLoaded" = "이미 등록된 지갑 %@개";
 
 // MARK: ExportMainViewController
 "ExportMain.Title" = "지갑 묶어서 내보내기";
