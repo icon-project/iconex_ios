@@ -212,6 +212,11 @@ class AlertViewController: BaseViewController {
                     
                     self.closer(self.successHandler)
                     
+                case .txHash:
+                    guard let txHash = self.txHashData?.txHash else { return }
+                    UIPasteboard.general.string = txHash
+                    self.closer(self.confirmHandler)
+                    
                 default:
                     self.closer(self.confirmHandler)
                 }
