@@ -272,6 +272,10 @@ extension IXInputBox: UITextFieldDelegate {
         case " " where _type == .normal || _type == .name:
             return !textField.text!.hasPrefix(" ") && range.location != 0
             
+        case "": return true
+            
+        case "\n": return true
+            
         default:
             guard let former = textField.text as NSString? else { return false }
             let text = former.replacingCharacters(in: range, with: string)

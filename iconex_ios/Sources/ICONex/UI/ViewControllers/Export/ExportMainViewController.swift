@@ -96,6 +96,7 @@ class ExportMainViewController: PopableViewController, Exportable {
                 let x = value * self.view.frame.width
                 self.stepScroll.setContentOffset(CGPoint(x: x, y: 0), animated: true)
                 self.exportPassword.resetData()
+                self.exportList.resetData()
             }
         }).disposed(by: disposeBag)
         
@@ -162,7 +163,7 @@ class ExportMainViewController: PopableViewController, Exportable {
             
             export(filepath: filePath) { (type, isCompleted, _, error) in
                 if isCompleted {
-                    Alert.basic(title: "ExportMain.Alert.BackedUp".localized).show()
+                    Alert.basic(title: "ExportMain.Alert.BackedUp".localized, leftButtonTitle: "Common.Confirm".localized).show()
                 }
             }
         } catch {

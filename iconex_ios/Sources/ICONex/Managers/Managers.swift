@@ -43,7 +43,7 @@ class WalletManager {
 
 extension WalletManager {
     func walletBy(address: String, type: String) -> BaseWalletConvertible? {
-        return DB.walletBy(address: address.lowercased(), type: type.lowercased())
+        return DB.walletBy(address: address.add0xPrefix().lowercased(), type: type.lowercased())
     }
 }
 
