@@ -92,34 +92,38 @@ class AddTokenInfoViewController: BaseViewController {
             
             if Validator.validateIRCAddress(address: contract) {
                 DispatchQueue.global().async {
-                    guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else { return }
+                    guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else {
+                        self.resetInputBox()
+                        return
+                    }
                     
                     DispatchQueue.main.async {
                         self.nameBox.text = request.name
                         self.symbolBox.text = request.symbol
                         self.decimalBox.text = String(request.decimal.hexToBigUInt() ?? 0)
                         
-                        self.nameBox.textField.sendActions(for: .valueChanged)
-                        self.symbolBox.textField.sendActions(for: .valueChanged)
-                        self.decimalBox.textField.sendActions(for: .valueChanged)
+                        self.sendActions()
                     }
                 }
                 
             } else if Validator.validateETHAddress(address: contract) {
                 DispatchQueue.global().async {
-                    guard let ercInfo = Ethereum.requestTokenInformation(tokenContractAddress: contract, myAddress: wallet.address) else { return }
+                    guard let ercInfo = Ethereum.requestTokenInformation(tokenContractAddress: contract, myAddress: wallet.address) else {
+                        self.resetInputBox()
+                        return
+                    }
                     
                     DispatchQueue.main.async {
                         self.nameBox.text = ercInfo.name
                         self.symbolBox.text = ercInfo.symbol
                         self.decimalBox.text = String(ercInfo.decimal)
                         
-                        self.nameBox.textField.sendActions(for: .valueChanged)
-                        self.symbolBox.textField.sendActions(for: .valueChanged)
-                        self.decimalBox.textField.sendActions(for: .valueChanged)
+                        self.sendActions()
                     }
                 }
                 
+            } else {
+                self.resetInputBox()
             }
         }.disposed(by: disposeBag)
         
@@ -173,5 +177,25 @@ class AddTokenInfoViewController: BaseViewController {
                 }
                 
         }.disposed(by: disposeBag)
+    }
+    
+    private func resetInputBox() {
+        DispatchQueue.main.async {
+            Alert.basic(title: "Token.Info.Error.ConnectionRefused".localized, leftButtonTitle: "Common.Confirm".localized).show()
+            
+            self.addressBox.text.removeAll()
+            self.nameBox.text.removeAll()
+            self.symbolBox.text.removeAll()
+            self.decimalBox.text.removeAll()
+            
+            self.sendActions()
+        }
+    }
+    
+    private func sendActions() {
+        self.addressBox.textField.sendActions(for: .valueChanged)
+        self.nameBox.textField.sendActions(for: .valueChanged)
+        self.symbolBox.textField.sendActions(for: .valueChanged)
+        self.decimalBox.textField.sendActions(for: .valueChanged)
     }
 }
