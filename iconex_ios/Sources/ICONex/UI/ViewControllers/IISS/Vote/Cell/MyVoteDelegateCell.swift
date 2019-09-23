@@ -21,7 +21,7 @@ class MyVoteDelegateCell: UITableViewCell {
     @IBOutlet weak var sliderContainer: UIView!
     @IBOutlet weak var myVotesLabel: UILabel!
     @IBOutlet weak var fieldContainer: UIView!
-    @IBOutlet weak var myVotesField: UITextField!
+    @IBOutlet weak var myVotesField: IXTextField!
     @IBOutlet weak var myVotesUnitLabel: UILabel!
     @IBOutlet weak var maxTitleLabel: UILabel!
     @IBOutlet weak var myVotesMax: UILabel!
@@ -87,6 +87,11 @@ class MyVoteDelegateCell: UITableViewCell {
         addButton.setImage(#imageLiteral(resourceName: "icDeleteList"), for: .highlighted)
         
         current = 0
+        
+        // set textfield
+        myVotesField.canPaste = false
+        myVotesField.delegate = self
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -95,4 +100,26 @@ class MyVoteDelegateCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+}
+
+extension MyVoteDelegateCell: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        switch string {
+        case Tool.decimalSeparator:
+            return Array(textField.text!).filter({ String($0) == Tool.decimalSeparator }).count < 1
+        default:
+            guard let former = textField.text as NSString? else { return false }
+            let text = former.replacingCharacters(in: range, with: string)
+            let split = text.components(separatedBy: ".")
+            if let below = split.last {
+                
+                if below.count <= 4 {
+                    return true
+                }
+                return false
+            }
+            return false
+
+        }
+    }
 }
