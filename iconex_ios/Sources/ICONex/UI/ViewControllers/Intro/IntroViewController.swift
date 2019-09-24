@@ -13,6 +13,7 @@ class IntroViewController: BaseViewController {
     @IBOutlet weak var iconImage: UIImageView!
     @IBOutlet weak var satellite: UIImageView!
     @IBOutlet weak var logoLabel: UILabel!
+    @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     private var _animated: Bool = false
     
@@ -27,6 +28,7 @@ class IntroViewController: BaseViewController {
         iconImage.alpha = 0.0
         satellite.alpha = 0.0
         logoLabel.alpha = 0.0
+        indicator.isHidden = true
     }
     
     override func refresh() {
@@ -83,7 +85,6 @@ class IntroViewController: BaseViewController {
             self.iconImage.transform = .identity
             self.satellite.transform = .identity
             
-            
             self.getVersion({
                 self.go()
             })
@@ -92,6 +93,7 @@ class IntroViewController: BaseViewController {
     }
     
     func getVersion(_ completion: (() -> Void)? = nil) {
+        indicator.isHidden = false
         var tracker: Tracker {
             switch Config.host {
             case .main:
@@ -112,6 +114,7 @@ class IntroViewController: BaseViewController {
         Alamofire.request(request).responseJSON(queue: DispatchQueue.global(qos: .utility)) { (dataResponse) in
             
             DispatchQueue.main.async {
+                self.indicator.isHidden = true
                 switch dataResponse.result {
                 case .success:
                     guard case let json as [String: Any] = dataResponse.result.value, let result = json["result"] as? String else {
@@ -156,7 +159,7 @@ class IntroViewController: BaseViewController {
             } else if !Tool.isPasscode() && Conn.isConnect {
                 let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as! ConnectViewController
                 app.window?.rootViewController = connect
-//                app.change(root: connect)
+                app.change(root: connect)
             } else {
                 app.toMain()
             }
