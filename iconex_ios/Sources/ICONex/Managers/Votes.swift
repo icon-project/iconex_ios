@@ -18,6 +18,7 @@ struct MyVoteEditInfo {
     var myDelegate: BigUInt?
     var editedDelegate: BigUInt?
     var isMyVote: Bool
+    var percent: Float?
 }
 
 class VoteListManager {
@@ -45,7 +46,7 @@ class VoteListManager {
         if let response = preps {
             myList = [MyVoteEditInfo]()
             for prep in response.preps {
-                let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false)
+                let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil)
                 myList?.append(editInfo)
             }
         }
@@ -61,7 +62,7 @@ class VoteListManager {
             if let response = preps {
                 myList = [MyVoteEditInfo]()
                 for prep in response.preps {
-                    let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false)
+                    let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil)
                     myList?.append(editInfo)
                 }
             }
@@ -80,7 +81,7 @@ class VoteListManager {
             myList = [MyVoteEditInfo]()
             for prep in response.delegations {
                 guard let prepInfo = Manager.icon.getPRepInfo(from: from, address: prep.address) else { continue }
-                let myInfo = MyVoteEditInfo(prepName: prepInfo.name, address: prep.address, totalDelegate: prepInfo.delegated, myDelegate: prep.value, editedDelegate: nil, isMyVote: true)
+                let myInfo = MyVoteEditInfo(prepName: prepInfo.name, address: prep.address, totalDelegate: prepInfo.delegated, myDelegate: prep.value, editedDelegate: nil, isMyVote: true, percent: nil)
                 myList?.append(myInfo)
             }
         }
@@ -97,7 +98,7 @@ class VoteListManager {
                 myList = [MyVoteEditInfo]()
                 for prep in response.delegations {
                     guard let prepInfo = Manager.icon.getPRepInfo(from: from, address: prep.address) else { continue }
-                    let myInfo = MyVoteEditInfo(prepName: prepInfo.name, address: prep.address, totalDelegate: prepInfo.delegated, myDelegate: prep.value, editedDelegate: nil, isMyVote: true)
+                    let myInfo = MyVoteEditInfo(prepName: prepInfo.name, address: prep.address, totalDelegate: prepInfo.delegated, myDelegate: prep.value, editedDelegate: nil, isMyVote: true, percent: nil)
                     myList?.append(myInfo)
                 }
             }

@@ -37,7 +37,7 @@ class MyVoteDelegateCell: UITableViewCell {
     var current: Float = 0.0 {
         willSet {
             guard newValue >= 0.0 else { return }
-            minWidth.constant = barContainer.frame.width * CGFloat(newValue)
+            minWidth.constant = barContainer.frame.width * CGFloat(newValue) / 100.0
         }
     }
     
