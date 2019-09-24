@@ -96,12 +96,31 @@ class InputDataViewController: BaseViewController {
         textViewShare
             .subscribe(onNext: { (text) in
                 self.placeholderLabel.isHidden = !text.isEmpty
-                let textLength = text.utf8.count
-                self.toolBar.kbLabel.text = "\(textLength)"
+                let byte = Int64(text.lengthOfBytes(using: .utf8))
                 
-                if textLength >= 512 {
-                    self.textView.text = String(text.utf8.prefix(513))
+                guard byte <= 524288 else {
+                    self.textView.text = String(text.utf8.prefix(524288))
+                    return
                 }
+                
+                let textLength: String = {
+                    var roundedByte = byte / 1024
+                    
+                    if byte % 1024 != 0 {
+                        roundedByte += 1
+                    }
+                    
+                    roundedByte = roundedByte * 1024
+                    
+                    let byteFormatter = ByteCountFormatter()
+                    byteFormatter.countStyle = .binary
+                    byteFormatter.allowedUnits = .useKB
+                    
+                    let kb = byteFormatter.string(fromByteCount: roundedByte)
+                    return kb
+                }()
+                
+                self.toolBar.kbLabel.text = textLength
                 
             }).disposed(by: disposeBag)
         
