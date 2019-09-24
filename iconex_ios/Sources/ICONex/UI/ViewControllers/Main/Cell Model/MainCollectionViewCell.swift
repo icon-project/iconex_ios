@@ -190,12 +190,58 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.symbolLabel.size16(text: CoinType.icx.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.icx.fullName, color: .gray179, weight: .light)
                     
-                    let balance = icx.balance?.toString(decimal: 18, 4)
-                    coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
+                    let balance = icx.balance ?? 0
                     
+                    let balanceString = balance.toString(decimal: 18, 4).currencySeparated()
+                    coinCell.balanceLabel.size16(text: balanceString, color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: icx.balance ?? 0)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
+                    
+                    // STAKE INFO
+                    guard let stakeInfo = Manager.iiss.stake(icx: icx), stakeInfo > 0 else {
+                        coinCell.basicView.backgroundColor = .gray252
+                        coinCell.backgroundColor = .gray252
+                        coinCell.basicView.corner(8)
+                        coinCell.basicView.border(0.5, .gray230)
+                        
+                        return coinCell
+                    }
+                    
+                    // set background color
+                    coinCell.basicView.backgroundColor = .white
+                    coinCell.backgroundColor = .gray252
+                    coinCell.basicView.corner(8)
+                    coinCell.basicView.border(0.5, .gray230)
+                    
+                    let staked = stakeInfo.toString(decimal: 18, 4).currencySeparated()
+                    coinCell.stakeLabel.text = staked
+                    
+                    guard let stakedDecimal = stakeInfo.decimalNumber, let balanceDecimal = balance.decimalNumber else { return coinCell }
+                    
+                    let totalBalance = stakedDecimal + balanceDecimal
+
+                    let stakedPercent: Float = {
+                        if stakedDecimal == 0 {
+                            return 0
+                        } else {
+                            return (stakedDecimal / totalBalance).floatValue * 100
+                        }
+                    }()
+                    
+                    coinCell.stakedPercentLabel.text = "(" + String(format: "%.1f", stakedPercent) + "%)"
+                    
+                    // I-SCORE
+                    DispatchQueue.global().async {
+                        let response = Manager.icon.queryIScore(from: icx)
+                        
+                        let iscore = response?.iscore.toString(decimal: 18, 4).currencySeparated()
+                        
+                        DispatchQueue.main.async {
+                            coinCell.iscoreLabel.text = iscore ?? "-"
+                            
+                        }
+                    }
                     
                 } else if let eth = info as? ETHWallet {
                     let currencySymbol = "eth\(currency.symbol.lowercased())"
@@ -232,7 +278,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
-                    coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light)
+                    coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     
                     return coinCell
                     
@@ -254,7 +300,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
-                    coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light)
+                    coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     
                     return coinCell
                     
@@ -349,7 +395,14 @@ extension MainCollectionViewCell: UITableViewDataSource {
 
 extension MainCollectionViewCell: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 82
+        guard let icxWallet = self.info as? ICXWallet else { return 82 }
+        guard let staked = Manager.iiss.stake(icx: icxWallet), staked > 0 else { return 82 }
+        
+        if indexPath.section == 0 {
+            return 162
+        } else {
+            return 82
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

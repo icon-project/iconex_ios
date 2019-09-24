@@ -20,11 +20,10 @@ class CoinTableViewCell: UITableViewCell {
     
     // stake
     @IBOutlet weak var stakeTitle: UILabel!
-    @IBOutlet weak var powerTitle: UILabel!
     @IBOutlet weak var iscoreTitle: UILabel!
     
     @IBOutlet weak var stakeLabel: UILabel!
-    @IBOutlet weak var powerLabel: UILabel!
+    @IBOutlet weak var stakedPercentLabel: UILabel!
     @IBOutlet weak var iscoreLabel: UILabel!
     
     
@@ -32,6 +31,9 @@ class CoinTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         logoImageView.image = nil
+        
+        self.stakeTitle.size12(text: "Staked", color: .gray77, weight: .light)
+        self.iscoreTitle.size12(text: "I-Score", color: .gray77, weight: .light)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
