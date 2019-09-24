@@ -133,6 +133,7 @@ class MyVoteViewController: BaseViewController {
         resetButton.setTitle("MyVoteView.VoteReset".localized, for: .normal)
         resetButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
         resetButton.setTitleColor(.gray128, for: .normal)
+        resetButton.setTitleColor(.gray217, for: .disabled)
         resetButton.translatesAutoresizingMaskIntoConstraints = false
         sectionHeader.addSubview(resetButton)
         resetButton.trailingAnchor.constraint(equalTo: sectionHeader.trailingAnchor, constant: -20).isActive = true
@@ -214,6 +215,16 @@ class MyVoteViewController: BaseViewController {
                 }
                 
             }).disposed(by: disposeBag)
+        
+        Observable.combineLatest(voteViewModel.myList, voteViewModel.newList)
+            .flatMapLatest({ (myList, newList) -> Observable<Bool> in
+                let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
+                let newListChecker = self.newList.filter({ $0.percent != 0.0 }).count > 0
+                
+                return Observable.just(myVoteChecker || newListChecker)
+                
+            }).bind(to: resetButton.rx.isEnabled)
+            .disposed(by: disposeBag)
         
         self.scrollView?.rx.didScroll
             .subscribe({ (_) in
@@ -461,7 +472,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     cell.slider.isEnabled = true
                 }
                 
-                cell.slider.rx.value.distinctUntilChanged()
+                cell.slider.rx.value.skip(1).distinctUntilChanged()
                     .subscribe(onNext: { value in
                         cell.current = value
                         
@@ -548,6 +559,7 @@ extension MyVoteViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
+            guard selectedIndexPath != indexPath else { return }
             selectedIndexPath = indexPath
             self.tableView.reloadData()
         }
