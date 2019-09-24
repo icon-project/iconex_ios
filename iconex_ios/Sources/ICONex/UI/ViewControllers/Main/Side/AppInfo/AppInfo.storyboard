@@ -212,6 +212,7 @@
                     <connections>
                         <outlet property="currentVersionLabel" destination="0yg-Ql-KIT" id="4ec-O1-nf9"/>
                         <outlet property="developerButton" destination="TRs-Bk-K5E" id="4EV-J0-9tS"/>
+                        <outlet property="developerContainer" destination="Eps-Sf-g9p" id="Nz9-5z-egj"/>
                         <outlet property="developerLabel" destination="hwU-Du-2mn" id="7BF-2O-l1D"/>
                         <outlet property="latestVersionLabel" destination="NK3-Yy-48J" id="yv7-Pk-iwb"/>
                         <outlet property="navBar" destination="Phr-Yd-ed8" id="ocX-Gu-oaf"/>
@@ -390,11 +391,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hlf-Yo-6Iq" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hlf-Yo-6Iq" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="9dj-e6-f2u">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="9dj-e6-f2u">
                                 <rect key="frame" x="0.0" y="104" width="375" height="608"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>

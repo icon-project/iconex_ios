@@ -129,7 +129,6 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
-                var tmp = [String]()
                 DispatchQueue.main.async {
                     self.balanceLabel.alpha = 0
                     self.balanceActivityIndicator.startAnimating()
@@ -149,23 +148,7 @@ class MainViewController: BaseViewController, Floatable {
                 let list = Manager.balance.calculateExchangeTotalBalance()
                 mainViewModel.balaneList.onNext(list)
                 
-                // COIN
-                for type in Manager.wallet.types { // icx, eth....
-                    guard let wallet = DB.walletListBy(type: type) else { return }
-                    self.coinTokenList[type] = wallet
-//                    self.symbolList.append(type)
-                    tmp.append(type)
-                }
-                
-                // TOKEN
-                for token in self.tokenList {
-                    self.coinTokenList[token.symbol] = DB.walletListBy(token: token)
-//                    self.symbolList.append(token.symbol)
-                    tmp.append(token.symbol)
-                }
-                
-                self.symbolList = tmp
-                self.pageControl.rx.numberOfPages.onNext(self.isWalletMode ? self.walletList.count : self.symbolList.count)
+                self.setCoinList()
             }.disposed(by: disposeBag)
         
         mainViewModel.noti
@@ -326,6 +309,8 @@ class MainViewController: BaseViewController, Floatable {
         if selectedWallet != nil {
             attach()
         }
+        
+        setCoinList()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -360,6 +345,25 @@ class MainViewController: BaseViewController, Floatable {
             self.selectedWallet = nil
             self.detach()
         }
+    }
+    
+    func setCoinList() {
+        var tmp = [String]()
+        // COIN
+        for type in Manager.wallet.types { // icx, eth....
+            guard let wallet = DB.walletListBy(type: type) else { return }
+            self.coinTokenList[type] = wallet
+            tmp.append(type)
+        }
+        
+        // TOKEN
+        for token in self.tokenList {
+            self.coinTokenList[token.symbol] = DB.walletListBy(token: token)
+            tmp.append(token.symbol)
+        }
+        
+        self.symbolList = tmp
+        self.pageControl.rx.numberOfPages.onNext(self.isWalletMode ? self.walletList.count : self.symbolList.count)
     }
 }
 

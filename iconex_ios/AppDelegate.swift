@@ -14,6 +14,7 @@ import ICONKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var connect: ConnectViewController?
     var appVersion: String {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
     }
@@ -47,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Conn.redirect = conURL
             Conn.isConnect = true
         } catch {
-
+            Log("Error - \(error)")
         }
         
     }
@@ -172,22 +173,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func toMain() {
         self.window?.rootViewController?.dismiss(animated: false, completion: {
-//            self.connect = nil
+            self.connect = nil
         })
-//        if Conn.isConnect {
+        if let nav = self.window?.rootViewController, let _ = nav.children.first as? MainViewController {
+            
+        } else {
             let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
-//            self.window?.rootViewController = main
-        change(root: main)
-//        }
+            change(root: main)
+        }
     }
     
     func toConnect() {
         let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as! ConnectViewController
-        if let top = self.topViewController() {
-            Log("Present - \(top)")
-            top.present(connect, animated: true, completion: nil)
-        }
-        // app.topViewController()?.present(connect, animated: true, completion: nil)
+        self.connect = connect
+         app.topViewController()?.present(connect, animated: true, completion: nil)
     }
     
     func change(root: UIViewController) {

@@ -22,6 +22,7 @@ class AppInfoViewController: BaseViewController {
     @IBOutlet weak var developerLabel: UILabel!
     @IBOutlet weak var opensourceButton: UIButton!
     @IBOutlet weak var developerButton: UIButton!
+    @IBOutlet weak var developerContainer: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,5 +61,11 @@ class AppInfoViewController: BaseViewController {
             let opensource = UIStoryboard(name: "AppInfo", bundle: nil).instantiateViewController(withIdentifier: "License") as! LicenseViewController
             self.presentPanModal(opensource)
         }).disposed(by: disposeBag)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        developerContainer.isHidden = !UserDefaults.standard.bool(forKey: "Developer")
     }
 }

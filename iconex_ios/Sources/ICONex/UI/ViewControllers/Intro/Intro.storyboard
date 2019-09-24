@@ -25,6 +25,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eqk-Av-nwA">
                                 <rect key="frame" x="152.66666666666666" y="283.33333333333331" width="70" height="70"/>
                                 <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Iv5-Mz-2DD">
+                                        <rect key="frame" x="25" y="25" width="20" height="20"/>
+                                    </activityIndicatorView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uj4-aa-DfG">
                                         <rect key="frame" x="0.0" y="0.0" width="70" height="70"/>
                                     </imageView>
@@ -36,8 +39,10 @@
                                 <constraints>
                                     <constraint firstItem="BKf-rU-UFH" firstAttribute="leading" secondItem="Eqk-Av-nwA" secondAttribute="leading" id="3g4-TF-HVT"/>
                                     <constraint firstAttribute="trailing" secondItem="BKf-rU-UFH" secondAttribute="trailing" id="5BF-b7-oW8"/>
+                                    <constraint firstItem="Iv5-Mz-2DD" firstAttribute="centerX" secondItem="Eqk-Av-nwA" secondAttribute="centerX" id="Dpz-SN-Toq"/>
                                     <constraint firstAttribute="height" constant="70" id="Kpz-81-Obz"/>
                                     <constraint firstAttribute="width" constant="70" id="Nu9-uA-GuB"/>
+                                    <constraint firstItem="Iv5-Mz-2DD" firstAttribute="centerY" secondItem="Eqk-Av-nwA" secondAttribute="centerY" id="PFH-Ss-ATS"/>
                                     <constraint firstAttribute="bottom" secondItem="uj4-aa-DfG" secondAttribute="bottom" id="RUC-O6-9tu"/>
                                     <constraint firstItem="BKf-rU-UFH" firstAttribute="top" secondItem="Eqk-Av-nwA" secondAttribute="top" id="UIu-Yj-cwF"/>
                                     <constraint firstItem="uj4-aa-DfG" firstAttribute="top" secondItem="Eqk-Av-nwA" secondAttribute="top" id="Vsu-ns-gIh"/>
@@ -80,6 +85,7 @@
                     </view>
                     <connections>
                         <outlet property="iconImage" destination="uj4-aa-DfG" id="hlG-iP-DV3"/>
+                        <outlet property="indicator" destination="Iv5-Mz-2DD" id="hQS-cg-MNd"/>
                         <outlet property="logoLabel" destination="2he-8A-lfi" id="zvd-KF-WcF"/>
                         <outlet property="satellite" destination="BKf-rU-UFH" id="nnt-tY-vm1"/>
                     </connections>
