@@ -469,100 +469,7 @@
 "Password.Enter" = "비밀번호 입력";
 "Passcode.Count" = "총 %@개 지갑";
 
-
-
-
-
-// Legacy
-
-"AddressBook.Select" = "주소 선택";
-"AddressBook.AddressBook" = "주소록";
-"AddressBook.Recent" = "최근 거래";
-"AddressBook.MyWallet" = "내 지갑";
-"AddressBook.Add" = "주소록 추가";
-"AddressBook.Empty" = "등록된 주소록이 없습니다.";
-"AddressBook.QRReader" = "QR 코드 주소 입력";
-"AddressBook.InputName" = "주소록 이름 입력 (8자)";
-"AddressBook.NoRecentHistory" = "최근 발생한 거래가 없습니다.";
-"AddressBook.NoWallets" = "지갑이 없습니다.";
-
-"Transfer.Transfer" = "송금";
-"Transfer.Balance" = "보유 수량";
-"Transfer.TransferAmount" = "송금할 수량";
-"Transfer.Max" = "전액";
-"Transfer.RecvAddress" = "송금 받는 주소";
-"Transfer.SelectAddress" = "주소 선택";
-"Transfer.QR" = "QR코드 스캔";
-"Transfer.EnterAddress" = "주소 입력";
-"Transfer.EnterAmount" = "송금 수량 입력";
-"Transfer.GasLimit" = "가스 한도";
-"Transfer.EnterGasLimit" = "가스 한도 입력 (숫자)";
-"Transfer.GasPrice" = "가스 가격";
-"Transfer.Data" = "데이터 (선택 입력)";
-"Transfer.DataTitle" = "데이터";
-"Transfer.InputType" = "입력 타입";
-"Transfer.EnterData" = "데이터 입력";
-"Transfer.Data.Cancel" = "데이터 입력을 취소하시겠습니까?";
-"Transfer.EstimatedFee" = "예상 최대 수수료";
-"Transfer.EstimatedBalance" = "송금 후 예상 잔액";
-"Transfer.Gas.Desc_1" = "가스 한도는 Transaction 실행에 지불할 용의가 있는 가스의 최대량을 의미합니다. 가스 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 가스만 소진합니다. 즉, 가스한도는 최대치만 설정 가능하며 실제 소진되는 가스량은 유동적입니다.";
-"Transfer.Gas.Desc_2" = "가스 가격은 가스 한 단위의 가격으로서 1 Gwei = 0.000000001 ETH로 고정되어 있습니다.\n이더리움 채굴자는 블록을 생성할 때 자신에게 가장 이익이 되는 Transaction을 먼저 채택합니다. 이는 가스 가격을 높게 설정할수록, 또는 가스 한도가 높을수록 채택될 확률이 높음을 의미하며, 따라서 전송속도에 영향을 미치게 됩니다.";
-"Transfer.Gas.Desc_3" = "예상 최대 수수로는 Transaction 실행 시 발생할 수 있는 최대 수수료는 가스 한도와 가스 가격을 곱한 값입니다.\nTransaction이 발생했지만 채굴자에 의해 채택되지 않는 경우, 이미 사용된 수수료는 소진되고 해당 Transaction은 취소되니 적절한 수준의 가스 한도와 가스 가격을 설정해야 합니다.";
-"Transfer.Gas.Desc_4" = "수신자로부터 Data 입력을 요청 받지 않은 경우에는 입력하지 않고 송금할 수 있습니다.\nData를 입력해야만 거래가 실행되도록 설계되어 있는 경우, Data를 입력하지 않으면 송금이 불가하며 수수료만 차감될 수 있습니다.";
-"Transfer.TxFee" = "예상 최대 수수료";
-"Transfer.AfterBalance" = "송금 후 예상 잔액";
-"Transfer.EstimatedStep" = "Transaction 실행 시 발생할 수 있는 최대 수수료로서, Step 한도와 Step 가격을 곱한 값입니다.";
-"Transfer.Slow" = "느림";
-"Transfer.Fast" = "빠름";
-"Transfer.RequestComplete" = "송금 요청이 완료되었습니다.";
-"Transfer.Step.Limit" = "Step 한도";
-"Transfer.Step.LimitInfo.First" = "Step 한도는 Transaction 실행에 지불할 용의가 있는 Step의 최대량을 의미합니다.\n";
-"Transfer.Step.LimitInfo.Second" = "Step 한도를 아주 높게 설정하더라도 Transaction에 필요한 만큼의 Step만 소진합니다. 즉, Step 한도는 최대치만 설정 가능하며 실제 소진되는 Step량은 유동적입니다.";
-"Transfer.Step.Price" = "Step 가격";
-"Transfer.Step.PriceInfo.First" = "Step 한 단위 당 지불하는 가격입니다.";
-"Transfer.Step.PriceInfo.Second" = "Step 가격은 loop로 지불하며 1 loop는 0.000000000000000001(";
-"Transfer.Step.PriceInfo.Third" = ") ICX로 고정되어 있습니다. ICON 거래 수수료는 스마트 컨트랙트 기능 사용 횟수, 블록체인 데이터베이스 사용량, 거래 데이터 크기 등에 따라 부과됩니다.";
-"Transfer.Step.PriceInfo.Superscript" = "10-18";
-"Transfer.Data.Title" = "데이터 (선택 입력)";
-"Transfer.Data.Info" = "사용자가 원하는 데이터를 입력하여 송금할 수 있습니다.\n입력한 데이터의 크기에 따라 수수료가 부과됩니다.";
-"Transfer.Data.Input" = "입력";
-"Transfer.Data.View" = "보기";
-
-"Side.Create" = "지갑 만들기";
-"Side.Import" = "지갑 가져오기";
-"Side.BundleExport" = "지갑 묶어서 내보내기";
-"Side.ScreenLock" = "잠금 설정";
-"Side.Language" = "언어 설정";
-"Side.Version" = "앱 정보";
-"Side.Disclaimer" = "ICONex 이용 면책 조항";
-
-"LockScreen.Setting.Title" = "잠금 번호 설정";
-"LockScreen.Setting.Header" = "잠금 번호를 사용하시겠습니까?";
-"LockScreen.Setting.Desc1" = "잠금 번호 사용 시 ICONex를 실행할 때마다 잠금 번호를 확인하여, 내 지갑 정보가 노출되는 것을 방지합니다.\n잠금 번호를 잊은 경우, 지갑 비밀번호 확인 후 잠금 번호를 재설정 할 수 있습니다.";
-"LockScreen.Setting.useFunction" = "잠금 번호 사용";
-"LockScreen.Setting.ChangeCode" = "잠금 번호 변경";
-"LockScreen.Setting.ChangeCode.Title" = "잠금 번호 변경";
-"LockScreen.Setting.useBiometrics.TouchID" = "Touch ID로 잠금 해제";
-"LockScreen.Setting.useBiometrics.FaceID" = "Face ID로 잠금 해제";
-
-"LockScreen.Setting.Bio.Title.TouchID" = "Touch ID로 잠금 해제 안내";
-"LockScreen.Setting.Bio.Title.FaceID" = "Face ID로 잠금 해제 안내";
-"LockScreen.Setting.Bio.Header.TouchID" = "Touch ID로 잠금 해제를 하시겠습니까?";
-"LockScreen.Setting.Bio.Header.FaceID" = "Face ID로 잠금 해제를 하시겠습니까?";
-"LockScreen.Setting.Bio.Desc.TouchID" = "ICONex 앱을 실행할 때 Touch ID를 사용하여 빠르게 잠금 해제가 가능합니다.\n\n휴대폰에 등록되어 있는 모든 지문으로 잠금 해제를 할 수 있습니다. 다른 사람의 지문이 등록되어 있는지 확인해주세요.";
-"LockScreen.Setting.Bio.Desc.FaceID" = "ICONex 앱을 실행할 때 Face ID를 사용하여 빠르게 잠금 해제가 가능합니다.\n\n휴대폰에 등록되어 있는 모든 Face ID로 잠금 해제를 할 수 있습니다. 다른 사람의 Face ID가 등록되어 있는지 확인해주세요.";
-"LockScreen.Setting.Bio.Use.TouchID" = "Touch ID로 해제";
-"LockScreen.Setting.Bio.Use.FaceID" = "Face ID로 해제";
-
-"LockScreen.Setting.Passcode.Header" = "잠금 번호 6자리를 입력해주세요.";
-"LockScreen.Setting.Passcode.Header_2" = "다시 한 번 잠금 번호를 입력해주세요.";
-"LockScreen.Setting.Passcode.Header_Error" = "잠금 번호가 일치하지 않습니다.";
-
-"LockScreen.Setting.Passcode.Change.Current" = "현재 잠금 번호 6자리를 입력해주세요.";
-"LockScreen.Setting.Passcode.Change.New" = "새로 변경할 잠금 번호 6자리를 입력해주세요.";
-"LockScreen.Setting.Passcode.Change.Renew" = "다시 한 번 잠금 번호를 입력해주세요.";
-"LockScreen.Setting.Passcode.Change.Error" = "잠금 번호가 일치하지 않습니다.\n설정할 잠금 번호 입력부터 다시 시도해주세요.";
- 
+// MARK: Connect
 "Connect.Select.Title" = "지갑 선택";
 "Connect.Send.Developer.Title" = "네트워크 선택";
 "Connect.Send.Amount" = "송금할 코인 수량";
@@ -571,48 +478,17 @@
 "Connect.Send.StepPrice" = "Step 가격";
 "Connect.Send.EstimatedFee" = "예상 최대 수수료";
 "Connect.Send.EstimatedRemain" = "송금 후 예상 잔액";
+"Connect.Send.Transfer" = "송금";
 
+// MARK: Retry
 "Retry.NoNetwork" = "네트워크에 접속 할 수 없습니다.";
 "Retry.CheckConnectivity" = "연결 상태 확인 후 다시 시도해주세요.";
 "Retry.Retry" = "재시도";
 
-
-"Alert.CreateCancel" = "지갑 만들기를 취소하시겠습니까?";
-"Alert.DownloadKeystore" = "지갑 백업 파일은 어떠한 경우에도 외부 공유 되어서는 안됩니다.\n\n\"나의 iPhone\"에 저장한 파일은 앱 삭제 시 함께 삭제될 수 있으므로, 반드시 안전한 저장 장소에 보관해주세요.";
-"Alert.SkipDownload" = "지갑 백업 파일을 다운로드하지 않고 다음 단계로 진행하시겠습니까?";
-"Alert.PrivateKey" = "개인 키 만으로 지갑 실행, 송금이 가능하므로 어떠한 경우에도 외부 공유가 되어서는 안됩니다.";
-"Alert.Bundle.Import" = "묶음 지갑을 가져오는 경우, 이미 등록된 지갑은 제외하고 지갑들이 추가됩니다.\n묶음 지갑을 가져오시겠습니까?";
-"Alert.TotalAssetInfo" = "USD 환산금액이 표시되지 않은 토큰은 전체 자산 평가금액에서 제외됩니다. 평가금액은 참고용으로만 활용해주세요.";
+// MARK: Alert
 "Alert.Bundle.Import.Success" = "묶음 지갑을 가져왔습니다. 각 지갑들의 비밀번호는 묶음지갑의 비밀번호와 동일하며, 지갑 메뉴에서 변경 가능합니다.";
-"Alert.Bundle.Export.Instruction" = "묶어서 내보낼 때, 묶음 지갑 비밀번호를 새로 만들어야 합니다.\n기존 지갑들의 비밀번호는 묶음 지갑의 비밀번호로 바뀝니다.\n계속 진행하시겠습니까?";
-"Alert.Wallet.EditName" = "지갑 이름 변경";
-"Alert.Wallet.Remove" = "지갑을 삭제하시겠습니까?";
-"Alert.Wallet.RemainBalance" = "삭제하시려는 지갑에 잔액이 남아있습니다. 지갑 백업이 되어있지 않으면 잔액 복구가 불가능합니다.\n그래도 삭제하시겠습니까?";
-"Alert.Transaction.ID" = "거래 ID";
-"Alert.Transaction.IDCopy" = "복사";
-"Alert.Transaction.IDCopied" = "거래 ID가 복사되었습니다.";
-"Alert.Transaction.History" = "거래 정보 확인";
-"Alert.ICX.Transfer.Info" = "ICX 출금 신청 후 처리되지 않은 거래는 자동 취소되며 출금액과 수수료는 모두 복구됩니다.";
-"Alert.Token.Remove" = "을(를) 삭제하시겠습니까?";
-"Alert.Token.Edit.Cancel" = "토큰 정보 수정을 취소하시겠습니까?";
-"Alert.Token.Add.Cancel" = "토큰 추가를 취소하시겠습니까?";
 "Alert.Password.Changed" = "비밀번호가 변경되었습니다.";
-"Alert.AddressBook.Add" = "주소록 추가";
-"Alert.AddressBook.ETH" = "ETH 주소 입력";
-"Alert.AddressBook.ICX" = "ICX 주소 입력";
-"Alert.AddressBook.Edit" = "주소록 수정";
-"Alert.AddressBook.Remove" = "선택한 주소를 삭제하시겠습니까?";
-"Alert.Transfer.Title" = "수량과 주소를 한번 더 확인해주세요.";
-"Alert.Transfer.Amount" = "송금 수량";
-"Alert.Transfer.Fee" = "예상 최대 수수료";
-"Alert.Transfer.EstimatedFee" = "예상 최대 수수료";
-"Alert.Transfer.Address" = "받는 주소";
-"Alert.Transfer.Data.Delete" = "입력된 데이터를 삭제하시겠습니까?";
-"Alert.Bio.Fingerprint.Empty" = "Touch ID가 설정되어 있지 않습니다.\n휴대폰의 설정화면에서 Touch ID를 설정 후 다시 시도해주세요.";
-"Alert.Bio.passcodeNotSet" = "휴대폰의 설정화면에서 “암호 켜기” 설정 후 다시 시도해주세요.";
-"Alert.Wallet.Import.Cancel" = "지갑 가져오기를 취소하시겠습니까?";
 "Alert.Wallet.RequestPassword" = "지갑 비밀번호 입력";
-"Alert.Wallet.Remove.UnknownBalance" = "지갑의 보유금액을 확인 할 수 없습니다.\n정말 삭제하시겠습니까?";
 "Alert.Permission.Camera" = "카메라에 대한 권한을 허용하지 않으면 QR코드 스캔을 사용할 수 없습니다.\n(휴대폰의 설정>앱 권한 설정에서 카메라 권한을 허용할 수 있습니다.)";
 "Alert.Connect.Select.Cancel1" = "지갑 선택을 취소하시겠습니까?";
 "Alert.Connect.Select.Cancel2" = "이용 중이던 앱으로 돌아갑니다.";
@@ -624,6 +500,7 @@
 "Alert.Connect.Send.Completed1" = "송금 요청이 완료되었습니다.";
 "Alert.Connect.Send.Completed2" = "거래내역은 내 지갑 상세페이지 또는 ICON Tracker에서 조회 가능합니다.";
 
+// Error
 "Error.Swap.NoICX" = "스왑 가능한 ICX 토큰이 없습니다.";
 "Error.Swap.NoETH" = "스왑 수수료 지불을 위한 ETH 잔액이 없습니다. 입금 후 진행해 주세요.";
 "Error.CommonError" = "오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.";

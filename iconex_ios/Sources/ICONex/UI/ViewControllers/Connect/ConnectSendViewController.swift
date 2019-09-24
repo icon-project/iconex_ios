@@ -326,7 +326,7 @@ class ConnectSendViewController: BaseViewController {
         cancelButton.setTitle("Common.Cancel".localized, for: .normal)
         cancelButton.round02()
         
-        sendButton.setTitle("Transfer.Transfer".localized, for: .normal)
+        sendButton.setTitle("Connect.Send.Transfer".localized, for: .normal)
         sendButton.lightMintRounded()
     }
     
