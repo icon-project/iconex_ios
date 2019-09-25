@@ -73,6 +73,38 @@ class VoteListManager {
         }
     }
     
+    func loadPrepListwithRank(from: ICXWallet, _ completion: ((NewPRepListResponse?, [MyVoteEditInfo]?) -> Void)? = nil) {
+        DispatchQueue.global().async {
+            let preps = Manager.icon.getPreps(from: from, start: nil, end: nil)
+            self.preps = preps
+            
+            var myList: [MyVoteEditInfo]? = nil
+            
+            var new: NewPRepListResponse? = nil
+            
+            var rankedList = [NewPReps]()
+            
+            if let response = preps {
+                myList = [MyVoteEditInfo]()
+                
+                for prep in response.preps {
+                    let editInfo = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil)
+                    myList?.append(editInfo)
+                    
+                    let rankInfo = NewPReps(rank: rankedList.count + 1, name: prep.name, country: prep.country, city: prep.city, address: prep.address, stake: prep.stake, delegated: prep.delegated, grade: prep.grade, irep: prep.irep, irepUpdateBlockHeight: prep.irepUpdateBlockHeight, lastGenerateBlockHeight: prep.lastGenerateBlockHeight, totalBlocks: prep.totalBlocks, validatedBlocks: prep.validatedBlocks)
+                    
+                    rankedList.append(rankInfo)
+                }
+                
+                new = NewPRepListResponse(blockHeight: response.blockHeight, startRanking: response.startRanking, totalDelegated: response.totalDelegated, totalStake: response.totalStake, preps: rankedList)
+            }
+            
+            DispatchQueue.main.async {
+                completion?(new, myList)
+            }
+        }
+    }
+    
     func loadMyVotes(from: ICXWallet) -> (TotalDelegation?, [MyVoteEditInfo]?) {
         let result = Manager.icon.getDelegation(wallet: from)
         self.myVotes = result

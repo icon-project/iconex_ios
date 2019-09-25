@@ -13,6 +13,7 @@ import RxCocoa
 class PRepViewCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var statusView: UIView!
+    @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var prepNameLabel: UILabel!
     @IBOutlet weak var prepTypeLabel: UILabel!
     @IBOutlet weak var totalVoteLabel: UILabel!

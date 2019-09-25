@@ -12,7 +12,7 @@ import RxCocoa
 import PanModal
 
 protocol PRepSearchDelegate {
-    var prepList: [PRepListResponse.PReps] { get }
+    var prepList: [NewPReps] { get }
 }
 
 class PRepSearchViewController: BaseViewController {
@@ -23,12 +23,22 @@ class PRepSearchViewController: BaseViewController {
     
     var delegate: PRepSearchDelegate!
     
-    var searched = [PRepListResponse.PReps]()
+    var searched = [NewPReps]()
+    
+    var wallet: ICXWallet?
+    
+    var newList = [MyVoteEditInfo]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.view.endEditing(true)
     }
     
     override func initializeComponents() {
@@ -68,6 +78,15 @@ class PRepSearchViewController: BaseViewController {
                 self.bottomAnchor.constant = keyboardHeight
             }
         }).disposed(by: disposeBag)
+        
+        self.tableView.rx.didScroll
+            .subscribe { (_) in
+                self.view.endEditing(true)
+        }.disposed(by: disposeBag)
+        
+        voteViewModel.newList.subscribe(onNext: { (list) in
+            self.newList = list
+        }).disposed(by: disposeBag)
     }
 }
 
@@ -80,11 +99,50 @@ extension PRepSearchViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepSearchCell", for: indexPath) as! PRepViewCell
         let prep = searched[indexPath.row]
         cell.addButton.isHidden = false
+        
+        cell.rankLabel.size12(text: "\(prep.rank).", color: .gray77, weight: .semibold)
+        
+        let grade: String = {
+            switch prep.grade {
+            case .main: return "P-Rep"
+            case .sub: return "Sub P-Rep"
+            case .candidate: return "Candidate"
+            }
+        }()
+        cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
         cell.active = true
         
+        cell.addButton.isEnabled = self.newList.filter({ $0.address == prep.address }).count == 0
+        
+        cell.addButton.rx.tap.asControlEvent().subscribe { (_) in
+            let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil)
+            self.newList.append(myEdited)
+            
+            voteViewModel.newList.onNext(self.newList)
+            
+            guard let total = try? voteViewModel.voteCount.value() else { return }
+            app.window?.showVoteToast(count: total)
+            
+        }.disposed(by: cell.disposeBag)
+        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let wallet = self.wallet else { return }
+        let prepInfo = self.searched[indexPath.row]
+        
+        DispatchQueue.global().async {
+            guard let prep = Manager.icon.getPRepInfo(from: wallet, address: prepInfo.address) else { return }
+
+            DispatchQueue.main.async {
+                Alert.prepDetail(prepInfo: prep).show()
+            }
+        }
     }
 }
 

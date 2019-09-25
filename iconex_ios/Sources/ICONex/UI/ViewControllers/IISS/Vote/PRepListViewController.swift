@@ -25,7 +25,7 @@ class PRepListViewController: BaseViewController, Floatable {
     var selectedWallet: ICXWallet? { return wallet }
     
     private var refreshControl: UIRefreshControl = UIRefreshControl()
-    private var preps: PRepListResponse?
+    private var preps: NewPRepListResponse?
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,7 +77,7 @@ extension PRepListViewController {
         guard self.refreshControl.isRefreshing == false else { return }
         
         self.refreshControl.beginRefreshing()
-        Manager.voteList.loadPrepList(from: wallet) { preps, _ in
+        Manager.voteList.loadPrepListwithRank(from: wallet) { (preps, _) in
             self.refreshControl.endRefreshing()
             self.preps = preps
             self.tableView.reloadData()
@@ -161,7 +161,7 @@ extension PRepListViewController: UITableViewDelegate {
 }
 
 extension PRepListViewController: PRepSearchDelegate {
-    var prepList: [PRepListResponse.PReps] {
+    var prepList: [NewPReps] {
         if let list = preps?.preps {
             return list
         }

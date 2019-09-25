@@ -10,6 +10,35 @@ import UIKit
 import RxSwift
 import RxCocoa
 import PanModal
+import BigInt
+
+public enum OrderType {
+    case rankDescending, rankAscending, nameDescending, nameAscending
+}
+
+public struct NewPRepListResponse {
+    var blockHeight: BigUInt
+    var startRanking: BigUInt
+    var totalDelegated: BigUInt
+    var totalStake: BigUInt
+    var preps: [NewPReps]
+}
+
+public struct NewPReps {
+    var rank: Int
+    var name: String
+    var country: String
+    var city: String
+    var address: String
+    var stake: BigUInt
+    var delegated: BigUInt
+    var grade: PRepGrade
+    var irep: BigUInt
+    var irepUpdateBlockHeight: BigUInt
+    var lastGenerateBlockHeight: BigUInt?
+    var totalBlocks: BigUInt
+    var validatedBlocks: BigUInt
+}
 
 class PRepsViewController: BaseViewController, Floatable {
     @IBOutlet weak var firstItem: UIButton!
@@ -25,11 +54,19 @@ class PRepsViewController: BaseViewController, Floatable {
     var selectedWallet: ICXWallet? { return delegate.wallet }
     
     private var refreshControl: UIRefreshControl = UIRefreshControl()
-    private var preps: PRepListResponse?
+    private var preps: NewPRepListResponse?
     private var editInfoList: [MyVoteEditInfo]?
     
     private var myvoteList: [MyVoteEditInfo]?
     private var newList: [MyVoteEditInfo]?
+    
+    private var sortType: OrderType = .rankDescending {
+        willSet {
+            sectionHeader.orderType = newValue
+        }
+    }
+    
+    private var sectionHeader = PRepSectionHeaderView(frame: CGRect(x: 0, y: 0, width: .max, height: 36))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,9 +106,31 @@ class PRepsViewController: BaseViewController, Floatable {
         
         floater.button.rx.tap.subscribe(onNext: { [unowned self] in
             let search = UIStoryboard(name: "Vote", bundle: nil).instantiateViewController(withIdentifier: "PRepSearchView") as! PRepSearchViewController
+            search.wallet = self.selectedWallet
             search.delegate = self
             search.pop(self)
         }).disposed(by: disposeBag)
+        
+        sectionHeader.orderButton.rx.tap.asControlEvent().subscribe { (_) in
+            switch self.sortType {
+            case .rankDescending:
+                self.sortType = .rankAscending
+                self.loadData()
+                
+            case .rankAscending:
+                self.sortType = .nameDescending
+                self.loadData()
+                
+            case .nameDescending:
+                self.sortType = .nameAscending
+                self.loadData()
+                
+            case .nameAscending:
+                self.sortType = .rankDescending
+                self.loadData()
+            }
+            
+        }.disposed(by: disposeBag)
     }
     
     override func refresh() {
@@ -98,11 +157,62 @@ extension PRepsViewController {
         
         self.refreshControl.beginRefreshing()
         
-        Manager.voteList.loadPrepList(from: delegate.wallet) { preps, editInfoList in
+        Manager.voteList.loadPrepListwithRank(from: delegate.wallet) { preps, editInfoList in
             self.refreshControl.endRefreshing()
             
-            self.preps = preps
-            self.editInfoList = editInfoList
+            let orderedList: NewPRepListResponse? = {
+                guard var prepInfo = preps, let prepList = preps?.preps else { return preps }
+                
+                switch self.sortType {
+                case .rankDescending:
+                    return preps
+                case .rankAscending:
+                    prepInfo.preps.reverse()
+                    
+                    return prepInfo
+                    
+                case .nameDescending:
+                    let aa = prepList.sorted(by: { (lhs, rhs) -> Bool in
+                        return lhs.name < rhs.name
+                    })
+                    prepInfo.preps = aa
+                    return prepInfo
+                    
+                case .nameAscending:
+                    let aa = prepList.sorted(by: { (lhs, rhs) -> Bool in
+                        return lhs.name > rhs.name
+                    })
+                    prepInfo.preps = aa
+                    return prepInfo
+                    
+                }
+            }()
+            
+            let orderedEditList: [MyVoteEditInfo]? = {
+                guard var editInfo = editInfoList else { return editInfoList }
+                
+                switch self.sortType {
+                case .rankDescending:
+                    break
+                    
+                case .rankAscending:
+                    editInfo.reverse()
+                    
+                case .nameDescending:
+                    editInfo.sort(by: { (lhs, rhs) -> Bool in
+                        return lhs.prepName < rhs.prepName
+                    })
+                    
+                case .nameAscending:
+                    editInfo.sort(by: { (lhs, rhs) -> Bool in
+                        return lhs.prepName > rhs.prepName
+                    })
+                }
+                return editInfo
+            }()
+        
+            self.preps = orderedList
+            self.editInfoList = orderedEditList
             self.tableView.reloadData()
         }
     }
@@ -124,9 +234,13 @@ extension PRepsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepViewCell", for: indexPath) as! PRepViewCell
         cell.addButton.isHidden = false
-        let prep = preps!.preps[indexPath.row]
+        
+        guard let prepList = preps?.preps else { return cell }
+        let prep = prepList[indexPath.row]
         
         guard let checker = self.myvoteList?.filter({ $0.address == prep.address }).count else { return cell }
+        
+        cell.rankLabel.size12(text: "\(prep.rank).", color: .gray77, weight: .semibold)
         
         let grade: String = {
             switch prep.grade {
@@ -201,51 +315,12 @@ extension PRepsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sectionHeader = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 36))
-        sectionHeader.backgroundColor = .gray250
-        let orderButton = UIButton(type: .custom)
-        orderButton.setTitle("Rank ↓ / Name", for: .normal)
-        orderButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
-        orderButton.setTitleColor(.gray77, for: .normal)
-        orderButton.translatesAutoresizingMaskIntoConstraints = false
-        sectionHeader.addSubview(orderButton)
-        orderButton.leadingAnchor.constraint(equalTo: sectionHeader.leadingAnchor, constant: 20).isActive = true
-        orderButton.centerYAnchor.constraint(equalTo: sectionHeader.centerYAnchor, constant: 0).isActive = true
-        
-        let resetButton = UIButton(type: .custom)
-        resetButton.setTitle("Total Votes", for: .normal)
-        resetButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
-        resetButton.setTitleColor(.gray128, for: .normal)
-        resetButton.translatesAutoresizingMaskIntoConstraints = false
-        sectionHeader.addSubview(resetButton)
-        resetButton.trailingAnchor.constraint(equalTo: sectionHeader.trailingAnchor, constant: -20).isActive = true
-        resetButton.centerYAnchor.constraint(equalTo: sectionHeader.centerYAnchor).isActive = true
-        
-        
-        let upperLine = UIView()
-        upperLine.backgroundColor = .gray230
-        upperLine.translatesAutoresizingMaskIntoConstraints = false
-        sectionHeader.addSubview(upperLine)
-        upperLine.leadingAnchor.constraint(equalTo: sectionHeader.leadingAnchor).isActive = true
-        upperLine.trailingAnchor.constraint(equalTo: sectionHeader.trailingAnchor).isActive = true
-        upperLine.topAnchor.constraint(equalTo: sectionHeader.topAnchor).isActive = true
-        upperLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        let underLine = UIView()
-        underLine.backgroundColor = .gray230
-        underLine.translatesAutoresizingMaskIntoConstraints = false
-        sectionHeader.addSubview(underLine)
-        underLine.leadingAnchor.constraint(equalTo: sectionHeader.leadingAnchor).isActive = true
-        underLine.trailingAnchor.constraint(equalTo: sectionHeader.trailingAnchor).isActive = true
-        underLine.bottomAnchor.constraint(equalTo: sectionHeader.bottomAnchor).isActive = true
-        underLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-        
-        
         return sectionHeader
     }
 }
 
 extension PRepsViewController: PRepSearchDelegate {
-    var prepList: [PRepListResponse.PReps] {
+    var prepList: [NewPReps] {
         if let list = preps?.preps {
             return list
         }

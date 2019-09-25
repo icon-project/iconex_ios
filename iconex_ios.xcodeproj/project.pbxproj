@@ -87,6 +87,8 @@
 		BF7FC19D2316B2070095F1D5 /* IXSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF7FC19C2316B2070095F1D5 /* IXSectionHeader.swift */; };
 		BF7FC19F2316B2170095F1D5 /* IXSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF7FC19E2316B2170095F1D5 /* IXSectionHeader.xib */; };
 		BF8250D922F43C3C00B0DCAE /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */; };
+		BF89C549233AE77200182D99 /* PRepSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF89C548233AE77200182D99 /* PRepSectionHeaderView.xib */; };
+		BF89C54B233AE8C700182D99 /* PRepSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF89C54A233AE8C700182D99 /* PRepSectionHeaderView.swift */; };
 		BF8AF6B3231C9B5B0071C7F9 /* SendETHViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */; };
 		BFA5C3CD2332227600664A11 /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA5C3CC2332227600664A11 /* ResetPasswordViewController.swift */; };
 		BFC9A49C23141498002E35F5 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC9A49323141498002E35F5 /* UIColor+Extension.swift */; };
@@ -284,6 +286,8 @@
 		BF7FC19C2316B2070095F1D5 /* IXSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXSectionHeader.swift; sourceTree = "<group>"; };
 		BF7FC19E2316B2170095F1D5 /* IXSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = IXSectionHeader.xib; sourceTree = "<group>"; };
 		BF8250D822F43C3C00B0DCAE /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		BF89C548233AE77200182D99 /* PRepSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepSectionHeaderView.xib; sourceTree = "<group>"; };
+		BF89C54A233AE8C700182D99 /* PRepSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepSectionHeaderView.swift; sourceTree = "<group>"; };
 		BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendETHViewController.swift; sourceTree = "<group>"; };
 		BFA5C3CC2332227600664A11 /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
 		BFC9A49323141498002E35F5 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -884,6 +888,8 @@
 				D49470A72318F8E000236288 /* PRepListViewController.swift */,
 				D4DACDF22314259900CC8EA8 /* PRepSearchViewController.swift */,
 				BF10BDBE23266F9A00DA2751 /* VoteViewModel.swift */,
+				BF89C548233AE77200182D99 /* PRepSectionHeaderView.xib */,
+				BF89C54A233AE8C700182D99 /* PRepSectionHeaderView.swift */,
 			);
 			path = Vote;
 			sourceTree = "<group>";
@@ -1159,6 +1165,7 @@
 				BF78B36222FCFCD4002E34B3 /* CreateWallet.storyboard in Resources */,
 				D42FF8DA22F182E900268C29 /* Passcode.storyboard in Resources */,
 				BF0902842314B6AE00B177F4 /* IXInputBox.xib in Resources */,
+				BF89C549233AE77200182D99 /* PRepSectionHeaderView.xib in Resources */,
 				BF6EFECA22FA5174003B6AF3 /* SendAlertView.xib in Resources */,
 				BF4F6F732318A57D0098D303 /* ManageWallet.storyboard in Resources */,
 				D4003BF120E4DD080003F4CB /* NanumSquareRegular.ttf in Resources */,
@@ -1361,6 +1368,7 @@
 				D46E775C231BFB8B00AF332D /* DisclaimerViewController.swift in Sources */,
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
 				D4757455230E8FEA00C46FFE /* MyVoteGeneralCell.swift in Sources */,
+				BF89C54B233AE8C700182D99 /* PRepSectionHeaderView.swift in Sources */,
 				D4757452230E8EBA00C46FFE /* MyVoteViewController.swift in Sources */,
 				D4EB6E4323237DD20051F38B /* Votes.swift in Sources */,
 				D4143E042133BE79004212A9 /* Errors.swift in Sources */,
