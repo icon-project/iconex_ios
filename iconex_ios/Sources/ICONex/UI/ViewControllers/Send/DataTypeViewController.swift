@@ -26,7 +26,7 @@ class DataTypeViewController: UIViewController {
     
     var disposeBag = DisposeBag()
     
-    var handler: ((_ data: String, _ dataType: InputType) -> Void)?
+    var handler: ((_ data: String?, _ dataType: InputType) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()

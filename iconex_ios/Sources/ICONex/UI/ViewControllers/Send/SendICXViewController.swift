@@ -59,23 +59,7 @@ class SendICXViewController: BaseViewController {
     var privateKey: PrivateKey?
     var toAddress: String? = nil
     
-    var data: String? = nil {
-        willSet {
-            guard let value = newValue else { return }
-            
-            if !value.isEmpty {
-                self.stepLimit = 1000000
-                setFooterBox()
-                self.dataButton.isEnabled = false
-                self.viewDataButton.isHidden = false
-                self.dataInputBox.set(state: .readOnly)
-            } else {
-                self.stepLimit = 100000
-                self.dataButton.isEnabled = true
-                self.viewDataButton.isHidden = true
-            }
-        }
-    }
+    var data: String? = nil
     
     var dataType: InputType = .utf8
     
@@ -90,7 +74,7 @@ class SendICXViewController: BaseViewController {
         }
         
         if self.token != nil {
-            self.stepLimit = 1000000
+            self.stepLimit = 200000
             self.dataInputBox.isHidden = true
             self.dataButton.isHidden = true
         }
@@ -279,8 +263,23 @@ class SendICXViewController: BaseViewController {
                 dataVC.handler = { data, dataType in
                     self.data = data
                     self.dataType = dataType
-                    self.dataInputBox.text = data
+                    self.dataInputBox.text = data ?? ""
                     self.dataInputBox.textField.sendActions(for: .valueChanged)
+                    
+                    guard data != nil else {
+                        self.stepLimit = 100000
+                        self.setFooterBox()
+                        self.dataButton.isEnabled = true
+                        self.viewDataButton.isHidden = true
+                        
+                        return
+                    }
+                    
+                    self.stepLimit = self.calcaulateStepLimit()
+                    self.setFooterBox()
+                    self.dataButton.isEnabled = false
+                    self.viewDataButton.isHidden = false
+                    self.dataInputBox.set(state: .readOnly)
                 }
                 
                 self.present(dataVC, animated: true, completion: nil)
@@ -298,8 +297,23 @@ class SendICXViewController: BaseViewController {
                 inputDataVC.type = self.dataType
                 inputDataVC.completeHandler = { dataString, _ in
                     self.data = dataString
-                    self.dataInputBox.text = dataString
+                    self.dataInputBox.text = dataString ?? ""
                     self.dataInputBox.textField.sendActions(for: .valueChanged)
+                    
+                    guard dataString != nil else {
+                        self.stepLimit = 100000
+                        self.dataButton.isEnabled = true
+                        self.viewDataButton.isHidden = true
+                        
+                        self.setFooterBox()
+                        return
+                    }
+                    
+                    self.stepLimit = self.calcaulateStepLimit()
+                    self.setFooterBox()
+                    self.dataButton.isEnabled = false
+                    self.viewDataButton.isHidden = false
+                    self.dataInputBox.set(state: .readOnly)
                 }
                 
                 self.presentPanModal(inputDataVC)
@@ -526,3 +540,29 @@ class SendICXViewController: BaseViewController {
         feePriceLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
     }
 }
+
+extension SendICXViewController {
+    func calcaulateStepLimit() -> BigUInt {
+        guard let defaultStepCost = Manager.icon.stepCost?.defaultValue, let defaultStepLimit = defaultStepCost.hexToBigUInt() else { return 0 }
+        var result: BigUInt = 0
+        var counter: BigUInt = 0
+        
+        guard let dataString = self.data else { return result }
+        guard let inputCostString = Manager.icon.stepCost?.input, let inputCost = inputCostString.hexToBigUInt() else { return result }
+        
+        if self.dataType == .hex {
+            counter = BigUInt(dataString.bytes.count + 2)
+        } else {
+            guard let hexString = dataString.hexEncodedString() else { return result }
+            counter = BigUInt(hexString.bytes.count + 2)
+        }
+        
+        let dumped = inputCost * counter
+        
+        result += defaultStepLimit + dumped
+        
+        return result
+    }
+}
+
+

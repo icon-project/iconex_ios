@@ -29,7 +29,7 @@ class InputDataViewController: BaseViewController {
     var isViewMode: Bool = false
     var isEditingMode: Bool = false
     
-    var completeHandler: ((_ data: String, _ dataType: InputType) -> Void)?
+    var completeHandler: ((_ data: String?, _ dataType: InputType) -> Void)?
     
     var delegate: SendDelegate!
     
@@ -143,7 +143,7 @@ class InputDataViewController: BaseViewController {
                     Alert.basic(title: "Send.InputData.Alert.Delete".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                         self.textView.text = ""
                         if let handler = self.completeHandler {
-                            handler("", self.type)
+                            handler(nil, self.type)
                         }
                         self.dismiss(animated: true, completion: nil)
                     }).show()

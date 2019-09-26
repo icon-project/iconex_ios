@@ -53,7 +53,7 @@ class SendETHViewController: BaseViewController {
     
     @IBOutlet weak var dataInputBox: IXInputBox!
     @IBOutlet weak var inputDataButton: UIButton!
-    @IBOutlet weak var viewDataButton: UIButton!
+    @IBOutlet weak var showDataButton: UIButton!
     
     @IBOutlet weak var footerBox: UIView!
     @IBOutlet weak var estimatedMaxFeeTitleLabel: UILabel!
@@ -78,19 +78,22 @@ class SendETHViewController: BaseViewController {
     
     var data: String? = nil {
         willSet {
-            guard let value = newValue else { return }
-            
-            if !value.isEmpty {
+            if newValue != nil {
+                self.gasLimit = 55000
+                self.gasLimitInputBox.text = "55000"
+                self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
+                
                 self.inputDataButton.isEnabled = false
-                self.viewDataButton.isHidden = false
+                self.showDataButton.isHidden = false
                 self.dataInputBox.set(state: .readOnly)
+                
             } else {
                 self.gasLimit = 21000
                 self.gasLimitInputBox.text = "21000"
                 self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
                 
                 self.inputDataButton.isEnabled = true
-                self.viewDataButton.isHidden = true
+                self.showDataButton.isHidden = true
             }
             
             self.estimatedGas = self.gasLimit * BigUInt(self.gasPrice)
@@ -197,9 +200,9 @@ class SendETHViewController: BaseViewController {
         
         dataInputBox.set(inputType: .normal)
         dataInputBox.set(state: .normal, placeholder: "Send.InputBox.Data".localized)
-        viewDataButton.isHidden = true
-        viewDataButton.roundGray230()
-        viewDataButton.setTitle("Send.InputBox.Data.View".localized, for: .normal)
+        showDataButton.isHidden = true
+        showDataButton.roundGray230()
+        showDataButton.setTitle("Send.InputBox.Data.View".localized, for: .normal)
         
         footerBox.corner(8)
         footerBox.border(0.5, .gray230)
@@ -228,7 +231,6 @@ class SendETHViewController: BaseViewController {
     
     private func setupBind() {
         guard let wallet = self.walletInfo else { return }
-        
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
                 self.amountInputBox.textField.becomeFirstResponder()
@@ -309,7 +311,7 @@ class SendETHViewController: BaseViewController {
                 inputDataVC.type = .hex
                 inputDataVC.completeHandler = { data, _ in
                     self.data = data
-                    self.dataInputBox.text = data
+                    self.dataInputBox.text = data ?? ""
                     self.dataInputBox.textField.sendActions(for: .valueChanged)
                 }
                 
@@ -317,7 +319,7 @@ class SendETHViewController: BaseViewController {
                 
             }.disposed(by: disposeBag)
         
-        viewDataButton.rx.tap.asControlEvent()
+        showDataButton.rx.tap
             .subscribe { (_) in
                 guard let dataValue = self.data else { return }
                 
@@ -329,12 +331,12 @@ class SendETHViewController: BaseViewController {
                 inputDataVC.isViewMode = true
                 inputDataVC.completeHandler = { data, _ in
                     self.data = data
-                    self.dataInputBox.text = data
+                    self.dataInputBox.text = data ?? ""
                     self.dataInputBox.textField.sendActions(for: .valueChanged)
                 }
                 
                 self.presentPanModal(inputDataVC)
-        }.disposed(by: disposeBag)
+            }.disposed(by: disposeBag)
         
         amountInputBox.set { [unowned self] (value) -> String? in
             guard !value.isEmpty else { return nil }
