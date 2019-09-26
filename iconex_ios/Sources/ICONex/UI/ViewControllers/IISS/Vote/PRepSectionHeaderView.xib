@@ -24,7 +24,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Xoc-VJ-31C">
-                    <rect key="frame" x="11" y="11" width="70" height="14.333333333333336"/>
+                    <rect key="frame" x="20" y="11" width="70" height="14.333333333333336"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xc1-9D-C1s">
                             <rect key="frame" x="0.0" y="0.0" width="31" height="14.333333333333334"/>
@@ -47,7 +47,7 @@
                     </subviews>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jjy-h4-JTc">
-                    <rect key="frame" x="0.0" y="0.0" width="91" height="36"/>
+                    <rect key="frame" x="0.0" y="0.0" width="100" height="36"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fXk-K6-o3z">
                     <rect key="frame" x="309" y="3" width="46" height="30"/>
@@ -79,7 +79,7 @@
                 <constraint firstItem="LPn-Oq-DDd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Ocq-QH-mEi"/>
                 <constraint firstItem="jjy-h4-JTc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="USy-9s-Aqu"/>
                 <constraint firstAttribute="trailing" secondItem="fXk-K6-o3z" secondAttribute="trailing" constant="20" id="azT-Kx-JNs"/>
-                <constraint firstItem="Xoc-VJ-31C" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="11" id="cao-Sn-XkA"/>
+                <constraint firstItem="Xoc-VJ-31C" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="cao-Sn-XkA"/>
                 <constraint firstItem="LPn-Oq-DDd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="et1-ay-7F8"/>
                 <constraint firstItem="Jzt-KM-fTK" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fnO-en-ftS"/>
                 <constraint firstAttribute="trailing" secondItem="Jzt-KM-fTK" secondAttribute="trailing" id="oek-bR-Y1K"/>
