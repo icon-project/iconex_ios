@@ -505,18 +505,15 @@ class AlertViewController: BaseViewController {
                     
                     let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                     
-                    if self.isICX {
-                        qrCodeReader.set(mode: .icx, handler: { (address) in
-                            addressView.addressInputBox.text = address
-                            addressView.addressInputBox.textField.sendActions(for: .valueChanged)
-                        })
-                        
-                    } else {
-                        qrCodeReader.set(mode: .eth, handler: { (address) in
-                            addressView.addressInputBox.text = address
-                            addressView.addressInputBox.textField.sendActions(for: .valueChanged)
-                        })
-                    }
+                    let readerMode: QRReaderMode = {
+                        return self.isICX ? .icx : .eth
+                    }()
+                    
+                    qrCodeReader.set(mode: readerMode, handler: { (address) in
+                        addressView.addressInputBox.text = address
+                        addressView.addressInputBox.set(state: .normal)
+                        addressView.addressInputBox.textField.sendActions(for: .valueChanged)
+                    })
                     
                     app.topViewController()?.present(qrCodeReader, animated: true, completion: nil)
                     
