@@ -360,6 +360,21 @@ extension MyVoteViewController: UITableViewDataSource {
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
                 cell.prepName.size12(text: info.prepName, color: .gray77, weight: .semibold)
+                
+                let grade: String = {
+                    switch info.grade {
+                    case .main: return "P-Rep"
+                    case .sub: return "Sub P-Rep"
+                    case .candidate: return "Candidate"
+                    }
+                }()
+                
+                if let edited = info.editedDelegate, edited != info.myDelegate {
+                    cell.prepInfo.size12(text: "(\(grade)/Voted/Edited)", color: .gray77, weight: .light)
+                } else {
+                    cell.prepInfo.size12(text: "(\(grade)/Voted)", color: .gray77, weight: .light)
+                }
+                
                 cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
                 
                 cell.addButton.isHighlighted = false
@@ -482,6 +497,16 @@ extension MyVoteViewController: UITableViewDataSource {
             } else {
                 let info = self.newList[indexPath.row - myVoteList.count]
                 cell.prepName.size12(text: info.prepName, color: .gray77, weight: .semibold)
+                
+                let grade: String = {
+                    switch info.grade {
+                    case .main: return "P-Rep"
+                    case .sub: return "Sub P-Rep"
+                    case .candidate: return "Candidate"
+                    }
+                }()
+                
+                cell.prepInfo.size12(text: "(\(grade))", color: .gray77, weight: .light)
                 cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
                 
                 cell.addButton.isHighlighted = true
@@ -549,7 +574,6 @@ extension MyVoteViewController: UITableViewDataSource {
                         cell.myVotesField.text = currentICXValue
                         
                         this.editedDelegate = rateValue
-                        print("Slider CHeck \(rateValue)")
                         
                         let nowPercent = (rateValueNum / stakedDecimal).floatValue
                         this.percent = nowPercent

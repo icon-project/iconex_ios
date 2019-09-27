@@ -14,6 +14,7 @@ class MyVoteDelegateCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dotView: UIView!
     @IBOutlet weak var prepName: UILabel!
+    @IBOutlet weak var prepInfo: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var totalVotedValue: UILabel!
     

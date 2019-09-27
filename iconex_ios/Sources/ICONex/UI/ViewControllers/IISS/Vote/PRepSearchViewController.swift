@@ -117,7 +117,7 @@ extension PRepSearchViewController: UITableViewDataSource {
         cell.addButton.isEnabled = self.newList.filter({ $0.address == prep.address }).count == 0
         
         cell.addButton.rx.tap.asControlEvent().subscribe { (_) in
-            let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil)
+            let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil, grade: prep.grade)
             self.newList.append(myEdited)
             
             voteViewModel.newList.onNext(self.newList)
