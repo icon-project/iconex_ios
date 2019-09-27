@@ -24,6 +24,7 @@ class SendICXViewController: BaseViewController {
     @IBOutlet weak var priceLabel: UILabel!
     
     @IBOutlet weak var amountInputBox: IXInputBox!
+    @IBOutlet weak var usdLabel: UILabel!
     
     @IBOutlet weak var plus10Button: UIButton!
     @IBOutlet weak var plus100Button: UIButton!
@@ -329,6 +330,7 @@ class SendICXViewController: BaseViewController {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: token.decimal, fixed: true) ?? 0
                 
                 if amount + fee > self.balance {
+                    self.usdLabel.isHidden = true
                     return "Send.InputBox.Amount.Error".localized
                 }
                 return nil
@@ -337,6 +339,7 @@ class SendICXViewController: BaseViewController {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: true) ?? 0
                 
                 if amount + fee > self.balance {
+                    self.usdLabel.isHidden = true
                     return "Send.InputBox.Amount.Error".localized
                 }
                 
@@ -344,6 +347,28 @@ class SendICXViewController: BaseViewController {
             }
             
         }
+        
+        amountInputBox.textField.rx.text.orEmpty.subscribe(onNext: { (value) in
+            let unit: String = {
+                if let token = self.token {
+                    return "\(token.symbol.lowercased())usd"
+                } else {
+                    return "icxusd"
+                }
+            }()
+            
+            let bigValue = Tool.stringToBigUInt(inputText: value) ?? 0
+            
+            let result = "$ " + Tool.calculatePrice(currency: unit, balance: bigValue)
+            
+            self.usdLabel.rx.text.onNext(result)
+            
+        }).disposed(by: disposeBag)
+        
+        amountInputBox.textField.rx.controlEvent(.editingDidBegin).subscribe(onNext: { [unowned self] in
+            self.usdLabel.isHidden = false
+        }).disposed(by: disposeBag)
+        
         
         // address
         addressInputBox.set { (address) -> String? in
