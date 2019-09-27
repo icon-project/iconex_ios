@@ -61,8 +61,11 @@ class MyVoteViewController: BaseViewController {
             
             self.delegate.stepLimit = stepLimitLabel.text ?? ""
             self.delegate.maxFee = estimatedFeeLabel.text ?? ""
+            self.delegate.estimatedStep = newValue
         }
     }
+    
+    private var isDecending: Bool = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,6 +161,20 @@ class MyVoteViewController: BaseViewController {
         underLine.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         
         
+        orderButton.rx.tap.asControlEvent()
+            .subscribe { (_) in
+                self.isDecending.toggle()
+                
+                if self.isDecending {
+                    orderButton.setTitle("My Votes ↓", for: .normal)
+                } else {
+                    orderButton.setTitle("My Votes ↑", for: .normal)
+                }
+                
+                self.tableView.reloadData()
+                
+        }.disposed(by: disposeBag)
+        
         resetButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 Alert.basic(title: "MyVoteView.Alert.Reset".localized, isOnlyOneButton: false, confirmAction: {
@@ -252,6 +269,19 @@ extension MyVoteViewController {
             if let votes = myVotes {
                 self.myVoteList.append(contentsOf: votes)
             }
+            
+            self.myVoteList.sort(by: { (lhs, rhs) -> Bool in
+                guard let left = lhs.myDelegate, let right = rhs.myDelegate else {
+                    return lhs.prepName > rhs.prepName
+                }
+            
+                if self.isDecending {
+                    return left > right
+                } else {
+                    return left < right
+                }
+                
+            })
             
             voteViewModel.available.onNext(tDelegation?.votingPower ?? 0)
             voteViewModel.myList.onNext(self.myVoteList)

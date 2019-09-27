@@ -17,7 +17,7 @@ protocol VoteMainDelegate {
     func headerSelected(index: Int)
     var stepLimit: String { get set }
     var maxFee: String { get set }
-    
+    var estimatedStep: BigUInt { get set }
 }
 
 class VoteMainViewController: BaseViewController, VoteMainDelegate {
@@ -33,7 +33,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     
     var stepLimit: String = ""
     var maxFee: String = ""
-    
+    var estimatedStep: BigUInt = 0
     
     var isPreps: Bool = false
     
@@ -108,6 +108,14 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
             .subscribe { (_) in
                 guard let pk = self.key else { return }
                 
+                let balance = Manager.balance.getBalance(wallet: self.wallet) ?? 0
+                let step = self.estimatedStep.convert(unit: .gLoop)
+                
+                guard balance >= step else {
+                    Alert.basic(title: "MyVoteView.Alert.InsufficientFee".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
+                
                 var delList = [[String: Any]]()
                 
                 for i in self.votedList {
@@ -136,7 +144,8 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     if isSuccess {
                         app.window?.showToast(message: "MyVoteView.Toast".localized)
                     } else {
-                        app.window?.showToast(message: txHash ?? "Common.Error".localized)
+                        Log(txHash, .error)
+                        app.window?.showToast(message: "Common.Error".localized)
                     }
                     
                 }).show()
@@ -152,7 +161,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     return $0.editedDelegate ?? 0
                 }
             }.reduce(0, +)
-            Log("voted \(votedListPower)")
+//            Log("voted \(votedListPower)")
             
             let votingListPower: BigUInt = self.votingList.map {
                 if $0.editedDelegate == nil {
@@ -161,14 +170,14 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     return $0.editedDelegate ?? 0
                 }
                 }.reduce(0, +)
-            Log("voting \(votingListPower)")
+//            Log("voting \(votingListPower)")
             
             let power = Manager.voteList.myVotes?.votingPower ?? 0
             let delegated = Manager.voteList.myVotes?.totalDelegated ?? 0
             let total = power + delegated
             let plus = votedListPower + votingListPower
             
-            Log("Power \(power) delegated \(delegated) total \(total) plus \(plus)")
+//            Log("Power \(power) delegated \(delegated) total \(total) plus \(plus)")
             
             guard plus <= total else { return voteViewModel.available.onNext(0) }
             
