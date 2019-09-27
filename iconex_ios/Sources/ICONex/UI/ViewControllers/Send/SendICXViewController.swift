@@ -324,12 +324,12 @@ class SendICXViewController: BaseViewController {
         amountInputBox.set { [unowned self] (value) -> String? in
             guard !value.isEmpty else { return nil }
             
-            let fee = self.stepLimit * self.stepPrice
+//            let fee = self.stepLimit * self.stepPrice
             
             if let token = self.token {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: token.decimal, fixed: true) ?? 0
                 
-                if amount + fee > self.balance {
+                if amount > self.balance {
                     self.usdLabel.isHidden = true
                     return "Send.InputBox.Amount.Error".localized
                 }
@@ -338,7 +338,7 @@ class SendICXViewController: BaseViewController {
             } else {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: true) ?? 0
                 
-                if amount + fee > self.balance {
+                if amount > self.balance {
                     self.usdLabel.isHidden = true
                     return "Send.InputBox.Amount.Error".localized
                 }
@@ -449,16 +449,8 @@ class SendICXViewController: BaseViewController {
                     }
                 }()
                 
-                let fee = self.stepLimit * self.stepPrice
-                
-                if self.token == nil {
-                    if amount + fee > self.balance {
-                        return Observable.just(false)
-                    }
-                } else {
-                    if amount > self.balance {
-                        return Observable.just(false)
-                    }
+                if amount > self.balance {
+                    return Observable.just(false)
                 }
                 
                 return Observable.just(true)
@@ -471,7 +463,15 @@ class SendICXViewController: BaseViewController {
                 
                 let estimatedStep: BigUInt = self.stepLimit * self.stepPrice
                 
-                if self.balance < estimatedStep {
+                let amount: BigUInt = {
+                    if let token = self.token {
+                        return Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
+                    } else {
+                        return Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
+                    }
+                }()
+                
+                if amount + estimatedStep > self.balance {
                     Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
                     return
                 }
@@ -483,8 +483,6 @@ class SendICXViewController: BaseViewController {
                 
                 let sendInfo: SendInfo = {
                     if let token = self.token {
-                        let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
-                        
                         let callTx = CallTransaction()
                             .from(wallet.address)
                             .to(token.contract)
@@ -496,8 +494,6 @@ class SendICXViewController: BaseViewController {
                         return SendInfo(transaction: callTx, privateKey: pk, stepLimitPrice: stepLimitPrice, estimatedFee: estimatedFee, estimatedUSD: estimatedUSD, token: token, tokenAmount: amount, tokenToAddress: toAddress)
                         
                     } else {
-                        let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
-                        
                         let tx: Transaction = {
                             if let dataString = self.data {
                                 let messageTx = MessageTransaction()
