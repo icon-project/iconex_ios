@@ -50,6 +50,7 @@ class MainViewController: BaseViewController, Floatable {
     @IBOutlet weak var activityControl: UIActivityIndicatorView!
     
     @IBOutlet weak var balanceActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var votedActivityIndicator: UIActivityIndicatorView!
     
     private var startPoint: CGPoint = .zero
     private var beforePoint: CGPoint = .zero
@@ -59,13 +60,7 @@ class MainViewController: BaseViewController, Floatable {
     
     private var horizontalVelocity: CGPoint = .zero
     
-    var walletList = [BaseWalletConvertible]() {
-        didSet {
-//            contentTop.constant = 0
-//            backHeight.constant = Header_Height
-//            contentBottom.constant = 0
-        }
-    }
+    var walletList = [BaseWalletConvertible]()
     
     var selectedWallet: ICXWallet?
     
@@ -131,7 +126,9 @@ class MainViewController: BaseViewController, Floatable {
             .subscribe { (_) in
                 DispatchQueue.main.async {
                     self.balanceLabel.alpha = 0
+                    self.powerLabel.alpha = 0
                     self.balanceActivityIndicator.startAnimating()
+                    self.votedActivityIndicator.startAnimating()
                 }
                 
                 self.walletList = Manager.wallet.walletList
@@ -150,6 +147,16 @@ class MainViewController: BaseViewController, Floatable {
                 
                 self.setCoinList()
             }.disposed(by: disposeBag)
+        
+        mainViewModel.totalVotedPower
+            .do(onNext: { (_) in
+                DispatchQueue.main.async {
+                    self.powerLabel.alpha = 1
+                    self.votedActivityIndicator.stopAnimating()
+                }
+            })
+            .bind(to: self.powerLabel.rx.text)
+            .disposed(by: disposeBag)
         
         mainViewModel.noti
             .observeOn(MainScheduler.instance)
@@ -180,7 +187,6 @@ class MainViewController: BaseViewController, Floatable {
         
         // 2
         powerAssetTitle.size16(text: "Main.Power.Title".localized, color: .init(white: 1, alpha: 0.6), weight: .light, align: .right)
-        powerLabel.setBalanceAttr(text: "90.8%")
         
         toggleButton.rx.tap.asControlEvent().subscribe { (_) in
             switch self.currencyUnit {
@@ -241,10 +247,12 @@ class MainViewController: BaseViewController, Floatable {
         }
         
         balanceActivityIndicator.startAnimating()
+        votedActivityIndicator.startAnimating()
         
         self.walletList = Manager.wallet.walletList
         
         self.balanceLabel.alpha = 0
+        self.powerLabel.alpha = 0
         
         balancePageView.setCurrentPage()
         powerPageView.setNonCurrentPage()
@@ -491,7 +499,6 @@ extension MainViewController: UICollectionViewDataSource {
             
             if let _ = wallet as? ETHWallet {
                 cell.scanButton.isHidden = true
-//                cell.symbol
             } else {
                 cell.scanButton.isHidden = false
             }

@@ -20,6 +20,8 @@ class MainViewModel {
     
     var totalExchangedBalance: PublishSubject<String>
     
+    var totalVotedPower: PublishSubject<String>
+    
     var balaneList: PublishSubject<[BigUInt]>
     
     var reload: PublishSubject<Bool>
@@ -33,6 +35,8 @@ class MainViewModel {
         self.currencyUnit = BehaviorSubject<BalanceUnit>(value: .USD)
         
         self.totalExchangedBalance = PublishSubject<String>()
+        
+        self.totalVotedPower = PublishSubject<String>()
         
         self.balaneList = PublishSubject<[BigUInt]>()
         
