@@ -126,14 +126,15 @@ class ManageWalletViewController: BaseViewController {
                             do {
                                 try DB.deleteWallet(wallet: wallet)
                                 mainViewModel.reload.onNext(true)
+                                mainViewModel.noti.onNext(true)
                                 if Manager.wallet.walletList.count > 0 {
                                     self.handler?()
                                 } else {
                                     let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
                                     app.change(root: start)
                                 }
-                            } catch {
-                                print("err")
+                            } catch let error {
+                                Log(error, .error)
                             }
                         }).show()
                         
@@ -145,8 +146,10 @@ class ManageWalletViewController: BaseViewController {
                                         do {
                                             try DB.deleteWallet(wallet: wallet)
                                             mainViewModel.reload.onNext(true)
+                                            mainViewModel.noti.onNext(true)
                                             self.handler?()
-                                        } catch {
+                                        } catch let error {
+                                            Log(error, .error)
                                         }
                                     }).show()
                                 } else {

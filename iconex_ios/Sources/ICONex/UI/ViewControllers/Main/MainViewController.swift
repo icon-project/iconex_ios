@@ -124,6 +124,7 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
+                print("Reload!!!!!")
                 DispatchQueue.main.async {
                     self.balanceLabel.alpha = 0
                     self.powerLabel.alpha = 0
@@ -315,6 +316,8 @@ class MainViewController: BaseViewController, Floatable {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
         // Floater
+        guard self.isWalletMode else { return }
+        
         if selectedWallet != nil {
             attach()
         }
@@ -518,12 +521,12 @@ extension MainViewController: UICollectionViewDataSource {
             
             cell.coinTokens = self.coinTokenList[cellCoinToken]
             
-            switch indexPath.row {
-            case 0:
-                cell.nicknameLabel.text = CoinType.icx.fullName
-            case 1:
-                cell.nicknameLabel.text = CoinType.eth.fullName
-            default:
+            let coinTypes = Manager.wallet.types
+            
+            if indexPath.row < coinTypes.count {
+                let type = coinTypes[indexPath.row]
+                cell.nicknameLabel.text = type == "icx" ? CoinType.icx.fullName : CoinType.eth.fullName
+            } else {
                 let realIndex = indexPath.row - Manager.wallet.types.count
                 cell.fullName = self.tokenList[realIndex].name
                 cell.nicknameLabel.text = self.tokenList[realIndex].name
@@ -531,7 +534,7 @@ extension MainViewController: UICollectionViewDataSource {
         }
         
         cell.handler = {
-//            self.refresh()
+            mainViewModel.reload.onNext(true)
         }
         return cell
     }
