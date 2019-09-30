@@ -161,15 +161,6 @@ class DetailViewController: BaseViewController, Floatable {
                 }
             }).disposed(by: disposeBag)
         
-        // stake
-        guard let icxWallet = wallet as? ICXWallet else { return }
-        guard let stake = Manager.iiss.stake(icx: icxWallet), let liquid = Manager.iiss.votingPower(icx: icxWallet) else { return }
-        
-        let votingPower = stake - liquid
-        
-        liquidLabel.size12(text: liquid.toString(decimal: 18, 8).currencySeparated(), color: .white, align: .right)
-        stakedLabel.size12(text: votingPower.toString(decimal: 18, 8).currencySeparated() , color: .white, align: .right)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -303,6 +294,24 @@ class DetailViewController: BaseViewController, Floatable {
         activityIndicator.stopAnimating()
     }
     
+    private func setStakeView() {
+        guard let icxWallet = self.walletInfo as? ICXWallet, let staked = Manager.iiss.stake(icx: icxWallet), staked > BigUInt(0), self.tokenInfo == nil else {
+            headerView.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 140)
+            stakeBoxView.isHidden = true
+            return
+        }
+        headerView.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 255)
+        stakeBoxView.isHidden = false
+        totalBalanceTitle.size12(text: "ICX Balance", color: .white, weight: .light, align: .left)
+        liquidTitle.size12(text: "Liquid ICX", color: .white, weight: .light, align: .left)
+        stakedTitle.size12(text: "Staked ICX (Voting Power)", color: .white, weight: .light, align: .left)
+        
+        guard let stake = Manager.iiss.stake(icx: icxWallet), let liquid = Manager.iiss.votingPower(icx: icxWallet) else { return }
+        
+        liquidLabel.size12(text: liquid.toString(decimal: 18, 8).currencySeparated(), color: .white, align: .right)
+        stakedLabel.size12(text: stake.toString(decimal: 18, 8).currencySeparated() , color: .white, align: .right)
+    }
+    
     private func setupUI() {
         guard let wallet = self.walletInfo else { return }
         
@@ -320,16 +329,7 @@ class DetailViewController: BaseViewController, Floatable {
         
         stakeBoxView.corner(8)
         stakeBoxView.backgroundColor = UIColor.init(white: 1.0, alpha: 0.1)
-        
-        guard let icxWallet = wallet as? ICXWallet, let staked = Manager.iiss.stake(icx: icxWallet), staked > BigUInt(0) else {
-            headerView.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 140)
-            stakeBoxView.isHidden = true
-            return
-        }
-        
-        totalBalanceTitle.size12(text: "ICX Balance", color: .white, weight: .light, align: .left)
-        liquidTitle.size12(text: "Liquid ICX", color: .white, weight: .light, align: .left)
-        stakedTitle.size12(text: "Staked ICX (Voting Power)", color: .white, weight: .light, align: .left)
+        setStakeView()
     }
     
     private func setupBind() {
@@ -354,6 +354,7 @@ class DetailViewController: BaseViewController, Floatable {
                     self.txList.removeAll()
                     self.fetchTxList()
                     self.fetchBalance()
+                    self.setStakeView()
                     self.tableView.reloadData()
                 }
                 selectVC.show()
@@ -382,11 +383,11 @@ class DetailViewController: BaseViewController, Floatable {
         .disposed(by: disposeBag)
         
         shareBalance
-            .flatMapLatest { (value) -> Observable<String> in
-                guard let token = self.tokenInfo else {
-                    return Observable.just(value.toString(decimal: wallet.decimal, 4).currencySeparated())
-                }
-                return Observable.just(value.toString(decimal: token.decimal, 4).currencySeparated())
+            .flatMapLatest { (unstake) -> Observable<String> in
+                guard let icxWallet = self.walletInfo as? ICXWallet, let staked = Manager.iiss.stake(icx: icxWallet) else { return Observable.just("")}
+                
+                let totalBalance = unstake + staked
+                return Observable.just(totalBalance.toString(decimal: 18, 8).currencySeparated())
                 
         }.bind(to: self.totalBalanceLabel.rx.text)
         .disposed(by: disposeBag)
@@ -468,6 +469,7 @@ class DetailViewController: BaseViewController, Floatable {
         
     }
 }
+
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.txList.count
