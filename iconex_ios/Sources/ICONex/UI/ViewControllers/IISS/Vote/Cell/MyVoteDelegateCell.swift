@@ -18,6 +18,9 @@ class MyVoteDelegateCell: UITableViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
     @IBOutlet weak var totalVotedValue: UILabel!
     
+    @IBOutlet weak var myVotesTitleLabel: UILabel!
+    @IBOutlet weak var myvotesValueLabel: UILabel!
+    
     @IBOutlet weak var sliderBoxView: UIView!
     @IBOutlet weak var sliderContainer: UIView!
     @IBOutlet weak var myVotesLabel: UILabel!
@@ -58,6 +61,7 @@ class MyVoteDelegateCell: UITableViewCell {
         // Initialization code
         dotView.corner(dotView.frame.height / 2)
         subtitleLabel.size12(text: "Total Votes (%)", color: .gray128, weight: .light, align: .left)
+        myVotesTitleLabel.size12(text: "My Votes (%)", color: .gray128, weight: .light, align: .left)
         
         sliderContainer.border(0.5, .gray230)
         sliderContainer.corner(8)

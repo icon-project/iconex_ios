@@ -67,6 +67,8 @@ class MyVoteViewController: BaseViewController {
     
     private var isDecending: Bool = true
     
+    private var prepInfo: NewPRepListResponse?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -262,6 +264,12 @@ extension MyVoteViewController {
         guard refreshControl.isRefreshing == false else { return }
         refreshControl.beginRefreshing()
         
+        guard let wallet = self.delegate.wallet else { return }
+        // getPReps
+        Manager.voteList.loadPrepListwithRank(from: wallet) { (prepList, _) in
+            self.prepInfo = prepList
+        }
+        
         Manager.voteList.loadMyVotes(from: delegate.wallet) { tDelegation, myVotes in
             self.refreshControl.endRefreshing()
             self.totalDelegation = tDelegation
@@ -326,8 +334,14 @@ extension MyVoteViewController: UITableViewDataSource {
             
             if selectedIndexPath == indexPath {
                 cell.sliderBoxView.isHidden = false
+                
+                cell.myVotesTitleLabel.isHidden = true
+                cell.myvotesValueLabel.isHidden = true
             } else {
                 cell.sliderBoxView.isHidden = true
+                
+                cell.myVotesTitleLabel.isHidden = false
+                cell.myvotesValueLabel.isHidden = false
             }
             
             
@@ -356,6 +370,17 @@ extension MyVoteViewController: UITableViewDataSource {
                     }
                 }()
                 
+                // myvotes
+                let myPercent: Float = {
+                    guard my > 0 else { return 0 }
+                    guard let myDecimal = my.decimalNumber, let delegatedDecimal = delegated.decimalNumber else { return 0 }
+                    let divided = (myDecimal / delegatedDecimal).floatValue * 100
+                    return divided
+                }()
+                
+                let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
+                cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
+                
                 let sliderMaxValue = fixedAvailable + my
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
@@ -370,12 +395,16 @@ extension MyVoteViewController: UITableViewDataSource {
                 }()
                 
                 if let edited = info.editedDelegate, edited != info.myDelegate {
-                    cell.prepInfo.size12(text: "(\(grade)/Voted/Edited)", color: .gray77, weight: .light)
+                    cell.prepInfo.size12(text: "(\(grade) / Voted / Edited)", color: .gray77, weight: .light)
                 } else {
-                    cell.prepInfo.size12(text: "(\(grade)/Voted)", color: .gray77, weight: .light)
+                    cell.prepInfo.size12(text: "(\(grade) / Voted)", color: .gray77, weight: .light)
                 }
+                guard let totalDelegated = self.prepInfo?.totalDelegated, let totalDelegatedDecimal = totalDelegated.decimalNumber, let prepTotalDecimal = info.totalDelegate.decimalNumber else { return cell }
                 
-                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
+                let calculatedFloat: Float = (prepTotalDecimal / totalDelegatedDecimal).floatValue * 100
+                let totalVotesPercent = "(" + String(format: "%.1f", calculatedFloat) + "%)"
+                
+                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
                 
                 cell.addButton.isHighlighted = false
                 cell.addButton.rx.tap.asControlEvent()
@@ -507,7 +536,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 }()
                 
                 cell.prepInfo.size12(text: "(\(grade))", color: .gray77, weight: .light)
-                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold)
                 
                 cell.addButton.isHighlighted = true
                 cell.addButton.rx.tap
@@ -527,7 +555,21 @@ extension MyVoteViewController: UITableViewDataSource {
                 let percentFloat = sliderMaxPercent.floatValue
                 
                 
+                guard let totalDelegated = self.prepInfo?.totalDelegated, let totalDelegatedDecimal = totalDelegated.decimalNumber, let prepTotalDecimal = info.totalDelegate.decimalNumber else { return cell }
+                
+                let calculatedFloat: Float = (prepTotalDecimal / totalDelegatedDecimal).floatValue * 100
+                let totalVotesPercent = "(" + String(format: "%.1f", calculatedFloat) + "%)"
+                
+                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
+                
                 cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
+                
+                let myPercent = info.percent ?? 0
+                
+                let myValue = self.convertPercentToBigValue(percent: myPercent).toString(decimal: 18, 4).currencySeparated()
+                let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
+                
+                cell.myvotesValueLabel.size12(text: "\(myValue) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
                 
                 if let valuePercent = info.percent {
                     let sliderValue = self.convertPercentToBigValue(percent: valuePercent)
@@ -668,9 +710,9 @@ extension MyVoteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard indexPath.section == 1 else { return 265 }
         if indexPath == selectedIndexPath {
-            return 228
+            return 250
         } else {
-            return 80
+            return 102
         }
     }
 
