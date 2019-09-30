@@ -504,7 +504,7 @@ class AlertViewController: BaseViewController {
                     self.view.endEditing(true)
                     
                     let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
-                    
+                    qrCodeReader.modalPresentationStyle = .fullScreen
                     let readerMode: QRReaderMode = {
                         return self.isICX ? .icx : .eth
                     }()

@@ -413,7 +413,7 @@ class SendICXViewController: BaseViewController {
                 self.view.endEditing(true)
                 
                 let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
-                
+                qrCodeReader.modalPresentationStyle = .fullScreen
                 qrCodeReader.set(mode: .icx, handler: { (address) in
                     self.addressInputBox.text = address
                     self.addressInputBox.textField.sendActions(for: .valueChanged)

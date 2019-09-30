@@ -78,7 +78,7 @@ class MainCollectionViewCell: UICollectionViewCell {
                 
                 Alert.password(wallet: wallet, returnAction: { (privateKey) in
                     let scanVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
-                    
+                    scanVC.modalPresentationStyle = .fullScreen
                     scanVC.set(mode: .icx, handler: { (address) in
                         let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
                         send.walletInfo = self.info

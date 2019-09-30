@@ -131,7 +131,7 @@ class AddTokenInfoViewController: BaseViewController {
         qrCodeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let qrVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
-                
+                qrVC.modalPresentationStyle = .fullScreen
                 if let _ = self.walletInfo as? ICXWallet {
                     qrVC.set(mode: .irc, handler: { (contract) in
                         self.addressBox.textField.text = contract
