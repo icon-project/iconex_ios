@@ -158,6 +158,8 @@
 		D49470A82318F8E000236288 /* PRepListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49470A72318F8E000236288 /* PRepListViewController.swift */; };
 		D49E088123225119001C293E /* Decimal+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49E088023225119001C293E /* Decimal+Extension.swift */; };
 		D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1E52722F2D20E00987D2C /* StartViewController.swift */; };
+		D4A2CE442341EC7600B371AA /* SendInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2CE432341EC7600B371AA /* SendInfoViewController.swift */; };
+		D4A2CE462342401300B371AA /* MainInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2CE452342401300B371AA /* MainInfoViewController.swift */; };
 		D4BE25E723165019002D697D /* FloatButton.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25E623165019002D697D /* FloatButton.storyboard */; };
 		D4BE25E923165469002D697D /* FloatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE25E823165469002D697D /* FloatViewController.swift */; };
 		D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */; };
@@ -364,6 +366,8 @@
 		D49470A72318F8E000236288 /* PRepListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepListViewController.swift; sourceTree = "<group>"; };
 		D49E088023225119001C293E /* Decimal+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decimal+Extension.swift"; sourceTree = "<group>"; };
 		D4A1E52722F2D20E00987D2C /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		D4A2CE432341EC7600B371AA /* SendInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInfoViewController.swift; sourceTree = "<group>"; };
+		D4A2CE452342401300B371AA /* MainInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInfoViewController.swift; sourceTree = "<group>"; };
 		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		D4BE25E623165019002D697D /* FloatButton.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FloatButton.storyboard; sourceTree = "<group>"; };
 		D4BE25E823165469002D697D /* FloatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatViewController.swift; sourceTree = "<group>"; };
@@ -431,6 +435,7 @@
 			isa = PBXGroup;
 			children = (
 				1BB4C767231A9D9F00BA4138 /* Send.storyboard */,
+				D4A2CE432341EC7600B371AA /* SendInfoViewController.swift */,
 				1BB4C76A231A9DD600BA4138 /* SendICXViewController.swift */,
 				BF8AF6B2231C9B5B0071C7F9 /* SendETHViewController.swift */,
 				1BB4C76F231BE15300BA4138 /* DataTypeViewController.swift */,
@@ -484,6 +489,7 @@
 				BF4F6F5D2318A57D0098D303 /* Cell Model */,
 				BF4F6F482318A57D0098D303 /* Main.storyboard */,
 				BF4F6F472318A57D0098D303 /* MainViewController.swift */,
+				D4A2CE452342401300B371AA /* MainInfoViewController.swift */,
 				BF4F6F4E2318A57D0098D303 /* MainViewModel.swift */,
 				BF4F6F462318A57D0098D303 /* SideMenuViewController.swift */,
 				BF4F6F5C2318A57D0098D303 /* MainQRCodeViewController.swift */,
@@ -1259,6 +1265,7 @@
 				D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */,
 				D48E49BC2043E6030064CFF4 /* ICXWallet.swift in Sources */,
 				D4BF98DF230FA7B4009D4632 /* PRepsViewController.swift in Sources */,
+				D4A2CE462342401300B371AA /* MainInfoViewController.swift in Sources */,
 				D4F7672722F3E1A900452DA7 /* PopableTitleView.swift in Sources */,
 				D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */,
 				BF4F6F6C2318A57D0098D303 /* ManageTokenViewController.swift in Sources */,
@@ -1378,6 +1385,7 @@
 				BF4F6F6B2318A57D0098D303 /* MainViewModel.swift in Sources */,
 				BF4F6F652318A57D0098D303 /* MainViewController.swift in Sources */,
 				1BBEC3C62324DB6300B69C22 /* BindPasswordViewController.swift in Sources */,
+				D4A2CE442341EC7600B371AA /* SendInfoViewController.swift in Sources */,
 				1BBEC3C72324DB6600B69C22 /* ConnectSendViewController.swift in Sources */,
 				D42FF8D822F182DD00268C29 /* PasscodeViewController.swift in Sources */,
 				D4FDCA6C22F7FA3700D6CDD4 /* LoadFileViewController.swift in Sources */,

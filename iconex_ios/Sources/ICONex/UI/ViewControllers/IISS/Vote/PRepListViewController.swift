@@ -11,6 +11,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import PanModal
+import BigInt
 
 class PRepListViewController: BaseViewController, Floatable {
     @IBOutlet weak var navBar: IXNavigationView!
@@ -101,7 +102,16 @@ extension PRepListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepViewCell", for: indexPath) as! PRepViewCell
         
+        cell.rankLabel.text = ""
+        cell.rankLabel.isHidden = true
+        cell.prepTypeLabel.isHidden = true
         let prep = preps!.preps[indexPath.row]
+        
+        if let total = preps?.totalDelegated, let totalD = total.decimalNumber, let delegatedD = prep.delegated.decimalNumber {
+            let percentD = delegatedD / totalD * 100
+            cell.totalVotePercent.size12(text: "(" + String(format: "%.0f", percentD.floatValue) + "%)")
+        }
+        
         cell.addButton.isHidden = true
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)

@@ -27,6 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
                 throw ConnectError.invalidRequest
             }
+//            if let host = components.host {
+//                guard host.lowercased() == "developer" else { return }
+//
+//                Conn.isConnect = true
+//                return
+//            }
+            
             guard let queries = components.queryItems else {
                 throw ConnectError.invalidRequest
             }
@@ -185,6 +192,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func toConnect() {
         let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as! ConnectViewController
+        connect.modalPresentationStyle = .fullScreen
         self.connect = connect
          app.topViewController()?.present(connect, animated: true, completion: nil)
     }

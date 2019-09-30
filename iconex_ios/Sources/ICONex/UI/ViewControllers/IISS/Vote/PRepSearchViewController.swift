@@ -123,7 +123,7 @@ extension PRepSearchViewController: UITableViewDataSource {
             voteViewModel.newList.onNext(self.newList)
             
             guard let total = try? voteViewModel.voteCount.value() else { return }
-            app.window?.showVoteToast(count: total)
+            Tool.voteToast(count: total)
             
         }.disposed(by: cell.disposeBag)
         

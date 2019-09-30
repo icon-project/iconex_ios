@@ -98,7 +98,9 @@ class SendICXViewController: BaseViewController {
         }
         navBar.setTitle(wallet.name)
         navBar.setRight(image: #imageLiteral(resourceName: "icInfoW")) {
-            // TODO
+            let sendInfo = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendInfo") as! SendInfoViewController
+            sendInfo.type = "icx"
+            self.presentPanModal(sendInfo)
         }
         
         setFooterBox()

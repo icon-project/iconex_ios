@@ -144,10 +144,10 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 
                 Alert.vote(voteInfo: voteInfo, confirmAction: { isSuccess, txHash in
                     if isSuccess {
-                        app.window?.showToast(message: "MyVoteView.Toast".localized)
+                        Tool.toast(message: "MyVoteView.Toast".localized)
                     } else {
                         Log(txHash, .error)
-                        app.window?.showToast(message: "Common.Error".localized)
+                        Tool.toast(message: "Common.Error".localized)
                     }
                     
                 }).show()

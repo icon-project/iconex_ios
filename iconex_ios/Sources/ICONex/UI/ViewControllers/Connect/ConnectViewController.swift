@@ -35,7 +35,7 @@ class ConnectViewController: BaseViewController {
                     Conn.redirect = nil
                     let app = UIApplication.shared.delegate as! AppDelegate
                     app.toMain()
-                    app.window?.showToast(message: e.errorDescription!)
+                    Tool.toast(message: e.errorDescription!)
                 } else {
                     Conn.sendError(error: e)
                 }

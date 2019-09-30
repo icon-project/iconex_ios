@@ -172,7 +172,9 @@ class SendETHViewController: BaseViewController {
         }
         navBar.setTitle(wallet.name)
         navBar.setRight(image: #imageLiteral(resourceName: "icInfoW")) {
-            // TODO
+            let sendInfo = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendInfo") as! SendInfoViewController
+            sendInfo.type = "eth"
+            self.presentPanModal(sendInfo)
         }
         balanceTitleLabel.size12(text: "Send.Balance.Avaliable.ETH".localized, color: .gray77, weight: .medium)
         amountInputBox.set(inputType: .decimal)

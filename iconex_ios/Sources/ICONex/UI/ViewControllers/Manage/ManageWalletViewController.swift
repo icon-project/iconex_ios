@@ -88,6 +88,7 @@ class ManageWalletViewController: BaseViewController {
                     }
                     let navRootVC = UINavigationController(rootViewController: tokenVC)
                     navRootVC.isNavigationBarHidden = true
+                    navRootVC.modalPresentationStyle = .fullScreen
                     app.topViewController()?.present(navRootVC, animated: true, completion: nil)
                 }
         }.disposed(by: disposeBag)
@@ -100,6 +101,7 @@ class ManageWalletViewController: BaseViewController {
                         let backUpVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "BackUp") as! ManageBackUpViewController
                         backUpVC.wallet = self.walletInfo
                         backUpVC.pk = privateKey
+                        backUpVC.modalPresentationStyle = .fullScreen
                         app.topViewController()?.present(backUpVC, animated: true, completion: nil)
                     }).show()
                 }
@@ -111,7 +113,7 @@ class ManageWalletViewController: BaseViewController {
                 self.beginClose {
                     let changePasswordVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "ChangePassword") as! ChangePasswordViewController
                     changePasswordVC.wallet = self.walletInfo
-                    
+                    changePasswordVC.modalPresentationStyle = .fullScreen
                     app.topViewController()?.present(changePasswordVC, animated: true, completion: nil)
                 }
             }.disposed(by: disposeBag)

@@ -173,7 +173,7 @@ class AddTokenInfoViewController: BaseViewController {
                     self.navigationController?.popToRootViewController(animated: true)
                     
                 } catch {
-                    self.view.showToast(message: "Common.Error".localized)
+                    Tool.toast(message: "Common.Error".localized)
                 }
                 
         }.disposed(by: disposeBag)

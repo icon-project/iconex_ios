@@ -68,7 +68,6 @@ class IScoreDetailViewController: BaseViewController {
         
         claimButton.isEnabled = false
         
-//        refreshControl?.attributedTitle = NSAttributedString(string: "Common.Downloading".localized)
         contentScroll.refreshControl = refreshControl
         refreshControl?.beginRefreshing()
         refreshControl?.addTarget(self, action: #selector(run), for: .valueChanged)
@@ -77,6 +76,19 @@ class IScoreDetailViewController: BaseViewController {
             .subscribe(onNext: { [unowned self] in
                 guard let info = self.iscore else { return }
                 Alert.iScore(iscoreInfo: info, confirmAction: {
+                    DispatchQueue.global().async {
+                        let response = Manager.icon.claimIScore(from: self.wallet)
+                        
+                        DispatchQueue.main.async {
+                            if response != nil {
+                                Log("txHash - \(response!)")
+                                
+                                Tool.toast(message: "ISCoreDetail.ClaimSuccess".localized)
+                            } else {
+                                Tool.toast(message: "Error.CommonError".localized)
+                            }
+                        }
+                    }
                     
                 }).show()
             }).disposed(by: disposeBag)

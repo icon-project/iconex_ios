@@ -313,8 +313,46 @@ struct Tool {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
         
         guard let window = app.window else { return }
+        let toastView = UIView.makeToast(message)
+        toastView.alpha = 0.0
+        window.addSubview(toastView)
         
-        window.showToast(message: message)
+        toastView.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: 20).isActive = true
+        toastView.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -20).isActive = true
+        toastView.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor, constant: -46).isActive = true
+        
+        UIView.animate(withDuration: 0.7, delay: 0.0, options: .curveEaseOut, animations: {
+            toastView.alpha = 1.0
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.3, delay: 2.0, options: .curveEaseIn, animations: {
+                toastView.alpha = 0.0
+            }) { _ in
+                toastView.removeFromSuperview()
+            }
+        })
+    }
+    
+    static func voteToast(count: Int) {
+        guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        guard let window = app.window else { return }
+        let voteToast = UIView.makeVoteToast(count: count)
+        voteToast.alpha = 0.0
+        window.addSubview(voteToast)
+        
+        voteToast.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: 20).isActive = true
+        voteToast.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -20).isActive = true
+        voteToast.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor, constant: -46).isActive = true
+        
+        UIView.animate(withDuration: 0.7, delay: 0.0, options: .curveEaseOut, animations: {
+            voteToast.alpha = 1.0
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.3, delay: 2.0, options: .curveEaseIn, animations: {
+                voteToast.alpha = 0.0
+            }) { _ in
+                voteToast.removeFromSuperview()
+            }
+        })
     }
     
     static func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {

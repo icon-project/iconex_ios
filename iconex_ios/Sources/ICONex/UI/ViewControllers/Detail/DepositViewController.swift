@@ -51,6 +51,7 @@ class DepositViewController: PopableViewController {
         }).disposed(by: disposeBag)
         
         inputBox.set(state: .normal, placeholder: "Main.QRCode.InputBox.Placeholder".localized)
+        inputBox.set(inputType: .decimal)
         requestButton.roundGray230()
         requestButton.setTitle("Main.QRCode.Request".localized, for: .normal)
         

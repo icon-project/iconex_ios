@@ -84,9 +84,10 @@ class MainCollectionViewCell: UICollectionViewCell {
                         send.walletInfo = self.info
                         send.privateKey = PrivateKey(hex: Data(hex: privateKey))
                         send.toAddress = address
+                        send.modalPresentationStyle = .fullScreen
                         
                         send.sendHandler = { isSuccess in
-                            app.topViewController()?.view.showToast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                            Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
                         }
                         
                         app.topViewController()?.present(send, animated: true, completion: nil)

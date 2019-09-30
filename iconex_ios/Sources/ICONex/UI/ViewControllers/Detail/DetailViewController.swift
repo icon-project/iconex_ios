@@ -531,7 +531,7 @@ extension DetailViewController: UITableViewDelegate {
         let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/transaction/\(txHash)")
         
         Alert.txHash(txData: txInfo, confirmAction: {
-            self.view.showToast(message: "Alert.Transaction.Copy.Complete".localized)
+            Tool.toast(message: "Alert.Transaction.Copy.Complete".localized)
         }).show()
     }
 }

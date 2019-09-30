@@ -59,9 +59,17 @@ class StakeViewController: BaseViewController {
         
         navBar.setTitle(wallet.name)
         navBar.setLeft {
-            if let modified = self.modifiedStake {
+            if let modified = self.modifiedStake, let staked = self.stakedInfo?.stake {
                 Log("Modified - \(modified)")
-                Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: "Stake.Alert.Discard.Message".localized, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.Cancel".localized, rightButtonTitle: "Common.Confirm".localized, confirmAction: {
+                guard modified != staked else { return }
+                let question: String = {
+                    if modified > staked {
+                        return "Stake"
+                    } else {
+                        return "Unstake"
+                    }
+                }()
+                Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.Cancel".localized, rightButtonTitle: "Common.Confirm".localized, confirmAction: {
                     self.navigationController?.popViewController(animated: true)
                 }).show()
                 
@@ -123,9 +131,15 @@ class StakeViewController: BaseViewController {
             .subscribe(onNext: { [unowned self] in
                 guard let staked = self.stakedInfo?.stake,
                     let modified = self.modifiedStake,
-                let limit = self.estimatedStep,
                 let stepPrice = Manager.icon.stepPrice
                 else { return }
+                
+                self.submitButton.isEnabled = false
+                
+                self.getEstimateFee()
+                
+                self.submitButton.isEnabled = true
+                guard let limit = self.estimatedStep else { return }
                 
                 let fee = limit * stepPrice
                 
@@ -152,7 +166,7 @@ class StakeViewController: BaseViewController {
                 balanceLabel.size14(text: "-")
                 return
             }
-            balanceLabel.size14(text: balance.toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
+            balanceLabel.size14(text: "-", color: .gray77, weight: .regular, align: .right)
             
             DispatchQueue.global().async {
                 let delegatedInfo = Manager.icon.getDelegation(wallet: self.wallet)
@@ -193,14 +207,20 @@ class StakeViewController: BaseViewController {
                             self.stakeProgress.staked = stakeRate.floatValue
                             self.stakeProgress.voted = voteRate.floatValue
                             
-                            
-                            
                             self.slider.setRange(total: totalValue, staked: stakeValue, voted: totalDelegated)
+                            
+                            let totalVote: Decimal = {
+                                let calVote = stakeNum * voteRate
+                                if calVote == 0 { return 0 }
+                                return calVote / totalNum * 100
+                            }()
+                            self.slider.secondHeader = "→ Voted (ICX) \(votedValue.toString(decimal: 18, 4, false).currencySeparated()) (\(String(format: "%.1f", totalVote.floatValue))%)"
                         } else {
                             self.slider.isEnabled = false
                             self.slider.setRange(total: 0)
                         }
                         
+                        self.balanceLabel.size14(text: totalValue.toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
                         self.unstakedLabel.size14(text: (totalValue - stakeValue).toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
                     } else {
                         self.slider.isEnabled = false

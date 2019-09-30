@@ -376,6 +376,11 @@ extension BalanceManager {
         guard isWorking == false else { return }
         DispatchQueue.global().async { [unowned self] in
             self.isWorking = true
+            
+            Manager.icon.stepCost = Manager.icon.getStepCosts()
+            Manager.icon.stepPrice = Manager.icon.getStepPrice()
+            Manager.iiss.getPRepInfo()
+            
             for wallet in Manager.wallet.walletList {
                 if let icx = wallet as? ICXWallet {
                     if let balance = try? Manager.icon.iconService.getBalance(address: icx.address).execute().get() {
@@ -409,10 +414,6 @@ extension BalanceManager {
                     mainViewModel.noti.onNext(true)
                 }
             }
-            
-            Manager.icon.stepCost = Manager.icon.getStepCosts()
-            Manager.icon.stepPrice = Manager.icon.getStepPrice()
-            Manager.iiss.getPRepInfo()
             
             DispatchQueue.main.async {
                 mainViewModel.reload.onNext(true)

@@ -87,13 +87,13 @@ class CreateQRCodeViewController: BaseViewController {
         copyButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 UIPasteboard.general.string = self.address
-                self.view.showToast(message: "Wallet.Address.CopyComplete".localized)
+                Tool.toast(message: "Wallet.Address.CopyComplete".localized)
         }.disposed(by: disposeBag)
         
         copyButton2.rx.tap.asControlEvent()
             .subscribe { (_) in
                 UIPasteboard.general.string = self.pk
-                self.view.showToast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }.disposed(by: disposeBag)
         
     }

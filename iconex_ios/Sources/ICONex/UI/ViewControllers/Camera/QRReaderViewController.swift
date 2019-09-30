@@ -167,7 +167,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 }
                 self.dismiss(animated: true, completion: nil)
             } else {
-                app.window?.showToast(message: "QRReader.Error.PrivateKey".localized)
+                Tool.toast(message: "QRReader.Error.PrivateKey".localized)
             }
             
         case .icx:
@@ -188,7 +188,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                app.window?.showToast(message: "QRReader.Error.ICX".localized)
+                Tool.toast(message: "QRReader.Error.ICX".localized)
             }            
             
         case .eth:
@@ -201,7 +201,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                app.window?.showToast(message: "QRReader.Error.ETH".localized)
+                Tool.toast(message: "QRReader.Error.ETH".localized)
             }
             
         case .irc:
@@ -214,7 +214,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                app.window?.showToast(message: "QRReader.Error.ICX".localized)
+                Tool.toast(message: "QRReader.Error.ICX".localized)
             }
         }
     }

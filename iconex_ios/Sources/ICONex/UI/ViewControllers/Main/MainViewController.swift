@@ -245,7 +245,8 @@ class MainViewController: BaseViewController, Floatable {
         }
         
         navBar.setRight(image: #imageLiteral(resourceName: "icInfoW")) {
-            
+            let mainInfo = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainInfo") as! MainInfoViewController
+            mainInfo.pop()
         }
         
         balanceActivityIndicator.startAnimating()

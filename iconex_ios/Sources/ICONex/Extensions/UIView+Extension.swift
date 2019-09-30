@@ -208,30 +208,17 @@ extension UIView {
 
 // Toast
 extension UIView {
-    // normalm toast
-    func showToast(message: String) {
-        let toastView = makeToast(message)
-        
-        showToastView(toastView)
-        hideToastView(toastView)
-    }
     
-    // vote toast
-    func showVoteToast(count: Int) {
-        let toastView = makeVoteToast(count: count)
-        
-        showToastView(toastView)
-        hideToastView(toastView)
-    }
-    
-    func makeToast(_ message: String) -> UIView {
+    static func makeToast(_ message: String) -> UIView {
         let label = UILabel()
         label.text = message
         label.textColor = .white
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
         
-        let toastView = UIView(frame: CGRect(x: 20, y: self.frame.height-mySafeAreaInsets.bottom-40-46, width: self.frame.width-40, height: 40))
+        let toastView = UIView()
+        toastView.translatesAutoresizingMaskIntoConstraints = false
         
         toastView.backgroundColor = UIColor(white: 38.0 / 255.0, alpha: 0.9)
         toastView.layer.cornerRadius = 8
@@ -240,65 +227,36 @@ extension UIView {
         
         label.translatesAutoresizingMaskIntoConstraints = false
         label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 12).isActive = true
-        label.centerXAnchor.constraint(equalTo: toastView.centerXAnchor).isActive = true
+        label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -12).isActive = true
+        label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 20).isActive = true
+        label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -20).isActive = true
         
         return toastView
         
     }
     
-    func makeVoteToast(count: Int) -> UIView {
-        let toastView = UIView(frame: CGRect(x: 20, y: self.frame.height-mySafeAreaInsets.bottom-40-46, width: self.frame.width-40, height: 40))
+    static func makeVoteToast(count: Int) -> UIView {
+        let toastView = UIView()
         toastView.backgroundColor = UIColor(white: 38.0 / 255.0, alpha: 0.9)
         toastView.layer.cornerRadius = 8
+        toastView.translatesAutoresizingMaskIntoConstraints = false
         
-        let label1 = UILabel()
-        label1.text = "\(count)"
-        label1.textColor = .white
-        label1.font = UIFont(name: "NanumSquareBold", size: 14)
-        label1.sizeToFit()
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
         
-        let label2 = UILabel()
-        label2.text = " / "
-        label2.textColor = UIColor.init(white: 1, alpha: 0.5)
-        label2.font = UIFont(name: "NanumSquareBold", size: 14)
-        label2.sizeToFit()
+        toastView.addSubview(label)
+        label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 16).isActive = true
+        label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -16).isActive = true
+        label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 16).isActive = true
+        label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -16).isActive = true
         
-        let label3 = UILabel()
-        label3.text = "10"
-        label3.textColor = UIColor.init(white: 1, alpha: 0.5)
-        label3.font = UIFont(name: "NanumSquareBold", size: 14)
-        label3.sizeToFit()
+        let mutAttr = NSMutableAttributedString(string: "\(count)/10", attributes: [.font: UIFont(name: "NanumSquareB", size: 14)!, .foregroundColor: UIColor.white])
+        mutAttr.append(NSAttributedString(string: "PRepView.Toast.MyVotes".localized, attributes: [.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 14)!, .foregroundColor: UIColor.white]))
         
-        let label4 = UILabel()
-        label4.text = "PRepView.Toast.MyVotes".localized
-        label4.textColor = .white
-        label4.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
-        label4.sizeToFit()
+        label.attributedText = mutAttr
+        label.adjustsFontSizeToFitWidth = true
         
-        let containerView = UIView()
-        
-        containerView.addSubview(label1)
-        label1.translatesAutoresizingMaskIntoConstraints = false
-        label1.leadingAnchor.constraint(equalTo: containerView.leadingAnchor).isActive = true
-        
-        containerView.addSubview(label2)
-        label2.translatesAutoresizingMaskIntoConstraints = false
-        label2.leadingAnchor.constraint(equalTo: label1.trailingAnchor).isActive = true
-        
-        containerView.addSubview(label3)
-        label3.translatesAutoresizingMaskIntoConstraints = false
-        label3.leadingAnchor.constraint(equalTo: label2.trailingAnchor).isActive = true
-        
-        containerView.addSubview(label4)
-        label4.translatesAutoresizingMaskIntoConstraints = false
-        label4.leadingAnchor.constraint(equalTo: label3.trailingAnchor, constant: 18).isActive = true
-        label4.trailingAnchor.constraint(equalTo: containerView.trailingAnchor).isActive = true
-        
-        toastView.addSubview(containerView)
-        
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 12).isActive = true
-        containerView.centerXAnchor.constraint(equalTo: toastView.centerXAnchor).isActive = true
         return toastView
     }
     

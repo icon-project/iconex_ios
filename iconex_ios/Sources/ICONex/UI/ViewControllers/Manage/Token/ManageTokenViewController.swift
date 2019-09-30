@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class ManageTokenViewController: UIViewController {
+class ManageTokenViewController: BaseViewController {
 
     @IBOutlet weak var navBar: IXNavigationView!
     @IBOutlet weak var tableView: UITableView!
@@ -22,8 +22,6 @@ class ManageTokenViewController: UIViewController {
     var walletInfo: BaseWalletConvertible? = nil
     var tokenList = PublishSubject<[Token]>()
     var isICX: Bool = true
-    
-    var disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -76,7 +76,7 @@ class CreateCompleteViewController: BaseViewController {
         copyButton.rx.tap.asControlEvent()
             .subscribe(onNext: { (_) in
                 UIPasteboard.general.string = self.privateKey
-                self.view.showToast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }).disposed(by: disposeBag)
         
         infoButton.rx.tap.asControlEvent()

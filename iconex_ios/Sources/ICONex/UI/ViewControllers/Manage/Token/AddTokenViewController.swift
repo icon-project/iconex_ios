@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class AddTokenViewController: UIViewController {
+class AddTokenViewController: BaseViewController {
 
     @IBOutlet weak var navBar: IXNavigationView!
     @IBOutlet weak var tableView: UITableView!
@@ -26,8 +26,6 @@ class AddTokenViewController: UIViewController {
     var tokenList = PublishSubject<[TokenFile]>()
     
     var selectedList = [String: NewToken]()
-    
-    var disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
