@@ -315,6 +315,8 @@ class MainViewController: BaseViewController, Floatable {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
         // Floater
+        guard self.isWalletMode else { return }
+        
         if selectedWallet != nil {
             attach()
         }
