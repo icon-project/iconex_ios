@@ -1,5 +1,5 @@
 PODS:
-  - AcknowList (1.9)
+  - AcknowList (1.9.1)
   - Alamofire (4.9.0)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
@@ -18,11 +18,11 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (6.8.4):
     - PromiseKit/CorePromise
-  - Realm (3.11.0):
-    - Realm/Headers (= 3.11.0)
-  - Realm/Headers (3.11.0)
-  - RealmSwift (3.11.0):
-    - Realm (= 3.11.0)
+  - Realm (3.19.0):
+    - Realm/Headers (= 3.19.0)
+  - Realm/Headers (3.19.0)
+  - RealmSwift (3.19.0):
+    - Realm (= 3.19.0)
   - RxCocoa (5.0.0):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -44,21 +44,19 @@ DEPENDENCIES:
   - Alamofire
   - ICONKit (from `https://github.com/icon-project/iconkit`, branch `develop`)
   - PanModal
-  - RealmSwift (= 3.11.0)
+  - RealmSwift
   - RxCocoa
   - RxSwift
   - web3swift
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AcknowList
     - Alamofire
     - BigInt
     - CryptoSwift
     - PanModal
     - PromiseKit
-    - Realm
-    - RealmSwift
     - RxCocoa
     - RxRelay
     - RxSwift
@@ -66,6 +64,9 @@ SPEC REPOS:
     - SipHash
     - Starscream
     - web3swift
+  trunk:
+    - Realm
+    - RealmSwift
 
 EXTERNAL SOURCES:
   ICONKit:
@@ -78,15 +79,15 @@ CHECKOUT OPTIONS:
     :git: https://github.com/icon-project/iconkit
 
 SPEC CHECKSUMS:
-  AcknowList: 06fde3319971dfd517ea1b1c194d78eb8cd774a2
+  AcknowList: 70efb7554e257914da0aea2724a72fb30c45dfe2
   Alamofire: afc3e7c6db61476cb45cdd23fed06bad03bbc321
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   ICONKit: a7ed1fe7988b1403d65989c678daf07e176fd105
   PanModal: 275f6d4d07565ddf4ed16d7be5d9cd275682d80d
   PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
-  Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
-  RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
+  Realm: 995d585bcf699aaff226715886c849a29dd3d07f
+  RealmSwift: 35f284a537989f2187b413e5917091948cb87a3f
   RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
   RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
   RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
@@ -95,6 +96,6 @@ SPEC CHECKSUMS:
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 238fcff3da521127cbbf113ccd34533c2c4894f6
+PODFILE CHECKSUM: f604d785778c174c288616814c7b04ab9c9b2c4b
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.8.1

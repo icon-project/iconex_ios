@@ -160,21 +160,18 @@ extension MainCollectionViewCell: UITableViewDataSource {
             cell.corner(8)
             cell.border(0.5, .gray230)
             cell.basicView.backgroundColor = .gray252
-//            cell.selectionStyle = .none
             return cell
         }()
         
         let tokenCell: TokenTableViewCell = {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tokenCell") as! TokenTableViewCell
             cell.corner(8)
-//            cell.selectionStyle = .none
             return cell
         }()
         
         let walletCell: WalletTableViewCell = {
             let cell = tableView.dequeueReusableCell(withIdentifier: "walletCell") as! WalletTableViewCell
             cell.corner(8)
-//            cell.selectionStyle = .none
             return cell
         }()
         

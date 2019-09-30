@@ -67,6 +67,31 @@ class PasscodeViewController: BaseViewController {
                 self.presentPanModal(resetPassword)
                 
         }.disposed(by: disposeBag)
+    }
+    
+    override func refresh() {
+        super.refresh()
+        
+        self.setPassStatus(status: .initial)
+        
+        if self.lockType == .check {
+            forgotPasswordButton.setTitle("Passcode.Code.Forgot".localized, for: .normal)
+            forgotPasswordButton.setTitleColor(.init(white: 1, alpha: 0.5), for: .normal)
+            forgotPasswordButton.titleLabel?.textAlignment = .center
+            forgotPasswordButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
+        }
+        forgotPasswordButton.isHidden = lockType == .check ? false : true
+        self.view.backgroundColor = lockType == .check ? .mint1 : .white
+        
+        setBubbleView()
+        setNumberView()
+        
+        setUpAnimation()
+        animateComponent()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
         if self.lockType == .check {
             let bio = LAContext().biometricType
@@ -94,27 +119,6 @@ class PasscodeViewController: BaseViewController {
                 
             }
         }
-    }
-    
-    override func refresh() {
-        super.refresh()
-        
-        self.setPassStatus(status: .initial)
-        
-        if self.lockType == .check {
-            forgotPasswordButton.setTitle("Passcode.Code.Forgot".localized, for: .normal)
-            forgotPasswordButton.setTitleColor(.init(white: 1, alpha: 0.5), for: .normal)
-            forgotPasswordButton.titleLabel?.textAlignment = .center
-            forgotPasswordButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
-        }
-        forgotPasswordButton.isHidden = lockType == .check ? false : true
-        self.view.backgroundColor = lockType == .check ? .mint1 : .white
-        
-        setBubbleView()
-        setNumberView()
-        
-        setUpAnimation()
-        animateComponent()
     }
     
     func setUpAnimation() {

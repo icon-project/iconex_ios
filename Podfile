@@ -6,7 +6,7 @@ inhibit_all_warnings!
 def import_pods
   pod 'RxCocoa'
   pod 'RxSwift'
-  pod 'RealmSwift', '3.11.0'
+  pod 'RealmSwift'
   pod 'web3swift', :modular_headers => true
   pod 'Alamofire'
   pod 'ICONKit', :git => 'https://github.com/icon-project/iconkit', :branch => 'develop'
