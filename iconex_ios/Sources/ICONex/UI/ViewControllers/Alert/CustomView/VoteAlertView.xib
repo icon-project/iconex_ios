@@ -106,7 +106,6 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="0Kg-U9-vY6" secondAttribute="trailing" constant="30" id="0pB-Df-K6T"/>
-                <constraint firstItem="gjr-Vm-BpT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="trailing" constant="-414" id="3IE-ea-3dz"/>
                 <constraint firstItem="PPi-Lh-aE4" firstAttribute="top" secondItem="0Kg-U9-vY6" secondAttribute="bottom" constant="30" id="3aF-br-C0i"/>
                 <constraint firstItem="bke-LB-3ja" firstAttribute="leading" secondItem="DOv-cc-MYx" secondAttribute="trailing" constant="3" id="6F1-xo-kgY"/>
                 <constraint firstItem="y6a-iT-BEX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Hcr-o6-Kbh" secondAttribute="trailing" constant="10" id="8w2-bg-fD6"/>
@@ -131,6 +130,7 @@
                 <constraint firstItem="KxH-hW-VhD" firstAttribute="trailing" secondItem="0Kg-U9-vY6" secondAttribute="trailing" id="rH1-v2-86O"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="gjr-Vm-BpT" secondAttribute="trailing" id="sCZ-8s-h6V"/>
                 <constraint firstItem="bke-LB-3ja" firstAttribute="top" secondItem="y6a-iT-BEX" secondAttribute="bottom" constant="4" id="sPe-DG-GI4"/>
+                <constraint firstItem="gjr-Vm-BpT" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="tha-WZ-Rxs"/>
                 <constraint firstAttribute="trailing" secondItem="PPi-Lh-aE4" secondAttribute="trailing" constant="30" id="yYq-3p-qQe"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
