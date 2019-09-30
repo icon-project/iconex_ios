@@ -486,6 +486,7 @@ extension MainViewController: UICollectionViewDataSource {
         if isWalletMode {
             return walletList.count
         } else {
+            print("타입 몇개 있음? \(Manager.wallet.types.count)")
             return Manager.wallet.types.count + tokenList.count
         }
     }
@@ -520,12 +521,12 @@ extension MainViewController: UICollectionViewDataSource {
             
             cell.coinTokens = self.coinTokenList[cellCoinToken]
             
-            switch indexPath.row {
-            case 0:
-                cell.nicknameLabel.text = CoinType.icx.fullName
-            case 1:
-                cell.nicknameLabel.text = CoinType.eth.fullName
-            default:
+            let coinTypes = Manager.wallet.types
+            
+            if indexPath.row < coinTypes.count {
+                let type = coinTypes[indexPath.row]
+                cell.nicknameLabel.text = type == "icx" ? CoinType.icx.fullName : CoinType.eth.fullName
+            } else {
                 let realIndex = indexPath.row - Manager.wallet.types.count
                 cell.fullName = self.tokenList[realIndex].name
                 cell.nicknameLabel.text = self.tokenList[realIndex].name
