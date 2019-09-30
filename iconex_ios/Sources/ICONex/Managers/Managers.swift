@@ -468,18 +468,42 @@ class PRepManager {
         return Manager.icon
     }
     
+//    private var votedPower: String = ""
+    
     private init() { }
     
     func getPRepInfo() {
         DispatchQueue.global().async {
             let icxList = Manager.wallet.walletList.compactMap { $0 as? ICXWallet }
+            
+            var staked: BigUInt = 0
+            var voted: BigUInt = 0
+            
             for icx in icxList {
                 guard let stake = self.service.getStake(from: icx) else { continue }
                 guard let voting = self.service.getDelegation(wallet: icx) else { continue }
                 guard let iscore = self.service.queryIScore(from: icx) else { continue }
                 let myStake = MyStakeInfo(stake: stake.stake, votingPower: voting.votingPower, iscore: iscore.iscore)
+                staked += stake.stake
+                voted += voting.totalDelegated
                 self.walletInfo[icx.address] = myStake
             }
+            
+            let percent: Float = {
+                if voted == 0 {
+                    return 0.0
+                } else {
+                    guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted.decimalNumber else {
+                        return 0.0
+                    }
+                    
+                    let result = (votedDecimal / stakedDecimal) * 100
+                    return result.floatValue
+                }
+            }()
+            
+            let percentString = String(format: "%.1f", percent) + " %"
+            mainViewModel.totalVotedPower.onNext(percentString)
         }
     }
     
