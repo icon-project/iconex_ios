@@ -486,7 +486,6 @@ extension MainViewController: UICollectionViewDataSource {
         if isWalletMode {
             return walletList.count
         } else {
-            print("타입 몇개 있음? \(Manager.wallet.types.count)")
             return Manager.wallet.types.count + tokenList.count
         }
     }
