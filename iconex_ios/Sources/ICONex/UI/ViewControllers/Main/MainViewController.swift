@@ -124,6 +124,7 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
+                print("Reload!!!!!")
                 DispatchQueue.main.async {
                     self.balanceLabel.alpha = 0
                     self.powerLabel.alpha = 0
@@ -530,7 +531,7 @@ extension MainViewController: UICollectionViewDataSource {
         }
         
         cell.handler = {
-//            self.refresh()
+            mainViewModel.reload.onNext(true)
         }
         return cell
     }
