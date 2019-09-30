@@ -138,7 +138,9 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     delList.append(info)
                     
                 }
-                let voteInfo = VoteInfo(count: delList.count, estimatedFee: self.stepLimit, maxFee: self.maxFee, wallet: self.wallet, delegationList: delList, privateKey: pk)
+                let price = Tool.calculatePrice(currency: "icxusd", balance: self.estimatedStep)
+                
+                let voteInfo = VoteInfo(count: delList.count, estimatedFee: self.stepLimit, maxFee: self.maxFee, usdPrice: price, wallet: self.wallet, delegationList: delList, privateKey: pk)
                 
                 Alert.vote(voteInfo: voteInfo, confirmAction: { isSuccess, txHash in
                     if isSuccess {

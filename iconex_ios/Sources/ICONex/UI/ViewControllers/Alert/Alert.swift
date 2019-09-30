@@ -204,6 +204,7 @@ struct VoteInfo {
     var count: Int
     var estimatedFee: String
     var maxFee: String
+    var usdPrice: String
     
     var wallet: ICXWallet
     var delegationList: [[String: Any]]
