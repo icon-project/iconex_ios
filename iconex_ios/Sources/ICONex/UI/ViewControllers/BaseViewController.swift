@@ -21,6 +21,10 @@ class BaseViewController: UIViewController, UINavigationControllerDelegate, UIGe
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         
+        if #available(iOS 13.0, *) {
+            overrideUserInterfaceStyle = .light
+        }
+        
         setKeyboardListener()
         initializeComponents()
     }

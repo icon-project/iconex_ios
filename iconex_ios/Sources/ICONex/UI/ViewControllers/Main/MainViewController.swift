@@ -228,6 +228,7 @@ class MainViewController: BaseViewController, Floatable {
                 
                 let navRootVC = UINavigationController(rootViewController: lockVC)
                 navRootVC.isNavigationBarHidden = true
+                navRootVC.modalPresentationStyle = .fullScreen
                 app.topViewController()?.present(navRootVC, animated: true, completion: nil)
                 
             }

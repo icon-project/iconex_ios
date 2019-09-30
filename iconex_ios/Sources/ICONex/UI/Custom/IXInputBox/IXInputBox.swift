@@ -156,8 +156,7 @@ enum IXInputBoxType {
     
     private var placeholder: String? {
         willSet {
-//            textField.placeholder = newValue
-            textField.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [.foregroundColor: UIColor.gray179, .font: UIFont.systemFont(ofSize: 15, weight: .medium)])
+            textField.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [.foregroundColor: UIColor.gray217, .font: UIFont.systemFont(ofSize: 15, weight: .medium)])
             
             if let text = textField.text, text.count > 0, let value = newValue {
                 placeholderLabel.isHidden = false
