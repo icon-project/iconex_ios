@@ -19,23 +19,20 @@ extension LAContext {
         case faceID
     }
     
-    var biometricType: BiometricType {
+    var biometricType: (type: BiometricType, canEvaluate: Bool) {
         var error: NSError?
         
-        guard self.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
-            // Capture these recoverable error thru Crashlytics
-            return .none
-        }
+        let canEvaluate = self.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
         
         switch self.biometryType {
         case .none:
-            return .none
+            return (.none, canEvaluate)
         case .touchID:
-            return .touchID
+            return (.touchID, canEvaluate)
         case .faceID:
-            return .faceID
+            return (.faceID, canEvaluate)
         default:
-            return .none
+            return (.none, canEvaluate)
         }
     }
 }

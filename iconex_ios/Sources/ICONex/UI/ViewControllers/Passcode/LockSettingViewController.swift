@@ -116,7 +116,7 @@ extension LockSettingViewController: UITableViewDataSource {
         default:
             let activateCell = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! SwitchTableViewCell
             activateCell.selectionStyle = .none
-            switch bioType {
+            switch bioType.type {
             case .none:
                 activateCell.titleLabel.text = ""
             case .touchID:
@@ -142,7 +142,7 @@ extension LockSettingViewController: UITableViewDataSource {
                             if status == Tool.LAStatus.locked {
                                 
                                 let title: String = {
-                                    if self.bioType == .touchID {
+                                    if self.bioType.type == .touchID {
                                         return "LockSetting.TouchID.Locked".localized
                                     } else {
                                         return "LockSetting.FaceID.Locked".localized
@@ -153,7 +153,7 @@ extension LockSettingViewController: UITableViewDataSource {
                                 
                             } else if status == Tool.LAStatus.notUsed {
                                 let title: String = {
-                                    if self.bioType == .touchID {
+                                    if self.bioType.type == .touchID {
                                         return "LockSetting.Alert.TouchID".localized
                                     } else {
                                         return "LockSetting.Alert.FaceID".localized

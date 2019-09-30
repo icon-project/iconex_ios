@@ -31,7 +31,7 @@ class BioAuthViewController: BaseViewController {
         
         let bioType = LAContext().biometricType
         
-        switch bioType {
+        switch bioType.type {
         case .touchID:
             navBar.setTitle("LockSetting.TouchID.NavBar.Title".localized)
             titleLabel.size18(text: "LockSetting.TouchID.NavBar.Title".localized, color: .mint1, align: .center)
@@ -60,7 +60,7 @@ class BioAuthViewController: BaseViewController {
                         self.navigationController?.popViewController(animated: true)
                         
                     case .locked:
-                        Alert.basic(title: bioType == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
+                        Alert.basic(title: bioType.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
                         
                     default:
                         break

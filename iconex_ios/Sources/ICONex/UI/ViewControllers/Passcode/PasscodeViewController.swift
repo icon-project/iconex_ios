@@ -68,20 +68,30 @@ class PasscodeViewController: BaseViewController {
                 
         }.disposed(by: disposeBag)
         
-        if self.lockType == .check && UserDefaults.standard.bool(forKey: "useBio") {
-            if Tool.canVerificateBiometry() == .success {
-                Tool.bioVerification(message: "", completion: { (state) in
-                    switch state {
-                    case .success:
-                        app.toMain()
-                        
-                    case .locked:
-                        Alert.basic(title: LAContext().biometricType == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
-                        
-                    default:
-                        break
-                    }
-                })
+        if self.lockType == .check {
+            let bio = LAContext().biometricType
+            
+            if UserDefaults.standard.bool(forKey: "useBio") {
+                
+                if bio.canEvaluate {
+                    Tool.bioVerification(message: "", completion: { (state) in
+                        switch state {
+                        case .success:
+                            app.toMain()
+                            
+                        case .locked:
+                            Alert.basic(title: bio.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
+                            
+                        default:
+                            break
+                        }
+                    })
+                } else {
+                    UserDefaults.standard.removeObject(forKey: "useBio")
+                    Alert.basic(title: String(format: "LockScreen.Alert.RemovedBio".localized, bio.type == .faceID ? "Face ID" : "Touch ID"), leftButtonTitle: "Common.Confirm".localized).show()
+                }
+            } else {
+                
             }
         }
     }
@@ -385,7 +395,7 @@ class PasscodeViewController: BaseViewController {
             case .change where status == .new: return "LockScreen.Setting.Passcode.Change.New".localized
             case .change where status == .renewCheck: return "LockScreen.Setting.Passcode.Change.Renew".localized
             case .change where status == .renewFail: return "LockScreen.Setting.Passcode.Change.Error".localized
-            case .change where status == .same: return "현재 잠금번호와 동일합니다.\n새 잠금 번호를 입력해주세요."
+            case .change where status == .same: return "LockScreen.Setting.Passcode.Same".localized
             case .change where status == .invalid: return "LockScreen.Setting.Passcode.Header_Error".localized
                 
             case .deactivate where status == .initial: return "LockScreen.Setting.Passcode.Change.Current".localized

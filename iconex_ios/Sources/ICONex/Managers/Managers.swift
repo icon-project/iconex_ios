@@ -181,7 +181,7 @@ extension ICONManager {
     
     public func sendTransaction(transaction: Transaction, privateKey: PrivateKey) throws -> Result<String, Error> {
         let signed = try SignedTransaction(transaction: transaction, privateKey: privateKey)
-        Log("dic - \(try? transaction.toDic())")
+        
         let request = iconService.sendTransaction(signedTransaction: signed)
         let response = request.execute()
         

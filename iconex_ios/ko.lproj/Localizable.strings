@@ -500,6 +500,37 @@
 "Alert.Connect.Send.Completed1" = "송금 요청이 완료되었습니다.";
 "Alert.Connect.Send.Completed2" = "거래내역은 내 지갑 상세페이지 또는 ICON Tracker에서 조회 가능합니다.";
 
+// MARK: LockScreen
+"LockScreen.Setting.Title" = "잠금 번호 설정";
+"LockScreen.Setting.Header" = "잠금 번호를 사용하시겠습니까?";
+"LockScreen.Setting.Desc1" = "잠금 번호 사용 시 ICONex를 실행할 때마다 잠금 번호를 확인하여, 내 지갑 정보가 노출되는 것을 방지합니다.\n잠금 번호를 잊은 경우, 지갑 비밀번호 확인 후 잠금 번호를 재설정 할 수 있습니다.";
+"LockScreen.Setting.useFunction" = "잠금 번호 사용";
+"LockScreen.Setting.ChangeCode" = "잠금 번호 변경";
+"LockScreen.Setting.ChangeCode.Title" = "잠금 번호 변경";
+"LockScreen.Setting.useBiometrics.TouchID" = "Touch ID로 잠금 해제";
+"LockScreen.Setting.useBiometrics.FaceID" = "Face ID로 잠금 해제";
+
+"LockScreen.Setting.Bio.Title.TouchID" = "Touch ID로 잠금 해제 안내";
+"LockScreen.Setting.Bio.Title.FaceID" = "Face ID로 잠금 해제 안내";
+"LockScreen.Setting.Bio.Header.TouchID" = "Touch ID로 잠금 해제를 하시겠습니까?";
+"LockScreen.Setting.Bio.Header.FaceID" = "Face ID로 잠금 해제를 하시겠습니까?";
+"LockScreen.Setting.Bio.Desc.TouchID" = "ICONex 앱을 실행할 때 Touch ID를 사용하여 빠르게 잠금 해제가 가능합니다.\n\n휴대폰에 등록되어 있는 모든 지문으로 잠금 해제를 할 수 있습니다. 다른 사람의 지문이 등록되어 있는지 확인해주세요.";
+"LockScreen.Setting.Bio.Desc.FaceID" = "ICONex 앱을 실행할 때 Face ID를 사용하여 빠르게 잠금 해제가 가능합니다.\n\n휴대폰에 등록되어 있는 모든 Face ID로 잠금 해제를 할 수 있습니다. 다른 사람의 Face ID가 등록되어 있는지 확인해주세요.";
+"LockScreen.Setting.Bio.Use.TouchID" = "Touch ID로 해제";
+"LockScreen.Setting.Bio.Use.FaceID" = "Face ID로 해제";
+
+"LockScreen.Setting.Passcode.Header" = "잠금 번호 6자리를 입력해주세요.";
+"LockScreen.Setting.Passcode.Header_2" = "다시 한 번 잠금 번호를 입력해주세요.";
+"LockScreen.Setting.Passcode.Header_Error" = "잠금 번호가 일치하지 않습니다.";
+
+"LockScreen.Setting.Passcode.Change.Current" = "현재 잠금 번호 6자리를 입력해주세요.";
+"LockScreen.Setting.Passcode.Change.New" = "새로 변경할 잠금 번호 6자리를 입력해주세요.";
+"LockScreen.Setting.Passcode.Change.Renew" = "다시 한 번 잠금 번호를 입력해주세요.";
+"LockScreen.Setting.Passcode.Change.Error" = "잠금 번호가 일치하지 않습니다.\n설정할 잠금 번호 입력부터 다시 시도해주세요.";
+"LockScreen.Setting.Passcode.Same" = "현재 잠금번호와 동일합니다.\n새 잠금 번호를 입력해주세요.";
+"LockScreen.Alert.AskUseBio" = "휴대폰의 설정에서 화면 잠금 설정 후 \"%@으로 잠금 해제\" 기능을 사용할 수 있습니다.";
+"LockScreen.Alert.RemovedBio" = "휴대폰의 설정화면에서 %@ 등록 후 \"%@로 잠금 해제\" 기능을 사용할 수 있습니다.";
+
 // Error
 "Error.Swap.NoICX" = "스왑 가능한 ICX 토큰이 없습니다.";
 "Error.Swap.NoETH" = "스왑 수수료 지불을 위한 ETH 잔액이 없습니다. 입금 후 진행해 주세요.";

@@ -171,7 +171,7 @@ struct Tool {
         let context = LAContext()
         var reason = ""
         
-        switch context.biometricType {
+        switch context.biometricType.type {
         case .touchID:
             reason = "LockScreen.Setting.Bio.Use.FaceID".localized
         case .faceID:
