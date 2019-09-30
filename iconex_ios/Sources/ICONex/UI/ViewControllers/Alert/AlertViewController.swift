@@ -25,6 +25,8 @@ class AlertViewController: BaseViewController {
     @IBOutlet weak var rightButton: UIButton!
     @IBOutlet weak var bottom: NSLayoutConstraint!
     
+    @IBOutlet weak var confirmSpinner: UIActivityIndicatorView!
+    
     var type: AlertType = .basic
     
     var isButtonOne: Bool = false
@@ -147,17 +149,14 @@ class AlertViewController: BaseViewController {
                 case .send:
                     guard let sendInfo = self.sendInfo else { return }
                     
+                    self.rightButton.setTitleColor(.clear, for: .normal)
+                    
+                    DispatchQueue.main.async {
+                       self.confirmSpinner.startAnimating()
+                    }
+                    
                     // ICX
                     if let tx = sendInfo.transaction, let pk = sendInfo.privateKey {
-//                        do {
-//                            let result = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
-//                            Log(result, .info)
-//
-//                            self.isSuccess = true
-//                            self.txHash = result
-//                        } catch {
-//                            self.isSuccess = false
-//                        }
                         do {
                             let request = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
                             
@@ -183,10 +182,20 @@ class AlertViewController: BaseViewController {
                         
                     }
                     
+                    DispatchQueue.main.async {
+                       self.confirmSpinner.stopAnimating()
+                    }
+                    
                     self.closer(self.successHandler)
                     
                 case .vote:
                     guard let info = self.voteInfo else { return }
+                    
+                    self.rightButton.setTitleColor(.clear, for: .normal)
+                    
+                    DispatchQueue.main.async {
+                       self.confirmSpinner.startAnimating()
+                    }
                     
                     let delegationCall = Manager.icon.setDelegation(from: info.wallet, delegations: info.delegationList)
                     
@@ -208,6 +217,10 @@ class AlertViewController: BaseViewController {
                     } catch {
                         self.isSuccess = false
                         self.txHash = "Common.Error".localized
+                    }
+                    
+                    DispatchQueue.main.async {
+                       self.confirmSpinner.stopAnimating()
                     }
                     
                     self.closer(self.successHandler)
