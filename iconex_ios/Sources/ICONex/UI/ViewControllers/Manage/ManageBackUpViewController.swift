@@ -86,7 +86,7 @@ class ManageBackUpViewController: BaseViewController {
     private func setupBind() {
         downloadButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                Alert.basic(title: "Create.Wallet.Step3.Alert.Info".localized, isOnlyOneButton: false, confirmAction: {
+                Alert.basic(title: "Create.Wallet.Step3.Alert.Info1".localized, subtitle: "Create.Wallet.Step3.Alert.Info2".localized, isOnlyOneButton: false, confirmAction: {
                     var filePath: URL = URL(fileURLWithPath: "")
                     do {
                         if let myWallet = self.wallet as? ICXWallet {
