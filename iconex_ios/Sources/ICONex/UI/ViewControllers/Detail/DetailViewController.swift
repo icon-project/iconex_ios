@@ -194,7 +194,7 @@ class DetailViewController: BaseViewController, Floatable {
                         return Manager.icon.getBalance(wallet: icx) ?? 0
                         
                     } else if let eth = wallet as? ETHWallet {
-                        return Ethereum.requestBalance(address: eth.address) ?? 0
+                        return Ethereum.requestBalance(address: eth.address.add0xPrefix()) ?? 0
                     } else {
                         return 0
                     }
