@@ -116,7 +116,7 @@ class CreateKeystoreViewController: BaseViewController {
                 self.confirmInputBox.setError(message: nil)
                 self.delegate.validated()
                 
-                self.delegate.walletInfo = WalletInfo(name: name, password: password)
+                self.delegate.walletInfo = WalletInfo(name: name.removeContinuosSuffix(string: " "), password: password)
             }).disposed(by: disposeBag)
     }
     
