@@ -29,7 +29,7 @@ class AddTokenInfoViewController: BaseViewController {
 
         navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
             if !self.addressBox.text.isEmpty || !self.nameBox.text.isEmpty {
-                Alert.basic(title: "Token.Add.Cancel".localized, isOnlyOneButton: false, confirmAction: {
+                Alert.basic(title: "Token.Info.Alert.Cancel".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.navigationController?.popViewController(animated: true)
                 }).show()
                 

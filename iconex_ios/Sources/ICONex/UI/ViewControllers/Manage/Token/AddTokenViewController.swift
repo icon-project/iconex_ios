@@ -22,8 +22,10 @@ class AddTokenViewController: BaseViewController {
     
     var walletInfo: BaseWalletConvertible? = nil
     
-    // 테이블뷰 리스트
+    // tableview list
     var tokenList = PublishSubject<[TokenFile]>()
+    
+    var checkList: [Token]?
     
     var selectedList = [String: NewToken]()
     
@@ -46,9 +48,14 @@ class AddTokenViewController: BaseViewController {
         
         setupBind()
         
-        if let loadToken = loadTokenList() {
+        if let loadToken = loadTokenList()?.sorted(by: { (lhs, rhs) -> Bool in
+            return lhs.name < rhs.name
+        }) {
             tokenList.onNext(loadToken)
         }
+        
+        guard let wallet = self.walletInfo else { return }
+        self.checkList = try? DB.tokenList(dependedAddress: wallet.address)
     }
     
     private func setupBind() {
@@ -85,8 +92,9 @@ class AddTokenViewController: BaseViewController {
                         
                     }).disposed(by: cell.cellBag)
                 
-                guard let wallet = self.walletInfo else { return }
-                if !wallet.canSaveToken(contractAddress: item.address) {
+                let checker = self.checkList?.filter({ $0.contract == item.address }).count ?? 0
+                
+                if checker > 0 {
                     cell.tokenState = .saved
                 } else {
                     cell.tokenState = .normal
