@@ -129,7 +129,7 @@ class LoadWalletViewController: PopableViewController {
             self.name.refresh()
             switch self.scrollIndex {
             case 0:
-                self.dismiss(animated: true, completion: nil)
+                self.closeCurrent()
                 
             default:
                 let value = (CGFloat)(self.scrollIndex - 1)
@@ -183,7 +183,7 @@ class LoadWalletViewController: PopableViewController {
         super.refresh()
         titleContainer.set(title: "LoadWallet.Title".localized)
         titleContainer.actionHandler = {
-            self.dismiss(animated: true, completion: nil)
+            self.closeCurrent()
         }
         
         leftButton.round02()
@@ -220,6 +220,14 @@ extension LoadWalletViewController: loadWalletSequence {
 }
 
 extension LoadWalletViewController {
+    func closeCurrent() {
+        if scrollIndex != 0 {
+            Alert.basic(title: "LoadWallet.Alert.Cancel".localized, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized) {
+                self.dismiss(animated: true, completion: nil)
+            }.show()
+        }
+    }
+    
     func finish() {
         guard let loader = _loader else { return }
         do {
