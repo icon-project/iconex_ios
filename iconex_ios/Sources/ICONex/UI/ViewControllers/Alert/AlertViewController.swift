@@ -66,6 +66,8 @@ class AlertViewController: BaseViewController {
     var returnHandler: ((_ privateKey: String) -> Void)?
     var successHandler: ((_ isSuccess: Bool, _ txHash: String?) -> Void)?
     
+    @IBOutlet weak var centerY: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -151,79 +153,78 @@ class AlertViewController: BaseViewController {
                     
                     self.rightButton.setTitleColor(.clear, for: .normal)
                     
-                    DispatchQueue.main.async {
-                       self.confirmSpinner.startAnimating()
-                    }
+                    self.confirmSpinner.isHidden = false
+                    self.confirmSpinner.startAnimating()
                     
-                    // ICX
-                    if let tx = sendInfo.transaction, let pk = sendInfo.privateKey {
-                        do {
-                            let request = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
-                            
-                            switch request {
-                            case .success(let txHash):
-                                self.isSuccess = true
-                                self.txHash = txHash
+                    DispatchQueue.global().async {
+                        // ICX
+                        if let tx = sendInfo.transaction, let pk = sendInfo.privateKey {
+                            do {
+                                let request = try Manager.icon.sendTransaction(transaction: tx, privateKey: pk)
                                 
-                            case .failure(let err):
+                                switch request {
+                                case .success(let txHash):
+                                    self.isSuccess = true
+                                    self.txHash = txHash
+                                    
+                                case .failure(let err):
+                                    self.isSuccess = false
+                                    self.txHash = err.localizedDescription
+                                }
+                            } catch {
                                 self.isSuccess = false
-                                self.txHash = err.localizedDescription
                             }
-                        } catch {
-                            self.isSuccess = false
                         }
-                    }
-                    
-                    // ETH
-                    if let ethTx = sendInfo.ethTransaction, let pk = sendInfo.ethPrivateKey {
-                        let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from, to: ethTx.to, value: ethTx.value, data: ethTx.data)
                         
-                        self.isSuccess = sendETH.isSuccess
+                        // ETH
+                        if let ethTx = sendInfo.ethTransaction, let pk = sendInfo.ethPrivateKey {
+                            let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from, to: ethTx.to, value: ethTx.value, data: ethTx.data)
+                            
+                            self.isSuccess = sendETH.isSuccess
+                            
+                        }
                         
-                    }
+                        DispatchQueue.main.async {
+                            self.confirmSpinner.stopAnimating()
+                            self.closer(self.successHandler)
+                        }
                     
-                    DispatchQueue.main.async {
-                       self.confirmSpinner.stopAnimating()
                     }
-                    
-                    self.closer(self.successHandler)
                     
                 case .vote:
                     guard let info = self.voteInfo else { return }
                     
                     self.rightButton.setTitleColor(.clear, for: .normal)
                     
-                    DispatchQueue.main.async {
-                       self.confirmSpinner.startAnimating()
-                    }
+                    self.confirmSpinner.isHidden = false
+                    self.confirmSpinner.startAnimating()
                     
+                    DispatchQueue.global().async {
                     let delegationCall = Manager.icon.setDelegation(from: info.wallet, delegations: info.delegationList)
-                    
-                    
-                    do {
-                        let response = try Manager.icon.sendTransaction(transaction: delegationCall, privateKey: info.privateKey)
-                        
-                        switch response {
-                        case .success(let txHash):
-                            Log(txHash, .debug)
-                            self.isSuccess = true
-                            self.txHash = txHash
+                        do {
+                            let response = try Manager.icon.sendTransaction(transaction: delegationCall, privateKey: info.privateKey)
                             
-                        case .failure(let error):
-                            Log(error.localizedDescription, .error)
+                            switch response {
+                            case .success(let txHash):
+                                Log(txHash, .debug)
+                                self.isSuccess = true
+                                self.txHash = txHash
+                                
+                            case .failure(let error):
+                                Log(error.localizedDescription, .error)
+                                self.isSuccess = false
+                                self.txHash = error.localizedDescription
+                            }
+                        } catch {
                             self.isSuccess = false
-                            self.txHash = error.localizedDescription
+                            self.txHash = "Common.Error".localized
                         }
-                    } catch {
-                        self.isSuccess = false
-                        self.txHash = "Common.Error".localized
+                        
+                        DispatchQueue.main.async {
+                            self.confirmSpinner.stopAnimating()
+                            self.closer(self.successHandler)
+                        }
                     }
-                    
-                    DispatchQueue.main.async {
-                       self.confirmSpinner.stopAnimating()
-                    }
-                    
-                    self.closer(self.successHandler)
                     
                 case .txHash:
                     guard let txHash = self.txHashData?.txHash else { return }
@@ -574,12 +575,14 @@ class AlertViewController: BaseViewController {
                     var keyboardHeight: CGFloat
                     if height == 0 {
                         keyboardHeight = height
-                        //                        self.view.frame.origin.y = 0
                     } else {
                         keyboardHeight = height - (self.view.safeAreaInsets.bottom)
-                        //                        self.view.frame.origin.y -= (height - self.view.safeAreaInsets.bottom - 100)
                     }
-                    self.popView.center = CGPoint(x: self.view.center.x, y: (self.view.frame.height - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom - keyboardHeight) / 2)
+                    
+                    self.bottom.constant = keyboardHeight
+                    UIView.animate(withDuration: 0.25) {
+                            self.view.layoutIfNeeded()
+                    }
                 }).disposed(by: disposeBag)
             
         default: break

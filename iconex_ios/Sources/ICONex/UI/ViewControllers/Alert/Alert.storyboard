@@ -114,6 +114,7 @@
                     </view>
                     <connections>
                         <outlet property="bottom" destination="Bo5-YO-6qL" id="KR0-1x-Bwf"/>
+                        <outlet property="centerY" destination="ppq-fh-5ig" id="dP8-mR-2tM"/>
                         <outlet property="confirmSpinner" destination="LDl-Od-Nuq" id="QbS-0c-GJx"/>
                         <outlet property="contentView" destination="5Mo-e4-FRu" id="aFw-pb-VqT"/>
                         <outlet property="headerLabel" destination="sAj-XE-3bv" id="7ye-RC-mMQ"/>
