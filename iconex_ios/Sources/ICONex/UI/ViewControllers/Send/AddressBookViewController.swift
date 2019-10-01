@@ -89,12 +89,10 @@ class AddressBookViewController: BaseViewController {
     private func setupUI() {
         titleLabel.size18(text: "AddressBook.Title".localized, color: .gray77, weight: .medium, align: .center)
         
-        addressBookButton.setTitle("AddressBook.Button.AddressBook".localized, for: .normal)
-        myWalletButton.setTitle("AddressBook.Button.MyWallet".localized, for: .normal)
-        
-
-        addressBookButton.titleLabel?.size14(text: "AddressBook.Button.AddressBook".localized, color: .gray77, weight: .bold, align: .center)
-        myWalletButton.titleLabel?.size14(text: "AddressBook.Button.MyWallet".localized, color: .gray77, align: .center)
+        addressBookButton.setAttributedTitle(NSAttributedString(string: "AddressBook.Button.AddressBook".localized, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .regular), .foregroundColor: UIColor.gray77]), for: .normal)
+        myWalletButton.setAttributedTitle(NSAttributedString(string: "AddressBook.Button.MyWallet".localized, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .regular), .foregroundColor: UIColor.gray77]), for: .normal)
+        addressBookButton.setAttributedTitle(NSAttributedString(string: "AddressBook.Button.AddressBook".localized, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor.gray77]), for: .selected)
+        myWalletButton.setAttributedTitle(NSAttributedString(string: "AddressBook.Button.MyWallet".localized, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor: UIColor.gray77]), for: .selected)
         
         rightButton.setTitle("Common.Edit".localized, for: .normal)
         rightButton.setTitleColor(.gray128, for: .normal)
@@ -106,14 +104,15 @@ class AddressBookViewController: BaseViewController {
         footerRightButton.setTitle("AddressBook.AddAddress".localized, for: .normal)
         
         myWalletLine.isHidden = true
+        addressBookButton.isSelected = true
     }
     
     private func setupBind() {
         addressBookButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 self.rightButton.isHidden = false
-                self.addressBookButton.titleLabel?.size14(text: "AddressBook.Button.AddressBook".localized, color: .gray77, weight: .bold, align: .center)
-                self.myWalletButton.titleLabel?.size14(text: "AddressBook.Button.MyWallet".localized, color: .gray77, weight: .regular, align: .center)
+                self.addressBookButton.isSelected = true
+                self.myWalletButton.isSelected = false
                 
                 self.selected = 0
                 self.footerView.isHidden = false
@@ -135,10 +134,8 @@ class AddressBookViewController: BaseViewController {
                 self.rightButton.isHidden = true
                 self.tableView.isEditing = false
                 self.rightButton.setTitle("Common.Edit".localized, for: .normal)
-                
-                self.addressBookButton.titleLabel?.size14(text: "AddressBook.Button.AddressBook".localized, color: .gray77, weight: .regular, align: .center)
-                self.myWalletButton.titleLabel?.size14(text: "AddressBook.Button.MyWallet".localized, color: .gray77, weight: .bold, align: .center)
-                
+                self.addressBookButton.isSelected = false
+                self.myWalletButton.isSelected = true
                 self.selected = 1
                 self.footerView.isHidden = true
                 self.addressBookLine.isHidden = true
