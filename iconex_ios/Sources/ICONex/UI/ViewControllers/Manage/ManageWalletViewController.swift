@@ -143,21 +143,21 @@ class ManageWalletViewController: BaseViewController {
                     } else {
                         Alert.basic(title: "Manage.Alert.Wallet".localized, isOnlyOneButton: false, confirmAction: {
                             do {
-                                if Manager.wallet.walletList.count > 0 {
-                                    Alert.password(wallet: wallet, returnAction: { (_) in
-                                        do {
-                                            try DB.deleteWallet(wallet: wallet)
-                                            mainViewModel.reload.onNext(true)
-                                            mainViewModel.noti.onNext(true)
+                                Alert.password(wallet: wallet, returnAction: { (_) in
+                                    do {
+                                        try DB.deleteWallet(wallet: wallet)
+                                        mainViewModel.reload.onNext(true)
+                                        mainViewModel.noti.onNext(true)
+                                        if Manager.wallet.walletList.count > 0 {
                                             self.handler?()
-                                        } catch let error {
-                                            Log(error, .error)
+                                        } else {
+                                            let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
+                                            app.change(root: start)
                                         }
-                                    }).show()
-                                } else {
-                                    let start = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "StartView")
-                                    app.change(root: start)
-                                }
+                                    } catch let error {
+                                        Log(error, .error)
+                                    }
+                                }).show()
                             }
                         }).show()
                     }
