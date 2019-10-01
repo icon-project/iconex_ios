@@ -71,10 +71,8 @@ class MainViewController: BaseViewController, Floatable {
     
     var isWalletMode: Bool = true {
         willSet {
-            DispatchQueue.main.async {
-                self.collectionView.setContentOffset(CGPoint.zero, animated: true)
-                self.collectionView.reloadData()
-            }
+            self.collectionView.setContentOffset(CGPoint.zero, animated: true)
+            self.collectionView.reloadData()
             
             navBar.setTitle(newValue ? "Main.Nav.Title.1".localized : "Main.Nav.Title.2".localized, isMain: true)
             
@@ -341,6 +339,9 @@ class MainViewController: BaseViewController, Floatable {
         let items = self.collectionView.indexPathsForVisibleItems
         
         let path: IndexPath = {
+            if items.count == 0 {
+                return IndexPath(row: 0, section: 0)
+            }
             if items.count == 1 {
                 return items.first!
             }
