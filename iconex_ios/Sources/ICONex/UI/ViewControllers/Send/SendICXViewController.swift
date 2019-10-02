@@ -422,6 +422,8 @@ class SendICXViewController: BaseViewController {
                     
                     if address == wallet.address {
                         self.addressInputBox.setError(message: "Send.InputBox.Address.Error.SameAddress".localized)
+                    } else {
+                        self.addressInputBox.set(state: .normal)
                     }
                 })
                 
