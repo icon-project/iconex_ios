@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import BigInt
 
-class SelectCoinTokenViewController: UIViewController {
+class SelectCoinTokenViewController: BaseViewController {
 
     @IBOutlet weak var dimmView: UIView!
     @IBOutlet weak var contentView: UIView!
@@ -20,8 +20,6 @@ class SelectCoinTokenViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var tableView: UITableView!
-    
-    var disposeBag = DisposeBag()
     
     var walletInfo: BaseWalletConvertible? = nil
     

@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import PanModal
 
-class DataTypeViewController: UIViewController {
+class DataTypeViewController: BaseViewController {
     @IBOutlet weak var dimmView: UIView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var dismissButton: UIButton!
@@ -23,8 +23,6 @@ class DataTypeViewController: UIViewController {
     @IBOutlet weak var hexButton: UIButton!
     
     var isSelect: InputType = .utf8
-    
-    var disposeBag = DisposeBag()
     
     var handler: ((_ data: String?, _ dataType: InputType) -> Void)?
     

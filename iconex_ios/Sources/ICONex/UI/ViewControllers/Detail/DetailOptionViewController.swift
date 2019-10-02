@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class DetailOptionViewController: UIViewController {
+class DetailOptionViewController: BaseViewController {
     @IBOutlet weak var contentView: UIView!
     
     @IBOutlet weak var closeButton: UIButton!
@@ -27,8 +27,6 @@ class DetailOptionViewController: UIViewController {
     var filter: TxFilter = .all
     
     var confirmHandler: ((_ filter: TxFilter) -> Void)?
-    
-    var disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
