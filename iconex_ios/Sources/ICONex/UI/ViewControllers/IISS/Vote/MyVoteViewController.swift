@@ -247,10 +247,7 @@ class MyVoteViewController: BaseViewController {
             }).bind(to: resetButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        self.scrollView?.rx.didScroll
-            .subscribe({ (_) in
-                self.view.endEditing(true)
-            }).disposed(by: disposeBag)
+        self.scrollView?.keyboardDismissMode = .onDrag
     }
     
     override func refresh() {
