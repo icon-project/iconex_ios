@@ -632,6 +632,7 @@
                         <outlet property="powerAssetTitle" destination="Rt2-Ls-9P7" id="3AY-OA-Mam"/>
                         <outlet property="powerLabel" destination="Ihs-g5-uXM" id="ogh-nB-lYZ"/>
                         <outlet property="powerPageView" destination="Sys-aR-03A" id="V4f-kQ-RZA"/>
+                        <outlet property="powerView" destination="nav-7N-4Rq" id="Hl7-TW-vS9"/>
                         <outlet property="toggleButton" destination="RmN-DS-12x" id="TT4-ha-Ooz"/>
                         <outlet property="unitLabel" destination="ETb-V0-3ta" id="9XF-si-AaG"/>
                         <outlet property="votedActivityIndicator" destination="mWc-Jr-Ikq" id="YDL-f8-HnQ"/>

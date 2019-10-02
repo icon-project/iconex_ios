@@ -35,6 +35,7 @@ class MainViewController: BaseViewController, Floatable {
     @IBOutlet weak var toggleButton: UIButton!
     @IBOutlet weak var balanceLabel: UILabel!
     
+    @IBOutlet weak var powerView: UIView!
     @IBOutlet weak var powerAssetTitle: UILabel!
     @IBOutlet weak var powerLabel: UILabel!
     
@@ -67,7 +68,7 @@ class MainViewController: BaseViewController, Floatable {
     var coinTokenList = [String: [BaseWalletConvertible]]()
     
     var symbolList = [String]()
-    var tokenList: [Token] = DB.allTokenList()
+    var tokenList = [Token]()
     
     var isWalletMode: Bool = true {
         willSet {
@@ -120,15 +121,17 @@ class MainViewController: BaseViewController, Floatable {
             self.isWalletMode.toggle()
         }
         
+        self.tokenList = DB.allTokenList().sorted { (lhs, rhs) -> Bool in
+            return lhs.created < rhs.created
+        }
+        
         mainViewModel.reload
             .subscribe { (_) in
                 print("Reload!!!!!")
-                DispatchQueue.main.async {
-                    self.balanceLabel.alpha = 0
-                    self.powerLabel.alpha = 0
-                    self.balanceActivityIndicator.startAnimating()
-                    self.votedActivityIndicator.startAnimating()
-                }
+//                self.balanceLabel.alpha = 0
+//                self.powerLabel.alpha = 0
+//                self.balanceActivityIndicator.startAnimating()
+//                self.votedActivityIndicator.startAnimating()
                 
                 self.walletList = Manager.wallet.walletList
                 
@@ -144,18 +147,23 @@ class MainViewController: BaseViewController, Floatable {
                 let list = Manager.balance.calculateExchangeTotalBalance()
                 mainViewModel.balaneList.onNext(list)
                 
+                self.tokenList = DB.allTokenList().sorted { (lhs, rhs) -> Bool in
+                    return lhs.created < rhs.created
+                }
+                
                 self.setCoinList()
             }.disposed(by: disposeBag)
         
         mainViewModel.totalVotedPower
-            .do(onNext: { (_) in
-                DispatchQueue.main.async {
-                    self.powerLabel.alpha = 1
-                    self.votedActivityIndicator.stopAnimating()
-                }
-            })
-            .bind(to: self.powerLabel.rx.text)
-            .disposed(by: disposeBag)
+            .observeOn(MainScheduler.instance)
+            .subscribe(onNext: { (power) in
+                self.balancePageView.isHidden = power == "0.0 %"
+                self.powerPageView.isHidden = power == "0.0 %"
+                self.powerView.isHidden = power == "0.0 %"
+                self.powerLabel.alpha = 1
+                self.votedActivityIndicator.stopAnimating()
+                self.powerLabel.text = power
+            }).disposed(by: disposeBag)
         
         mainViewModel.noti
             .observeOn(MainScheduler.instance)
@@ -173,10 +181,8 @@ class MainViewController: BaseViewController, Floatable {
         balanceObservable
             .observeOn(MainScheduler.instance)
             .subscribe { (_) in
-                DispatchQueue.main.async {
-                    self.balanceLabel.alpha = 1
-                    self.balanceActivityIndicator.stopAnimating()
-                }
+                self.balanceLabel.alpha = 1
+                self.balanceActivityIndicator.stopAnimating()
         }.disposed(by: disposeBag)
         
         // scrollview
