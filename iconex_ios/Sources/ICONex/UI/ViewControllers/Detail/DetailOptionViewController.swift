@@ -11,6 +11,8 @@ import RxSwift
 import RxCocoa
 
 class DetailOptionViewController: BaseViewController {
+    
+    @IBOutlet weak var dismissView: UIView!
     @IBOutlet weak var contentView: UIView!
     
     @IBOutlet weak var closeButton: UIButton!
@@ -23,6 +25,8 @@ class DetailOptionViewController: BaseViewController {
     @IBOutlet weak var allButton: UIButton!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var depositButton: UIButton!
+    
+    @IBOutlet weak var bottomView: UIView!
     
     var filter: TxFilter = .all
     
@@ -71,17 +75,28 @@ class DetailOptionViewController: BaseViewController {
         
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
         contentView.alpha = 0.0
+        bottomView.alpha = 0.0
         contentView.transform = CGAffineTransform(translationX: 0, y: 50)
+        bottomView.transform = CGAffineTransform(translationX: 0, y: 50)
     }
     
     private func setupBind() {
         
-        closeButton.rx.tap.asControlEvent()
+        closeButton.rx.tap
             .subscribe { (_) in
                 self.beginClose()
         }.disposed(by: disposeBag)
         
-        allButton.rx.tap.asControlEvent()
+        
+        let tapGesture = UITapGestureRecognizer()
+        
+        dismissView.addGestureRecognizer(tapGesture)
+        
+        tapGesture.rx.event.bind { _ in
+            self.beginClose()
+        }.disposed(by: disposeBag)
+        
+        allButton.rx.tap
             .subscribe { (_) in
                 self.allButton.isSelected = true
                 self.sendButton.isSelected = false
@@ -89,7 +104,7 @@ class DetailOptionViewController: BaseViewController {
                 self.filter = .all
         }.disposed(by: disposeBag)
 
-        sendButton.rx.tap.asControlEvent()
+        sendButton.rx.tap
             .subscribe { (_) in
                 self.sendButton.isSelected = true
                 self.allButton.isSelected = false
@@ -97,7 +112,7 @@ class DetailOptionViewController: BaseViewController {
                 self.filter = .send
             }.disposed(by: disposeBag)
 
-        depositButton.rx.tap.asControlEvent()
+        depositButton.rx.tap
             .subscribe { (_) in
                 self.depositButton.isSelected = true
                 self.sendButton.isSelected = false
@@ -105,7 +120,7 @@ class DetailOptionViewController: BaseViewController {
                 self.filter = .deposit
             }.disposed(by: disposeBag)
         
-        confirmButton.rx.tap.asControlEvent()
+        confirmButton.rx.tap
             .subscribe { (_) in
                 detailViewModel.filter.onNext(self.filter)
                 self.beginClose()
@@ -132,6 +147,9 @@ extension DetailOptionViewController {
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
                 self.contentView.alpha = 1.0
                 self.contentView.transform = .identity
+                
+                self.bottomView.alpha = 1.0
+                self.bottomView.transform = .identity
             })
         }, completion: nil)
     }
@@ -141,6 +159,9 @@ extension DetailOptionViewController {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
                 self.contentView.transform = CGAffineTransform(translationX: 0, y: 50)
                 self.contentView.alpha = 0.0
+                
+                self.bottomView.transform = CGAffineTransform(translationX: 0, y: 50)
+                self.bottomView.alpha = 0.0
             })
             
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {

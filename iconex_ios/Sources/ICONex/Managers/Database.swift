@@ -193,12 +193,13 @@ struct DB {
         var walletList = [BaseWalletConvertible]()
         
         for model in list {
-            
-            if model.type == "icx", let wallet = ICXWallet(name: model.name, rawData: model.rawData!, created: model.createdDate) {
-                walletList.append(wallet)
-            } else if let wallet = ETHWallet(name: model.name, rawData: model.rawData!, created: model.createdDate) {
-                walletList.append(wallet)
+            var wallet: BaseWalletConvertible
+            if model.type == "icx" {
+                wallet = ICXWallet(model: model)
+            } else {
+                wallet = ETHWallet(model: model)
             }
+            walletList.append(wallet)
         }
         
         return walletList

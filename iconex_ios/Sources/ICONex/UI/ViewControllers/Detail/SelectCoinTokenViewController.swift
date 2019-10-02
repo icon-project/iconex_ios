@@ -48,6 +48,14 @@ class SelectCoinTokenViewController: BaseViewController {
                 self.beginClose()
         }.disposed(by: disposeBag)
         
+        let tapGesture = UITapGestureRecognizer()
+        
+        dimmView.addGestureRecognizer(tapGesture)
+        
+        tapGesture.rx.event.bind { _ in
+            self.beginClose()
+        }.disposed(by: disposeBag)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,6 +107,8 @@ extension SelectCoinTokenViewController: UITableViewDelegate {
 extension SelectCoinTokenViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let tokens = self.walletInfo?.tokens?.count ?? 0
+        print("토큰이 몇개일까 \(tokens)")
+//        print("지갑 정보 \(self.walletInfo ?? "지갑 없당")")
         return tokens + 1
     }
     
@@ -155,7 +165,7 @@ extension SelectCoinTokenViewController {
     private func beginShow() {
         UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25, animations: {
-                self.dimmView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
+                self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
             })
             
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
@@ -173,7 +183,7 @@ extension SelectCoinTokenViewController {
             })
             
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
-                self.dimmView.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
+                self.view.backgroundColor = UIColor(white: 0.0, alpha: 0.0)
             })
         }, completion: { _ in
             self.dismiss(animated: false, completion: {
