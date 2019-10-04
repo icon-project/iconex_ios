@@ -457,6 +457,12 @@ extension MainCollectionViewCell: UITableViewDelegate {
                     guard let tokenList = selectedWallet.tokens else { return }
                     guard let tokenInfo = tokenList.filter({ $0.symbol == symbol }).first else { return }
                     detailVC.tokenInfo = tokenInfo
+                    
+                    if let _ = selectedWallet as? ICXWallet {
+                        detailVC.detailType = .irc
+                    } else {
+                        detailVC.detailType = .erc
+                    }
                     detailViewModel.token.onNext(tokenInfo)
                 }
             }

@@ -414,14 +414,16 @@ class DetailViewController: BaseViewController, Floatable {
         toggleButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let currencyUnit = try! detailViewModel.currencyUnit.value()
+                
                 switch self.detailType {
-                case .icx:
+                case .icx, .erc:
                     switch currencyUnit {
                     case .USD: detailViewModel.currencyUnit.onNext(.BTC)
                     case .BTC: detailViewModel.currencyUnit.onNext(.ETH)
                     case .ETH: detailViewModel.currencyUnit.onNext(.USD)
                     default: break
                     }
+                
                 default:
                     switch currencyUnit {
                     case .USD: detailViewModel.currencyUnit.onNext(.BTC)
