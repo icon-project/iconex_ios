@@ -18,8 +18,8 @@ class VoteViewModel {
     
     var available: BehaviorSubject<BigUInt>
     
-    var myList: PublishSubject<[MyVoteEditInfo]>
-    var newList: PublishSubject<[MyVoteEditInfo]>
+    var myList: BehaviorSubject<[MyVoteEditInfo]>
+    var newList: BehaviorSubject<[MyVoteEditInfo]>
     
     var voteCount: BehaviorSubject<Int>
     
@@ -28,8 +28,8 @@ class VoteViewModel {
     init() {
         self.isChanged = PublishSubject<Bool>()
         self.available = BehaviorSubject<BigUInt>(value: Manager.voteList.myVotes?.votingPower ?? 0)
-        self.myList = PublishSubject<[MyVoteEditInfo]>()
-        self.newList = PublishSubject<[MyVoteEditInfo]>()
+        self.myList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
+        self.newList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.voteCount = BehaviorSubject<Int>(value: Manager.voteList.votesCount)
         
         Observable.combineLatest(self.myList, self.newList).flatMapLatest { (myList, newList) -> Observable<Int> in
@@ -42,4 +42,4 @@ class VoteViewModel {
 
 let voteViewModel = VoteViewModel.shared
 
-let sharedAvailable = voteViewModel.available.share(replay: 1, scope: .forever)
+let sharedAvailable = voteViewModel.available.share(replay: 1)

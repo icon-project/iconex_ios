@@ -177,7 +177,7 @@ class MyVoteViewController: BaseViewController {
                 
         }.disposed(by: disposeBag)
         
-        resetButton.rx.tap.asControlEvent()
+        resetButton.rx.tap
             .subscribe { (_) in
                 Alert.basic(title: "MyVoteView.Alert.Reset".localized, isOnlyOneButton: false, confirmAction: {
                     for (index, list) in self.myVoteList.enumerated() {
@@ -207,6 +207,7 @@ class MyVoteViewController: BaseViewController {
             }.disposed(by: disposeBag)
         
         Observable.merge(voteViewModel.myList, voteViewModel.newList)
+            .skip(2)
             .subscribe(onNext: { (list) in
                 
                 print("ESTIMATE!!!!!")
@@ -287,7 +288,8 @@ extension MyVoteViewController {
                 }
                 
             })
-            
+            // 여기서 crash~~~~
+            print("delegation \(tDelegation?.votingPower)")
             voteViewModel.available.onNext(tDelegation?.votingPower ?? 0)
             voteViewModel.myList.onNext(self.myVoteList)
             
@@ -323,6 +325,7 @@ extension MyVoteViewController: UITableViewDataSource {
             let info = self.totalDelegation!
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath) as! MyVoteGeneralCell
             
+            print("info \(info)")
             cell.set(info: info)
             
             return cell
@@ -425,7 +428,14 @@ extension MyVoteViewController: UITableViewDataSource {
                 let myDelegateDecimal = my.decimalNumber ?? 0.0
                 let sliderDecimal = sliderMaxValue.decimalNumber ?? 0.0
                 
-                let calculated = myDelegateDecimal / sliderDecimal
+                let calculated: Decimal =  {
+                    if sliderDecimal > 0 {
+                        return myDelegateDecimal / sliderDecimal
+                    } else {
+                        return 0
+                    }
+                }()
+                
                 let sliderPercent = calculated.floatValue * 100
                 cell.current = sliderPercent
                 cell.slider.value = sliderPercent
@@ -435,6 +445,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculated.floatValue * 100) + "%)"
                 
+//                print("대체 슬라이더가 얼마길래. \(sliderMaxValue)")
                 if sliderMaxValue == 0 {
                     cell.slider.isEnabled = false
                 } else {
@@ -546,6 +557,8 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 let delegate = self.convertPercentToBigValue(percent: info.percent ?? 0.0)
                 let sliderMaxValue = fixedAvailable + delegate
+                print("fixedAvailable \(fixedAvailable)")
+                print("delegate \(delegate)")
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
                 let sliderMaxPercent = (sliderMaxDecimal / stakedDecimal) * 100
@@ -589,7 +602,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     
                     cell.slider.sendActions(for: .valueChanged)
                 }
-                
+                print("대체 슬라이더가 얼마길래. \(sliderMaxValue)")
                 if sliderMaxValue == 0 {
                     cell.slider.isEnabled = false
                 } else {
