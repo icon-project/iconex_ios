@@ -335,7 +335,9 @@ extension MainCollectionViewCell: UITableViewDataSource {
             
         } else {
             if isWalletMode {
-                guard let token = info?.tokens?[indexPath.row] else { return tokenCell }
+                guard let token = info?.tokens?.sorted(by: { (lhs, rhs) -> Bool in
+                    return lhs.created < rhs.created
+                })[indexPath.row] else { return tokenCell }
                 
                 let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
 
@@ -406,9 +408,7 @@ extension MainCollectionViewCell: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableview.deselectRow(at: indexPath, animated: true)
         
-//        guard let wallet = self.info else { return }
         let detailVC = UIStoryboard.init(name: "Detail", bundle: nil).instantiateInitialViewController() as! DetailViewController
-//        detailVC.walletInfo = wallet
         
         if indexPath.section == 0 {
             guard let wallet = self.info else { return }
@@ -429,7 +429,9 @@ extension MainCollectionViewCell: UITableViewDelegate {
         } else {
             if isWalletMode {
                 guard let wallet = self.info else { return }
-                guard let token = wallet.tokens?[indexPath.row] else { return }
+                guard let token = wallet.tokens?.sorted(by: { (lhs, rhs) -> Bool in
+                    return lhs.created < rhs.created
+                })[indexPath.row] else { return }
                 
                 detailViewModel.wallet.onNext(wallet)
                 detailViewModel.token.onNext(token)

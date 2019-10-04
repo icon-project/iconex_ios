@@ -350,6 +350,13 @@ class DetailViewController: BaseViewController, Floatable {
                 let selectVC = self.storyboard?.instantiateViewController(withIdentifier: "SelectCoinToken") as! SelectCoinTokenViewController
                 selectVC.walletInfo = self.walletInfo
                 selectVC.changedHandler = { (newToken) in
+                    switch self.detailType {
+                    case .icx, .irc:
+                        self.detailType = newToken == nil ? .icx : .irc
+                    case .eth, .erc:
+                        self.detailType = newToken == nil ? .eth : .erc
+                    }
+                    detailViewModel.currencyUnit.onNext(.USD)
                     self.tokenInfo = newToken
                     self.txList.removeAll()
                     self.fetchTxList()

@@ -21,7 +21,15 @@ class SelectCoinTokenViewController: BaseViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
-    var walletInfo: BaseWalletConvertible? = nil
+    var walletInfo: BaseWalletConvertible? = nil {
+        willSet {
+            self.tokenList = newValue?.tokens?.sorted(by: { (lhs, rhs) -> Bool in
+                return lhs.created > rhs.created
+            })
+        }
+    }
+    
+    var tokenList: [Token]?
     
     var changedHandler: ((_ token: Token?) -> Void)?
     
@@ -84,7 +92,7 @@ extension SelectCoinTokenViewController: UITableViewDelegate {
             }
             
         } else {
-            guard let tokenList = wallet.tokens else { return }
+            guard let tokenList = self.tokenList else { return }
             let token = tokenList[indexPath.row-1]
             
             detailViewModel.token.onNext(token)
@@ -106,9 +114,7 @@ extension SelectCoinTokenViewController: UITableViewDelegate {
 
 extension SelectCoinTokenViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let tokens = self.walletInfo?.tokens?.count ?? 0
-        print("토큰이 몇개일까 \(tokens)")
-//        print("지갑 정보 \(self.walletInfo ?? "지갑 없당")")
+        let tokens = self.tokenList?.count ?? 0
         return tokens + 1
     }
     
@@ -138,7 +144,7 @@ extension SelectCoinTokenViewController: UITableViewDataSource {
             cell.usdPriceLabel.size12(text: price, color: .gray179, align: .right)
             
         } else {
-            guard let token = wallet.tokens?[indexPath.row-1] else { return cell }
+            guard let token = self.tokenList?[indexPath.row - 1] else { return cell }
             cell.symbolLabel.size14(text: token.symbol, color: .gray77, weight: .bold)
             cell.fullNameLabel.size12(text: token.name, color: .gray179)
             
