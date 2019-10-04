@@ -22,7 +22,7 @@ class PRepSectionHeaderView: UIView {
         willSet {
             switch newValue {
             case .rankDescending:
-                self.rankLabel.text = "Rank ↓"
+                self.rankLabel.text = "Rank ↑"
                 self.nameLabel.text = "Name"
                 
                 // color
@@ -30,17 +30,17 @@ class PRepSectionHeaderView: UIView {
                 self.nameLabel.textColor = .gray179
                 
             case .rankAscending:
-                self.rankLabel.text = "Rank ↑"
+                self.rankLabel.text = "Rank ↓"
                 
             case .nameDescending:
                 self.rankLabel.text = "Rank"
-                self.nameLabel.text = "Name ↓"
+                self.nameLabel.text = "Name ↑"
                 
                 self.rankLabel.textColor = .gray179
                 self.nameLabel.textColor = .gray77
                 
             case .nameAscending:
-                self.nameLabel.text = "Name ↑"
+                self.nameLabel.text = "Name ↓"
             }
         }
     }
@@ -73,7 +73,7 @@ class PRepSectionHeaderView: UIView {
         totalVotesButton.setTitleColor(.gray179, for: .normal)
         totalVotesButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
         
-        self.rankLabel.text = "Rank ↓"
+        self.rankLabel.text = "Rank ↑"
         self.nameLabel.text = "Name"
         
         // color
