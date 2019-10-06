@@ -336,7 +336,7 @@
 "TokenDetail.Placeholder.Address" = "주소 (Address)";
 "TokenDetail.Placeholder.Name" = "토큰 이름 (Token Name)";
 "TokenDetail.Placeholder.Symbol" = "토큰 기호 (Token Symbol)";
-"TokenDetail.Placeholder.Decimal" = "소수 자리수 (Decimals)";
+"TokenDetail.Placeholder.Decimal" = "소수 자리수 (Number of Decimals)";
 "TokenDetail.Alert.Delete" = "%@을(를) 삭제하시겠습니까?";
 "TokenDetail.Alert.Cancel" = "토큰 정보 수정을 취소하시겠습니까?";
 

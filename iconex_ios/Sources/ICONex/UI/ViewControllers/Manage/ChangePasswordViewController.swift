@@ -50,7 +50,7 @@ class ChangePasswordViewController: BaseViewController {
         
         attentionView.mintBox()
         attentionLabel.size12(text: "ChangePassword.Desc1".localized, color: .mint1)
-        footerDescLabel.size12(text: "ChangePassword.Desc1".localized, color: .mint1, weight: .light)
+        footerDescLabel.size12(text: "ChangePassword.Desc2".localized, color: .mint1, weight: .light)
         
         changeButton.isEnabled = false
         changeButton.setTitle("Common.Change".localized, for: .normal)

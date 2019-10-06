@@ -37,7 +37,7 @@ class AddTokenInfoViewController: BaseViewController {
                 self.navigationController?.popViewController(animated: true)
             }
         }
-        navBar.setTitle("ManageToken.Add".localized)
+        navBar.setTitle("Token.Add.Footer.Button".localized)
         
         // box init
         self.addressBox.set(state: .normal, placeholder: "TokenDetail.Placeholder.Address".localized)
