@@ -156,7 +156,7 @@ class DetailViewController: BaseViewController, Floatable {
                     self.floater.showMenu(wallet: wallet, token: self.tokenInfo, self)
                 }
                 if let eth = wallet as? ETHWallet {
-                    self.floater.showMenu(ethWallet: eth, self)
+                    self.floater.showMenu(ethWallet: eth, token: self.tokenInfo, self)
                     return
                 }
             }).disposed(by: disposeBag)
@@ -181,7 +181,7 @@ class DetailViewController: BaseViewController, Floatable {
             let balance: BigUInt = {
                 if let token = self.tokenInfo {
                     if let _ = wallet as? ICXWallet {
-                        return Manager.icon.getIRCTokenBalance(tokenInfo: token) ?? 0
+                        return Manager.icon.getIRCTokenBalance(dependedAddress: wallet.address, contractAddress: token.contract) ?? 0
                         
                     } else if let _ = wallet as? ETHWallet {
                         return Ethereum.requestTokenBalance(token: token) ?? 0

@@ -201,7 +201,7 @@ class Floater {
         floatMenu.pop()
     }
     
-    func showMenu(ethWallet: ETHWallet, _ controller: UIViewController? = nil) {
+    func showMenu(ethWallet: ETHWallet, token: Token?, _ controller: UIViewController? = nil) {
         targetAction = controller
         let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
         
@@ -217,11 +217,11 @@ class Floater {
                 let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendETH") as! SendETHViewController
                 send.walletInfo = ethWallet
                 send.privateKey = privateKey
-                
+                send.token = token
                 send.sendHandler = { isSuccess in
                     Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
                 }
-                
+                send.modalPresentationStyle = .fullScreen
                 app.topViewController()?.present(send, animated: true, completion: nil)
             }).show()
         }

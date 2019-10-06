@@ -163,19 +163,18 @@ extension ICONManager {
         return balance
     }
     
-    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> Result<BigUInt, Error> {
+    public func getIRCTokenBalance(dependedAddress: String, contractAddress: String) -> BigUInt? {
         let call = Call<BigUInt>(from: dependedAddress, to: contractAddress, method: "balanceOf", params: ["_owner": dependedAddress])
         let result = self.iconService.call(call).execute()
         
         switch result {
         case .success(let balance):
             Manager.balance.updateTokenBalance(address: dependedAddress, contract: contractAddress, balance: balance)
+            return balance
             
         case .failure:
-            break
+            return nil
         }
-        
-        return result
     }
     
     
@@ -624,7 +623,7 @@ struct Ethereum {
         guard let ethAddress = EthereumAddress(address) else { return nil }
         
         let result = try? web3.eth.getBalance(address: ethAddress)
-        
+        Manager.balance.updateWalletBalance(address: address.prefix0xRemoved(), balance: result ?? 0)
         return result
     }
     
