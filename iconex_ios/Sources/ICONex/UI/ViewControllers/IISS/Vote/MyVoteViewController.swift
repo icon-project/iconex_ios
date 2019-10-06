@@ -273,26 +273,22 @@ extension MyVoteViewController {
             self.totalDelegation = tDelegation
             self.myVoteList.removeAll()
             if let votes = myVotes {
-                self.myVoteList.append(contentsOf: votes)
+                self.myVoteList.append(contentsOf: votes.sorted(by: { (lhs, rhs) -> Bool in
+                    guard let left = lhs.myDelegate, let right = rhs.myDelegate else {
+                        return lhs.prepName > rhs.prepName
+                    }
+                    
+                    if self.isDecending {
+                        return left > right
+                    } else {
+                        return left < right
+                    }
+                    
+                }))
             }
-            
-            self.myVoteList.sort(by: { (lhs, rhs) -> Bool in
-                guard let left = lhs.myDelegate, let right = rhs.myDelegate else {
-                    return lhs.prepName > rhs.prepName
-                }
-            
-                if self.isDecending {
-                    return left > right
-                } else {
-                    return left < right
-                }
-                
-            })
-            // 여기서 crash~~~~
-            print("delegation \(tDelegation?.votingPower)")
             voteViewModel.available.onNext(tDelegation?.votingPower ?? 0)
             voteViewModel.myList.onNext(self.myVoteList)
-            
+            voteViewModel.originalList.onNext(self.myVoteList)
             self.tableView.reloadData()
         }
         
@@ -445,11 +441,12 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculated.floatValue * 100) + "%)"
                 
-//                print("대체 슬라이더가 얼마길래. \(sliderMaxValue)")
                 if sliderMaxValue == 0 {
                     cell.slider.isEnabled = false
+                    cell.myVotesField.isEnabled = false
                 } else {
                     cell.slider.isEnabled = true
+                    cell.myVotesField.isEnabled = true
                 }
                 
                 cell.slider.rx.value.skip(1).distinctUntilChanged()
@@ -502,7 +499,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         let maxDecimal = sliderMaxValue.decimalNumber?.floatValue ?? 0
                         
-                        let percent = maxDecimal / stakedDecimal.floatValue
+                        let percent = maxDecimal / stakedDecimal.floatValue * 100
                         this.percent = percent
                         
                         self.myVoteList[indexPath.row] = this
@@ -512,10 +509,16 @@ extension MyVoteViewController: UITableViewDataSource {
                     }
                     
                     guard let bigValueDecimal = bigValue.decimalNumber, let maxValueDecimal = sliderMaxValue.decimalNumber else { return }
-                    let valuePercent = (bigValueDecimal / maxValueDecimal).floatValue * 100
                     
-                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valuePercent
-                        ) + " %)"
+                    let valuePercent: Float = {
+                        if bigValueDecimal > 0 {
+                            return (bigValueDecimal / maxValueDecimal).floatValue * 100
+                        } else {
+                            return 0
+                        }
+                    }()
+                    
+                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valuePercent) + " %)"
                     
                     cell.current = valuePercent
                     cell.slider.value = valuePercent
@@ -557,8 +560,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 let delegate = self.convertPercentToBigValue(percent: info.percent ?? 0.0)
                 let sliderMaxValue = fixedAvailable + delegate
-                print("fixedAvailable \(fixedAvailable)")
-                print("delegate \(delegate)")
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
                 let sliderMaxPercent = (sliderMaxDecimal / stakedDecimal) * 100
@@ -585,7 +586,13 @@ extension MyVoteViewController: UITableViewDataSource {
                     let sliderValue = self.convertPercentToBigValue(percent: valuePercent)
                     let sliderDecimal = sliderValue.decimalNumber ?? 0
                     
-                    let calculatedFloat = (sliderDecimal / sliderMaxDecimal).floatValue * 100
+                    let calculatedFloat: Float = {
+                        if sliderMaxDecimal > 0 {
+                            return (sliderDecimal / sliderMaxDecimal).floatValue * 100
+                        } else {
+                            return 0
+                        }
+                    }()
                     
                     cell.slider.value = calculatedFloat
                     cell.current = calculatedFloat
@@ -602,11 +609,13 @@ extension MyVoteViewController: UITableViewDataSource {
                     
                     cell.slider.sendActions(for: .valueChanged)
                 }
-                print("대체 슬라이더가 얼마길래. \(sliderMaxValue)")
+                
                 if sliderMaxValue == 0 {
                     cell.slider.isEnabled = false
+                    cell.myVotesField.isEnabled = false
                 } else {
                     cell.slider.isEnabled = true
+                    cell.myVotesField.isEnabled = true
                 }
                 
                 cell.slider.rx.value.skip(1).distinctUntilChanged()
@@ -663,7 +672,15 @@ extension MyVoteViewController: UITableViewDataSource {
                     }
 
                     guard let bigValueDecimal = bigValue.decimalNumber, let maxValueDecimal = sliderMaxValue.decimalNumber else { return }
-                    let sliderPercent = bigValueDecimal / maxValueDecimal * 100
+//                    let sliderPercent = bigValueDecimal / maxValueDecimal * 100
+                    
+                    let sliderPercent: Decimal = {
+                        if bigValueDecimal > 0 {
+                            return bigValueDecimal / maxValueDecimal * 100
+                        } else {
+                            return 0
+                        }
+                    }()
                     
                     let availablePercent = (bigValueDecimal / stakedDecimal).floatValue * 100
                     

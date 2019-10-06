@@ -72,19 +72,41 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         
         voteButton.isEnabled = false
         
-        Observable.merge(voteViewModel.myList, voteViewModel.newList)
-            .subscribe(onNext: { (list) in
-                for i in list {
-                    if i.editedDelegate != nil {
-                        self.voteButton.rx.isEnabled.onNext(true)
-                        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-                        return
-                    }
+        Observable.combineLatest(voteViewModel.originalList, voteViewModel.myList, voteViewModel.newList).flatMapLatest { (originalList, myList, newList) -> Observable<Bool> in
+            for i in myList {
+                let newPrepChecker = originalList.contains(where: { (list) -> Bool in
+                    return i.address == list.address
+                })
+                
+                if !newPrepChecker {
+                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+                    return Observable.just(true)
                 }
-                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-                self.voteButton.rx.isEnabled.onNext(false)
-                return
-        }).disposed(by: disposeBag)
+            }
+            
+            if originalList.count != myList.count {
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+                return Observable.just(true)
+            }
+            
+            for i in myList {
+                if i.editedDelegate != nil {
+                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+                    return Observable.just(true)
+                }
+            }
+            
+            for i in newList {
+                if let edited = i.editedDelegate, edited > BigUInt(0) {
+                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+                    return Observable.just(true)
+                }
+            }
+            
+            self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+            return Observable.just(false)
+            
+        }.bind(to: self.voteButton.rx.isEnabled).disposed(by: disposeBag)
         
         voteViewModel.myList
             .subscribe(onNext: { (list) in
