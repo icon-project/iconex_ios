@@ -176,7 +176,11 @@ class SendETHViewController: BaseViewController {
             sendInfo.type = "eth"
             self.presentPanModal(sendInfo)
         }
-        balanceTitleLabel.size12(text: "Send.Balance.Avaliable.ETH".localized, color: .gray77, weight: .medium)
+        if let token = self.token {
+            balanceTitleLabel.size12(text: String(format: "Send.Balance.Avaliable.Token".localized, token.symbol) , color: .gray77, weight: .medium)
+        } else {
+            balanceTitleLabel.size12(text: "Send.Balance.Avaliable".localized, color: .gray77, weight: .medium)
+        }
         amountInputBox.set(inputType: .decimal)
         amountInputBox.set(state: .normal, placeholder: "Send.InputBox.Amount".localized)
         
