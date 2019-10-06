@@ -85,7 +85,7 @@ class InputDataViewController: BaseViewController {
                 if self.textView.text.isEmpty || self.isEditingMode || self.isViewMode {
                    self.dismiss(animated: true, completion: nil)
                 } else {
-                    Alert.basic(title: "Send.InputData.Alert.Cancel".localized, isOnlyOneButton: false, confirmAction: {
+                    Alert.basic(title: "Send.InputData.Alert.Cancel".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                         self.dismiss(animated: true, completion: nil)
                     }).show()
                 }

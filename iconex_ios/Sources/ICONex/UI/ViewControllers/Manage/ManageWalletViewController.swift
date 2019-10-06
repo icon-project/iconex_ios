@@ -124,7 +124,7 @@ class ManageWalletViewController: BaseViewController {
             .subscribe { (_) in
                 self.beginClose {
                     if wallet.balance == 0 || wallet.balance == nil {
-                        Alert.basic(title: "Manage.Alert.Wallet.Empty".localized, isOnlyOneButton: false, confirmAction: {
+                        Alert.basic(title: "Manage.Alert.Wallet.Empty".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                             do {
                                 try DB.deleteWallet(wallet: wallet)
                                 mainViewModel.reload.onNext(true)
@@ -141,7 +141,7 @@ class ManageWalletViewController: BaseViewController {
                         }).show()
                         
                     } else {
-                        Alert.basic(title: "Manage.Alert.Wallet".localized, isOnlyOneButton: false, confirmAction: {
+                        Alert.basic(title: "Manage.Alert.Wallet".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                             do {
                                 Alert.password(wallet: wallet, returnAction: { (_) in
                                     do {

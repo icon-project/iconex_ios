@@ -63,7 +63,7 @@ class SendAlertView: UIView {
         addSubview(view)
         contentView = view
         
-        stepLimitLabel.text = "Alert.Common.StepLimit".localized
+        stepLimitTitleLabel.text = "Alert.Common.StepLimit".localized
         estimatedTitleLabel.text =  "Alert.Common.EstimatedFee".localized
         addressTitleLabel.text = "Alert.Send.Address".localized
     }

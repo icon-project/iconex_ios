@@ -561,7 +561,7 @@ class SendICXViewController: BaseViewController {
         let calculated = self.stepLimit * stepPrice
         let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
         
-        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 9, false), color: .gray77, align: .right)
+        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 3), color: .gray77, align: .right)
         feePriceLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
     }
 }

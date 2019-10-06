@@ -500,7 +500,7 @@ class AlertViewController: BaseViewController {
                     
                 } else {
                     if !Validator.validateETHAddress(address: inputValue) {
-                        return "Error.Address.ETH.Invalid".localized
+                        return "Error.Address.Invalid".localized
                     }
                 }
                 if !DB.canSaveAddressBook(address: inputValue) {
