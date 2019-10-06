@@ -34,14 +34,14 @@ class BioAuthViewController: BaseViewController {
         switch bioType.type {
         case .touchID:
             navBar.setTitle("LockSetting.TouchID.NavBar.Title".localized)
-            titleLabel.size18(text: "LockSetting.TouchID.NavBar.Title".localized, color: .mint1, align: .center)
+            titleLabel.size18(text: "LockSetting.TouchID.Title".localized, color: .mint1, align: .center)
             subtitleLabel.size14(text: "LockSetting.TouchID.SubTitle".localized, color: .gray128, weight: .light, align: .center)
             descLabel.size12(text: "LockSetting.TouchID.Description".localized, color: .gray128, weight: .light, align: .center)
             useButton.setTitle("LockSetting.TouchID.Button".localized, for: .normal)
             
         case .faceID:
             navBar.setTitle("LockSetting.FaceID.NavBar.Title".localized)
-            titleLabel.size18(text: "LockSetting.FaceID.NavBar.Title".localized, color: .mint1, align: .center)
+            titleLabel.size18(text: "LockSetting.FaceID.Title".localized, color: .mint1, align: .center)
             subtitleLabel.size14(text: "LockSetting.FaceID.SubTitle".localized, color: .gray128, weight: .light, align: .center)
             descLabel.isHidden = true
             useButton.setTitle("LockSetting.FaceID.Button".localized, for: .normal)
