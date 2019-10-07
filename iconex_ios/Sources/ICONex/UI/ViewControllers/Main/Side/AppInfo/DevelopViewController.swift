@@ -66,6 +66,9 @@ class DevelopViewController: BaseViewController {
         developSwitch.rx.controlEvent(.valueChanged)
             .subscribe(onNext: {
                 self.developer = self.developSwitch.isOn
+                if self.developSwitch.isOn == false {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }).disposed(by: disposeBag)
        
     }

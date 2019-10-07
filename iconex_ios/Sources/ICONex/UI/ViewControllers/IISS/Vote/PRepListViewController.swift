@@ -109,7 +109,7 @@ extension PRepListViewController: UITableViewDataSource {
         
         if let total = preps?.totalDelegated, let totalD = total.decimalNumber, let delegatedD = prep.delegated.decimalNumber {
             let percentD = delegatedD / totalD * 100
-            cell.totalVotePercent.size12(text: "(" + String(format: "%.0f", percentD.floatValue) + "%)")
+            cell.totalVotePercent.size12(text: "(" + String(format: "%.1f", percentD.floatValue) + "%)")
         }
         
         cell.addButton.isHidden = true

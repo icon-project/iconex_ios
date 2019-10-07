@@ -298,11 +298,18 @@ extension ICONManager {
         }
     }
     
-    func claimIScore(from: ICXWallet) -> String? {
-        let call = Call<String>(from: from.address, to: CONST.iiss, method: "claimIScore", params: nil)
-        let result = self.iconService.call(call).execute()
+    func claimIScore(from: ICXWallet, limit: BigUInt, privateKey: PrivateKey) -> String? {
+        let transaction = CallTransaction()
+        transaction.from = from.address
+        transaction.to = CONST.iiss
+        transaction.method("claimIScore")
+        transaction.value(0)
+        transaction.stepLimit(limit)
+        transaction.nonce("0x0")
+        transaction.nid = Manager.icon.iconService.nid
         
         do {
+            let result = try Manager.icon.sendTransaction(transaction: transaction, privateKey: privateKey)
             return try result.get()
         } catch {
             Log("Error - \(error)")
@@ -503,7 +510,9 @@ class PRepManager {
             }()
             
             let percentString = String(format: "%.1f", percent) + " %"
-            mainViewModel.totalVotedPower.onNext(percentString)
+            DispatchQueue.main.async {
+                mainViewModel.totalVotedPower.onNext(percentString)
+            }
         }
     }
     

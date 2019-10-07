@@ -146,7 +146,7 @@ class Floater {
                 }).show()
             }
             floatMenu.itemAction2 = {
-                guard let votingPower = Manager.iiss.votingPower(icx: wallet), votingPower > 0 else {
+                guard let votingPower = Manager.iiss.votingPower(icx: wallet), let staked = Manager.iiss.stake(icx: wallet), votingPower > 0 || staked > 0 else {
                     Alert.basic(title: "Floater.Alert.Vote".localized, leftButtonTitle: "Common.Confirm".localized).show()
                     return
                 }
