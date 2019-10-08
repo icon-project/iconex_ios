@@ -122,6 +122,21 @@ extension PRepListViewController: UITableViewDataSource {
 }
 
 extension PRepListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard let wallet = self.wallet, let prepList = preps?.preps else { return }
+        let prepInfo = prepList[indexPath.row]
+        
+        DispatchQueue.global().async {
+            guard let prep = Manager.icon.getPRepInfo(from: wallet, address: prepInfo.address) else { return }
+
+            DispatchQueue.main.async {
+                Alert.prepDetail(prepInfo: prep).show()
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 36
     }

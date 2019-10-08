@@ -98,23 +98,23 @@ class PasscodeViewController: BaseViewController {
             
             if UserDefaults.standard.bool(forKey: "useBio") {
                 
-                if bio.canEvaluate {
-                    Tool.bioVerification(message: "", completion: { (state) in
-                        switch state {
-                        case .success:
-                            app.toMain()
-                            
-                        case .locked:
-                            Alert.basic(title: bio.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
-                            
-                        default:
-                            break
-                        }
-                    })
-                } else {
-                    UserDefaults.standard.removeObject(forKey: "useBio")
-                    Alert.basic(title: String(format: "LockScreen.Alert.RemovedBio".localized, bio.type == .faceID ? "Face ID" : "Touch ID"), leftButtonTitle: "Common.Confirm".localized).show()
-                }
+                Tool.bioVerification(message: "", completion: { (state) in
+                    switch state {
+                    case .success:
+                        app.toMain()
+                        
+                    case .locked:
+                        Alert.basic(title: bio.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
+                        
+                    case .failed, .userCancel, .userFallback:
+                        break
+                        
+                    default:
+                        UserDefaults.standard.removeObject(forKey: "useBio")
+                        let method = bio.type == .faceID ? "Face ID" : "Touch ID"
+                        Alert.basic(title: String(format: "LockScreen.Alert.RemovedBio".localized, method, method), leftButtonTitle: "Common.Confirm".localized).show()
+                    }
+                })
             } else {
                 
             }

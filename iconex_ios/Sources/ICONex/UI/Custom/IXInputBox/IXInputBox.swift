@@ -130,6 +130,7 @@ enum IXInputBoxType {
     
     var state: IXInputBoxState { return _state }
     var inputType: IXInputBoxType { return _type }
+    var maxLength: Int = 0
     
     var text: String {
         get {

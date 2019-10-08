@@ -250,6 +250,7 @@
 "Stake.Alert.Title.Unstake" = "Unstake";
 "Stake.Alert.Discard.Title" = "수정하지 않고 나가시겠습니까?";
 "Stake.Alert.Discard.Message" = "Submit 버튼을 눌러야 진행 중인 %@ 요청 수량 수정을 할 수 있습니다.";
+"Stake.Alert.Complete.Message" = "%@ 실행이 완료되었습니다.";
 
 // MARK: MyVoteViewController
 "MyVoteView.VoteReset" = "투표 수량 초기화";

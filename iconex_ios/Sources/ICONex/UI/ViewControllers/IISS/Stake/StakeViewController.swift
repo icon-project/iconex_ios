@@ -61,7 +61,10 @@ class StakeViewController: BaseViewController {
         navBar.setLeft {
             if let modified = self.modifiedStake, let staked = self.stakedInfo?.stake {
                 Log("Modified - \(modified)")
-                guard modified != staked else { return }
+                guard modified != staked else {
+                    self.navigationController?.popViewController(animated: true)
+                    return
+                }
                 let question: String = {
                     if modified > staked {
                         return "Stake"
@@ -147,13 +150,13 @@ class StakeViewController: BaseViewController {
                     // unstake
                     let unstake = StakeInfo(timeRequired: "Stake.Value.TimeRequired.Unstake".localized, stepLimit: limit.toString(decimal: 0, 0, false).currencySeparated(), estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
                     Alert.unstake(unstakeInfo: unstake, confirmAction: {
-                        self.setStake(value: modified, stepLimit: limit)
+                        self.setStake(value: modified, stepLimit: limit, message: "Unstake")
                     }).show()
                 } else {
                     // stake
                     let unstake = StakeInfo(timeRequired: "Stake.Value.TimeRequired.Stake".localized, stepLimit: limit.toString(decimal: 0, 0, false).currencySeparated(), estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
                     Alert.stake(stakeInfo: unstake, confirmAction: {
-                        self.setStake(value: modified, stepLimit: limit)
+                        self.setStake(value: modified, stepLimit: limit, message: "Stake")
                     }).show()
                 }
             }).disposed(by: disposeBag)
@@ -298,17 +301,19 @@ extension StakeViewController {
         }
     }
     
-    func setStake(value modified: BigUInt, stepLimit: BigUInt) {
+    func setStake(value modified: BigUInt, stepLimit: BigUInt, message: String) {
         let transaction = Manager.icon.setStake(from: self.wallet, value: modified, stepLimit: stepLimit)
         do {
             let signed = try SignedTransaction(transaction: transaction, privateKey: self.key)
             let result = Manager.icon.iconService.sendTransaction(signedTransaction: signed).execute()
             let hash = try result.get()
             Log("Hash - \(hash)")
-            Tool.toast(message: "Send.Success".localized)
+            Alert.basic(title: String(format: "Stake.Alert.Complete.Message".localized, message), leftButtonTitle: "Common.Confirm".localized, cancelAction: {
+                self.navigationController?.popViewController(animated: true)
+            }).show()
         } catch {
             Log("Error - \(error)")
-            Tool.toast(message: "Error.CommonError".localized)
+            Alert.basic(title: "Error.CommonError".localized, leftButtonTitle: "Common.Confirm".localized).show()
         }
     }
 }
