@@ -14,10 +14,6 @@ import BigInt
 class VoteViewModel {
     static let shared = VoteViewModel()
     
-    var isChanged: PublishSubject<Bool>
-    
-    var available: BehaviorSubject<BigUInt>
-    
     var originalList: PublishSubject<[MyVoteEditInfo]>
     var myList: BehaviorSubject<[MyVoteEditInfo]>
     var newList: BehaviorSubject<[MyVoteEditInfo]>
@@ -27,9 +23,6 @@ class VoteViewModel {
     var disposeBag = DisposeBag()
     
     init() {
-        self.isChanged = PublishSubject<Bool>()
-        self.available = BehaviorSubject<BigUInt>(value: Manager.voteList.myVotes?.votingPower ?? 0)
-        
         self.originalList = PublishSubject<[MyVoteEditInfo]>()
         self.myList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.newList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
@@ -44,5 +37,3 @@ class VoteViewModel {
 }
 
 let voteViewModel = VoteViewModel.shared
-
-let sharedAvailable = voteViewModel.available.share(replay: 1)

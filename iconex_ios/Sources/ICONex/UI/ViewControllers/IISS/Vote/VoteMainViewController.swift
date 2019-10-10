@@ -175,40 +175,6 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 }).show()
                 
         }.disposed(by: disposeBag)
-        
-        
-        voteViewModel.isChanged.subscribe { (_) in
-            let votedListPower: BigUInt = self.votedList.map {
-                if $0.editedDelegate == nil {
-                    return $0.myDelegate ?? 0
-                } else {
-                    return $0.editedDelegate ?? 0
-                }
-            }.reduce(0, +)
-//            Log("voted \(votedListPower)")
-            
-            let votingListPower: BigUInt = self.votingList.map {
-                if $0.editedDelegate == nil {
-                    return $0.myDelegate ?? 0
-                } else {
-                    return $0.editedDelegate ?? 0
-                }
-                }.reduce(0, +)
-//            Log("voting \(votingListPower)")
-            
-            let power = Manager.voteList.myVotes?.votingPower ?? 0
-            let delegated = Manager.voteList.myVotes?.totalDelegated ?? 0
-            let total = power + delegated
-            let plus = votedListPower + votingListPower
-            
-//            Log("Power \(power) delegated \(delegated) total \(total) plus \(plus)")
-            
-            guard plus <= total else { return voteViewModel.available.onNext(0) }
-            
-            let result = total - plus
-            
-            voteViewModel.available.onNext(result)
-        }.disposed(by: disposeBag)
     }
 }
 

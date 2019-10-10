@@ -36,8 +36,6 @@ class MyVoteViewController: BaseViewController {
     
     private var selectedIndexPath: IndexPath? = nil
     
-    private var available: BigUInt = 0
-    
     private var sectionHeader = UIView()
     
     private var scrollPoint: CGFloat = 0
@@ -68,6 +66,9 @@ class MyVoteViewController: BaseViewController {
     private var isDecending: Bool = true
     
     private var prepInfo: NewPRepListResponse?
+    
+    private var available: BehaviorSubject<BigUInt> = BehaviorSubject<BigUInt>(value: BigUInt.zero)
+    private var isChanged: PublishSubject<Bool> = PublishSubject<Bool>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,12 +116,36 @@ class MyVoteViewController: BaseViewController {
             self.tableView.reloadData()
         }).disposed(by: disposeBag)
         
-        sharedAvailable.subscribe(onNext: { (value) in
-            self.available = value
-        }).disposed(by: disposeBag)
-        
         voteViewModel.myList.onNext(self.myVoteList)
         voteViewModel.newList.onNext(self.newList)
+        
+        self.isChanged.subscribe { (_) in
+            let votedListPower: BigUInt = self.myVoteList.map {
+                if $0.editedDelegate == nil {
+                    return $0.myDelegate ?? 0
+                } else {
+                    return $0.editedDelegate ?? 0
+                }
+            }.reduce(0, +)
+            
+            let votingListPower: BigUInt = self.newList.map {
+                if $0.editedDelegate == nil {
+                    return $0.myDelegate ?? 0
+                } else {
+                    return $0.editedDelegate ?? 0
+                }
+            }.reduce(0, +)
+            
+            let power = Manager.voteList.myVotes?.votingPower ?? 0
+            let delegated = Manager.voteList.myVotes?.totalDelegated ?? 0
+            let total = power + delegated
+            let plus = votedListPower + votingListPower
+            
+            guard plus <= total else { return self.available.onNext(0) }
+            
+            let result = total - plus
+            self.available.onNext(result)
+        }.disposed(by: disposeBag)
         
         // section header
         sectionHeader = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 36))
@@ -199,7 +224,7 @@ class MyVoteViewController: BaseViewController {
                     voteViewModel.myList.onNext(self.myVoteList)
                     voteViewModel.newList.onNext(self.newList)
 
-                    voteViewModel.isChanged.onNext(true)
+                    self.isChanged.onNext(true)
 
                     self.tableView.reloadData()
 
@@ -268,9 +293,10 @@ extension MyVoteViewController {
             self.prepInfo = prepList
         }
         
-        Manager.voteList.loadMyVotes(from: delegate.wallet) { tDelegation, myVotes in
+        Manager.voteList.loadMyVotes(from: delegate.wallet) { [unowned self] tDelegation, myVotes in
             self.refreshControl.endRefreshing()
             self.totalDelegation = tDelegation
+            
             self.myVoteList.removeAll()
             if let votes = myVotes {
                 self.myVoteList.append(contentsOf: votes.sorted(by: { (lhs, rhs) -> Bool in
@@ -286,7 +312,7 @@ extension MyVoteViewController {
                     
                 }))
             }
-            voteViewModel.available.onNext(tDelegation?.votingPower ?? 0)
+            self.available.onNext(tDelegation?.votingPower ?? 0)
             voteViewModel.myList.onNext(self.myVoteList)
             voteViewModel.originalList.onNext(self.myVoteList)
             self.tableView.reloadData()
@@ -321,8 +347,25 @@ extension MyVoteViewController: UITableViewDataSource {
             let info = self.totalDelegation!
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteGeneralCell", for: indexPath) as! MyVoteGeneralCell
             
-            print("info \(info)")
-            cell.set(info: info)
+            let votingPower = info.votingPower
+            let total = info.totalDelegated + votingPower
+            let totalDecimal = total.decimalNumber ?? 0
+            
+            self.available.subscribe(onNext: { (availablePower) in
+                let powerDecimal = availablePower.decimalNumber ?? 0
+                let rate = powerDecimal / totalDecimal
+
+                cell.votedWidth.constant = cell.slideView.frame.width * CGFloat(1.0 - rate.floatValue)
+
+                let percent = rate * 100
+                cell.votedLabel.size14(text: "Voted " + String(format: "%.1f", 100.0 - percent.floatValue) + "%", color: .mint1, weight: .light)
+                cell.availableLabel.size14(text: "Available " + String(format: "%.1f", percent.floatValue) + "%", color: .gray77, weight: .light)
+
+                let delegated = total - availablePower
+                cell.votedValueLabel.size14(text: delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+                cell.availableValueLabel.size14(text: availablePower.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+
+            }).disposed(by: cell.cellBag)
             
             return cell
         } else {
@@ -346,7 +389,13 @@ extension MyVoteViewController: UITableViewDataSource {
             let stakedTotalValue = delegated + votingPower
             let stakedDecimal = stakedTotalValue.decimalNumber ?? 0
             
-            let fixedAvailable = self.available
+            let fixedAvailable: BigUInt = {
+                do {
+                    return try self.available.value()
+                } catch {
+                    return BigUInt.zero
+                }
+            }()
             
             if indexPath.row < myVoteList.count {
                 var info = myVoteList[indexPath.row]
@@ -455,16 +504,17 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         cell.current = realValue
                         
-                        var this = self.myVoteList[indexPath.row]
+                        var updated = self.myVoteList[indexPath.row]
                         let valueDecimal = NSDecimalNumber(value: realValue).decimalValue
+                        
                         let rateValueNum = sliderMaxDecimal * valueDecimal
                         let rateValue = BigUInt(rateValueNum.floatValue / 100.0 )
                         
                         // percent
                         let percent = rateValueNum / stakedDecimal
                         
-                        this.editedDelegate = rateValue
-                        this.percent = percent.floatValue
+                        updated.editedDelegate = rateValue
+                        updated.percent = percent.floatValue
                         
                         cell.slider.value = valueDecimal.floatValue
                         
@@ -473,12 +523,14 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valueDecimal.floatValue) + "%)"
                         
-                        self.myVoteList[indexPath.row] = this
-                        
-                        voteViewModel.myList.onNext(self.myVoteList)
-                        voteViewModel.isChanged.onNext(true)
+                        self.myVoteList[indexPath.row] = updated
+                        self.isChanged.onNext(true)
                         
                     }).disposed(by: cell.disposeBag)
+                
+                cell.slider.rx.controlEvent(.touchUpInside).subscribe { (_) in
+                    voteViewModel.myList.onNext(self.myVoteList)
+                }.disposed(by: cell.disposeBag)
                 
                 // textfield
                 cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { (value) in
@@ -504,7 +556,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         self.myVoteList[indexPath.row] = this
                         voteViewModel.myList.onNext(self.myVoteList)
-                        voteViewModel.isChanged.onNext(true)
+                        self.isChanged.onNext(true)
                         return
                     }
                     
@@ -529,10 +581,13 @@ extension MyVoteViewController: UITableViewDataSource {
                     this.percent = percentValue
                     
                     self.myVoteList[indexPath.row] = this
-                    voteViewModel.myList.onNext(self.myVoteList)
-                    voteViewModel.isChanged.onNext(true)
+                    self.isChanged.onNext(true)
                     
-                }).disposed(by: disposeBag)
+                }).disposed(by: cell.disposeBag)
+                
+                cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { (_) in
+                    voteViewModel.myList.onNext(self.myVoteList)
+                }.disposed(by: cell.disposeBag)
                 
             } else {
                 let info = self.newList[indexPath.row - myVoteList.count]
@@ -554,7 +609,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         self.newList.remove(at: indexPath.row - self.myVoteList.count)
                         Manager.voteList.remove(prep: info)
                         voteViewModel.newList.onNext(self.newList)
-                        voteViewModel.isChanged.onNext(true)
+                        self.isChanged.onNext(true)
                         tableView.reloadData()
                     }).disposed(by: cell.disposeBag)
                 
@@ -644,12 +699,12 @@ extension MyVoteViewController: UITableViewDataSource {
                         cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valueDecimal.floatValue) + "%)"
 
                         self.newList[indexPath.row - self.myVoteList.count] = this
-
-                        voteViewModel.newList.onNext(self.newList)
-                        voteViewModel.isChanged.onNext(true)
-
+                        self.isChanged.onNext(true)
                     }).disposed(by: cell.disposeBag)
                 
+                cell.slider.rx.controlEvent(.touchUpInside).subscribe { (_) in
+                    voteViewModel.newList.onNext(self.newList)
+                }.disposed(by: cell.disposeBag)
                 
                 cell.myVotesField.rx.text.orEmpty.subscribe(onNext: { (value) in
                     guard let bigValue = Tool.stringToBigUInt(inputText: value) else { return }
@@ -666,13 +721,12 @@ extension MyVoteViewController: UITableViewDataSource {
                         this.editedDelegate = sliderMaxValue
                         this.percent = 100.0
                         self.newList[indexPath.row - self.myVoteList.count] = this
-                        voteViewModel.newList.onNext(self.newList)
-                        voteViewModel.isChanged.onNext(true)
+                        
+                        self.isChanged.onNext(true)
                         return
                     }
 
                     guard let bigValueDecimal = bigValue.decimalNumber, let maxValueDecimal = sliderMaxValue.decimalNumber else { return }
-//                    let sliderPercent = bigValueDecimal / maxValueDecimal * 100
                     
                     let sliderPercent: Decimal = {
                         if bigValueDecimal > 0 {
@@ -695,9 +749,12 @@ extension MyVoteViewController: UITableViewDataSource {
                     this.percent = availablePercent
                     
                     self.newList[indexPath.row - self.myVoteList.count] = this
-                    voteViewModel.newList.onNext(self.newList)
-                    voteViewModel.isChanged.onNext(true)
-                }).disposed(by: disposeBag)
+                    self.isChanged.onNext(true)
+                }).disposed(by: cell.disposeBag)
+                
+                cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { (_) in
+                    voteViewModel.myList.onNext(self.myVoteList)
+                }.disposed(by: cell.disposeBag)
             }
             
             return cell
