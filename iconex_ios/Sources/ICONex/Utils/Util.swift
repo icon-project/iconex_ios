@@ -173,14 +173,14 @@ struct Tool {
         
         switch context.biometricType.type {
         case .touchID:
-            reason = "LockScreen.Setting.Bio.Use.FaceID".localized
+            reason = "LockScreen.Setting.Bio.Use.TouchID".localized
         case .faceID:
             reason = "LockScreen.Setting.Bio.Use.FaceID".localized
         case .none:
             break
             
         }
-        
+        context.localizedFallbackTitle = ""
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { (isSuccess, error) in
             
             var state = LAStatus.success

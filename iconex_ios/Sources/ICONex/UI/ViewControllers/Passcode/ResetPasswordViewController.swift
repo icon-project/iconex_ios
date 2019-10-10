@@ -24,8 +24,6 @@ class ResetPasswordViewController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerLabel: UILabel!
     
-    @IBOutlet weak var closeButton: UIButton!
-    
     var walletList: BehaviorSubject<[BaseWalletConvertible]>!
     
     override func viewDidLoad() {
@@ -47,16 +45,9 @@ class ResetPasswordViewController: BaseViewController {
         
         navBar.set(title: "Passcode.Reset".localized)
         headerLabel.size16(text: "Passcode.Reset.withWallet".localized, color: .gray77, weight: .medium, align: .center)
-        
-        closeButton.round02()
     }
     
     private func setupBind() {
-        
-        closeButton.rx.tap.asControlEvent().subscribe { (_) in
-            self.dismiss(animated: true, completion: nil)
-        }.disposed(by: disposeBag)
-        
         walletList.observeOn(MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: "walletCell", cellType: WalletListTableViewCell.self)) {
                 (_, item, cell) in

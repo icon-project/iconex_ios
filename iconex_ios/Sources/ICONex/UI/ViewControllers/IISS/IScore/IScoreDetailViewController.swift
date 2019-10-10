@@ -61,7 +61,7 @@ class IScoreDetailViewController: BaseViewController {
         
         currentIScoreValue.set(text: "-", size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
         receiveICXValue.set(text: "-", size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
-        descValue1.size14(text: BigUInt(100_000).toString(decimal: 0).currencySeparated() + " / " + BigUInt(100_000).convert(unit: .loop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
+        descValue1.size14(text: BigUInt(100_000).toString(decimal: 0).currencySeparated() + " / " + BigUInt(100_000).convert(unit: .gLoop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
         descValue1.adjustsFontSizeToFitWidth = true
         descValue2.size14(text: "-", color: UIColor(51, 51, 51), weight: .regular, align: .right)
         exchangedValue.size12(text: "$ -", color: .gray179, weight: .regular, align: .right)
@@ -77,7 +77,7 @@ class IScoreDetailViewController: BaseViewController {
                 guard let info = self.iscore else { return }
                 Alert.iScore(iscoreInfo: info, confirmAction: {
                     DispatchQueue.global().async {
-                        let response = Manager.icon.claimIScore(from: self.wallet)
+                        let response = Manager.icon.claimIScore(from: self.wallet, limit: BigUInt(info.stepLimit)!, privateKey: self.key)
                         
                         DispatchQueue.main.async {
                             if response != nil {
@@ -138,7 +138,7 @@ class IScoreDetailViewController: BaseViewController {
                     
                     let estimated = (estimatedStep ?? 0) * (Manager.icon.stepPrice ?? 0)
                     
-                    self?.descValue1.size14(text: (estimatedStep ?? 0).toString(decimal: 0).currencySeparated() + " / " + (estimatedStep ?? 0).convert(unit: .loop).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
+                    self?.descValue1.size14(text: (estimatedStep ?? 0).toString(decimal: 0).currencySeparated() + " / " + (Manager.icon.stepPrice ?? 0).toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
                     self?.descValue2.size14(text: estimated.toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
                     self?.exchangedValue.size12(text: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"), color: .gray179, weight: .regular, align: .right)
                     

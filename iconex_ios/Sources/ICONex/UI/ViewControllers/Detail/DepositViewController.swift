@@ -57,6 +57,11 @@ class DepositViewController: PopableViewController {
         
         descLabel.size12(text: "Main.QRCode.Description".localized, color: .mint1, weight: .light)
         descLabel.numberOfLines = 0
+        
+        inputBox.set(validator: { input in
+          
+            return nil
+        })
     }
     
     

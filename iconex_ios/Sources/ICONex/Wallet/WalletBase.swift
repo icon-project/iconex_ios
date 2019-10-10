@@ -45,7 +45,7 @@ extension BaseWalletConvertible {
     }
     
     func save() throws {
-        try DB.saveWallet(name: name, address: address, type: address.hasPrefix("hx") ? "icx" : "eth", rawData: rawData)
+        try DB.saveWallet(name: name.removeContinuosSuffix(string: " "), address: address, type: address.hasPrefix("hx") ? "icx" : "eth", rawData: rawData)
         if let tokens = self.tokens {
             for token in tokens {
                 try addToken(token: token)

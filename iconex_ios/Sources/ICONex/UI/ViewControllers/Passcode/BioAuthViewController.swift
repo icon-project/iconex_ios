@@ -38,6 +38,7 @@ class BioAuthViewController: BaseViewController {
             subtitleLabel.size14(text: "LockSetting.TouchID.SubTitle".localized, color: .gray128, weight: .light, align: .center)
             descLabel.size12(text: "LockSetting.TouchID.Description".localized, color: .gray128, weight: .light, align: .center)
             useButton.setTitle("LockSetting.TouchID.Button".localized, for: .normal)
+            bioImageView.image = #imageLiteral(resourceName: "imgFingerscanC")
             
         case .faceID:
             navBar.setTitle("LockSetting.FaceID.NavBar.Title".localized)
@@ -45,6 +46,7 @@ class BioAuthViewController: BaseViewController {
             subtitleLabel.size14(text: "LockSetting.FaceID.SubTitle".localized, color: .gray128, weight: .light, align: .center)
             descLabel.isHidden = true
             useButton.setTitle("LockSetting.FaceID.Button".localized, for: .normal)
+            bioImageView.image = #imageLiteral(resourceName: "imgFaceidC")
             
         default:
             break
