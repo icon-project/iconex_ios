@@ -16,7 +16,6 @@ class PRepSectionHeaderView: UIView {
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var orderButton: UIButton!
-    @IBOutlet weak var totalVotesButton: UIButton!
     
     var orderType: OrderType = .rankDescending {
         willSet {
@@ -68,10 +67,6 @@ class PRepSectionHeaderView: UIView {
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(view)
         contentView = view
-        
-        totalVotesButton.setTitle("Total Votes", for: .normal)
-        totalVotesButton.setTitleColor(.gray179, for: .normal)
-        totalVotesButton.titleLabel?.font = .systemFont(ofSize: 12, weight: .light)
         
         self.rankLabel.text = "Rank ↑"
         self.nameLabel.text = "Name"

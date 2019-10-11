@@ -111,8 +111,18 @@ class MyVoteViewController: BaseViewController {
             }.disposed(by: disposeBag)
         
         Manager.voteList.currentAddedList.subscribe(onNext: { addedList in
-            self.newList = addedList
-            voteViewModel.newList.onNext(addedList)
+            for i in addedList {
+                let checker = self.newList.contains(where: { (new) -> Bool in
+                    return new.address == i.address
+                })
+                
+                if !checker {
+                    self.newList.append(i)
+                }
+            }
+            
+            voteViewModel.newList.onNext(self.newList)
+            
             self.tableView.reloadData()
         }).disposed(by: disposeBag)
         
@@ -424,8 +434,8 @@ extension MyVoteViewController: UITableViewDataSource {
                 // myvotes
                 let myPercent: Float = {
                     guard my > 0 else { return 0 }
-                    guard let myDecimal = my.decimalNumber, let delegatedDecimal = delegated.decimalNumber else { return 0 }
-                    let divided = (myDecimal / delegatedDecimal).floatValue * 100
+                    guard let myDecimal = my.decimalNumber else { return 0 }
+                    let divided = (myDecimal / stakedDecimal).floatValue * 100
                     return divided
                 }()
                 
@@ -505,7 +515,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 }
                 
                 cell.slider.rx.value.skip(1).distinctUntilChanged()
-                    .subscribe(onNext: { value in
+                    .subscribe(onNext: { [unowned self] value in
                         let realValue = roundf(value)
                         
                         cell.current = realValue
@@ -626,12 +636,12 @@ extension MyVoteViewController: UITableViewDataSource {
                         tableView.reloadData()
                     }).disposed(by: cell.disposeBag)
                 
-                let delegate = self.convertPercentToBigValue(percent: info.percent ?? 0.0)
+                let delegate = info.editedDelegate ?? 0
                 let sliderMaxValue = fixedAvailable + delegate
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
                 let sliderMaxPercent: Decimal = {
-                    if stakedDecimal > 0 {
+                    if sliderMaxDecimal > 0 {
                         return (sliderMaxDecimal / stakedDecimal) * 100
                     } else {
                         return 0.0
@@ -654,22 +664,20 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 // myvotes
                 let myPercent: Float = {
-                    guard my > 0 else { return 0 }
-                    guard let myDecimal = my.decimalNumber, let delegatedDecimal = delegated.decimalNumber else { return 0 }
-                    let divided = (myDecimal / delegatedDecimal).floatValue * 100
+                    guard let myDecimal = my.decimalNumber else { return 0 }
+                    let divided = (myDecimal / stakedDecimal).floatValue * 100
                     return divided
                 }()
                 
                 let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
                 cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
                 
-                if let valuePercent = info.percent {
-                    let sliderValue = self.convertPercentToBigValue(percent: valuePercent)
-                    let sliderDecimal = sliderValue.decimalNumber ?? 0
-                    
+
+                if let edited = info.editedDelegate {
+                    let editedDecimal = edited.decimalNumber ?? 0.0
                     let calculatedFloat: Float = {
-                        if sliderMaxDecimal > 0 {
-                            return (sliderDecimal / sliderMaxDecimal).floatValue * 100
+                        if editedDecimal > 0 {
+                            return (editedDecimal / sliderMaxDecimal).floatValue * 100
                         } else {
                             return 0
                         }
@@ -678,16 +686,16 @@ extension MyVoteViewController: UITableViewDataSource {
                     cell.slider.value = calculatedFloat
                     cell.current = calculatedFloat
                     
-                    let stringValue = sliderValue.toString(decimal: 18, 4).currencySeparated()
+                    let stringValue = edited.toString(decimal: 18, 4).currencySeparated()
                     cell.myVotesField.text = stringValue
                     
-                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculatedFloat * 100) + "%)"
+                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculatedFloat) + "%)"
                     
                 } else {
                     cell.current = 0.0
                     cell.slider.value = 0.0
                     cell.myVotesUnitLabel.text = "0.0%"
-                    
+                    cell.myVotesField.text = "0.0000"
                     cell.slider.sendActions(for: .valueChanged)
                 }
                 
@@ -705,6 +713,12 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         let realValue = roundf(value)
                         cell.current = realValue
+                        
+                        if realValue > 0 {
+                            cell.prepInfo.size12(text: "(\(grade) / Edited)", color: .gray77, weight: .light)
+                        } else {
+                            cell.prepInfo.size12(text: "(\(grade))", color: .gray77, weight: .light)
+                        }
 
                         let valueDecimal = NSDecimalNumber(value: realValue).decimalValue
                         let rateValueNum = sliderMaxDecimal * valueDecimal
@@ -736,10 +750,16 @@ extension MyVoteViewController: UITableViewDataSource {
                     voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
                 
-                cell.myVotesField.rx.text.orEmpty.subscribe(onNext: { (value) in
+                cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { (value) in
                     guard let bigValue = Tool.stringToBigUInt(inputText: value, fixed: true) else { return }
 
                     var this = self.newList[indexPath.row - self.myVoteList.count]
+                    
+                    if bigValue > BigUInt.zero {
+                        cell.prepInfo.size12(text: "(\(grade) / Edited)", color: .gray77, weight: .light)
+                    } else {
+                        cell.prepInfo.size12(text: "(\(grade))", color: .gray77, weight: .light)
+                    }
 
                     guard bigValue <= sliderMaxValue else {
                         bzz()

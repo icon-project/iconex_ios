@@ -78,7 +78,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     return i.address == list.address
                 })
                 
-                if !newPrepChecker {
+                guard newPrepChecker else {
                     self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
                     return Observable.just(true)
                 }
@@ -90,7 +90,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
             }
             
             for i in myList {
-                if i.editedDelegate != nil {
+                if i.editedDelegate != nil && i.editedDelegate != i.myDelegate {
                     self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
                     return Observable.just(true)
                 }
@@ -167,6 +167,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 Alert.vote(voteInfo: voteInfo, confirmAction: { isSuccess, txHash in
                     if isSuccess {
                         Tool.toast(message: "MyVoteView.Toast".localized)
+                        self.navigationController?.popToRootViewController(animated: true)
                     } else {
                         Log(txHash, .error)
                         Tool.toast(message: "Common.Error".localized)

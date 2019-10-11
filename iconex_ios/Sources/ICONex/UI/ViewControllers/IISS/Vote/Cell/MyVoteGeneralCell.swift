@@ -27,8 +27,8 @@ class MyVoteGeneralCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         slideView.corner(slideView.frame.height / 2)
-        votedICXLabel.size12(text: "Voted (VP)", color: .gray77, weight: .light, align: .left)
-        availableICXLabel.size12(text: "Available (VP)", color: .gray77, weight: .light, align: .left)
+        votedICXLabel.size12(text: "Voted (ICX)", color: .gray77, weight: .light, align: .left)
+        availableICXLabel.size12(text: "Available (ICX)", color: .gray77, weight: .light, align: .left)
         voteHeader.size16(text: "Vote (0/10)", color: .gray77, weight: .light, align: .left)
         votedLabel.size14(text: "Voted -", color: .mint1, weight: .light, align: .left)
         availableLabel.size14(text: "Available -", color: .gray77, weight: .light, align: .right)
