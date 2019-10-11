@@ -257,12 +257,14 @@ extension ICONManager {
         call.params(del)
         call.nid = Manager.icon.iconService.nid
         
-        do {
-            let estimatedStep = try Manager.icon.service.estimateStep(transaction: call).execute().get()
-            call.stepLimit(estimatedStep)
-            
-        } catch {
-            print("없다")
+        let response = Manager.icon.service.estimateStep(transaction: call).execute()
+        
+        switch response {
+        case .success(let estimated):
+            call.stepLimit(estimated)
+        case .failure(let error):
+            Log("ERROR \(error)")
+            break
         }
         
         return call

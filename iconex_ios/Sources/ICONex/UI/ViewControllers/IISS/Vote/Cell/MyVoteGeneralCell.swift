@@ -34,10 +34,6 @@ class MyVoteGeneralCell: UITableViewCell {
         availableLabel.size14(text: "Available -", color: .gray77, weight: .light, align: .right)
         votedValueLabel.size14(text: "-", color: .gray77, weight: .light, align: .right)
         availableValueLabel.size14(text: "-", color: .gray77, weight: .light, align: .right)
-        
-        voteViewModel.voteCount.subscribe(onNext: { (count) in
-            self.voteHeader.size16(text: "Vote (\(count)/10)", color: .gray77, weight: .medium, align: .left)
-        }).disposed(by: cellBag)
     }
     
     override func prepareForReuse() {

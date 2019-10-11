@@ -231,39 +231,9 @@ class MyVoteViewController: BaseViewController {
                 }).show()
             }.disposed(by: disposeBag)
         
-        Observable.merge(voteViewModel.myList, voteViewModel.newList)
-            .skip(2)
-            .subscribe(onNext: { (list) in
-                
-                print("ESTIMATE!!!!!")
-                var delList = [[String: Any]]()
-                
-                for i in list {
-                    let value: String = {
-                        if let edit = i.editedDelegate {
-                            return edit.toHexString()
-                        } else if let myDelegate = i.myDelegate {
-                            return myDelegate.toHexString()
-                        } else {
-                            return "0x0"
-                        }
-                    }()
-                    
-                    let info = ["address": i.address, "value": value]
-                    delList.append(info)
-                }
-                
-                DispatchQueue.global().async {
-                    let delegationCall = Manager.icon.setDelegation(from: self.delegate.wallet, delegations: delList)
-                    
-                    DispatchQueue.main.async {
-                        self.estimatedStep = delegationCall.stepLimit ?? 0
-                    }
-                }
-                
-            }).disposed(by: disposeBag)
+        let combindedList = Observable.combineLatest(voteViewModel.myList, voteViewModel.newList).share(replay: 1)
         
-        Observable.combineLatest(voteViewModel.myList, voteViewModel.newList)
+        combindedList
             .flatMapLatest({ (myList, newList) -> Observable<Bool> in
                 let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
                 let newListChecker = self.newList.filter({ $0.percent != 0.0 }).count > 0
@@ -272,6 +242,39 @@ class MyVoteViewController: BaseViewController {
                 
             }).bind(to: resetButton.rx.isEnabled)
             .disposed(by: disposeBag)
+        
+        
+        combindedList.skip(1).subscribe(onNext: { [weak self] myList, newList in
+            print("ESTIMATE!!!!!")
+            
+            let list = myList + newList
+            var delList = [[String: Any]]()
+            
+            for i in list {
+                let value: String = {
+                    if let edit = i.editedDelegate {
+                        return edit.toHexString()
+                    } else if let myDelegate = i.myDelegate {
+                        return myDelegate.toHexString()
+                    } else {
+                        return "0x0"
+                    }
+                }()
+                
+                let info = ["address": i.address, "value": value]
+                delList.append(info)
+            }
+            
+            guard let wallet = self?.delegate.wallet else { return }
+            
+            DispatchQueue.global().async {
+                let delegationCall = Manager.icon.setDelegation(from: wallet, delegations: delList)
+                
+                DispatchQueue.main.async {
+                    self?.estimatedStep = delegationCall.stepLimit ?? 0
+                }
+            }
+        }).disposed(by: disposeBag)
         
         self.scrollView?.keyboardDismissMode = .onDrag
     }
@@ -367,6 +370,10 @@ extension MyVoteViewController: UITableViewDataSource {
 
             }).disposed(by: cell.cellBag)
             
+            voteViewModel.voteCount.subscribe(onNext: { (count) in
+                cell.voteHeader.size16(text: "Vote (\(count)/10)", color: .gray77, weight: .medium, align: .left)
+            }).disposed(by: cell.cellBag)
+            
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
@@ -401,15 +408,14 @@ extension MyVoteViewController: UITableViewDataSource {
                 var info = myVoteList[indexPath.row]
                 
                 let my: BigUInt = {
-                    if let percent = info.percent {
-                        let result = self.convertPercentToBigValue(percent: percent)
-                        return result
+                    if let edit = info.editedDelegate {
+                        return edit
                         
                     } else if let myDelegate = info.myDelegate {
                         let percent = self.calculatePercent(value: myDelegate)
                         info.percent = percent
-                        
                         return myDelegate
+                        
                     } else {
                         return 0
                     }
@@ -523,6 +529,13 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valueDecimal.floatValue) + "%)"
                         
+                        // edit label
+                        if let edited = updated.editedDelegate, edited != updated.myDelegate {
+                            cell.prepInfo.size12(text: "(\(grade) / Voted / Edited)", color: .gray77, weight: .light)
+                        } else {
+                            cell.prepInfo.size12(text: "(\(grade) / Voted)", color: .gray77, weight: .light)
+                        }
+                        
                         self.myVoteList[indexPath.row] = updated
                         self.isChanged.onNext(true)
                         
@@ -534,7 +547,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 // textfield
                 cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { (value) in
-                    guard let bigValue = Tool.stringToBigUInt(inputText: value) else { return }
+                    guard let bigValue = Tool.stringToBigUInt(inputText: value, fixed: true) else { return }
                     
                     var this = self.myVoteList[indexPath.row]
                     
@@ -551,7 +564,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                         let maxDecimal = sliderMaxValue.decimalNumber?.floatValue ?? 0
                         
-                        let percent = maxDecimal / stakedDecimal.floatValue * 100
+                        let percent = (maxDecimal / stakedDecimal.floatValue) * 100
                         this.percent = percent
                         
                         self.myVoteList[indexPath.row] = this
@@ -577,7 +590,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     
                     this.editedDelegate = bigValue
                     
-                    let percentValue = (bigValueDecimal / stakedDecimal).floatValue
+                    let percentValue = (bigValueDecimal / stakedDecimal).floatValue * 100
                     this.percent = percentValue
                     
                     self.myVoteList[indexPath.row] = this
@@ -617,7 +630,14 @@ extension MyVoteViewController: UITableViewDataSource {
                 let sliderMaxValue = fixedAvailable + delegate
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
-                let sliderMaxPercent = (sliderMaxDecimal / stakedDecimal) * 100
+                let sliderMaxPercent: Decimal = {
+                    if stakedDecimal > 0 {
+                        return (sliderMaxDecimal / stakedDecimal) * 100
+                    } else {
+                        return 0.0
+                    }
+                }()
+                
                 let percentFloat = sliderMaxPercent.floatValue
                 
                 
@@ -630,12 +650,18 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
                 
-                let myPercent = info.percent ?? 0
+                let my: BigUInt = info.editedDelegate ?? 0
                 
-                let myValue = self.convertPercentToBigValue(percent: myPercent).toString(decimal: 18, 4).currencySeparated()
+                // myvotes
+                let myPercent: Float = {
+                    guard my > 0 else { return 0 }
+                    guard let myDecimal = my.decimalNumber, let delegatedDecimal = delegated.decimalNumber else { return 0 }
+                    let divided = (myDecimal / delegatedDecimal).floatValue * 100
+                    return divided
+                }()
+                
                 let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
-                
-                cell.myvotesValueLabel.size12(text: "\(myValue) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
+                cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
                 
                 if let valuePercent = info.percent {
                     let sliderValue = self.convertPercentToBigValue(percent: valuePercent)
@@ -689,7 +715,11 @@ extension MyVoteViewController: UITableViewDataSource {
 
                         cell.myVotesField.text = currentICXValue
                         
-                        this.editedDelegate = rateValue
+                        if realValue == 100.0 {
+                            this.editedDelegate = sliderMaxValue
+                        } else {
+                            this.editedDelegate = rateValue
+                        }
                         
                         let nowPercent = (rateValueNum / stakedDecimal).floatValue
                         this.percent = nowPercent
@@ -707,7 +737,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 }.disposed(by: cell.disposeBag)
                 
                 cell.myVotesField.rx.text.orEmpty.subscribe(onNext: { (value) in
-                    guard let bigValue = Tool.stringToBigUInt(inputText: value) else { return }
+                    guard let bigValue = Tool.stringToBigUInt(inputText: value, fixed: true) else { return }
 
                     var this = self.newList[indexPath.row - self.myVoteList.count]
 
@@ -753,7 +783,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 }).disposed(by: cell.disposeBag)
                 
                 cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { (_) in
-                    voteViewModel.myList.onNext(self.myVoteList)
+                    voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
             }
             
@@ -785,8 +815,12 @@ extension MyVoteViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
-            guard selectedIndexPath != indexPath else { return }
-            selectedIndexPath = indexPath
+            if selectedIndexPath == indexPath {
+                selectedIndexPath = nil
+            } else {
+                selectedIndexPath = indexPath
+            }
+            
             self.tableView.reloadData()
         }
     }
