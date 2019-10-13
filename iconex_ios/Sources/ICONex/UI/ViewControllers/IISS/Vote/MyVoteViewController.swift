@@ -683,6 +683,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         }
                     }()
                     
+                    cell.prepInfo.size12(text: "(\(grade) / Edited)", color: .gray77, weight: .light)
                     cell.slider.value = calculatedFloat
                     cell.current = calculatedFloat
                     
@@ -692,6 +693,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", calculatedFloat) + "%)"
                     
                 } else {
+                    cell.prepInfo.size12(text: "(\(grade))", color: .gray77, weight: .light)
                     cell.current = 0.0
                     cell.slider.value = 0.0
                     cell.myVotesUnitLabel.text = "0.0%"
