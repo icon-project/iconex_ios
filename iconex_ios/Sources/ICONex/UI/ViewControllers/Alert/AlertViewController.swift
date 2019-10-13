@@ -384,7 +384,7 @@ class AlertViewController: BaseViewController {
                         self.popView.alpha = 0.0
                     }, completion: { _ in
                         self.dismiss(animated: false, completion: {
-                            Alert.basic(title: "Alert.ForgotPasscode.Title".localized, subtitle: "Alert.ForgotPasscode.SubTitle".localized, isOnlyOneButton: false, rightButtonTitle: "Side.Load".localized, confirmAction: {
+                            Alert.basic(title: "Alert.ForgotPasscode.SubTitle".localized, isOnlyOneButton: false, rightButtonTitle: "Side.Load".localized, confirmAction: {
                                 
                                 let loadWallet = UIStoryboard(name: "LoadWallet".localized, bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
                                 
