@@ -247,7 +247,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.symbolLabel.size16(text: CoinType.eth.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.eth.fullName, color: .gray179, weight: .light)
                     
-                    let balance = eth.balance?.toString(decimal: 18, 4)
+                    let balance = eth.balance?.toString(decimal: 18, 4).currencySeparated()
                     coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: eth.balance ?? 0)
@@ -271,7 +271,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     for i in list {
                         totalBalance += i.balance ?? 0
                     }
-                    let balance = totalBalance.toString(decimal: 18, 4, false)
+                    let balance = totalBalance.toString(decimal: 18, 4).currencySeparated()
                     
                     coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
@@ -294,7 +294,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                         totalBalance += i.balance ?? 0
                     }
                     
-                    let balance = totalBalance.toString(decimal: 18, 4, false)
+                    let balance = totalBalance.toString(decimal: 18, 4).currencySeparated()
                     coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
