@@ -184,7 +184,9 @@ class DetailViewController: BaseViewController, Floatable {
                         return Manager.icon.getIRCTokenBalance(dependedAddress: wallet.address, contractAddress: token.contract) ?? 0
                         
                     } else if let _ = wallet as? ETHWallet {
-                        return Ethereum.requestTokenBalance(token: token) ?? 0
+                        let ethBalance = Ethereum.requestTokenBalance(token: token) ?? 0
+                        Manager.balance.updateTokenBalance(address: token.parent, contract: token.contract, balance: ethBalance)
+                        return ethBalance
                     } else {
                         return 0
                     }

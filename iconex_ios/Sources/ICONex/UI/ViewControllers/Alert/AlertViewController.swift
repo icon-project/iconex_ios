@@ -449,6 +449,7 @@ class AlertViewController: BaseViewController {
             setButtonUI(isOne: false)
             
             let sendView = SendAlertView()
+            print("sendinfo \(self.sendInfo)")
             sendView.info = self.sendInfo
             
             addSubviewWithConstraint(sendView)

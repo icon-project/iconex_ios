@@ -92,7 +92,7 @@ struct Token {
     
     init(model: TokenModel) {
         self.name = model.name
-        self.parent = model.dependedAddress.prefix0xRemoved()
+        self.parent = model.dependedAddress
         self.contract = model.contractAddress
         self.parentType = model.parentType
         self.symbol = model.symbol

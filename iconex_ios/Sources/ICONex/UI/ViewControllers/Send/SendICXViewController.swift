@@ -124,7 +124,7 @@ class SendICXViewController: BaseViewController {
         plus1000Button.setTitle("+1000", for: .normal)
         maxButton.setTitle("Send.Amount.Max".localized, for: .normal)
         
-        addressInputBox.set(inputType: .normal)
+        addressInputBox.set(inputType: .address)
         addressInputBox.set(state: .normal, placeholder: "Send.InputBox.Address".localized)
         
         addressBookButton.roundGray230()
@@ -151,13 +151,13 @@ class SendICXViewController: BaseViewController {
         
         if let token = self.token {
             balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
-            balanceLabel.size24(text: balance.toString(decimal: token.decimal, 5).currencySeparated(), color: .mint1, align: .right)
+            balanceLabel.size24(text: balance.toString(decimal: token.decimal, token.decimal).currencySeparated(), color: .mint1, align: .right)
             
             let price = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: balance)
             priceLabel.size12(text: price, color: .gray179, align: .right)
         } else {
             balance = Manager.balance.getBalance(wallet: wallet) ?? 0
-            balanceLabel.size24(text: balance.toString(decimal: 18, 5).currencySeparated() , color: .mint1, align: .right)
+            balanceLabel.size24(text: balance.toString(decimal: 18, 18).currencySeparated() , color: .mint1, align: .right)
             
             let price = Tool.calculatePrice(currency: "icxusd", balance: balance)
             priceLabel.size12(text: price, color: .gray179, align: .right)
@@ -167,10 +167,7 @@ class SendICXViewController: BaseViewController {
     private func setupBind() {
         guard let wallet = self.walletInfo else { return }
         
-        self.scrollView?.rx.didScroll
-            .subscribe({ (_) in
-                self.view.endEditing(true)
-        }).disposed(by: disposeBag)
+        self.scrollView?.keyboardDismissMode = .onDrag
         
         plus10Button.rx.tap.asControlEvent()
             .subscribe { (_) in
@@ -181,13 +178,13 @@ class SendICXViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal, false)
+                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal, true)
                 } else {
                     let power = BigUInt(10).convert()
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: 18, 18, false)
+                    self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
@@ -208,7 +205,7 @@ class SendICXViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: 18, 18, false)
+                    self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
@@ -229,7 +226,7 @@ class SendICXViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: 18, 18, false)
+                    self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
@@ -240,7 +237,7 @@ class SendICXViewController: BaseViewController {
                 self.amountInputBox.textField.becomeFirstResponder()
                 
                 if let token = self.token {
-                    self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, false)
+                    self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal)
                     
                 } else {
                     let fee: BigUInt = self.stepLimit * self.stepPrice
@@ -250,7 +247,7 @@ class SendICXViewController: BaseViewController {
                     }
                     
                     let maxBalance = self.balance - fee
-                    self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, false)
+                    self.amountInputBox.text = maxBalance.toString(decimal: 18, 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
@@ -326,8 +323,6 @@ class SendICXViewController: BaseViewController {
         amountInputBox.set { [unowned self] (value) -> String? in
             guard !value.isEmpty else { return nil }
             
-//            let fee = self.stepLimit * self.stepPrice
-            
             if let token = self.token {
                 let amount = Tool.stringToBigUInt(inputText: value, decimal: token.decimal, fixed: true) ?? 0
                 
@@ -402,6 +397,8 @@ class SendICXViewController: BaseViewController {
                 addressBook.selectedHandler = { address in
                     self.addressInputBox.text = address
                     self.addressInputBox.textField.sendActions(for: .valueChanged)
+                    
+                    self.addressInputBox.set(state: .normal)
                 }
                 
                 self.presentPanModal(addressBook)
@@ -563,7 +560,7 @@ class SendICXViewController: BaseViewController {
     
     private func setFooterBox() {
         let separated = String(self.stepLimit).currencySeparated()
-        let priceToICX = self.stepPrice.toString(decimal: 18, 9, false)
+        let priceToICX = self.stepPrice.toString(decimal: 18, 18, true)
         
         let stepLimitString = separated + " / " + priceToICX
         stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
@@ -571,7 +568,7 @@ class SendICXViewController: BaseViewController {
         let calculated = self.stepLimit * stepPrice
         let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
         
-        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 3), color: .gray77, align: .right)
+        estimateFeeLabel.size14(text: calculated.toString(decimal: 18, 18, true), color: .gray77, align: .right)
         feePriceLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
     }
 }

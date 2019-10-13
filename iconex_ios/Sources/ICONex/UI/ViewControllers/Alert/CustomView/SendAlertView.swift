@@ -26,18 +26,30 @@ class SendAlertView: UIView {
         willSet {
             guard let info = newValue else { return }
             
-            if let token = info.token {
-                sendAmountTitleLabel.text = String(format: "Alert.Send.Value.Token".localized, token.symbol)
-            } else {
-                if info.transaction == nil {
+            if info.transaction == nil {
+                stepLimitTitleLabel.isHidden = true
+                stepLimitLabel.isHidden = true
+                estimatedTitleLabel.text =  "Alert.Send.ETH.Fee".localized
+                
+                if let token = info.token {
+                    sendAmountTitleLabel.text = String(format: "Alert.Send.Value.Token".localized, token.symbol)
+                } else {
                     sendAmountTitleLabel.text = "Alert.Send.Value.ETH".localized
+                }
+                
+            } else {
+                stepLimitTitleLabel.text = "Alert.Common.StepLimit".localized
+                estimatedTitleLabel.text =  "Alert.Common.EstimatedFee".localized
+                
+                if let token = info.token {
+                    sendAmountTitleLabel.text = String(format: "Alert.Send.Value.Token".localized, token.symbol)
                 } else {
                     sendAmountTitleLabel.text = "Alert.Send.Value.ICX".localized
                 }
             }
             
             sendAmountLabel.size18(text: info.amount, color: .mint1, weight: .regular, align: .right)
-            stepLimitLabel.size12(text: info.stepLimit, color: .gray128, weight: .bold, align: .right)
+            stepLimitLabel.size12(text: info.stepLimit, color: .gray77, weight: .bold, align: .right)
             estimateMaxLabel.size12(text: info.estimatedFee, color: .gray77,  weight: .bold, align: .right)
             estimateUSDLabel.size12(text: info.estimatedUSD, color: .gray179,  weight: .regular, align: .right)
             addressLabel.size12(text: info.receivingAddress, color: .gray77,  weight: .bold, align: .left)
@@ -63,8 +75,6 @@ class SendAlertView: UIView {
         addSubview(view)
         contentView = view
         
-        stepLimitTitleLabel.text = "Alert.Common.StepLimit".localized
-        estimatedTitleLabel.text =  "Alert.Common.EstimatedFee".localized
         addressTitleLabel.text = "Alert.Send.Address".localized
     }
 }

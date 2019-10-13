@@ -46,8 +46,8 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gvU-V7-HfM">
-                                                <rect key="frame" x="298" y="72.333333333333343" width="57" height="28.666666666666671"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="gvU-V7-HfM">
+                                                <rect key="frame" x="20" y="72.333333333333343" width="335" height="28.666666666666671"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -218,6 +218,7 @@
                                             <constraint firstItem="M6p-Ip-aKe" firstAttribute="leading" secondItem="V4x-c9-ErT" secondAttribute="leading" constant="20" id="aWk-4w-YRW"/>
                                             <constraint firstItem="M6p-Ip-aKe" firstAttribute="top" secondItem="jyp-Pq-pfP" secondAttribute="bottom" constant="40" id="aa1-mq-T50"/>
                                             <constraint firstAttribute="trailing" secondItem="MdZ-1p-KJv" secondAttribute="trailing" constant="20" id="cfE-eo-5jE"/>
+                                            <constraint firstItem="gvU-V7-HfM" firstAttribute="leading" secondItem="NF2-FL-xdV" secondAttribute="leading" id="cgp-Hv-NNV"/>
                                             <constraint firstItem="OsP-Dg-PhR" firstAttribute="top" secondItem="M6p-Ip-aKe" secondAttribute="bottom" constant="6" id="e1c-py-ZHu"/>
                                             <constraint firstItem="AzV-CA-6j8" firstAttribute="leading" secondItem="V4x-c9-ErT" secondAttribute="leading" constant="20" id="g2h-PE-NnI"/>
                                             <constraint firstItem="MdZ-1p-KJv" firstAttribute="leading" secondItem="V4x-c9-ErT" secondAttribute="leading" constant="20" id="hXY-1f-VZx"/>
@@ -357,7 +358,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZMn-dF-cEQ">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="ZMn-dF-cEQ">
                                                 <rect key="frame" x="20" y="72.333333333333343" width="335" height="20.333333333333329"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>

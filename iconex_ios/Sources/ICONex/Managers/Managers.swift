@@ -634,7 +634,7 @@ struct Ethereum {
         guard let ethAddress = EthereumAddress(address) else { return nil }
         
         let result = try? web3.eth.getBalance(address: ethAddress)
-        Manager.balance.updateWalletBalance(address: address.prefix0xRemoved(), balance: result ?? 0)
+        Manager.balance.updateWalletBalance(address: address, balance: result ?? 0)
         return result
     }
     

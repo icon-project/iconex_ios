@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,24 +29,12 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="331" height="290"/>
+            <rect key="frame" x="0.0" y="0.0" width="331" height="281"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jr3-H7-cEY">
-                    <rect key="frame" x="0.0" y="0.0" width="331" height="100"/>
+                    <rect key="frame" x="0.0" y="0.0" width="331" height="102.5"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send amount (ICX)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PDT-hA-GIY">
-                            <rect key="frame" x="30" y="30" width="97" height="14.5"/>
-                            <fontDescription key="fontDescription" name="AppleSDGothicNeo-SemiBold" family="Apple SD Gothic Neo" pointSize="12"/>
-                            <color key="textColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="npB-Zz-AVd">
-                            <rect key="frame" x="257" y="49" width="44" height="21"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r05-dh-inN">
                             <rect key="frame" x="0.0" y="0.0" width="331" height="0.5"/>
                             <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.90196078430000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -56,20 +42,34 @@
                                 <constraint firstAttribute="height" constant="0.5" id="np6-Qw-DI6"/>
                             </constraints>
                         </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send amount (ICX)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PDT-hA-GIY">
+                            <rect key="frame" x="30" y="30" width="271" height="15"/>
+                            <fontDescription key="fontDescription" name="AppleSDGothicNeo-SemiBold" family="Apple SD Gothic Neo" pointSize="12"/>
+                            <color key="textColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="npB-Zz-AVd">
+                            <rect key="frame" x="30" y="51" width="271" height="21.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <constraints>
                         <constraint firstItem="r05-dh-inN" firstAttribute="leading" secondItem="Jr3-H7-cEY" secondAttribute="leading" id="Cyu-1Z-SXI"/>
+                        <constraint firstAttribute="trailing" secondItem="PDT-hA-GIY" secondAttribute="trailing" constant="30" id="JFH-XI-0Wq"/>
                         <constraint firstAttribute="trailing" secondItem="r05-dh-inN" secondAttribute="trailing" id="MCo-pu-Mhy"/>
                         <constraint firstItem="r05-dh-inN" firstAttribute="top" secondItem="Jr3-H7-cEY" secondAttribute="top" id="UFa-3p-wtg"/>
                         <constraint firstItem="PDT-hA-GIY" firstAttribute="top" secondItem="Jr3-H7-cEY" secondAttribute="top" constant="30" id="bds-ak-1y9"/>
                         <constraint firstItem="PDT-hA-GIY" firstAttribute="leading" secondItem="Jr3-H7-cEY" secondAttribute="leading" constant="30" id="cSl-Kf-6b5"/>
-                        <constraint firstAttribute="bottom" secondItem="npB-Zz-AVd" secondAttribute="bottom" constant="30" id="eIA-Mx-Qgw"/>
                         <constraint firstAttribute="trailing" secondItem="npB-Zz-AVd" secondAttribute="trailing" constant="30" id="hE5-Ix-IrL"/>
-                        <constraint firstAttribute="height" constant="100" id="iE6-7c-ynm"/>
+                        <constraint firstItem="npB-Zz-AVd" firstAttribute="leading" secondItem="PDT-hA-GIY" secondAttribute="leading" id="mJj-CL-RYC"/>
+                        <constraint firstItem="npB-Zz-AVd" firstAttribute="top" secondItem="PDT-hA-GIY" secondAttribute="bottom" constant="6" id="oFI-5Z-VFC"/>
+                        <constraint firstAttribute="bottom" secondItem="npB-Zz-AVd" secondAttribute="bottom" constant="30" id="sCZ-aP-Fep"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6j9-M8-Bqu">
-                    <rect key="frame" x="0.0" y="100" width="331" height="190"/>
+                    <rect key="frame" x="0.0" y="102.5" width="331" height="178"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Step Limit / Price (ICX)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lgE-IJ-M0h">
                             <rect key="frame" x="30" y="30" width="112.5" height="14.5"/>
@@ -131,8 +131,6 @@
                     <constraints>
                         <constraint firstItem="lgE-IJ-M0h" firstAttribute="top" secondItem="6j9-M8-Bqu" secondAttribute="top" constant="30" id="0nM-PI-8Rt"/>
                         <constraint firstAttribute="trailing" secondItem="UiX-iZ-qtq" secondAttribute="trailing" constant="30" id="1u5-lM-krq"/>
-                        <constraint firstAttribute="bottom" relation="lessThanOrEqual" secondItem="UiX-iZ-qtq" secondAttribute="bottom" constant="52" id="41f-A4-RhP"/>
-                        <constraint firstAttribute="height" constant="190" id="58A-ka-56a"/>
                         <constraint firstItem="uZz-w6-WgD" firstAttribute="centerY" secondItem="lgE-IJ-M0h" secondAttribute="centerY" id="5EK-rg-U5V"/>
                         <constraint firstItem="zDp-4A-Cwz" firstAttribute="leading" secondItem="lgE-IJ-M0h" secondAttribute="leading" id="DaX-tx-gcM"/>
                         <constraint firstItem="Hu0-BV-9pd" firstAttribute="leading" secondItem="6j9-M8-Bqu" secondAttribute="leading" constant="30" id="Dou-A2-DBs"/>
@@ -151,6 +149,7 @@
                         <constraint firstItem="Oaz-bB-2tS" firstAttribute="trailing" secondItem="uZz-w6-WgD" secondAttribute="trailing" id="mOw-6P-ZeJ"/>
                         <constraint firstItem="sYR-Pc-9J9" firstAttribute="top" secondItem="lgE-IJ-M0h" secondAttribute="bottom" constant="11" id="nVT-H1-aWv"/>
                         <constraint firstItem="Oaz-bB-2tS" firstAttribute="centerY" secondItem="sYR-Pc-9J9" secondAttribute="centerY" id="qtQ-xr-ogj"/>
+                        <constraint firstAttribute="bottom" secondItem="UiX-iZ-qtq" secondAttribute="bottom" constant="40" id="uZV-Xw-9yE"/>
                     </constraints>
                 </view>
             </subviews>

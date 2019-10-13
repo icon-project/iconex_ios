@@ -28,6 +28,7 @@ enum IXInputBoxType {
     case decimal
     case integer
     case fileSelect
+    case address
 }
 
 @IBDesignable class IXInputBox: UIView {
@@ -124,6 +125,11 @@ enum IXInputBoxType {
             case .fileSelect:
                 textField.isEnabled = false
                 textField.canPaste = false
+                
+            case .address:
+                textField.keyboardType = .alphabet
+                textField.canPaste = true
+                subtitleLabel.text = ""
             }
         }
     }

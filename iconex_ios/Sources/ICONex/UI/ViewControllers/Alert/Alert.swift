@@ -160,10 +160,10 @@ struct SendInfo {
             
             self.token = token
             if let tokenInfo = token, let tokenValue = tokenAmount, let toAddr = tokenToAddress {
-                self.amount = tokenValue.toString(decimal: tokenInfo.decimal, 3).currencySeparated()
+                self.amount = tokenValue.toString(decimal: tokenInfo.decimal, tokenInfo.decimal, true).currencySeparated()
                 self.receivingAddress = toAddr
             } else {
-                self.amount = icx.value?.toString(decimal: 18, 3).currencySeparated() ?? "0"
+                self.amount = icx.value?.toString(decimal: 18, 18, true).currencySeparated() ?? "0"
                 self.receivingAddress = icx.to ?? ""
             }
             
@@ -175,10 +175,12 @@ struct SendInfo {
         } else if let eth = ethTransaction {
             self.ethTransaction = eth
             self.ethPrivateKey = ethPrivateKey
+            
+            self.token = token
             if let tokenInfo = token, let tokenValue = tokenAmount {
-                self.amount = tokenValue.toString(decimal: tokenInfo.decimal, 3).currencySeparated()
+                self.amount = tokenValue.toString(decimal: tokenInfo.decimal, tokenInfo.decimal, true).currencySeparated()
             } else {
-                self.amount = eth.value.toString(decimal: 18, 3).currencySeparated()
+                self.amount = eth.value.toString(decimal: 18, 18, true).currencySeparated()
             }
             self.stepLimit = String(eth.gasLimit)
             self.receivingAddress = eth.to

@@ -201,7 +201,7 @@ class Floater {
         floatMenu.pop()
     }
     
-    func showMenu(ethWallet: ETHWallet, token: Token?, _ controller: UIViewController? = nil) {
+    func showMenu(ethWallet: ETHWallet, token: Token? = nil, _ controller: UIViewController? = nil) {
         targetAction = controller
         let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
         

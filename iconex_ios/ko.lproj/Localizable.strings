@@ -131,6 +131,7 @@
 "Alert.Send.Value.ETH" = "전송 수량 (ETH)";
 "Alert.Send.Value.Token" = "전송 수량 (%@)";
 "Alert.Send.Address" = "받는 주소";
+"Alert.Send.ETH.Fee" = "예상 최대 수수료 (ETH)";
 
 "Alert.Password.Header" = "지갑 비밀번호 입력";
 "Alert.Password.Placeholder" = "비밀번호 입력";
