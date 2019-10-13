@@ -475,9 +475,19 @@ class SendICXViewController: BaseViewController {
                     }
                 }()
                 
-                if amount + estimatedStep > self.balance {
-                    Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
-                    return
+                if self.token == nil {
+                    if estimatedStep > self.balance {
+                        Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                        return
+                    }
+                } else {
+                    guard let wallet = self.walletInfo else { return }
+                    let icxBalance = Manager.balance.getBalance(wallet: wallet) ?? 0
+                    
+                    if estimatedStep > icxBalance {
+                        Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                        return
+                    }
                 }
                 
                 let toAddress = self.addressInputBox.text
