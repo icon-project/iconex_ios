@@ -85,5 +85,3 @@ class DetailViewModel {
         }.disposed(by: disposeBag)
     }
 }
-
-let detailViewModel = DetailViewModel.shared

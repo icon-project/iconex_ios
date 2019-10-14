@@ -76,17 +76,7 @@ extension SelectCoinTokenViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
         
-        guard let wallet = self.walletInfo else { return }
-        
         if indexPath.row == 0 {
-            detailViewModel.token.onNext(nil)
-            if let _ = wallet as? ICXWallet {
-                detailViewModel.symbol.onNext(CoinType.icx.symbol)
-                detailViewModel.fullName.onNext(CoinType.icx.fullName)
-            } else {
-                detailViewModel.symbol.onNext(CoinType.eth.symbol)
-                detailViewModel.fullName.onNext(CoinType.eth.fullName)
-            }
             if let handler = self.changedHandler {
                 handler(nil)
             }
@@ -94,10 +84,6 @@ extension SelectCoinTokenViewController: UITableViewDelegate {
         } else {
             guard let tokenList = self.tokenList else { return }
             let token = tokenList[indexPath.row-1]
-            
-            detailViewModel.token.onNext(token)
-            detailViewModel.symbol.onNext(token.symbol)
-            detailViewModel.fullName.onNext(token.name)
             
             if let handler = self.changedHandler {
                 handler(token)

@@ -32,6 +32,7 @@ class DetailViewController: BaseViewController, Floatable {
     @IBOutlet weak var arrowImageView: UIImageView!
     @IBOutlet weak var dropDownButton: UIButton!
     
+    @IBOutlet weak var balanceSpinner: UIActivityIndicatorView!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var currencyPriceLabel: UILabel!
     @IBOutlet weak var currencyLabel: UILabel!
@@ -48,9 +49,6 @@ class DetailViewController: BaseViewController, Floatable {
     @IBOutlet weak var liquidLabel: UILabel!
     @IBOutlet weak var stakedLabel: UILabel!
     
-    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    
     var walletInfo: BaseWalletConvertible? = nil {
         willSet {
             guard let wallet = newValue else { return }
@@ -63,7 +61,7 @@ class DetailViewController: BaseViewController, Floatable {
     var tokenInfo: Token? = nil {
         willSet {
             guard let token = newValue else { return }
-            detailViewModel.symbol.onNext(token.symbol)
+            self.detailViewModel.symbol.onNext(token.symbol)
         }
     }
     
@@ -84,11 +82,11 @@ class DetailViewController: BaseViewController, Floatable {
         }
     }
     
-    var txList = [Tracker.TxList]()
+    private var txList = [Tracker.TxList]()
     
-    var pageIndex: Int = 1
+    private var pageIndex: Int = 1
     var detailType: DetailType = .icx
-    var filter: TxFilter = .all
+    private var filter: TxFilter = .all
     
     let ixSectionHeader = IXSectionHeader(frame: CGRect.init(x: 0, y: 0, width: .max, height: 36))
     
@@ -96,9 +94,12 @@ class DetailViewController: BaseViewController, Floatable {
     
     var floater: Floater = Floater(type: .wallet)
     
+    private var detailViewModel: DetailViewModel = DetailViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.detailViewModel.filter.onNext(.all)
         setupBind()
         setupUI()
         
@@ -108,14 +109,12 @@ class DetailViewController: BaseViewController, Floatable {
         refreshControl.backgroundColor = .mint1
         refreshControl.rx.controlEvent(.valueChanged)
             .subscribe { (_) in
-                self.txList.removeAll()
                 self.pageIndex = 1
                 self.fetchBalance()
                 self.fetchTxList()
                 
-                DispatchQueue.main.async {
-                    refreshControl.endRefreshing()
-                }
+                refreshControl.endRefreshing()
+                
             }.disposed(by: disposeBag)
         
         self.tableView.refreshControl = refreshControl
@@ -134,9 +133,11 @@ class DetailViewController: BaseViewController, Floatable {
             }
         }
         
+        self.balanceLabel.isHidden = true
+        self.balanceSpinner.startAnimating()
+        
         // balance
         fetchBalance()
-        detailViewModel.currencyUnit.onNext(.USD)
         
         // eth button
         let attr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .regular), .underlineStyle: NSUnderlineStyle.single.rawValue])
@@ -204,12 +205,12 @@ class DetailViewController: BaseViewController, Floatable {
             }()
             
             DispatchQueue.main.async {
-                detailViewModel.balance.onNext(balance)
+                self.detailViewModel.balance.onNext(balance)
             }
         }
     }
     
-    private func fetchTxList() {
+    private func fetchTxList(isRefresh: Bool = true) {
         guard let wallet = self.walletInfo else { return }
         
         switch self.detailType {
@@ -231,7 +232,7 @@ class DetailViewController: BaseViewController, Floatable {
         default: break
         }
         
-        activityIndicator.startAnimating()
+        var newTxList = [Tracker.TxList]()
         
         DispatchQueue.global().async {
             if let token = self.tokenInfo { //token
@@ -241,14 +242,14 @@ class DetailViewController: BaseViewController, Floatable {
                             let tx = Tracker.TxList.init(dic: i)
                             switch self.filter {
                             case .all:
-                                self.txList.append(tx)
+                                newTxList.append(tx)
                             case .send:
                                 if tx.fromAddr == wallet.address {
-                                    self.txList.append(tx)
+                                    newTxList.append(tx)
                                 }
                             case .deposit:
                                 if tx.toAddr == wallet.address {
-                                    self.txList.append(tx)
+                                    newTxList.append(tx)
                                 }
                             }
                         }
@@ -261,14 +262,14 @@ class DetailViewController: BaseViewController, Floatable {
                             let tx = Tracker.TxList.init(dic: i)
                             switch self.filter {
                             case .all:
-                                self.txList.append(tx)
+                                newTxList.append(tx)
                             case .send:
                                 if tx.fromAddr == wallet.address {
-                                    self.txList.append(tx)
+                                    newTxList.append(tx)
                                 }
                             case .deposit:
                                 if tx.toAddr == wallet.address {
-                                    self.txList.append(tx)
+                                    newTxList.append(tx)
                                 }
                             }
                         }
@@ -276,9 +277,13 @@ class DetailViewController: BaseViewController, Floatable {
                 }
             }
             
+            if isRefresh {
+                self.txList = newTxList
+            } else {
+                self.txList.append(contentsOf: newTxList)
+            }
+            
             DispatchQueue.main.async {
-                self.tableView.reloadData()
-                
                 if self.txList.isEmpty {
                     let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
                     messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
@@ -290,20 +295,26 @@ class DetailViewController: BaseViewController, Floatable {
                     self.tableView.backgroundView = nil
                     self.tableView.separatorStyle = .singleLine
                 }
+                
+                self.tableView.reloadData()
             }
         }
         
-        activityIndicator.stopAnimating()
     }
     
     private func setStakeView() {
         guard let icxWallet = self.walletInfo as? ICXWallet, let staked = Manager.iiss.stake(icx: icxWallet), staked > BigUInt(0), self.tokenInfo == nil else {
-            headerView.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 140)
-            stakeBoxView.isHidden = true
+            self.headerView.frame.size.height = 140
+            self.stakeBoxView.isHidden = true
+            
             return
         }
-        headerView.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 255)
-        stakeBoxView.isHidden = false
+        
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+            self.headerView.frame.size.height = 255
+            
+        }, completion: nil)
+        
         totalBalanceTitle.size12(text: "ICX Balance", color: .white, weight: .light, align: .left)
         liquidTitle.size12(text: "Liquid ICX", color: .white, weight: .light, align: .left)
         stakedTitle.size12(text: "Staked ICX (Voting Power)", color: .white, weight: .light, align: .left)
@@ -312,13 +323,14 @@ class DetailViewController: BaseViewController, Floatable {
         
         liquidLabel.size12(text: liquid.toString(decimal: 18, 8).currencySeparated(), color: .white, align: .right)
         stakedLabel.size12(text: stake.toString(decimal: 18, 8).currencySeparated() , color: .white, align: .right)
+        
+        stakeBoxView.isHidden = false
     }
     
     private func setupUI() {
         guard let wallet = self.walletInfo else { return }
         
         navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
-             detailViewModel.filter.onNext(.all)
             self.navigationController?.popToRootViewController(animated: true)
         }
         navBar.setTitle(wallet.name)
@@ -329,15 +341,19 @@ class DetailViewController: BaseViewController, Floatable {
             manageVC.show()
         }
         
+        self.currencyPriceLabel.isHidden = true
+        
         stakeBoxView.corner(8)
         stakeBoxView.backgroundColor = UIColor.init(white: 1.0, alpha: 0.1)
+        
+        
         setStakeView()
     }
     
     private func setupBind() {
         guard let wallet = self.walletInfo else { return }
         
-        detailViewModel.wallet
+        self.detailViewModel.wallet
             .map {
                 if let tokens = $0.tokens, tokens.count > 0 {
                     return true
@@ -352,37 +368,72 @@ class DetailViewController: BaseViewController, Floatable {
                 let selectVC = self.storyboard?.instantiateViewController(withIdentifier: "SelectCoinToken") as! SelectCoinTokenViewController
                 selectVC.walletInfo = self.walletInfo
                 selectVC.changedHandler = { (newToken) in
+                    self.balanceLabel.isHidden = true
+                    self.currencyPriceLabel.isHidden = true
+                    self.balanceSpinner.startAnimating()
+                    
+                    // token or nil
+                    self.detailViewModel.token.onNext(newToken)
+                    
                     switch self.detailType {
                     case .icx, .irc:
-                        self.detailType = newToken == nil ? .icx : .irc
+                        if let token = newToken {
+                            self.detailType = .irc
+                            
+                            self.detailViewModel.symbol.onNext(token.symbol)
+                            self.detailViewModel.fullName.onNext(token.name)
+                            
+                        } else {
+                            self.detailType = .icx
+                            
+                            self.detailViewModel.symbol.onNext(CoinType.icx.symbol)
+                            self.detailViewModel.fullName.onNext(CoinType.icx.fullName)
+                        }
+                        
                     case .eth, .erc:
                         self.detailType = newToken == nil ? .eth : .erc
+                        
+                        if let token = newToken {
+                            self.detailType = .erc
+                            
+                            self.detailViewModel.symbol.onNext(token.symbol)
+                            self.detailViewModel.fullName.onNext(token.name)
+                            
+                        } else {
+                            self.detailType = .eth
+                            
+                            self.detailViewModel.symbol.onNext(CoinType.eth.symbol)
+                            self.detailViewModel.fullName.onNext(CoinType.eth.fullName)
+                        }
                     }
-                    detailViewModel.currencyUnit.onNext(.USD)
                     self.tokenInfo = newToken
-                    self.txList.removeAll()
+                    
                     self.fetchTxList()
+                    self.detailViewModel.currencyUnit.onNext(.USD)
+                    self.currencyPriceLabel.isHidden = true
                     self.fetchBalance()
                     self.setStakeView()
-                    self.tableView.reloadData()
+                    
                 }
                 selectVC.show()
                 
         }.disposed(by: disposeBag)
         
-        detailViewModel.fullName
+        self.detailViewModel.fullName
             .bind(to: self.coinTypeLabel.rx.text)
             .disposed(by: disposeBag)
         
-        detailViewModel.currencyUnit
+        self.detailViewModel.currencyUnit
             .map { $0.symbol }
             .bind(to: self.currencyLabel.rx.text)
             .disposed(by: disposeBag)
                 
-        let shareBalance = detailViewModel.balance.share(replay: 1)
+        let shareBalance = self.detailViewModel.balance.share(replay: 1)
         
-        shareBalance
-            .flatMapLatest { (value) -> Observable<String> in
+        shareBalance.flatMapLatest { (value) -> Observable<String> in
+            self.balanceLabel.isHidden = false
+            self.balanceSpinner.stopAnimating()
+                
             guard let token = self.tokenInfo else {
                 return Observable.just(value.toString(decimal: wallet.decimal, 4).currencySeparated())
             }
@@ -402,7 +453,8 @@ class DetailViewController: BaseViewController, Floatable {
         .disposed(by: disposeBag)
         
         
-        Observable.combineLatest(detailViewModel.currencyPrice, detailViewModel.balance).flatMapLatest { (currency, bal) -> Observable<String> in
+        Observable.combineLatest(self.detailViewModel.currencyPrice, self.detailViewModel.balance).flatMapLatest { (currency, bal) -> Observable<String> in
+            self.currencyPriceLabel.isHidden = false
             
             let currencyPrice = Float(currency) ?? 0
             let balance = Float(bal)
@@ -422,33 +474,33 @@ class DetailViewController: BaseViewController, Floatable {
         
         toggleButton.rx.tap.asControlEvent()
             .subscribe { (_) in
-                let currencyUnit = try! detailViewModel.currencyUnit.value()
+                let currencyUnit = try! self.detailViewModel.currencyUnit.value()
                 
                 switch self.detailType {
                 case .icx, .erc:
                     switch currencyUnit {
-                    case .USD: detailViewModel.currencyUnit.onNext(.BTC)
-                    case .BTC: detailViewModel.currencyUnit.onNext(.ETH)
-                    case .ETH: detailViewModel.currencyUnit.onNext(.USD)
+                    case .USD: self.detailViewModel.currencyUnit.onNext(.BTC)
+                    case .BTC: self.detailViewModel.currencyUnit.onNext(.ETH)
+                    case .ETH: self.detailViewModel.currencyUnit.onNext(.USD)
                     default: break
                     }
                 
                 default:
                     switch currencyUnit {
-                    case .USD: detailViewModel.currencyUnit.onNext(.BTC)
-                    case .BTC: detailViewModel.currencyUnit.onNext(.ICX)
-                    case .ICX: detailViewModel.currencyUnit.onNext(.USD)
+                    case .USD: self.detailViewModel.currencyUnit.onNext(.BTC)
+                    case .BTC: self.detailViewModel.currencyUnit.onNext(.ICX)
+                    case .ICX: self.detailViewModel.currencyUnit.onNext(.USD)
                     default: break
                     }
                 }
         }.disposed(by: disposeBag)
         
-        detailViewModel.filter.observeOn(MainScheduler.instance)
+        self.detailViewModel.filter.distinctUntilChanged()
             .subscribe(onNext: { (filter) in
-                self.txList.removeAll()
                 self.filter = filter
+                self.pageIndex = 1
                 self.fetchTxList()
-                self.tableView.reloadData()
+                
         }).disposed(by: disposeBag)
         
         tableView.rx.didEndDragging.subscribe { (_) in
@@ -461,12 +513,11 @@ class DetailViewController: BaseViewController, Floatable {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 self.pageIndex += 1
                 
-                self.fetchTxList()
-                self.tableView.reloadData()
+                self.fetchTxList(isRefresh: false)
+                
             } else {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -76, right: 0)
 
-                spinner.startAnimating()
                 spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.tableView.bounds.width, height: CGFloat(44))
 
                 self.tableView.tableFooterView = spinner
@@ -490,13 +541,14 @@ extension DetailViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "detailCell") as! DetailTableViewCell
         
         guard let wallet = self.walletInfo else { return cell }
-        let item = txList[indexPath.row]
+        
+        let item = self.txList[indexPath.row]
         
         let txHash = item.txHash
         let from = item.fromAddr
         let amount = self.tokenInfo == nil ? item.amount : item.quantity
         let timeStamp = self.tokenInfo == nil ? item.createDate : item.age
-        let symbol = try? detailViewModel.symbol.value()
+        let symbol = try? self.detailViewModel.symbol.value()
         
         cell.txHashLabel.size12(text: txHash, color: .gray128, weight: .light)
         
@@ -522,11 +574,29 @@ extension DetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        ixSectionHeader.filter = self.filter
+        
         switch self.detailType {
         case .eth, .erc:
             ixSectionHeader.infoButton.isHidden = true
         default: break
         }
+        
+        let description: String = {
+            switch self.filter {
+            case .all: return "Wallet.Detail.Option.All".localized
+            case .send: return "Wallet.Detail.Option.Send".localized
+            case .deposit: return "Wallet.Detail.Option.Deposit".localized
+            }
+        }()
+        
+        ixSectionHeader.typeLabel.text = description
+        
+        ixSectionHeader.handler = { newFilter in
+            self.detailViewModel.filter.onNext(newFilter)
+        }
+        
         return ixSectionHeader
     }
     
@@ -537,7 +607,7 @@ extension DetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let txHash = txList[indexPath.row].txHash
+        let txHash = self.txList[indexPath.row].txHash
         let provider = tracker.provider
         let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/transaction/\(txHash)")
         

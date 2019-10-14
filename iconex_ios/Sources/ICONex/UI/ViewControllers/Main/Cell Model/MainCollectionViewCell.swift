@@ -416,12 +416,9 @@ extension MainCollectionViewCell: UITableViewDelegate {
             
             detailVC.walletInfo = wallet
             
-            detailViewModel.wallet.onNext(wallet)
             if let _ = wallet as? ICXWallet {
-                detailViewModel.symbol.onNext(CoinType.icx.symbol)
                 detailVC.detailType = .icx
             } else {
-                detailViewModel.symbol.onNext(CoinType.eth.symbol)
                 detailVC.detailType = .eth
             }
             
@@ -433,9 +430,6 @@ extension MainCollectionViewCell: UITableViewDelegate {
                     return lhs.created < rhs.created
                 })[indexPath.row] else { return }
                 
-                detailViewModel.wallet.onNext(wallet)
-                detailViewModel.token.onNext(token)
-                detailViewModel.symbol.onNext(token.symbol.uppercased())
                 detailVC.tokenInfo = token
                 detailVC.walletInfo = wallet
                 
@@ -446,8 +440,6 @@ extension MainCollectionViewCell: UITableViewDelegate {
                 }
             } else { // coin token
                 guard let selectedWallet = self.coinTokens?[indexPath.row] else { return }
-                detailViewModel.wallet.onNext(selectedWallet)
-                detailViewModel.symbol.onNext(symbol.uppercased())
                 detailVC.walletInfo = selectedWallet
                 
                 switch symbol {
@@ -465,7 +457,6 @@ extension MainCollectionViewCell: UITableViewDelegate {
                     } else {
                         detailVC.detailType = .erc
                     }
-                    detailViewModel.token.onNext(tokenInfo)
                 }
             }
         }
