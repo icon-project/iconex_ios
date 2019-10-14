@@ -382,7 +382,10 @@ class BalanceManager {
 extension BalanceManager {
     func getAllBalances(_ completion: (() -> Void)? = nil) {
         guard isWorking == false else { return }
-        DispatchQueue.global().async { [unowned self] in
+        
+        let queue = dispatch_queue_concurrent_t(label: "Queue.getBalances")
+        
+        queue.async { [unowned self] in
             self.isWorking = true
             
             Manager.icon.stepCost = Manager.icon.getStepCosts()

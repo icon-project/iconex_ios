@@ -115,4 +115,22 @@ struct Validator {
         let result = NSPredicate(format: "SELF MATCHES %@", pattern)
         return result.evaluate(with: name)
     }
+    
+    static func validateConnectPay(code: String) -> (address: String, amount: String?)? {
+        guard let components = URLComponents(string: code),
+            components.scheme == "iconex",
+            components.host == "pay",
+            let queries = components.queryItems,
+            let encodedQuery = queries.first,
+            encodedQuery.name == "data",
+            let v = encodedQuery.value else { return nil }
+        
+        
+        guard let data = Data(base64Encoded: v) else { return nil }
+        guard let connect = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: String] else { return nil }
+        guard let address = connect["address"] else { return nil }
+        guard Validator.validateICXAddress(address: address) else { return nil }
+        
+        return (address, connect["amount"])
+    }
 }

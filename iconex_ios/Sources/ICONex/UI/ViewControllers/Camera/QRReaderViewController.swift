@@ -12,7 +12,7 @@ import RxSwift
 import RxCocoa
 
 enum QRReaderMode {
-    case prvKey, icx, eth, irc
+    case prvKey, icx, eth, irc, connect
 }
 
 private let INITIAL_HEIGHT: CGFloat = 260
@@ -32,7 +32,7 @@ class QRReaderViewController: BaseViewController {
     
     private var readerMode: QRReaderMode = .prvKey
     
-    private var handler: ((String) -> Void)?
+    private var handler: ((String, String?) -> Void)?
     
     private var standingBy = false
     
@@ -107,7 +107,7 @@ class QRReaderViewController: BaseViewController {
         })
     }
     
-    func set(mode: QRReaderMode, handler: @escaping ((String) -> Void)) {
+    func set(mode: QRReaderMode, handler: @escaping ((String, String?) -> Void)) {
         self.readerMode = mode
         self.handler = handler
     }
@@ -163,7 +163,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 captureSession.stopRunning()
                 Log("Code - \(code)")
                 if let handle = handler {
-                    handle(code)
+                    handle(code, nil)
                 }
                 self.dismiss(animated: true, completion: nil)
             } else {
@@ -176,7 +176,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 Log("Code - \(code)")
                 self.dismiss(animated: true, completion: {
                     if let handle = self.handler {
-                        handle(code)
+                        handle(code, nil)
                     }
                 })
             } else if Validator.validateIRCAddress(address: code) {
@@ -184,7 +184,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 Log("Code - \(code)")
                 self.dismiss(animated: true, completion: {
                     if let handle = self.handler {
-                        handle(code)
+                        handle(code, nil)
                     }
                 })
             } else {
@@ -197,7 +197,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 Log("Code - \(code)")
                 self.dismiss(animated: true, completion: {
                     if let handle = self.handler {
-                        handle(code)
+                        handle(code, nil)
                     }
                 })
             } else {
@@ -210,11 +210,31 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 Log("Code - \(code)")
                 self.dismiss(animated: true, completion: {
                     if let handle = self.handler {
-                        handle(code)
+                        handle(code, nil)
                     }
                 })
             } else {
                 Tool.toast(message: "QRReader.Error.ICX".localized)
+            }
+            
+        case .connect:
+            Log("Code - \(code)")
+            let address: String
+            var amount: String? = nil
+            if Validator.validateICXAddress(address: code) {
+                address = code
+            } else if let data = Validator.validateConnectPay(code: code) {
+                address = data.address
+                amount = data.amount
+            } else {
+                Tool.toast(message: "QRReader.Error.ICX".localized)
+                return
+            }
+            captureSession.stopRunning()
+            self.dismiss(animated: true) {
+                if let handle = self.handler {
+                    handle(address, amount)
+                }
             }
         }
     }

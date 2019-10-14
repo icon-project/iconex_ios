@@ -369,6 +369,17 @@ struct Tool {
         }
         return controller
     }
+    
+    static func toConnectString(address: String, amount: BigUInt?) -> String? {
+        var dic: [String: String] = ["address": address]
+        if let bigValue = amount {
+            let hexValue = bigValue.toHexString()
+            dic["amount"] = hexValue
+        }
+        guard let data = try? JSONSerialization.data(withJSONObject: dic, options: []) else { return nil }
+        
+        return "iconex://pay?data=\(data.base64EncodedString())"
+    }
 }
 
 func scaleQRCode(origin: CIImage) -> UIImage {

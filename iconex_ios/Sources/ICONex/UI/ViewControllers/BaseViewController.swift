@@ -25,12 +25,11 @@ class BaseViewController: UIViewController, UINavigationControllerDelegate, UIGe
             overrideUserInterfaceStyle = .light
         }
         
-        setKeyboardListener()
         initializeComponents()
     }
     
     func initializeComponents() {
-        
+        setKeyboardListener()
     }
     
     func refresh() {

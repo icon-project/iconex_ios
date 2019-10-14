@@ -59,6 +59,7 @@ class SendICXViewController: BaseViewController {
     var stepPrice = Manager.icon.stepPrice ?? 0
     var privateKey: PrivateKey?
     var toAddress: String? = nil
+    var toAmount: String? = nil
     
     var data: String? = nil
     
@@ -69,11 +70,6 @@ class SendICXViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let toAddress = self.toAddress {
-            self.addressInputBox.text = toAddress
-            self.addressInputBox.textField.sendActions(for: .valueChanged)
-        }
-        
         if self.token != nil {
             self.stepLimit = 200000
             self.dataInputBox.isHidden = true
@@ -82,6 +78,15 @@ class SendICXViewController: BaseViewController {
         
         setupUI()
         setupBind()
+        
+        if let toAddress = self.toAddress {
+            self.addressInputBox.text = toAddress
+            self.addressInputBox.textField.sendActions(for: .editingDidEndOnExit)
+        }
+        if let toAmount = self.toAmount {
+            self.amountInputBox.text = toAmount
+            self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -186,7 +191,7 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
         }.disposed(by: disposeBag)
         
@@ -207,7 +212,7 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -228,7 +233,7 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -249,7 +254,7 @@ class SendICXViewController: BaseViewController {
                     let maxBalance = self.balance - fee
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -264,7 +269,7 @@ class SendICXViewController: BaseViewController {
                     self.data = data
                     self.dataType = dataType
                     self.dataInputBox.text = data ?? ""
-                    self.dataInputBox.textField.sendActions(for: .valueChanged)
+                    self.dataInputBox.textField.sendActions(for: .editingDidEndOnExit)
                     
                     guard data != nil else {
                         self.stepLimit = 100000
@@ -298,7 +303,7 @@ class SendICXViewController: BaseViewController {
                 inputDataVC.completeHandler = { dataString, _ in
                     self.data = dataString
                     self.dataInputBox.text = dataString ?? ""
-                    self.dataInputBox.textField.sendActions(for: .valueChanged)
+                    self.dataInputBox.textField.sendActions(for: .editingDidEndOnExit)
                     
                     guard dataString != nil else {
                         self.stepLimit = 100000
@@ -396,9 +401,7 @@ class SendICXViewController: BaseViewController {
                 
                 addressBook.selectedHandler = { address in
                     self.addressInputBox.text = address
-                    self.addressInputBox.textField.sendActions(for: .valueChanged)
-                    
-                    self.addressInputBox.set(state: .normal)
+                    self.addressInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 }
                 
                 self.presentPanModal(addressBook)
@@ -413,14 +416,12 @@ class SendICXViewController: BaseViewController {
                 
                 let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                 qrCodeReader.modalPresentationStyle = .fullScreen
-                qrCodeReader.set(mode: .icx, handler: { (address) in
+                qrCodeReader.set(mode: .icx, handler: { address, amount in
                     self.addressInputBox.text = address
-                    self.addressInputBox.textField.sendActions(for: .valueChanged)
-                    
-                    if address == wallet.address {
-                        self.addressInputBox.setError(message: "Send.InputBox.Address.Error.SameAddress".localized)
-                    } else {
-                        self.addressInputBox.set(state: .normal)
+                    self.addressInputBox.textField.sendActions(for: .editingDidEndOnExit)
+                    if let a = amount?.hexToBigUInt()?.toString(decimal: 18, 18, true) {
+                        self.amountInputBox.text = a
+                        self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                     }
                 })
                 

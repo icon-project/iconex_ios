@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Hpg-fK-R45">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Hpg-fK-R45">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -319,7 +319,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Es-yF-2cz" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Es-yF-2cz" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -330,10 +330,10 @@
                                     <constraint firstAttribute="height" constant="1" id="gLO-MQ-ena"/>
                                 </constraints>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RHe-Y5-vIP">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RHe-Y5-vIP">
                                 <rect key="frame" x="0.0" y="104" width="375" height="674"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rEE-5d-N5C">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rEE-5d-N5C">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="471.33333333333331"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wallet Address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fta-BQ-63M">
@@ -361,10 +361,10 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                             </button>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p62-hc-ya1">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p62-hc-ya1">
                                                 <rect key="frame" x="30" y="342.33333333333331" width="315" height="78"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" verticalHuggingPriority="1000" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kwX-Fl-dwC" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" verticalHuggingPriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="kwX-Fl-dwC" customClass="IXInputBox" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="225" height="78"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </view>
@@ -386,7 +386,7 @@
                                                     <constraint firstItem="bAJ-vO-OuU" firstAttribute="leading" secondItem="kwX-Fl-dwC" secondAttribute="trailing" constant="8" id="ymp-KV-Ln8"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLy-ZC-5Sf">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLy-ZC-5Sf">
                                                 <rect key="frame" x="40" y="430.33333333333337" width="295" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -449,6 +449,7 @@
                         <outlet property="inputBox" destination="kwX-Fl-dwC" id="ouc-ht-192"/>
                         <outlet property="qrImage" destination="jPW-6k-KbS" id="XfC-jj-xYy"/>
                         <outlet property="requestButton" destination="bAJ-vO-OuU" id="Z3l-SX-OJg"/>
+                        <outlet property="scrollView" destination="RHe-Y5-vIP" id="4QR-qT-ESR"/>
                         <outlet property="titleContainer" destination="3Es-yF-2cz" id="5nd-W6-npT"/>
                         <outlet property="walletAddressLabel" destination="34a-p6-CJq" id="ooY-cc-rs2"/>
                         <outlet property="walletAddressTitle" destination="Fta-BQ-63M" id="2Dt-W0-IEt"/>
