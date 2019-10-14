@@ -142,7 +142,7 @@
 "Alert.QRCode.PrivateKey" = "개인 키 만으로 지갑 실행, 전송이 가능하므로 어떠한 경우에도 외부 공유가 되어서는 안됩니다.";
 
 "Alert.ForgotPasscode.Title" = "비밀번호를 잊으셨나요?";
-"Alert.ForgotPasscode.SubTitle" = "저장해 놓은 개인 키로 지갑을 다시 불러온 후,\n비밀번호를 재설정 할 수 있습니다.";
+"Alert.ForgotPasscode.SubTitle" = "개인 키를 알고 있다면 지갑을 새로 가져와서 비밀번호를 재설정 할 수 있습니다. 아래 단계를 따라 진행해주세요.\n\"지갑 가져오기\" 선택 > \"개인 키\" 선택 > 개인 키 입력 후 가져오기 > 새 비밀번호 입력";
 
 "Alert.Vote.Header" = "Vote";
 "Alert.Vote.Prep" = "투표한 P-Rep";
@@ -322,7 +322,7 @@
 "Main.QRCode.Request" = "전송 요청";
 "Main.QRCode.Create" = "QR 코드 생성";
 "Main.QRCode.Description" = "・ 전송 요청 수량 입력 시, 입력한 수량 정보가 포함된 QR 코드로 변경됩니다.";
-
+"Main.QRCode.Generate" = "QR 코드 생성";
 
 // MARK: ManageWalletViewController
 "Manage.Title" = "지갑 관리";
@@ -571,6 +571,7 @@
 "Error.Password" = "비밀번호를 입력해주세요.";
 "Error.Password.Length" = "8자 이상으로 입력해주세요.";
 "Error.Password.CharacterSet" = "영문, 숫자, 특수문자( ? ! : . , % + - / * < > { } ( ) [ ] ` ” ‘ ~ _ ^ \\ | @ # $ & )를 혼용하여 입력해주세요.";
+"Error.Password.Invaild.SpecialCharacter" = "사용 가능한 특수문자를 확인해 주세요. ( ? ! : . , % + - / * < > { } ( ) [ ] ` \" ' ~ _ ^ \ | @ # $ & )";
 "Error.Password.Serialize" = "동일한 문자를 3자 이상 연속해서 입력할 수 없습니다.";
 "Error.Password.Blank" = "공백 없이 입력해주세요.";
 "Error.Password.Wrong" = "비밀번호를 다시 확인해주세요.";
