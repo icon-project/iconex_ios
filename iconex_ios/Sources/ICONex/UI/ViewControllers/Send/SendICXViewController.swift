@@ -189,7 +189,7 @@ class SendICXViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: 18)
+                    self.amountInputBox.text = calculated.toString(decimal: 18, 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
@@ -204,13 +204,13 @@ class SendICXViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal, false)
+                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal)
                 } else {
                     let power = BigUInt(100).convert()
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: 18)
+                    self.amountInputBox.text = calculated.toString(decimal: 18, 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
@@ -225,13 +225,13 @@ class SendICXViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal, false)
+                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal)
                 } else {
                     let power = BigUInt(1000).convert()
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: 18)
+                    self.amountInputBox.text = calculated.toString(decimal: 18, 18)
                 }
                 self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
@@ -242,7 +242,7 @@ class SendICXViewController: BaseViewController {
                 self.amountInputBox.textField.becomeFirstResponder()
                 
                 if let token = self.token {
-                    self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal)
+                    self.amountInputBox.text = self.balance.toString(decimal: token.decimal, token.decimal, true)
                     
                 } else {
                     let fee: BigUInt = self.stepLimit * self.stepPrice
@@ -252,7 +252,7 @@ class SendICXViewController: BaseViewController {
                     }
                     
                     let maxBalance = self.balance - fee
-                    self.amountInputBox.text = maxBalance.toString(decimal: 18, 18)
+                    self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, true)
                 }
                 self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
