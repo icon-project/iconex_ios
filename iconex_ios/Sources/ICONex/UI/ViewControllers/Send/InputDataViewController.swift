@@ -46,7 +46,8 @@ class InputDataViewController: BaseViewController {
         }
         
         if self.isViewMode {
-            self.textView.isUserInteractionEnabled = false
+            self.textView.isEditable = false
+            self.textView.isSelectable = false
         }
         
         setupUI()
@@ -80,6 +81,17 @@ class InputDataViewController: BaseViewController {
     }
     
     private func setupBind() {
+        
+        keyboardHeight().observeOn(MainScheduler.instance)
+        .subscribe(onNext: { [unowned self] (height: CGFloat) in
+            if height == 0 {
+                self.textView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            } else {
+                let keyboardHeight: CGFloat = height - self.view.safeAreaInsets.bottom
+                self.textView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+            }
+        }).disposed(by: disposeBag)
+        
         closeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 if self.textView.text.isEmpty || self.isEditingMode || self.isViewMode {
@@ -148,7 +160,8 @@ class InputDataViewController: BaseViewController {
                         self.dismiss(animated: true, completion: nil)
                     }).show()
                 }
-                self.textView.isUserInteractionEnabled = true
+                self.textView.isSelectable = true
+                self.textView.isEditable = true
                 self.textView.becomeFirstResponder()
                 self.isEditingMode = true
                 self.confirmButton.setTitle("Common.Remove".localized, for: .normal)
