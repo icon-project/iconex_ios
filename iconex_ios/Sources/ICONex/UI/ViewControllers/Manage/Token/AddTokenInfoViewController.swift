@@ -133,12 +133,12 @@ class AddTokenInfoViewController: BaseViewController {
                 let qrVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                 qrVC.modalPresentationStyle = .fullScreen
                 if let _ = self.walletInfo as? ICXWallet {
-                    qrVC.set(mode: .irc, handler: { (contract) in
+                    qrVC.set(mode: .irc, handler: { contract, _ in
                         self.addressBox.textField.text = contract
                         self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
                     })
                 } else {
-                    qrVC.set(mode: .eth, handler: { (contract) in
+                    qrVC.set(mode: .eth, handler: { contract, _ in
                         self.addressBox.textField.text = contract
                         self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
                     })
@@ -193,9 +193,9 @@ class AddTokenInfoViewController: BaseViewController {
     }
     
     private func sendActions() {
-        self.addressBox.textField.sendActions(for: .valueChanged)
-        self.nameBox.textField.sendActions(for: .valueChanged)
-        self.symbolBox.textField.sendActions(for: .valueChanged)
-        self.decimalBox.textField.sendActions(for: .valueChanged)
+        self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
+        self.nameBox.textField.sendActions(for: .editingDidEndOnExit)
+        self.symbolBox.textField.sendActions(for: .editingDidEndOnExit)
+        self.decimalBox.textField.sendActions(for: .editingDidEndOnExit)
     }
 }

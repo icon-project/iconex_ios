@@ -136,7 +136,7 @@ enum IXInputBoxType {
     
     var state: IXInputBoxState { return _state }
     var inputType: IXInputBoxType { return _type }
-    var maxLength: Int = 0
+    var maxDecimalLength: Int = 18
     
     var text: String {
         get {
@@ -242,10 +242,21 @@ enum IXInputBoxType {
         self.placeholder = placeholder
     }
     
+    func set(maxDecimalLength: Int = 18) {
+        self.maxDecimalLength = maxDecimalLength
+    }
+    
     func setError(message: String?) {
+        subtitleLabel.textColor = .error1
         if let msg = message, msg.count > 0 {
-            _state = .error
-            subtitleLabel.text = msg
+            if msg.hasPrefix("$") {
+                _state = .normal
+                subtitleLabel.textColor = .gray179
+                subtitleLabel.text = msg
+            } else {
+                _state = .error
+                subtitleLabel.text = msg
+            }
         } else {
             _state = .normal
             subtitleLabel.text = ""
@@ -299,7 +310,7 @@ extension IXInputBox: UITextFieldDelegate {
                         
                         if let below = split.last {
                             
-                            if below.count <= 18 {
+                            if below.count <= maxDecimalLength {
                                 return true
                             }
                             return false

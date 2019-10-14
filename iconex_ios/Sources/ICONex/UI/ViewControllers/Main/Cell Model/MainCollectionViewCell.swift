@@ -79,17 +79,18 @@ class MainCollectionViewCell: UICollectionViewCell {
                 Alert.password(wallet: wallet, returnAction: { (privateKey) in
                     let scanVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                     scanVC.modalPresentationStyle = .fullScreen
-                    scanVC.set(mode: .icx, handler: { (address) in
+                    scanVC.set(mode: .connect, handler: { address, amount in
                         let send = UIStoryboard(name: "Send", bundle: nil).instantiateViewController(withIdentifier: "SendICX") as! SendICXViewController
                         send.walletInfo = self.info
                         send.privateKey = PrivateKey(hex: Data(hex: privateKey))
                         send.toAddress = address
+                        send.toAmount = amount?.hexToBigUInt()?.toString(decimal: 18, 18, true)
                         send.modalPresentationStyle = .fullScreen
-                        
+
                         send.sendHandler = { isSuccess in
                             Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
                         }
-                        
+
                         app.topViewController()?.present(send, animated: true, completion: nil)
                     })
                     app.topViewController()?.present(scanVC, animated: true, completion: nil)

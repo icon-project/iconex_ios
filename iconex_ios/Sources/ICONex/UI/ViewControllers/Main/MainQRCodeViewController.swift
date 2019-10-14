@@ -70,7 +70,7 @@ class MainQRCodeViewController: BaseViewController {
         copyButton.setTitle("Wallet.Address.Copy".localized, for: .normal)
         
         sendButton.roundGray230()
-        sendButton.setTitle("Main.QRCode.Request".localized, for: .normal)
+        sendButton.setTitle("Main.QRCode.Create".localized, for: .normal)
         
         descLabel.size12(text: "Main.QRCode.Description".localized, color: .mint1, weight: .light)
         
@@ -91,6 +91,21 @@ class MainQRCodeViewController: BaseViewController {
                 UIPasteboard.general.string = self.wallet?.address ?? ""
                 Tool.toast(message: "Wallet.Address.CopyComplete".localized)
         }.disposed(by: disposeBag)
+        
+        sendButton.rx.tap.subscribe(onNext: {
+            self.view.endEditing(true)
+            let input = self.inputBox.text
+            
+            if !input.isEmpty {
+                let amount = input.bigUInt(decimal: 18)
+                guard let qrString = Tool.toConnectString(address: self.wallet!.address, amount: amount) else { return }
+                guard let qrCodeSource = qrString.generateQRCode() else { return }
+                self.qrImageView.image = UIImage(ciImage: qrCodeSource)
+            } else {
+                guard let qrCodeSource = self.wallet!.address.generateQRCode() else { return }
+                self.qrImageView.image = UIImage(ciImage: qrCodeSource)
+            }
+            }).disposed(by: disposeBag)
         
 //        sendButton.rx.tap.asControlEvent()
 //            .subscribe { (_) in
@@ -123,18 +138,15 @@ class MainQRCodeViewController: BaseViewController {
                 self.beginClose()
         }.disposed(by: disposeBag)
         
-        inputBox.setError(message: "$\t0.000")
-        
         inputBox.set { (value) -> String? in
             guard !value.isEmpty else { return nil }
-            let exchangedInfo = self.isICX ? "icxusd" : "ethusd"
+            let exchangedInfo = "icxusd"
             let usdPrice = Manager.exchange.exchangeInfoList[exchangedInfo]?.price
             
             guard let usd = Float(usdPrice ?? "0"), let value = Float(value) else {
-                return "Error.CommonError".localized
+                return nil
             }
-            // TODO: qrCode image update
-            let priceString = "$ " + String(usd*value)
+            let priceString = "$ " + String(format: "%.2f", usd*value)
             return priceString
         }
 
@@ -159,7 +171,7 @@ class MainQRCodeViewController: BaseViewController {
         
         inputBox.set(inputType: .decimal)
         inputBox.set(state: .normal, placeholder: "Main.QRCode.InputBox.Placeholder".localized)
-        
+        inputBox.set(maxDecimalLength: 8)
     }
     
     override func viewDidAppear(_ animated: Bool) {

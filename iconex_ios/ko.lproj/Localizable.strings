@@ -278,14 +278,18 @@
 "Main.Nav.Title.2" = "코인&토큰";
 "Main.Balance.Title" = "전체 자산 가치";
 "Main.Power.Title" = "전체 Voted Power";
-"Main.Info.About.Title1" = "전체 자산 가치";
-"Main.Info.About.Desc1" = "USD 환산금액이 표시되지 않은 토큰은 전체 자산 평가금액에서 제외됩니다. 평가금액은 참고용으로만 활용해주세요.";
-"Main.Info.About.Title2" = "Stake";
-"Main.Info.About.Desc2" = "원하는 수량 만큼 ICX를 잠금 상태(Staked ICX)로 전환하는 기능입니다. Stake를 실행하면 ICX는 잠금 상태로 전환되며, 해제 시 수일이 소요됩니다. Stake된 ICX의 양만큼 Voting Power가 1:1 비율로 생성됩니다.";
-"Main.Info.About.Title3" = "Vote";
-"Main.Info.About.Desc3" = "Voting Power를 이용하여 P-Rep 후보자에게 투표할 수 있습니다.";
-"Main.Info.About.Title4" = "I-Score";
-"Main.Info.About.Desc4" = "P-Rep 투표에 대한 기여도 점수이며, 1,000 I-Score를 1 ICX로 청구할 수 있습니다.";
+
+// MARK: MainInfoViewController
+"Main.Info.About.AllAssets.Title" = "전체 자산 가치";
+"Main.Info.About.AllAssets.Desc" = "USD 환산금액이 표시되지 않은 토큰은 전체 자산 평가금액에서 제외됩니다. 평가금액은 참고용으로만 활용해주세요.";
+"Main.Info.About.Prep.Title" = "P-Rep";
+"Main.Info.About.Prep.Desc" = "ICON Network는 대표자(Public Representative, 이하 P-Rep)에 의해 운영되는 블록체인 네트워크로, 사용자(ICONist)들은 양질의 P-Rep을 선별하여 투표해야 합니다. 각 대표자들은 ICON Network 전체 보상량에 영향을 주는 대표자 월간 보상 변수(i_rep) 값을 제출할 수 있으며, 사용자들은 각 대표자들이 제출한 값을 살펴볼 수 있습니다. 아울러, 투표에 참여한 사용자들은 대표자 위임 연간 보상률(r_rep)에 의해 투표에 대한 보상을 받습니다.";
+"Main.Info.About.Stake.Title" = "Stake";
+"Main.Info.About.Stake.Desc" = "원하는 수량 만큼 ICX를 잠금 상태(Staked ICX)로 전환하는 기능입니다. Stake를 실행하면 ICX는 잠금 상태로 전환되며, 해제 시 수일이 소요됩니다. Stake된 ICX의 양만큼 Voting Power가 1:1 비율로 생성됩니다.";
+"Main.Info.About.Vote.Title" = "Vote";
+"Main.Info.About.Vote.Desc" = "Voting Power를 이용하여 P-Rep 후보자에게 투표할 수 있습니다.";
+"Main.Info.About.IScore.Title" = "I-Score";
+"Main.Info.About.IScore.Desc" = "P-Rep 투표에 대한 기여도 점수이며, 1,000 I-Score를 1 ICX로 청구할 수 있습니다.";
 
 
 // MARK: SideMenuViewController
@@ -316,6 +320,7 @@
 // MARK: MainQRCodeViewController
 "Main.QRCode.InputBox.Placeholder" = "전송 요청 수량 (ICX)";
 "Main.QRCode.Request" = "전송 요청";
+"Main.QRCode.Create" = "QR 코드 생성";
 "Main.QRCode.Description" = "・ 전송 요청 수량 입력 시, 입력한 수량 정보가 포함된 QR 코드로 변경됩니다.";
 
 

@@ -524,10 +524,10 @@ class AlertViewController: BaseViewController {
                         return self.isICX ? .icx : .eth
                     }()
                     
-                    qrCodeReader.set(mode: readerMode, handler: { (address) in
+                    qrCodeReader.set(mode: readerMode, handler: { address, _ in
                         addressView.addressInputBox.text = address
                         addressView.addressInputBox.set(state: .normal)
-                        addressView.addressInputBox.textField.sendActions(for: .valueChanged)
+                        addressView.addressInputBox.textField.sendActions(for: .editingDidEndOnExit)
                     })
                     
                     app.topViewController()?.present(qrCodeReader, animated: true, completion: nil)

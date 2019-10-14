@@ -120,7 +120,7 @@ class LoadFileViewController: BaseViewController {
         qrButton.rx.tap.subscribe(onNext: { [unowned self] in
             let reader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
             reader.modalPresentationStyle = .fullScreen
-            reader.set(mode: .prvKey, handler: { code in
+            reader.set(mode: .prvKey, handler: { code, _ in
                 self.inputBox2.text = code
                 _ = self.validatePrivateKey()
             })

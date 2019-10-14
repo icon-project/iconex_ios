@@ -82,7 +82,7 @@ class SendETHViewController: BaseViewController {
             if newValue != nil {
                 self.gasLimit = 55000
                 self.gasLimitInputBox.text = "55000"
-                self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
+                self.gasLimitInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
                 self.inputDataButton.isEnabled = false
                 self.showDataButton.isHidden = false
@@ -91,7 +91,7 @@ class SendETHViewController: BaseViewController {
             } else {
                 self.gasLimit = 21000
                 self.gasLimitInputBox.text = "21000"
-                self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
+                self.gasLimitInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
                 self.inputDataButton.isEnabled = true
                 self.showDataButton.isHidden = true
@@ -247,7 +247,7 @@ class SendETHViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -268,7 +268,7 @@ class SendETHViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -289,7 +289,7 @@ class SendETHViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -311,7 +311,7 @@ class SendETHViewController: BaseViewController {
                     let maxBalance = self.balance - gas
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, true)
                 }
-                self.amountInputBox.textField.sendActions(for: .valueChanged)
+                self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 
             }.disposed(by: disposeBag)
         
@@ -324,7 +324,7 @@ class SendETHViewController: BaseViewController {
                 inputDataVC.completeHandler = { data, _ in
                     self.data = data
                     self.dataInputBox.text = data ?? ""
-                    self.dataInputBox.textField.sendActions(for: .valueChanged)
+                    self.dataInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 }
                 
                 self.presentPanModal(inputDataVC)
@@ -344,7 +344,7 @@ class SendETHViewController: BaseViewController {
                 inputDataVC.completeHandler = { data, _ in
                     self.data = data
                     self.dataInputBox.text = data ?? ""
-                    self.dataInputBox.textField.sendActions(for: .valueChanged)
+                    self.dataInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 }
                 
                 self.presentPanModal(inputDataVC)
@@ -420,9 +420,7 @@ class SendETHViewController: BaseViewController {
                 
                 addressBook.selectedHandler = { address in
                     self.addressInputBox.text = address.add0xPrefix()
-                    self.addressInputBox.textField.sendActions(for: .valueChanged)
-                    
-                    self.addressInputBox.set(state: .normal)
+                    self.addressInputBox.textField.sendActions(for: .editingDidEndOnExit)
                 }
                 
                 self.presentPanModal(addressBook)
@@ -435,14 +433,12 @@ class SendETHViewController: BaseViewController {
                 
                 let qrCodeReader = UIStoryboard(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                 qrCodeReader.modalPresentationStyle = .fullScreen
-                qrCodeReader.set(mode: .eth, handler: { (address) in
+                qrCodeReader.set(mode: .eth, handler: { address, amount in
                     self.addressInputBox.text = address
-                    self.addressInputBox.textField.sendActions(for: .valueChanged)
-                    
-                    if address == wallet.address {
-                        self.addressInputBox.setError(message: "Send.InputBox.Address.Error.SameAddress".localized)
-                    } else {
-                        self.addressInputBox.set(state: .normal)
+                    self.addressInputBox.textField.sendActions(for: .editingDidEndOnExit)
+                    if let a = amount?.hexToBigUInt()?.toString(decimal: 18, 18, true) {
+                        self.amountInputBox.text = a
+                        self.amountInputBox.textField.sendActions(for: .editingDidEndOnExit)
                     }
                 })
                 
@@ -490,7 +486,7 @@ class SendETHViewController: BaseViewController {
                 if data.isEmpty {
                     self.gasLimit = 21000
                     self.gasLimitInputBox.text = "21000"
-                    self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
+                    self.gasLimitInputBox.textField.sendActions(for: .editingDidEndOnExit)
                     
                 } else {
                     let value = Tool.stringToBigUInt(inputText: amount, decimal: 18, fixed: true) ?? 0
@@ -500,7 +496,7 @@ class SendETHViewController: BaseViewController {
                         self.gasLimit = Ethereum.requestETHEstimatedGas(value: value, data: data.prefix0xRemoved().hexToData() ?? Data(), from: wallet.address, to: address) ?? 0
                         DispatchQueue.main.async {
                             self.gasLimitInputBox.textField.text = "\(self.gasLimit)"
-                            self.gasLimitInputBox.textField.sendActions(for: .valueChanged)
+                            self.gasLimitInputBox.textField.sendActions(for: .editingDidEndOnExit)
                         }
                     }
                 }
