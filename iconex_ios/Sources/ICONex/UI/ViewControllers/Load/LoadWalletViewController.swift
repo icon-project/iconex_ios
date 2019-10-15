@@ -225,6 +225,8 @@ extension LoadWalletViewController {
             Alert.basic(title: "LoadWallet.Alert.Cancel".localized, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized) {
                 self.dismiss(animated: true, completion: nil)
             }.show()
+        } else {
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
