@@ -18,6 +18,10 @@ class IXSectionHeader: UIView {
     @IBOutlet weak var typeLabel: UILabel!
     @IBOutlet weak var toggleButton: UIButton!
     
+    var filter: TxFilter = .all
+    
+    var handler: ((_ txFilter: TxFilter) -> Void)?
+    
     var disposeBag = DisposeBag()
     
     override func awakeFromNib() {
@@ -51,18 +55,6 @@ class IXSectionHeader: UIView {
     }
     
     private func setupBind() {
-        detailViewModel.filter
-            .observeOn(MainScheduler.instance)
-            .subscribe(onNext: { (filter) in
-            switch filter {
-            case .all:
-                self.typeLabel.text = "Wallet.Detail.Option.All".localized
-            case .send:
-                self.typeLabel.text = "Wallet.Detail.Option.Send".localized
-            case .deposit:
-                self.typeLabel.text = "Wallet.Detail.Option.Deposit".localized
-            }
-        }).disposed(by: disposeBag)
         
         infoButton.rx.tap.asControlEvent()
             .subscribe { (_) in
@@ -72,6 +64,14 @@ class IXSectionHeader: UIView {
         toggleButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 let optionVC = UIStoryboard(name: "Detail", bundle: nil).instantiateViewController(withIdentifier: "DetailOption") as! DetailOptionViewController
+                optionVC.filter = self.filter
+                
+                optionVC.confirmHandler = { filter in
+                    if let confirmHandler = self.handler {
+                        confirmHandler(filter)
+                    }
+                }
+                
                 optionVC.show()
                 
             }.disposed(by: disposeBag)

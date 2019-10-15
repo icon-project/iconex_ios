@@ -40,17 +40,14 @@ class DetailOptionViewController: BaseViewController {
     }
     
     private func setupUI() {
-        detailViewModel.filter.subscribe(onNext: { (filter) in
-            switch filter {
-            case .all:
-                self.allButton.isSelected = true
-            case .send:
-                self.sendButton.isSelected = true
-            case .deposit:
-                self.depositButton.isSelected = true
-            }
-        }).disposed(by: disposeBag)
-        
+        switch self.filter {
+        case .all:
+            self.allButton.isSelected = true
+        case .send:
+            self.sendButton.isSelected = true
+        case .deposit:
+            self.depositButton.isSelected = true
+        }
         
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
         confirmButton.setTitleColor(.gray128, for: .normal)
@@ -122,7 +119,9 @@ class DetailOptionViewController: BaseViewController {
         
         confirmButton.rx.tap
             .subscribe { (_) in
-                detailViewModel.filter.onNext(self.filter)
+                if let handler = self.confirmHandler {
+                    handler(self.filter)
+                }
                 self.beginClose()
         }.disposed(by: disposeBag)
     }
