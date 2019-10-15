@@ -43,7 +43,7 @@ DEPENDENCIES:
   - AcknowList
   - Alamofire
   - ICONKit (from `https://github.com/icon-project/iconkit`, branch `develop`)
-  - PanModal
+  - PanModal (from `https://github.com/a1ahn/PanModal.git`)
   - RealmSwift
   - RxCocoa
   - RxSwift
@@ -55,7 +55,6 @@ SPEC REPOS:
     - Alamofire
     - BigInt
     - CryptoSwift
-    - PanModal
     - PromiseKit
     - RxCocoa
     - RxRelay
@@ -72,11 +71,16 @@ EXTERNAL SOURCES:
   ICONKit:
     :branch: develop
     :git: https://github.com/icon-project/iconkit
+  PanModal:
+    :git: https://github.com/a1ahn/PanModal.git
 
 CHECKOUT OPTIONS:
   ICONKit:
     :commit: 28fb37a574a037ac48dbb6e6aab7a4e65f4bc9cb
     :git: https://github.com/icon-project/iconkit
+  PanModal:
+    :commit: 4bd1699f1ef2b40dfef4a9937eb9dc28da2aad59
+    :git: https://github.com/a1ahn/PanModal.git
 
 SPEC CHECKSUMS:
   AcknowList: 70efb7554e257914da0aea2724a72fb30c45dfe2
@@ -96,6 +100,6 @@ SPEC CHECKSUMS:
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: f604d785778c174c288616814c7b04ab9c9b2c4b
+PODFILE CHECKSUM: 79050ab2a1541d10762b97904cc0fb0c91e1cab4
 
 COCOAPODS: 1.8.1
