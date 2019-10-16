@@ -157,7 +157,7 @@
 "Floater.Vote.IScore" = "I-Score";
 "Floater.Wallet.Deposit" = "입금";
 "Floater.Wallet.Send" = "전송";
-"Floater.Alert.Stake" = "Stake 또는 Unstake 실행을 하려면 5 ICX 이상 잔액이 있어야 합니다.";
+"Floater.Alert.Stake" = "Stake 또는 Unstake 실행을 하려면 1 ICX 이상 잔액이 있어야 합니다.";
 "Floater.Alert.Vote" = "Voting Power가 없습니다 ICX를 Stake하면 1:1 비율로 Voting Power가 생성됩니다.";
 
 // MARK: QRReaderViewController
@@ -240,7 +240,8 @@
 
 // MARK: StakeViewController
 "Stake.Desc1.Stake" = "・ Stake 되어 있는 수량 중, 이미 투표에 사용된 수량은 Unstake 할 수 없습니다.";
-"Stake.Desc2.Stake" = "・ Unstaked 최소 수량은 3 ICX 입니다. 최소 수량이 확보되어야 추후 Voting 등의 수수료를 지불할 수 있습니다.";
+"Stake.Desc2.Stake" = "・ Unstaked 최소 수량은 1 ICX 입니다. 최소 수량이 확보되어야 추후 Voting 등의 수수료를 지불할 수 있습니다.";
+"Stake.Desc1.Unavailable" = "・ 조절 가능한 수량이 없습니다.\nICX를 입금하거나, Vote 화면에서 투표에 사용한 수량을 줄여주세요.";
 "Stake.Header.TimeRequired" = "소요 시간";
 "Stake.Value.TimeRequired.Stake" = "즉시 Stake";
 "Stake.Value.TimeRequired.Unstake" = "72시간 후 Unstake";

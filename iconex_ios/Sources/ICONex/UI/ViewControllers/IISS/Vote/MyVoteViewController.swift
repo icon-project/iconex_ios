@@ -260,11 +260,15 @@ class MyVoteViewController: BaseViewController {
             let list = myList + newList
             var delList = [[String: Any]]()
             
+            var testTotalDelegation: BigUInt = 0
+            
             for i in list {
                 let value: String = {
                     if let edit = i.editedDelegate {
+                        testTotalDelegation += edit
                         return edit.toHexString()
                     } else if let myDelegate = i.myDelegate {
+                        testTotalDelegation += myDelegate
                         return myDelegate.toHexString()
                     } else {
                         return "0x0"
@@ -274,6 +278,9 @@ class MyVoteViewController: BaseViewController {
                 let info = ["address": i.address, "value": value]
                 delList.append(info)
             }
+            
+            print("Real Voting Power \(self?.totalDelegation?.votingPower ?? 0)")
+            print("Total Delegation: \(testTotalDelegation)")
             
             guard let wallet = self?.delegate.wallet else { return }
             
@@ -484,7 +491,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 let parentDecimal = stakedTotalValue.decimalNumber ?? 0.0
                 let percent = (child / parentDecimal) * 100
                 let percentFloat = percent.floatValue
-                cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
+                cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + "%"
                 
                 let myDelegateDecimal = my.decimalNumber ?? 0.0
                 let sliderDecimal = sliderMaxValue.decimalNumber ?? 0.0
@@ -524,7 +531,14 @@ extension MyVoteViewController: UITableViewDataSource {
                         let valueDecimal = NSDecimalNumber(value: realValue).decimalValue
                         
                         let rateValueNum = sliderMaxDecimal * valueDecimal
-                        let rateValue = BigUInt(rateValueNum.floatValue / 100.0 )
+//                        let rateValue = BigUInt(rateValueNum.floatValue / 100.0 )
+                        let rateValue: BigUInt = {
+                            if realValue == 100.0 {
+                                return sliderMaxValue
+                            } else {
+                                return BigUInt(rateValueNum.floatValue / 100.0 )
+                            }
+                        }()
                         
                         // percent
                         let percent = rateValueNum / stakedDecimal
@@ -593,7 +607,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         }
                     }()
                     
-                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valuePercent) + " %)"
+                    cell.myVotesUnitLabel.text = "(" + String(format: "%.1f", valuePercent) + "%)"
                     
                     cell.current = valuePercent
                     cell.slider.value = valuePercent
@@ -658,7 +672,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
                 
-                cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + " %"
+                cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + "%"
                 
                 let my: BigUInt = info.editedDelegate ?? 0
                 

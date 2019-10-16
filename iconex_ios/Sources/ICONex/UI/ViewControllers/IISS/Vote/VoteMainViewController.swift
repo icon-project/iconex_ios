@@ -170,7 +170,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                         self.navigationController?.popToRootViewController(animated: true)
                     } else {
                         Log(txHash, .error)
-                        Tool.toast(message: "Common.Error".localized)
+                        Tool.toast(message: "Error.CommonError".localized)
                     }
                     
                 }).show()

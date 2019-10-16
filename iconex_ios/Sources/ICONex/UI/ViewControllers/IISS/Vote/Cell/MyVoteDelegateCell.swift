@@ -115,15 +115,18 @@ extension MyVoteDelegateCell: UITextFieldDelegate {
         default:
             guard let former = textField.text as NSString? else { return false }
             let text = former.replacingCharacters(in: range, with: string)
-            let split = text.components(separatedBy: ".")
-            if let below = split.last {
-                
-                if below.count <= 4 {
-                    return true
+            if text.contains(".") {
+                let split = text.components(separatedBy: ".")
+                if let below = split.last {
+
+                    if below.count <= 4 {
+                        return true
+                    }
+                    return false
                 }
                 return false
             }
-            return false
+            return true
 
         }
     }
