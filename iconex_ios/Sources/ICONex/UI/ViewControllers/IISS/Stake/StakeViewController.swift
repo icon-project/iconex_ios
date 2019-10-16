@@ -42,11 +42,21 @@ class StakeViewController: BaseViewController {
     private var stakedInfo: PRepStakeResponse?
     private var estimatedStep: BigUInt?
     
+    private var walletTotalBalance: BigUInt?
+    private var totalICX: BigUInt?
+    
     var wallet: ICXWallet!
     
     var key: PrivateKey!
     
-    private var modifiedStake: BigUInt? = nil
+    private var modifiedStake: BigUInt? = nil {
+        willSet {
+            guard let total = self.totalICX, let newStake = newValue else { return }
+            
+            let unstaked = total - newStake
+            self.unstakedLabel.text = unstaked.toString(decimal: 18, 4).currencySeparated()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,14 +127,33 @@ class StakeViewController: BaseViewController {
         exchangedLabel.size12(text: "-", color: .gray179)
         
         slider.currentValue
+            .skip(1)
             .observeOn(MainScheduler.asyncInstance)
             .distinctUntilChanged()
-            .debounce(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe(onNext: { current in
                 self.modifiedStake = current
+                
                 Log("CURRENT \(current)")
-                self.getEstimateFee()
+                
+                // update slider
+                guard let totalICXDecimal = self.totalICX?.decimalNumber, let newStake = current.decimalNumber else { return }
+                
+                let stakeRate: Decimal = {
+                    if newStake == 0 {
+                        return 0
+                    } else {
+                        return newStake / totalICXDecimal
+                    }
+                }()
+                
+                self.slider.isEnabled = true
+                self.stakeProgress.staked = stakeRate.floatValue
         }).disposed(by: disposeBag)
+        
+        
+        slider.estimateFee.subscribe { (_) in
+            self.getEstimateFee()
+        }.disposed(by: disposeBag)
         
         submitButton.isEnabled = false
         scrollView?.refreshControl = self.refreshControl
@@ -179,7 +208,10 @@ class StakeViewController: BaseViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                     if let delegated = delegatedInfo, let staked = stakedInfo {
                         Log("Info - \(balance) + \(staked.stake) + \(staked.unstake ?? 0) = \(balance + staked.stake + (staked.unstake ?? 0))")
+                        
                         let totalValue = balance + staked.stake + (staked.unstake ?? 0)
+                        
+                        self.totalICX = totalValue
                         
                         let totalDelegated = delegated.totalDelegated
                         let stakeValue = staked.stake
@@ -201,7 +233,7 @@ class StakeViewController: BaseViewController {
                                 if votedNum == 0 {
                                     return 0
                                 } else {
-                                    return votedNum / stakeNum
+                                    return votedNum / totalNum
                                 }
                             }()
                             
@@ -211,13 +243,19 @@ class StakeViewController: BaseViewController {
                             self.stakeProgress.voted = voteRate.floatValue
                             
                             self.slider.setRange(total: totalValue, staked: stakeValue, voted: totalDelegated)
+                            self.getEstimateFee()
                             
-                            let totalVote: Decimal = {
-                                let calVote = stakeNum * voteRate
-                                if calVote == 0 { return 0 }
-                                return calVote / totalNum * 100
-                            }()
-                            self.slider.secondHeader = "→ Voted (ICX) \(votedValue.toString(decimal: 18, 4, false).currencySeparated()) (\(String(format: "%.1f", totalVote.floatValue))%)"
+                            self.slider.secondHeader = "→ Voted (ICX) \(votedValue.toString(decimal: 18, 4, false).currencySeparated()) (\(String(format: "%.1f", voteRate.floatValue * 100))%)"
+                            
+                            // check
+//                            let max = totalValue - BigUInt(1).convert()
+//                            
+//                            if max == votedValue {
+//                                self.slider.isEnabled = false
+//                                self.desc1.size12(text: "Stake.Desc1.Unavailable".localized, color: .gray128, weight: .light, align: .left)
+//                                self.desc2.isHidden = true
+//                            }
+                            
                         } else {
                             self.slider.isEnabled = false
                             self.slider.setRange(total: 0)
@@ -225,6 +263,7 @@ class StakeViewController: BaseViewController {
                         
                         self.balanceLabel.size14(text: totalValue.toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
                         self.unstakedLabel.size14(text: (totalValue - stakeValue).toString(decimal: 18, 4, false).currencySeparated(), color: .gray77, weight: .regular, align: .right)
+                        
                     } else {
                         self.slider.isEnabled = false
                     }

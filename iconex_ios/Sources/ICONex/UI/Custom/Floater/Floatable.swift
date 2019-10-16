@@ -134,7 +134,7 @@ class Floater {
                 self.targetAction?.navigationController?.pushViewController(prep, animated: true)
             }
             floatMenu.itemAction1 = {
-                guard let balance = wallet.balance, balance >= BigUInt(5).convert(unit: ICONKit.Unit.icx) else {
+                guard let balance = wallet.balance, balance >= BigUInt(1).convert(unit: ICONKit.Unit.icx) else {
                     Alert.basic(title: "Floater.Alert.Stake".localized, leftButtonTitle: "Common.Confirm".localized).show()
                     return }
                 

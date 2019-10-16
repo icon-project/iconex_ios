@@ -15,7 +15,7 @@ import BigInt
 class IXSlider: UIView {
     @IBOutlet private weak var firstLabel: UILabel!
     @IBOutlet private weak var fieldContainer: UIView!
-    @IBOutlet private weak var textField: UITextField!
+    @IBOutlet weak var textField: IXTextField!
     @IBOutlet private weak var innerLabel: UILabel!
     
     @IBOutlet private weak var votedContainer: UIView!
@@ -39,6 +39,8 @@ class IXSlider: UIView {
     private var staked: BigUInt?
     private var voted: BigUInt?
     
+    private var minICX: BigUInt = BigUInt(1).convert()
+    
     var fieldAction: ((String) -> Void)?
     
     var firstHeader: String = "Staked (ICX)" {
@@ -59,34 +61,36 @@ class IXSlider: UIView {
     var minText: String = "Min"
     var maxText: String = "Max"
     
-    private var current: Float = 0.0 {
+    private var myStake: BigUInt = 0 {
         willSet {
-            guard newValue >= 0.0 else {
-                
-                return }
-            minWidth.constant = barContainer.frame.width * CGFloat(newValue)
-            guard let totalNum = self.totalValue?.decimalNumber, let voted = self.voted?.decimalNumber else { return }
-            let totalValue = totalNum - voted
-            let rateValueNum = totalValue * NSDecimalNumber(value: newValue).decimalValue
-            let rateValue = BigUInt(rateValueNum.floatValue)
-            Log("newValue - \(newValue)")
-            Log("rateNum - \(rateValueNum)")
-            Log("rateBig - \(rateValue))")
-            currentValue.onNext(rateValue)
+            guard let totalNum = self.totalValue?.decimalNumber, let votedNum = self.voted?.decimalNumber, let myStakeNum = newValue.decimalNumber else { return }
+            let stakePercent: Float = {
+                if myStakeNum > votedNum && totalNum > votedNum {
+                    let top = myStakeNum - votedNum
+                    let bottom = totalNum - votedNum
+                    return (top / bottom).floatValue * 100
+                } else {
+                    return 0.0
+                }
+            }()
             
-            textField.text = rateValue.toString(decimal: 18, 4, false)
-            innerLabel.size12(text: String(format: "%.1f", current * 100) + " %")
+            self.minWidth.constant = self.barContainer.frame.width * CGFloat(stakePercent / 100.0)
+
+            currentValue.onNext(newValue)
+
+            textField.text = newValue.toString(decimal: 18, 4, false)
+            innerLabel.size12(text: "(" + String(format: "%.1f", stakePercent) + "%)")
         }
     }
     
     var isEnabled: Bool = true {
         willSet {
             if !newValue {
-                current = 0.0
-                slider.isHidden = true
+//                slider.isEnabled = false
                 votedContainer.isHidden = true
                 textField.isEnabled = false
             } else {
+//                slider.isEnabled = true
                 slider.isHidden = false
                 votedContainer.isHidden = false
                 textField.isEnabled = true
@@ -95,6 +99,8 @@ class IXSlider: UIView {
     }
     
     var currentValue: PublishSubject<BigUInt> = PublishSubject<BigUInt>()
+    
+    var estimateFee: PublishSubject<Bool> = PublishSubject<Bool>()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -117,6 +123,7 @@ class IXSlider: UIView {
         contentView = view
         
         view.border(0.5, .gray230)
+        view.corner(8)
         view.backgroundColor = .gray252
         
         minBar.corner(minBar.frame.height / 2)
@@ -132,7 +139,7 @@ class IXSlider: UIView {
         fieldContainer.backgroundColor = .white
         fieldContainer.corner(4)
         fieldContainer.border(1, .gray230)
-        
+        textField.delegate = self
         textField.keyboardType = .decimalPad
         textField.tintColor = .mint1
         let bar = UIToolbar()
@@ -143,8 +150,31 @@ class IXSlider: UIView {
         textField.inputAccessoryView = bar
         
         slider.rx.value.subscribe(onNext: { value in
-            self.current = value
+            let percent = roundf(value) / 100
+            
+            guard let totalNum = self.totalValue?.decimalNumber, let voted = self.voted?.decimalNumber else { return }
+            
+            let totalValue = totalNum - voted
+            let rateValueNum = totalValue * NSDecimalNumber(value: percent).decimalValue
+            let rateValue: BigUInt = {
+                if percent == 1.0 {
+                    guard let total = self.totalValue else { return BigUInt.zero }
+                    return total
+                }
+                
+                let total = (rateValueNum + voted).floatValue
+                return BigUInt(total)
+
+            }()
+            
+            self.currentValue.onNext(rateValue)
+            self.myStake = rateValue
+            
         }).disposed(by: disposeBag)
+        
+        slider.rx.controlEvent(.touchUpInside).subscribe { (_) in
+            self.estimateFee.onNext(true)
+        }.disposed(by: disposeBag)
         
         textField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit])
             .subscribe(onNext: { [unowned self] in
@@ -155,6 +185,29 @@ class IXSlider: UIView {
                 self.fieldContainer.backgroundColor = .white
                 self.innerLabel.alpha = 1.0
                 self.innerLabel.textColor = .gray77
+                
+                guard let value = self.textField.text, let bigValue = Tool.stringToBigUInt(inputText: value), let bigTotal = self.totalValue, let bigVoted = self.voted else { return }
+                
+                if bigValue < bigVoted {
+                    bzz()
+                    
+                    let minValue = bigVoted.toString(decimal: 18, 4).currencySeparated()
+                    
+                    Tool.toast(message: String(format: "Error.Transfer.Limit.MoreThen".localized, minValue))
+                    self.textField.text = minValue
+                    
+                    self.currentValue.onNext(bigVoted)
+                    
+                } else if bigValue > bigTotal {
+                    bzz()
+                    
+                    let maxValue = bigTotal.toString(decimal: 18, 4).currencySeparated()
+                    
+                    Tool.toast(message: String(format: "Error.Transfer.Limit.LessThen".localized, maxValue))
+                    self.textField.text = maxValue
+                    
+                    self.currentValue.onNext(bigTotal)
+                }
             }).disposed(by: disposeBag)
         
         textField.rx.controlEvent(.editingDidBegin)
@@ -165,24 +218,68 @@ class IXSlider: UIView {
                 self.innerLabel.alpha = 0.5
             }).disposed(by: disposeBag)
         
+        textField.rx.text.orEmpty.subscribe(onNext: { (value) in
+            // BigUInt
+            guard let bigValue = Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: true) , let bigTotal = self.totalValue, let bigVoted = self.voted else { return }
+            // Decimal
+            guard let valueDecimal = bigValue.decimalNumber, let totalDecimal = bigTotal.decimalNumber, let votedDecimal = bigVoted.decimalNumber else { return }
+
+            if valueDecimal > totalDecimal {
+                
+                self.minWidth.constant = self.barContainer.frame.width * CGFloat(100.0)
+                self.innerLabel.size12(text: "100.0 %")
+                self.slider.value = 100.0
+
+            } else if valueDecimal < votedDecimal {
+                self.minWidth.constant = self.barContainer.frame.width * CGFloat(0.0)
+                self.innerLabel.size12(text: "0.0 %")
+                self.slider.value = 0.0
+
+            } else {
+                let top = valueDecimal - votedDecimal
+                let bottom = totalDecimal - votedDecimal
+                let percent = (top / bottom).floatValue * 100
+                self.minWidth.constant = self.barContainer.frame.width * CGFloat(percent / 100.0)
+                self.innerLabel.size12(text: "(" + String(format: "%.1f", percent) + "%)") // "(" + String(format: "%.1f", currentFloat) + "%)"
+                self.currentValue.onNext(bigValue)
+                self.slider.value = percent
+            }
+
+        }).disposed(by: disposeBag)
+        
         self.backgroundColor = .clear
         
     }
     
     func setRange(total: BigUInt, staked: BigUInt = 0, voted: BigUInt? = nil) {
-        self.totalValue = total
+        if total > BigUInt.zero {
+            self.totalValue = total - self.minICX
+        } else {
+            self.totalValue = total
+        }
         self.staked = staked
         self.voted = voted
         if total == 0 {
-            current = 0
+            myStake = voted ?? 0
             slider.value = 0
             isEnabled = false
         } else {
-            let crtNum = (staked.decimalNumber! - (voted?.decimalNumber ?? 0)) / total.decimalNumber!
+            guard let stakedDecimal = staked.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber else { return }
             
+            let crtNum = (stakedDecimal / totalDecimal) * 100
+            
+            let currentFloat = crtNum.floatValue
+            
+            print("staked: \(stakedDecimal)")
             Log("current = \(crtNum.floatValue)")
-            current = crtNum.floatValue
-            slider.value = crtNum.floatValue
+            
+            self.minWidth.constant = barContainer.frame.width * CGFloat(currentFloat / 100.0)
+            currentValue.onNext(staked)
+            
+            textField.text = staked.toString(decimal: 18, 4, false)
+            innerLabel.size12(text: "(" + String(format: "%.1f", currentFloat) + "%)")
+            
+            slider.value = currentFloat
             isEnabled = true
         }
     }
@@ -191,5 +288,30 @@ class IXSlider: UIView {
 extension IXSlider {
     @objc func resign() {
         textField.resignFirstResponder()
+    }
+}
+
+extension IXSlider: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        switch string {
+        case Tool.decimalSeparator:
+            return Array(textField.text!).filter({ String($0) == Tool.decimalSeparator }).count < 1
+        default:
+            guard let former = textField.text as NSString? else { return false }
+            let text = former.replacingCharacters(in: range, with: string)
+            
+            if text.contains(".") {
+                let split = text.components(separatedBy: ".")
+                if let below = split.last {
+
+                    if below.count <= 4 {
+                        return true
+                    }
+                    return false
+                }
+                return false
+            }
+            return true
+        }
     }
 }

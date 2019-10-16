@@ -81,6 +81,6 @@ class IXStakeProgressView: UIView {
     
     func refreshBar() {
         stakedWidth.constant = self.frame.width * CGFloat(staked)
-        votedWidth.constant = stakedWidth.constant * CGFloat(voted)
+        votedWidth.constant = self.frame.width * CGFloat(voted)
     }
 }
