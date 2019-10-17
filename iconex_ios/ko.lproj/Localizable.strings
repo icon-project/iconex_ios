@@ -254,6 +254,14 @@
 "Stake.Alert.Discard.Message" = "Submit 버튼을 눌러야 진행 중인 %@ 요청 수량 수정을 할 수 있습니다.";
 "Stake.Alert.Complete.Message" = "%@ 실행이 완료되었습니다.";
 
+// MARK: UnStakeViewController
+"Unstake.Request.Percent" = "Unstake 요청";
+"Unstake.Request.ICX" = "Unstake 요청 (ICX)";
+"Unstake.Block" = "완료 BLOCK";
+"Unstake.EstimateLockPeriod" = "완료 예상 시간";
+"Unstake.Edit" = "요청 수량 수정";
+"Unstake.Desc" = "・ 요청 수량 수정 시 완료 예정 시간이 초기화 되며, Transaction 수수료를 지불해야 합니다.";
+
 // MARK: MyVoteViewController
 "MyVoteView.VoteReset" = "투표 수량 초기화";
 "MyVoteView.Toast" = "Voting이 완료되었습니다.";
