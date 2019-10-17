@@ -264,13 +264,15 @@ class IXSlider: UIView {
             slider.value = 0
             isEnabled = false
         } else {
-            guard let stakedDecimal = staked.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber else { return }
+            guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted?.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber else { return }
             
-            let crtNum = (stakedDecimal / totalDecimal) * 100
+            let top = stakedDecimal - votedDecimal
+            let crtNum = (top / totalDecimal) * 100
             
             let currentFloat = crtNum.floatValue
             
             print("staked: \(stakedDecimal)")
+//            print("total: \(totalDecimal)")
             Log("current = \(crtNum.floatValue)")
             
             self.minWidth.constant = barContainer.frame.width * CGFloat(currentFloat / 100.0)
