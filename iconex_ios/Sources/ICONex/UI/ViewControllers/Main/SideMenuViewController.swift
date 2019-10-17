@@ -59,6 +59,7 @@ class SideMenuViewController: BaseViewController {
         gradient.locations = [0.5, 1.0]
         menuView.layer.insertSublayer(gradient, at: 0)
         gradient.frame = menuView.bounds
+        menuView.alpha = 0.0
         
         menuView.transform = CGAffineTransform(translationX: -self.menuView.frame.width, y: 0)
         topStackView.transform = CGAffineTransform(translationX: 0, y: 10)
@@ -152,6 +153,7 @@ class SideMenuViewController: BaseViewController {
                 self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.4)
             })
             UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.25, animations: {
+                self.menuView.alpha = 1.0
                 self.menuView.transform = .identity
             })
             UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.25, animations: {
@@ -188,6 +190,7 @@ class SideMenuViewController: BaseViewController {
     func close(_ handler: (() -> Void)?) {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: {
             self.menuView.frame.origin.x = -self.menuView.frame.width
+            self.menuView.alpha = 0.0
             self.backView.backgroundColor = UIColor.init(white: 0, alpha: 0.0) // ??
         }, completion: { (_) in
             self.dismiss(animated: false, completion: {

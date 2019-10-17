@@ -66,6 +66,6 @@ class AppInfoViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        developerContainer.isHidden = !UserDefaults.standard.bool(forKey: "Developer")
+//        developerContainer.isHidden = !UserDefaults.standard.bool(forKey: "Developer")
     }
 }

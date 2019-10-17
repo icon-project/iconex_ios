@@ -14,11 +14,16 @@ protocol Exportable {
 }
 
 extension Exportable where Self: UIViewController {
-    func export(filepath: URL, _ completion: UIActivityViewController.CompletionWithItemsHandler?) {
+    func export(filepath: URL, sender: UIView, _ completion: UIActivityViewController.CompletionWithItemsHandler?) {
         let activity = UIActivityViewController(activityItems: [filepath], applicationActivities: nil)
         activity.excludedActivityTypes = [.postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToFacebook, .postToTencentWeibo, .addToReadingList, .assignToContact, .openInIBooks]
         activity.completionWithItemsHandler = completion
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            activity.popoverPresentationController?.sourceView = sender
+            activity.popoverPresentationController?.permittedArrowDirections = .up
+            activity.popoverPresentationController?.sourceRect = sender.bounds
+        }
         self.present(activity, animated: true, completion: nil)
     }
 }

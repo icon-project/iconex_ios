@@ -134,7 +134,7 @@ extension CreateQRCodeViewController: PanModalPresentable {
     }
     
     var topOffset: CGFloat {
-        return app.window!.safeAreaInsets.top
+        return app.window!.safeAreaInsets.top + (UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad ? UIApplication.shared.statusBarFrame.height : 0)
     }
     
     var backgroundAlpha: CGFloat {

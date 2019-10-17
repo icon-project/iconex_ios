@@ -161,7 +161,7 @@ class ExportMainViewController: PopableViewController, Exportable {
             let filePath = path.appendingPathComponent(filename)
             try encoded.write(to: filePath, options: .atomic)
             
-            export(filepath: filePath) { (type, isCompleted, _, error) in
+            export(filepath: filePath, sender: rightButton) { (type, isCompleted, _, error) in
                 if isCompleted {
                     Alert.basic(title: "ExportMain.Alert.BackedUp".localized, leftButtonTitle: "Common.Confirm".localized).show()
                 }

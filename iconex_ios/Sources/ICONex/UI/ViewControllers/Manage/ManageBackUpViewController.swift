@@ -96,16 +96,11 @@ class ManageBackUpViewController: BaseViewController {
                             filePath = try myWallet.getBackupKeystoreFilepath()
                         }
                         
-                        let activity = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
-                        activity.excludedActivityTypes = [.postToFacebook, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToTencentWeibo, .addToReadingList, .airDrop, .markupAsPDF, .openInIBooks, .print]
-                        
-                        activity.completionWithItemsHandler = { type, completed, _, error in
+                        self.export(filepath: filePath, sender: self.downloadButton) { (_, completed, _, _) in
                             if completed {
                                 Alert.basic(title: "Create.Wallet.Step3.Alert.Save".localized, leftButtonTitle: "Common.Confirm".localized).show()
                             }
                         }
-                        self.present(activity, animated: true, completion: nil)
-                        
                     } catch {
                         Alert.basic(title: "Error.CommonError".localized, confirmAction: nil).show()
                     }
@@ -141,18 +136,6 @@ class ManageBackUpViewController: BaseViewController {
         }.disposed(by: disposeBag)
     }
 }
-extension ManageBackUpViewController {
-    func export(filepath: URL, _ completion: UIActivityViewController.CompletionWithItemsHandler?, _ sourceView: UIView) {
-        let activity = UIActivityViewController(activityItems: [filepath], applicationActivities: nil)
-        activity.excludedActivityTypes = [.postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToFacebook, .postToTencentWeibo, .addToReadingList, .assignToContact, .openInIBooks]
-        activity.completionWithItemsHandler = completion
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if let vc = activity.popoverPresentationController {
-                vc.sourceView = sourceView
-                vc.permittedArrowDirections = .up
-                vc.sourceRect = sourceView.bounds
-            }
-        }
-        self.present(activity, animated: true, completion: nil)
-    }
+extension ManageBackUpViewController: Exportable {
+    
 }
