@@ -139,10 +139,24 @@ class Floater {
                     return }
                 
                 Alert.password(wallet: wallet, returnAction: { pk in
-                    let stake = UIStoryboard(name: "Stake", bundle: nil).instantiateInitialViewController() as! StakeViewController
-                    stake.wallet = self.delegate.selectedWallet
-                    stake.key = PrivateKey(hex: Data(hex: pk))
-                    self.targetAction?.show(stake, sender: self)
+                    guard let stakedInfo = Manager.icon.getStake(from: wallet) else {
+                        Tool.toast(message: "Error.CommonError".localized)
+                        return
+                    }
+                    
+                    if stakedInfo.unstake != nil {
+                        let unStake = UIStoryboard(name: "Stake", bundle: nil).instantiateViewController(withIdentifier: "Unstake") as! UnStakeViewController
+                        unStake.wallet = self.delegate.selectedWallet
+                        unStake.key = PrivateKey(hex: Data(hex: pk))
+                        unStake.stakedInfo = stakedInfo
+                        self.targetAction?.show(unStake, sender: self)
+                        
+                    } else {
+                        let stake = UIStoryboard(name: "Stake", bundle: nil).instantiateInitialViewController() as! StakeViewController
+                        stake.wallet = self.delegate.selectedWallet
+                        stake.key = PrivateKey(hex: Data(hex: pk))
+                        self.targetAction?.show(stake, sender: self)
+                    }
                 }).show()
             }
             floatMenu.itemAction2 = {

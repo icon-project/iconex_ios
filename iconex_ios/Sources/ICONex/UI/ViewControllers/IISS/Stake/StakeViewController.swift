@@ -42,7 +42,6 @@ class StakeViewController: BaseViewController {
     private var stakedInfo: PRepStakeResponse?
     private var estimatedStep: BigUInt?
     
-    private var walletTotalBalance: BigUInt?
     private var totalICX: BigUInt?
     
     var wallet: ICXWallet!

@@ -32,6 +32,7 @@
 		BF2D35AD230157C200EC2A35 /* IXNavigationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4F7672F22F41B4900452DA7 /* IXNavigationView.xib */; };
 		BF4183ED2330BEA4004FCC61 /* PRepDetailAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF4183EC2330BEA4004FCC61 /* PRepDetailAlertView.xib */; };
 		BF4183EF2330BEB6004FCC61 /* PRepDetailAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4183EE2330BEB6004FCC61 /* PRepDetailAlertView.swift */; };
+		BF4D43A02358172300C11B27 /* UnStakeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4D439F2358172300C11B27 /* UnStakeViewController.swift */; };
 		BF4F6F642318A57D0098D303 /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F462318A57D0098D303 /* SideMenuViewController.swift */; };
 		BF4F6F652318A57D0098D303 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F472318A57D0098D303 /* MainViewController.swift */; };
 		BF4F6F662318A57D0098D303 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF4F6F482318A57D0098D303 /* Main.storyboard */; };
@@ -233,6 +234,7 @@
 		BF2D35AB2301576600EC2A35 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BF4183EC2330BEA4004FCC61 /* PRepDetailAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepDetailAlertView.xib; sourceTree = "<group>"; };
 		BF4183EE2330BEB6004FCC61 /* PRepDetailAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRepDetailAlertView.swift; sourceTree = "<group>"; };
+		BF4D439F2358172300C11B27 /* UnStakeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnStakeViewController.swift; sourceTree = "<group>"; };
 		BF4F6F462318A57D0098D303 /* SideMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		BF4F6F472318A57D0098D303 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		BF4F6F482318A57D0098D303 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -754,6 +756,7 @@
 			children = (
 				D4682A0E230B909000225C73 /* Stake.storyboard */,
 				D4682A17230BB1E200225C73 /* StakeViewController.swift */,
+				BF4D439F2358172300C11B27 /* UnStakeViewController.swift */,
 			);
 			path = Stake;
 			sourceTree = "<group>";
@@ -1371,6 +1374,7 @@
 				BF6EFEC722FA5174003B6AF3 /* AddressAlertView.swift in Sources */,
 				D46CD8A522E006C30063BAA0 /* Variables.swift in Sources */,
 				BF6EFEC422FA5174003B6AF3 /* IScoreAlertView.swift in Sources */,
+				BF4D43A02358172300C11B27 /* UnStakeViewController.swift in Sources */,
 				BF78B35E22FCFCD4002E34B3 /* CreateCompleteViewController.swift in Sources */,
 				D46E775C231BFB8B00AF332D /* DisclaimerViewController.swift in Sources */,
 				D4728A132007040B00E0A899 /* AppDelegate.swift in Sources */,
