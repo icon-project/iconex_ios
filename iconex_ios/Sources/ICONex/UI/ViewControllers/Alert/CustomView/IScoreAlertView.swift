@@ -53,8 +53,8 @@ class IScoreAlertView: UIView {
         addSubview(view)
         contentView = view
         
-        currentIScoreTitleLabel.size12(text: "Alert.Iscore.Current".localized, color: .gray77, weight: .bold, align: .left)
-        canReceiveTitleLabel.size12(text: "Alert.Iscore.Value".localized, color: .gray77, weight: .bold, align: .left)
+        currentIScoreTitleLabel.size12(text: "Alert.Iscore.Current".localized, color: .gray77, weight: .semibold, align: .left)
+        canReceiveTitleLabel.size12(text: "Alert.Iscore.Value".localized, color: .gray77, weight: .semibold, align: .left)
         stepLimitTitleLabel.size12(text: "Alert.Common.StepLimit".localized, color: .gray128, weight: .light, align: .left)
         estimatedFeeTItleLabel.size12(text: "Alert.Common.EstimatedFee".localized, color: .gray128, weight: .light, align: .left)
     }
