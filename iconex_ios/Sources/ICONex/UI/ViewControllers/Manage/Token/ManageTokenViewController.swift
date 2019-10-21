@@ -50,10 +50,16 @@ class ManageTokenViewController: BaseViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         guard let address = walletInfo?.address else { return }
         if let list = try? DB.tokenList(dependedAddress: address) {
             self.tokenList.onNext(list)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     private func setupBind() {

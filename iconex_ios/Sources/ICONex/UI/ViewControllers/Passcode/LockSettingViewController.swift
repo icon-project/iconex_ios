@@ -66,6 +66,12 @@ class LockSettingViewController: BaseViewController {
         
         self.tableView.reloadData()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
+    
 }
 
 extension LockSettingViewController: UITableViewDataSource {

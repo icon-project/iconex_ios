@@ -111,8 +111,6 @@ class PasscodeViewController: BaseViewController {
                         
                     default:
                         UserDefaults.standard.removeObject(forKey: "useBio")
-                        let method = bio.type == .faceID ? "Face ID" : "Touch ID"
-                        Alert.basic(title: String(format: "LockScreen.Alert.RemovedBio".localized, method, method), leftButtonTitle: "Common.Confirm".localized).show()
                     }
                 })
             } else {
