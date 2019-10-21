@@ -85,9 +85,7 @@ class AddTokenInfoViewController: BaseViewController {
             return nil
         }
         
-        let addressObservable = addressBox.textField.rx.controlEvent(.editingDidEndOnExit)
-        
-        addressObservable.subscribe { (_) in
+        addressBox.textField.rx.controlEvent(.editingDidEndOnExit).subscribe { (_) in
             let contract = self.addressBox.text
             
             if Validator.validateIRCAddress(address: contract) {
@@ -121,9 +119,6 @@ class AddTokenInfoViewController: BaseViewController {
                         self.sendActions()
                     }
                 }
-                
-            } else {
-                self.resetInputBox()
             }
         }.disposed(by: disposeBag)
         
@@ -193,9 +188,9 @@ class AddTokenInfoViewController: BaseViewController {
     }
     
     private func sendActions() {
-        self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
-        self.nameBox.textField.sendActions(for: .editingDidEndOnExit)
-        self.symbolBox.textField.sendActions(for: .editingDidEndOnExit)
-        self.decimalBox.textField.sendActions(for: .editingDidEndOnExit)
+        self.addressBox.textField.sendActions(for: .valueChanged)
+        self.nameBox.textField.sendActions(for: .valueChanged)
+        self.symbolBox.textField.sendActions(for: .valueChanged)
+        self.decimalBox.textField.sendActions(for: .valueChanged)
     }
 }
