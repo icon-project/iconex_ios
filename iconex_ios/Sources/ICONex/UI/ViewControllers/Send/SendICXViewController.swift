@@ -459,7 +459,7 @@ class SendICXViewController: BaseViewController {
         }.bind(to: self.sendButton.rx.isEnabled)
         .disposed(by: disposeBag)
         
-        sendButton.rx.tap.asControlEvent()
+        sendButton.rx.tap
             .subscribe { (_) in
                 guard let pk = self.privateKey else { return }
                 
@@ -473,12 +473,13 @@ class SendICXViewController: BaseViewController {
                     }
                 }()
                 
+                // send ICX
                 if self.token == nil {
-                    if estimatedStep > self.balance {
+                    if amount + estimatedStep > self.balance {
                         Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
                         return
                     }
-                } else {
+                } else { // send token
                     guard let wallet = self.walletInfo else { return }
                     let icxBalance = Manager.balance.getBalance(wallet: wallet) ?? 0
                     

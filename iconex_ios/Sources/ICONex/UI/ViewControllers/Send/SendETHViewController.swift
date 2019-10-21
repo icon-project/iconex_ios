@@ -106,15 +106,6 @@ class SendETHViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let token = self.token {
-            self.balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
-            self.balanceLabel.size24(text: self.balance.toString(decimal: token.decimal, token.decimal, true).currencySeparated(), color: .mint1, align: .right)
-        } else {
-            guard let wallet = self.walletInfo else { return }
-            self.balance = Manager.balance.getBalance(wallet: wallet) ?? 0
-            self.balanceLabel.size24(text: self.balance.toString(decimal: 18, 18, true).currencySeparated(), color: .mint1, align: .right)
-        }
-        
         setupUI()
         setupBind()
     }
@@ -211,14 +202,15 @@ class SendETHViewController: BaseViewController {
         sendButton.isEnabled = false
         
         if let token = self.token {
+            self.dataInputBox.isHidden = true
             balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
-            balanceLabel.size24(text: balance.toString(decimal: token.decimal, 5).currencySeparated(), color: .mint1, align: .right)
+            balanceLabel.size24(text: balance.toString(decimal: token.decimal, token.decimal).currencySeparated(), color: .mint1, align: .right)
             
             let price = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: balance)
             exchangeLabel .size12(text: price, color: .gray179, align: .right)
         } else {
             balance = Manager.balance.getBalance(wallet: wallet) ?? 0
-            balanceLabel.size24(text: balance.toString(decimal: 18, 5).currencySeparated() , color: .mint1, align: .right)
+            balanceLabel.size24(text: balance.toString(decimal: 18, 18).currencySeparated() , color: .mint1, align: .right)
             
             let price = Tool.calculatePrice(currency: "ethusd", balance: balance)
             exchangeLabel.size12(text: price, color: .gray179, align: .right)
@@ -533,7 +525,7 @@ class SendETHViewController: BaseViewController {
             }.bind(to: self.sendButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        sendButton.rx.tap.asControlEvent()
+        sendButton.rx.tap
             .subscribe { (_) in
                 guard let pk = self.privateKey else { return }
                 guard let wallet = self.walletInfo else { return }
@@ -549,14 +541,15 @@ class SendETHViewController: BaseViewController {
                 let estimatedGas = BigUInt(self.gasPrice) * self.gasLimit
                 let gas = estimatedGas.convert(unit: .gLoop)
                 
-                if self.token != nil {
-                    let ethBalance = Manager.balance.getBalance(wallet: wallet) ?? 0
-                    if gas > ethBalance {
+                // send ETH
+                if self.token == nil {
+                    if amount + gas > self.balance {
                         Alert.basic(title: "Send.Error.InsufficientFee.ETH".localized, leftButtonTitle: "Common.Confirm".localized).show()
                         return
                     }
-                } else {
-                    if gas > self.balance {
+                } else { // send token
+                    let ethBalance = Manager.balance.getBalance(wallet: wallet) ?? 0
+                    if gas > ethBalance {
                         Alert.basic(title: "Send.Error.InsufficientFee.ETH".localized, leftButtonTitle: "Common.Confirm".localized).show()
                         return
                     }
