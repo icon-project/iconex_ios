@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class TxHashAlertView: UIView {
     @IBOutlet var contentView: UIView!
@@ -14,15 +15,28 @@ class TxHashAlertView: UIView {
     @IBOutlet weak var txHashLabel: UILabel!
     @IBOutlet weak var trackerButton: UIButton!
     
+    var disposeBag = DisposeBag()
+    
     var info: AlertTxHashInfo? {
         willSet {
-            txHashLabel.size12(text: newValue!.txHash, color: .gray77, weight: .regular, align: .center)
+            guard let info = newValue else { return }
+            txHashLabel.size12(text: info.txHash, color: .gray77, weight: .regular, align: .center)
             
+            let buttonString: String = {
+                return info.trackerURL.contains("etherscan.io") ? "Etherscan" : "Alert.TxHash.Tracker".localized
+            }()
+            
+            let attrString = NSAttributedString(string: buttonString, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .light), .foregroundColor: UIColor.mint1, .underlineStyle: NSUnderlineStyle.single.rawValue])
+            
+            trackerButton.setAttributedTitle(attrString, for: .normal)
+        }
+        
+        didSet {
             trackerButton.rx.tap
                 .subscribe { (_) in
-                    guard let url = URL(string: newValue!.trackerURL), UIApplication.shared.canOpenURL(url) else { return }
+                    guard let trackerURL = self.info?.trackerURL, let url = URL(string: trackerURL), UIApplication.shared.canOpenURL(url) else { return }
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
+            }.disposed(by: disposeBag)
         }
     }
     
@@ -43,12 +57,6 @@ class TxHashAlertView: UIView {
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(view)
         contentView = view
-        
-        
-        let attrString = NSAttributedString(string: "Alert.TxHash.Tracker".localized, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .light), .foregroundColor: UIColor.mint1, .underlineStyle: NSUnderlineStyle.single.rawValue])
-        
-        trackerButton.setAttributedTitle(attrString, for: .normal)
-        
     }
 
 }

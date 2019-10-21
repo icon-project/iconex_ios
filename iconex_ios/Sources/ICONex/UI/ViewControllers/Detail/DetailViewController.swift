@@ -54,6 +54,8 @@ class DetailViewController: BaseViewController, Floatable {
             guard let wallet = newValue else { return }
             if let icx = wallet as? ICXWallet {
                 selectedWallet = icx
+            } else {
+                self.detailViewModel.symbol.onNext(CoinType.eth.symbol)
             }
         }
     }
@@ -83,6 +85,7 @@ class DetailViewController: BaseViewController, Floatable {
     }
     
     private var txList = [Tracker.TxList]()
+    private var ethTxList = [TransactionModel]()
     
     private var pageIndex: Int = 1
     var detailType: DetailType = .icx
@@ -225,8 +228,33 @@ class DetailViewController: BaseViewController, Floatable {
 //            ethStack.alignment = .center
 //            ethStack.distribution = .fill
 //
-            self.tableView.backgroundView = etherscanButton
-            self.tableView.separatorStyle = .none
+            ethTxList.removeAll()
+            
+            if filter == .deposit {
+                self.tableView.backgroundView = etherscanButton
+                self.tableView.separatorStyle = .none
+                
+                self.tableView.reloadData()
+                return
+            }
+            
+            ethTxList = Transactions.etherTxList(address: wallet.address.add0xPrefix()).filter({ (txInfo) -> Bool in
+                guard let tokenSymbol = self.tokenInfo?.symbol.lowercased() else {
+                    return txInfo.tokenSymbol == nil
+                }
+
+                return txInfo.tokenSymbol?.lowercased() == tokenSymbol
+            })
+            
+            if ethTxList.isEmpty {
+                self.tableView.backgroundView = etherscanButton
+                self.tableView.separatorStyle = .none
+            } else {
+                self.tableView.backgroundView = nil
+                self.tableView.separatorStyle = .singleLine
+            }
+            
+            self.tableView.reloadData()
             
             return
         default: break
@@ -534,7 +562,12 @@ class DetailViewController: BaseViewController, Floatable {
 
 extension DetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.txList.count
+        switch detailType {
+        case .eth, .erc:
+            return self.ethTxList.count
+        case .icx, .irc:
+            return self.txList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -542,29 +575,48 @@ extension DetailViewController: UITableViewDataSource {
         
         guard let wallet = self.walletInfo else { return cell }
         
-        let item = self.txList[indexPath.row]
-        
-        let txHash = item.txHash
-        let from = item.fromAddr
-        let amount = self.tokenInfo == nil ? item.amount : item.quantity
-        let timeStamp = self.tokenInfo == nil ? item.createDate : item.age
-        let symbol = try? self.detailViewModel.symbol.value()
-        
-        cell.txHashLabel.size12(text: txHash, color: .gray128, weight: .light)
-        
-//        let status = item.state // 0, 1
-        if from == wallet.address {
-           cell.statusLabel.size12(text: "Wallet.Detail.TransferCompleted".localized , color: .gray77, weight: .semibold)
+        switch detailType {
+        case .eth, .erc:
+            let item = self.ethTxList[indexPath.row]
+            
+            let txHash = item.txHash
+            let amount = item.value
+            let timeStamp = item.date.toDateString()
+            let symbol = try? self.detailViewModel.symbol.value()
+            
+            cell.txHashLabel.size12(text: txHash, color: .gray128, weight: .light)
+            
+            cell.statusLabel.size12(text: "Wallet.Detail.TransferCompleted".localized , color: .gray77, weight: .semibold)
             cell.valueLabel.size12(text: "- \(amount)", color: .gray77, weight: .bold, align: .right)
-            cell.symbolLabel.size12(text: symbol ?? "", color: .gray77, weight: .bold, align: .right)
-        } else {
-            cell.statusLabel.size12(text: "Wallet.Detail.DepositCompleted".localized , color: .gray77, weight: .semibold)
-            cell.valueLabel.size12(text: "+ \(amount)", color: .mint1, weight: .bold, align: .right)
-            cell.symbolLabel.size12(text: symbol ?? "", color: .mint1, weight: .bold, align: .right)
+            cell.symbolLabel.size12(text: symbol ?? "ETH", color: .gray77, weight: .bold, align: .right)
+            cell.timestampLabel.size12(text: timeStamp, color: .gray128, align: .right)
+            
+            return cell
+        case .icx, .irc:
+            let item = self.txList[indexPath.row]
+            
+            let txHash = item.txHash
+            let from = item.fromAddr
+            let amount = self.tokenInfo == nil ? item.amount : item.quantity
+            let timeStamp = self.tokenInfo == nil ? item.createDate : item.age
+            let symbol = try? self.detailViewModel.symbol.value()
+            
+            cell.txHashLabel.size12(text: txHash, color: .gray128, weight: .light)
+            
+            //        let status = item.state // 0, 1
+            if from == wallet.address {
+                cell.statusLabel.size12(text: "Wallet.Detail.TransferCompleted".localized , color: .gray77, weight: .semibold)
+                cell.valueLabel.size12(text: "- \(amount)", color: .gray77, weight: .bold, align: .right)
+                cell.symbolLabel.size12(text: symbol ?? "", color: .gray77, weight: .bold, align: .right)
+            } else {
+                cell.statusLabel.size12(text: "Wallet.Detail.DepositCompleted".localized , color: .gray77, weight: .semibold)
+                cell.valueLabel.size12(text: "+ \(amount)", color: .mint1, weight: .bold, align: .right)
+                cell.symbolLabel.size12(text: symbol ?? "", color: .mint1, weight: .bold, align: .right)
+            }
+            cell.timestampLabel.size12(text: timeStamp.yymmdd(), color: .gray128, align: .right)
+            
+            return cell
         }
-        cell.timestampLabel.size12(text: timeStamp.yymmdd(), color: .gray128, align: .right)
-        
-        return cell
     }
 }
 
@@ -607,13 +659,26 @@ extension DetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let txHash = self.txList[indexPath.row].txHash
-        let provider = tracker.provider
-        let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/transaction/\(txHash)")
-        
-        Alert.txHash(txData: txInfo, confirmAction: {
-            Tool.toast(message: "Alert.Transaction.Copy.Complete".localized)
-        }).show()
+        switch detailType {
+        case .icx, .irc:
+            let txHash = self.txList[indexPath.row].txHash
+            let provider = tracker.provider
+            let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/transaction/\(txHash)")
+            
+            Alert.txHash(txData: txInfo, confirmAction: {
+                Tool.toast(message: "Alert.Transaction.Copy.Complete".localized)
+            }).show()
+            
+        default:
+            let txHash = self.ethTxList[indexPath.row].txHash
+            let provider = Ethereum.etherScanURL.deletingLastPathComponent()
+            
+            let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/tx/\(txHash)")
+            
+            Alert.txHash(txData: txInfo, confirmAction: {
+                Tool.toast(message: "Alert.Transaction.Copy.Complete".localized)
+            }).show()
+        }
     }
 }
 
@@ -648,5 +713,19 @@ class MintRefreshControl: UIRefreshControl {
         super.layoutSubviews()
         let originalFrame = frame
         frame = originalFrame
+    }
+}
+
+extension Date {
+    func toDateString() -> String {
+        let dateformatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd HH:mm:s"
+            formatter.timeZone = .autoupdatingCurrent
+            return formatter
+        }()
+        
+        let date = dateformatter.string(from: self)
+        return date
     }
 }
