@@ -127,7 +127,7 @@ enum IXInputBoxType {
                 textField.canPaste = false
                 
             case .address:
-                textField.keyboardType = .alphabet
+                textField.keyboardType = .asciiCapable
                 textField.canPaste = true
                 subtitleLabel.text = ""
             }

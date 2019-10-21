@@ -45,7 +45,8 @@ class AddTokenInfoViewController: BaseViewController {
         self.symbolBox.set(state: .readOnly, placeholder: "TokenDetail.Placeholder.Symbol".localized)
         self.decimalBox.set(state: .readOnly, placeholder: "TokenDetail.Placeholder.Decimal".localized)
         
-        self.addressBox.set(inputType: .normal)
+        self.addressBox.set(inputType: .address)
+        self.nameBox.set(inputType: .address)
         
         qrCodeButton.roundGray230()
         
@@ -78,46 +79,56 @@ class AddTokenInfoViewController: BaseViewController {
         }
         
         nameBox.set { (name) -> String? in
-            guard !name.isEmpty else { return nil }
+            guard !name.isEmpty else {
+                self.addButton.isEnabled = self.validateForms()
+                return nil }
             if !Validator.validateTokenName(name: name) {
+                self.addButton.isEnabled = self.validateForms()
                 return "Token.Info.Error.Symbol".localized
             }
+            self.addButton.isEnabled = self.validateForms()
             return nil
         }
         
         addressBox.textField.rx.controlEvent(.editingDidEndOnExit).subscribe { (_) in
             let contract = self.addressBox.text
-            
-            if Validator.validateIRCAddress(address: contract) {
-                DispatchQueue.global().async {
-                    guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else {
-                        self.resetInputBox()
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.nameBox.text = request.name
-                        self.symbolBox.text = request.symbol
-                        self.decimalBox.text = String(request.decimal.hexToBigUInt() ?? 0)
+            if self.walletInfo!.address.hasPrefix("hx") {
+                if Validator.validateIRCAddress(address: contract) {
+                    DispatchQueue.global().async {
+                        guard let request = Manager.icon.getIRCTokenInfo(walletAddress: wallet.address, contractAddress: contract) else {
+                            self.resetInputBox()
+                            return
+                        }
                         
-                        self.sendActions()
+                        DispatchQueue.main.async {
+                            self.nameBox.text = request.name
+                            self.symbolBox.text = request.symbol
+                            self.decimalBox.text = String(request.decimal.hexToBigUInt() ?? 0)
+                            
+                            self.addButton.isEnabled = self.validateForms()
+                        }
                     }
+                } else {
+                    self.addButton.isEnabled = self.validateForms()
                 }
-                
-            } else if Validator.validateETHAddress(address: contract) {
-                DispatchQueue.global().async {
-                    guard let ercInfo = Ethereum.requestTokenInformation(tokenContractAddress: contract, myAddress: wallet.address) else {
-                        self.resetInputBox()
-                        return
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.nameBox.text = ercInfo.name
-                        self.symbolBox.text = ercInfo.symbol
-                        self.decimalBox.text = String(ercInfo.decimal)
+            } else {
+                if Validator.validateETHAddress(address: contract) {
+                    DispatchQueue.global().async {
+                        guard let ercInfo = Ethereum.requestTokenInformation(tokenContractAddress: contract, myAddress: wallet.address) else {
+                            self.resetInputBox()
+                            return
+                        }
                         
-                        self.sendActions()
+                        DispatchQueue.main.async {
+                            self.nameBox.text = ercInfo.name
+                            self.symbolBox.text = ercInfo.symbol
+                            self.decimalBox.text = String(ercInfo.decimal)
+                            
+                            self.addButton.isEnabled = self.validateForms()
+                        }
                     }
+                } else {
+                    self.addButton.isEnabled = self.validateForms()
                 }
             }
         }.disposed(by: disposeBag)
@@ -141,12 +152,12 @@ class AddTokenInfoViewController: BaseViewController {
                 self.present(qrVC, animated: true, completion: nil)
         }.disposed(by: disposeBag)
         
-        Observable.combineLatest(addressBox.textField.rx.text.orEmpty, nameBox.textField.rx.text.orEmpty, symbolBox.textField.rx.text.orEmpty, decimalBox.textField.rx.text.orEmpty)
-            .flatMapLatest { (address, name, symbol, decimal) -> Observable<Bool> in
-                return Observable.just(!address.isEmpty && !name.isEmpty && !symbol.isEmpty && !decimal.isEmpty)
-                
-            }.bind(to: addButton.rx.isEnabled)
-            .disposed(by: disposeBag)
+//        Observable.combineLatest(addressBox.textField.rx.text.orEmpty, nameBox.textField.rx.text.orEmpty, symbolBox.textField.rx.text.orEmpty, decimalBox.textField.rx.text.orEmpty)
+//            .flatMapLatest { (address, name, symbol, decimal) -> Observable<Bool> in
+//                return Observable.just(!address.isEmpty && !name.isEmpty && !symbol.isEmpty && !decimal.isEmpty)
+//
+//            }.bind(to: addButton.rx.isEnabled)
+//            .disposed(by: disposeBag)
         
         addButton.rx.tap.asControlEvent()
             .subscribe { (_) in
@@ -183,14 +194,12 @@ class AddTokenInfoViewController: BaseViewController {
             self.symbolBox.text.removeAll()
             self.decimalBox.text.removeAll()
             
-            self.sendActions()
+            self.addButton.isEnabled = self.validateForms()
         }
     }
     
-    private func sendActions() {
-        self.addressBox.textField.sendActions(for: .valueChanged)
-        self.nameBox.textField.sendActions(for: .valueChanged)
-        self.symbolBox.textField.sendActions(for: .valueChanged)
-        self.decimalBox.textField.sendActions(for: .valueChanged)
+    private func validateForms() -> Bool {
+        return (walletInfo!.address.hasPrefix("hx") ? Validator.validateIRCAddress(address: addressBox.text) : Validator.validateETHAddress(address: addressBox.text)) &&
+            !nameBox.text.isEmpty && !symbolBox.text.isEmpty && !decimalBox.text.isEmpty
     }
 }

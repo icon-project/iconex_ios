@@ -418,7 +418,7 @@ extension BalanceManager {
                                 tokenBalances[token.contract] = balance
                             }
                         }
-                        self.tokenBalances[wallet.address] = tokenBalances
+                        self.tokenBalances[wallet.address.add0xPrefix()] = tokenBalances
                     }
                 }
                 DispatchQueue.main.async {
