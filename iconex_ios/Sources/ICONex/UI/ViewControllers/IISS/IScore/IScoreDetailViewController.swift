@@ -142,7 +142,14 @@ class IScoreDetailViewController: BaseViewController {
                     self?.descValue2.size14(text: estimated.toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
                     self?.exchangedValue.size12(text: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"), color: .gray179, weight: .regular, align: .right)
                     
-                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), stepLimit: (estimatedStep ?? 0).toString(decimal: 0), estimatedFee: estimated.toString(decimal: 18, 18, true), estimateUSD: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
+                    let stepLimitPrice: String = {
+                        guard let estimated = estimatedStep?.toString(decimal: 0).currencySeparated(), let stepPrice = Manager.icon.stepPrice?.toString(decimal: 18, 18, true).currencySeparated() else {
+                            return "-"
+                        }
+                        return estimated + " / " + stepPrice
+                    }()
+                    
+                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), stepLimit: stepLimitPrice, estimatedFee: estimated.toString(decimal: 18, 18, true), estimateUSD: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
                     
                     self?.iscore = iscoreInfo
                     

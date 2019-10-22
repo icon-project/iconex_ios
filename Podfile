@@ -9,7 +9,7 @@ def import_pods
   pod 'RealmSwift'
   pod 'web3swift', :modular_headers => true
   pod 'Alamofire'
-  pod 'ICONKit', :git => 'https://github.com/icon-project/iconkit', :branch => 'develop'
+  pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit', :branch => 'develop'
   pod 'PanModal', :git => 'https://github.com/a1ahn/PanModal.git'
   pod 'AcknowList'
 end

@@ -435,9 +435,7 @@ extension BalanceManager {
                                 tokenBalances[token.contract] = balance
                             }
                         }
-                        print("eth wallet: \(wallet.address)")
-                        print("tokens \(tokenBalances)")
-                        self.tokenBalances[wallet.address] = tokenBalances
+                        self.tokenBalances[wallet.address.add0xPrefix()] = tokenBalances
                     }
                 }
                 DispatchQueue.main.async {
@@ -900,6 +898,18 @@ struct Transactions {
         }
         
         return infos
+    }
+    
+    static func etherTxList(address: String) -> [TransactionModel] {
+        var transactions = [TransactionModel]()
+        
+        guard let models = DB.transactionList(type: "eth") else { return transactions }
+        
+        transactions = models.filter { (txModel) -> Bool in
+            return txModel.from == address
+        }
+        
+        return transactions
     }
     
     static func updateTransactionCompleted(txHash: String) {
