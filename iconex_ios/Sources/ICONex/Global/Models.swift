@@ -278,3 +278,7 @@ public enum BalanceUnit {
         }
     }
 }
+
+struct EstimatedUnstakePeriod: Decodable {
+    var unstakeLockPeriod: String
+}

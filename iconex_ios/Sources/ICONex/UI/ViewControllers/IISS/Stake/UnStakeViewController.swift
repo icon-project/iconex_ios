@@ -138,10 +138,10 @@ class UnStakeViewController: BaseViewController {
     }
     
     func twinkle() {
-        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveEaseInOut, animations: {
+        UIView.animate(withDuration: 0.7, delay: 0.0, options: .curveEaseInOut, animations: {
             self.unstakingBar.alpha = 0.6
         }, completion: { _ in
-            UIView.animate(withDuration: 0.6, delay: 0.0, options: .curveEaseInOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseInOut, animations: {
                 self.unstakingBar.alpha = 0.3
             }, completion: { (isFinished) in
                 if isFinished {

@@ -63,8 +63,9 @@ class IXSlider: UIView {
     
     private var myStake: BigUInt = 0 {
         willSet {
-            guard let totalNum = self.totalValue?.decimalNumber, let votedNum = self.voted?.decimalNumber, let myStakeNum = newValue.decimalNumber else { return }
-            let stakePercent: Float = {
+            guard let totalNum = self.totalValue?.decimalNumber, let votedNum = self.voted?.decimalNumber, let myStakeNum = newValue.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
+
+            let stakeSliderPercent: Float = {
                 if myStakeNum > votedNum && totalNum > votedNum {
                     let top = myStakeNum - votedNum
                     let bottom = totalNum - votedNum
@@ -73,8 +74,17 @@ class IXSlider: UIView {
                     return 0.0
                 }
             }()
-            
-            self.minWidth.constant = self.barContainer.frame.width * CGFloat(stakePercent / 100.0)
+
+            let stakePercent: Float = {
+                if myStakeNum > 0 {
+                    let bottom = totalNum + minDecimal
+                    return (myStakeNum / bottom).floatValue * 100
+                } else {
+                    return 0.0
+                }
+            }()
+
+            self.minWidth.constant = self.barContainer.frame.width * CGFloat(stakeSliderPercent / 100.0)
 
             currentValue.onNext(newValue)
 
@@ -86,11 +96,10 @@ class IXSlider: UIView {
     var isEnabled: Bool = true {
         willSet {
             if !newValue {
-//                slider.isEnabled = false
+                slider.isHidden = true
                 votedContainer.isHidden = true
                 textField.isEnabled = false
             } else {
-//                slider.isEnabled = true
                 slider.isHidden = false
                 votedContainer.isHidden = false
                 textField.isEnabled = true
@@ -152,7 +161,7 @@ class IXSlider: UIView {
         slider.rx.value.subscribe(onNext: { value in
             let percent = roundf(value) / 100
             
-            guard let totalNum = self.totalValue?.decimalNumber, let voted = self.voted?.decimalNumber else { return }
+            guard let totalNum = self.totalValue?.decimalNumber, let voted = self.voted?.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
             
             let totalValue = totalNum - voted
             let rateValueNum = totalValue * NSDecimalNumber(value: percent).decimalValue
@@ -168,7 +177,20 @@ class IXSlider: UIView {
             }()
             
             self.currentValue.onNext(rateValue)
-            self.myStake = rateValue
+            
+            let stakePercent: Float = {
+                let top = rateValueNum + voted
+                if top > 0 {
+                    let bottom = totalNum + minDecimal
+                    return (top / bottom).floatValue * 100
+                } else {
+                    return 0.0
+                }
+            }()
+            self.textField.text = rateValue.toString(decimal: 18, 4, false)
+            self.innerLabel.size12(text: "(" + String(format: "%.1f", stakePercent) + "%)")
+            
+            self.minWidth.constant = self.barContainer.frame.width * CGFloat(percent)
             
         }).disposed(by: disposeBag)
         
@@ -222,7 +244,7 @@ class IXSlider: UIView {
             // BigUInt
             guard let bigValue = Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: true) , let bigTotal = self.totalValue, let bigVoted = self.voted else { return }
             // Decimal
-            guard let valueDecimal = bigValue.decimalNumber, let totalDecimal = bigTotal.decimalNumber, let votedDecimal = bigVoted.decimalNumber else { return }
+            guard let valueDecimal = bigValue.decimalNumber, let totalDecimal = bigTotal.decimalNumber, let votedDecimal = bigVoted.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
 
             if valueDecimal > totalDecimal {
                 
@@ -236,11 +258,23 @@ class IXSlider: UIView {
                 self.slider.value = 0.0
 
             } else {
-                let top = valueDecimal - votedDecimal
-                let bottom = totalDecimal - votedDecimal
-                let percent = (top / bottom).floatValue * 100
+                let percent: Float = {
+                    if valueDecimal > 0 {
+                        let result = (valueDecimal / totalDecimal) * 100
+                        return result.floatValue
+                    } else {
+                        return 0.0
+                    }
+                }()
+                
+                let innerPercent: Float = {
+                    let bottom = totalDecimal + minDecimal
+                    let result = (valueDecimal / bottom) * 100
+                    return result.floatValue
+                }()
+                
                 self.minWidth.constant = self.barContainer.frame.width * CGFloat(percent / 100.0)
-                self.innerLabel.size12(text: "(" + String(format: "%.1f", percent) + "%)") // "(" + String(format: "%.1f", currentFloat) + "%)"
+                self.innerLabel.size12(text: "(" + String(format: "%.1f", innerPercent) + "%)")
                 self.currentValue.onNext(bigValue)
                 self.slider.value = percent
             }
@@ -264,11 +298,9 @@ class IXSlider: UIView {
             slider.value = 0
             isEnabled = false
         } else {
-            guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted?.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber else { return }
+            guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted?.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
             
-            let top = stakedDecimal - votedDecimal
-            let bottom = totalDecimal - votedDecimal
-            let crtNum = (top / bottom) * 100
+            let crtNum = (stakedDecimal / totalDecimal) * 100
             
             let currentFloat = crtNum.floatValue
             
@@ -278,7 +310,11 @@ class IXSlider: UIView {
             currentValue.onNext(staked)
             
             textField.text = staked.toString(decimal: 18, 4, false)
-            innerLabel.size12(text: "(" + String(format: "%.1f", currentFloat) + "%)")
+            
+            let bottom = totalDecimal + minDecimal
+            let innerPercent = (stakedDecimal / bottom) * 100
+            
+            innerLabel.size12(text: "(" + String(format: "%.1f", innerPercent.floatValue) + "%)")
             
             slider.value = currentFloat
             isEnabled = true

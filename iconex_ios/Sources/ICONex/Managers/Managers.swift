@@ -204,6 +204,23 @@ extension ICONManager {
 
 // IISS
 extension ICONManager {
+    func estimateUnstakeLockPeriod(from: ICXWallet) -> BigUInt? {
+        let testICONService = ICONService(provider: "https://zicon.net.solidwallet.io/api/v3", nid: "0x3")
+        let call = Call<EstimatedUnstakePeriod>(from: from.address, to: CONST.iiss, method: "estimateUnstakeLockPeriod", params: nil)
+        
+        let result = testICONService.call(call).execute()
+        
+        do {
+            let period = try result.get().unstakeLockPeriod
+            let periodBigUInt = period.hexToBigUInt()
+            
+            return periodBigUInt
+        } catch let err {
+            Log(err)
+            return nil
+        }
+    }
+    
     func getStake(from: ICXWallet) -> PRepStakeResponse? {
         let params = ["address": from.address]
         
@@ -418,6 +435,8 @@ extension BalanceManager {
                                 tokenBalances[token.contract] = balance
                             }
                         }
+                        print("eth wallet: \(wallet.address)")
+                        print("tokens \(tokenBalances)")
                         self.tokenBalances[wallet.address] = tokenBalances
                     }
                 }
@@ -456,6 +475,7 @@ extension BalanceManager {
     }
     
     func getTokenBalance(address: String, contract: String) -> BigUInt {
+        // 바로 가져오게
         guard let wallet = self.tokenBalances[address] else { return 0 }
         let balance = wallet[contract] ?? 0
         
@@ -479,8 +499,6 @@ class PRepManager {
     private var service: ICONManager {
         return Manager.icon
     }
-    
-//    private var votedPower: String = ""
     
     private init() { }
     

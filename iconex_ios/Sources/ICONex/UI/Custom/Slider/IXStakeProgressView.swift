@@ -19,6 +19,8 @@ class IXStakeProgressView: UIView {
     var stakedColor: UIColor = .mint2
     var votedColor: UIColor = .mint3
     
+    var checker: Int = 0
+    
     var staked: Float = 0.0 {
         willSet {
             stakedLabel.size14(text: "Staked " + String(format: "%.1f", newValue * 100) + "%" , color: minTextColor, weight: .light, align: .left)
@@ -26,16 +28,20 @@ class IXStakeProgressView: UIView {
         }
         
         didSet {
-            refreshBar()
+            self.stakedWidth.constant = self.frame.width * CGFloat(staked)
         }
     }
+    
     var voted: Float = 0.0 {
         willSet {
             votedLabel.size12(text: String(format: "→ Voted %.1f", newValue * 100) + "%", color: minTextColor, weight: .light, align: .left)
         }
-        
+
         didSet {
-            refreshBar()
+            if checker < 2 {
+                checker += 1
+                self.votedWidth.constant = self.stakedWidth.constant * CGFloat(voted)
+            }
         }
     }
     
@@ -77,10 +83,5 @@ class IXStakeProgressView: UIView {
         stakedBar.corner(stakedBar.frame.height / 2)
         votedBar.corner(votedBar.frame.height / 2)
         votedBar.border(2, stakedColor)
-    }
-    
-    func refreshBar() {
-        stakedWidth.constant = self.frame.width * CGFloat(staked)
-        votedWidth.constant = self.frame.width * CGFloat(voted)
     }
 }
