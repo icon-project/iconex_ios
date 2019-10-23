@@ -39,7 +39,7 @@ class StakeAlertView: UIView {
                 unstakeCancelView.layer.borderColor = UIColor.mint5.cgColor
                 unstakeCancelView.layer.borderWidth = 0.5
                 
-                unstakeCancelLabel.size12(text: "Alert.UnStakeCancel.Infomation".localized, color: .mint1, weight: .regular, align: .left)
+                unstakeCancelLabel.size12(text: "Alert.UnStakeCancel.Infomation".localized, color: .mint1, weight: .regular, align: .left, lineBreakMode: .byWordWrapping)
                 unstakeCancelLabel.numberOfLines = 2
             }
         }

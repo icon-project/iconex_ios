@@ -55,10 +55,15 @@ extension UILabel {
         if text.rangeOfCharacter(from: charSet.inverted, options: .caseInsensitive, range: nil) != nil {
             font = UIFont.systemFont(ofSize: size, weight: weight)
         } else {
-            if weight == .regular {
-                font = UIFont(name: "NanumSquareR", size: size)!
-            } else {
-                font = UIFont(name: "NanumSquareB", size: size)!
+            switch weight {
+                case .light, .ultraLight, .thin:
+                    font = UIFont(name: "NanumSquareL", size: size)!
+                
+                case .regular, .medium:
+                    font = UIFont(name: "NanumSquareR", size: size)!
+                
+                default:
+                    font = UIFont(name: "NanumSquareB", size: size)!
             }
         }
         let paragraphStyle = NSMutableParagraphStyle()

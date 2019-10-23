@@ -15,6 +15,7 @@ class DepositViewController: PopableViewController {
     @IBOutlet weak var qrImage: UIImageView!
     @IBOutlet weak var walletAddressLabel: UILabel!
     @IBOutlet weak var copyButton: UIButton!
+    @IBOutlet weak var depositContainer: UIView!
     @IBOutlet weak var inputBox: IXInputBox!
     @IBOutlet weak var requestButton: UIButton!
     @IBOutlet weak var descLabel: UILabel!
@@ -96,6 +97,9 @@ class DepositViewController: PopableViewController {
                 self.scrollView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
             }
         }).disposed(by: disposeBag)
+        
+        depositContainer.isHidden = !wallet.address.hasPrefix("hx")
+        descLabel.isHidden = !wallet.address.hasPrefix("hx")
     }
     
     

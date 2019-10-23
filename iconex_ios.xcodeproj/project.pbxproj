@@ -161,6 +161,7 @@
 		D4A1E52822F2D20E00987D2C /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A1E52722F2D20E00987D2C /* StartViewController.swift */; };
 		D4A2CE442341EC7600B371AA /* SendInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2CE432341EC7600B371AA /* SendInfoViewController.swift */; };
 		D4A2CE462342401300B371AA /* MainInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A2CE452342401300B371AA /* MainInfoViewController.swift */; };
+		D4AEEA76235FF31000856126 /* NanumSquareLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D4AEEA75235FF31000856126 /* NanumSquareLight.ttf */; };
 		D4BE25E723165019002D697D /* FloatButton.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25E623165019002D697D /* FloatButton.storyboard */; };
 		D4BE25E923165469002D697D /* FloatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BE25E823165469002D697D /* FloatViewController.swift */; };
 		D4BE25EB2317BF5D002D697D /* PRepViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */; };
@@ -371,6 +372,7 @@
 		D4A2CE432341EC7600B371AA /* SendInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendInfoViewController.swift; sourceTree = "<group>"; };
 		D4A2CE452342401300B371AA /* MainInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainInfoViewController.swift; sourceTree = "<group>"; };
 		D4A8C08321BE437500B41B36 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		D4AEEA75235FF31000856126 /* NanumSquareLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquareLight.ttf; sourceTree = "<group>"; };
 		D4BE25E623165019002D697D /* FloatButton.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FloatButton.storyboard; sourceTree = "<group>"; };
 		D4BE25E823165469002D697D /* FloatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatViewController.swift; sourceTree = "<group>"; };
 		D4BE25EA2317BF5D002D697D /* PRepViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PRepViewCell.xib; sourceTree = "<group>"; };
@@ -637,6 +639,7 @@
 		D4003BEF20E4CA9A0003F4CB /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				D4AEEA75235FF31000856126 /* NanumSquareLight.ttf */,
 				D4003BF020E4CAFA0003F4CB /* NanumSquareRegular.ttf */,
 				D434868820E6254500B7708F /* NanumSquareBold.ttf */,
 			);
@@ -1147,6 +1150,7 @@
 				D427DCEA221117050098D852 /* Tokens.json in Resources */,
 				BF7C61BE23194356001C8749 /* Detail.storyboard in Resources */,
 				BF4F6F662318A57D0098D303 /* Main.storyboard in Resources */,
+				D4AEEA76235FF31000856126 /* NanumSquareLight.ttf in Resources */,
 				BF6EFEC222FA5174003B6AF3 /* BasicAlertView.xib in Resources */,
 				D4FDCA6622F7C62200D6CDD4 /* LoadWallet.storyboard in Resources */,
 				1BB4C76C231B933600BA4138 /* Send.storyboard in Resources */,

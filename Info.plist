@@ -62,6 +62,7 @@
 	<array>
 		<string>NanumSquareRegular.ttf</string>
 		<string>NanumSquareBold.ttf</string>
+		<string>NanumSquareLight.ttf</string>
 	</array>
 	<key>UIFileSharingEnabled</key>
 	<false/>

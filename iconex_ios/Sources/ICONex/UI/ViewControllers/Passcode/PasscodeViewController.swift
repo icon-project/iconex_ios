@@ -93,6 +93,22 @@ class PasscodeViewController: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        for line in numberStack.arrangedSubviews {
+            let lineStack = line as! UIStackView
+            
+            for button in lineStack.arrangedSubviews {
+                let btn = button as! UIButton
+                
+                btn.corner(btn.frame.height / 2)
+                if self.lockType == .check {
+                    btn.setBackgroundImage(UIImage(color: .init(white: 1, alpha: 0.2)), for: .highlighted)
+                } else {
+                    btn.setBackgroundImage(UIImage(color: UIColor(38, 38, 38, 0.03)), for: .highlighted)
+                }
+                
+            }
+        }
+        
         if self.lockType == .check {
             let bio = LAContext().biometricType
             
@@ -149,17 +165,6 @@ class PasscodeViewController: BaseViewController {
                     
                 btn.rx.tap.asControlEvent()
                     .subscribe { _ in
-                        UIView.animate(withDuration: 0.05, delay: 0.0, options: .curveEaseInOut, animations: {
-                            if self.lockType == .check {
-                                btn.backgroundColor = .init(white: 1, alpha: 0.2)
-                            } else {
-                                btn.backgroundColor = UIColor.init(38, 38, 38, 0.03)
-                            }
-                            
-                        }, completion: { _ in
-                            btn.backgroundColor = .clear
-                        })
-                        
                         if btn.tag == 99 && self.tmpPassword.count > 0 {
                             self.clearBubble(self.tmpPassword.count-1)
                             self.tmpPassword.removeLast()

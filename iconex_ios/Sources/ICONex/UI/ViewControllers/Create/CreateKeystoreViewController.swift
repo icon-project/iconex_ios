@@ -70,6 +70,9 @@ class CreateKeystoreViewController: BaseViewController {
             guard Validator.validateCharacterSet(password: value) else {
                 return "Error.Password.CharacterSet".localized
             }
+            guard Validator.validateSpecialCharacter(password: value) else {
+                return "Error.Password.Invaild.SpecialCharacter".localized
+            }
             return nil
         }
         

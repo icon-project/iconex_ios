@@ -78,6 +78,7 @@ class InputDataViewController: BaseViewController {
         } else {
             self.placeholderLabel.text = "0x1234…"
         }
+        textView.delegate = self
     }
     
     private func setupBind() {
@@ -85,10 +86,10 @@ class InputDataViewController: BaseViewController {
         keyboardHeight().observeOn(MainScheduler.instance)
         .subscribe(onNext: { [unowned self] (height: CGFloat) in
             if height == 0 {
-                self.textView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                self.textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             } else {
                 let keyboardHeight: CGFloat = height - self.view.safeAreaInsets.bottom
-                self.textView?.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+                self.textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
             }
         }).disposed(by: disposeBag)
         
@@ -109,31 +110,35 @@ class InputDataViewController: BaseViewController {
             .subscribe(onNext: { (text) in
                 self.placeholderLabel.isHidden = !text.isEmpty
                 let byte = Int64(text.lengthOfBytes(using: .utf8))
-                
+
                 guard byte <= 524288 else {
-                    self.textView.text = String(text.utf8.prefix(524288))
+                    var prompted = text
+                    while prompted.lengthOfBytes(using: .utf8) > 524288 {
+                        prompted.removeLast()
+                    }
+                    self.textView.text = String(prompted)
                     return
                 }
-                
+
                 let textLength: String = {
                     var roundedByte = byte / 1024
-                    
+
                     if byte % 1024 != 0 {
                         roundedByte += 1
                     }
-                    
+
                     roundedByte = roundedByte * 1024
-                    
+
                     let byteFormatter = ByteCountFormatter()
                     byteFormatter.countStyle = .binary
                     byteFormatter.allowedUnits = .useKB
-                    
+
                     let kb = byteFormatter.string(fromByteCount: roundedByte)
                     return kb
                 }()
-                
+
                 self.toolBar.kbLabel.text = textLength
-                
+
             }).disposed(by: disposeBag)
         
         textViewShare.map { !$0.isEmpty }
@@ -197,5 +202,16 @@ extension InputDataViewController: PanModalPresentable {
     
     var cornerRadius: CGFloat {
         return 18.0
+    }
+}
+
+extension InputDataViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        guard let former = textView.text as NSString? else { return false }
+        var replaced = former.replacingCharacters(in: range, with: text)
+        
+        let byte = Int64(replaced.lengthOfBytes(using: .utf8))
+        guard byte <= 524288 else { return false }
+        return true
     }
 }

@@ -17,9 +17,9 @@ class BasicAlertView: UIView {
     
     var info: AlertBasicInfo? {
         willSet {
-            titleLabel.size16(text: newValue!.title, color: .gray77, weight: .medium, align: .center)
+            titleLabel.size16(text: newValue!.title, color: .gray77, weight: .medium, align: .center, lineBreakMode: .byWordWrapping)
             if let sub = newValue?.subtitle {
-                subtitleLabel.size14(text: sub, color: .gray128, weight: .light, align: .center)
+                subtitleLabel.size14(text: sub, color: .gray128, weight: .light, align: .center, lineBreakMode: .byWordWrapping)
             } else {
                 subtitleLabel.isHidden = true
             }

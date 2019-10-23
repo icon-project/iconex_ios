@@ -702,13 +702,13 @@ struct Ethereum {
         var options = TransactionOptions.defaultOptions
         options.gasPrice = .manual(gasPrice)
         options.gasLimit = .manual(gasLimit)
-        options.from = EthereumAddress(from)
+        options.from = EthereumAddress(from.add0xPrefix())
         
         let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
         let manager = KeystoreManager([keystore!])
         web3.addKeystoreManager(manager)
         
-        let intermediate = web3.eth.sendETH(to: EthereumAddress(to)!, amount: value, extraData: data ?? Data(), transactionOptions: options)
+        let intermediate = web3.eth.sendETH(to: EthereumAddress(to.add0xPrefix())!, amount: value, extraData: data ?? Data(), transactionOptions: options)
         
         if let estimated = try? intermediate!.estimateGas(transactionOptions: nil) {
             Log("estimated: \(estimated), gasLimit: \(gasLimit)")
@@ -720,26 +720,24 @@ struct Ethereum {
             return (false, -99)
         }
         
-        
-        guard let result = try? intermediate?.send() else {
-            return (false, -99)
-        }
-        
-        Log("result: \(result)")
-        if let txHash = result.transaction.txhash {
-            do {
+        do {
+            let result = try intermediate!.send()
+            Log("result: \(result)")
+            
+            if let txHash = result.transaction.txhash {
                 try DB.saveTransaction(from: from, to: to, txHash: txHash, value: value.toString(decimal: 18, 18, true), type: "eth")
-            } catch {
-                Log("\(error)")
+                return (true, 0)
+            } else {
+                return (false, -99)
             }
-            return (true, 0)
-        } else {
+        } catch {
+            Log("Error - \(error)")
             return (false, -99)
         }
     }
     
     static func requestTokenInformation(tokenContractAddress address: String, myAddress: String) -> ETHTokenResult? {
-        let contractAddress = EthereumAddress(address)
+        let contractAddress = EthereumAddress(address.add0xPrefix())
         
         guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
@@ -750,7 +748,7 @@ struct Ethereum {
         }
         
         var options = TransactionOptions.defaultOptions
-        options.from = EthereumAddress(myAddress)
+        options.from = EthereumAddress(myAddress.add0xPrefix())
         
         var tokenResult = ETHTokenResult("", "", 0)
         
@@ -791,7 +789,7 @@ struct Ethereum {
         guard let web3 = try? Web3.new(Ethereum.provider) else {
             return nil
         }
-        let ethAddress = EthereumAddress(token.contract)
+        let ethAddress = EthereumAddress(token.contract.add0xPrefix())
         
         guard let contract = web3.contract(Web3.Utils.erc20ABI, at: ethAddress) else {
             
@@ -818,9 +816,9 @@ struct Ethereum {
                 return
             }
             
-            let fromAddress = EthereumAddress(from)
-            let toAddress = EthereumAddress(to)
-            let contractAddress = EthereumAddress(tokenInfo.contract)
+            let fromAddress = EthereumAddress(from.add0xPrefix())
+            let toAddress = EthereumAddress(to.add0xPrefix())
+            let contractAddress = EthereumAddress(tokenInfo.contract.add0xPrefix())
             
             let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
             let manager = KeystoreManager([keystore!])

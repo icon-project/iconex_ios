@@ -20,7 +20,7 @@ class TxHashAlertView: UIView {
     var info: AlertTxHashInfo? {
         willSet {
             guard let info = newValue else { return }
-            txHashLabel.size12(text: info.txHash, color: .gray77, weight: .regular, align: .center)
+            txHashLabel.size12(text: info.txHash, color: .gray77, weight: .regular, align: .center, lineBreakMode: .byWordWrapping)
             
             let buttonString: String = {
                 return info.trackerURL.contains("etherscan.io") ? "Etherscan" : "Alert.TxHash.Tracker".localized

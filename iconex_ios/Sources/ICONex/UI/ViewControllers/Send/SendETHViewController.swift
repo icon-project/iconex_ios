@@ -453,7 +453,6 @@ class SendETHViewController: BaseViewController {
             }
         }
         
-        // 데이터 필드를 눌렀는데 이게 왜 불리지
         Observable.combineLatest(gasLimitInputBox.textField.rx.text.orEmpty, slider.rx.value).flatMapLatest { (limit, price) -> Observable<String> in
             let gasLimit = BigUInt(limit) ?? 0
             let gasPrice = BigUInt(price)

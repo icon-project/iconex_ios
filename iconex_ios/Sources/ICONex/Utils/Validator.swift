@@ -17,10 +17,11 @@ struct Validator {
     static func validateCharacterSet(password: String) -> Bool {
         var charSet = CharacterSet.lowercaseLetters
         let digitSet = CharacterSet.decimalDigits
-        let specialSet = CharacterSet(charactersIn: "?!:.,%+-/*<>{}()[]`\"'~_^\\|@#$&")
+//        let specialSet = CharacterSet(charactersIn: "?!:.,%+-/*<>{}()[]`\"'~_^\\|@#$&")
         let letterSet = charSet.union(CharacterSet.uppercaseLetters)
         
         charSet = letterSet.union(digitSet)
+        let specialSet = charSet.inverted
         charSet = charSet.union(specialSet)
         
         let notAllowed = password.unicodeScalars.filter { charSet.inverted.contains($0) }
@@ -48,6 +49,20 @@ struct Validator {
         }
         
         return valid
+    }
+    
+    static func validateSpecialCharacter(password: String) -> Bool {
+        var charSet = CharacterSet.lowercaseLetters
+        let digitSet = CharacterSet.decimalDigits
+        let specialSet = CharacterSet(charactersIn: "?!:.,%+-/*<>{}()[]`\"'~_^\\|@#$&")
+        let letterSet = charSet.union(CharacterSet.uppercaseLetters)
+        charSet = letterSet.union(digitSet)
+        
+        let exceptSpecial = password.unicodeScalars.filter { charSet.inverted.contains($0) }
+        
+        let excluded = exceptSpecial.filter { specialSet.inverted.contains($0) }
+        Log("excluded - \(excluded)")
+        return excluded.count == 0
     }
     
     static func validateICXAddress(address: String) -> Bool {

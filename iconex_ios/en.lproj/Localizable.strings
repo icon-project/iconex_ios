@@ -239,8 +239,8 @@
 "Stake.Desc1.Stake" = "・ You cannot unstake the amount that is already delegated.";
 "Stake.Desc2.Stake" = "・ Minimum Unstaked amount is 1 ICX. It is required to pay transaction fee occured by delegation.";
 "Stake.Desc1.Unavailable" = "・ There is not enough amount.\nDeposit ICX or reduce the delegation abmount in Vote page.";
-"Stake.Header.TimeRequired" = "Duration time";
-"Stake.Value.TimeRequired.Stake" = "Stake Immediately";
+"Stake.Header.TimeRequired" = "Estimated to complete";
+"Stake.Value.TimeRequired.Stake" = "Immediately";
 "Stake.Value.TimeRequired.Unstake" = "Unstake in 72 hours";
 "Stake.Header.StepLimit" = "Step Limit / Price (ICX)";
 "Stake.Header.EstimatedFee" = "Expected Maximum transaction fee (ICX)";
@@ -266,6 +266,8 @@
 "MyVoteView.Alert.Back" = "By pressing Vote button will apply the change you made. \nVote Would you like to leave without making change?";
 "MyVoteView.Alert.InsufficientFee" = "Not enough ICX to pay transaction fee.";
 "MyVoteView.ToolTip.Delete" = "Delegated P-Rep is not able to delete in the list.\nSet Voting Power to 0 and press Vote button.";
+"MyVoteView.Empty.Title” = “In the P-Reps tab, add candidates to vote in the voting list first, then adjust Voting Power.";
+"MyVoteView.Empty.Desc” = “ICX used for Voting Power can be returned when you unstake your Staked ICX and I-Score will be paid to you as a reward for ecosystem contribution.";
 
 // MARK: PRepsViewController
 "PRepView.Toast.MyVotes" = "Add to My Votes";

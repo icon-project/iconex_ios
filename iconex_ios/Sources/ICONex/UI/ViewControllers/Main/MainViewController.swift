@@ -59,8 +59,6 @@ class MainViewController: BaseViewController, Floatable {
     
     private let gradient = CAGradientLayer()
     
-    private var horizontalVelocity: CGPoint = .zero
-    
     var walletList = [BaseWalletConvertible]()
     
     var selectedWallet: ICXWallet?
@@ -134,15 +132,6 @@ class MainViewController: BaseViewController, Floatable {
 //                self.votedActivityIndicator.startAnimating()
                 
                 self.walletList = Manager.wallet.walletList
-                
-                Manager.balance.getAllBalances {
-                    self.contentTop.constant = 0
-                    self.backHeight.constant = Header_Height
-                    self.contentBottom.constant = 0
-                    UIView.animate(withDuration: 0.25, animations: {
-                        self.view.layoutIfNeeded()
-                    })
-                }
                 
                 let list = Manager.balance.calculateExchangeTotalBalance()
                 mainViewModel.balaneList.onNext(list)
@@ -282,17 +271,9 @@ class MainViewController: BaseViewController, Floatable {
         collectionView.rx.didEndDecelerating
             .subscribe(onNext: {
                 if self.isWalletMode {
+                    Log("Checking!!!!")
                     self.checkFloater()
                 }
-            }).disposed(by: disposeBag)
-        
-        collectionView.rx.willBeginDragging
-            .subscribe(onNext: {
-                let velocity = self.collectionView.panGestureRecognizer.velocity(in: self.collectionView.superview)
-                if velocity != .zero {
-                    self.horizontalVelocity = velocity
-                }
-                
             }).disposed(by: disposeBag)
         
         self.collectionView.allowsSelection = false
@@ -342,23 +323,20 @@ class MainViewController: BaseViewController, Floatable {
 
     func checkFloater() {
         
-        let items = self.collectionView.indexPathsForVisibleItems
-        
-        let path: IndexPath = {
-            if items.count == 0 {
-                return IndexPath(row: 0, section: 0)
-            }
-            if items.count == 1 {
-                return items.first!
-            }
-            if horizontalVelocity.x < 0 {
-                return items.first!
-            } else {
-                return items.last!
-            }
+        let index: Int = {
+            let x: Int = {
+                let offsetX = self.collectionView.contentOffset.x
+                if offsetX <= 0 {
+                    return 0
+                } else {
+                    return Int(self.collectionView.frame.width / offsetX)
+                }
+            }()
+            
+            return x
         }()
         
-        if let icx = self.walletList[path.row] as? ICXWallet {
+        if let icx = self.walletList[index] as? ICXWallet {
             self.selectedWallet = icx
             self.attach()
         } else {
@@ -452,7 +430,14 @@ extension MainViewController {
                         UIView.animate(withDuration: 0.25, animations: {
                             self.view.layoutIfNeeded()
                         }) { _ in
-                            mainViewModel.reload.onNext(true)
+                            Manager.balance.getAllBalances {
+                                self.contentTop.constant = 0
+                                self.backHeight.constant = Header_Height
+                                self.contentBottom.constant = 0
+                                UIView.animate(withDuration: 0.25, animations: {
+                                    self.view.layoutIfNeeded()
+                                })
+                            }
                         }
                     } else {
                         contentTop.constant = 0

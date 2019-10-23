@@ -95,7 +95,6 @@
         <!--Start View Controller-->
         <scene sceneID="OJo-eh-Mdo">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="bM1-1M-9ep" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="StartView" id="tf7-xi-j65" customClass="StartViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AcJ-zU-kgA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
@@ -255,6 +254,7 @@
                         <outlet property="scroll" destination="fWA-nM-uwf" id="25H-c5-tmu"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bM1-1M-9ep" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-21.600000000000001" y="811.33004926108379"/>
         </scene>
@@ -450,7 +450,7 @@
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="mnJ-yB-g5h" firstAttribute="leading" secondItem="U39-y6-FP3" secondAttribute="leading" constant="10" id="BhH-kZ-hmQ"/>
                                             <constraint firstAttribute="trailing" secondItem="mnJ-yB-g5h" secondAttribute="trailing" constant="10" id="OKv-6I-VEZ"/>
