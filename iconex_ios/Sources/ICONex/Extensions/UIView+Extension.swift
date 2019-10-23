@@ -191,10 +191,7 @@ extension UIView {
         dismissButton.imageRect(forContentRect: CGRect(x: 0, y: 0, width: 10, height: 10))
         dismissButton.imageEdgeInsets = UIEdgeInsets(top: 7, left: 0, bottom: 7, right: 0)
         
-        dismissButton.rx.tap.asControlEvent()
-            .subscribe { _ in
-                popView.removeFromSuperview()
-        }
+        dismissButton.addTarget(self, action: #selector(dismissTooltip(_:)), for: .touchUpInside)
         
         popView.addSubview(dismissButton)
         dismissButton.translatesAutoresizingMaskIntoConstraints = false
@@ -203,6 +200,10 @@ extension UIView {
         dismissButton.centerYAnchor.constraint(equalTo: label.centerYAnchor).isActive = true
         
         self.addSubview(popView)
+    }
+    
+    @objc func dismissTooltip(_ popView: UIView) {
+        popView.superview!.removeFromSuperview()
     }
 }
 

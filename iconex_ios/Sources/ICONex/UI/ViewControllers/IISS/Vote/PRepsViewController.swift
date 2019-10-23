@@ -53,7 +53,7 @@ class PRepsViewController: BaseViewController, Floatable {
     
     var selectedWallet: ICXWallet? { return delegate.wallet }
     
-    private var refreshControl: UIRefreshControl = UIRefreshControl()
+    private var refreshControl: UIRefreshControl?
     private var preps: NewPRepListResponse?
     private var editInfoList: [MyVoteEditInfo]?
     
@@ -91,16 +91,18 @@ class PRepsViewController: BaseViewController, Floatable {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.refreshControl = refreshControl
         
-        refreshControl.addTarget(self, action: #selector(loadData), for: .valueChanged)
+        let refresh = UIRefreshControl()
+        tableView.refreshControl = refresh
+        self.refreshControl = refresh
+        refresh.beginRefreshing()
         
-        voteViewModel.myList.subscribe(onNext: { (list) in
+        delegate.voteViewModel.myList.subscribe(onNext: { (list) in
             self.myvoteList = list
             self.tableView.reloadData()
         }).disposed(by: disposeBag)
         
-        voteViewModel.newList.subscribe { (_) in
+        delegate.voteViewModel.newList.subscribe { (_) in
             self.tableView.reloadData()
         }.disposed(by: disposeBag)
         
@@ -153,12 +155,12 @@ class PRepsViewController: BaseViewController, Floatable {
 
 extension PRepsViewController {
     @objc func loadData() {
-        guard self.refreshControl.isRefreshing == false else { return }
-        
-        self.refreshControl.beginRefreshing()
-        
         Manager.voteList.loadPrepListwithRank(from: delegate.wallet) { [unowned self] preps, editInfoList in
-            self.refreshControl.endRefreshing()
+            if let refresh = self.refreshControl {
+                refresh.endRefreshing()
+                self.tableView.refreshControl = nil
+                self.refreshControl = nil
+            }
             
             let orderedList: NewPRepListResponse? = {
                 guard var prepInfo = preps, let prepList = preps?.preps else { return preps }
@@ -326,5 +328,9 @@ extension PRepsViewController: PRepSearchDelegate {
         }
         
         return []
+    }
+    
+    var voteViewModel: VoteViewModel! {
+        return delegate.voteViewModel
     }
 }

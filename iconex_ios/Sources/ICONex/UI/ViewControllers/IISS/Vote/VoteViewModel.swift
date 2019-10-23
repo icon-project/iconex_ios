@@ -12,7 +12,7 @@ import RxCocoa
 import BigInt
 
 class VoteViewModel {
-    static let shared = VoteViewModel()
+//    static let shared = VoteViewModel()
     
     var originalList: PublishSubject<[MyVoteEditInfo]>
     var myList: BehaviorSubject<[MyVoteEditInfo]>
@@ -34,4 +34,4 @@ class VoteViewModel {
     }
 }
 
-let voteViewModel = VoteViewModel.shared
+//let voteViewModel = VoteViewModel.shared

@@ -32,7 +32,7 @@ class MyVoteViewController: BaseViewController {
     
     private var totalDelegation: TotalDelegation?
     
-    private var refreshControl = UIRefreshControl()
+    private var refreshControl: UIRefreshControl?
     
     private var selectedIndexPath: IndexPath? = nil
     
@@ -115,12 +115,10 @@ class MyVoteViewController: BaseViewController {
                 self?.delegate.headerSelected(index: 1)
             }).disposed(by: disposeBag)
         
-        tableView.refreshControl = refreshControl
-        
-        refreshControl.rx.controlEvent(.valueChanged)
-            .subscribe { [weak self] (_) in
-                self?.loadData()
-            }.disposed(by: disposeBag)
+        let refresh = UIRefreshControl()
+        tableView.refreshControl = refresh
+        self.refreshControl = refresh
+        refresh.beginRefreshing()
         
         Manager.voteList.currentAddedList.subscribe(onNext: { [unowned self] addedList in
             for i in addedList {
@@ -133,13 +131,10 @@ class MyVoteViewController: BaseViewController {
                 }
             }
             
-            voteViewModel.newList.onNext(self.newList)
+            self.delegate.voteViewModel.newList.onNext(self.newList)
             
             self.tableView.reloadData()
         }).disposed(by: disposeBag)
-        
-        voteViewModel.myList.onNext(self.myVoteList)
-        voteViewModel.newList.onNext(self.newList)
         
         self.isChanged.subscribe { (_) in
             let votedListPower: BigUInt = self.myVoteList.map {
@@ -244,8 +239,8 @@ class MyVoteViewController: BaseViewController {
                         self.newList[index] = item
                     }
 
-                    voteViewModel.myList.onNext(self.myVoteList)
-                    voteViewModel.newList.onNext(self.newList)
+                    self.delegate.voteViewModel.myList.onNext(self.myVoteList)
+                    self.delegate.voteViewModel.newList.onNext(self.newList)
 
                     self.isChanged.onNext(true)
 
@@ -254,7 +249,7 @@ class MyVoteViewController: BaseViewController {
                 }).show()
             }.disposed(by: disposeBag)
         
-        let combindedList = Observable.combineLatest(voteViewModel.myList, voteViewModel.newList)
+        let combindedList = Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList)
         
         combindedList.flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
                 let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
@@ -271,19 +266,6 @@ class MyVoteViewController: BaseViewController {
             
             let list = myList + newList
             
-            print("COUNT: \(list.count)")
-            
-            print("===========START===============")
-            print("---------My List-----------")
-            for i in myList {
-                print("\(i.prepName) - \(i.address)")
-            }
-            print("-----------NEW list------------")
-            for i in newList {
-                print("\(i.prepName) - \(i.address)")
-            }
-            print("===========END===============")
-            
             var delList = [[String: Any]]()
             
             var testTotalDelegation: BigUInt = 0
@@ -292,16 +274,13 @@ class MyVoteViewController: BaseViewController {
                 
                 let value: String = {
                     if let edit = i.editedDelegate {
-//                        print("\(i.prepName): \(edit)")
                         testTotalDelegation += edit
                         return edit.toHexString()
                     } else if let myDelegate = i.myDelegate {
-//                        print("\(i.prepName): \(myDelegate)")
                         testTotalDelegation += myDelegate
                         return myDelegate.toHexString()
                     } else {
                         let zero = BigUInt(0).toHexString()
-//                        print("\(i.prepName): \(zero.hexToBigUInt()!) hex: \(zero)")
                         return zero
                     }
                 }()
@@ -312,17 +291,8 @@ class MyVoteViewController: BaseViewController {
                 delList.append(info)
             }
             
-            print("======Check======")
-            print(delList)
-            print("======END======")
-            
-            print("Real Voting Power \(self.totalDelegation?.votingPower ?? 0)")
-            print("Total Delegation: \(testTotalDelegation)")
-            
             guard let wallet = self.delegate.wallet else { return }
-            Log("Wallet out- \(wallet.name) \(self)")
             DispatchQueue.global().async {
-                Log("Wallet in - \(wallet.name) \(self)")
                 let delegationCall = Manager.icon.setDelegation(from: wallet, delegations: delList)
                 
                 DispatchQueue.main.async {
@@ -342,9 +312,6 @@ class MyVoteViewController: BaseViewController {
 
 extension MyVoteViewController {
     @objc func loadData() {
-        guard refreshControl.isRefreshing == false else { return }
-        refreshControl.beginRefreshing()
-        
         guard let wallet = self.delegate.wallet else { return }
         // getPReps
         Manager.voteList.loadPrepListwithRank(from: wallet) { [unowned self] (prepList, _) in
@@ -352,7 +319,13 @@ extension MyVoteViewController {
         }
         
         Manager.voteList.loadMyVotes(from: delegate.wallet) { [unowned self] tDelegation, myVotes in
-            self.refreshControl.endRefreshing()
+            if let refresh = self.refreshControl {
+                refresh.endRefreshing()
+                self.tableView.refreshControl = nil
+                self.refreshControl = nil
+            }
+            
+            
             self.totalDelegation = tDelegation
             
             self.myVoteList.removeAll()
@@ -376,8 +349,8 @@ extension MyVoteViewController {
             }
             self.isFirstLoad = false
             
-            voteViewModel.myList.onNext(self.myVoteList)
-            voteViewModel.originalList.onNext(self.myVoteList)
+            self.delegate.voteViewModel.myList.onNext(self.myVoteList)
+            self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
             self.tableView.reloadData()
         }
         
@@ -441,7 +414,7 @@ extension MyVoteViewController: UITableViewDataSource {
 
             }).disposed(by: cell.cellBag)
             
-            voteViewModel.voteCount.subscribe(onNext: { [unowned cell] (count) in
+            delegate.voteViewModel.voteCount.subscribe(onNext: { [unowned cell] (count) in
                 cell.voteHeader.size16(text: "Vote (\(count)/10)", color: .gray77, weight: .medium, align: .left)
             }).disposed(by: cell.cellBag)
             
@@ -614,7 +587,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     }).disposed(by: cell.disposeBag)
                 
                 cell.slider.rx.controlEvent(.touchUpInside).subscribe { [unowned self] (_) in
-                    voteViewModel.myList.onNext(self.myVoteList)
+                    self.delegate.voteViewModel.myList.onNext(self.myVoteList)
                 }.disposed(by: cell.disposeBag)
                 
                 // textfield
@@ -640,7 +613,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         this.percent = percent
                         
                         self.myVoteList[indexPath.row] = this
-                        voteViewModel.myList.onNext(self.myVoteList)
+                        self.delegate.voteViewModel.myList.onNext(self.myVoteList)
                         self.isChanged.onNext(true)
                         return
                     }
@@ -671,7 +644,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 }).disposed(by: cell.disposeBag)
                 
                 cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { [unowned self] (_) in
-                    voteViewModel.myList.onNext(self.myVoteList)
+                    self.delegate.voteViewModel.myList.onNext(self.myVoteList)
                 }.disposed(by: cell.disposeBag)
                 
             } else {
@@ -693,7 +666,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     .subscribe(onNext: { [unowned self] in
                         self.newList.remove(at: indexPath.row - self.myVoteList.count)
                         Manager.voteList.remove(prep: info)
-                        voteViewModel.newList.onNext(self.newList)
+                        self.delegate.voteViewModel.newList.onNext(self.newList)
                         self.isChanged.onNext(true)
                         tableView.reloadData()
                     }).disposed(by: cell.disposeBag)
@@ -816,7 +789,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     }).disposed(by: cell.disposeBag)
                 
                 cell.slider.rx.controlEvent(.touchUpInside).subscribe { [unowned self] (_) in
-                    voteViewModel.newList.onNext(self.newList)
+                    self.delegate.voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
                 
                 cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { [unowned self] (value) in
@@ -872,7 +845,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 }).disposed(by: cell.disposeBag)
                 
                 cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { [unowned self] (_) in
-                    voteViewModel.newList.onNext(self.newList)
+                    self.delegate.voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
             }
             

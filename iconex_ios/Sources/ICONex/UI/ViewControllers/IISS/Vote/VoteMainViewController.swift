@@ -18,6 +18,7 @@ protocol VoteMainDelegate: class {
     var stepLimit: String { get set }
     var maxFee: String { get set }
     var estimatedStep: BigUInt { get set }
+    var voteViewModel: VoteViewModel { get set }
 }
 
 class VoteMainViewController: BaseViewController, VoteMainDelegate {
@@ -28,8 +29,10 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     @IBOutlet weak var voteButton: UIButton!
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
+    var voteViewModel: VoteViewModel = VoteViewModel()
+    
     weak var wallet: ICXWallet!
-    weak var key: PrivateKey!
+    var key: PrivateKey!
     
     var stepLimit: String = ""
     var maxFee: String = ""
@@ -53,10 +56,20 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
             print("View Did Disappear - Vote Main")
             
             Manager.voteList.reset()
-            voteViewModel.dispose()
+//            voteViewModel.dispose()
         }
     }
+    deinit {
+        Log("deinit")
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let myVote = segue.destination as? MyVoteViewController {
+            myVote.delegate = self
+        } else if let prep = segue.destination as? PRepsViewController {
+            prep.delegate = self
+        }
+    }
     
     override func initializeComponents() {
         super.initializeComponents()
@@ -126,13 +139,13 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 self.votingList = list
             }).disposed(by: disposeBag)
         
-        children.forEach({
-            if let myVote = $0 as? MyVoteViewController {
-                myVote.delegate = self
-            } else if let prep = $0 as? PRepsViewController {
-                prep.delegate = self
-            }
-        })
+//        children.forEach({
+//            if let myVote = $0 as? MyVoteViewController {
+//                myVote.delegate = self
+//            } else if let prep = $0 as? PRepsViewController {
+//                prep.delegate = self
+//            }
+//        })
         
         voteButton.rx.tap.asControlEvent()
             .subscribe { [unowned self] (_) in

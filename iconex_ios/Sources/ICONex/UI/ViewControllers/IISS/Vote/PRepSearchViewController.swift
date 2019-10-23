@@ -13,6 +13,7 @@ import PanModal
 
 protocol PRepSearchDelegate {
     var prepList: [NewPReps] { get }
+    var voteViewModel: VoteViewModel! { get }
 }
 
 class PRepSearchViewController: BaseViewController {
@@ -88,11 +89,11 @@ class PRepSearchViewController: BaseViewController {
                 self.view.endEditing(true)
         }.disposed(by: disposeBag)
         
-        voteViewModel.newList.subscribe(onNext: { (list) in
+        delegate.voteViewModel.newList.subscribe(onNext: { (list) in
             self.newList = list
         }).disposed(by: disposeBag)
         
-        voteViewModel.myList.subscribe(onNext: { (list) in
+        delegate.voteViewModel.myList.subscribe(onNext: { (list) in
             self.myVoteList = list
         }).disposed(by: disposeBag)
     }
@@ -151,7 +152,7 @@ extension PRepSearchViewController: UITableViewDataSource {
             let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil, grade: prep.grade)
             
             if Manager.voteList.add(prep: myEdited) {
-                guard let total = try? voteViewModel.voteCount.value() else { return }
+                guard let total = try? self.delegate.voteViewModel.voteCount.value() else { return }
                 Tool.voteToast(count: total)
                 self.tableView.reloadData()
                 

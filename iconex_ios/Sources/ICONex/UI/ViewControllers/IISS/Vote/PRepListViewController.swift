@@ -235,4 +235,8 @@ extension PRepListViewController: PRepSearchDelegate {
         
         return []
     }
+    
+    var voteViewModel: VoteViewModel! {
+        return nil
+    }
 }

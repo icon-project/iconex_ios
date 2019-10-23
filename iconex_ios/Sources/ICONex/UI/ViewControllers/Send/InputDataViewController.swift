@@ -208,7 +208,7 @@ extension InputDataViewController: PanModalPresentable {
 extension InputDataViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         guard let former = textView.text as NSString? else { return false }
-        var replaced = former.replacingCharacters(in: range, with: text)
+        let replaced = former.replacingCharacters(in: range, with: text)
         
         let byte = Int64(replaced.lengthOfBytes(using: .utf8))
         guard byte <= 524288 else { return false }
