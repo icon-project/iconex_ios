@@ -52,6 +52,8 @@ class CreateQRCodeViewController: BaseViewController {
     override func initializeComponents() {
         super.initializeComponents()
         
+        pageControl.isUserInteractionEnabled = false
+        
         navTitleView.actionHandler = {
             self.dismiss(animated: true, completion: nil)
         }

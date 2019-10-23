@@ -27,6 +27,8 @@ class StartViewController: BaseViewController {
     override func initializeComponents() {
         super.initializeComponents()
         
+        page.isUserInteractionEnabled = false
+        
         scroll.rx.didEndDecelerating.subscribe(onNext: { [unowned self] in
             self.page.currentPage = (Int)(self.scroll.contentOffset.x / self.scroll.frame.width)
         }).disposed(by: disposeBag)
