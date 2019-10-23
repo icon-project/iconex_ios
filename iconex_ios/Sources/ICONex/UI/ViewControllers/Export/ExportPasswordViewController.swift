@@ -58,6 +58,9 @@ class ExportPasswordViewController: BaseViewController {
             guard Validator.validateCharacterSet(password: value) else {
                 return "Error.Password.CharacterSet".localized
             }
+            guard Validator.validateSpecialCharacter(password: value) else {
+                return "Error.Password.Invaild.SpecialCharacter".localized
+            }
             return nil
         })
         
@@ -82,6 +85,10 @@ class ExportPasswordViewController: BaseViewController {
                     return
                 }
                 guard Validator.validateCharacterSet(password: password) else {
+                    self.delegate.invalidated()
+                    return
+                }
+                guard Validator.validateSpecialCharacter(password: password) else {
                     self.delegate.invalidated()
                     return
                 }

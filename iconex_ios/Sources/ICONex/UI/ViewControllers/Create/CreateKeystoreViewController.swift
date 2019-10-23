@@ -108,6 +108,10 @@ class CreateKeystoreViewController: BaseViewController {
                     self.delegate.invalidated()
                     return
                 }
+                guard Validator.validateSpecialCharacter(password: password) else {
+                    self.delegate.invalidated()
+                    return
+                }
                 if password != confirm {
 //                    self.confirmInputBox.setError(message: "Error.Password.Mismatch".localized)
                     self.delegate.invalidated()

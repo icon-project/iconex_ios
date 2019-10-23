@@ -248,6 +248,10 @@ extension LoadNameViewController {
             delegate.invalidated()
             return "Error.Password.Serialize".localized
         }
+        guard Validator.validateCharacterSet(password: text) else {
+            delegate.invalidated()
+            return "Error.Password.Invaild.SpecialCharacter".localized
+        }
         return nil
     }
     
