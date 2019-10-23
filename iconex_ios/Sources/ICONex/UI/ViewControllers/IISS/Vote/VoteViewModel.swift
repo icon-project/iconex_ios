@@ -27,12 +27,10 @@ class VoteViewModel {
         self.myList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.newList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.voteCount = BehaviorSubject<Int>(value: Manager.voteList.votesCount)
-        
-        Observable.combineLatest(self.myList, self.newList).flatMapLatest { (myList, newList) -> Observable<Int> in
-            let total = myList + newList
-            return Observable.just(total.count)
-        }.bind(to: self.voteCount)
-        .disposed(by: disposeBag)
+    }
+    
+    func dispose() {
+        disposeBag = DisposeBag()
     }
 }
 

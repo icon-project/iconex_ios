@@ -265,6 +265,7 @@ extension ICONManager {
     }
     
     func setDelegation(from: ICXWallet, delegations: [[String: Any]]) -> CallTransaction {
+        print("$ 이름: \(from.name)")
         let del = ["delegations": delegations]
         
         let call = CallTransaction()
@@ -281,6 +282,9 @@ extension ICONManager {
             call.stepLimit(estimated)
         case .failure(let error):
             Log("ERROR \(error)")
+            print("$ delegation wallet: \(from.name)")
+            print("delegations \(delegations)")
+            
             break
         }
         

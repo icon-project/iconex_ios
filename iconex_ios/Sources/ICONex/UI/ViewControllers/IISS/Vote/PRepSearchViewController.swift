@@ -29,6 +29,10 @@ class PRepSearchViewController: BaseViewController {
     
     var newList = [MyVoteEditInfo]()
     
+    var myVoteList = [MyVoteEditInfo]()
+    
+    var isViewMode: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -87,6 +91,10 @@ class PRepSearchViewController: BaseViewController {
         voteViewModel.newList.subscribe(onNext: { (list) in
             self.newList = list
         }).disposed(by: disposeBag)
+        
+        voteViewModel.myList.subscribe(onNext: { (list) in
+            self.myVoteList = list
+        }).disposed(by: disposeBag)
     }
 }
 
@@ -112,18 +120,45 @@ extension PRepSearchViewController: UITableViewDataSource {
         cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
+        
+        let totalDelegatedDecimal = Manager.voteList.preps?.totalDelegated.decimalNumber ?? 0
+        let prepDelegated = prep.delegated.decimalNumber ?? 0
+        
+        let delegatedPercent: Float = {
+            if prepDelegated > 0 {
+                return (prepDelegated / totalDelegatedDecimal).floatValue * 100
+            } else {
+                return 0.0
+            }
+        }()
+        
+        cell.totalVotePercent.size12(text: "(" + String(format: "%.1f", delegatedPercent) + "%)", color: .gray77, weight: .semibold, align: .right)
+        
         cell.active = true
         
-        cell.addButton.isEnabled = self.newList.filter({ $0.address == prep.address }).count == 0
+        cell.addButton.isHidden = self.isViewMode
+        
+        let myVoteChecker = self.myVoteList.filter({ $0.address == prep.address }).count == 0
+        let newVoteChecker = self.newList.filter({ $0.address == prep.address }).count == 0
+        
+        let checker = myVoteChecker && newVoteChecker
+        
+        cell.addButton.isEnabled = checker
         
         cell.addButton.rx.tap.asControlEvent().subscribe { (_) in
+            self.view.endEditing(true)
+            
             let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil, grade: prep.grade)
-            self.newList.append(myEdited)
             
-            voteViewModel.newList.onNext(self.newList)
-            
-            guard let total = try? voteViewModel.voteCount.value() else { return }
-            Tool.voteToast(count: total)
+            if Manager.voteList.add(prep: myEdited) {
+                guard let total = try? voteViewModel.voteCount.value() else { return }
+                Tool.voteToast(count: total)
+                self.tableView.reloadData()
+                
+            } else {
+                let cellRect = tableView.rectForRow(at: indexPath)
+                self.tableView.showToolTip(positionY: cellRect.origin.y-14, text: "PRepView.ToolTip.Maximum".localized)
+            }
             
         }.disposed(by: cell.disposeBag)
         
@@ -131,7 +166,6 @@ extension PRepSearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
         
         guard let wallet = self.wallet else { return }
         let prepInfo = self.searched[indexPath.row]
@@ -143,6 +177,7 @@ extension PRepSearchViewController: UITableViewDataSource {
                 Alert.prepDetail(prepInfo: prep).show()
             }
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 

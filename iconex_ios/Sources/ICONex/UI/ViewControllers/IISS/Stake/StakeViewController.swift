@@ -243,7 +243,9 @@ class StakeViewController: BaseViewController {
                         
                         Log("Total = \(totalValue)\nStaked = \(stakeValue)\nVoted = \(delegated.totalDelegated)")
                         
-                        if let totalNum = totalValue.decimalNumber ,let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber, let unstakeNum = staked.unstake?.decimalNumber {
+                        if let totalNum = totalValue.decimalNumber ,let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber {
+                            
+                            let unstakeNum = staked.unstake?.decimalNumber ?? 0.0
                             
                             let stakeRate: Decimal = {
                                 let top = stakeNum + unstakeNum

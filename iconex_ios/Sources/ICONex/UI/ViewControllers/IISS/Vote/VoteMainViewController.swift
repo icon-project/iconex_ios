@@ -47,8 +47,16 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        Manager.voteList.reset()
+        super.viewDidDisappear(animated)
+        
+        if self.isMovingFromParent {
+            print("View Did Disappear - Vote Main")
+            
+            Manager.voteList.reset()
+            voteViewModel.dispose()
+        }
     }
+    
     
     override func initializeComponents() {
         super.initializeComponents()
@@ -147,7 +155,8 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                         } else if let myDelegate = i.myDelegate {
                             return myDelegate.toHexString()
                         } else {
-                            return "0x0"
+                            let zero = BigUInt(0).toHexString()
+                            return zero
                         }
                     }()
                     
@@ -176,6 +185,12 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 }).show()
                 
         }.disposed(by: disposeBag)
+        
+        Observable.combineLatest(voteViewModel.myList, voteViewModel.newList).flatMapLatest { (myList, newList) -> Observable<Int> in
+            let total = myList + newList
+            return Observable.just(total.count)
+        }.bind(to: voteViewModel.voteCount)
+        .disposed(by: disposeBag)
     }
 }
 
