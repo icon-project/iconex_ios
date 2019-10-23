@@ -138,7 +138,7 @@ class MainViewController: BaseViewController, Floatable {
                 self.tokenList = DB.allTokenList().sorted { (lhs, rhs) -> Bool in
                     return lhs.created < rhs.created
                 }
-                
+                self.collectionView.reloadData()
                 self.setCoinList()
             }.disposed(by: disposeBag)
         
@@ -324,7 +324,12 @@ class MainViewController: BaseViewController, Floatable {
         let index: Int = {
             let x: Int = {
                 let offsetX = self.collectionView.contentOffset.x
-                return Int(offsetX / self.collectionView.frame.width)
+                let x = Int(offsetX / self.collectionView.frame.width)
+                if self.walletList.count <= x {
+                    return self.walletList.count - 1
+                } else {
+                    return x
+                }
             }()
             
             return x
@@ -520,7 +525,7 @@ extension MainViewController: UICollectionViewDataSource {
         }
         
         cell.handler = {
-            mainViewModel.reload.onNext(true)
+            self.checkFloater()
         }
         return cell
     }
