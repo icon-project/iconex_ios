@@ -79,7 +79,7 @@ class TokenDetailViewController: BaseViewController {
         
         
         modifyCompleteButton.darkRounded()
-        modifyCompleteButton.setTitle("Complete", for: .normal)
+        modifyCompleteButton.setTitle("Common.Complete".localized, for: .normal)
         
         // nameInputBox share
         let nameBox = nameInputBox.textField.rx.text.orEmpty.share(replay: 1)

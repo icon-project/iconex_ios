@@ -39,6 +39,9 @@ class PRepViewCell: UITableViewCell {
         totalVoteLabel.size12(text: "Total Votes (%)", color: .gray128, weight: .light, align: .left)
         statusView.corner(statusView.frame.height / 2)
         statusView.border(1.0, .mint2)
+        
+        addButton.setImage(#imageLiteral(resourceName: "icAddListEnabled"), for: .normal)
+        addButton.setImage(#imageLiteral(resourceName: "icAddListDisabled"), for: .highlighted)
     }
     
     override func prepareForReuse() {

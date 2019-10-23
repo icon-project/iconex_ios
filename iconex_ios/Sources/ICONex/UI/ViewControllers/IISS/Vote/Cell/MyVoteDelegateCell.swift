@@ -13,6 +13,7 @@ import RxCocoa
 class MyVoteDelegateCell: UITableViewCell {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var dotView: UIView!
+    @IBOutlet weak var rank: UILabel!
     @IBOutlet weak var prepName: UILabel!
     @IBOutlet weak var prepInfo: UILabel!
     @IBOutlet weak var subtitleLabel: UILabel!

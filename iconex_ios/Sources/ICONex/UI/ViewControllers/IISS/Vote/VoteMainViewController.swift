@@ -53,10 +53,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         super.viewDidDisappear(animated)
         
         if self.isMovingFromParent {
-            print("View Did Disappear - Vote Main")
-            
             Manager.voteList.reset()
-//            voteViewModel.dispose()
         }
     }
     deinit {

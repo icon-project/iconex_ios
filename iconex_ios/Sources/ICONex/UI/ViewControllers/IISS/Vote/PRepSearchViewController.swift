@@ -157,8 +157,7 @@ extension PRepSearchViewController: UITableViewDataSource {
                 self.tableView.reloadData()
                 
             } else {
-                let cellRect = tableView.rectForRow(at: indexPath)
-                self.tableView.showToolTip(positionY: cellRect.origin.y-14, text: "PRepView.ToolTip.Maximum".localized)
+                Tool.toast(message: "PRepView.ToolTip.Maximum".localized)
             }
             
         }.disposed(by: cell.disposeBag)

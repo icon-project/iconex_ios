@@ -275,8 +275,8 @@ extension PRepsViewController: UITableViewDataSource {
             .subscribe(onNext: { [unowned self] in
                 let editInfo = self.editInfoList![indexPath.row]
                 if Manager.voteList.contains(address: editInfo.address) || checker > 0 {
-                    let cellRect = tableView.rectForRow(at: indexPath)
-                    self.tableView.showToolTip(positionY: cellRect.origin.y-14, text: "PRepView.ToolTip.Exist".localized)
+                    self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "PRepView.ToolTip.Exist".localized)
+                    self.tableView.reloadData()
                 } else {
                     if Manager.voteList.add(prep: editInfo) {
                         let myVoteCount = self.myvoteList?.count ?? 0
@@ -285,13 +285,12 @@ extension PRepsViewController: UITableViewDataSource {
                         let total = myVoteCount + newVoteCount
                         Tool.voteToast(count: total)
                     } else {
-                        let cellRect = tableView.rectForRow(at: indexPath)
-                        self.tableView.showToolTip(positionY: cellRect.origin.y-14, text: "PRepView.ToolTip.Maximum".localized)
+                        self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "PRepView.ToolTip.Maximum".localized)
                     }
                 }
             }).disposed(by: cell.disposeBag)
         
-        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address) || checker > 0
+        cell.addButton.isHighlighted = Manager.voteList.contains(address: prep.address) || checker > 0
         
         return cell
     }

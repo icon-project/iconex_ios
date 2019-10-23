@@ -282,8 +282,6 @@ extension ICONManager {
             call.stepLimit(estimated)
         case .failure(let error):
             Log("ERROR \(error)")
-            print("$ delegation wallet: \(from.name)")
-            print("delegations \(delegations)")
             
             break
         }

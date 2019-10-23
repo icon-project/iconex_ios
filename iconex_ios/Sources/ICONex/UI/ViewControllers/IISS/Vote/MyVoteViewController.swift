@@ -38,7 +38,7 @@ class MyVoteViewController: BaseViewController {
     
     private var sectionHeader = UIView()
     
-    private var scrollPoint: CGFloat = 0
+    @IBOutlet weak var tableFooterView: UIView!
     
     private var stepPrice: BigUInt = Manager.icon.stepPrice ?? 0
     
@@ -72,20 +72,39 @@ class MyVoteViewController: BaseViewController {
     
     private var isFirstLoad: Bool = true
     
+    private var stack: UIStackView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        print("View Did Disappear - My Vote View")
-    }
-    
     override func initializeComponents() {
         super.initializeComponents()
+        
+        let messageTitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 40))
+        messageTitle.size14(text: "MyVoteView.Empty.Title".localized, color: .mint1, align: .center)
+        messageTitle.numberOfLines = 0
+         
+        let messageSubtitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 40))
+        messageSubtitle.size12(text: "MyVoteView.Empty.Desc".localized, color: .gray128, weight: .light, align: .center)
+        messageSubtitle.numberOfLines = 0
+        
+        
+        stack = UIStackView(arrangedSubviews: [messageTitle,messageSubtitle])
+        stack?.axis = .vertical
+        
+        stack?.spacing = 16
+        stack?.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let stackView = self.stack {
+            stackView.isHidden = true
+            self.tableFooterView.addSubview(stackView)
+            stackView.topAnchor.constraint(equalTo: self.tableFooterView.topAnchor, constant: 40).isActive = true
+            stackView.widthAnchor.constraint(equalTo: self.tableFooterView.widthAnchor).isActive = true
+            stackView.bottomAnchor.constraint(equalTo: self.tableFooterView.bottomAnchor, constant: -10).isActive = true
+        }
         
         footerBox.layer.cornerRadius = 8
         footerBox.clipsToBounds = true
@@ -121,6 +140,9 @@ class MyVoteViewController: BaseViewController {
         refresh.beginRefreshing()
         
         Manager.voteList.currentAddedList.subscribe(onNext: { [unowned self] addedList in
+            guard !addedList.isEmpty else {
+                return
+            }
             for i in addedList {
                 let checker = self.newList.contains(where: { (new) -> Bool in
                     return new.address == i.address
@@ -249,35 +271,31 @@ class MyVoteViewController: BaseViewController {
                 }).show()
             }.disposed(by: disposeBag)
         
-        let combindedList = Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList)
+        Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList).flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
+            let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
+            
+            let newVoteChecker = self.newList.filter { (newList) -> Bool in
+                let edited = newList.editedDelegate ?? BigUInt.zero
+                return edited > BigUInt.zero
+            }.count > 0
+            
+            return Observable.just(myVoteChecker || newVoteChecker)
+            
+        }).bind(to: resetButton.rx.isEnabled)
+        .disposed(by: disposeBag)
         
-        combindedList.flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
-                let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
-                let newListChecker = self.newList.filter({ $0.percent != 0.0 }).count > 0
-                
-                return Observable.just(myVoteChecker || newListChecker)
-                
-            }).bind(to: resetButton.rx.isEnabled)
-            .disposed(by: disposeBag)
         
-        
-        combindedList.skip(1).subscribe(onNext: { [unowned self] myList, newList in
+        Observable.merge(delegate.voteViewModel.myList, delegate.voteViewModel.newList).subscribe(onNext: { [unowned self] list in
             print("ESTIMATE!!!!!")
             
-            let list = myList + newList
-            
             var delList = [[String: Any]]()
-            
-            var testTotalDelegation: BigUInt = 0
             
             for i in list {
                 
                 let value: String = {
                     if let edit = i.editedDelegate {
-                        testTotalDelegation += edit
                         return edit.toHexString()
                     } else if let myDelegate = i.myDelegate {
-                        testTotalDelegation += myDelegate
                         return myDelegate.toHexString()
                     } else {
                         let zero = BigUInt(0).toHexString()
@@ -286,7 +304,6 @@ class MyVoteViewController: BaseViewController {
                 }()
                 
                 let info = ["address": i.address, "value": value]
-                
                 
                 delList.append(info)
             }
@@ -351,11 +368,23 @@ extension MyVoteViewController {
             
             if self.isFirstLoad {
                 self.available.onNext(tDelegation?.votingPower ?? 0)
+                self.delegate.voteViewModel.myList.onNext(self.myVoteList)
+                self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
             }
             self.isFirstLoad = false
             
-            self.delegate.voteViewModel.myList.onNext(self.myVoteList)
-            self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
+            let count = self.myVoteList.count + self.newList.count
+            self.footerBox.isHidden = count == 0
+            
+            if count == 0 {
+                self.stack?.isHidden = false
+                self.tableView.separatorStyle = .none
+                
+            } else {
+                self.stack?.isHidden = true
+                self.tableView.separatorStyle = .singleLine
+            }
+            
             self.tableView.reloadData()
         }
         
@@ -373,20 +402,7 @@ extension MyVoteViewController: UITableViewDataSource {
             
         } else {
             let count = self.myVoteList.count + self.newList.count
-            self.footerBox.isHidden = count == 0
             
-//            if count == 0 {
-//                let messageTitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 40))
-//                messageTitle.size20(text: "MyVoteView.Empty.Title".localized, color: .mint1, align: .center)
-//                messageTitle.sizeToFit()
-//                
-//                self.tableView.backgroundView = messageTitle
-//                self.tableView.separatorStyle = .none
-//                
-//            } else {
-//                self.tableView.backgroundView = nil
-//                self.tableView.separatorStyle = .singleLine
-//            }
             return count
         }
     }
@@ -456,6 +472,13 @@ extension MyVoteViewController: UITableViewDataSource {
             if indexPath.row < myVoteList.count {
                 var info = myVoteList[indexPath.row]
                 
+                // add rank
+                let rank: Int = self.prepInfo?.preps.first(where: { (prep) -> Bool in
+                    return prep.address == info.address
+                })?.rank ?? 0
+                
+                cell.rank.size12(text: "\(rank).", color: .gray77, weight: .semibold)
+                
                 let my: BigUInt = {
                     if let edit = info.editedDelegate {
                         return edit
@@ -509,7 +532,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.addButton.isHighlighted = false
                 cell.addButton.rx.tap.asControlEvent()
                     .subscribe { (_) in
-                        self.tableView.showToolTip(positionY: cell.frame.origin.y-self.scrollPoint, text: "MyVoteView.ToolTip.Delete".localized)
+                        self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "MyVoteView.ToolTip.Delete".localized)
                     }.disposed(by: cell.disposeBag)
                 
                 
@@ -655,6 +678,13 @@ extension MyVoteViewController: UITableViewDataSource {
             } else {
                 let info = self.newList[indexPath.row - myVoteList.count]
                 cell.prepName.size12(text: info.prepName, color: .gray77, weight: .semibold)
+                
+                // add rank
+                let rank: Int = self.prepInfo?.preps.first(where: { (prep) -> Bool in
+                    return prep.address == info.address
+                })?.rank ?? 0
+                
+                cell.rank.size12(text: "\(rank).", color: .gray77, weight: .semibold)
                 
                 let grade: String = {
                     switch info.grade {
@@ -861,10 +891,6 @@ extension MyVoteViewController: UITableViewDataSource {
 }
 
 extension MyVoteViewController: UITableViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.scrollPoint = scrollView.contentOffset.y
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0
