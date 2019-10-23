@@ -45,7 +45,7 @@ class PRepsViewController: BaseViewController, Floatable {
     @IBOutlet weak var secondItem: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    var delegate: VoteMainDelegate!
+    unowned var delegate: VoteMainDelegate!
     
     var floater: Floater = {
         return Floater(type: .search)
@@ -111,7 +111,7 @@ class PRepsViewController: BaseViewController, Floatable {
             search.pop(self)
         }).disposed(by: disposeBag)
         
-        sectionHeader.orderButton.rx.tap.asControlEvent().subscribe { (_) in
+        sectionHeader.orderButton.rx.tap.asControlEvent().subscribe { [unowned self] (_) in
             switch self.sortType {
             case .rankDescending:
                 self.sortType = .rankAscending
@@ -157,7 +157,7 @@ extension PRepsViewController {
         
         self.refreshControl.beginRefreshing()
         
-        Manager.voteList.loadPrepListwithRank(from: delegate.wallet) { preps, editInfoList in
+        Manager.voteList.loadPrepListwithRank(from: delegate.wallet) { [unowned self] preps, editInfoList in
             self.refreshControl.endRefreshing()
             
             let orderedList: NewPRepListResponse? = {
@@ -270,7 +270,7 @@ extension PRepsViewController: UITableViewDataSource {
         cell.active = true
         
         cell.addButton.rx.tap
-            .subscribe(onNext: {
+            .subscribe(onNext: { [unowned self] in
                 let editInfo = self.editInfoList![indexPath.row]
                 if Manager.voteList.contains(address: editInfo.address) || checker > 0 {
                     let cellRect = tableView.rectForRow(at: indexPath)

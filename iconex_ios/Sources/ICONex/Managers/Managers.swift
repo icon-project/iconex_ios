@@ -265,7 +265,7 @@ extension ICONManager {
     }
     
     func setDelegation(from: ICXWallet, delegations: [[String: Any]]) -> CallTransaction {
-        print("$ 이름: \(from.name)")
+        Log("Wallet - \(from.name)")
         let del = ["delegations": delegations]
         
         let call = CallTransaction()

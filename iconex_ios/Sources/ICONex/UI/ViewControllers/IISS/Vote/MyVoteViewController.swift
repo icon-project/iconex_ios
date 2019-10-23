@@ -12,7 +12,7 @@ import RxCocoa
 import BigInt
 
 class MyVoteViewController: BaseViewController {
-    var delegate: VoteMainDelegate!
+    unowned var delegate: VoteMainDelegate!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerFirstItem: UILabel!
     @IBOutlet weak var headerSecondItem: UIButton!
@@ -118,11 +118,11 @@ class MyVoteViewController: BaseViewController {
         tableView.refreshControl = refreshControl
         
         refreshControl.rx.controlEvent(.valueChanged)
-            .subscribe { (_) in
-                self.loadData()
+            .subscribe { [weak self] (_) in
+                self?.loadData()
             }.disposed(by: disposeBag)
         
-        Manager.voteList.currentAddedList.subscribe(onNext: { addedList in
+        Manager.voteList.currentAddedList.subscribe(onNext: { [unowned self] addedList in
             for i in addedList {
                 let checker = self.newList.contains(where: { (new) -> Bool in
                     return new.address == i.address
@@ -226,7 +226,7 @@ class MyVoteViewController: BaseViewController {
 //        }.disposed(by: disposeBag)
         
         resetButton.rx.tap
-            .subscribe { (_) in
+            .subscribe { [unowned self] (_) in
                 Alert.basic(title: "MyVoteView.Alert.Reset".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     for (index, list) in self.myVoteList.enumerated() {
                         var item = list
@@ -256,7 +256,7 @@ class MyVoteViewController: BaseViewController {
         
         let combindedList = Observable.combineLatest(voteViewModel.myList, voteViewModel.newList)
         
-        combindedList.flatMapLatest({ (myList, newList) -> Observable<Bool> in
+        combindedList.flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
                 let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
                 let newListChecker = self.newList.filter({ $0.percent != 0.0 }).count > 0
                 
@@ -266,7 +266,7 @@ class MyVoteViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         
-        combindedList.skip(1).subscribe(onNext: { myList, newList in
+        combindedList.skip(1).subscribe(onNext: { [unowned self] myList, newList in
             print("ESTIMATE!!!!!")
             
             let list = myList + newList
@@ -320,10 +320,9 @@ class MyVoteViewController: BaseViewController {
             print("Total Delegation: \(testTotalDelegation)")
             
             guard let wallet = self.delegate.wallet else { return }
-            print("$ Wallet Name: \(wallet.name)")
-            
-            DispatchQueue.global().sync {
-                print("$ Wallet Name second: \(wallet.name)")
+            Log("Wallet out- \(wallet.name) \(self)")
+            DispatchQueue.global().async {
+                Log("Wallet in - \(wallet.name) \(self)")
                 let delegationCall = Manager.icon.setDelegation(from: wallet, delegations: delList)
                 
                 DispatchQueue.main.async {
@@ -348,7 +347,7 @@ extension MyVoteViewController {
         
         guard let wallet = self.delegate.wallet else { return }
         // getPReps
-        Manager.voteList.loadPrepListwithRank(from: wallet) { (prepList, _) in
+        Manager.voteList.loadPrepListwithRank(from: wallet) { [unowned self] (prepList, _) in
             self.prepInfo = prepList
         }
         
@@ -426,7 +425,7 @@ extension MyVoteViewController: UITableViewDataSource {
             let total = info.totalDelegated + votingPower
             let totalDecimal = total.decimalNumber ?? 0
             
-            self.available.subscribe(onNext: { (availablePower) in
+            self.available.subscribe(onNext: { [unowned cell] (availablePower) in
                 let powerDecimal = availablePower.decimalNumber ?? 0
                 let rate = powerDecimal / totalDecimal
 
@@ -442,7 +441,7 @@ extension MyVoteViewController: UITableViewDataSource {
 
             }).disposed(by: cell.cellBag)
             
-            voteViewModel.voteCount.subscribe(onNext: { (count) in
+            voteViewModel.voteCount.subscribe(onNext: { [unowned cell] (count) in
                 cell.voteHeader.size16(text: "Vote (\(count)/10)", color: .gray77, weight: .medium, align: .left)
             }).disposed(by: cell.cellBag)
             
@@ -614,12 +613,12 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                     }).disposed(by: cell.disposeBag)
                 
-                cell.slider.rx.controlEvent(.touchUpInside).subscribe { (_) in
+                cell.slider.rx.controlEvent(.touchUpInside).subscribe { [unowned self] (_) in
                     voteViewModel.myList.onNext(self.myVoteList)
                 }.disposed(by: cell.disposeBag)
                 
                 // textfield
-                cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { (value) in
+                cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { [unowned self] (value) in
                     guard let bigValue = Tool.stringToBigUInt(inputText: value, fixed: true) else { return }
                     
                     var this = self.myVoteList[indexPath.row]
@@ -671,7 +670,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     
                 }).disposed(by: cell.disposeBag)
                 
-                cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { (_) in
+                cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { [unowned self] (_) in
                     voteViewModel.myList.onNext(self.myVoteList)
                 }.disposed(by: cell.disposeBag)
                 
@@ -691,7 +690,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.addButton.isHighlighted = true
                 cell.addButton.rx.tap
-                    .subscribe(onNext: {
+                    .subscribe(onNext: { [unowned self] in
                         self.newList.remove(at: indexPath.row - self.myVoteList.count)
                         Manager.voteList.remove(prep: info)
                         voteViewModel.newList.onNext(self.newList)
@@ -778,7 +777,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 }
                 
                 cell.slider.rx.value.skip(1).distinctUntilChanged()
-                    .subscribe(onNext: { value in
+                    .subscribe(onNext: { [unowned self] value in
                         var this = self.newList[indexPath.row - self.myVoteList.count]
                         
                         let realValue = roundf(value)
@@ -816,11 +815,11 @@ extension MyVoteViewController: UITableViewDataSource {
                         self.isChanged.onNext(true)
                     }).disposed(by: cell.disposeBag)
                 
-                cell.slider.rx.controlEvent(.touchUpInside).subscribe { (_) in
+                cell.slider.rx.controlEvent(.touchUpInside).subscribe { [unowned self] (_) in
                     voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
                 
-                cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { (value) in
+                cell.myVotesField.rx.text.orEmpty.skip(1).subscribe(onNext: { [unowned self] (value) in
                     guard let bigValue = Tool.stringToBigUInt(inputText: value, fixed: true) else { return }
 
                     var this = self.newList[indexPath.row - self.myVoteList.count]
@@ -872,7 +871,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     self.isChanged.onNext(true)
                 }).disposed(by: cell.disposeBag)
                 
-                cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { (_) in
+                cell.myVotesField.rx.controlEvent(.editingDidEnd).subscribe { [unowned self] (_) in
                     voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
             }

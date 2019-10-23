@@ -12,7 +12,7 @@ import RxCocoa
 import ICONKit
 import BigInt
 
-protocol VoteMainDelegate {
+protocol VoteMainDelegate: class {
     var wallet: ICXWallet! { get set }
     func headerSelected(index: Int)
     var stepLimit: String { get set }
@@ -28,8 +28,8 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
     @IBOutlet weak var voteButton: UIButton!
     @IBOutlet weak var bottomHeight: NSLayoutConstraint!
     
-    var wallet: ICXWallet!
-    var key: PrivateKey!
+    weak var wallet: ICXWallet!
+    weak var key: PrivateKey!
     
     var stepLimit: String = ""
     var maxFee: String = ""
@@ -80,7 +80,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         
         voteButton.isEnabled = false
         
-        Observable.combineLatest(voteViewModel.originalList, voteViewModel.myList, voteViewModel.newList).flatMapLatest { (originalList, myList, newList) -> Observable<Bool> in
+        Observable.combineLatest(voteViewModel.originalList, voteViewModel.myList, voteViewModel.newList).flatMapLatest { [unowned self] (originalList, myList, newList) -> Observable<Bool> in
             for i in myList {
                 let newPrepChecker = originalList.contains(where: { (list) -> Bool in
                     return i.address == list.address
@@ -117,12 +117,12 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         }.bind(to: self.voteButton.rx.isEnabled).disposed(by: disposeBag)
         
         voteViewModel.myList
-            .subscribe(onNext: { (list) in
+            .subscribe(onNext: { [unowned self] (list) in
                 self.votedList = list
             }).disposed(by: disposeBag)
         
         voteViewModel.newList
-            .subscribe(onNext: { (list) in
+            .subscribe(onNext: { [unowned self] (list) in
                 self.votingList = list
             }).disposed(by: disposeBag)
         
@@ -135,7 +135,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         })
         
         voteButton.rx.tap.asControlEvent()
-            .subscribe { (_) in
+            .subscribe { [unowned self] (_) in
                 guard let pk = self.key else { return }
                 
                 let balance = Manager.balance.getBalance(wallet: self.wallet) ?? 0
