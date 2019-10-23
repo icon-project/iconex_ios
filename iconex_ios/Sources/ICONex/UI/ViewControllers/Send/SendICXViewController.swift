@@ -65,8 +65,6 @@ class SendICXViewController: BaseViewController {
     
     var dataType: InputType = .utf8
     
-    var sendHandler: ((_ isSuccess: Bool) -> Void)?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -155,7 +153,7 @@ class SendICXViewController: BaseViewController {
         sendButton.isEnabled = false
         
         if let token = self.token {
-            balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
+            balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract) ?? 0
             balanceLabel.size24(text: balance.toString(decimal: token.decimal, token.decimal).currencySeparated(), color: .mint1, align: .right)
             
             let price = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: balance)
@@ -548,12 +546,8 @@ class SendICXViewController: BaseViewController {
                 }()
                 
                 Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess, txHash in
-                    
-                    self.dismiss(animated: true, completion: {
-                        if let handler = self.sendHandler {
-                            handler(isSuccess)
-                        }
-                    })
+                    Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                    self.dismiss(animated: true, completion: nil)
                     
                 }).show()
                 

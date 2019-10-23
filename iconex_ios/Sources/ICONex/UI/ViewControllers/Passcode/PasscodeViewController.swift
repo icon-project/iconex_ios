@@ -22,6 +22,8 @@ class PasscodeViewController: BaseViewController {
     @IBOutlet weak var numberStack: UIStackView!
     @IBOutlet weak var forgotPasswordButton: UIButton!
     
+    var completeHandler: (() -> Void)? = nil
+    
     var lockType: LockType = .activate
     
     var tmpPassword: String = ""
@@ -117,7 +119,10 @@ class PasscodeViewController: BaseViewController {
                 Tool.bioVerification(message: "", completion: { (state) in
                     switch state {
                     case .success:
-                        app.toMain()
+                        self.dismiss(animated: true, completion: {
+                            self.completeHandler?()
+                        })
+                        
                         
                     case .locked:
                         Alert.basic(title: bio.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
@@ -282,8 +287,11 @@ class PasscodeViewController: BaseViewController {
                         navigationController.popToRootViewController(animated: true)
                         
                     } else { // reset
-                        mainViewModel.reload.onNext(true)
-                        app.toMain()
+                        self.dismiss(animated: true) {
+                            app.usingLock = false
+                            mainViewModel.reload.onNext(true)
+                            self.completeHandler?()
+                        }
                     }
                 } else {
                     self.setPassStatus(status: .renewFail)

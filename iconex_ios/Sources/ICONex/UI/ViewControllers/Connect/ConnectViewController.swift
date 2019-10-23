@@ -107,8 +107,7 @@ class ConnectViewController: BaseViewController {
                 default: return false
                 }
                 
-                let balance = Manager.balance.getTokenBalance(address: from, contract: to)
-                if balance == 0 || balance < requestedValue {
+                if let balance = Manager.balance.getTokenBalance(address: from, contract: to), balance == 0 || balance < requestedValue {
                     Conn.sendError(error: .insufficient(.balance))
                     return false
                 }

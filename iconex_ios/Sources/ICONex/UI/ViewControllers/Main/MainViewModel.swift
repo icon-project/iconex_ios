@@ -23,7 +23,7 @@ class MainViewModel {
 //    var totalVotedPower: PublishSubject<String>
     var totalVotedPower: BehaviorSubject<String>
     
-    var balaneList: PublishSubject<[BigUInt]>
+    var balanceList: PublishSubject<[BigUInt?]>
     
     var reload: PublishSubject<Bool>
     var noti: PublishSubject<Bool>
@@ -39,24 +39,34 @@ class MainViewModel {
         
         self.totalVotedPower = BehaviorSubject<String>(value: "-")
         
-        self.balaneList = PublishSubject<[BigUInt]>()
+        self.balanceList = PublishSubject<[BigUInt?]>()
         
         self.reload = PublishSubject<Bool>()
         self.noti = PublishSubject<Bool>()
         
         self.isBigCard = BehaviorSubject<Bool>(value: false)
         
-        Observable.combineLatest(self.currencyUnit, self.balaneList).flatMapLatest { (unit, totalBalance) -> Observable<String> in
+        Observable.combineLatest(self.currencyUnit, self.balanceList).flatMapLatest { (unit, totalBalance) -> Observable<String> in
             let unitSymbol = unit.symbol
             
-            guard let icxPrice = Tool.calculate(currency: "icx\(unitSymbol.lowercased())", balance: totalBalance[0]), let ethPrice = Tool.calculate(currency: "eth\(unitSymbol.lowercased())", balance: totalBalance[1]) else { return Observable.just("-") }
+            let tempTotalPrice: BigUInt? = {
+                var total: BigUInt? = nil
+                if let icxBalance = totalBalance[0], let icxPrice = Tool.calculate(currency: "icx\(unitSymbol.lowercased())", balance: icxBalance) {
+                    total = icxPrice
+                }
+                if let ethBalance = totalBalance[1], let ethPrice = Tool.calculate(currency: "eth\(unitSymbol.lowercased())", balance: ethBalance) {
+                    if let t = total {
+                        total = t + ethPrice
+                    } else {
+                        total = ethPrice
+                    }
+                }
+                return total
+            }()
             
-            let totalPrice = icxPrice + ethPrice
+            guard let totalPrice = tempTotalPrice else { return Observable.just("-") }
+            
             let result = totalPrice.toString(decimal: 18, 4, true).currencySeparated()
-            
-            print("ICX \(icxPrice)")
-            print("ETH \(ethPrice)")
-            print("Balance: \(result)")
             
             return Observable.just(result)
             

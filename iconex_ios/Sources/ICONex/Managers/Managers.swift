@@ -412,6 +412,8 @@ extension BalanceManager {
             Manager.icon.stepCost = Manager.icon.getStepCosts()
             Manager.icon.stepPrice = Manager.icon.getStepPrice()
             Manager.iiss.getPRepInfo()
+            self.walletBalances.removeAll()
+            self.tokenBalances.removeAll()
             
             for wallet in Manager.wallet.walletList {
                 if let icx = wallet as? ICXWallet {
@@ -459,37 +461,51 @@ extension BalanceManager {
         return walletBalances[wallet.address]
     }
     
-    func calculateExchangeTotalBalance() -> [BigUInt] {
-        var icxBalance: BigUInt = 0
-        var ethBalance: BigUInt = 0
+    func calculateExchangeTotalBalance() -> [BigUInt?] {
+        var icxBalance: BigUInt?
+        var ethBalance: BigUInt?
         
         for wallet in Manager.wallet.walletList {
             let address = wallet.address
             
             if wallet is ICXWallet {
-                icxBalance += walletBalances[address] ?? 0
+                if let balance = walletBalances[address] {
+                    if let icx = icxBalance {
+                        icxBalance = icx + balance
+                    } else {
+                        icxBalance = balance
+                    }
+                }
             } else {
-                ethBalance += walletBalances[address] ?? 0
+                if let balance = walletBalances[address.add0xPrefix()] {
+                    if let eth = ethBalance {
+                        ethBalance = eth + balance
+                    } else {
+                        ethBalance = balance
+                    }
+                }
             }
         }
         
         return [icxBalance, ethBalance]
     }
     
-    func getTokenBalance(address: String, contract: String) -> BigUInt {
+    func getTokenBalance(address: String, contract: String) -> BigUInt? {
         // 바로 가져오게
-        guard let wallet = self.tokenBalances[address] else { return 0 }
-        let balance = wallet[contract] ?? 0
+        guard let wallet = self.tokenBalances[address] else { return nil }
+        let balance = wallet[contract]
         
         return balance
     }
     
     func updateWalletBalance(address: String, balance: BigUInt) {
         walletBalances[address] = balance
+        mainViewModel.reload.onNext(true)
     }
     
     func updateTokenBalance(address: String, contract: String, balance: BigUInt) {
         tokenBalances[address]?.updateValue(balance, forKey: contract)
+        mainViewModel.reload.onNext(true)
     }
 }
 
@@ -510,7 +526,7 @@ class PRepManager {
             
             var staked: BigUInt = 0
             var voted: BigUInt = 0
-            
+            self.walletInfo.removeAll()
             for icx in icxList {
                 guard let stake = self.service.getStake(from: icx) else { continue }
                 guard let voting = self.service.getDelegation(wallet: icx) else { continue }

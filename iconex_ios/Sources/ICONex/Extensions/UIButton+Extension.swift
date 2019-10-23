@@ -125,6 +125,7 @@ extension UIButton {
         setTitleColor(UIColor(217, 217, 217), for: .disabled)
         border(1, .gray230)
         titleLabel?.font = .systemFont(ofSize: 12)
+        corner(4)
     }
     
     func line02() {
@@ -134,6 +135,7 @@ extension UIButton {
         setTitleColor(UIColor(217, 217, 217), for: .disabled)
         border(1, .gray230)
         titleLabel?.font = .systemFont(ofSize: 16)
+        corner(4)
     }
     
     func roundGray230() {

@@ -315,6 +315,9 @@ extension MyVoteViewController {
         guard let wallet = self.delegate.wallet else { return }
         // getPReps
         Manager.voteList.loadPrepListwithRank(from: wallet) { [unowned self] (prepList, _) in
+            if prepList == nil {
+                Tool.toast(message: "Error.CommonError".localized)
+            }
             self.prepInfo = prepList
         }
         
@@ -342,6 +345,8 @@ extension MyVoteViewController {
                     }
                     
                 }))
+            } else {
+                Tool.toast(message: "Error.CommonError".localized)
             }
             
             if self.isFirstLoad {

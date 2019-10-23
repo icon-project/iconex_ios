@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var all: String?
     var necessary: String?
     
+    var usingLock: Bool = false
+    
     func setRedirect(source: URL) {
         do {
             guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
@@ -129,6 +131,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        Log("Entering background...")
+        if UserDefaults.standard.bool(forKey: "useLock") {
+            UserDefaults.standard.set(Date(), forKey: "sleep")
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -145,6 +151,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }.show()
             return
         }
+        
+        if let date = UserDefaults.standard.object(forKey: "sleep") as? Date {
+            let time = Int(Date().timeIntervalSince1970 - date.timeIntervalSince1970)
+            
+            if time >= 5 * 60 {
+                presentLock()
+            } else {
+                if !usingLock && !Tool.isPasscode() && Conn.isConnect {
+                    toConnect()
+                }
+            }
+        } else {
+            if !usingLock && !Tool.isPasscode() && Conn.isConnect {
+                toConnect()
+            }
+        }
+        UserDefaults.standard.removeObject(forKey: "sleep")
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -202,6 +225,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
             self.window?.rootViewController = root
         }, completion: nil)
+    }
+    
+    func presentLock(_ handler: (() -> Void)? = nil) {
+        guard usingLock == false else { return }
+        let passcodeVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
+        passcodeVC.lockType = .check
+        passcodeVC.modalPresentationStyle = .fullScreen
+        passcodeVC.completeHandler = handler
+        usingLock = true
+        app.topViewController()?.present(passcodeVC, animated: true, completion: nil)
     }
 }
 

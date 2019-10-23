@@ -196,10 +196,6 @@ class Floater {
                     send.walletInfo = wallet
                     send.token = token
                     send.privateKey = PrivateKey(hex: Data(hex: privateKey))
-                    
-                    send.sendHandler = { isSuccess in
-                        Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
-                    }
                     send.modalPresentationStyle = .fullScreen
                     app.topViewController()?.present(send, animated: true, completion: nil)
                 }).show()
@@ -232,9 +228,6 @@ class Floater {
                 send.walletInfo = ethWallet
                 send.privateKey = privateKey
                 send.token = token
-                send.sendHandler = { isSuccess in
-                    Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
-                }
                 send.modalPresentationStyle = .fullScreen
                 app.topViewController()?.present(send, animated: true, completion: nil)
             }).show()

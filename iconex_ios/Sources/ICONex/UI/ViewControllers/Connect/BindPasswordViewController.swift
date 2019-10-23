@@ -106,7 +106,7 @@ class BindPasswordViewController: BaseViewController {
             
             let balance = Manager.balance.getTokenBalance(address: wallet.address, contract: contract)
             
-            self.balanceLabel.size14(text: balance.toString(decimal: decimal, 4).currencySeparated(), color: .gray77, weight: .bold)
+            self.balanceLabel.size14(text: balance?.toString(decimal: decimal, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold)
             self.symbolLabel.size14(text: symbol.uppercased(), color: .gray77, align: .right)
             
             

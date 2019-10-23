@@ -225,7 +225,7 @@ extension AddressBookViewController: UITableViewDataSource {
             
             if let token = self.token {
                 let tokenBalance = Manager.balance.getTokenBalance(address: item.address, contract: token.contract)
-                cell.balanceLabel.size12(text: tokenBalance.toString(decimal: token.decimal, token.decimal, false), color: .gray77, weight: .bold)
+                cell.balanceLabel.size12(text: tokenBalance?.toString(decimal: token.decimal, token.decimal, false) ?? "-", color: .gray77, weight: .bold)
                 cell.symbolLabel.size12(text: token.symbol, color: .gray77, weight: .bold)
             } else {
                 cell.balanceLabel.size12(text: item.balance?.toString(decimal: 18, 18, false) ?? "0", color: .gray77, weight: .bold)

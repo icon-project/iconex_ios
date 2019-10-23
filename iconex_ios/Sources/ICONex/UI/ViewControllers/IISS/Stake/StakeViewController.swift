@@ -45,6 +45,8 @@ class StakeViewController: BaseViewController {
     
     private var totalICX: BigUInt?
     
+    private var stepPrice: BigUInt?
+    
     var wallet: ICXWallet!
     
     var key: PrivateKey!
@@ -183,12 +185,9 @@ class StakeViewController: BaseViewController {
             .subscribe(onNext: { [unowned self] in
                 guard let staked = self.stakedInfo?.stake,
                     let modified = self.modifiedStake,
-                let stepPrice = Manager.icon.stepPrice
+                let stepPrice = self.stepPrice
                 else { return }
                 
-                self.submitButton.isEnabled = false
-                
-                self.submitButton.isEnabled = true
                 guard let limit = self.estimatedStep else { return }
                 
                 let fee = limit * stepPrice
@@ -225,11 +224,13 @@ class StakeViewController: BaseViewController {
             DispatchQueue.global().async {
                 let delegatedInfo = Manager.icon.getDelegation(wallet: self.wallet)
                 let stakedInfo = Manager.icon.getStake(from: self.wallet)
+                let stepPriceInfo = Manager.icon.getStepPrice()
                 self.delegateInfo = delegatedInfo
                 self.stakedInfo = stakedInfo
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                    if let delegated = delegatedInfo, let staked = stakedInfo {
+                    if let delegated = delegatedInfo, let staked = stakedInfo, let stepPrice = stepPriceInfo {
                         Log("Info - \(balance) + \(staked.stake) + \(staked.unstake ?? 0) = \(balance + staked.stake + (staked.unstake ?? 0))")
+                        self.stepPrice = stepPrice
                         
                         let totalDelegated = delegated.totalDelegated
                         let stakeValue = staked.stake
@@ -293,6 +294,8 @@ class StakeViewController: BaseViewController {
                         
                     } else {
                         self.slider.isEnabled = false
+                        Tool.toast(message: "Error.CommonError".localized)
+                        self.navigationController?.popViewController(animated: true)
                     }
                     self.refreshControl?.endRefreshing()
                     self.refreshControl = nil
@@ -367,7 +370,7 @@ extension StakeViewController {
     }
     
     func refreshFeeInfo() {
-        guard let stepPrice = Manager.icon.stepPrice else {
+        guard let stepPrice = self.stepPrice else {
             timeLabel.size14(text: "-", color: .gray77)
             stepLimitLabel.size14(text: "-", color: .gray77)
             estimatedLabel.size14(text: "-", color: .gray77)

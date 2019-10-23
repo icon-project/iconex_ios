@@ -137,7 +137,7 @@ extension SelectCoinTokenViewController: UITableViewDataSource {
             let tokenBalance = Manager.balance.getTokenBalance(address: wallet.address, contract: token.contract)
             price = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: tokenBalance)
             let decimal = token.decimal
-            cell.balanceLabel.size14(text: tokenBalance.toString(decimal: decimal, 4, true), color: .gray77, weight: .bold, align: .right)
+            cell.balanceLabel.size14(text: tokenBalance?.toString(decimal: decimal, 4, true) ?? "-", color: .gray77, weight: .bold, align: .right)
             
             cell.usdPriceLabel.size12(text: price, color: .gray179, align: .right)
         }

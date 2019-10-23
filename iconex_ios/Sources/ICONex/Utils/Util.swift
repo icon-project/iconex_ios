@@ -28,8 +28,8 @@ struct Tool {
         case passcodeNotSet
     }
     
-    static func calculatePrice(decimal: Int = 18, currency: String, balance: BigUInt) -> String {
-        guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price else { return "-" }
+    static func calculatePrice(decimal: Int = 18, currency: String, balance optBalance: BigUInt?) -> String {
+        guard let exchange = Manager.exchange.exchangeInfoList[currency]?.price, let balance = optBalance else { return "-" }
         
         let bigExchange = stringToBigUInt(inputText: exchange, decimal: decimal, fixed: true) ?? 0
         let calculated = bigExchange * balance / BigUInt(10).power(decimal)
@@ -379,6 +379,13 @@ struct Tool {
         guard let data = try? JSONSerialization.data(withJSONObject: dic, options: []) else { return nil }
         
         return "iconex://pay?data=\(data.base64EncodedString())"
+    }
+    
+    static func lost(retryHandler: (() -> Void)?) {
+        let lost = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "LostView") as! LostViewController
+        lost.retryHandler = retryHandler
+        lost.modalPresentationStyle = .fullScreen
+        app.topViewController()?.present(lost, animated: true, completion: nil)
     }
 }
 

@@ -133,7 +133,7 @@ class MainViewController: BaseViewController, Floatable {
                 self.walletList = Manager.wallet.walletList
                 
                 let list = Manager.balance.calculateExchangeTotalBalance()
-                mainViewModel.balaneList.onNext(list)
+                mainViewModel.balanceList.onNext(list)
                 
                 self.tokenList = DB.allTokenList().sorted { (lhs, rhs) -> Bool in
                     return lhs.created < rhs.created

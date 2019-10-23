@@ -87,10 +87,6 @@ class MainCollectionViewCell: UICollectionViewCell {
                         send.toAmount = amount?.hexToBigUInt()?.toString(decimal: 18, 18, true)
                         send.modalPresentationStyle = .fullScreen
 
-                        send.sendHandler = { isSuccess in
-                            Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
-                        }
-
                         app.topViewController()?.present(send, animated: true, completion: nil)
                     })
                     app.topViewController()?.present(scanVC, animated: true, completion: nil)
@@ -189,20 +185,20 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.symbolLabel.size16(text: CoinType.icx.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.icx.fullName, color: .gray179, weight: .light)
                     
-                    let balance = icx.balance ?? 0
+                    coinCell.balanceLabel.size16(text: icx.balance?.toString(decimal: 18, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold, align: .right)
                     
-                    let balanceString = balance.toString(decimal: 18, 4).currencySeparated()
-                    coinCell.balanceLabel.size16(text: balanceString, color: .gray77, weight: .bold, align: .right)
-                    
-                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: icx.balance ?? 0)
+                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: icx.balance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                     
                     // STAKE INFO
-                    guard let stakeInfo = Manager.iiss.stake(icx: icx), stakeInfo > 0 else {
+                    guard let stakeInfo = Manager.iiss.stake(icx: icx), stakeInfo > 0, let balance = icx.balance else {
                         coinCell.basicView.backgroundColor = .gray252
                         coinCell.backgroundColor = .gray252
                         coinCell.basicView.corner(8)
                         coinCell.basicView.border(0.5, .gray230)
+                        coinCell.stakeLabel.text = "-"
+                        coinCell.stakedPercentLabel.text = "( -%)"
+                        coinCell.iscoreLabel.text = "-"
                         
                         return coinCell
                     }
@@ -251,7 +247,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     let balance = eth.balance?.toString(decimal: 18, 4).currencySeparated()
                     coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
                     
-                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: eth.balance ?? 0)
+                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: eth.balance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                 }
                 return coinCell
@@ -268,13 +264,19 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     guard let list = self.coinTokens else { return coinCell }
                     
-                    var totalBalance: BigUInt = 0
+                    var totalBalance: BigUInt? = nil
                     for i in list {
-                        totalBalance += i.balance ?? 0
+                        if let balance = i.balance {
+                            if let t = totalBalance {
+                                totalBalance = t + balance
+                            } else {
+                                totalBalance = balance
+                            }
+                        }
                     }
-                    let balance = totalBalance.toString(decimal: 18, 4).currencySeparated()
+                    let balance = totalBalance?.toString(decimal: 18, 4).currencySeparated()
                     
-                    coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
+                    coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
@@ -290,13 +292,19 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     guard let list = self.coinTokens else { return coinCell }
                     
-                    var totalBalance: BigUInt = 0
+                    var totalBalance: BigUInt? = nil
                     for i in list {
-                        totalBalance += i.balance ?? 0
+                        if let balance = i.balance {
+                            if let t = totalBalance {
+                                totalBalance = t + balance
+                            } else {
+                                totalBalance = balance
+                            }
+                        }
                     }
                     
-                    let balance = totalBalance.toString(decimal: 18, 4).currencySeparated()
-                    coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
+                    let balance = totalBalance?.toString(decimal: 18, 4).currencySeparated()
+                    coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
                     
                     let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
@@ -310,10 +318,15 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     guard let list = self.coinTokens, let contract = self.contractAddress else { return tokenCell }
                     
-                    var totalBalance: BigUInt = 0
-                    
+                    var totalBalance: BigUInt? = nil
                     for i in list {
-                        totalBalance += Manager.balance.getTokenBalance(address: i.address, contract: contract)
+                        if let balance = Manager.balance.getTokenBalance(address: i.address, contract: contract) {
+                            if let t = totalBalance {
+                                totalBalance = t + balance
+                            } else {
+                                totalBalance = balance
+                            }
+                        }
                     }
                     
                     guard let nickName = symbol.first?.uppercased() else { return tokenCell }
@@ -322,8 +335,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     tokenCell.symbolLabel.size16(text: symbol, color: .gray77, weight: .semibold)
                     tokenCell.fullnameLabel.size12(text: fullName, color: .gray179, weight: .light)
                     
-                    let balance = totalBalance.toString(decimal: 18, 4).currencySeparated()
-                    tokenCell.balanceLabel.size16(text: balance , color: .gray77, weight: .bold, align: .right)
+                    let balance = totalBalance?.toString(decimal: 18, 4).currencySeparated()
+                    tokenCell.balanceLabel.size16(text: balance ?? "-" , color: .gray77, weight: .bold, align: .right)
                     
                     let decimal = DB.tokenListBy(symbol: symbol).first?.decimal ?? 0
                     let price = Tool.calculatePrice(decimal: decimal, currency: currencySymbol, balance: totalBalance)
@@ -348,7 +361,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 tokenCell.fullnameLabel.size12(text: token.name, color: .gray179, weight: .light)
                 
                 let tokenBalance = Manager.balance.getTokenBalance(address: symbol == "icx" ? token.parent : token.parent.add0xPrefix(), contract: token.contract)
-                tokenCell.balanceLabel.size16(text: tokenBalance.toString(decimal: token.decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+                tokenCell.balanceLabel.size16(text: tokenBalance?.toString(decimal: token.decimal, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold, align: .right)
                 
                 let price = Tool.calculatePrice(decimal: token.decimal, currency: currencySymbol, balance: tokenBalance)
                 tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
@@ -368,7 +381,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     walletCell.addressLabel.size12(text: wallet.address, color: .gray179, weight: .light)
 
                     let tokenBalance = Manager.balance.getTokenBalance(address: wallet.address, contract: contractAddress)
-                    walletCell.balanceLabel.size16(text: tokenBalance.toString(decimal: decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+                    walletCell.balanceLabel.size16(text: tokenBalance?.toString(decimal: decimal, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold, align: .right)
 
                     let price = Tool.calculatePrice(decimal: decimal, currency: currenySymbol, balance: tokenBalance)
                     walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
@@ -380,8 +393,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     walletCell.nicknameLabel.size16(text: wallet.name, color: .gray77, weight: .semibold)
                     walletCell.addressLabel.size12(text: wallet.address, color: .gray179, weight: .light)
 
-                    let balance = Manager.balance.getBalance(wallet: wallet) ?? 0
-                    walletCell.balanceLabel.size16(text: balance.toString(decimal: 18, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
+                    let balance = Manager.balance.getBalance(wallet: wallet)
+                    walletCell.balanceLabel.size16(text: balance?.toString(decimal: 18, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold, align: .right)
 
                     let price = Tool.calculatePrice(decimal: 18, currency: currenySymbol, balance: balance)
                     walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)

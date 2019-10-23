@@ -258,6 +258,79 @@
             </objects>
             <point key="canvasLocation" x="-21.600000000000001" y="811.33004926108379"/>
         </scene>
+        <!--Lost View Controller-->
+        <scene sceneID="xBU-NH-YCL">
+            <objects>
+                <viewController storyboardIdentifier="LostView" id="qof-Qn-19h" customClass="LostViewController" customModule="iconex_ios" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Go-YA-bnT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wd5-bv-t04">
+                                <rect key="frame" x="30" y="288.66666666666669" width="315" height="234.66666666666669"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icWifi" translatesAutoresizingMaskIntoConstraints="NO" id="grx-v1-XKw">
+                                        <rect key="frame" x="122.66666666666666" y="0.0" width="70" height="70"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="70" id="AhX-ET-5XJ"/>
+                                            <constraint firstAttribute="width" constant="70" id="zS4-0l-knd"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IEI-Ny-Yaw">
+                                        <rect key="frame" x="0.0" y="110" width="315" height="20.333333333333343"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="puE-Ib-YIN">
+                                        <rect key="frame" x="0.0" y="144.33333333333331" width="315" height="20.333333333333343"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M8f-Hl-qYC">
+                                        <rect key="frame" x="82.666666666666686" y="204.66666666666663" width="150" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="XKm-rT-XlO"/>
+                                            <constraint firstAttribute="width" constant="150" id="qaS-Zd-hp8"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="puE-Ib-YIN" secondAttribute="trailing" id="2sg-AJ-tEH"/>
+                                    <constraint firstItem="M8f-Hl-qYC" firstAttribute="top" secondItem="puE-Ib-YIN" secondAttribute="bottom" constant="40" id="AZn-ys-Hd9"/>
+                                    <constraint firstItem="grx-v1-XKw" firstAttribute="top" secondItem="wd5-bv-t04" secondAttribute="top" id="LZr-FZ-seT"/>
+                                    <constraint firstItem="IEI-Ny-Yaw" firstAttribute="top" secondItem="grx-v1-XKw" secondAttribute="bottom" constant="40" id="PgS-gT-GNx"/>
+                                    <constraint firstItem="grx-v1-XKw" firstAttribute="centerX" secondItem="wd5-bv-t04" secondAttribute="centerX" id="Q87-uR-l6d"/>
+                                    <constraint firstAttribute="bottom" secondItem="M8f-Hl-qYC" secondAttribute="bottom" id="SpR-ut-RYf"/>
+                                    <constraint firstItem="puE-Ib-YIN" firstAttribute="leading" secondItem="wd5-bv-t04" secondAttribute="leading" id="UQv-6d-ZEP"/>
+                                    <constraint firstAttribute="trailing" secondItem="IEI-Ny-Yaw" secondAttribute="trailing" id="Wal-Ay-vyh"/>
+                                    <constraint firstItem="puE-Ib-YIN" firstAttribute="top" secondItem="IEI-Ny-Yaw" secondAttribute="bottom" constant="14" id="Y6w-eZ-RuK"/>
+                                    <constraint firstItem="IEI-Ny-Yaw" firstAttribute="leading" secondItem="wd5-bv-t04" secondAttribute="leading" id="dN1-c1-PlK"/>
+                                    <constraint firstItem="M8f-Hl-qYC" firstAttribute="centerX" secondItem="wd5-bv-t04" secondAttribute="centerX" id="vW6-5C-2gg"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ox3-dX-KhV" firstAttribute="trailing" secondItem="wd5-bv-t04" secondAttribute="trailing" constant="30" id="UvV-US-Q1Y"/>
+                            <constraint firstItem="wd5-bv-t04" firstAttribute="leading" secondItem="ox3-dX-KhV" secondAttribute="leading" constant="30" id="lYz-E4-kFv"/>
+                            <constraint firstItem="wd5-bv-t04" firstAttribute="centerY" secondItem="6Go-YA-bnT" secondAttribute="centerY" id="s2X-Fx-Q7n"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ox3-dX-KhV"/>
+                    </view>
+                    <connections>
+                        <outlet property="lostDesc" destination="puE-Ib-YIN" id="r1V-OE-jJw"/>
+                        <outlet property="lostTitle" destination="IEI-Ny-Yaw" id="w96-Rd-YMu"/>
+                        <outlet property="retryButton" destination="M8f-Hl-qYC" id="s6L-s6-2VA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TD5-O0-UqG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="941.60000000000002" y="811.33004926108379"/>
+        </scene>
         <!--Permission View Controller-->
         <scene sceneID="N26-5R-emI">
             <objects>
@@ -508,5 +581,6 @@
     <resources>
         <image name="icCamera" width="24" height="24"/>
         <image name="icNone" width="24" height="24"/>
+        <image name="icWifi" width="70" height="70"/>
     </resources>
 </document>

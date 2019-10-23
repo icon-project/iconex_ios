@@ -52,7 +52,7 @@ class IntroViewController: BaseViewController {
                 _animated = true
                 startAlpha()
             } else {
-                go()
+                self.getVersion()
             }
         }
     }
@@ -85,14 +85,12 @@ class IntroViewController: BaseViewController {
             self.iconImage.transform = .identity
             self.satellite.transform = .identity
             
-            self.getVersion({
-                self.go()
-            })
+            self.getVersion()
             
         })
     }
     
-    func getVersion(_ completion: (() -> Void)? = nil) {
+    func getVersion() {
         indicator.isHidden = false
         var tracker: Tracker {
             switch Config.host {
@@ -118,7 +116,7 @@ class IntroViewController: BaseViewController {
                 switch dataResponse.result {
                 case .success:
                     guard case let json as [String: Any] = dataResponse.result.value, let result = json["result"] as? String else {
-                        #warning("retry 구현")
+                        self.lost()
                         return
                     }
                     Log("Version: \(json)")
@@ -131,13 +129,7 @@ class IntroViewController: BaseViewController {
                     
                 case .failure(let error):
                     Log("Error \(error)")
-                    if let comp = completion {
-                        comp()
-                        return
-                    } else {
-                        #warning("retry 구현")
-                        return
-                    }
+                    self.lost()
                 }
             }
         }
@@ -153,9 +145,9 @@ class IntroViewController: BaseViewController {
             app.change(root: start)
         } else {
             if Tool.isPasscode() {
-                let passcodeVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
-                passcodeVC.lockType = .check
-                app.change(root: passcodeVC)
+                app.presentLock({
+                    app.toMain()
+                })
             } else if !Tool.isPasscode() && Conn.isConnect {
                 app.toConnect()
             } else {
@@ -172,6 +164,13 @@ class IntroViewController: BaseViewController {
             
             if version > myVersion {
                 let message = "Version.Message".localized
+                Alert.basic(title: message, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.Cancel".localized, rightButtonTitle: "Version.Update".localized, cancelAction: {
+                    exit(0)
+                }) {
+                    UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: { _ in
+                        exit(0)
+                    })
+                }.show()
 //                    Alert.Confirm(message: message, cancel: "Common.Cancel".localized, confirm: "Version.Update".localized, handler: {
 //                        UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: { _ in
 //                            exit(0)
@@ -180,8 +179,13 @@ class IntroViewController: BaseViewController {
 //                        exit(0)
 //                    }).show(self.window!.rootViewController!)
             } else {
-                
-                go()
+                if let presented = self.presentedViewController {
+                    presented.dismiss(animated: true) {
+                        self.go()
+                    }
+                } else {
+                    go()
+                }
                 
             }
         } else {
@@ -189,4 +193,12 @@ class IntroViewController: BaseViewController {
         }
     }
     
+    private func lost() {
+        let lost = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "LostView") as! LostViewController
+        lost.modalPresentationStyle = .fullScreen
+        lost.retryHandler = {
+            self.getVersion()
+        }
+        self.present(lost, animated: true, completion: nil)
+    }
 }

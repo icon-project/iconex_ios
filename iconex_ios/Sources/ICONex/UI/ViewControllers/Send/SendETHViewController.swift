@@ -101,8 +101,6 @@ class SendETHViewController: BaseViewController {
         }
     }
     
-    var sendHandler: ((_ isSuccess: Bool) -> Void)?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -203,7 +201,7 @@ class SendETHViewController: BaseViewController {
         
         if let token = self.token {
             self.dataInputBox.isHidden = true
-            balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract)
+            balance = Manager.balance.getTokenBalance(address: token.parent, contract: token.contract) ?? 0
             balanceLabel.size24(text: balance.toString(decimal: token.decimal, token.decimal).currencySeparated(), color: .mint1, align: .right)
             
             let price = Tool.calculatePrice(decimal: token.decimal, currency: "\(token.symbol.lowercased())usd", balance: balance)
@@ -536,7 +534,7 @@ class SendETHViewController: BaseViewController {
                 let gasLimit = self.gasLimit
                 
                 let data = self.data?.prefix0xRemoved().hexToData() ?? Data()
-
+                
                 let estimatedGas = BigUInt(self.gasPrice) * self.gasLimit
                 let gas = estimatedGas.convert(unit: .gLoop)
                 
@@ -568,13 +566,12 @@ class SendETHViewController: BaseViewController {
                 }()
                 
                 Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess, txHash in
-                    self.dismiss(animated: true, completion: {
-                        if let handler = self.sendHandler {
-                            handler(isSuccess)
-                        }
-                    })
+                    Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                    if isSuccess {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }).show()
                 
-            }.disposed(by: disposeBag)
+        }.disposed(by: disposeBag)
     }
 }
