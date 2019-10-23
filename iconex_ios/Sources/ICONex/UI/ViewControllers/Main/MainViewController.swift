@@ -125,7 +125,6 @@ class MainViewController: BaseViewController, Floatable {
         
         mainViewModel.reload
             .subscribe { (_) in
-                print("Reload!!!!!")
 //                self.balanceLabel.alpha = 0
 //                self.powerLabel.alpha = 0
 //                self.balanceActivityIndicator.startAnimating()
@@ -271,7 +270,6 @@ class MainViewController: BaseViewController, Floatable {
         collectionView.rx.didEndDecelerating
             .subscribe(onNext: {
                 if self.isWalletMode {
-                    Log("Checking!!!!")
                     self.checkFloater()
                 }
             }).disposed(by: disposeBag)
@@ -326,16 +324,11 @@ class MainViewController: BaseViewController, Floatable {
         let index: Int = {
             let x: Int = {
                 let offsetX = self.collectionView.contentOffset.x
-                if offsetX <= 0 {
-                    return 0
-                } else {
-                    return Int(self.collectionView.frame.width / offsetX)
-                }
+                return Int(offsetX / self.collectionView.frame.width)
             }()
             
             return x
         }()
-        
         if let icx = self.walletList[index] as? ICXWallet {
             self.selectedWallet = icx
             self.attach()
