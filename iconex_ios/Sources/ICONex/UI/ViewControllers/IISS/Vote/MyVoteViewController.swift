@@ -38,8 +38,6 @@ class MyVoteViewController: BaseViewController {
     
     private var sectionHeader = UIView()
     
-    private var scrollPoint: CGFloat = 0
-    
     private var stepPrice: BigUInt = Manager.icon.stepPrice ?? 0
     
     private var estimatedStep: BigUInt = 0 {
@@ -76,12 +74,6 @@ class MyVoteViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        print("View Did Disappear - My Vote View")
     }
     
     override func initializeComponents() {
@@ -121,6 +113,9 @@ class MyVoteViewController: BaseViewController {
         refresh.beginRefreshing()
         
         Manager.voteList.currentAddedList.subscribe(onNext: { [unowned self] addedList in
+            guard !addedList.isEmpty else {
+                return
+            }
             for i in addedList {
                 let checker = self.newList.contains(where: { (new) -> Bool in
                     return new.address == i.address
@@ -249,35 +244,31 @@ class MyVoteViewController: BaseViewController {
                 }).show()
             }.disposed(by: disposeBag)
         
-        let combindedList = Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList)
+        Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList).flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
+            let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
+            
+            let newVoteChecker = self.newList.filter { (newList) -> Bool in
+                let edited = newList.editedDelegate ?? BigUInt.zero
+                return edited > BigUInt.zero
+            }.count > 0
+            
+            return Observable.just(myVoteChecker || newVoteChecker)
+            
+        }).bind(to: resetButton.rx.isEnabled)
+        .disposed(by: disposeBag)
         
-        combindedList.flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
-                let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
-                let newListChecker = self.newList.filter({ $0.percent != 0.0 }).count > 0
-                
-                return Observable.just(myVoteChecker || newListChecker)
-                
-            }).bind(to: resetButton.rx.isEnabled)
-            .disposed(by: disposeBag)
         
-        
-        combindedList.skip(1).subscribe(onNext: { [unowned self] myList, newList in
+        Observable.merge(delegate.voteViewModel.myList, delegate.voteViewModel.newList).subscribe(onNext: { [unowned self] list in
             print("ESTIMATE!!!!!")
             
-            let list = myList + newList
-            
             var delList = [[String: Any]]()
-            
-            var testTotalDelegation: BigUInt = 0
             
             for i in list {
                 
                 let value: String = {
                     if let edit = i.editedDelegate {
-                        testTotalDelegation += edit
                         return edit.toHexString()
                     } else if let myDelegate = i.myDelegate {
-                        testTotalDelegation += myDelegate
                         return myDelegate.toHexString()
                     } else {
                         let zero = BigUInt(0).toHexString()
@@ -286,7 +277,6 @@ class MyVoteViewController: BaseViewController {
                 }()
                 
                 let info = ["address": i.address, "value": value]
-                
                 
                 delList.append(info)
             }
@@ -346,11 +336,12 @@ extension MyVoteViewController {
             
             if self.isFirstLoad {
                 self.available.onNext(tDelegation?.votingPower ?? 0)
+                self.delegate.voteViewModel.myList.onNext(self.myVoteList)
+                self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
             }
             self.isFirstLoad = false
             
-            self.delegate.voteViewModel.myList.onNext(self.myVoteList)
-            self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
+            
             self.tableView.reloadData()
         }
         
@@ -504,7 +495,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.addButton.isHighlighted = false
                 cell.addButton.rx.tap.asControlEvent()
                     .subscribe { (_) in
-                        self.tableView.showToolTip(positionY: cell.frame.origin.y-self.scrollPoint, text: "MyVoteView.ToolTip.Delete".localized)
+                        self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "MyVoteView.ToolTip.Delete".localized)
                     }.disposed(by: cell.disposeBag)
                 
                 
@@ -856,10 +847,6 @@ extension MyVoteViewController: UITableViewDataSource {
 }
 
 extension MyVoteViewController: UITableViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.scrollPoint = scrollView.contentOffset.y
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
             return 0
