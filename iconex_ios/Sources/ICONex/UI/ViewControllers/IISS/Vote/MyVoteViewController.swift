@@ -141,6 +141,11 @@ class MyVoteViewController: BaseViewController {
         
         Manager.voteList.currentAddedList.subscribe(onNext: { [unowned self] addedList in
             guard !addedList.isEmpty else {
+                if self.myVoteList.count == 0 {
+                    self.footerBox.isHidden = true
+                    self.stack?.isHidden = false
+                    self.tableView.separatorStyle = .none
+                }
                 return
             }
             for i in addedList {
@@ -154,6 +159,18 @@ class MyVoteViewController: BaseViewController {
             }
             
             self.delegate.voteViewModel.newList.onNext(self.newList)
+            
+            let count = self.myVoteList.count + self.newList.count
+            self.footerBox.isHidden = count == 0
+            
+            if count == 0 {
+                self.stack?.isHidden = false
+                self.tableView.separatorStyle = .none
+                
+            } else {
+                self.stack?.isHidden = true
+                self.tableView.separatorStyle = .singleLine
+            }
             
             self.tableView.reloadData()
         }).disposed(by: disposeBag)
@@ -370,20 +387,11 @@ extension MyVoteViewController {
                 self.available.onNext(tDelegation?.votingPower ?? 0)
                 self.delegate.voteViewModel.myList.onNext(self.myVoteList)
                 self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
+                
+                self.footerBox.isHidden = self.myVoteList.count == 0
+                self.stack?.isHidden = self.myVoteList.count != 0
             }
             self.isFirstLoad = false
-            
-            let count = self.myVoteList.count + self.newList.count
-            self.footerBox.isHidden = count == 0
-            
-            if count == 0 {
-                self.stack?.isHidden = false
-                self.tableView.separatorStyle = .none
-                
-            } else {
-                self.stack?.isHidden = true
-                self.tableView.separatorStyle = .singleLine
-            }
             
             self.tableView.reloadData()
         }
