@@ -245,14 +245,15 @@ extension UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
+        label.textAlignment = .center
         
         toastView.addSubview(label)
+        label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 16).isActive = true
         label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 16).isActive = true
         label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -16).isActive = true
-        label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 16).isActive = true
         label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -16).isActive = true
         
-        let mutAttr = NSMutableAttributedString(string: "\(count)/10", attributes: [.font: UIFont(name: "NanumSquareB", size: 14)!, .foregroundColor: UIColor.white])
+        let mutAttr = NSMutableAttributedString(string: "\(count)/10  ", attributes: [.font: UIFont(name: "NanumSquareB", size: 14)!, .foregroundColor: UIColor.white])
         mutAttr.append(NSAttributedString(string: "PRepView.Toast.MyVotes".localized, attributes: [.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 14)!, .foregroundColor: UIColor.white]))
         
         label.attributedText = mutAttr
