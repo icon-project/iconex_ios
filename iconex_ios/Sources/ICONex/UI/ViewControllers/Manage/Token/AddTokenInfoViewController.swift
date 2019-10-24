@@ -90,7 +90,7 @@ class AddTokenInfoViewController: BaseViewController {
             return nil
         }
         
-        addressBox.textField.rx.controlEvent(.editingDidEndOnExit).subscribe { (_) in
+        addressBox.textField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit]).subscribe { (_) in
             let contract = self.addressBox.text
             if self.walletInfo!.address.hasPrefix("hx") {
                 if Validator.validateIRCAddress(address: contract) {
@@ -134,7 +134,7 @@ class AddTokenInfoViewController: BaseViewController {
         }.disposed(by: disposeBag)
         
         
-        qrCodeButton.rx.tap.asControlEvent()
+        qrCodeButton.rx.tap
             .subscribe { (_) in
                 let qrVC = UIStoryboard.init(name: "Camera", bundle: nil).instantiateInitialViewController() as! QRReaderViewController
                 qrVC.modalPresentationStyle = .fullScreen
@@ -159,7 +159,7 @@ class AddTokenInfoViewController: BaseViewController {
 //            }.bind(to: addButton.rx.isEnabled)
 //            .disposed(by: disposeBag)
         
-        addButton.rx.tap.asControlEvent()
+        addButton.rx.tap
             .subscribe { (_) in
                 let name = self.nameBox.text
                 let address = self.addressBox.text
