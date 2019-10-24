@@ -170,6 +170,7 @@ class MainViewController: BaseViewController, Floatable {
         balanceObservable
             .observeOn(MainScheduler.instance)
             .subscribe { (_) in
+                guard Manager.balance.isWorking == false else { return }
                 self.balanceLabel.alpha = 1
                 self.balanceActivityIndicator.stopAnimating()
         }.disposed(by: disposeBag)

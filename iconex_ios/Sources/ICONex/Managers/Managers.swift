@@ -390,7 +390,7 @@ extension ICONManager {
 class BalanceManager {
     static let shared = BalanceManager()
     
-    private var isWorking: Bool = false
+    var isWorking: Bool = false
     
     private var walletBalances = [String: BigUInt]()
     private var tokenBalances = [String: [String: BigUInt]]()
@@ -448,8 +448,8 @@ extension BalanceManager {
             }
             
             DispatchQueue.main.async {
-                mainViewModel.reload.onNext(true)
                 self.isWorking = false
+                mainViewModel.reload.onNext(true)
                 completion?()
             }
         }
