@@ -569,7 +569,7 @@
 "LockScreen.Setting.Passcode.Change.Current" = "현재 잠금 번호 6자리를 입력해주세요.";
 "LockScreen.Setting.Passcode.Change.New" = "새로 변경할 잠금 번호 6자리를 입력해주세요.";
 "LockScreen.Setting.Passcode.Change.Renew" = "다시 한 번 잠금 번호를 입력해주세요.";
-"LockScreen.Setting.Passcode.Change.Error" = "잠금 번호가 일치하지 않습니다. 현재 잠금 번호 입력부터 다시 시도해주세요.";
+"LockScreen.Setting.Passcode.Change.Error" = "잠금 번호가 일치하지 않습니다.\n현재 잠금 번호 입력부터 다시 시도해주세요.";
 "LockScreen.Setting.Passcode.Same" = "현재 잠금번호와 동일합니다.\n새 잠금 번호를 입력해주세요.";
 "LockScreen.Alert.AskUseBio" = "휴대폰의 설정에서 화면 잠금 설정 후 \"%@으로 잠금 해제\" 기능을 사용할 수 있습니다.";
 "LockScreen.Alert.RemovedBio" = "휴대폰의 설정화면에서 %@ 등록 후 \"%@로 잠금 해제\" 기능을 사용할 수 있습니다.";

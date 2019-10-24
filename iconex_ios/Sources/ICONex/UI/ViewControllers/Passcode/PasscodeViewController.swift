@@ -419,7 +419,7 @@ class PasscodeViewController: BaseViewController {
             default: return ""
             }
         }()
-        titleLabel.size18(text: titleString, color: lockType == .check ? UIColor.init(white: 1, alpha: 0.5) : .gray77, align: .center)
+        titleLabel.size18(text: titleString, color: lockType == .check ? UIColor.init(white: 1, alpha: 0.5) : .gray77, align: .center, lineBreakMode: .byWordWrapping)
     }
 }
 
