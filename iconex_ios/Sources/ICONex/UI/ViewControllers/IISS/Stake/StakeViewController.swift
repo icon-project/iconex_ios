@@ -341,15 +341,16 @@ extension StakeViewController {
     }
     
     func estimatedPeriod() {
-        guard let modified = modifiedStake, let stakedInfo = stakedInfo else {
+        guard let modified = modifiedStake, let stakedInfo = stakedInfo, let delegated = self.delegateInfo?.totalDelegated else {
             timeLabel.size14(text: "-", color: .gray77)
             return
         }
+        let myStake = modified - delegated
         
-        if modified > stakedInfo.stake {
+        if myStake > stakedInfo.stake {
             timeLabel.size14(text: "Stake.Value.TimeRequired.Stake".localized, color: .gray77)
             
-        } else if modified < stakedInfo.stake {
+        } else if myStake < stakedInfo.stake {
             DispatchQueue.global().async {
                 guard let estimatedUnstakeTime = Manager.icon.estimateUnstakeLockPeriod(from: self.wallet) else { return }
                 

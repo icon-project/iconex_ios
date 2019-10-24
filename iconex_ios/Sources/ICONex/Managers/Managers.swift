@@ -205,10 +205,9 @@ extension ICONManager {
 // IISS
 extension ICONManager {
     func estimateUnstakeLockPeriod(from: ICXWallet) -> BigUInt? {
-        let testICONService = ICONService(provider: "https://zicon.net.solidwallet.io/api/v3", nid: "0x3")
         let call = Call<EstimatedUnstakePeriod>(from: from.address, to: CONST.iiss, method: "estimateUnstakeLockPeriod", params: nil)
         
-        let result = testICONService.call(call).execute()
+        let result = self.service.call(call).execute()
         
         do {
             let period = try result.get().unstakeLockPeriod
