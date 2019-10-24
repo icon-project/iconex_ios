@@ -291,22 +291,19 @@ struct Tool {
         }
         
         UserDefaults.standard.set(newDomain, forKey: "domain")
-        UserDefaults.standard.synchronize()
         
-        Log("TouchID domain saved.", .debug)
+        Log("Bio domain saved.", .debug)
     }
     
     static func removeBio() {
         UserDefaults.standard.removeObject(forKey: "domain")
         UserDefaults.standard.removeObject(forKey: "useBio")
-        UserDefaults.standard.synchronize()
     }
     
     static func removePasscode() {
         UserDefaults.standard.removeObject(forKey: "u8djdnuEe2xIddfkD")
         UserDefaults.standard.removeObject(forKey: "aExd73E0dxvdQrx")
         UserDefaults.standard.removeObject(forKey: "useLock")
-        UserDefaults.standard.synchronize()
     }
     
     static func toast(message: String) {

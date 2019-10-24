@@ -76,7 +76,7 @@ class LockSettingViewController: BaseViewController {
 
 extension LockSettingViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard UserDefaults.standard.bool(forKey: "useLock") else {
+        guard Tool.isPasscode() else {
             self.headerHeight.constant = 100
             self.headerLabel.isHidden = false
             self.footerLabel.isHidden = false
@@ -95,12 +95,12 @@ extension LockSettingViewController: UITableViewDataSource {
             let activateCell = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! SwitchTableViewCell
             activateCell.selectionStyle = .none
             activateCell.titleLabel.size14(text: "LockSetting.Activate".localized, color: .gray77)
-            activateCell.switchControl.isOn = UserDefaults.standard.bool(forKey: "useLock")
+            activateCell.switchControl.isOn = Tool.isPasscode()
             
             activateCell.switchControl.rx.controlEvent(.valueChanged).subscribe { (_) in
                 let passCodeVC = self.storyboard?.instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
                 
-                if UserDefaults.standard.bool(forKey: "useLock") {
+                if Tool.isPasscode() {
                     passCodeVC.lockType = .deactivate
                 } else {
                     passCodeVC.lockType = .activate

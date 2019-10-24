@@ -132,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         Log("Entering background...")
-        if UserDefaults.standard.bool(forKey: "useLock") {
+        if Tool.isPasscode() {
             UserDefaults.standard.set(Date(), forKey: "sleep")
         }
     }
