@@ -186,6 +186,13 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 Alert.vote(voteInfo: voteInfo, confirmAction: { isSuccess, txHash in
                     if isSuccess {
                         Tool.toast(message: "MyVoteView.Toast".localized)
+                        
+                        DispatchQueue.global().async {
+                            let result = Manager.icon.getBalance(address: self.wallet.address)
+                            Log("Balance: \(String(describing: result))")
+                            Manager.iiss.getPRepInfo()
+                        }
+                        
                         self.navigationController?.popToRootViewController(animated: true)
                     } else {
                         Log(txHash, .error)

@@ -489,7 +489,6 @@ extension BalanceManager {
     }
     
     func getTokenBalance(address: String, contract: String) -> BigUInt? {
-        // 바로 가져오게
         guard let wallet = self.tokenBalances[address] else { return nil }
         let balance = wallet[contract]
         
@@ -551,9 +550,20 @@ class PRepManager {
             let percentString = String(format: "%.1f", percent) + " %"
             DispatchQueue.main.async {
                 mainViewModel.totalVotedPower.onNext(percentString)
+                mainViewModel.reload.onNext(true)
             }
         }
     }
+    
+//    func updatePrepInfo(icx: ICXWallet) {
+//        guard let stake = self.service.getStake(from: icx) else { return }
+//        guard let voting = self.service.getDelegation(wallet: icx) else { return }
+//        guard let iscore = self.service.queryIScore(from: icx) else { return }
+//        let myStake = MyStakeInfo(stake: stake.stake, votingPower: voting.votingPower, iscore: iscore.iscore)
+//        self.walletInfo[icx.address] = myStake
+//
+//        mainViewModel.reload.onNext(true)
+//    }
     
     func votingPower(icx: ICXWallet) -> BigUInt? {
         return walletInfo[icx.address]?.votingPower

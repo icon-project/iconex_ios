@@ -18,7 +18,7 @@ class MainViewModel {
     
     var currencyUnit: BehaviorSubject<BalanceUnit>
     
-    var totalExchangedBalance: PublishSubject<String>
+    var totalExchangedBalance: BehaviorSubject<String>
     
 //    var totalVotedPower: PublishSubject<String>
     var totalVotedPower: BehaviorSubject<String>
@@ -35,7 +35,7 @@ class MainViewModel {
     init() {
         self.currencyUnit = BehaviorSubject<BalanceUnit>(value: .USD)
         
-        self.totalExchangedBalance = PublishSubject<String>()
+        self.totalExchangedBalance = BehaviorSubject<String>(value: "-")
         
         self.totalVotedPower = BehaviorSubject<String>(value: "-")
         

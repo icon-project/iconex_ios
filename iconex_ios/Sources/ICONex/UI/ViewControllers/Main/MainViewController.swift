@@ -124,6 +124,7 @@ class MainViewController: BaseViewController, Floatable {
         }
         
         mainViewModel.reload
+            .observeOn(MainScheduler.instance)
             .subscribe { (_) in
 //                self.balanceLabel.alpha = 0
 //                self.powerLabel.alpha = 0
