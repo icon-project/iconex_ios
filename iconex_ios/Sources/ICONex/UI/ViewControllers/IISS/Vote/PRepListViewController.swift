@@ -109,42 +109,47 @@ extension PRepListViewController {
         
         self.refreshControl.beginRefreshing()
         
-        // load my votes        
-        let _ = Manager.voteList.loadMyVotes(from: wallet)
-        
-        Manager.voteList.loadPrepListwithRank(from: wallet) { preps, editInfoList in
-            self.refreshControl.endRefreshing()
+        DispatchQueue.global().async {
+            // load my votes
+            let _ = Manager.voteList.loadMyVotes(from: self.wallet)
             
-            let orderedList: NewPRepListResponse? = {
-                guard var prepInfo = preps, let prepList = preps?.preps else { return preps }
+            Manager.voteList.loadPrepListwithRank(from: self.wallet) { preps, editInfoList in
+                self.refreshControl.endRefreshing()
                 
-                switch self.sortType {
-                case .rankDescending:
-                    return preps
-                case .rankAscending:
-                    prepInfo.preps.reverse()
+                let orderedList: NewPRepListResponse? = {
+                    guard var prepInfo = preps, let prepList = preps?.preps else { return preps }
                     
-                    return prepInfo
-                    
-                case .nameDescending:
-                    let aa = prepList.sorted(by: { (lhs, rhs) -> Bool in
-                        return lhs.name < rhs.name
-                    })
-                    prepInfo.preps = aa
-                    return prepInfo
-                    
-                case .nameAscending:
-                    let aa = prepList.sorted(by: { (lhs, rhs) -> Bool in
-                        return lhs.name > rhs.name
-                    })
-                    prepInfo.preps = aa
-                    return prepInfo
-                    
+                    switch self.sortType {
+                    case .rankDescending:
+                        return preps
+                    case .rankAscending:
+                        prepInfo.preps.reverse()
+                        
+                        return prepInfo
+                        
+                    case .nameDescending:
+                        let aa = prepList.sorted(by: { (lhs, rhs) -> Bool in
+                            return lhs.name < rhs.name
+                        })
+                        prepInfo.preps = aa
+                        return prepInfo
+                        
+                    case .nameAscending:
+                        let aa = prepList.sorted(by: { (lhs, rhs) -> Bool in
+                            return lhs.name > rhs.name
+                        })
+                        prepInfo.preps = aa
+                        return prepInfo
+                        
+                    }
+                }()
+                
+                DispatchQueue.main.async {
+                    self.preps = orderedList
+                    self.tableView.reloadData()
                 }
-            }()
-            
-            self.preps = orderedList
-            self.tableView.reloadData()
+            }
+        
         }
     }
 }

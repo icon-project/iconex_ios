@@ -89,13 +89,15 @@ class PRepSearchViewController: BaseViewController {
                 self.view.endEditing(true)
         }.disposed(by: disposeBag)
         
-        delegate.voteViewModel.newList.subscribe(onNext: { (list) in
-            self.newList = list
-        }).disposed(by: disposeBag)
-        
-        delegate.voteViewModel.myList.subscribe(onNext: { (list) in
-            self.myVoteList = list
-        }).disposed(by: disposeBag)
+        if !isViewMode {
+            delegate.voteViewModel.newList.subscribe(onNext: { (list) in
+                self.newList = list
+            }).disposed(by: disposeBag)
+
+            delegate.voteViewModel.myList.subscribe(onNext: { (list) in
+                self.myVoteList = list
+            }).disposed(by: disposeBag)
+        }
     }
 }
 
@@ -111,14 +113,6 @@ extension PRepSearchViewController: UITableViewDataSource {
         
         cell.rankLabel.size12(text: "\(prep.rank).", color: .gray77, weight: .semibold)
         
-        let grade: String = {
-            switch prep.grade {
-            case .main: return "P-Rep"
-            case .sub: return "Sub P-Rep"
-            case .candidate: return "Candidate"
-            }
-        }()
-        cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
         cell.prepNameLabel.size12(text: prep.name, color: .gray77, weight: .semibold, align: .left)
         cell.totalVoteValue.size12(text: prep.delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .semibold, align: .right)
         
@@ -145,6 +139,28 @@ extension PRepSearchViewController: UITableViewDataSource {
         let checker = myVoteChecker && newVoteChecker
         
         cell.addButton.isEnabled = checker
+        
+        let grade: String = {
+            switch prep.grade {
+            case .main: return "P-Rep"
+            case .sub: return "Sub P-Rep"
+            case .candidate: return "Candidate"
+            }
+        }()
+        
+        if isViewMode {
+            if let checker = Manager.voteList.myVotes?.delegations.filter({ $0.address == prep.address }).count, checker > 0 {
+                cell.prepTypeLabel.size12(text: "(" + grade + " / Voted)", color: .gray77)
+            } else {
+                cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
+            }
+        } else {
+            if checker {
+                cell.prepTypeLabel.size12(text: "(" + grade + ")", color: .gray77)
+            } else {
+                cell.prepTypeLabel.size12(text: "(" + grade + " / Voted)", color: .gray77)
+            }
+        }
         
         cell.addButton.rx.tap.asControlEvent().subscribe { (_) in
             self.view.endEditing(true)
