@@ -230,6 +230,7 @@ class IXSlider: UIView {
                     
                     self.currentValue.onNext(bigTotal)
                 }
+                self.estimateFee.onNext(true)
             }).disposed(by: disposeBag)
         
         textField.rx.controlEvent(.editingDidBegin)
@@ -298,7 +299,7 @@ class IXSlider: UIView {
             slider.value = 0
             isEnabled = false
         } else {
-            guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted?.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
+            guard let stakedDecimal = staked.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
             
             let crtNum = (stakedDecimal / totalDecimal) * 100
             

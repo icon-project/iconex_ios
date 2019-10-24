@@ -401,6 +401,14 @@ extension StakeViewController {
             Alert.basic(title: String(format: "Stake.Alert.Complete.Message".localized, message), leftButtonTitle: "Common.Confirm".localized, cancelAction: {
                 self.navigationController?.popViewController(animated: true)
             }).show()
+            
+            DispatchQueue.global().async {
+                let result = Manager.icon.getBalance(address: self.wallet.address)
+                Log("Balance: \(String(describing: result))")
+                
+                // fetch prep info
+                Manager.iiss.getPRepInfo()
+            }
         } catch {
             Log("Error - \(error)")
             Alert.basic(title: "Error.CommonError".localized, leftButtonTitle: "Common.Confirm".localized).show()
