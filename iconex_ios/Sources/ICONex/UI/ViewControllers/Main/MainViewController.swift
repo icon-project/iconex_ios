@@ -521,6 +521,7 @@ extension MainViewController: UICollectionViewDataSource {
                 cell.nicknameLabel.text = type == "icx" ? CoinType.icx.fullName : CoinType.eth.fullName
             } else {
                 let realIndex = indexPath.row - Manager.wallet.types.count
+                cell.coinTokenIndex = realIndex
                 cell.fullName = self.tokenList[realIndex].name
                 cell.nicknameLabel.text = self.tokenList[realIndex].name
             }

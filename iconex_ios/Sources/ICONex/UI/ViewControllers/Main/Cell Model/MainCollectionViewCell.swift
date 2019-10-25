@@ -36,6 +36,7 @@ class MainCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    var coinTokenIndex: Int?
     var symbol: String = ""
     var fullName: String = ""
     var coinTokens: [BaseWalletConvertible]? = nil {
@@ -331,7 +332,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     guard let nickName = symbol.first?.uppercased() else { return tokenCell }
                     tokenCell.symbolNicknameLabel.size16(text: nickName , color: .white, weight: .medium, align: .center)
-                    tokenCell.symbolView.backgroundColor = colorList[indexPath.row%12].background // 임시
+                    tokenCell.symbolView.backgroundColor = colorList[(self.coinTokenIndex ?? 0)%12].background
                     tokenCell.symbolLabel.size16(text: symbol, color: .gray77, weight: .semibold)
                     tokenCell.fullnameLabel.size12(text: fullName, color: .gray179, weight: .light)
                     
