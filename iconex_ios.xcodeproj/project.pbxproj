@@ -60,6 +60,7 @@
 		BF4F6F7C2318A57D0098D303 /* CoinTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4F6F632318A57D0098D303 /* CoinTableViewCell.swift */; };
 		BF61DF77232B908A00F6CEA2 /* VoteAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF61DF76232B908A00F6CEA2 /* VoteAlertView.xib */; };
 		BF61DF79232B90A100F6CEA2 /* VoteAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF61DF78232B90A100F6CEA2 /* VoteAlertView.swift */; };
+		BF6C3CBD2362DF7A0091F838 /* IXToolTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6C3CBC2362DF7A0091F838 /* IXToolTip.swift */; };
 		BF6EFEBF22FA5174003B6AF3 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6EFEAD22FA5173003B6AF3 /* Alert.swift */; };
 		BF6EFEC022FA5174003B6AF3 /* Alert.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF6EFEAE22FA5173003B6AF3 /* Alert.storyboard */; };
 		BF6EFEC122FA5174003B6AF3 /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF6EFEAF22FA5173003B6AF3 /* AlertViewController.swift */; };
@@ -264,6 +265,7 @@
 		BF4F6F632318A57D0098D303 /* CoinTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoinTableViewCell.swift; sourceTree = "<group>"; };
 		BF61DF76232B908A00F6CEA2 /* VoteAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VoteAlertView.xib; sourceTree = "<group>"; };
 		BF61DF78232B90A100F6CEA2 /* VoteAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteAlertView.swift; sourceTree = "<group>"; };
+		BF6C3CBC2362DF7A0091F838 /* IXToolTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXToolTip.swift; sourceTree = "<group>"; };
 		BF6EFEAD22FA5173003B6AF3 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		BF6EFEAE22FA5173003B6AF3 /* Alert.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Alert.storyboard; sourceTree = "<group>"; };
 		BF6EFEAF22FA5173003B6AF3 /* AlertViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
@@ -671,6 +673,7 @@
 				D424B73322EEB7DE00D9BD12 /* IXTextField */,
 				BF0902812314B6AE00B177F4 /* IXInputBox */,
 				1BB4C777231BFAA500BA4138 /* IXKeyboardToolBar */,
+				BF6C3CBC2362DF7A0091F838 /* IXToolTip.swift */,
 			);
 			path = Custom;
 			sourceTree = "<group>";
@@ -1311,6 +1314,7 @@
 				D472BA6D230299EA00E28E05 /* IScoreDetailViewController.swift in Sources */,
 				BF4F6F7A2318A57D0098D303 /* WalletTableViewCell.swift in Sources */,
 				1BB4C781231C1EBB00BA4138 /* AddressBookViewController.swift in Sources */,
+				BF6C3CBD2362DF7A0091F838 /* IXToolTip.swift in Sources */,
 				D49E088123225119001C293E /* Decimal+Extension.swift in Sources */,
 				D4ECFE5622013FE4001644AF /* WalletKeystore.swift in Sources */,
 				1BBFFCEF232538A300957E5F /* ConnectDataViewController.swift in Sources */,

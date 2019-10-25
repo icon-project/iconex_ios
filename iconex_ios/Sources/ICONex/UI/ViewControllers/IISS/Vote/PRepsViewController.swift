@@ -68,6 +68,8 @@ class PRepsViewController: BaseViewController, Floatable {
     
     private var sectionHeader = PRepSectionHeaderView(frame: CGRect(x: 0, y: 0, width: .max, height: 36))
     
+    private let toolTip: IXToolTip = IXToolTip()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -114,6 +116,8 @@ class PRepsViewController: BaseViewController, Floatable {
         }).disposed(by: disposeBag)
         
         sectionHeader.orderButton.rx.tap.asControlEvent().subscribe { [unowned self] (_) in
+            self.toolTip.dismissLastToolTip()
+            
             switch self.sortType {
             case .rankDescending:
                 self.sortType = .rankAscending
@@ -275,7 +279,7 @@ extension PRepsViewController: UITableViewDataSource {
             .subscribe(onNext: { [unowned self] in
                 let editInfo = self.editInfoList![indexPath.row]
                 if Manager.voteList.contains(address: editInfo.address) || checker > 0 {
-                    self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "PRepView.ToolTip.Exist".localized)
+                    self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "PRepView.ToolTip.Exist".localized, parent: self.tableView)
                     self.tableView.reloadData()
                 } else {
                     if Manager.voteList.add(prep: editInfo) {
@@ -285,7 +289,7 @@ extension PRepsViewController: UITableViewDataSource {
                         let total = myVoteCount + newVoteCount
                         Tool.voteToast(count: total)
                     } else {
-                        self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "PRepView.ToolTip.Maximum".localized)
+                        self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "PRepView.ToolTip.Maximum".localized, parent: self.tableView)
                     }
                 }
             }).disposed(by: cell.disposeBag)

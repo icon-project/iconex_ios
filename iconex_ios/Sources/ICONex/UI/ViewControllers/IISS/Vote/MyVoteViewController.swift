@@ -74,6 +74,8 @@ class MyVoteViewController: BaseViewController {
     
     private var stack: UIStackView?
     
+    private let toolTip: IXToolTip = IXToolTip()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -95,15 +97,14 @@ class MyVoteViewController: BaseViewController {
         stack = UIStackView(arrangedSubviews: [messageTitle,messageSubtitle])
         stack?.axis = .vertical
         
-        stack?.spacing = 16
         stack?.translatesAutoresizingMaskIntoConstraints = false
         
         if let stackView = self.stack {
             stackView.isHidden = true
             self.tableFooterView.addSubview(stackView)
-            stackView.topAnchor.constraint(equalTo: self.tableFooterView.topAnchor, constant: 40).isActive = true
+            stackView.topAnchor.constraint(equalTo: self.tableFooterView.topAnchor, constant: 10).isActive = true
             stackView.widthAnchor.constraint(equalTo: self.tableFooterView.widthAnchor).isActive = true
-            stackView.bottomAnchor.constraint(equalTo: self.tableFooterView.bottomAnchor, constant: -10).isActive = true
+            stackView.bottomAnchor.constraint(equalTo: self.tableFooterView.bottomAnchor, constant: -40).isActive = true
         }
         
         footerBox.layer.cornerRadius = 8
@@ -262,6 +263,8 @@ class MyVoteViewController: BaseViewController {
         resetButton.rx.tap
             .subscribe { [unowned self] (_) in
                 Alert.basic(title: "MyVoteView.Alert.Reset".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                    self.toolTip.dismissLastToolTip()
+                    
                     for (index, list) in self.myVoteList.enumerated() {
                         var item = list
                         item.editedDelegate = 0
@@ -540,7 +543,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.addButton.isHighlighted = false
                 cell.addButton.rx.tap.asControlEvent()
                     .subscribe { (_) in
-                        self.tableView.showToolTip(positionY: cell.frame.origin.y-14, text: "MyVoteView.ToolTip.Delete".localized)
+                        self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "MyVoteView.ToolTip.Delete".localized, parent: self.tableView)
                     }.disposed(by: cell.disposeBag)
                 
                 
@@ -709,9 +712,11 @@ extension MyVoteViewController: UITableViewDataSource {
                     .subscribe(onNext: { [unowned self] in
                         self.newList.remove(at: indexPath.row - self.myVoteList.count)
                         Manager.voteList.remove(prep: info)
+                        tableView.reloadData()
+                        
                         self.delegate.voteViewModel.newList.onNext(self.newList)
                         self.isChanged.onNext(true)
-                        tableView.reloadData()
+                        
                     }).disposed(by: cell.disposeBag)
                 
                 let delegate = info.editedDelegate ?? 0
@@ -921,7 +926,7 @@ extension MyVoteViewController: UITableViewDelegate {
             } else {
                 selectedIndexPath = indexPath
             }
-            
+            self.toolTip.dismissLastToolTip()
             self.tableView.reloadData()
         }
     }
