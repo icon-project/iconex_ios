@@ -48,6 +48,7 @@ class IScoreDetailViewController: BaseViewController {
         IScoreHeader1.size16(text: "IScoreDetail.Header1".localized, color: .gray77, weight: .medium, align: .left)
         IScoreHeader2.size16(text: "IScoreDetail.Header2".localized, color: .gray77, weight: .medium, align: .left)
         descContainer.border(0.5, .gray230)
+        descContainer.corner(8)
         descContainer.backgroundColor = .gray250
         descHeader1.size12(text: "IScoreDetail.DescHeader1".localized, color: .gray128, weight: .light, align: .left)
         descHeader2.size12(text: "IScoreDetail.DescHeader2".localized, color: .gray128, weight: .light, align: .left)
@@ -75,9 +76,11 @@ class IScoreDetailViewController: BaseViewController {
         claimButton.rx.tap
             .subscribe(onNext: { [unowned self] in
                 guard let info = self.iscore else { return }
+                print("stepLimit \(info.stepLimit)")
                 Alert.iScore(iscoreInfo: info, confirmAction: {
                     DispatchQueue.global().async {
-                        let response = Manager.icon.claimIScore(from: self.wallet, limit: BigUInt(info.stepLimit)!, privateKey: self.key)
+                        
+                        let response = Manager.icon.claimIScore(from: self.wallet, limit: info.stepLimit, privateKey: self.key)
                         
                         DispatchQueue.main.async {
                             if response != nil {
@@ -142,14 +145,9 @@ class IScoreDetailViewController: BaseViewController {
                     self?.descValue2.size14(text: estimated.toString(decimal: 18, 18, true).currencySeparated(), color: UIColor(51, 51, 51), weight: .regular, align: .right)
                     self?.exchangedValue.size12(text: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"), color: .gray179, weight: .regular, align: .right)
                     
-                    let stepLimitPrice: String = {
-                        guard let estimated = estimatedStep?.toString(decimal: 0).currencySeparated(), let stepPrice = Manager.icon.stepPrice?.toString(decimal: 18, 18, true).currencySeparated() else {
-                            return "-"
-                        }
-                        return estimated + " / " + stepPrice
-                    }()
+                    let stepPrice = Manager.icon.stepPrice?.toString(decimal: 18, 18, true).currencySeparated() ?? "-"
                     
-                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), stepLimit: stepLimitPrice, estimatedFee: estimated.toString(decimal: 18, 18, true), estimateUSD: "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
+                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), stepLimit: estimatedStep ?? BigUInt.zero, stepPrice: stepPrice, estimatedFee: estimated.toString(decimal: 18, 18, true).currencySeparated(), estimateUSD:  "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
                     
                     self?.iscore = iscoreInfo
                     

@@ -226,7 +226,8 @@ struct EthereumTransaction {
 struct IScoreClaimInfo {
     var currentIScore: String
     var youcanReceive: String
-    var stepLimit: String
+    var stepLimit: BigUInt
+    var stepPrice: String
     var estimatedFee: String
     var estimateUSD: String
 }

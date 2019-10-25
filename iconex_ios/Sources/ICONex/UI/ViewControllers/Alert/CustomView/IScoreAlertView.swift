@@ -28,7 +28,7 @@ class IScoreAlertView: UIView {
         willSet {
             currentIScoreLabel.size18(text: newValue!.currentIScore, color: .mint1, weight: .regular, align: .right, lineBreakMode: .byWordWrapping)
             canReceiveLabel.size18(text: newValue!.youcanReceive, color: .mint1, weight: .regular, align: .right)
-            stepLimitLabel.size12(text: newValue!.stepLimit, color: .gray77, weight: .bold, align: .right)
+            stepLimitLabel.size12(text: newValue!.stepLimit.toString(decimal: 0).currencySeparated() + " / " + newValue!.stepPrice, color: .gray77, weight: .bold, align: .right)
             estimatedFeeLabel.size12(text: newValue!.estimatedFee, color: .gray77, weight: .bold, align: .right)
             estimatedUSDLabel.size12(text: newValue!.estimateUSD, color: .gray179, weight: .regular, align: .right)
         }
