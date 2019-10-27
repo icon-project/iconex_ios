@@ -83,7 +83,7 @@
 "Create.Wallet.Step3.Desc.1_1" = "・ With wallet Keystore file and password, wallet can be install in different device and restore deleted wallet.";
 "Create.Wallet.Step3.Desc.1_2" = "・ Keystore files can be dowload after creating wallet at 'wallet Keystore'.";
 "Create.Wallet.Step3.Alert.Info1" = "Wallet Keystore files should not be shared";
-"Create.Wallet.Step3.Alert.Info2" = "Keystore file that saved in \"my iPhone\" could deleted when application is deleted; please save at safe place.";
+"Create.Wallet.Step3.Alert.Info2" = "Keystore file that saved in \"my iPhone\" could deleted when application is deleted. Please save at safe place.";
 "Create.Wallet.Step3.Alert.Save" = "File saved.";
 "Create.Wallet.Step3.Alert.NotSaved" = "Would you like to proceed without saving Keystore file?";
 
@@ -370,7 +370,7 @@
 
 // MARK: ManageBackUpViewController
 "Manage.Backup.NavBar.Title" = "Keystore Backup";
-"Manage.Backup.Title" = "'You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
+"Manage.Backup.Title" = "You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
 "Manage.Backup.Download" = "Download the Keystore file";
 "Manage.Backup.Keystore.Desc1" = "The Keystore file contains the encrypted private key and requires the wallet password to access it.";
 "Manage.Backup.Keystore.Desc2" = "・ Use this Keystore file to load your wallet from other devices.";
@@ -424,8 +424,8 @@
 "Send.GasLimit" = "Gas Limit";
 "Send.GasLimit.Error" = "Please enter the Gas Limit at least 21,000";
 "Send.GasPrice" = "Gas Price";
-"Send.GasPrice.Slow" = "Slow";
-"Send.GasPrice.Fast" = "Fast";
+"Send.GasPrice.Slow" = "1 (Slow)";
+"Send.GasPrice.Fast" = "(Fast) 99";
 "Send.EstimatedMaxStep" = "Estimated Maximum Fee";
 "Send.SendButton" = "Transfer";
 "Send.AddressBook" = "Select Address";
