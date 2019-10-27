@@ -17,6 +17,22 @@ class WalletTableViewCell: UITableViewCell {
     @IBOutlet weak var currencyLabel: UILabel!
     @IBOutlet weak var currencyUnitLabel: UILabel!
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    var isLoading: Bool = true {
+        willSet {
+            if newValue {
+                spinner.startAnimating()
+            } else {
+                spinner.stopAnimating()
+            }
+            
+            self.balanceLabel.isHidden = newValue
+            self.currencyLabel.isHidden = newValue
+            self.currencyUnitLabel.isHidden = newValue
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
