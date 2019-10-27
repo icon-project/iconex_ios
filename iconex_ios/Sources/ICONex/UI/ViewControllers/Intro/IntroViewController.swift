@@ -136,7 +136,6 @@ class IntroViewController: BaseViewController {
     }
     
     private func go() {
-        Manager.exchange.getExchangeList()
         Manager.balance.getAllBalances()
         
         let list = Manager.wallet.walletList

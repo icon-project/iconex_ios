@@ -409,6 +409,8 @@ extension BalanceManager {
             Manager.icon.stepCost = Manager.icon.getStepCosts()
             Manager.icon.stepPrice = Manager.icon.getStepPrice()
             Manager.iiss.getPRepInfo()
+            Manager.exchange.getExchangeList()
+            
             self.walletBalances.removeAll()
             self.tokenBalances.removeAll()
             

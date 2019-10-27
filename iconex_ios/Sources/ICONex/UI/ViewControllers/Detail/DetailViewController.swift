@@ -113,11 +113,13 @@ class DetailViewController: BaseViewController, Floatable {
         refreshControl.rx.controlEvent(.valueChanged)
             .subscribe { (_) in
                 self.pageIndex = 1
+                Manager.exchange.getExchangeList()
                 self.fetchBalance()
                 self.fetchTxList()
                 
-                refreshControl.endRefreshing()
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(700)) {
+                    refreshControl.endRefreshing()
+                }
             }.disposed(by: disposeBag)
         
         self.tableView.refreshControl = refreshControl
@@ -368,6 +370,10 @@ class DetailViewController: BaseViewController, Floatable {
             manageVC.walletInfo = wallet
             manageVC.show()
         }
+        
+        totalBalanceLabel.text = ""
+        liquidLabel.text = ""
+        stakedLabel.text = ""
         
         self.currencyPriceLabel.isHidden = true
         
