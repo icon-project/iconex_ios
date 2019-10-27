@@ -50,6 +50,8 @@ class PRepSearchViewController: BaseViewController {
         super.initializeComponents()
         
         searchField.placeholder = "PRepSearch.Placeholder".localized
+        searchField.keyboardType = .asciiCapable
+        searchField.returnKeyType = .search
         
         cancelButton.setTitle("Common.Cancel".localized, for: .normal)
         cancelButton.setTitleColor(.gray128, for: .normal)

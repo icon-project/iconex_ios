@@ -68,7 +68,7 @@ class MyVoteDelegateCell: UITableViewCell {
         sliderContainer.corner(8)
         sliderContainer.backgroundColor = .gray252
         
-        myVotesLabel.size14(text: "My Votes (%)", color: .mint1)
+        myVotesLabel.size14(text: "My Votes", color: .mint1)
         
         fieldContainer.border(0.5, .gray230)
         fieldContainer.corner(4)
