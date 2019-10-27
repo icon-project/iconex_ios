@@ -529,7 +529,7 @@ class PRepManager {
                 guard let stake = self.service.getStake(from: icx) else { continue }
                 guard let voting = self.service.getDelegation(wallet: icx) else { continue }
                 guard let iscore = self.service.queryIScore(from: icx) else { continue }
-                let myStake = MyStakeInfo(stake: stake.stake, votingPower: voting.votingPower, iscore: iscore.iscore)
+                let myStake = MyStakeInfo(stake: stake.stake, unstake: stake.unstake, votingPower: voting.votingPower, iscore: iscore.iscore)
                 staked += stake.stake
                 voted += voting.totalDelegated
                 self.walletInfo[icx.address] = myStake
@@ -556,22 +556,16 @@ class PRepManager {
         }
     }
     
-//    func updatePrepInfo(icx: ICXWallet) {
-//        guard let stake = self.service.getStake(from: icx) else { return }
-//        guard let voting = self.service.getDelegation(wallet: icx) else { return }
-//        guard let iscore = self.service.queryIScore(from: icx) else { return }
-//        let myStake = MyStakeInfo(stake: stake.stake, votingPower: voting.votingPower, iscore: iscore.iscore)
-//        self.walletInfo[icx.address] = myStake
-//
-//        mainViewModel.reload.onNext(true)
-//    }
-    
     func votingPower(icx: ICXWallet) -> BigUInt? {
         return walletInfo[icx.address]?.votingPower
     }
     
     func stake(icx: ICXWallet) -> BigUInt? {
         return walletInfo[icx.address]?.stake
+    }
+    
+    func unstake(icx: ICXWallet) -> BigUInt? {
+        return walletInfo[icx.address]?.unstake
     }
     
     func iscore(icx: ICXWallet) -> BigUInt? {

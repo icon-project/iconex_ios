@@ -215,13 +215,16 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     guard let stakedDecimal = stakeInfo.decimalNumber, let balanceDecimal = balance.decimalNumber else { return coinCell }
                     
-                    let totalBalance = stakedDecimal + balanceDecimal
+                    let unstakeDecimal = Manager.iiss.unstake(icx: icx)?.decimalNumber ?? 0
+                    
+                    let totalBalance = stakedDecimal + unstakeDecimal + balanceDecimal
 
                     let stakedPercent: Float = {
                         if stakedDecimal == 0 {
                             return 0
                         } else {
-                            return (stakedDecimal / totalBalance).floatValue * 100
+                            let top = stakedDecimal + unstakeDecimal
+                            return (top / totalBalance).floatValue * 100
                         }
                     }()
                     
