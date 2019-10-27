@@ -76,7 +76,26 @@ class IScoreDetailViewController: BaseViewController {
         claimButton.rx.tap
             .subscribe(onNext: { [unowned self] in
                 guard let info = self.iscore else { return }
-                print("stepLimit \(info.stepLimit)")
+                
+                let stepPrice: BigUInt? = {
+                    guard let stepPrice = Manager.icon.stepPrice else {
+                        return Manager.icon.getStepPrice()
+                    }
+                    return stepPrice
+                }()
+                
+                guard let balance = Manager.icon.getBalance(wallet: self.wallet), let price = stepPrice else {
+                    Tool.toast(message: "Error.CommonError".localized)
+                    return
+                }
+                
+                let estimatedFee = info.stepLimit * price
+                
+                if estimatedFee > balance {
+                    Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
+                
                 Alert.iScore(iscoreInfo: info, confirmAction: {
                     DispatchQueue.global().async {
                         
@@ -87,6 +106,7 @@ class IScoreDetailViewController: BaseViewController {
                                 Log("txHash - \(response!)")
                                 
                                 Tool.toast(message: "ISCoreDetail.ClaimSuccess".localized)
+                                self.run()
                             } else {
                                 Tool.toast(message: "Error.CommonError".localized)
                             }
@@ -135,9 +155,9 @@ class IScoreDetailViewController: BaseViewController {
                 self?.refreshControl?.endRefreshing()
                 
                 if let resp = response {
-                    self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18, 15), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
                     
-                    self?.receiveICXValue.set(text: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    self?.receiveICXValue.set(text: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 8), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
                     
                     let estimated = (estimatedStep ?? 0) * (Manager.icon.stepPrice ?? 0)
                     
@@ -147,7 +167,7 @@ class IScoreDetailViewController: BaseViewController {
                     
                     let stepPrice = Manager.icon.stepPrice?.toString(decimal: 18, 18, true).currencySeparated() ?? "-"
                     
-                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 18, true), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 18, true), stepLimit: estimatedStep ?? BigUInt.zero, stepPrice: stepPrice, estimatedFee: estimated.toString(decimal: 18, 18, true).currencySeparated(), estimateUSD:  "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
+                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 15), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 8), stepLimit: estimatedStep ?? BigUInt.zero, stepPrice: stepPrice, estimatedFee: estimated.toString(decimal: 18, 18, true).currencySeparated(), estimateUSD:  "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
                     
                     self?.iscore = iscoreInfo
                     
