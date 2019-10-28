@@ -140,7 +140,7 @@ extension PRepSearchViewController: UITableViewDataSource {
         
         let checker = myVoteChecker && newVoteChecker
         
-        cell.addButton.isEnabled = checker
+        cell.addButton.isHighlighted = !checker
         
         let grade: String = {
             switch prep.grade {
@@ -169,13 +169,19 @@ extension PRepSearchViewController: UITableViewDataSource {
             
             let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil, grade: prep.grade)
             
-            if Manager.voteList.add(prep: myEdited) {
-                guard let total = try? self.delegate.voteViewModel.voteCount.value() else { return }
-                Tool.voteToast(count: total)
+            if Manager.voteList.contains(address: prep.address) {
+                Toast.toast(message: "PRepView.ToolTip.Exist".localized)
                 self.tableView.reloadData()
-                
             } else {
-                Toast.toast(message: "PRepView.ToolTip.Maximum".localized)
+                if Manager.voteList.add(prep: myEdited) {
+                    self.delegate.voteViewModel.currentAddedList.onNext(Manager.voteList.myAddList)
+                    guard let total = try? self.delegate.voteViewModel.voteCount.value() else { return }
+                    Tool.voteToast(count: total)
+                    self.tableView.reloadData()
+                    
+                } else {
+                    Toast.toast(message: "PRepView.ToolTip.Maximum".localized)
+                }
             }
             
         }.disposed(by: cell.disposeBag)

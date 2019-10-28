@@ -288,6 +288,8 @@ extension PRepsViewController: UITableViewDataSource {
                         
                         let total = myVoteCount + newVoteCount
                         Tool.voteToast(count: total)
+                        
+                        self.delegate.voteViewModel.currentAddedList.onNext(Manager.voteList.myAddList)
                     } else {
                         self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "PRepView.ToolTip.Maximum".localized, parent: self.tableView)
                     }
