@@ -16,6 +16,7 @@ class IntroViewController: BaseViewController {
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
     private var _animated: Bool = false
+    private var _checked: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +53,9 @@ class IntroViewController: BaseViewController {
                 _animated = true
                 startAlpha()
             } else {
-                self.getVersion()
+                if !_checked {
+                    self.getVersion()
+                }
             }
         }
     }
@@ -92,6 +95,7 @@ class IntroViewController: BaseViewController {
     
     func getVersion() {
         indicator.isHidden = false
+        _checked = true
         var tracker: Tracker {
             switch Config.host {
             case .main:
@@ -197,6 +201,7 @@ class IntroViewController: BaseViewController {
         let lost = UIStoryboard(name: "Intro", bundle: nil).instantiateViewController(withIdentifier: "LostView") as! LostViewController
         lost.modalPresentationStyle = .fullScreen
         lost.retryHandler = {
+            self._checked = false
             self.getVersion()
         }
         self.present(lost, animated: true, completion: nil)

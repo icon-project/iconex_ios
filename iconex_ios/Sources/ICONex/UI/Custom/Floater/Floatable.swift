@@ -122,7 +122,7 @@ class Floater {
         })
     }
     
-    func showMenu(wallet: ICXWallet, token: Token? = nil, _ controller: UIViewController? = nil) {
+    func showMenu(wallet: ICXWallet, token: Token? = nil, _ controller: UIViewController? = nil, isICX: Bool = false) {
         targetAction = controller
         let floatMenu = UIStoryboard(name: "FloatButton", bundle: nil).instantiateInitialViewController() as! FloatViewController
         
@@ -140,7 +140,7 @@ class Floater {
                 
                 Alert.password(wallet: wallet, returnAction: { pk in
                     guard let stakedInfo = Manager.icon.getStake(from: wallet) else {
-                        Tool.toast(message: "Error.CommonError".localized)
+                        Toast.toast(message: "Error.CommonError".localized)
                         return
                     }
                     
@@ -187,6 +187,7 @@ class Floater {
             floatMenu.itemAction1 = {
                 let deposit = UIStoryboard(name: "Detail", bundle: nil).instantiateViewController(withIdentifier: "Deposit") as! DepositViewController
                 deposit.wallet = wallet
+                deposit.isICX = isICX
                 app.topViewController()?.presentPanModal(deposit)
             }
             

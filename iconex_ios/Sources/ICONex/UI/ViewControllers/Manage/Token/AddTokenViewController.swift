@@ -107,6 +107,7 @@ class AddTokenViewController: BaseViewController {
                 for i in self.selectedList {
                     try? wallet.addToken(token: i.value)
                 }
+                mainViewModel.reload.onNext(true)
                 self.navigationController?.popViewController(animated: true)
             }.disposed(by: disposeBag)
         

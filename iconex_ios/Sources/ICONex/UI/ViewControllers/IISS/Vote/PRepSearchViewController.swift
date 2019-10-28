@@ -173,7 +173,7 @@ extension PRepSearchViewController: UITableViewDataSource {
                 self.tableView.reloadData()
                 
             } else {
-                Tool.toast(message: "PRepView.ToolTip.Maximum".localized)
+                Toast.toast(message: "PRepView.ToolTip.Maximum".localized)
             }
             
         }.disposed(by: cell.disposeBag)

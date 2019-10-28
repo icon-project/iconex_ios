@@ -21,6 +21,7 @@ class DepositViewController: PopableViewController {
     @IBOutlet weak var descLabel: UILabel!
     
     var wallet: BaseWalletConvertible!
+    var isICX: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,7 @@ class DepositViewController: PopableViewController {
         
         walletAddressTitle.size20(text: "Wallet.Address".localized, color: .gray77, weight: .medium, align: .center)
         
-        guard let qrCodeSource = wallet.address.generateQRCode() else { return }
+        guard let qrCodeSource = wallet.address.add0xPrefix().generateQRCode() else { return }
         self.qrImage.image = UIImage(ciImage: qrCodeSource)
         
         walletAddressLabel.size12(text: wallet.address.add0xPrefix(), color: .gray77, align: .center)
@@ -50,7 +51,7 @@ class DepositViewController: PopableViewController {
         copyButton.setTitle("Wallet.Address.Copy".localized, for: .normal)
         copyButton.rx.tap.subscribe(onNext: {
             copyString(message: self.wallet.address)
-            Tool.toast(message: "Wallet.Address.CopyComplete".localized)
+            Toast.toast(message: "Wallet.Address.CopyComplete".localized)
         }).disposed(by: disposeBag)
         
         inputBox.set(state: .normal, placeholder: "Main.QRCode.InputBox.Placeholder".localized)
@@ -84,7 +85,7 @@ class DepositViewController: PopableViewController {
                 guard let qrCodeSource = qrString.generateQRCode() else { return }
                 self.qrImage.image = UIImage(ciImage: qrCodeSource)
             } else {
-                guard let qrCodeSource = self.wallet.address.generateQRCode() else { return }
+                guard let qrCodeSource = self.wallet.address.add0xPrefix().generateQRCode() else { return }
                 self.qrImage.image = UIImage(ciImage: qrCodeSource)
             }
         }).disposed(by: disposeBag)
@@ -98,8 +99,8 @@ class DepositViewController: PopableViewController {
             }
         }).disposed(by: disposeBag)
         
-        depositContainer.isHidden = !wallet.address.hasPrefix("hx")
-        descLabel.isHidden = !wallet.address.hasPrefix("hx")
+        depositContainer.isHidden = !wallet.address.hasPrefix("hx") || !isICX
+        descLabel.isHidden = !wallet.address.hasPrefix("hx") || !isICX
     }
     
     

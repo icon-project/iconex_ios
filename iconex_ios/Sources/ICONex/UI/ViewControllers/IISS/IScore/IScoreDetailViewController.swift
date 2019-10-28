@@ -86,9 +86,9 @@ class IScoreDetailViewController: BaseViewController {
                             if response != nil {
                                 Log("txHash - \(response!)")
                                 
-                                Tool.toast(message: "ISCoreDetail.ClaimSuccess".localized)
+                                Toast.toast(message: "ISCoreDetail.ClaimSuccess".localized)
                             } else {
-                                Tool.toast(message: "Error.CommonError".localized)
+                                Toast.toast(message: "Error.CommonError".localized)
                             }
                         }
                     }

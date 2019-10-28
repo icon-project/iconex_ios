@@ -337,9 +337,9 @@
 "Manage.Token" = "Manage Token";
 "Manage.Backup" = "Backup Wallet";
 "Manage.Change" = "Change wallet password";
-"Manage.Delete" = "Delete password";
+"Manage.Delete" = "Remove Wallet";
 "Manage.Alert.Wallet.Empty" = "Do you like to delete your wallet?";
-"Manage.Alert.Wallet" = "There are some ICX left in your wallet. Do you still want to delete your wallet?";
+"Manage.Alert.Wallet" = "There are some balances left in your wallet. Do you still want to delete your wallet?";
 
 // MARK: ManageTokenViewController
 "ManageToken.Title" = "Manage Token";

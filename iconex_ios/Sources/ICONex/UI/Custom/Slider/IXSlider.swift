@@ -215,7 +215,7 @@ class IXSlider: UIView {
                     
                     let minValue = bigVoted.toString(decimal: 18, 4).currencySeparated()
                     
-                    Tool.toast(message: String(format: "Error.Transfer.Limit.MoreThen".localized, minValue))
+                    Toast.toast(message: String(format: "Error.Transfer.Limit.MoreThen".localized, minValue))
                     self.textField.text = minValue
                     
                     self.currentValue.onNext(bigVoted)
@@ -225,7 +225,7 @@ class IXSlider: UIView {
                     
                     let maxValue = bigTotal.toString(decimal: 18, 4).currencySeparated()
                     
-                    Tool.toast(message: String(format: "Error.Transfer.Limit.LessThen".localized, maxValue))
+                    Toast.toast(message: String(format: "Error.Transfer.Limit.LessThen".localized, maxValue))
                     self.textField.text = maxValue
                     
                     self.currentValue.onNext(bigTotal)

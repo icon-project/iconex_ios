@@ -89,13 +89,13 @@ class CreateQRCodeViewController: BaseViewController {
         copyButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 UIPasteboard.general.string = self.address
-                Tool.toast(message: "Wallet.Address.CopyComplete".localized)
+                Toast.toast(message: "Wallet.Address.CopyComplete".localized)
         }.disposed(by: disposeBag)
         
         copyButton2.rx.tap.asControlEvent()
             .subscribe { (_) in
                 UIPasteboard.general.string = self.pk
-                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Toast.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
             }.disposed(by: disposeBag)
         
     }
@@ -104,7 +104,7 @@ class CreateQRCodeViewController: BaseViewController {
         super.refresh()
         
         if let address = self.address, let pk = self.pk {
-            guard let qrCodeSource = address.generateQRCode() else { return }
+            guard let qrCodeSource = address.add0xPrefix().generateQRCode() else { return }
             guard let qrCodeSource2 = pk.generateQRCode() else { return }
             
             self.qrImageView.image = UIImage(ciImage: qrCodeSource)
