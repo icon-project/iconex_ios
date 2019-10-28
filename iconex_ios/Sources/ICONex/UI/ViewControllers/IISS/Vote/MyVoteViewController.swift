@@ -45,16 +45,14 @@ class MyVoteViewController: BaseViewController {
     private var estimatedStep: BigUInt = 0 {
         willSet {
             let separated = String(newValue).currencySeparated()
-            let priceToICX = self.stepPrice.toString(decimal: 18, 9, false)
+            let priceToICX = self.stepPrice.toString(decimal: 18, 18, true)
             
             let stepLimitString = separated + " / " + priceToICX
-            stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
+            stepLimitLabel.text = stepLimitString
             
             let calculated = newValue * self.stepPrice
             let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
-            
-            stepLimitLabel.size14(text: stepLimitString, color: .gray179, align: .right)
-            estimatedFeeLabel.size14(text: calculated.toString(decimal: 18, 9, false), color: .gray179, align: .right)
+            estimatedFeeLabel.size14(text: calculated.toString(decimal: 18, 18, true), color: .gray77, align: .right)
             exchangedLabel.size14(text: calculatedPrice, color: .gray179, align: .right)
             
             self.delegate.stepLimit = stepLimitLabel.text ?? ""
@@ -113,11 +111,11 @@ class MyVoteViewController: BaseViewController {
         footerBox.layer.borderColor = UIColor.gray230.cgColor
         footerBox.layer.borderWidth = 1
         
-        stepLimitTitleLabel.size12(text: "Alert.Common.StepLimit".localized, color: .gray77, align: .right)
-        estimatedFeeTitleLabel.size12(text: "Alert.Common.EstimatedFee".localized, color: .gray77, align: .right)
+        stepLimitTitleLabel.size12(text: "Alert.Common.StepLimit".localized, color: .gray128, weight: .light, align: .right)
+        estimatedFeeTitleLabel.size12(text: "Alert.Common.EstimatedFee".localized, color: .gray128, weight: .light,align: .right)
         
-        stepLimitLabel.size14(text: "-", color: .gray179, align: .right)
-        estimatedFeeLabel.size14(text: "-", color: .gray179, align: .right)
+        stepLimitLabel.size14(text: "-", color: .gray77, align: .right)
+        estimatedFeeLabel.size14(text: "-", color: .gray77, align: .right)
         exchangedLabel.size14(text: "-", color: .gray179, align: .right)
         
         tableView.dataSource = self
@@ -441,8 +439,8 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.availableLabel.size14(text: "Available " + String(format: "%.1f", percent.floatValue) + "%", color: .gray77, weight: .light)
 
                 let delegated = total - availablePower
-                cell.votedValueLabel.size14(text: delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
-                cell.availableValueLabel.size14(text: availablePower.toString(decimal: 18, 4, false), color: .gray77, weight: .light, align: .right)
+                cell.votedValueLabel.size14(text: delegated.toString(decimal: 18, 4, false), color: .gray77, weight: .regular, align: .right)
+                cell.availableValueLabel.size14(text: availablePower.toString(decimal: 18, 4, false), color: .gray77, weight: .regular, align: .right)
 
             }).disposed(by: cell.cellBag)
             

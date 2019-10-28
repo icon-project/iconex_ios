@@ -42,7 +42,7 @@ class CreateCompleteViewController: BaseViewController {
         pkView.corner(4)
         pkView.backgroundColor = .gray250
         
-        titleLabel.size12(text: "Private Key", color: .gray77, weight: .regular)
+        titleLabel.size12(text: "Wallet.PrivateKey".localized, color: .gray77, weight: .regular)
         
         copyButton.setTitle("Create.Wallet.Step4.Copy".localized, for: .normal)
         copyButton.cornered(size: 12)

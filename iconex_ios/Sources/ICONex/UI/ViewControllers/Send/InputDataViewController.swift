@@ -50,6 +50,10 @@ class InputDataViewController: BaseViewController {
             self.textView.isSelectable = false
         }
         
+        if type == .hex {
+            self.textView.keyboardType = .asciiCapable
+        }
+        
         setupUI()
         setupBind()
     }

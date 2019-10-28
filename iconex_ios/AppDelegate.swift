@@ -180,7 +180,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setRedirect(source: url)
         Conn.setMessage(source: url)
         if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
-            Manager.exchange.getExchangeList()
             Manager.balance.getAllBalances()
             toConnect()
         }

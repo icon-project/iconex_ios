@@ -392,6 +392,7 @@ struct PRepListResponse: Decodable {
 
 struct MyStakeInfo {
     let stake: BigUInt
+    let unstake: BigUInt?
     let votingPower: BigUInt
     let iscore: BigUInt
 }

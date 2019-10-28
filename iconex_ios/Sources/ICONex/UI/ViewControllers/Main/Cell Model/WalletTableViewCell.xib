@@ -62,14 +62,19 @@
                             </stackView>
                         </subviews>
                     </stackView>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="hYt-lc-SNr">
+                        <rect key="frame" x="280" y="31" width="20" height="20"/>
+                    </activityIndicatorView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailing" secondItem="2cs-2f-AI2" secondAttribute="trailing" constant="20" id="0BB-43-O5s"/>
+                    <constraint firstItem="hYt-lc-SNr" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="1ZB-3f-eDd"/>
                     <constraint firstItem="TN6-uW-F8s" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="6H7-Mr-zDH"/>
                     <constraint firstItem="EDe-xU-eSX" firstAttribute="top" secondItem="TN6-uW-F8s" secondAttribute="top" id="VZX-o5-6cn"/>
                     <constraint firstAttribute="trailing" secondItem="EDe-xU-eSX" secondAttribute="trailing" constant="20" id="aeR-k3-Hnp"/>
                     <constraint firstItem="TN6-uW-F8s" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" multiplier="120/325" id="itW-4l-Aqp"/>
                     <constraint firstItem="TN6-uW-F8s" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="24" id="qoq-hL-qlc"/>
+                    <constraint firstItem="hYt-lc-SNr" firstAttribute="trailing" secondItem="EDe-xU-eSX" secondAttribute="trailing" id="x3Y-zu-idf"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -79,6 +84,7 @@
                 <outlet property="currencyLabel" destination="Enx-Hm-EfO" id="MYN-gD-6er"/>
                 <outlet property="currencyUnitLabel" destination="lcB-7t-fVu" id="ANb-aV-W06"/>
                 <outlet property="nicknameLabel" destination="TvX-9l-GGu" id="YUW-Ra-DFp"/>
+                <outlet property="spinner" destination="hYt-lc-SNr" id="7Nb-oM-bBJ"/>
             </connections>
             <point key="canvasLocation" x="137.59999999999999" y="144.82758620689657"/>
         </tableViewCell>

@@ -83,7 +83,7 @@
 "Create.Wallet.Step3.Desc.1_1" = "・ With wallet Keystore file and password, wallet can be install in different device and restore deleted wallet.";
 "Create.Wallet.Step3.Desc.1_2" = "・ Keystore files can be dowload after creating wallet at 'wallet Keystore'.";
 "Create.Wallet.Step3.Alert.Info1" = "Wallet Keystore files should not be shared";
-"Create.Wallet.Step3.Alert.Info2" = "Keystore file that saved in \"my iPhone\" could deleted when application is deleted; please save at safe place.";
+"Create.Wallet.Step3.Alert.Info2" = "Keystore file that saved in \"my iPhone\" could deleted when application is deleted. Please save at safe place.";
 "Create.Wallet.Step3.Alert.Save" = "File saved.";
 "Create.Wallet.Step3.Alert.NotSaved" = "Would you like to proceed without saving Keystore file?";
 
@@ -370,7 +370,7 @@
 
 // MARK: ManageBackUpViewController
 "Manage.Backup.NavBar.Title" = "Keystore Backup";
-"Manage.Backup.Title" = "'You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
+"Manage.Backup.Title" = "You can load your wallet using the Keystore file or your private key. Please backup your Keystore file or your private key.";
 "Manage.Backup.Download" = "Download the Keystore file";
 "Manage.Backup.Keystore.Desc1" = "The Keystore file contains the encrypted private key and requires the wallet password to access it.";
 "Manage.Backup.Keystore.Desc2" = "・ Use this Keystore file to load your wallet from other devices.";
@@ -424,15 +424,15 @@
 "Send.GasLimit" = "Gas Limit";
 "Send.GasLimit.Error" = "Please enter the Gas Limit at least 21,000";
 "Send.GasPrice" = "Gas Price";
-"Send.GasPrice.Slow" = "Slow";
-"Send.GasPrice.Fast" = "Fast";
+"Send.GasPrice.Slow" = "1 (Slow)";
+"Send.GasPrice.Fast" = "(Fast) 99";
 "Send.EstimatedMaxStep" = "Estimated Maximum Fee";
 "Send.SendButton" = "Transfer";
 "Send.AddressBook" = "Select Address";
 "Send.ScanQRCode" = "Scan QR Code";
 "Send.Success" = "Transfer Request Complete";
-"Send.Error.InsufficientFee.ICX" = "Insufficient ETH balance for transaction fee.";
-"Send.Error.InsufficientFee.ETH" = "Insufficient ICX balance for transaction fee.";
+"Send.Error.InsufficientFee.ICX" = "Insufficient ICX balance for transaction fee.";
+"Send.Error.InsufficientFee.ETH" = "Insufficient ETH balance for transaction fee.";
 "Send.Info.Title" = "Information";
 "Send.Info.ICX" = "[Data]\nYou may enter data to send with the transaction.Transaction fee is imposed according to the size of data.\n\n[Step 한도]\nStep limit is the amount of Step to send with your transaction.\nUnnecessary Step is refunded to you at the end of transaction. In other words, you can set the maximum amount of Step but the actual Step consumption is not fixed.\n\n[Step Price]\nStep price is the amount you pay per unit of Step.\n Step 가격은 loop로 지불하며 1 loop 는 0.000000000000000001(10^-18) ICX. ICON transaction fee is imposed according to various factors such as the number of smart contract usage, the amount of blockchain database used and the size of transaction data, etc.\n\n[Estimated Maxumim Fee]\nEstimated Maximum Fee is Step price * Step limit";
 "Send.Info.ETH" = "[Data]\nIf you do not enter the data when required, the transaction will fail.\nYou will still have to pay the transaction fees. You don't have to enter data if it is not required in the transaction.\n\n[Gas Limit]\nGas limit is the amount of gas to send with your transaction.\nUnnecessary gas is refunded to you at the end of transaction. In other words, you can set the maximum amount of gas but the actual gas consumption is not fixed.\n\n[Gas Price]\nGas price is an unit of gas. 1 Gwei equals 0.000000001 ETH.\nEthereum miners prioritize based on gas price when generating blocks. If you set higher gas price, you have more chance to get your transaction confirmed. It also determines your transaction speed.\n\n[Estimated Maximum Fee]\nEstimated Maximum Fee = Gas Price * Gas Limit\nSet proper gas limit and gas price. You will pay transaction fees even if your transaction is not confirmed by miners.";

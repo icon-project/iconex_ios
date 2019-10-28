@@ -19,6 +19,21 @@ class TokenTableViewCell: UITableViewCell {
     @IBOutlet weak var unitBalanceLabel: UILabel!
     @IBOutlet weak var unitLabel: UILabel!
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    var isLoading: Bool = true {
+        willSet {
+            if newValue {
+                self.spinner.startAnimating()
+            } else {
+                self.spinner.stopAnimating()
+            }
+            
+            self.balanceLabel.isHidden = newValue
+            self.unitBalanceLabel.isHidden = newValue
+            self.unitLabel.isHidden = newValue
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

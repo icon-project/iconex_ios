@@ -427,8 +427,8 @@
 "Send.GasLimit" = "가스 한도";
 "Send.GasLimit.Error" = "21,000 이상으로 입력해주세요.";
 "Send.GasPrice" = "가스 가격";
-"Send.GasPrice.Slow" = "느림";
-"Send.GasPrice.Fast" = "빠름";
+"Send.GasPrice.Slow" = "1 (느림)";
+"Send.GasPrice.Fast" = "(빠름) 99";
 "Send.EstimatedMaxStep" = "예상 최대 수수료";
 "Send.SendButton" = "전송";
 "Send.AddressBook" = "주소 선택";
