@@ -13,31 +13,27 @@ class Toaster {
     
     private init() { }
     
-    var views = [UIView]()
+    var views = [ToastView]()
     
     func toast(message: String) {
-        halt {
+        remove {
             let toastView = ToastView(message)
-            
+            self.views.append(toastView)
             toastView.show()
         }
     }
     
-    func halt(_ completed: (() -> Void)? = nil) {
+    func remove(_ completed: (() -> Void)? = nil) {
         guard let v = views.last else {
             completed?()
             return }
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.15, animations: {
             v.alpha = 0.0
         }, completion: { _ in
-            v.removeFromSuperview()
+            v.invalidate()
             self.views.removeAll()
             completed?()
         })
-    }
-    
-    func gone(_ toastView: ToastView) {
-        
     }
 }
     
@@ -85,23 +81,27 @@ class ToastView: UIView {
         self.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -20).isActive = true
         self.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor, constant: -46).isActive = true
         
+        UIView.animate(withDuration: 0.15, animations: {
+            self.alpha = 1.0
+        }) { _ in
+            self.setTimer()
+        }
     }
     
     private func setTimer() {
-        timer = Timer(timeInterval: 2, repeats: false, block: { t in
-            UIView.animate(withDuration: 0.3, animations: {
-                self.alpha = 0.0
-            }, completion: { c in
-                if c {
-                    
-                }
-            })
+        timer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { _ in
+            self.invalidate()
         })
     }
     
-    private func invalidate() {
+    func invalidate() {
         timer?.invalidate()
         timer = nil
+        UIView.animate(withDuration: 0.15, animations: {
+            self.alpha = 0.0
+        }) { _ in
+            self.removeFromSuperview()
+        }
     }
 }
 

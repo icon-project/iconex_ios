@@ -26,6 +26,8 @@ class QRReaderViewController: BaseViewController {
     @IBOutlet weak var captureView: UIView!
     @IBOutlet weak var bottomDesc: UILabel!
     @IBOutlet weak var height: NSLayoutConstraint!
+    @IBOutlet weak var innerToast: UIView!
+    @IBOutlet weak var toastMessage: UILabel!
     
     private var captureSession: AVCaptureSession!
     private var previewLayer: AVCaptureVideoPreviewLayer!
@@ -35,6 +37,13 @@ class QRReaderViewController: BaseViewController {
     private var handler: ((String, String?) -> Void)?
     
     private var standingBy = false
+    
+    private var toast: String? = nil {
+        willSet {
+            innerToast.isHidden = (newValue == nil)
+            toastMessage.text = newValue
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,12 +64,15 @@ class QRReaderViewController: BaseViewController {
         bottomDesc.alpha = 0.0
         captureView.alpha = 0.0
         height.constant = MAX_HEIGHT
+        innerToast.corner(8)
         
         makeEdge()
         
         closeButton.rx.tap.subscribe(onNext: { [weak self] in
             self?.dismiss(animated: true, completion: nil)
         }).disposed(by: disposeBag)
+        
+        toast = nil
     }
     
     override func refresh() {
@@ -142,9 +154,11 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
         previewLayer.frame = view.layer.bounds
         view.layer.addSublayer(previewLayer)
         view.bringSubviewToFront(backgroundView)
+        view.bringSubviewToFront(innerToast)
     }
     
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        self.toast = nil
         guard standingBy == true else { return }
         guard metadataObjects.count > 0 else { return }
         
@@ -167,7 +181,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 }
                 self.dismiss(animated: true, completion: nil)
             } else {
-                Toast.toast(message: "QRReader.Error.PrivateKey".localized)
+                self.toast = "QRReader.Error.PrivateKey".localized
             }
             
         case .icx:
@@ -188,7 +202,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                Toast.toast(message: "QRReader.Error.ICX".localized)
+                self.toast = "QRReader.Error.ICX".localized
             }            
             
         case .eth:
@@ -201,7 +215,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                Toast.toast(message: "QRReader.Error.ETH".localized)
+                self.toast = "QRReader.Error.ETH".localized
             }
             
         case .irc:
@@ -214,7 +228,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                Toast.toast(message: "QRReader.Error.ICX".localized)
+                self.toast = "QRReader.Error.ICX".localized
             }
             
         case .connect:
@@ -227,7 +241,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 address = data.address
                 amount = data.amount
             } else {
-                Toast.toast(message: "QRReader.Error.ICX".localized)
+                self.toast = "QRReader.Error.ICX".localized
                 return
             }
             captureSession.stopRunning()
