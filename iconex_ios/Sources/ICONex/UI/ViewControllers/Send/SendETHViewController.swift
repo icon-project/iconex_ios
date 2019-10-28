@@ -133,6 +133,8 @@ class SendETHViewController: BaseViewController {
         gasPriceSlider.border(0.5, .gray230)
         gasPriceSlider.backgroundColor = .gray252
         
+        sliderContainer.layoutIfNeeded()
+        
         self.minView.layer.cornerRadius = 4
         self.minView.clipsToBounds = true
         self.maxView.layer.cornerRadius = 4
