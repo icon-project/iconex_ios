@@ -134,16 +134,22 @@ class Floater {
                 self.targetAction?.navigationController?.pushViewController(prep, animated: true)
             }
             floatMenu.itemAction1 = {
-                guard let balance = wallet.balance, balance >= BigUInt(1).convert(unit: ICONKit.Unit.icx) else {
+                guard let stakedInfo = Manager.icon.getStake(from: wallet) else {
+                    Toast.toast(message: "Error.CommonError".localized)
+                    return
+                }
+                
+                let staked = stakedInfo.stake
+                let unstake = stakedInfo.unstake ?? BigUInt.zero
+                let icxBalance = Manager.icon.getBalance(address: wallet.address) ?? BigUInt.zero
+                let totalBalance = staked + unstake + icxBalance
+                
+                guard totalBalance >= BigUInt(1).convert() else {
                     Alert.basic(title: "Floater.Alert.Stake".localized, leftButtonTitle: "Common.Confirm".localized).show()
-                    return }
+                    return
+                }
                 
                 Alert.password(wallet: wallet, returnAction: { pk in
-                    guard let stakedInfo = Manager.icon.getStake(from: wallet) else {
-                        Toast.toast(message: "Error.CommonError".localized)
-                        return
-                    }
-                    
                     if stakedInfo.unstake != nil {
                         let unStake = UIStoryboard(name: "Stake", bundle: nil).instantiateViewController(withIdentifier: "Unstake") as! UnStakeViewController
                         unStake.wallet = self.delegate.selectedWallet

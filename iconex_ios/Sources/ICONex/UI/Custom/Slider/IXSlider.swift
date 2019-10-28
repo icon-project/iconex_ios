@@ -39,7 +39,7 @@ class IXSlider: UIView {
     private var staked: BigUInt?
     private var voted: BigUInt?
     
-    private var minICX: BigUInt = BigUInt(1).convert()
+    private var minICX: BigUInt = BigUInt.zero
     
     var fieldAction: ((String) -> Void)?
     
@@ -287,9 +287,11 @@ class IXSlider: UIView {
         
     }
     
-    func setRange(total: BigUInt, staked: BigUInt = 0, voted: BigUInt? = nil) {
+    func setRange(total: BigUInt, staked: BigUInt = 0, voted: BigUInt? = nil, minICX: BigUInt = BigUInt.zero) {
+        self.minICX = minICX
+        
         if total > BigUInt.zero {
-            self.totalValue = total - self.minICX
+            self.totalValue = total - minICX
         } else {
             self.totalValue = total
         }
@@ -300,7 +302,7 @@ class IXSlider: UIView {
             slider.value = 0
             isEnabled = false
         } else {
-            guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted?.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
+            guard let stakedDecimal = staked.decimalNumber, let votedDecimal = voted?.decimalNumber, let totalDecimal = self.totalValue?.decimalNumber, let minDecimal = minICX.decimalNumber else { return }
             
             let percent: Float = {
                 let top = stakedDecimal - votedDecimal

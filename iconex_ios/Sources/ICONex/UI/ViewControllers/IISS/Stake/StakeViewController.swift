@@ -192,6 +192,14 @@ class StakeViewController: BaseViewController {
                 
                 let fee = limit * stepPrice
                 
+                // Check fee
+                let balance = Manager.icon.getBalance(address: self.wallet.address) ?? BigUInt.zero
+                
+                guard balance >= fee else {
+                    Alert.basic(title: "Send.Error.InsufficientFee.ICX".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                    return
+                }
+                
                 let stepLimitPrice = limit.toString(decimal: 0, 0, false).currencySeparated() + " / " + stepPrice.toString(decimal: 18, 18, true).currencySeparated()
                 
                 // unstake
@@ -238,6 +246,15 @@ class StakeViewController: BaseViewController {
                         let votedValue = delegated.totalDelegated
                         
                         let totalValue = balance + stakeValue + unstakeValue
+                        
+                        let minICX: BigUInt = {
+                            if balance >= BigUInt(1).convert() {
+                                return BigUInt(1).convert()
+                            } else {
+                                return balance
+                            }
+                        }()
+                        
                         self.totalICX = totalValue
                         
                         let totalStaked = stakeValue + unstakeValue
@@ -271,19 +288,11 @@ class StakeViewController: BaseViewController {
                             self.stakeProgress.staked = stakeRate.floatValue
                             self.stakeProgress.voted = voteRate.floatValue
                             
-                            self.slider.setRange(total: totalValue, staked: totalStaked, voted: totalDelegated)
+                            self.slider.setRange(total: totalValue, staked: totalStaked, voted: totalDelegated, minICX: minICX)
                             self.getEstimateFee()
                             
                             self.slider.secondHeader = "→ Voted (ICX) \(votedValue.toString(decimal: 18, 4, false).currencySeparated()) (\(String(format: "%.1f", voteRate.floatValue * 100))%)"
                             
-                            // check
-//                            let max = totalValue - BigUInt(1).convert()
-//                            
-//                            if max == votedValue {
-//                                self.slider.isEnabled = false
-//                                self.desc1.size12(text: "Stake.Desc1.Unavailable".localized, color: .gray128, weight: .light, align: .left)
-//                                self.desc2.isHidden = true
-//                            }
                         } else {
                             self.slider.isEnabled = false
                             self.slider.setRange(total: 0)
