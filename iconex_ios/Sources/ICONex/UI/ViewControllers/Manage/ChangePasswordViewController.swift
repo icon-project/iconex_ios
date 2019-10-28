@@ -152,13 +152,8 @@ class ChangePasswordViewController: BaseViewController {
                 let newPassword = self.confirmBox.text
                 
                 do {
-                    if let icx = wallet as? ICXWallet {
-                        print(icx.keystore)
-                        try DB.changeWalletPassword(wallet: wallet, oldPassword: currentPassword, newPassword: newPassword)
-                    } else if let eth = wallet as? ETHWallet {
-                        try eth.changePassword(oldPassword: currentPassword, newPassword: newPassword)
-                    }
-                    Tool.toast(message: "Alert.Password.Changed".localized)
+                    try DB.changeWalletPassword(wallet: wallet, oldPassword: currentPassword, newPassword: newPassword)
+                    Toast.toast(message: "Alert.Password.Changed".localized)
                     self.dismiss(animated: true, completion: nil)
                     
                 } catch let err {

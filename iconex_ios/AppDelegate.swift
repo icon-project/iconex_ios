@@ -115,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Log("Stack trace ========================")
             Log("\(exception.callStackSymbols)")
         }
-        
+        UserDefaults.standard.removeObject(forKey: "sleep")
         Manager.wallet.walletList.forEach {
             Log("Wallet - \($0.address) \($0.name)")
         }
@@ -131,8 +131,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        Log("Entering background...")
         if Tool.isPasscode() {
+            Log("Entering background...")
+            UserDefaults.standard.removeObject(forKey: "sleep")
             UserDefaults.standard.set(Date(), forKey: "sleep")
         }
     }
@@ -155,9 +156,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let date = UserDefaults.standard.object(forKey: "sleep") as? Date {
             let time = Int(Date().timeIntervalSince1970 - date.timeIntervalSince1970)
             
-            if time >= 5 * 60 {
+            if time >= 5 {
                 presentLock()
             } else {
+                UserDefaults.standard.removeObject(forKey: "sleep")
                 if !usingLock && !Tool.isPasscode() && Conn.isConnect {
                     toConnect()
                 }
@@ -166,8 +168,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if !usingLock && !Tool.isPasscode() && Conn.isConnect {
                 toConnect()
             }
+            UserDefaults.standard.removeObject(forKey: "sleep")
         }
-        UserDefaults.standard.removeObject(forKey: "sleep")
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

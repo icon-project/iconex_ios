@@ -159,7 +159,7 @@ class DetailViewController: BaseViewController, Floatable {
         floater.button.rx.tap
             .subscribe(onNext: {
                 if let wallet = self.selectedWallet {
-                    self.floater.showMenu(wallet: wallet, token: self.tokenInfo, self)
+                    self.floater.showMenu(wallet: wallet, token: self.tokenInfo, self, isICX: self.detailType == .icx)
                 }
                 if let eth = wallet as? ETHWallet {
                     self.floater.showMenu(ethWallet: eth, token: self.tokenInfo, self)
@@ -672,7 +672,7 @@ extension DetailViewController: UITableViewDelegate {
             let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/transaction/\(txHash)")
             
             Alert.txHash(txData: txInfo, confirmAction: {
-                Tool.toast(message: "Alert.Transaction.Copy.Complete".localized)
+                Toast.toast(message: "Alert.Transaction.Copy.Complete".localized)
             }).show()
             
         default:
@@ -682,7 +682,7 @@ extension DetailViewController: UITableViewDelegate {
             let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/tx/\(txHash)")
             
             Alert.txHash(txData: txInfo, confirmAction: {
-                Tool.toast(message: "Alert.Transaction.Copy.Complete".localized)
+                Toast.toast(message: "Alert.Transaction.Copy.Complete".localized)
             }).show()
         }
     }

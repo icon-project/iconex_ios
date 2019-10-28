@@ -89,7 +89,7 @@ class MainQRCodeViewController: BaseViewController {
             .subscribe { (_) in
                 bzz()
                 UIPasteboard.general.string = self.wallet?.address.add0xPrefix() ?? ""
-                Tool.toast(message: "Wallet.Address.CopyComplete".localized)
+                Toast.toast(message: "Wallet.Address.CopyComplete".localized)
         }.disposed(by: disposeBag)
         
         sendButton.rx.tap.subscribe(onNext: {
@@ -102,7 +102,7 @@ class MainQRCodeViewController: BaseViewController {
                 guard let qrCodeSource = qrString.generateQRCode() else { return }
                 self.qrImageView.image = UIImage(ciImage: qrCodeSource)
             } else {
-                guard let qrCodeSource = self.wallet!.address.generateQRCode() else { return }
+                guard let qrCodeSource = self.wallet!.address.add0xPrefix().generateQRCode() else { return }
                 self.qrImageView.image = UIImage(ciImage: qrCodeSource)
             }
             }).disposed(by: disposeBag)
@@ -141,13 +141,7 @@ class MainQRCodeViewController: BaseViewController {
         inputBox.set { (value) -> String? in
             guard !value.isEmpty else { return nil }
             let exchangedInfo = "icxusd"
-            let usdPrice = Manager.exchange.exchangeInfoList[exchangedInfo]?.price
-            
-            guard let usd = Float(usdPrice ?? "0"), let value = Float(value) else {
-                return nil
-            }
-            let priceString = "$ " + String(format: "%.2f", usd*value)
-            return priceString
+            return Tool.calculatePrice(decimal: 18, currency: exchangedInfo, balance: Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: false))
         }
 
         fakeTop.constant = startHeight

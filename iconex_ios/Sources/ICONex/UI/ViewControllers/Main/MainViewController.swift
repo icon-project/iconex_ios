@@ -289,7 +289,7 @@ class MainViewController: BaseViewController, Floatable {
         floater.button.rx.tap
             .subscribe(onNext: {
                 if let wallet = self.selectedWallet {
-                    self.floater.showMenu(wallet: wallet, self)
+                    self.floater.showMenu(wallet: wallet, self, isICX: true)
                 }
             }).disposed(by: disposeBag)
         

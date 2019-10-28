@@ -111,7 +111,7 @@ class ManageBackUpViewController: BaseViewController {
         copyPkButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 UIPasteboard.general.string = self.pk
-                Tool.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
+                Toast.toast(message: "Wallet.PrivateKey.Copy.Message".localized)
         }.disposed(by: disposeBag)
         
         walletInfoButton.rx.tap.asControlEvent()

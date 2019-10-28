@@ -347,7 +347,7 @@ class Connect {
         guard Conn.redirect != nil else {
             let app = UIApplication.shared.delegate as! AppDelegate
             app.toMain()
-            Tool.toast(message: error.errorDescription ?? "Unknown Error")
+            Toast.toast(message: error.errorDescription ?? "Unknown Error")
             return
         }
         let response = ConnectResponse(code: error.code, message: error.errorDescription ?? "Unknown Error", result: nil)

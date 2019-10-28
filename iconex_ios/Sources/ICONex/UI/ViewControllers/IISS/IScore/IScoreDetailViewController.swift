@@ -85,7 +85,7 @@ class IScoreDetailViewController: BaseViewController {
                 }()
                 
                 guard let balance = Manager.icon.getBalance(wallet: self.wallet), let price = stepPrice else {
-                    Tool.toast(message: "Error.CommonError".localized)
+                    Toast.toast(message: "Error.CommonError".localized)
                     return
                 }
                 
@@ -105,10 +105,10 @@ class IScoreDetailViewController: BaseViewController {
                             if response != nil {
                                 Log("txHash - \(response!)")
                                 
-                                Tool.toast(message: "ISCoreDetail.ClaimSuccess".localized)
+                                Toast.toast(message: "ISCoreDetail.ClaimSuccess".localized)
                                 self.run()
                             } else {
-                                Tool.toast(message: "Error.CommonError".localized)
+                                Toast.toast(message: "Error.CommonError".localized)
                             }
                         }
                     }

@@ -23,7 +23,6 @@ class DetailViewModel {
     
     var fullName: PublishSubject<String>
     var symbol: BehaviorSubject<String>
-    var coinTokenType: PublishSubject<DetailType>
     
     // usd, btc, eth..
     var currencyUnit: BehaviorSubject<BalanceUnit>
@@ -62,7 +61,6 @@ class DetailViewModel {
         
         self.fullName = PublishSubject<String>()
         self.symbol = BehaviorSubject<String>(value: "ICX")
-        self.coinTokenType = PublishSubject<DetailType>()
         
         self.currencyUnit = BehaviorSubject<BalanceUnit>(value: .USD)
         let exchangeUnit = try? self.currencyUnit.value().symbol

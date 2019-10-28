@@ -136,58 +136,6 @@ extension UIView {
 // Toast
 extension UIView {
     
-    static func makeToast(_ message: String) -> UIView {
-        let label = UILabel()
-        label.text = message
-        label.textColor = .white
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.font = UIFont(name: "AppleSDGothicNeo-Regular", size: 14)
-        
-        let toastView = UIView()
-        toastView.translatesAutoresizingMaskIntoConstraints = false
-        
-        toastView.backgroundColor = UIColor(white: 38.0 / 255.0, alpha: 0.9)
-        toastView.layer.cornerRadius = 8
-        
-        toastView.addSubview(label)
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 12).isActive = true
-        label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -12).isActive = true
-        label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 20).isActive = true
-        label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -20).isActive = true
-        
-        return toastView
-        
-    }
-    
-    static func makeVoteToast(count: Int) -> UIView {
-        let toastView = UIView()
-        toastView.backgroundColor = UIColor(white: 38.0 / 255.0, alpha: 0.9)
-        toastView.layer.cornerRadius = 8
-        toastView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        
-        toastView.addSubview(label)
-        label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 16).isActive = true
-        label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 16).isActive = true
-        label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -16).isActive = true
-        label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -16).isActive = true
-        
-        let mutAttr = NSMutableAttributedString(string: "\(count)/10  ", attributes: [.font: UIFont(name: "NanumSquareB", size: 14)!, .foregroundColor: UIColor.white])
-        mutAttr.append(NSAttributedString(string: "PRepView.Toast.MyVotes".localized, attributes: [.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 14)!, .foregroundColor: UIColor.white]))
-        
-        label.attributedText = mutAttr
-        label.adjustsFontSizeToFitWidth = true
-        
-        return toastView
-    }
-    
     // animation
     func showToastView(_ toastView: UIView) {
         toastView.alpha = 0.0

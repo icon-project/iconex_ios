@@ -306,34 +306,37 @@ struct Tool {
         UserDefaults.standard.removeObject(forKey: "useLock")
     }
     
-    static func toast(message: String) {
-        guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
+    static func makeVoteToast(count: Int) -> UIView {
+        let toastView = UIView()
+        toastView.backgroundColor = UIColor(white: 38.0 / 255.0, alpha: 0.9)
+        toastView.layer.cornerRadius = 8
+        toastView.translatesAutoresizingMaskIntoConstraints = false
         
-        guard let window = app.window else { return }
-        let toastView = UIView.makeToast(message)
-        toastView.alpha = 0.0
-        window.addSubview(toastView)
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .center
         
-        toastView.leadingAnchor.constraint(equalTo: window.leadingAnchor, constant: 20).isActive = true
-        toastView.trailingAnchor.constraint(equalTo: window.trailingAnchor, constant: -20).isActive = true
-        toastView.bottomAnchor.constraint(equalTo: window.safeAreaLayoutGuide.bottomAnchor, constant: -46).isActive = true
+        toastView.addSubview(label)
+        label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 16).isActive = true
+        label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 16).isActive = true
+        label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -16).isActive = true
+        label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -16).isActive = true
         
-        UIView.animate(withDuration: 0.7, delay: 0.0, options: .curveEaseOut, animations: {
-            toastView.alpha = 1.0
-        }, completion: { _ in
-            UIView.animate(withDuration: 0.3, delay: 2.0, options: .curveEaseIn, animations: {
-                toastView.alpha = 0.0
-            }) { _ in
-                toastView.removeFromSuperview()
-            }
-        })
+        let mutAttr = NSMutableAttributedString(string: "\(count)/10  ", attributes: [.font: UIFont(name: "NanumSquareB", size: 14)!, .foregroundColor: UIColor.white])
+        mutAttr.append(NSAttributedString(string: "PRepView.Toast.MyVotes".localized, attributes: [.font: UIFont(name: "AppleSDGothicNeo-Regular", size: 14)!, .foregroundColor: UIColor.white]))
+        
+        label.attributedText = mutAttr
+        label.adjustsFontSizeToFitWidth = true
+        
+        return toastView
     }
     
     static func voteToast(count: Int) {
         guard let app = UIApplication.shared.delegate as? AppDelegate else { return }
         
         guard let window = app.window else { return }
-        let voteToast = UIView.makeVoteToast(count: count)
+        let voteToast = Tool.makeVoteToast(count: count)
         voteToast.alpha = 0.0
         window.addSubview(voteToast)
         

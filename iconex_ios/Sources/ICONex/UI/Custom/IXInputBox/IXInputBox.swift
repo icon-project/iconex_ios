@@ -311,16 +311,25 @@ extension IXInputBox: UITextFieldDelegate {
                         if let below = split.last {
                             
                             if below.count <= maxDecimalLength {
-                                return true
+                                return below.onlyNumbers()
                             }
                             return false
                         }
-                        return true
+                        return above.onlyNumbers()
                     }
                 }
                 return false
             }
             return true
         }
+    }
+}
+
+extension String {
+    func onlyNumbers() -> Bool {
+        let numSet = CharacterSet.decimalDigits
+        let validSet = numSet.union(CharacterSet(charactersIn: ".,"))
+        
+        return self.rangeOfCharacter(from: validSet.inverted, options: .caseInsensitive, range: nil) == nil
     }
 }

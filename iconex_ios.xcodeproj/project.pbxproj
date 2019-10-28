@@ -106,6 +106,7 @@
 		D40C2BBA2303A557009782AA /* MainCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D40C2BB92303A557009782AA /* MainCardView.swift */; };
 		D40C2BBC2303A5B1009782AA /* MainCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D40C2BBB2303A5B1009782AA /* MainCardView.xib */; };
 		D4143E042133BE79004212A9 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4143E032133BE78004212A9 /* Errors.swift */; };
+		D416CAC92362DF12009A1803 /* Toaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = D416CAC82362DF12009A1803 /* Toaster.swift */; };
 		D424B72E22EEB0E600D9BD12 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D424B72D22EEB0E600D9BD12 /* Colors.swift */; };
 		D424B73522EEB7F200D9BD12 /* IXTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D424B73422EEB7F200D9BD12 /* IXTextField.swift */; };
 		D424B73C22EEE43100D9BD12 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D424B73B22EEE43100D9BD12 /* Intro.storyboard */; };
@@ -311,6 +312,7 @@
 		D40C2BB92303A557009782AA /* MainCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCardView.swift; sourceTree = "<group>"; };
 		D40C2BBB2303A5B1009782AA /* MainCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainCardView.xib; sourceTree = "<group>"; };
 		D4143E032133BE78004212A9 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		D416CAC82362DF12009A1803 /* Toaster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toaster.swift; sourceTree = "<group>"; };
 		D41B430E207B71C60011DDB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = /Users/ahn/Documents/work/iconex_ios/Info.plist; sourceTree = "<absolute>"; };
 		D424B72D22EEB0E600D9BD12 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D424B73422EEB7F200D9BD12 /* IXTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IXTextField.swift; sourceTree = "<group>"; };
@@ -872,6 +874,7 @@
 				D44A94882019CA0100F60614 /* Cipher.swift */,
 				D4BE74C82040046C00638E2E /* Util.swift */,
 				D46CD8A822E045D00063BAA0 /* Validator.swift */,
+				D416CAC82362DF12009A1803 /* Toaster.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1292,6 +1295,7 @@
 				D4304999231CA26500A8F540 /* IXPickerViewController.swift in Sources */,
 				1BBEC3C42324DB5D00B69C22 /* ConnectViewController.swift in Sources */,
 				D4DACDF32314259900CC8EA8 /* PRepSearchViewController.swift in Sources */,
+				D416CAC92362DF12009A1803 /* Toaster.swift in Sources */,
 				D4682A12230B93ED00225C73 /* IXSlider.swift in Sources */,
 				BF6EFEC622FA5174003B6AF3 /* PasswordAlertView.swift in Sources */,
 				BF78B36B22FD4852002E34B3 /* CreateQRCodeViewController.swift in Sources */,
@@ -1559,7 +1563,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 134;
+				CURRENT_PROJECT_VERSION = 136;
 				DEVELOPMENT_TEAM = 27F4PR54DX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1604,7 +1608,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 134;
+				CURRENT_PROJECT_VERSION = 136;
 				DEVELOPMENT_TEAM = 27F4PR54DX;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (

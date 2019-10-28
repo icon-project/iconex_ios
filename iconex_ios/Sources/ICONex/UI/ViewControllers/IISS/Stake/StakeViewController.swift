@@ -294,7 +294,7 @@ class StakeViewController: BaseViewController {
                         
                     } else {
                         self.slider.isEnabled = false
-                        Tool.toast(message: "Error.CommonError".localized)
+                        Toast.toast(message: "Error.CommonError".localized)
                         self.navigationController?.popViewController(animated: true)
                     }
                     self.refreshControl?.endRefreshing()

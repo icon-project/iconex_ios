@@ -167,7 +167,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 }
                 self.dismiss(animated: true, completion: nil)
             } else {
-                Tool.toast(message: "QRReader.Error.PrivateKey".localized)
+                Toast.toast(message: "QRReader.Error.PrivateKey".localized)
             }
             
         case .icx:
@@ -188,7 +188,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                Tool.toast(message: "QRReader.Error.ICX".localized)
+                Toast.toast(message: "QRReader.Error.ICX".localized)
             }            
             
         case .eth:
@@ -201,7 +201,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                Tool.toast(message: "QRReader.Error.ETH".localized)
+                Toast.toast(message: "QRReader.Error.ETH".localized)
             }
             
         case .irc:
@@ -214,7 +214,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                     }
                 })
             } else {
-                Tool.toast(message: "QRReader.Error.ICX".localized)
+                Toast.toast(message: "QRReader.Error.ICX".localized)
             }
             
         case .connect:
@@ -227,7 +227,7 @@ extension QRReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
                 address = data.address
                 amount = data.amount
             } else {
-                Tool.toast(message: "QRReader.Error.ICX".localized)
+                Toast.toast(message: "QRReader.Error.ICX".localized)
                 return
             }
             captureSession.stopRunning()

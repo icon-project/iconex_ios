@@ -542,7 +542,7 @@ class SendICXViewController: BaseViewController {
                 }()
                 
                 Alert.send(sendInfo: sendInfo, confirmAction: { isSuccess, txHash in
-                    Tool.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
+                    Toast.toast(message: isSuccess ? "Send.Success".localized : "Error.CommonError".localized)
                     self.dismiss(animated: true, completion: nil)
                     
                 }).show()

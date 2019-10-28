@@ -119,7 +119,7 @@ class AlertViewController: BaseViewController {
                     guard let newName = sub.inputBoxView.textField.text else { return }
                     
                     do {
-                        try DB.changeWalletName(former: formerName, newName: newName)
+                        try DB.changeWalletName(former: formerName, newName: newName.removeContinuosSuffix(string: " "))
                         self.closer(self.confirmHandler)
                     } catch {
                         sub.inputBoxView.setError(message: "Error.Wallet.Duplicated.Name".localized)
@@ -666,8 +666,6 @@ class AlertViewController: BaseViewController {
     }
     
     func show() {
-        Log("Now show!!!!!!!!!!")
         Tool.topViewController()?.present(self, animated: false, completion: nil)
-        Log("Showed!!!!!!!!!!!!!!!")
     }
 }

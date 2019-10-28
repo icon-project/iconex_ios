@@ -288,7 +288,6 @@ class PasscodeViewController: BaseViewController {
                         
                     } else { // reset
                         self.dismiss(animated: true) {
-                            app.usingLock = false
                             mainViewModel.reload.onNext(true)
                             self.completeHandler?()
                         }
@@ -348,8 +347,10 @@ class PasscodeViewController: BaseViewController {
         case .check:
             if Tool.verifyPasscode(code: tmpPassword) {
                 self.reset()
-                app.toMain()
-                
+                self.dismiss(animated: true, completion: {
+                    self.completeHandler?()
+                })
+                app.usingLock = false
             } else {
                 self.setPassStatus(status: .invalid)
                 
