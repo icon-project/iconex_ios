@@ -413,11 +413,12 @@ extension StakeViewController {
             }).show()
             
             DispatchQueue.global().async {
-                let result = Manager.icon.getBalance(address: self.wallet.address)
-                Log("Balance: \(String(describing: result))")
-                
-                // fetch prep info
-                Manager.iiss.getPRepInfo()
+//                let result = Manager.icon.getBalance(address: self.wallet.address)
+//                Log("Balance: \(String(describing: result))")
+//
+//                // fetch prep info
+//                Manager.iiss.getPRepInfo()
+                Manager.balance.getAllBalances()
             }
         } catch {
             Log("Error - \(error)")

@@ -187,11 +187,12 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                     if isSuccess {
                         Toast.toast(message: "MyVoteView.Toast".localized)
                         
-                        DispatchQueue.global().async {
-                            let result = Manager.icon.getBalance(address: self.wallet.address)
-                            Log("Balance: \(String(describing: result))")
-                            Manager.iiss.getPRepInfo()
-                        }
+//                        DispatchQueue.global().async {
+//                            let result = Manager.icon.getBalance(address: self.wallet.address)
+//                            Log("Balance: \(String(describing: result))")
+//                            Manager.iiss.getPRepInfo()
+//                        }
+                        Manager.balance.getAllBalances()
                         
                         self.navigationController?.popToRootViewController(animated: true)
                     } else {

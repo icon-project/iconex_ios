@@ -104,7 +104,7 @@ class IScoreDetailViewController: BaseViewController {
                         DispatchQueue.main.async {
                             if response != nil {
                                 Log("txHash - \(response!)")
-                                
+                                Manager.balance.getAllBalances()
                                 Toast.toast(message: "ISCoreDetail.ClaimSuccess".localized)
                                 self.run()
                             } else {
