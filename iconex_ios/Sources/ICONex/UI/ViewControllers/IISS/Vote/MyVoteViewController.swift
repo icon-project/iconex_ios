@@ -53,7 +53,7 @@ class MyVoteViewController: BaseViewController {
             let calculated = newValue * self.stepPrice
             let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
             estimatedFeeLabel.size14(text: calculated.toString(decimal: 18, 18, true), color: .gray77, align: .right)
-            exchangedLabel.size14(text: calculatedPrice, color: .gray179, align: .right)
+            exchangedLabel.size12(text: calculatedPrice, color: .gray179, align: .right)
             
             self.delegate.stepLimit = stepLimitLabel.text ?? ""
             self.delegate.maxFee = estimatedFeeLabel.text ?? ""
@@ -92,7 +92,7 @@ class MyVoteViewController: BaseViewController {
         messageSubtitle.numberOfLines = 0
         
         
-        stack = UIStackView(arrangedSubviews: [messageTitle,messageSubtitle])
+        stack = UIStackView(arrangedSubviews: [messageTitle, messageSubtitle])
         stack?.axis = .vertical
         
         stack?.translatesAutoresizingMaskIntoConstraints = false
@@ -116,7 +116,7 @@ class MyVoteViewController: BaseViewController {
         
         stepLimitLabel.size14(text: "-", color: .gray77, align: .right)
         estimatedFeeLabel.size14(text: "-", color: .gray77, align: .right)
-        exchangedLabel.size14(text: "-", color: .gray179, align: .right)
+        exchangedLabel.size12(text: "-", color: .gray179, align: .right)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -138,7 +138,7 @@ class MyVoteViewController: BaseViewController {
         self.refreshControl = refresh
         refresh.beginRefreshing()
         
-        Manager.voteList.currentAddedList.subscribe(onNext: { [unowned self] addedList in
+        self.delegate.voteViewModel.currentAddedList.subscribe(onNext: { [unowned self] addedList in
             guard !addedList.isEmpty else {
                 if self.myVoteList.count == 0 {
                     self.footerBox.isHidden = true
@@ -289,7 +289,9 @@ class MyVoteViewController: BaseViewController {
                 }).show()
             }.disposed(by: disposeBag)
         
-        Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList).flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
+        let voteObservable = Observable.combineLatest(delegate.voteViewModel.myList, delegate.voteViewModel.newList).share(replay: 1)
+        
+        voteObservable.flatMapLatest({ [unowned self] (myList, newList) -> Observable<Bool> in
             let myVoteChecker = self.myVoteList.filter({ $0.percent != 0.0 }).count > 0
             
             let newVoteChecker = self.newList.filter { (newList) -> Bool in
@@ -302,14 +304,14 @@ class MyVoteViewController: BaseViewController {
         }).bind(to: resetButton.rx.isEnabled)
         .disposed(by: disposeBag)
         
-        
-        Observable.merge(delegate.voteViewModel.myList, delegate.voteViewModel.newList).subscribe(onNext: { [unowned self] list in
+        voteObservable.skip(1).subscribe(onNext: { (myList, newList) in
             print("ESTIMATE!!!!!")
+            
+            let list = myList + newList
             
             var delList = [[String: Any]]()
             
             for i in list {
-                
                 let value: String = {
                     if let edit = i.editedDelegate {
                         return edit.toHexString()

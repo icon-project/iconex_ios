@@ -33,8 +33,6 @@ class VoteListManager {
     
     var myAddList = [MyVoteEditInfo]()
     
-    var currentAddedList = PublishSubject<[MyVoteEditInfo]>()
-    
     var votesCount: Int {
         return (myVotes?.delegations.count ?? 0) + myAddList.count
     }
@@ -151,7 +149,6 @@ class VoteListManager {
         
         myAddList.append(prep)
         Log("added List - \(myAddList)")
-        currentAddedList.onNext(myAddList)
         return true
     }
     
@@ -161,12 +158,10 @@ class VoteListManager {
         if let index = filtered.first?.offset {
             _ = myAddList.remove(at: index)
             Log("added List - \(myAddList)")
-            currentAddedList.onNext(myAddList)
         }
     }
     
     func reset() {
         myAddList.removeAll()
-        currentAddedList.onNext(myAddList)
     }
 }

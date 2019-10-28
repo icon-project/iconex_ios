@@ -12,11 +12,11 @@ import RxCocoa
 import BigInt
 
 class VoteViewModel {
-//    static let shared = VoteViewModel()
-    
     var originalList: PublishSubject<[MyVoteEditInfo]>
     var myList: BehaviorSubject<[MyVoteEditInfo]>
     var newList: BehaviorSubject<[MyVoteEditInfo]>
+    
+    var currentAddedList: PublishSubject<[MyVoteEditInfo]>
     
     var voteCount: BehaviorSubject<Int>
     
@@ -26,6 +26,7 @@ class VoteViewModel {
         self.originalList = PublishSubject<[MyVoteEditInfo]>()
         self.myList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.newList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
+        self.currentAddedList = PublishSubject<[MyVoteEditInfo]>()
         self.voteCount = BehaviorSubject<Int>(value: Manager.voteList.votesCount)
     }
     
@@ -33,5 +34,3 @@ class VoteViewModel {
         disposeBag = DisposeBag()
     }
 }
-
-//let voteViewModel = VoteViewModel.shared
