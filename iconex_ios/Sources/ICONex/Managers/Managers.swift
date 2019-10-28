@@ -431,7 +431,8 @@ extension BalanceManager {
                     }
                 } else if let eth = wallet as? ETHWallet {
                     if let balance = Ethereum.requestBalance(address: eth.address.add0xPrefix()) {
-                        self.walletBalances[wallet.address] = balance
+                        Log("Wallet balance - \(wallet.name) , \(balance.toString(decimal: 18, 18, false))")
+                        self.walletBalances[wallet.address.add0xPrefix()] = balance
                         
                         guard let tokenList = wallet.tokens else { continue }
                         var tokenBalances = [String: BigUInt]()
@@ -457,7 +458,7 @@ extension BalanceManager {
     }
     
     func getBalance(wallet: BaseWalletConvertible) -> BigUInt? {
-        return walletBalances[wallet.address]
+        return walletBalances[wallet.address.add0xPrefix()]
     }
     
     func calculateExchangeTotalBalance() -> [BigUInt?] {
@@ -465,7 +466,7 @@ extension BalanceManager {
         var ethBalance: BigUInt?
         
         for wallet in Manager.wallet.walletList {
-            let address = wallet.address
+            let address = wallet.address.add0xPrefix()
             
             if wallet is ICXWallet {
                 if let balance = walletBalances[address] {
@@ -476,7 +477,7 @@ extension BalanceManager {
                     }
                 }
             } else {
-                if let balance = walletBalances[address.add0xPrefix()] {
+                if let balance = walletBalances[address] {
                     if let eth = ethBalance {
                         ethBalance = eth + balance
                     } else {
@@ -490,19 +491,19 @@ extension BalanceManager {
     }
     
     func getTokenBalance(address: String, contract: String) -> BigUInt? {
-        guard let wallet = self.tokenBalances[address] else { return nil }
-        let balance = wallet[contract]
+        guard let wallet = self.tokenBalances[address.add0xPrefix()] else { return nil }
+        let balance = wallet[contract.add0xPrefix()]
         
         return balance
     }
     
     func updateWalletBalance(address: String, balance: BigUInt) {
-        walletBalances[address] = balance
+        walletBalances[address.add0xPrefix()] = balance
         mainViewModel.reload.onNext(true)
     }
     
     func updateTokenBalance(address: String, contract: String, balance: BigUInt) {
-        tokenBalances[address]?.updateValue(balance, forKey: contract)
+        tokenBalances[address.add0xPrefix()]?.updateValue(balance, forKey: contract.add0xPrefix())
         mainViewModel.reload.onNext(true)
     }
 }
@@ -637,14 +638,23 @@ typealias ETHTokenResult = (name: String, symbol: String, decimal: Int)
 
 struct Ethereum {
     
-    static var provider: URL {
+//    static var provider: URL {
+//        switch Config.host {
+//        case .main:
+//            return URL(string: "https://eth.solidwallet.io/")!
+//
+//        default:
+//            return URL(string: "https://ropsten.infura.io")!
+//        }
+//    }
+    
+    static var provider: web3 {
         switch Config.host {
-        case .main:
-            return URL(string: "https://eth.solidwallet.io/")!
+            case .main:
+                return Web3.InfuraMainnetWeb3()
             
-//        case .testnet, .yeouido:
-        default:
-            return URL(string: "https://ropsten.infura.io")!
+            default:
+                return Web3.InfuraRopstenWeb3()
         }
     }
     
@@ -660,32 +670,27 @@ struct Ethereum {
     }
     
     static var gasPrice: BigUInt? {
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return nil
-        }
+        let web3 = Ethereum.provider
         guard let gasPrice = try? web3.eth.getGasPrice() else { return nil }
         Log("gasPrice: \(gasPrice)")
         return gasPrice
     }
     
     static func requestBalance(address: String) -> BigUInt? {
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return nil
-        }
-        
+        let web3 = Ethereum.provider
         guard let ethAddress = EthereumAddress(address) else { return nil }
-        
-        let result = try? web3.eth.getBalance(address: ethAddress)
-        Manager.balance.updateWalletBalance(address: address, balance: result ?? 0)
-        return result
+        do {
+            let result = try web3.eth.getBalance(address: ethAddress)
+            Manager.balance.updateWalletBalance(address: address.add0xPrefix(), balance: result)
+            return result
+        } catch {
+            Log("Error - \(error)")
+        }
+        return nil
     }
     
     static func requestETHEstimatedGas(value: BigUInt, data: Data, from: String, to: String) -> BigUInt? {
-        
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return nil
-        }
-        
+        let web3 = Ethereum.provider
         var options = TransactionOptions.defaultOptions
         options.from = EthereumAddress(from)
         options.to = EthereumAddress(to)
@@ -700,10 +705,7 @@ struct Ethereum {
     }
     
     static func requestTokenEstimatedGas(value: BigUInt, gasPrice: BigUInt, from: String, to: String, tokenInfo: Token) -> BigUInt? {
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return nil
-        }
-        
+        let web3 = Ethereum.provider
         let fromAddress = EthereumAddress(from)
         let toAddress = EthereumAddress(to)
         let contractAddress = EthereumAddress(tokenInfo.contract)
@@ -718,10 +720,7 @@ struct Ethereum {
     }
     
     static func requestSendTransaction(privateKey: String, gasPrice: BigUInt, gasLimit: BigUInt, from: String, to: String, value: BigUInt, data: Data? = nil) -> (isSuccess: Bool, reason: Int) {
-        
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return (false, -99)
-        }
+        let web3 = Ethereum.provider
         var options = TransactionOptions.defaultOptions
         options.gasPrice = .manual(gasPrice)
         options.gasLimit = .manual(gasLimit)
@@ -761,11 +760,7 @@ struct Ethereum {
     
     static func requestTokenInformation(tokenContractAddress address: String, myAddress: String) -> ETHTokenResult? {
         let contractAddress = EthereumAddress(address.add0xPrefix())
-        
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return nil
-        }
-        
+        let web3 = Ethereum.provider
         guard let contract = web3.contract(Web3.Utils.erc20ABI, at: contractAddress) else {
             return nil
         }
@@ -809,9 +804,7 @@ struct Ethereum {
     
     
     static func requestTokenBalance(token: Token) -> BigUInt? {
-        guard let web3 = try? Web3.new(Ethereum.provider) else {
-            return nil
-        }
+        let web3 = Ethereum.provider
         let ethAddress = EthereumAddress(token.contract.add0xPrefix())
         
         guard let contract = web3.contract(Web3.Utils.erc20ABI, at: ethAddress) else {
@@ -831,13 +824,7 @@ struct Ethereum {
     
     static func requestTokenSendTransaction(privateKey: String, from: String, to: String, tokenInfo: Token, limit: BigUInt, price: BigUInt, value: BigUInt, completion: @escaping (_ isCompleted: Bool) -> Void) {
         DispatchQueue.global(qos: .default).async {
-            guard let web3 = try? Web3.new(Ethereum.provider) else {
-                Log("HALT")
-                DispatchQueue.main.async {
-                    completion(false)
-                }
-                return
-            }
+            let web3 = Ethereum.provider
             
             let fromAddress = EthereumAddress(from.add0xPrefix())
             let toAddress = EthereumAddress(to.add0xPrefix())

@@ -118,20 +118,25 @@ class PasscodeViewController: BaseViewController {
                 
                 Tool.bioVerification(message: "", completion: { (state) in
                     switch state {
-                    case .success:
-                        self.dismiss(animated: true, completion: {
-                            self.completeHandler?()
-                        })
+                        case .success:
+                            self.dismiss(animated: true, completion: {
+                                self.completeHandler?()
+                            })
                         
                         
-                    case .locked:
-                        Alert.basic(title: bio.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
+                        case .locked:
+                            Alert.basic(title: bio.type == .faceID ? "LockSetting.FaceID.Locked".localized : "LockSetting.TouchID.Locked".localized, leftButtonTitle: "Common.Confirm".localized, confirmAction: nil).show()
                         
-                    case .failed, .userCancel, .userFallback:
-                        break
+                        case .failed, .userCancel, .userFallback:
+                            break
                         
-                    default:
-                        UserDefaults.standard.removeObject(forKey: "useBio")
+                        case .notUsed:
+                            Alert.basic(title: bio.type == .faceID ? "LockSetting.Alert.FaceID".localized : "LockSetting.Alert.TouchID".localized, leftButtonTitle: "Common.Confirm".localized).show()
+                            UserDefaults.standard.removeObject(forKey: "useBio")
+                            break
+                        
+                        default:
+                            UserDefaults.standard.removeObject(forKey: "useBio")
                     }
                 })
             } else {
@@ -348,9 +353,9 @@ class PasscodeViewController: BaseViewController {
             if Tool.verifyPasscode(code: tmpPassword) {
                 self.reset()
                 self.dismiss(animated: true, completion: {
+                    app.usingLock = false
                     self.completeHandler?()
                 })
-                app.usingLock = false
             } else {
                 self.setPassStatus(status: .invalid)
                 

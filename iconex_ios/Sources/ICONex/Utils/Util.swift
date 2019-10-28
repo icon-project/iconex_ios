@@ -194,36 +194,39 @@ struct Tool {
                 }
             } else {
                 switch error!._code {
-                case LAError.Code.systemCancel.rawValue, LAError.Code.userCancel.rawValue:
-                    state = .userCancel
-                    break
-                    
-                case LAError.Code.authenticationFailed.rawValue:
-                    state = .failed
-                    break
-                    
-                case LAError.Code.passcodeNotSet.rawValue, LAError.Code.biometryNotEnrolled.rawValue:
-                    state = .notUsed
-                    break
-                    
-                case LAError.Code.biometryNotAvailable.rawValue:
-                    state = .notSupported
-                    break
-                    
-                case LAError.Code.userFallback.rawValue:
-                    state = .userFallback
-                    break
-                    
-                default:
-                    if (error!._code == LAError.Code.appCancel.rawValue) {
+                    case LAError.Code.systemCancel.rawValue, LAError.Code.userCancel.rawValue:
                         state = .userCancel
-                    } else if (error!._code == LAError.Code.biometryLockout.rawValue) {
-                        state = .locked
-                    } else {
-                        state = .userCancel
-                    }
+                        break
                     
-                    break
+                    case LAError.Code.authenticationFailed.rawValue:
+                        state = .failed
+                        break
+                    
+                    case LAError.Code.biometryNotEnrolled.rawValue:
+                        state = .notUsed
+                        break
+                    
+                    case LAError.Code.passcodeNotSet.rawValue:
+                        state = .passcodeNotSet
+                    
+                    case LAError.Code.biometryNotAvailable.rawValue:
+                        state = .notSupported
+                        break
+                    
+                    case LAError.Code.userFallback.rawValue:
+                        state = .userFallback
+                        break
+                    
+                    default:
+                        if (error!._code == LAError.Code.appCancel.rawValue) {
+                            state = .userCancel
+                        } else if (error!._code == LAError.Code.biometryLockout.rawValue) {
+                            state = .locked
+                        } else {
+                            state = .userCancel
+                        }
+                        
+                        break
                 }
             }
             DispatchQueue.main.async {
