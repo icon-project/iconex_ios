@@ -170,7 +170,7 @@ extension PRepSearchViewController: UITableViewDataSource {
             let myEdited = MyVoteEditInfo(prepName: prep.name, address: prep.address, totalDelegate: prep.delegated, myDelegate: nil, editedDelegate: nil, isMyVote: false, percent: nil, grade: prep.grade)
             
             if Manager.voteList.contains(address: prep.address) {
-                Tool.toast(message: "PRepView.ToolTip.Exist".localized)
+                Toast.toast(message: "PRepView.ToolTip.Exist".localized)
                 self.tableView.reloadData()
             } else {
                 if Manager.voteList.add(prep: myEdited) {
@@ -180,7 +180,7 @@ extension PRepSearchViewController: UITableViewDataSource {
                     self.tableView.reloadData()
                     
                 } else {
-                    Tool.toast(message: "PRepView.ToolTip.Maximum".localized)
+                    Toast.toast(message: "PRepView.ToolTip.Maximum".localized)
                 }
             }
             
