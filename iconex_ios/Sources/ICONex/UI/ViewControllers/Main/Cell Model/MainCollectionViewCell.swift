@@ -195,7 +195,14 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                     
                     // STAKE INFO
-                    guard let stakeInfo = Manager.iiss.stake(icx: icx), stakeInfo > 0, let balance = icx.balance else {
+                    // total stake = staked + unstake
+                    let stake = Manager.iiss.stake(icx: icx) ?? BigUInt.zero
+                    let unstake = Manager.iiss.unstake(icx: icx) ?? BigUInt.zero
+                    
+                    let totalStaked = stake + unstake
+                    let totalStakedDecimal = totalStaked.decimalNumber ?? Decimal.zero
+                    
+                    guard totalStaked > 0, let balance = icx.balance else {
                         coinCell.basicView.backgroundColor = .gray252
                         coinCell.backgroundColor = .gray252
                         coinCell.basicView.corner(8)
@@ -210,27 +217,23 @@ extension MainCollectionViewCell: UITableViewDataSource {
                         return coinCell
                     }
                     
+                    let balanceDecimal = balance.decimalNumber ?? Decimal.zero
+                    let totalBalance = totalStakedDecimal + balanceDecimal
+                    
                     // set background color
                     coinCell.basicView.backgroundColor = .white
                     coinCell.backgroundColor = .gray252
                     coinCell.basicView.corner(8)
                     coinCell.basicView.border(0.5, .gray230)
                     
-                    let staked = stakeInfo.toString(decimal: 18, 4).currencySeparated()
+                    let staked = totalStaked.toString(decimal: 18, 4).currencySeparated()
                     coinCell.stakeLabel.text = staked
                     
-                    guard let stakedDecimal = stakeInfo.decimalNumber, let balanceDecimal = balance.decimalNumber else { return coinCell }
-                    
-                    let unstakeDecimal = Manager.iiss.unstake(icx: icx)?.decimalNumber ?? 0
-                    
-                    let totalBalance = stakedDecimal + unstakeDecimal + balanceDecimal
-
                     let stakedPercent: Float = {
-                        if stakedDecimal == 0 {
+                        if totalStakedDecimal == 0 {
                             return 0
                         } else {
-                            let top = stakedDecimal + unstakeDecimal
-                            return (top / totalBalance).floatValue * 100
+                            return (totalStakedDecimal / totalBalance).floatValue * 100
                         }
                     }()
                     
@@ -443,10 +446,17 @@ extension MainCollectionViewCell: UITableViewDataSource {
 extension MainCollectionViewCell: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let icxWallet = self.info as? ICXWallet else { return 82 }
-        guard let staked = Manager.iiss.stake(icx: icxWallet), staked > 0 else { return 82 }
         
         if indexPath.section == 0 {
-            return 162
+            if let staked = Manager.iiss.stake(icx: icxWallet), staked > 0 {
+                return 162
+            }
+
+            if let unstaked = Manager.iiss.unstake(icx: icxWallet), unstaked > 0 {
+                return 162
+            }
+            
+            return 82
         } else {
             return 82
         }

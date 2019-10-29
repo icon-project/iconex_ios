@@ -97,10 +97,14 @@ class IXSlider: UIView {
         willSet {
             if !newValue {
                 slider.isHidden = true
+                minBar.backgroundColor = .gray230
+                maxBar.backgroundColor = .gray230
                 votedContainer.isHidden = true
                 textField.isEnabled = false
             } else {
                 slider.isHidden = false
+                minBar.backgroundColor = .mint2
+                maxBar.backgroundColor = .gray77
                 votedContainer.isHidden = false
                 textField.isEnabled = true
             }
@@ -171,10 +175,18 @@ class IXSlider: UIView {
                     return total
                 }
                 
+                if percent == 0 {
+                    if let votedValue = self.voted {
+                        return votedValue
+                    } else {
+                        return BigUInt.zero
+                    }
+                }
+                
                 let total = (rateValueNum + voted).floatValue
                 return BigUInt(total)
 
-            }()
+            }() 
             
             self.currentValue.onNext(rateValue)
             
