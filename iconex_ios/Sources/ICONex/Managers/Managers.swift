@@ -822,51 +822,42 @@ struct Ethereum {
         return value["0"] as? BigUInt
     }
     
-    static func requestTokenSendTransaction(privateKey: String, from: String, to: String, tokenInfo: Token, limit: BigUInt, price: BigUInt, value: BigUInt, completion: @escaping (_ isCompleted: Bool) -> Void) {
-        DispatchQueue.global(qos: .default).async {
-            let web3 = Ethereum.provider
-            
-            let fromAddress = EthereumAddress(from.add0xPrefix())
-            let toAddress = EthereumAddress(to.add0xPrefix())
-            let contractAddress = EthereumAddress(tokenInfo.contract.add0xPrefix())
-            
-            let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
-            let manager = KeystoreManager([keystore!])
-            web3.addKeystoreManager(manager)
-            
-            var options = TransactionOptions.defaultOptions
-            options.gasLimit = .manual(limit)
-            options.gasPrice = .manual(price)
-            
-            guard let intermediate = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress!, from: fromAddress!, to: toAddress!, amount: value, transactionOptions: options) else {
-                Log("HALT")
-                DispatchQueue.main.async {
-                    completion(false)
+    static func requestTokenSendTransaction(privateKey: String, from: String, to: String, tokenInfo: Token, limit: BigUInt, price: BigUInt, value: BigUInt) -> (isSuccess: Bool, reason: Int) {
+        let web3 = Ethereum.provider
+        guard let fromAddress = EthereumAddress(from.add0xPrefix()), let toAddress = EthereumAddress(to.add0xPrefix()), let contractAddress = EthereumAddress(tokenInfo.contract.add0xPrefix()) else {
+            return (false, -99)
+        }
+
+        let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
+        let manager = KeystoreManager([keystore!])
+        web3.addKeystoreManager(manager)
+
+        var options = TransactionOptions.defaultOptions
+        options.gasLimit = .manual(limit)
+        options.gasPrice = .manual(price)
+        
+        guard let intermediate = web3.eth.sendERC20tokensWithKnownDecimals(tokenAddress: contractAddress, from: fromAddress, to: toAddress, amount: value, transactionOptions: options) else {
+            Log("HALT")
+            return (false, -99)
+        }
+
+        if let result = try? intermediate.send() {
+
+            Log("success: \(String(describing: result))")
+            if let txHash = result.transaction.txhash {
+                do {
+                    try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: value.toString(decimal: tokenInfo.decimal, tokenInfo.decimal, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
+                    
+                } catch {
+                    Log("\(error)")
                 }
-                return
-            }
-            
-            if let result = try? intermediate.send() {
-                
-                DispatchQueue.main.async {
-                    Log("success: \(String(describing: result))")
-                    if let txHash = result.transaction.txhash {
-                        do {
-                            try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: value.toString(decimal: 18, 18, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
-                        } catch {
-                            Log("\(error)")
-                        }
-                        completion(true)
-                    } else {
-                        completion(false)
-                    }
-                }
-                
+                return (true, 0)
             } else {
-                DispatchQueue.main.async {
-                    completion(false)
-                }
+                return (false, -99)
             }
+
+        } else {
+            return (false, -99)
         }
     }
 }

@@ -178,10 +178,16 @@ class AlertViewController: BaseViewController {
                         
                         // ETH
                         if let ethTx = sendInfo.ethTransaction, let pk = sendInfo.ethPrivateKey {
-                            let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from, to: ethTx.to, value: ethTx.value, data: ethTx.data)
-                            
-                            self.isSuccess = sendETH.isSuccess
-                            
+                            // ERC
+                            if let token = sendInfo.token {
+                                let sendERC = Ethereum.requestTokenSendTransaction(privateKey: pk, from: ethTx.from, to: ethTx.to, tokenInfo: token, limit: ethTx.gasLimit, price: ethTx.gasPrice, value: ethTx.value)
+                                
+                                self.isSuccess = sendERC.isSuccess
+                            } else {
+                                let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from, to: ethTx.to, value: ethTx.value, data: ethTx.data)
+                                
+                                self.isSuccess = sendETH.isSuccess
+                            }
                         }
                         
                         DispatchQueue.main.async {

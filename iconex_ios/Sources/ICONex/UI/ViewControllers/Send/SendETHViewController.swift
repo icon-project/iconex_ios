@@ -518,7 +518,14 @@ class SendETHViewController: BaseViewController {
                 guard let pk = self.privateKey else { return }
                 guard let wallet = self.walletInfo else { return }
                 
-                let amount = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
+                let amount: BigUInt = {
+                    if let token = self.token {
+                        return Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
+                    } else {
+                        return Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
+                    }
+                }()
+                
                 let toAddress = self.addressInputBox.text.add0xPrefix()
                 
                 let gasPrice = self.gasPrice
