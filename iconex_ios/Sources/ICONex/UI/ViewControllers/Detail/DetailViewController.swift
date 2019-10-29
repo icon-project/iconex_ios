@@ -54,18 +54,11 @@ class DetailViewController: BaseViewController, Floatable {
             guard let wallet = newValue else { return }
             if let icx = wallet as? ICXWallet {
                 selectedWallet = icx
-            } else {
-                self.detailViewModel.symbol.onNext(CoinType.eth.symbol)
             }
         }
     }
     
-    var tokenInfo: Token? = nil {
-        willSet {
-            guard let token = newValue else { return }
-            self.detailViewModel.symbol.onNext(token.symbol)
-        }
-    }
+    var tokenInfo: Token? = nil
     
     var tracker: Tracker {
         switch Config.host {
@@ -103,6 +96,16 @@ class DetailViewController: BaseViewController, Floatable {
         super.viewDidLoad()
         
         self.detailViewModel.filter.onNext(.all)
+        
+        if let token = self.tokenInfo {
+            self.detailViewModel.symbol.onNext(token.symbol)
+        } else {
+            if let _ = self.walletInfo as? ICXWallet {
+                self.detailViewModel.symbol.onNext(CoinType.icx.symbol)
+            } else {
+                self.detailViewModel.symbol.onNext(CoinType.eth.symbol)
+            }
+        }
         setupBind()
         setupUI()
         
