@@ -93,7 +93,7 @@ class StakeViewController: BaseViewController {
                         return "Unstake"
                     }
                 }()
-                Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.Cancel".localized, rightButtonTitle: "Common.Confirm".localized, confirmAction: {
+                Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.navigationController?.popViewController(animated: true)
                 }).show()
                 

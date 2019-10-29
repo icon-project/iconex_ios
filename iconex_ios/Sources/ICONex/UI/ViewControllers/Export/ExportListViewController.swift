@@ -85,7 +85,7 @@ class ExportListViewController: BaseViewController {
         desc1.size12(text: "ExportList.TableHeader.Desc1".localized, color: .mint1, align: .left, lineBreakMode: .byWordWrapping)
         desc2.size12(text: "ExportList.TableHeader.Desc2".localized, color: .mint1, align: .left, lineBreakMode: .byWordWrapping)
         
-        descContainer.border(1.0, .mint3)
+        descContainer.border(0.5, .mint3)
         descContainer.backgroundColor = .mint4
         descContainer.corner(8)
         

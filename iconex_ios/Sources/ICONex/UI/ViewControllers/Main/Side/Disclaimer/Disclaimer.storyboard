@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Bhq-bG-K7N">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Bhq-bG-K7N">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,7 +34,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DAs-DJ-3rU">
-                                                <rect key="frame" x="10" y="10" width="355" height="46"/>
+                                                <rect key="frame" x="10" y="10" width="355" height="40"/>
                                                 <state key="normal" title="Button"/>
                                             </button>
                                         </subviews>
@@ -44,7 +42,7 @@
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="DAs-DJ-3rU" secondAttribute="trailing" constant="10" id="IL6-dO-TAH"/>
                                             <constraint firstAttribute="height" constant="66" id="J5S-Gd-MC9"/>
-                                            <constraint firstAttribute="bottom" secondItem="DAs-DJ-3rU" secondAttribute="bottom" constant="10" id="U4Q-Zi-b2h"/>
+                                            <constraint firstAttribute="bottom" secondItem="DAs-DJ-3rU" secondAttribute="bottom" constant="16" id="U4Q-Zi-b2h"/>
                                             <constraint firstItem="DAs-DJ-3rU" firstAttribute="top" secondItem="MQn-Gu-gVC" secondAttribute="top" constant="10" id="VgR-3O-BNT"/>
                                             <constraint firstItem="DAs-DJ-3rU" firstAttribute="leading" secondItem="MQn-Gu-gVC" secondAttribute="leading" constant="10" id="Z5j-uK-DcN"/>
                                         </constraints>

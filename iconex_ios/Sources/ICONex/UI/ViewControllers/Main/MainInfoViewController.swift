@@ -23,7 +23,7 @@ class MainInfoViewController: PopableViewController {
     override func initializeComponents() {
         super.initializeComponents()
         let color = UIColor.gray77
-        let titleFont = UIFont.systemFont(ofSize: 16, weight: .bold)
+        let titleFont = UIFont.systemFont(ofSize: 16, weight: .medium)
         let bodyFont = UIFont.systemFont(ofSize: 14, weight: .light)
         let lineBreak = NSAttributedString(string: "\n")
         
@@ -70,7 +70,7 @@ class MainInfoViewController: PopableViewController {
             self.dismiss(animated: true, completion: nil)
         }
         
-        closeButton.gray77round()
+        closeButton.round02()
         closeButton.setTitle("Common.Close".localized, for: .normal)
         closeButton.rx.tap.subscribe(onNext: {
             self.dismiss(animated: true, completion: nil)

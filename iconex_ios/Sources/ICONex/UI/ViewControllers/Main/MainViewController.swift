@@ -486,7 +486,6 @@ extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath) as! MainCollectionViewCell
-        cell.layer.cornerRadius = 18
         
         if isWalletMode {
             let wallet = walletList[indexPath.row]
@@ -495,9 +494,9 @@ extension MainViewController: UICollectionViewDataSource {
             cell.info = wallet
             
             if let _ = wallet as? ETHWallet {
-                cell.scanButton.isHidden = true
+                cell.scanButton.isEnabled = false
             } else {
-                cell.scanButton.isHidden = false
+                cell.scanButton.isEnabled = true
             }
             
         } else {

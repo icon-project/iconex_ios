@@ -63,7 +63,13 @@ class MainCollectionViewCell: UICollectionViewCell {
         let nibName = UINib(nibName: "WalletTableViewCell", bundle: nil)
         self.tableview.register(nibName, forCellReuseIdentifier: "walletCell")
         
-        cardView.corner(18)
+        self.backgroundColor = .clear
+        self.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.1
+        self.layer.shadowRadius = 1
+        
+        self.cardView.corner(18)
         
         mainViewModel.isBigCard.subscribe(onNext: { (value) in
             self.tableview.isScrollEnabled = value
