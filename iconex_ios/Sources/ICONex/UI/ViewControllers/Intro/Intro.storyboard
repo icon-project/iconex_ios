@@ -104,14 +104,14 @@
                                 <rect key="frame" x="0.0" y="712" width="375" height="66"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="kWJ-hB-qQJ">
-                                        <rect key="frame" x="10" y="10" width="355" height="46"/>
+                                        <rect key="frame" x="10" y="10" width="355" height="40"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TKO-IM-DGg">
-                                                <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="46"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="174.66666666666666" height="40"/>
                                                 <state key="normal" title="Button"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="POr-hu-8vv">
-                                                <rect key="frame" x="180.66666666666663" y="0.0" width="174.33333333333337" height="46"/>
+                                                <rect key="frame" x="180.66666666666663" y="0.0" width="174.33333333333337" height="40"/>
                                                 <state key="normal" title="Button"/>
                                             </button>
                                         </subviews>
@@ -122,7 +122,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="kWJ-hB-qQJ" secondAttribute="bottom" constant="10" id="AKd-8o-xdW"/>
+                                    <constraint firstAttribute="bottom" secondItem="kWJ-hB-qQJ" secondAttribute="bottom" constant="16" id="AKd-8o-xdW"/>
                                     <constraint firstAttribute="trailing" secondItem="kWJ-hB-qQJ" secondAttribute="trailing" constant="10" id="Iuu-vD-bcY"/>
                                     <constraint firstItem="kWJ-hB-qQJ" firstAttribute="leading" secondItem="v7W-sd-BFr" secondAttribute="leading" constant="10" id="Pad-WH-WsC"/>
                                     <constraint firstItem="kWJ-hB-qQJ" firstAttribute="top" secondItem="v7W-sd-BFr" secondAttribute="top" constant="10" id="fmS-6k-ooM"/>

@@ -37,6 +37,9 @@ class IXNavigationView: UIView {
         }
     }
     
+    var left: UIButton { return leftButton }
+    var right: UIButton { return rightButton }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         xibSetup()

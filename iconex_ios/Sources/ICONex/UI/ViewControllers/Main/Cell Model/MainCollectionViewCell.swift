@@ -12,6 +12,10 @@ import RxCocoa
 import BigInt
 import ICONKit
 
+protocol MainCollectionDelegate: class {
+    func cardFlip(_ willShow: Bool)
+}
+
 class MainCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var cardView: UIView!
@@ -24,6 +28,8 @@ class MainCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var infoButton: UIButton!
     
     @IBOutlet weak var tableview: UITableView!
+    
+    weak var delegate: MainCollectionDelegate?
     
     var handler: (() -> Void)?
     
@@ -63,7 +69,13 @@ class MainCollectionViewCell: UICollectionViewCell {
         let nibName = UINib(nibName: "WalletTableViewCell", bundle: nil)
         self.tableview.register(nibName, forCellReuseIdentifier: "walletCell")
         
-        cardView.corner(18)
+        self.backgroundColor = .clear
+        self.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.1
+        self.layer.shadowRadius = 1
+        
+        self.cardView.corner(18)
         
         mainViewModel.isBigCard.subscribe(onNext: { (value) in
             self.tableview.isScrollEnabled = value
@@ -106,11 +118,11 @@ class MainCollectionViewCell: UICollectionViewCell {
                 let snapshot = self.cardView.asImage()
                 qrVC.fakeImage = snapshot
                 qrVC.startHeight = self.tableview.isScrollEnabled ? 56 : 148 + 56
-                
+                qrVC.delegate = self.delegate
                 app.topViewController()?.present(qrVC, animated: false, completion: {
                     self.isHidden = true
                 })
-
+                self.delegate?.cardFlip(true)
                 
             }.disposed(by: disposeBag)
         

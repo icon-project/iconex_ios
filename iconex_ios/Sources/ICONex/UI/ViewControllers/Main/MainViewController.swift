@@ -486,8 +486,7 @@ extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath) as! MainCollectionViewCell
-        cell.layer.cornerRadius = 18
-        
+        cell.delegate = self
         if isWalletMode {
             let wallet = walletList[indexPath.row]
             cell.buttonStack.isHidden = false
@@ -495,9 +494,9 @@ extension MainViewController: UICollectionViewDataSource {
             cell.info = wallet
             
             if let _ = wallet as? ETHWallet {
-                cell.scanButton.isHidden = true
+                cell.scanButton.isEnabled = false
             } else {
-                cell.scanButton.isHidden = false
+                cell.scanButton.isEnabled = true
             }
             
         } else {
@@ -539,5 +538,18 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
+    }
+}
+
+extension MainViewController: MainCollectionDelegate {
+    func cardFlip(_ willShow: Bool) {
+        let alpha: CGFloat = {
+            return willShow ? 0.0 : 1.0
+        }()
+        UIView.animate(withDuration: 0.25) {
+            self.pageControl.alpha = alpha
+            self.navBar.left.alpha = alpha
+            self.navBar.right.alpha = alpha
+        }
     }
 }

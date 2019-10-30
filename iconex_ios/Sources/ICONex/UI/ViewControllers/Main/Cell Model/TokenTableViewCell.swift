@@ -39,6 +39,9 @@ class TokenTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         symbolView.corner(16)
+        let view = UIView()
+        view.backgroundColor = UIColor(250, 250, 250)
+        selectedBackgroundView = view
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

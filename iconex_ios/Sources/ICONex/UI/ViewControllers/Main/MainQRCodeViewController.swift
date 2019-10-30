@@ -28,6 +28,9 @@ class MainQRCodeViewController: BaseViewController {
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var fakeImageView: UIImageView!
     @IBOutlet weak var fakeTop: NSLayoutConstraint!
+    
+    weak var delegate: MainCollectionDelegate?
+    
     var wallet: BaseWalletConvertible? = nil {
         willSet {
             self.isICX = newValue is ICXWallet
@@ -198,6 +201,7 @@ class MainQRCodeViewController: BaseViewController {
                 self.fakeView.layer.transform = CATransform3DMakeRotation(0, 0, 1, 0)
             })
         }, completion: { _ in
+            self.delegate?.cardFlip(false)
             self.dismiss(animated: false, completion: {
                 self.dismissAction?()
             })

@@ -87,11 +87,17 @@ class SideMenuViewController: BaseViewController {
         button6.setTitle("Side.Disclaimer".localized, for: .normal)
         
         button1.setTitleColor(.white, for: .normal)
+        button1.setBackgroundImage(color: UIColor(white: 1, alpha: 0.1), state: .highlighted)
         button2.setTitleColor(.white, for: .normal)
+        button2.setBackgroundImage(color: UIColor(white: 1, alpha: 0.1), state: .highlighted)
         button3.setTitleColor(.white, for: .normal)
+        button3.setBackgroundImage(color: UIColor(white: 1, alpha: 0.1), state: .highlighted)
         button4.setTitleColor(.white, for: .normal)
+        button4.setBackgroundImage(color: UIColor(white: 1, alpha: 0.1), state: .highlighted)
         button5.setTitleColor(.white, for: .normal)
+        button5.setBackgroundImage(color: UIColor(white: 1, alpha: 0.1), state: .highlighted)
         button6.setTitleColor(.white, for: .normal)
+        button6.setBackgroundImage(color: UIColor(white: 1, alpha: 0.1), state: .highlighted)
         
         // Create
         button1.rx.tap.asControlEvent().subscribe { (_) in
@@ -199,13 +205,5 @@ class SideMenuViewController: BaseViewController {
                 }
             })
         })
-    }
-}
-
-class SideButton: UIButton {
-    override var isHighlighted: Bool {
-        willSet {
-           self.backgroundColor = newValue ? UIColor.init(white: 1, alpha: 0.1) : .clear
-        }
     }
 }

@@ -225,7 +225,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cardCell" id="2vm-3p-9Dy" customClass="MainCollectionViewCell" customModule="iconex_ios" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="cardCell" id="2vm-3p-9Dy" customClass="MainCollectionViewCell" customModule="iconex_ios" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="4.666666666666667" width="375" height="499"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -247,10 +247,13 @@
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7EI-oH-wiE">
                                                                             <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                                                             <state key="normal" image="icQrcodeScanEnabled"/>
+                                                                            <state key="disabled" image="icQrcodeScanDisabled"/>
+                                                                            <state key="highlighted" image="icQrcodeScanPressed"/>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HUa-rE-BwC">
                                                                             <rect key="frame" x="40" y="0.0" width="40" height="40"/>
                                                                             <state key="normal" image="icWalletRemDarkgray"/>
+                                                                            <state key="highlighted" image="icWalletQrcodeEnabled"/>
                                                                         </button>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AqY-42-Kwp">
                                                                             <rect key="frame" x="80" y="0.0" width="40" height="40"/>
@@ -259,6 +262,7 @@
                                                                                 <constraint firstAttribute="height" constant="40" id="6UQ-lz-Vbx"/>
                                                                             </constraints>
                                                                             <state key="normal" image="icMoreVertDarkgray"/>
+                                                                            <state key="highlighted" image="icWalletMorePressed"/>
                                                                         </button>
                                                                     </subviews>
                                                                     <constraints>
@@ -436,7 +440,7 @@
                                                                                 <outlet property="unitLabel" destination="ZmN-I2-AVq" id="Md0-yi-znL"/>
                                                                             </connections>
                                                                         </tableViewCell>
-                                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="tokenCell" rowHeight="82" id="mD4-fM-946" customClass="TokenTableViewCell" customModule="iconex_ios" customModuleProvider="target">
+                                                                        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="tokenCell" rowHeight="82" id="mD4-fM-946" customClass="TokenTableViewCell" customModule="iconex_ios" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="210" width="325" height="82"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mD4-fM-946" id="5YJ-xw-49O">
@@ -521,6 +525,7 @@
                                                                                 </constraints>
                                                                             </tableViewCellContentView>
                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="separatorInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                                                                             <connections>
                                                                                 <outlet property="balanceLabel" destination="ONk-qF-q0M" id="qEg-kx-HWy"/>
                                                                                 <outlet property="fullnameLabel" destination="cRD-Ty-TKI" id="QOz-57-oT2"/>
@@ -669,11 +674,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nqS-gD-vLV" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nqS-gD-vLV" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VS9-4s-hL6">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="VS9-4s-hL6">
                                 <rect key="frame" x="22" y="126" width="331" height="586"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
@@ -688,14 +693,14 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="66"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HNz-kr-BIJ">
-                                                <rect key="frame" x="10" y="10" width="355" height="46"/>
+                                                <rect key="frame" x="10" y="10" width="355" height="40"/>
                                                 <state key="normal" title="Button"/>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="HNz-kr-BIJ" firstAttribute="leading" secondItem="kwU-82-9rq" secondAttribute="leading" constant="10" id="2ZF-7r-Ppe"/>
-                                            <constraint firstAttribute="bottom" secondItem="HNz-kr-BIJ" secondAttribute="bottom" constant="10" id="HcJ-CQ-fPL"/>
+                                            <constraint firstAttribute="bottom" secondItem="HNz-kr-BIJ" secondAttribute="bottom" constant="16" id="HcJ-CQ-fPL"/>
                                             <constraint firstAttribute="height" constant="66" id="JeE-Ll-gWk"/>
                                             <constraint firstItem="HNz-kr-BIJ" firstAttribute="top" secondItem="kwU-82-9rq" secondAttribute="top" constant="10" id="T6M-Sw-UjT"/>
                                             <constraint firstAttribute="trailing" secondItem="HNz-kr-BIJ" secondAttribute="trailing" constant="10" id="gTn-Ud-c0O"/>
@@ -764,22 +769,22 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dhj-WO-unB">
                                                 <rect key="frame" x="0.0" y="180" width="273.66666666666669" height="180"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yO8-n6-NBf" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yO8-n6-NBf" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="273.66666666666669" height="60"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="60" id="eMu-Ty-Ezm"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nEh-wZ-oLw" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nEh-wZ-oLw" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="60" width="273.66666666666669" height="60"/>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="skZ-kX-M4E" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="skZ-kX-M4E" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="120" width="273.66666666666669" height="60"/>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
                                                 </subviews>
@@ -794,22 +799,22 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ca8-e9-xeK">
                                                 <rect key="frame" x="0.0" y="420.66666666666669" width="273.66666666666669" height="180.00000000000006"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3LC-Vf-BYU" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3LC-Vf-BYU" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="273.66666666666669" height="60"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="60" id="uHV-eB-4nt"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50g-lp-S8C" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="50g-lp-S8C" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="60" width="273.66666666666669" height="60"/>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fe6-PW-4d7" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fe6-PW-4d7" customClass="SideButton" customModule="iconex_ios" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="119.99999999999994" width="273.66666666666669" height="60"/>
-                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="16"/>
                                                         <state key="normal" title="Button"/>
                                                     </button>
                                                 </subviews>
@@ -1102,8 +1107,12 @@
     <resources>
         <image name="icCloseMenu" width="50" height="50"/>
         <image name="icMoreVertDarkgray" width="24" height="24"/>
+        <image name="icQrcodeScanDisabled" width="24" height="24"/>
         <image name="icQrcodeScanEnabled" width="24" height="24"/>
+        <image name="icQrcodeScanPressed" width="24" height="24"/>
         <image name="icToggle" width="20" height="20"/>
+        <image name="icWalletMorePressed" width="24" height="24"/>
+        <image name="icWalletQrcodeEnabled" width="24" height="24"/>
         <image name="icWalletRemDarkgray" width="24" height="24"/>
         <image name="imgLogoIcon0156W" width="56" height="56"/>
         <image name="imgLogoIcon0270W" width="70" height="70"/>
