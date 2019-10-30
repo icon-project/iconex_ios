@@ -251,7 +251,7 @@ extension PRepsViewController: UITableViewDataSource {
         
         let grade: String = {
             switch prep.grade {
-            case .main: return "P-Rep"
+            case .main: return "Main P-Rep"
             case .sub: return "Sub P-Rep"
             case .candidate: return "Candidate"
             }

@@ -527,7 +527,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 let grade: String = {
                     switch info.grade {
-                    case .main: return "P-Rep"
+                    case .main: return "Main P-Rep"
                     case .sub: return "Sub P-Rep"
                     case .candidate: return "Candidate"
                     }
@@ -703,7 +703,7 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 let grade: String = {
                     switch info.grade {
-                    case .main: return "P-Rep"
+                    case .main: return "Main P-Rep"
                     case .sub: return "Sub P-Rep"
                     case .candidate: return "Candidate"
                     }
