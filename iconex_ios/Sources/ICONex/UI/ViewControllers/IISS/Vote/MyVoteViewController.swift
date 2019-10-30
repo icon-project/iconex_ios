@@ -519,7 +519,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 }()
                 
                 let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
-                // cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
                 cell.myvotesValueLabel.text = "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)"
                 let sliderMaxValue = fixedAvailable + my
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
@@ -544,7 +543,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 let calculatedFloat: Float = (prepTotalDecimal / totalDelegatedDecimal).floatValue * 100
                 let totalVotesPercent = "(" + String(format: "%.1f", calculatedFloat) + "%)"
                 
-//                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
                 cell.totalVotedValue.text = info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)"
                 
                 cell.addButton.isSelected = false
@@ -598,7 +596,6 @@ extension MyVoteViewController: UITableViewDataSource {
                         let valueDecimal = NSDecimalNumber(value: realValue).decimalValue
                         
                         let rateValueNum = sliderMaxDecimal * valueDecimal
-//                        let rateValue = BigUInt(rateValueNum.floatValue / 100.0 )
                         let rateValue: BigUInt = {
                             if realValue == 100.0 {
                                 return sliderMaxValue
@@ -753,8 +750,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 let calculatedFloat: Float = (prepTotalDecimal / totalDelegatedDecimal).floatValue * 100
                 let totalVotesPercent = "(" + String(format: "%.1f", calculatedFloat) + "%)"
                 
-                // cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
-                
                 cell.totalVotedValue.text = info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)"
                 cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + "%"
                 
@@ -768,7 +763,6 @@ extension MyVoteViewController: UITableViewDataSource {
                 }()
                 
                 let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
-                // cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
                 cell.myvotesValueLabel.text = "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)"
 
                 if let edited = info.editedDelegate {
