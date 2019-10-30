@@ -12,6 +12,10 @@ import RxCocoa
 import BigInt
 import ICONKit
 
+protocol MainCollectionDelegate: class {
+    func cardFlip(_ willShow: Bool)
+}
+
 class MainCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var cardView: UIView!
@@ -24,6 +28,8 @@ class MainCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var infoButton: UIButton!
     
     @IBOutlet weak var tableview: UITableView!
+    
+    weak var delegate: MainCollectionDelegate?
     
     var handler: (() -> Void)?
     
@@ -112,11 +118,11 @@ class MainCollectionViewCell: UICollectionViewCell {
                 let snapshot = self.cardView.asImage()
                 qrVC.fakeImage = snapshot
                 qrVC.startHeight = self.tableview.isScrollEnabled ? 56 : 148 + 56
-                
+                qrVC.delegate = self.delegate
                 app.topViewController()?.present(qrVC, animated: false, completion: {
                     self.isHidden = true
                 })
-
+                self.delegate?.cardFlip(true)
                 
             }.disposed(by: disposeBag)
         

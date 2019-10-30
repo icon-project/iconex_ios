@@ -486,7 +486,7 @@ extension MainViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cardCell", for: indexPath) as! MainCollectionViewCell
-        
+        cell.delegate = self
         if isWalletMode {
             let wallet = walletList[indexPath.row]
             cell.buttonStack.isHidden = false
@@ -538,5 +538,18 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.frame.size
+    }
+}
+
+extension MainViewController: MainCollectionDelegate {
+    func cardFlip(_ willShow: Bool) {
+        let alpha: CGFloat = {
+            return willShow ? 0.0 : 1.0
+        }()
+        UIView.animate(withDuration: 0.25) {
+            self.pageControl.alpha = alpha
+            self.navBar.left.alpha = alpha
+            self.navBar.right.alpha = alpha
+        }
     }
 }
