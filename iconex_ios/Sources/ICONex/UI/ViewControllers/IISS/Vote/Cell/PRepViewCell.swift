@@ -41,7 +41,7 @@ class PRepViewCell: UITableViewCell {
         statusView.border(1.0, .mint2)
         
         addButton.setImage(#imageLiteral(resourceName: "icAddListEnabled"), for: .normal)
-        addButton.setImage(#imageLiteral(resourceName: "icAddListDisabled"), for: .highlighted)
+        addButton.setImage(#imageLiteral(resourceName: "icAddListDisabled"), for: .selected)
     }
     
     override func prepareForReuse() {

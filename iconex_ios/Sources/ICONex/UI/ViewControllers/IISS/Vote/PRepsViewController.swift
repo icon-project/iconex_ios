@@ -297,7 +297,7 @@ extension PRepsViewController: UITableViewDataSource {
                 }
             }).disposed(by: cell.disposeBag)
         
-        cell.addButton.isHighlighted = Manager.voteList.contains(address: prep.address) || checker > 0
+        cell.addButton.isSelected = Manager.voteList.contains(address: prep.address) || checker > 0
         
         return cell
     }

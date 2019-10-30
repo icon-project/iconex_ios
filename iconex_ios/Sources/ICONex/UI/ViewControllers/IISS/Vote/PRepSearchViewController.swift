@@ -140,7 +140,7 @@ extension PRepSearchViewController: UITableViewDataSource {
         
         let checker = myVoteChecker && newVoteChecker
         
-        cell.addButton.isHighlighted = !checker
+        cell.addButton.isSelected = !checker
         
         let grade: String = {
             switch prep.grade {
