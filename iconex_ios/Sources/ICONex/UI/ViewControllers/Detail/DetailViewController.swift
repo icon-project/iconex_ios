@@ -86,6 +86,7 @@ class DetailViewController: BaseViewController, Floatable {
     
     let ixSectionHeader = IXSectionHeader(frame: CGRect.init(x: 0, y: 0, width: .max, height: 36))
     
+    var etherButtonView = UIView()
     var etherscanButton = UIButton()
     
     var floater: Floater = Floater(type: .wallet)
@@ -95,6 +96,7 @@ class DetailViewController: BaseViewController, Floatable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.layoutIfNeeded()
         self.detailViewModel.filter.onNext(.all)
         
         if let token = self.tokenInfo {
@@ -126,7 +128,7 @@ class DetailViewController: BaseViewController, Floatable {
             }.disposed(by: disposeBag)
         
         self.tableView.refreshControl = refreshControl
-        self.tableView.tableFooterView = UIView()
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.width, height: 30))
         
         guard let wallet = self.walletInfo else { return }
         
@@ -148,7 +150,17 @@ class DetailViewController: BaseViewController, Floatable {
         fetchBalance()
         
         // eth button
-        let attr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .regular), .underlineStyle: NSUnderlineStyle.single.rawValue])
+        etherscanButton.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width/2 , height: 40)
+        
+        let attr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .regular), .underlineStyle: NSUnderlineStyle.single.rawValue, .foregroundColor: UIColor.mint1])
+        
+        etherButtonView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: 100))
+        etherButtonView.addSubview(etherscanButton)
+        
+        etherscanButton.translatesAutoresizingMaskIntoConstraints = false
+        etherscanButton.centerXAnchor.constraint(equalTo: etherButtonView.centerXAnchor).isActive = true
+        etherscanButton.centerYAnchor.constraint(equalTo: etherButtonView.centerYAnchor).isActive = true
+    
         etherscanButton.setAttributedTitle(attr, for: .normal)
         
         etherscanButton.rx.tap.asControlEvent()
@@ -223,20 +235,11 @@ class DetailViewController: BaseViewController, Floatable {
         
         switch self.detailType {
         case .eth, .erc:
-//            let messageLabel = UILabel()
-//            messageLabel.size14(text: "Wallet.Detail.ETHTransactions".localized, color: .gray77, align: .center)
-//            messageLabel.sizeToFit()
-            
-//            let ethStack = UIStackView(arrangedSubviews: [messageLabel, etherscanButton])
-//            ethStack.axis = .vertical
-//            ethStack.frame.size = CGSize(width: self.view.frame.width, height: self.tableView.frame.height)
-//            ethStack.alignment = .center
-//            ethStack.distribution = .fill
-//
             ethTxList.removeAll()
             
             if filter == .deposit {
-                self.tableView.backgroundView = etherscanButton
+                self.tableView.backgroundView = etherButtonView
+                
                 self.tableView.separatorStyle = .none
                 
                 self.tableView.reloadData()
@@ -252,7 +255,10 @@ class DetailViewController: BaseViewController, Floatable {
             })
             
             if ethTxList.isEmpty {
-                self.tableView.backgroundView = etherscanButton
+                let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+                messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
+                
+                self.tableView.backgroundView = messageLabel
                 self.tableView.separatorStyle = .none
             } else {
                 self.tableView.backgroundView = nil
