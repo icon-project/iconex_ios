@@ -34,7 +34,7 @@ class MyVoteViewController: BaseViewController {
     
     private var refreshControl: UIRefreshControl?
     
-    private var selectedIndexPath: IndexPath? = nil
+    private var selectedIndexPath: IndexPath?
     
     private var sectionHeader = UIView()
     
@@ -82,6 +82,8 @@ class MyVoteViewController: BaseViewController {
     
     override func initializeComponents() {
         super.initializeComponents()
+        
+        selectedIndexPath = IndexPath(row: 0, section: 1)
         
         let messageTitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 40))
         messageTitle.size14(text: "MyVoteView.Empty.Title".localized, color: .mint1, align: .center)
@@ -140,6 +142,7 @@ class MyVoteViewController: BaseViewController {
         
         self.delegate.voteViewModel.currentAddedList.subscribe(onNext: { [unowned self] addedList in
             guard !addedList.isEmpty else {
+                self.delegate.voteViewModel.newList.onNext(addedList)
                 if self.myVoteList.count == 0 {
                     self.footerBox.isHidden = true
                     self.stack?.isHidden = false
@@ -455,6 +458,7 @@ extension MyVoteViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyVoteDelegateCell", for: indexPath) as! MyVoteDelegateCell
             
             if selectedIndexPath == indexPath {
+                cell.sliderBoxView.layoutIfNeeded()
                 cell.sliderBoxView.isHidden = false
                 
                 cell.myVotesTitleLabel.isHidden = true
@@ -712,9 +716,7 @@ extension MyVoteViewController: UITableViewDataSource {
                     .subscribe(onNext: { [unowned self] in
                         self.newList.remove(at: indexPath.row - self.myVoteList.count)
                         Manager.voteList.remove(prep: info)
-                        tableView.reloadData()
-                        
-                        self.delegate.voteViewModel.newList.onNext(self.newList)
+                        self.delegate.voteViewModel.currentAddedList.onNext(self.newList)
                         self.isChanged.onNext(true)
                         
                     }).disposed(by: cell.disposeBag)

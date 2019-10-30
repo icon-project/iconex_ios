@@ -83,7 +83,7 @@ class PRepsViewController: BaseViewController, Floatable {
         
         firstItem.setTitle("My Votes", for: .normal)
         firstItem.setTitleColor(.gray77, for: .normal)
-        firstItem.titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
+        firstItem.titleLabel?.font = .systemFont(ofSize: 14, weight: .regular)
         secondItem.size14(text: "P-Reps", color: .gray77, weight: .bold, align: .center)
         
         firstItem.rx.tap.subscribe(onNext: { [weak self] in
