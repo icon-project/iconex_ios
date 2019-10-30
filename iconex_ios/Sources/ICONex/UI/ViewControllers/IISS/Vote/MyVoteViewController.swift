@@ -133,6 +133,7 @@ class MyVoteViewController: BaseViewController {
         headerSecondItem.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.delegate.headerSelected(index: 1)
+                self?.toolTip.dismissLastToolTip()
             }).disposed(by: disposeBag)
         
         let refresh = UIRefreshControl()
@@ -148,6 +149,7 @@ class MyVoteViewController: BaseViewController {
                     self.stack?.isHidden = false
                     self.tableView.separatorStyle = .none
                 }
+                self.tableView.reloadData()
                 return
             }
             for i in addedList {
@@ -517,8 +519,8 @@ extension MyVoteViewController: UITableViewDataSource {
                 }()
                 
                 let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
-                cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
-                
+                // cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
+                cell.myvotesValueLabel.text = "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)"
                 let sliderMaxValue = fixedAvailable + my
                 let sliderMaxDecimal = sliderMaxValue.decimalNumber ?? 0
                 
@@ -542,10 +544,11 @@ extension MyVoteViewController: UITableViewDataSource {
                 let calculatedFloat: Float = (prepTotalDecimal / totalDelegatedDecimal).floatValue * 100
                 let totalVotesPercent = "(" + String(format: "%.1f", calculatedFloat) + "%)"
                 
-                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
+//                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
+                cell.totalVotedValue.text = info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)"
                 
-                cell.addButton.isHighlighted = false
-                cell.addButton.rx.tap.asControlEvent()
+                cell.addButton.isSelected = false
+                cell.addButton.rx.tap
                     .subscribe { (_) in
                         self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "MyVoteView.ToolTip.Delete".localized, parent: self.tableView)
                     }.disposed(by: cell.disposeBag)
@@ -711,10 +714,19 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.prepInfo.size12(text: "(\(grade))", color: .gray77, weight: .light)
                 
-                cell.addButton.isHighlighted = true
+                cell.addButton.isSelected = true
                 cell.addButton.rx.tap
                     .subscribe(onNext: { [unowned self] in
                         self.newList.remove(at: indexPath.row - self.myVoteList.count)
+                        
+                        if let selectedRow = self.selectedIndexPath?.row {
+                            if selectedRow == indexPath.row {
+                                self.selectedIndexPath = nil
+                            } else if selectedRow > indexPath.row {
+                                self.selectedIndexPath?.row -= 1
+                            }
+                        }
+                        
                         Manager.voteList.remove(prep: info)
                         self.delegate.voteViewModel.currentAddedList.onNext(self.newList)
                         self.isChanged.onNext(true)
@@ -741,8 +753,9 @@ extension MyVoteViewController: UITableViewDataSource {
                 let calculatedFloat: Float = (prepTotalDecimal / totalDelegatedDecimal).floatValue * 100
                 let totalVotesPercent = "(" + String(format: "%.1f", calculatedFloat) + "%)"
                 
-                cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
+                // cell.totalVotedValue.size12(text: info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)" , color: .gray77, weight: .bold)
                 
+                cell.totalVotedValue.text = info.totalDelegate.toString(decimal: 18, 4, false) + " \(totalVotesPercent)"
                 cell.myVoteMaxValue = String(format: "%.0f", percentFloat) + "%"
                 
                 let my: BigUInt = info.editedDelegate ?? 0
@@ -755,8 +768,8 @@ extension MyVoteViewController: UITableViewDataSource {
                 }()
                 
                 let myPercentString = "(" + String(format: "%.1f", myPercent) + "%)"
-                cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
-                
+                // cell.myvotesValueLabel.size12(text: "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)", color: .gray77, weight: .bold, align: .right)
+                cell.myvotesValueLabel.text = "\(my.toString(decimal: 18, 4).currencySeparated()) \(myPercentString)"
 
                 if let edited = info.editedDelegate {
                     let editedDecimal = edited.decimalNumber ?? 0.0
@@ -929,6 +942,9 @@ extension MyVoteViewController: UITableViewDelegate {
                 selectedIndexPath = indexPath
             }
             self.toolTip.dismissLastToolTip()
+            self.tableView.reloadData()
+        } else {
+            selectedIndexPath = nil
             self.tableView.reloadData()
         }
     }

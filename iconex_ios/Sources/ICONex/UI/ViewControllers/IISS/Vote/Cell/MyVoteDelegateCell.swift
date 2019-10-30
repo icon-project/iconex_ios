@@ -90,7 +90,7 @@ class MyVoteDelegateCell: UITableViewCell {
         slider.setThumbImage(#imageLiteral(resourceName: "icControlerAtive"), for: .highlighted)
         
         addButton.setImage(#imageLiteral(resourceName: "icDeleteListDisabled"), for: .normal)
-        addButton.setImage(#imageLiteral(resourceName: "icDeleteList"), for: .highlighted)
+        addButton.setImage(#imageLiteral(resourceName: "icDeleteList"), for: .selected)
         
         current = 0
         

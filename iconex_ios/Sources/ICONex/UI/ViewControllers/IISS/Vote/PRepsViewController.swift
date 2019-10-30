@@ -88,6 +88,7 @@ class PRepsViewController: BaseViewController, Floatable {
         
         firstItem.rx.tap.subscribe(onNext: { [weak self] in
             self?.delegate.headerSelected(index: 0)
+            self?.toolTip.dismissLastToolTip()
         }).disposed(by: disposeBag)
         
         tableView.tableFooterView = UIView()
