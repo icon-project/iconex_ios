@@ -46,7 +46,6 @@ class TokenDetailViewController: BaseViewController {
         nameBox
             .subscribe(onNext: { (value) in
                 guard let tokenName = self.tokenInfo?.name else { return }
-                print("Now \(tokenName == value)")
                 self.navigationController?.interactivePopGestureRecognizer?.isEnabled = value == tokenName
             }).disposed(by: disposeBag)
         

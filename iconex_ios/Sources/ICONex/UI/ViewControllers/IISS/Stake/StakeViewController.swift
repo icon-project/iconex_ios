@@ -93,6 +93,7 @@ class StakeViewController: BaseViewController {
                         return "Unstake"
                     }
                 }()
+                
                 Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                     self.navigationController?.popViewController(animated: true)
                 }).show()
@@ -109,6 +110,10 @@ class StakeViewController: BaseViewController {
         
         slider.firstHeader = "Stake (ICX)"
         slider.secondHeader = "→ Voted"
+        
+        desc1.isHidden = true
+        desc2.isHidden = true
+        infoContainer.isHidden = true
         
         desc1.size12(text: "Stake.Desc1.Stake".localized, color: .gray128, weight: .light, align: .left)
         desc2.size12(text: "Stake.Desc2.Stake".localized, color: .gray128, weight: .light, align: .left)
@@ -147,7 +152,8 @@ class StakeViewController: BaseViewController {
                 Log("CURRENT \(current)")
                 
                 // update slider
-                guard let totalICXDecimal = self.totalICX?.decimalNumber, let newStake = current.decimalNumber, let votedDecimal = self.delegateInfo?.totalDelegated.decimalNumber else { return }
+                let voted = self.delegateInfo?.totalDelegated ?? BigUInt.zero
+                guard let totalICXDecimal = self.totalICX?.decimalNumber, let newStake = current.decimalNumber, let votedDecimal = voted.decimalNumber else { return }
                 
                 let stakeRate: Decimal = {
                     if newStake == 0 {
@@ -165,8 +171,16 @@ class StakeViewController: BaseViewController {
                     }
                 }()
                 
+                let totalStaked: BigUInt = {
+                    let staked = self.stakedInfo?.stake ?? BigUInt.zero
+                    let unstake = self.stakedInfo?.unstake ?? BigUInt.zero
+                    return staked + unstake
+                }()
+                
                 self.slider.isEnabled = true
-                self.submitButton.isEnabled = self.modifiedStake != self.stakedInfo?.stake
+                
+                self.submitButton.isEnabled = self.modifiedStake != totalStaked
+                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = self.modifiedStake == totalStaked
                 self.stakeProgress.staked = stakeRate.floatValue
                 self.stakeProgress.voted = votedRate.floatValue
                 
@@ -190,6 +204,8 @@ class StakeViewController: BaseViewController {
                 
                 guard let limit = self.estimatedStep else { return }
                 
+                let unstake = self.stakedInfo?.unstake ?? BigUInt.zero
+                let totalStaked = staked + unstake
                 let fee = limit * stepPrice
                 
                 // Check fee
@@ -203,7 +219,7 @@ class StakeViewController: BaseViewController {
                 let stepLimitPrice = limit.toString(decimal: 0, 0, false).currencySeparated() + " / " + stepPrice.toString(decimal: 18, 18, true).currencySeparated()
                 
                 // unstake
-                if staked > modified {
+                if totalStaked > modified {
                     let unstake = StakeInfo(timeRequired: self.estimatedTime, stepLimit: stepLimitPrice, estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
                     Alert.unstake(unstakeInfo: unstake, confirmAction: {
                         self.setStake(value: modified, stepLimit: limit, message: "Unstake")
@@ -211,8 +227,8 @@ class StakeViewController: BaseViewController {
                     
                 } else {
                     // stake
-                    let unstake = StakeInfo(timeRequired: "Stake.Value.TimeRequired.Stake".localized, stepLimit: stepLimitPrice, estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
-                    Alert.stake(stakeInfo: unstake, confirmAction: {
+                    let stake = StakeInfo(timeRequired: "Stake.Value.TimeRequired.Stake".localized, stepLimit: stepLimitPrice, estimatedFee: fee.toString(decimal: 18, 18, true), estimatedFeeUSD: (fee.exchange(from: "icx", to: "usd", decimal: 18)?.toString(decimal: 18, 2, false) ?? "-"))
+                    Alert.stake(stakeInfo: stake, confirmAction: {
                         self.setStake(value: modified, stepLimit: limit, message: "Stake")
                     }).show()
                     
@@ -261,7 +277,7 @@ class StakeViewController: BaseViewController {
                         
                         Log("Total = \(totalValue)\nStaked = \(stakeValue)\nVoted = \(delegated.totalDelegated)")
                         
-                        if let totalNum = totalValue.decimalNumber ,let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber {
+                        if let totalNum = totalValue.decimalNumber ,let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber, let totalStakedNum = totalStaked.decimalNumber {
                             
                             let unstakeNum = staked.unstake?.decimalNumber ?? 0.0
                             
@@ -283,7 +299,18 @@ class StakeViewController: BaseViewController {
                                 }
                             }()
                             
-                            self.slider.isEnabled = true
+                            if (totalStakedNum == votedNum) && stakeNum != 0 {
+                                self.desc1.isHidden = false
+                                self.desc1.size12(text: "Stake.Desc1.Unavailable".localized, color: .gray128, weight: .light, align: .left, lineBreakMode: .byWordWrapping)
+                                self.infoContainer.isHidden = true
+                                self.slider.isEnabled = false
+                            } else {
+                                self.desc1.isHidden = false
+                                self.desc1.size12(text: "Stake.Desc1.Stake".localized, color: .gray128, weight: .light, align: .left, lineBreakMode: .byWordWrapping)
+                                self.desc2.isHidden = false
+                                self.infoContainer.isHidden = false
+                                self.slider.isEnabled = true
+                            }
                             
                             self.stakeProgress.staked = stakeRate.floatValue
                             self.stakeProgress.voted = voteRate.floatValue
@@ -350,16 +377,17 @@ extension StakeViewController {
     }
     
     func estimatedPeriod() {
-        guard let modified = modifiedStake, let stakedInfo = stakedInfo, let delegated = self.delegateInfo?.totalDelegated else {
+        guard let modified = modifiedStake, let stakedInfo = stakedInfo else {
             timeLabel.size14(text: "-", color: .gray77)
             return
         }
-        let myStake = modified - delegated
         
-        if myStake > stakedInfo.stake {
+        let totalStake = stakedInfo.stake + (stakedInfo.unstake ?? BigUInt.zero)
+        
+        if modified > totalStake {
             timeLabel.size14(text: "Stake.Value.TimeRequired.Stake".localized, color: .gray77)
             
-        } else if myStake < stakedInfo.stake {
+        } else if modified < totalStake {
             DispatchQueue.global().async {
                 guard let estimatedUnstakeTime = Manager.icon.estimateUnstakeLockPeriod(from: self.wallet) else { return }
                 

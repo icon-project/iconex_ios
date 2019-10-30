@@ -54,18 +54,11 @@ class DetailViewController: BaseViewController, Floatable {
             guard let wallet = newValue else { return }
             if let icx = wallet as? ICXWallet {
                 selectedWallet = icx
-            } else {
-                self.detailViewModel.symbol.onNext(CoinType.eth.symbol)
             }
         }
     }
     
-    var tokenInfo: Token? = nil {
-        willSet {
-            guard let token = newValue else { return }
-            self.detailViewModel.symbol.onNext(token.symbol)
-        }
-    }
+    var tokenInfo: Token? = nil
     
     var tracker: Tracker {
         switch Config.host {
@@ -103,6 +96,16 @@ class DetailViewController: BaseViewController, Floatable {
         super.viewDidLoad()
         
         self.detailViewModel.filter.onNext(.all)
+        
+        if let token = self.tokenInfo {
+            self.detailViewModel.symbol.onNext(token.symbol)
+        } else {
+            if let _ = self.walletInfo as? ICXWallet {
+                self.detailViewModel.symbol.onNext(CoinType.icx.symbol)
+            } else {
+                self.detailViewModel.symbol.onNext(CoinType.eth.symbol)
+            }
+        }
         setupBind()
         setupUI()
         
@@ -349,10 +352,10 @@ class DetailViewController: BaseViewController, Floatable {
         liquidTitle.size12(text: "Liquid ICX", color: .white, weight: .light, align: .left)
         stakedTitle.size12(text: "Staked ICX (Voting Power)", color: .white, weight: .light, align: .left)
         
-        guard let stake = Manager.iiss.stake(icx: icxWallet), let liquid = Manager.iiss.votingPower(icx: icxWallet) else { return }
+        let liquid = Manager.icon.getBalance(address: icxWallet.address) ?? BigUInt.zero
         
         liquidLabel.size12(text: liquid.toString(decimal: 18, 8).currencySeparated(), color: .white, align: .right)
-        stakedLabel.size12(text: stake.toString(decimal: 18, 8).currencySeparated() , color: .white, align: .right)
+        stakedLabel.size12(text: staked.toString(decimal: 18, 8).currencySeparated() , color: .white, align: .right)
         
         stakeBoxView.isHidden = false
     }
@@ -367,13 +370,20 @@ class DetailViewController: BaseViewController, Floatable {
         
         navBar.setRight(image: #imageLiteral(resourceName: "icWalletMoreEnabled")) {
             let manageVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "Manage") as! ManageWalletViewController
-            manageVC.walletInfo = wallet
+            manageVC.walletInfo = self.walletInfo
+            manageVC.handler = {
+                guard let newWallet = Manager.wallet.walletList.filter({ $0.address == wallet.address }).first else { return }
+                self.walletInfo = newWallet
+                
+                self.navBar.setTitle(newWallet.name)
+            }
+            
             manageVC.show()
         }
         
-        totalBalanceLabel.text = ""
-        liquidLabel.text = ""
-        stakedLabel.text = ""
+        totalBalanceLabel.text = "-"
+        liquidLabel.text = "-"
+        stakedLabel.text = "-"
         
         self.currencyPriceLabel.isHidden = true
         
