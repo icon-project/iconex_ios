@@ -277,7 +277,7 @@ class StakeViewController: BaseViewController {
                         
                         Log("Total = \(totalValue)\nStaked = \(stakeValue)\nVoted = \(delegated.totalDelegated)")
                         
-                        if let totalNum = totalValue.decimalNumber ,let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber, let totalStakedNum = totalStaked.decimalNumber {
+                        if let totalNum = totalValue.decimalNumber, let stakeNum = stakeValue.decimalNumber, let votedNum = votedValue.decimalNumber, let totalStakedNum = totalStaked.decimalNumber {
                             
                             let unstakeNum = staked.unstake?.decimalNumber ?? 0.0
                             
@@ -299,7 +299,11 @@ class StakeViewController: BaseViewController {
                                 }
                             }()
                             
-                            if (totalStakedNum == votedNum) && stakeNum != 0 {
+                            let icx1 = BigUInt(1).convert().decimalNumber ?? 0
+                            let isOnly1ICX = (totalNum == icx1) && (totalStakedNum == 0)
+                            let vote100check = ((totalStakedNum == votedNum) && stakeNum != 0) && (totalStakedNum + icx1 > totalNum)
+                            
+                            if vote100check || isOnly1ICX {
                                 self.desc1.isHidden = false
                                 self.desc1.size12(text: "Stake.Desc1.Unavailable".localized, color: .gray128, weight: .light, align: .left, lineBreakMode: .byWordWrapping)
                                 self.infoContainer.isHidden = true

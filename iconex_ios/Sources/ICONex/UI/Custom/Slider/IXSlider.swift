@@ -348,7 +348,6 @@ class IXSlider: UIView {
             innerLabel.size12(text: "(" + String(format: "%.1f", innerPercent.floatValue) + "%)")
             
             slider.value = percent
-            isEnabled = true
         }
     }
 }
