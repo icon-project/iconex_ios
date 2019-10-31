@@ -212,7 +212,7 @@ class SendETHViewController: BaseViewController {
         footerBox.border(0.5, .gray230)
         footerBox.backgroundColor = .gray252
         
-        estimatedMaxFeeTitleLabel.size12(text: "Send.EstimatedMaxStep".localized, color: .gray77, weight: .light)
+        estimatedMaxFeeTitleLabel.size12(text: "Alert.Send.ETH.Fee".localized, color: .gray77, weight: .light)
         
         sendButton.lightMintRounded()
         sendButton.setTitle("Send.SendButton".localized, for: .normal)
