@@ -134,15 +134,10 @@ class CreateWalletViewController: PopableViewController {
     override func initializeComponents() {
         super.initializeComponents()
         
-        step1Label.size11(text: "Create.Wallet.Step1.StepTitle".localized, color: .mint1)
-        step2Label.size11(text: "Create.Wallet.Step2.StepTitle".localized, color: .gray128)
-        step3Label.size11(text: "Create.Wallet.Step3.StepTitle".localized, color: .gray128)
-        step4Label.size11(text: "Create.Wallet.Step4.StepTitle".localized, color: .gray128)
-        
-        step1Label.sizeToFit()
-        step2Label.sizeToFit()
-        step3Label.sizeToFit()
-        step4Label.sizeToFit()
+        step1Label.size11(text: "Create.Wallet.Step1.StepTitle".localized, color: .mint1, align: .center, lineBreakMode: .byWordWrapping)
+        step2Label.size11(text: "Create.Wallet.Step2.StepTitle".localized, color: .gray128, align: .center, lineBreakMode: .byWordWrapping)
+        step3Label.size11(text: "Create.Wallet.Step3.StepTitle".localized, color: .gray128, align: .center, lineBreakMode: .byWordWrapping)
+        step4Label.size11(text: "Create.Wallet.Step4.StepTitle".localized, color: .gray128, align: .center, lineBreakMode: .byWordWrapping)
         
         scrollIndex = 0
 

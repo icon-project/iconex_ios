@@ -145,8 +145,11 @@ class SendICXViewController: BaseViewController {
         footerBox.border(0.5, .gray230)
         footerBox.backgroundColor = .gray252
         
-        stepLimitTitleLabel.size12(text: "Send.Step".localized, color: .gray77, weight: .light)
+        stepLimitTitleLabel.text = "Send.Step".localized
+        stepLimitTitleLabel.textColor = .gray77
         estimateFeeTitleLabel.size12(text: "Send.EstimatedMaxStep".localized, color: .gray77, weight: .light)
+        
+        stepLimitLabel.textColor = .gray77
         
         sendButton.lightMintRounded()
         sendButton.setTitle("Send.SendButton".localized, for: .normal)
@@ -555,7 +558,8 @@ class SendICXViewController: BaseViewController {
         let priceToICX = self.stepPrice.toString(decimal: 18, 18, true)
         
         let stepLimitString = separated + " / " + priceToICX
-        stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
+//        stepLimitLabel.size14(text: stepLimitString, color: .gray77, align: .right)
+        stepLimitLabel.text = stepLimitString
         
         let calculated = self.stepLimit * stepPrice
         let calculatedPrice = Tool.calculatePrice(decimal: 18, currency: "icxusd", balance: calculated)
