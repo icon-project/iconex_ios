@@ -106,7 +106,7 @@ class IScoreDetailViewController: BaseViewController {
                                 Log("txHash - \(response!)")
                                 Manager.balance.getAllBalances()
                                 Toast.toast(message: "ISCoreDetail.ClaimSuccess".localized)
-                                self.run()
+                                self.navigationController?.popToRootViewController(animated: true)
                             } else {
                                 Toast.toast(message: "Error.CommonError".localized)
                             }
