@@ -632,7 +632,9 @@
 "Error.Transfer.AmountEmpty" = "송금할 수량을 입력해주세요.";
 "Error.Transfer.EmptyLimit" = "Step 한도를 입력해주세요.";
 "Error.Data.Exceeded" = "입력 한도 %dKB를 초과합니다.";
-"Error.Transfer.Limit.LessThen" = "%@ 이하로 입력해주세요.";
-"Error.Transfer.Limit.MoreThen" = "%@ 이상으로 입력해주세요.";
+"Error.Transfer.Limit.LessThan" = "%@ 이하로 입력해주세요.";
+"Error.Transfer.Limit.MoreThan" = "%@ 이상으로 입력해주세요.";
 "Error.Connect.Send.InsufficientFee" = "ICX 보유 수량이 부족합니다.";
 "Error.Fail.Downloading" = "데이터 가져오기에 실패했습니다.";
+"Error.Stake.Limit.LessThan" = "%@ 이하로 입력해주세요.";
+"Error.Stake.Limit.MoreThan" = "%@ 이상으로 입력해주세요.";

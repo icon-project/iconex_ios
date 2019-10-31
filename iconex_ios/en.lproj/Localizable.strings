@@ -636,8 +636,9 @@
 "Error.Transfer.AmountEmpty" = "Please enter the transfer amount.";
 "Error.Transfer.EmptyLimit" = "Please enter step limit.";
 "Error.Data.Exceeded" = "This exceeds input limit %dKB";
-"Error.Transfer.Limit.LessThen" = "Enter step limit less than %@";
-"Error.Transfer.Limit.MoreThen" = "Enter step limit more than %@";
+"Error.Transfer.Limit.LessThan" = "Enter step limit less than %@";
+"Error.Transfer.Limit.MoreThan" = "Enter step limit more than %@";
 "Error.Connect.Send.InsufficientFee" = "This exceeds your balances";
-
 "Error.Fail.Downloading" = "Failed to download the data";
+"Error.Stake.Limit.LessThan" = "Enter less than %@";
+"Error.Stake.Limit.MoreThan" = "Enter more than %@";
