@@ -423,13 +423,13 @@
 "Send.InputBox.Data" = "데이터 (선택 입력)";
 "Send.InputBox.Data.View" = "데이터 보기";
 "Send.Amount.Max" = "전액";
-"Send.Step" = "적정 Step 한도 / 가격";
+"Send.Step" = "적정 Step 한도 / 가격 (ICX)";
 "Send.GasLimit" = "가스 한도";
 "Send.GasLimit.Error" = "21,000 이상으로 입력해주세요.";
 "Send.GasPrice" = "가스 가격";
 "Send.GasPrice.Slow" = "1 (느림)";
 "Send.GasPrice.Fast" = "(빠름) 99";
-"Send.EstimatedMaxStep" = "예상 최대 수수료";
+"Send.EstimatedMaxStep" = "예상 최대 수수료 (ICX)";
 "Send.SendButton" = "전송";
 "Send.AddressBook" = "주소 선택";
 "Send.ScanQRCode" = "QR코드 스캔";

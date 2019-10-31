@@ -97,7 +97,7 @@
 "Create.Wallet.Step4.Desc.2" = "・ After creating wallet, you can check at 'Wallet Keystore'.";
 
 // MARK: AlertCustomView
-"Alert.Common.StepLimit" = " Step limit / Price (ICX)";
+"Alert.Common.StepLimit" = "Step limit / Price (ICX)";
 "Alert.Common.EstimatedFee" = "Maxium estimated transaction fee (ICX)";
 
 "Alert.Iscore.Header" = "I-Score Claim";
@@ -266,8 +266,8 @@
 "MyVoteView.Alert.Back" = "By pressing Vote button will apply the change you made. \nVote Would you like to leave without making change?";
 "MyVoteView.Alert.InsufficientFee" = "Not enough ICX to pay transaction fee.";
 "MyVoteView.ToolTip.Delete" = "Delegated P-Rep is not able to delete in the list.\nSet Voting Power to 0 and press Vote button.";
-"MyVoteView.Empty.Title” = “In the P-Reps tab, add candidates to vote in the voting list first, then adjust Voting Power.";
-"MyVoteView.Empty.Desc” = “ICX used for Voting Power can be returned when you unstake your Staked ICX and I-Score will be paid to you as a reward for ecosystem contribution.";
+"MyVoteView.Empty.Title" = "In the P-Reps tab, add candidates to vote in the voting list first, then adjust Voting Power.";
+"MyVoteView.Empty.Desc" = "ICX used for Voting Power can be returned when you unstake your Staked ICX and I-Score will be paid to you as a reward for ecosystem contribution.";
 
 // MARK: PRepsViewController
 "PRepView.Toast.MyVotes" = "Add to My Votes";
@@ -297,7 +297,7 @@
 "Main.Info.About.Vote.Title" = "Vote";
 "Main.Info.About.Vote.Desc" = "Usiung Voting Power you can delegate to P-Rep candidates.";
 "Main.Info.About.IScore.Title" = "I-Score";
-"Main.Info.About.IScore.Desc" = "This Score is Contribution score for delegating P-Rep; 1,000 I-Score can be claim to 1 ICX.";
+"Main.Info.About.IScore.Desc" = "This Score is Contribution score for delegating P-Rep, 1,000 I-Score can be claim to 1 ICX.";
 
 
 // MARK: SideMenuViewController
@@ -412,7 +412,7 @@
 "Send.Balance.Avaliable.ETH" = "Available balance (ETH)";
 "Send.Balance.Avaliable.Token" = "Available balance (%@)";
 "Send.InputBox.Amount" = "Transfer Amount";
-"Send.InputBox.Amount.Error" = "Please enter less then your balance";
+"Send.InputBox.Amount.Error" = "Please enter less than your balance";
 "Send.InputBox.Address" = "Receiving address";
 "Send.InputBox.Address.Error" = "Invaild ICX address";
 "Send.InputBox.Address.Error.ETH" = "Invaild ETH address";
@@ -420,13 +420,13 @@
 "Send.InputBox.Data" = "Data (Optional Input)";
 "Send.InputBox.Data.View" = "Data";
 "Send.Amount.Max" = "Max amount";
-"Send.Step" = "Proper Step Limit / Price";
+"Send.Step" = "Proper Step Limit / Price (ICX)";
 "Send.GasLimit" = "Gas Limit";
 "Send.GasLimit.Error" = "Please enter the Gas Limit at least 21,000";
 "Send.GasPrice" = "Gas Price";
 "Send.GasPrice.Slow" = "1 (Slow)";
 "Send.GasPrice.Fast" = "(Fast) 99";
-"Send.EstimatedMaxStep" = "Estimated Maximum Fee";
+"Send.EstimatedMaxStep" = "Estimated Maximum Fee (ICX)";
 "Send.SendButton" = "Transfer";
 "Send.AddressBook" = "Select Address";
 "Send.ScanQRCode" = "Scan QR Code";
