@@ -86,11 +86,12 @@ class MyVoteViewController: BaseViewController {
         selectedIndexPath = IndexPath(row: 0, section: 1)
         
         let messageTitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 40))
-        messageTitle.size14(text: "MyVoteView.Empty.Title".localized, color: .mint1, align: .center)
+        messageTitle.numberOfLines = 0
+        messageTitle.size14(text: "MyVoteView.Empty.Title".localized, color: .mint1, align: .center, lineBreakMode: .byWordWrapping)
         messageTitle.numberOfLines = 0
          
         let messageSubtitle = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.frame.size.width, height: 40))
-        messageSubtitle.size12(text: "MyVoteView.Empty.Desc".localized, color: .gray128, weight: .light, align: .center)
+        messageSubtitle.size12(text: "MyVoteView.Empty.Desc".localized, color: .gray128, weight: .light, align: .center, lineBreakMode: .byWordWrapping)
         messageSubtitle.numberOfLines = 0
         
         
@@ -103,7 +104,8 @@ class MyVoteViewController: BaseViewController {
             stackView.isHidden = true
             self.tableFooterView.addSubview(stackView)
             stackView.topAnchor.constraint(equalTo: self.tableFooterView.topAnchor, constant: 10).isActive = true
-            stackView.widthAnchor.constraint(equalTo: self.tableFooterView.widthAnchor).isActive = true
+            stackView.leadingAnchor.constraint(equalTo: self.tableFooterView.leadingAnchor, constant: 20).isActive = true
+            stackView.trailingAnchor.constraint(equalTo: self.tableFooterView.trailingAnchor, constant: -20).isActive = true
             stackView.bottomAnchor.constraint(equalTo: self.tableFooterView.bottomAnchor, constant: -40).isActive = true
         }
         
