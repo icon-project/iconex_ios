@@ -50,7 +50,12 @@ class DepositViewController: PopableViewController {
         copyButton.roundGray230()
         copyButton.setTitle("Wallet.Address.Copy".localized, for: .normal)
         copyButton.rx.tap.subscribe(onNext: {
-            copyString(message: self.wallet.address)
+            if !self.wallet.address.hasPrefix("hx") || !self.isICX {
+                copyString(message: self.wallet.address.add0xPrefix())
+            } else {
+                copyString(message: self.wallet.address)
+            }
+            
             Toast.toast(message: "Wallet.Address.CopyComplete".localized)
         }).disposed(by: disposeBag)
         
