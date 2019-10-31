@@ -256,6 +256,7 @@ class SendETHViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         
@@ -276,6 +277,7 @@ class SendETHViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         
@@ -296,6 +298,7 @@ class SendETHViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         
@@ -317,6 +320,7 @@ class SendETHViewController: BaseViewController {
                     let maxBalance = self.balance - gas
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         

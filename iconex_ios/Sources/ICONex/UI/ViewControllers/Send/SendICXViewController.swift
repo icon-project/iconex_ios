@@ -192,6 +192,7 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
         }.disposed(by: disposeBag)
         
@@ -212,6 +213,7 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         
@@ -232,6 +234,7 @@ class SendICXViewController: BaseViewController {
                     let calculated = currentValue + power
                     self.amountInputBox.text = calculated.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         
@@ -252,6 +255,7 @@ class SendICXViewController: BaseViewController {
                     let maxBalance = self.balance - fee
                     self.amountInputBox.text = maxBalance.toString(decimal: 18, 18, true)
                 }
+                self.amountInputBox.textField.sendActions(for: .valueChanged)
                 
             }.disposed(by: disposeBag)
         
