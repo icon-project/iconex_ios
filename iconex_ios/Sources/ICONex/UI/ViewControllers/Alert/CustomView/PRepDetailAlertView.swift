@@ -22,14 +22,7 @@ class PRepDetailAlertView: UIView {
         willSet {
             guard let prep = newValue else { return }
             prepNameLabel.size16(text: prep.name, color: .gray77, weight: .semibold)
-            
-            let status: String = {
-                switch prep.status {
-                case .active: return "Active"
-                default: return "Inactive"
-                }
-            }()
-            serverLabel.size14(text: "\(prep.city) / \(status)", color: .gray128)
+            serverLabel.size14(text: "\(prep.city)", color: .gray128)
         }
     }
     
