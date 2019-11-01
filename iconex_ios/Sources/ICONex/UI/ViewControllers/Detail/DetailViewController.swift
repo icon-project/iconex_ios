@@ -158,7 +158,14 @@ class DetailViewController: BaseViewController, Floatable {
         // eth button
         etherscanButton.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width/2 , height: 40)
         
-        let attr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 17, weight: .regular), .underlineStyle: NSUnderlineStyle.single.rawValue, .foregroundColor: UIColor.mint1])
+        let attString = NSMutableAttributedString()
+        
+        let historyAttr = NSAttributedString(string: "Wallet.Detail.EtherscanDeposit".localized + " ", attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .light), .foregroundColor: UIColor.gray77])
+        
+        let etherscanAttr = NSAttributedString(string: "Etherscan", attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .light), .underlineStyle: NSUnderlineStyle.single.rawValue, .foregroundColor: UIColor.mint1])
+        
+        attString.append(historyAttr)
+        attString.append(etherscanAttr)
         
         etherButtonView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: 100))
         etherButtonView.addSubview(etherscanButton)
@@ -167,7 +174,7 @@ class DetailViewController: BaseViewController, Floatable {
         etherscanButton.centerXAnchor.constraint(equalTo: etherButtonView.centerXAnchor).isActive = true
         etherscanButton.centerYAnchor.constraint(equalTo: etherButtonView.centerYAnchor).isActive = true
     
-        etherscanButton.setAttributedTitle(attr, for: .normal)
+        etherscanButton.setAttributedTitle(attString, for: .normal)
         
         etherscanButton.rx.tap.asControlEvent()
             .subscribe { (_) in
