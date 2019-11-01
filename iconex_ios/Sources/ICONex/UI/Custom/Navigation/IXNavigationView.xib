@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_9" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -35,10 +33,7 @@
                             <state key="normal" image="icAppbarBack"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Pa-Fp-QcJ">
-                            <rect key="frame" x="372" y="0.0" width="32" height="56"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="32" id="JEo-86-vgj"/>
-                            </constraints>
+                            <rect key="frame" x="374" y="0.0" width="30" height="56"/>
                         </button>
                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VcW-Zp-4VP">
                             <rect key="frame" x="176.33333333333334" y="18" width="61.666666666666657" height="20"/>
@@ -71,6 +66,7 @@
                         <constraint firstItem="9xy-0t-wCv" firstAttribute="top" secondItem="tCB-Ab-fdE" secondAttribute="top" id="TAL-f9-8yR"/>
                         <constraint firstItem="9xy-0t-wCv" firstAttribute="leading" secondItem="tCB-Ab-fdE" secondAttribute="leading" constant="10" id="a2f-H9-IJ4"/>
                         <constraint firstItem="VcW-Zp-4VP" firstAttribute="centerY" secondItem="0Pa-Fp-QcJ" secondAttribute="centerY" id="cPT-fx-LCd"/>
+                        <constraint firstItem="0Pa-Fp-QcJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="A1d-RW-Z99" secondAttribute="trailing" constant="10" id="dPW-ZI-d4J"/>
                         <constraint firstItem="VcW-Zp-4VP" firstAttribute="centerX" secondItem="tCB-Ab-fdE" secondAttribute="centerX" id="neL-Fk-PQr"/>
                         <constraint firstAttribute="bottom" secondItem="0Pa-Fp-QcJ" secondAttribute="bottom" id="oic-BK-n3t"/>
                         <constraint firstItem="A1d-RW-Z99" firstAttribute="trailing" secondItem="VcW-Zp-4VP" secondAttribute="trailing" constant="20" id="quR-YN-abL"/>
@@ -89,6 +85,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="139" y="154"/>
         </view>
     </objects>
     <resources>
