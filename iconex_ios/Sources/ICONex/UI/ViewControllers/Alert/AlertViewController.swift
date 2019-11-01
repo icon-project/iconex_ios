@@ -118,6 +118,11 @@ class AlertViewController: BaseViewController {
                     let formerName = wallet.name
                     guard let newName = sub.inputBoxView.textField.text else { return }
                     
+                    if formerName == newName {
+                        self.closer(self.confirmHandler)
+                        return
+                    }
+                    
                     do {
                         try DB.changeWalletName(former: formerName, newName: newName.removeContinuosSuffix(string: " "))
                         self.closer(self.confirmHandler)

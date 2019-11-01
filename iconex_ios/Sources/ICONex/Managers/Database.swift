@@ -124,8 +124,12 @@ struct DB {
     static func changeWalletName(former: String, newName: String) throws {
         let realm = try Realm()
         
-        guard let wallet = realm.objects(WalletModel.self).filter({ $0.name == former }).first else {
+        if realm.objects(WalletModel.self).filter({ $0.name == newName }).count > 0 {
             throw CommonError.duplicateName
+        }
+        
+        guard let wallet = realm.objects(WalletModel.self).filter({ $0.name == former }).first else {
+            throw WalletError.noWallet(former)
         }
         
         try realm.write {
