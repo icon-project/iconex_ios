@@ -155,9 +155,25 @@ class IScoreDetailViewController: BaseViewController {
                 self?.refreshControl?.endRefreshing()
                 
                 if let resp = response {
-                    self?.currentIScoreValue.set(text: resp.iscore.toString(decimal: 18, 15), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    let currentIscore: String = {
+                        if resp.iscore > BigUInt(1000) {
+                            return resp.iscore.toString(decimal: 21, 15).currencySeparated()
+                        } else {
+                            return "0"
+                        }
+                    }()
                     
-                    self?.receiveICXValue.set(text: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 8), size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    let iscore: String = {
+                        if resp.iscore > BigUInt(1000) {
+                            return resp.iscore.toString(decimal: 18, 8).currencySeparated()
+                        } else {
+                            return "0"
+                        }
+                    }()
+                    
+                    self?.currentIScoreValue.set(text: currentIscore, size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
+                    
+                    self?.receiveICXValue.set(text: iscore, size: 24, height: 24, color: .mint1, weight: .regular, align: .right)
                     
                     let estimated = (estimatedStep ?? 0) * (Manager.icon.stepPrice ?? 0)
                     
@@ -167,11 +183,11 @@ class IScoreDetailViewController: BaseViewController {
                     
                     let stepPrice = Manager.icon.stepPrice?.toString(decimal: 18, 18, true).currencySeparated() ?? "-"
                     
-                    let iscoreInfo = IScoreClaimInfo(currentIScore: resp.iscore.toString(decimal: 18, 15), youcanReceive: (resp.iscore != 0 ? resp.iscore / 1000 : 0).toString(decimal: 18, 8), stepLimit: estimatedStep ?? BigUInt.zero, stepPrice: stepPrice, estimatedFee: estimated.toString(decimal: 18, 18, true).currencySeparated(), estimateUSD:  "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
+                    let iscoreInfo = IScoreClaimInfo(currentIScore: currentIscore, youcanReceive: iscore, stepLimit: estimatedStep ?? BigUInt.zero, stepPrice: stepPrice, estimatedFee: estimated.toString(decimal: 18, 18, true).currencySeparated(), estimateUSD:  "$ " + (estimated.exchange(from: "icx", to: "usd")?.toString(decimal: 18, 2, false).currencySeparated() ?? "-"))
                     
                     self?.iscore = iscoreInfo
+                    self?.claimButton.isEnabled = resp.iscore >= BigUInt(1000)
                     
-                    self?.claimButton.isEnabled = true
                 } else {
                     Alert.basic(title: "Error.Fail.Downloading".localized, leftButtonTitle: "Common.Confirm".localized).show()
                     self?.claimButton.isEnabled = false
