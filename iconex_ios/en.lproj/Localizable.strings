@@ -27,7 +27,7 @@
 "Wallet.PrivateKey" = "Private Key";
 "Wallet.PrivateKey.Copy" = "Copy Private Key";
 "Wallet.PrivateKey.Copy.Message" = "Private key is copied.";
-"Wallet.ViewInfo" = "View Wallet Info.";
+"Wallet.ViewInfo" = "View Wallet Info";
 "Wallet.Create" = "Create a Wallet";
 "Wallet.Load" = "Load Wallet";
 "Wallet.Backup" = "Backup Wallet";
@@ -392,10 +392,13 @@
 "Wallet.Detail.Alert.Info" = "If the transactions which is not processed after you withdraw ICX, all pending transactions will be automatically canceled and both withdrawals and fees will be recovered.";
 
 "Wallet.Detail.DepositCompleted" = "Deposit Completed";
-"Wallet.Detail.TransferCompleted" = "Transfer Complete";
+"Wallet.Detail.TransferCompleted" = "Transfer Completed";
+"Wallet.Detail.DepositFailed" = "Deposit Failed";
+"Wallet.Detail.TransferFailed" = "Transfer Failed";
 "Wallet.Detail.TransferPending" = "Transfer Pending";
 "Wallet.Detail.ETHTransactions" = "ETH Transaction History";
 "Wallet.Detail.NoTxHistory" = "No transaction history";
+"Wallet.Detail.EtherscanDeposit" = "Deposit history";
 
 // MARK: SelectCoinTokenViewController
 "Wallet.Detail.SelectCoinToken.Title" = "Coins&Tokens";

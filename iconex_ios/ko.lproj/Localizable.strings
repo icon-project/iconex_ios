@@ -395,10 +395,13 @@
 "Wallet.Detail.Alert.Info" = "ICX 출금 신청 후 처리되지 않은 거래는 자동 취소되며 출금액과 수수료는 모두 복구됩니다.";
 
 "Wallet.Detail.DepositCompleted" = "입금완료";
-"Wallet.Detail.TransferCompleted" = "송금완료";
+"Wallet.Detail.TransferCompleted" = "전송완료";
+"Wallet.Detail.DepositFailed" = "입금실패";
+"Wallet.Detail.TransferFailed" = "전송실패";
 "Wallet.Detail.TransferPending" = "송금대기";
 "Wallet.Detail.ETHTransactions" = "이더리움 거래 내역";
 "Wallet.Detail.NoTxHistory" = "거래 내역이 없습니다.";
+"Wallet.Detail.EtherscanDeposit" = "입금 내역";
 
 // MARK: SelectCoinTokenViewController
 "Wallet.Detail.SelectCoinToken.Title" = "코인&토큰 선택";
