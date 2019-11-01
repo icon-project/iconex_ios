@@ -12,7 +12,6 @@ import RxCocoa
 import BigInt
 
 class VoteViewModel {
-    var originalList: PublishSubject<[MyVoteEditInfo]>
     var myList: BehaviorSubject<[MyVoteEditInfo]>
     var newList: BehaviorSubject<[MyVoteEditInfo]>
     
@@ -23,7 +22,6 @@ class VoteViewModel {
     var disposeBag = DisposeBag()
     
     init() {
-        self.originalList = PublishSubject<[MyVoteEditInfo]>()
         self.myList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.newList = BehaviorSubject<[MyVoteEditInfo]>(value: [MyVoteEditInfo]())
         self.currentAddedList = PublishSubject<[MyVoteEditInfo]>()

@@ -582,7 +582,7 @@
 "Error.Password" = "비밀번호를 입력해주세요.";
 "Error.Password.Length" = "8자 이상으로 입력해주세요.";
 "Error.Password.CharacterSet" = "영문, 숫자, 특수문자( ? ! : . , % + - / * < > { } ( ) [ ] ` ” ‘ ~ _ ^ \\ | @ # $ & )를 혼용하여 입력해주세요.";
-"Error.Password.Invaild.SpecialCharacter" = "사용 가능한 특수문자를 확인해 주세요. ( ? ! : . , % + - / * < > { } ( ) [ ] ` \" ' ~ _ ^ \ | @ # $ & )";
+"Error.Password.Invaild.SpecialCharacter" = "사용 가능한 특수문자를 확인해 주세요. ( ? ! : . , % + - / * < > { } ( ) [ ] ` \" ' ~ _ ^ \\ | @ # $ & )";
 "Error.Password.Serialize" = "동일한 문자를 3자 이상 연속해서 입력할 수 없습니다.";
 "Error.Password.Blank" = "공백 없이 입력해주세요.";
 "Error.Password.Wrong" = "비밀번호를 다시 확인해주세요.";

@@ -118,12 +118,15 @@ class DetailViewController: BaseViewController, Floatable {
         refreshControl.rx.controlEvent(.valueChanged)
             .subscribe { (_) in
                 self.pageIndex = 1
-                Manager.exchange.getExchangeList()
-                self.fetchBalance()
-                self.fetchTxList()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(700)) {
-                    refreshControl.endRefreshing()
+                Manager.exchange.getExchangeList {
+                    self.fetchBalance {
+                        self.fetchTxList {
+                            refreshControl.endRefreshing()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(700)) {
+                                self.tableView.reloadData()
+                            }
+                        }
+                    }
                 }
             }.disposed(by: disposeBag)
         
@@ -196,7 +199,7 @@ class DetailViewController: BaseViewController, Floatable {
         detach()
     }
     
-    private func fetchBalance() {
+    private func fetchBalance(completed: (() -> Void)? = nil) {
         guard let wallet = self.walletInfo else { return }
         DispatchQueue.global().async {
             let balance: BigUInt = {
@@ -226,11 +229,12 @@ class DetailViewController: BaseViewController, Floatable {
             
             DispatchQueue.main.async {
                 self.detailViewModel.balance.onNext(balance)
+                completed?()
             }
         }
     }
     
-    private func fetchTxList(isRefresh: Bool = true) {
+    private func fetchTxList(isRefresh: Bool = true, completed: (() -> Void)? = nil) {
         guard let wallet = self.walletInfo else { return }
         
         switch self.detailType {
@@ -241,8 +245,7 @@ class DetailViewController: BaseViewController, Floatable {
                 self.tableView.backgroundView = etherButtonView
                 
                 self.tableView.separatorStyle = .none
-                
-                self.tableView.reloadData()
+                completed?()
                 return
             }
             
@@ -265,8 +268,7 @@ class DetailViewController: BaseViewController, Floatable {
                 self.tableView.separatorStyle = .singleLine
             }
             
-            self.tableView.reloadData()
-            
+            completed?()
             return
         default: break
         }
@@ -317,10 +319,9 @@ class DetailViewController: BaseViewController, Floatable {
             }
             
             if isRefresh {
-                self.txList = newTxList
-            } else {
-                self.txList.append(contentsOf: newTxList)
+                self.txList.removeAll()
             }
+            self.txList.append(contentsOf: newTxList)
             
             DispatchQueue.main.async {
                 if self.txList.isEmpty {
@@ -334,8 +335,7 @@ class DetailViewController: BaseViewController, Floatable {
                     self.tableView.backgroundView = nil
                     self.tableView.separatorStyle = .singleLine
                 }
-                
-                self.tableView.reloadData()
+                completed?()
             }
         }
         
@@ -557,24 +557,12 @@ class DetailViewController: BaseViewController, Floatable {
             let height = self.tableView.contentSize.height
             let offset = self.tableView.contentOffset.y
             
-            let spinner = UIActivityIndicatorView(style: .gray)
-            
-            if offset + self.tableView.frame.height >= height {
+            if offset > 0, offset + self.tableView.frame.height >= height + 60 {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 self.pageIndex += 1
                 
                 self.fetchTxList(isRefresh: false)
                 
-            } else {
-                self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -76, right: 0)
-
-                spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.tableView.bounds.width, height: CGFloat(44))
-
-                self.tableView.tableFooterView = spinner
-                self.tableView.tableFooterView?.isHidden = false
-                
-                self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                spinner.stopAnimating()
             }
 
         }.disposed(by: disposeBag)

@@ -581,7 +581,7 @@
 "Error.Password" = "Enter password";
 "Error.Password.Length" = "Password must contain at least 8 characters.";
 "Error.Password.CharacterSet" = "Password must contain a combination of letters, numbers, and special characters. ( ? ! : . , % + - / * < > { } ( ) [ ] ` ” ‘ ~ _ ^ \\ | @ # $ & )";
-"Error.Password.Invaild.SpecialCharacter" = "Plase check the available special character. ( ? ! : . , % + - / * < > { } ( ) [ ] ` \" ' ~ _ ^ \ | @ # $ & )";
+"Error.Password.Invaild.SpecialCharacter" = "Please check the available special character. ( ? ! : . , % + - / * < > { } ( ) [ ] ` \" ' ~ _ ^ \\ | @ # $ & )";
 "Error.Password.Serialize" = "Password must not have more than 2 consecutive identical characters.";
 "Error.Password.Blank" = "Please do not leave blank.";
 "Error.Password.Wrong" = "Please check your password.";
