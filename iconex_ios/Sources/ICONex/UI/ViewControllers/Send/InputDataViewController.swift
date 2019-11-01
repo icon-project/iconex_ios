@@ -136,6 +136,7 @@ class InputDataViewController: BaseViewController {
                     let byteFormatter = ByteCountFormatter()
                     byteFormatter.countStyle = .binary
                     byteFormatter.allowedUnits = .useKB
+                    byteFormatter.allowsNonnumericFormatting = false
 
                     let kb = byteFormatter.string(fromByteCount: roundedByte)
                     return kb
