@@ -225,7 +225,7 @@ class CreateWalletViewController: PopableViewController {
 
                 do {
                     try new.save()
-                    
+                    Manager.balance.getAllBalances()
                     self.dismiss(animated: true, completion: {
                         self.doneAction?()
                     })

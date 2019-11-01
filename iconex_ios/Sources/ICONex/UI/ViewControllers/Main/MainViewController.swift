@@ -204,6 +204,8 @@ class MainViewController: BaseViewController, Floatable {
                 let createVC = UIStoryboard.init(name: "CreateWallet", bundle: nil).instantiateInitialViewController() as! CreateWalletViewController
                 createVC.doneAction = {
                     mainViewModel.reload.onNext(true)
+                    
+                    self.scrollToLastItem()
                 }
                 createVC.pop()
             }
@@ -211,6 +213,8 @@ class MainViewController: BaseViewController, Floatable {
                 let loadVC = UIStoryboard.init(name: "LoadWallet", bundle: nil).instantiateInitialViewController() as! LoadWalletViewController
                 loadVC.doneAction = {
                     mainViewModel.reload.onNext(true)
+                    
+                    self.scrollToLastItem()
                 }
                 loadVC.pop()
             }
@@ -362,6 +366,12 @@ class MainViewController: BaseViewController, Floatable {
         
         self.symbolList = tmp
         self.pageControl.rx.numberOfPages.onNext(self.isWalletMode ? self.walletList.count : self.symbolList.count)
+    }
+    
+    private func scrollToLastItem() {
+        let item = self.collectionView(self.collectionView, numberOfItemsInSection: 0) - 1
+        let lastItemIndex = NSIndexPath(item: item, section: 0)
+        self.collectionView.scrollToItem(at: lastItemIndex as IndexPath, at: .right, animated: false)
     }
 }
 

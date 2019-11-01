@@ -45,7 +45,7 @@ class CreateKeystoreViewController: BaseViewController {
         confirmInputBox.set(inputType: .confirmPassword)
         confirmInputBox.set(state: .normal, placeholder: "Create.Wallet.Step2.Confirm.Placeholder".localized)
         
-        footerBox.border(0.5, .mint5)
+        footerBox.border(0.5, .mint6)
         footerBox.corner(8)
         footerBox.backgroundColor = .mint4
         
