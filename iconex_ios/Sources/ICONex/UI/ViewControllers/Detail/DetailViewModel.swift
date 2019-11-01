@@ -32,7 +32,6 @@ class DetailViewModel {
     var unitBalancePrice: PublishSubject<String>
     
     var reload: PublishSubject<Bool>
-    var filter: BehaviorSubject<TxFilter>
     
     var disposeBag = DisposeBag()
     
@@ -68,7 +67,6 @@ class DetailViewModel {
         self.currencyPrice = BehaviorSubject<String>(value: "-")
         self.unitBalancePrice = PublishSubject<String>()
         self.reload = PublishSubject<Bool>()
-        self.filter = BehaviorSubject<TxFilter>(value: .all)
 
         Observable.combineLatest(self.currencyUnit, self.symbol).flatMapLatest { (unit, symbol) -> Observable<String> in
             let unitSymbol = unit.symbol.lowercased()

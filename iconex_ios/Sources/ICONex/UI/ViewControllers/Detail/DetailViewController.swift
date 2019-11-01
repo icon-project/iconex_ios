@@ -78,7 +78,9 @@ class DetailViewController: BaseViewController, Floatable {
     }
     
     private var txList = [Tracker.TxList]()
+    private var filteredTxList = [Tracker.TxList]()
     private var ethTxList = [TransactionModel]()
+    private var ethTransferList = [TransactionModel]()
     
     private var pageIndex: Int = 1
     var detailType: DetailType = .icx
@@ -95,10 +97,7 @@ class DetailViewController: BaseViewController, Floatable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.tableView.layoutIfNeeded()
-        self.detailViewModel.filter.onNext(.all)
-        
         if let token = self.tokenInfo {
             self.detailViewModel.symbol.onNext(token.symbol)
         } else {
@@ -121,9 +120,10 @@ class DetailViewController: BaseViewController, Floatable {
                 Manager.exchange.getExchangeList {
                     self.fetchBalance {
                         self.fetchTxList {
+                            self.txFilter()
                             refreshControl.endRefreshing()
                             DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(700)) {
-                                self.tableView.reloadData()
+                                self.reloadTableView()
                             }
                         }
                     }
@@ -151,6 +151,9 @@ class DetailViewController: BaseViewController, Floatable {
         
         // balance
         fetchBalance()
+        fetchTxList() {
+            self.reloadTableView()
+        }
         
         // eth button
         etherscanButton.frame = CGRect(x: 0, y: 0, width: self.tableView.frame.width/2 , height: 40)
@@ -234,20 +237,47 @@ class DetailViewController: BaseViewController, Floatable {
         }
     }
     
+    private func loadData(completion: @escaping(([Tracker.TxList]) -> Void)) {
+        var newTxList = [Tracker.TxList]()
+        
+        guard let wallet = self.walletInfo else {
+            completion(newTxList)
+            return
+        }
+        
+        DispatchQueue.global().async {
+            if let token = self.tokenInfo { //token
+                if let transactionList = self.tracker.tokenTxList(address: wallet.address, contractAddress: token.contract, page: self.pageIndex) {
+                    if let list = transactionList["data"] as? [[String: Any]] {
+                        for i in list {
+                            let tx = Tracker.TxList.init(dic: i)
+                            newTxList.append(tx)
+                        }
+                    }
+                }
+            } else { // coin
+                if let transactionList = self.tracker.transactionList(address: wallet.address, page: self.pageIndex, txType: .icxTransfer) {
+                    if let list = transactionList["data"] as? [[String: Any]] {
+                        for i in list {
+                            let tx = Tracker.TxList.init(dic: i)
+                            newTxList.append(tx)
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                completion(newTxList)
+            }
+            
+        }
+    }
+    
     private func fetchTxList(isRefresh: Bool = true, completed: (() -> Void)? = nil) {
         guard let wallet = self.walletInfo else { return }
         
         switch self.detailType {
         case .eth, .erc:
             ethTxList.removeAll()
-            
-            if filter == .deposit {
-                self.tableView.backgroundView = etherButtonView
-                
-                self.tableView.separatorStyle = .none
-                completed?()
-                return
-            }
             
             ethTxList = Transactions.etherTxList(address: wallet.address.add0xPrefix()).filter({ (txInfo) -> Bool in
                 guard let tokenSymbol = self.tokenInfo?.symbol.lowercased() else {
@@ -257,88 +287,86 @@ class DetailViewController: BaseViewController, Floatable {
                 return txInfo.tokenSymbol?.lowercased() == tokenSymbol
             })
             
-            if ethTxList.isEmpty {
-                let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
-                messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
-                
-                self.tableView.backgroundView = messageLabel
-                self.tableView.separatorStyle = .none
-            } else {
-                self.tableView.backgroundView = nil
-                self.tableView.separatorStyle = .singleLine
-            }
-            
             completed?()
             return
         default: break
         }
         
-        var newTxList = [Tracker.TxList]()
-        
-        DispatchQueue.global().async {
-            if let token = self.tokenInfo { //token
-                if let transactionList = self.tracker.tokenTxList(address: wallet.address, contractAddress: token.contract, page: self.pageIndex) {
-                    if let list = transactionList["data"] as? [[String: Any]] {
-                        for i in list {
-                            let tx = Tracker.TxList.init(dic: i)
-                            switch self.filter {
-                            case .all:
-                                newTxList.append(tx)
-                            case .send:
-                                if tx.fromAddr == wallet.address {
-                                    newTxList.append(tx)
-                                }
-                            case .deposit:
-                                if tx.toAddr == wallet.address {
-                                    newTxList.append(tx)
-                                }
-                            }
-                        }
-                    }
-                }
-            } else { // coin
-                if let transactionList = self.tracker.transactionList(address: wallet.address, page: self.pageIndex, txType: .icxTransfer) {
-                    if let list = transactionList["data"] as? [[String: Any]] {
-                        for i in list {
-                            let tx = Tracker.TxList.init(dic: i)
-                            switch self.filter {
-                            case .all:
-                                newTxList.append(tx)
-                            case .send:
-                                if tx.fromAddr == wallet.address {
-                                    newTxList.append(tx)
-                                }
-                            case .deposit:
-                                if tx.toAddr == wallet.address {
-                                    newTxList.append(tx)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            
+        loadData { (list) in
             if isRefresh {
                 self.txList.removeAll()
+                self.filteredTxList.removeAll()
             }
-            self.txList.append(contentsOf: newTxList)
+            self.txList.append(contentsOf: list)
+            self.filteredTxList.append(contentsOf: list)
             
             DispatchQueue.main.async {
-                if self.txList.isEmpty {
+                completed?()
+            }
+        }
+    }
+    
+    private func txFilter() {
+        guard let wallet = self.walletInfo else { return }
+        
+        if let _ = wallet as? ICXWallet {
+            switch self.filter {
+            case .all:
+                filteredTxList = self.txList
+            case .send:
+                filteredTxList = self.txList.filter({ $0.fromAddr == wallet.address })
+            case .deposit:
+                filteredTxList = self.txList.filter({ $0.toAddr == wallet.address })
+            }
+            
+        } else {
+            switch self.filter {
+            case .all, .send:
+                ethTxList = Transactions.etherTxList(address: wallet.address.add0xPrefix()).filter({ (txInfo) -> Bool in
+                    guard let tokenSymbol = self.tokenInfo?.symbol.lowercased() else {
+                        return txInfo.tokenSymbol == nil
+                    }
+
+                    return txInfo.tokenSymbol?.lowercased() == tokenSymbol
+                })
+            case .deposit:
+                ethTxList.removeAll()
+            }
+        }
+    }
+    
+    private func reloadTableView() {
+        if let _ = self.walletInfo as? ICXWallet {
+            if self.filteredTxList.isEmpty {
+                let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
+                messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
+                
+                self.tableView.backgroundView = messageLabel
+                self.tableView.separatorStyle = .none
+                
+            } else {
+                self.tableView.backgroundView = nil
+                self.tableView.separatorStyle = .singleLine
+            }
+        } else {
+            if self.filter == .deposit {
+                self.tableView.backgroundView = self.etherButtonView
+                self.tableView.separatorStyle = .none
+            } else {
+                if self.ethTxList.isEmpty {
                     let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: self.tableView.bounds.size.height))
                     messageLabel.size14(text: "Wallet.Detail.NoTxHistory".localized, color: .gray77, align: .center)
                     
                     self.tableView.backgroundView = messageLabel
                     self.tableView.separatorStyle = .none
-                    
                 } else {
                     self.tableView.backgroundView = nil
                     self.tableView.separatorStyle = .singleLine
                 }
-                completed?()
             }
         }
         
+        self.tableView.reloadData()
     }
     
     private func setStakeView() {
@@ -413,7 +441,7 @@ class DetailViewController: BaseViewController, Floatable {
             }.bind(to: dropDownButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
-        dropDownButton.rx.tap.asControlEvent()
+        dropDownButton.rx.tap
             .subscribe { (_) in
                 let selectVC = self.storyboard?.instantiateViewController(withIdentifier: "SelectCoinToken") as! SelectCoinTokenViewController
                 selectVC.walletInfo = self.walletInfo
@@ -457,14 +485,17 @@ class DetailViewController: BaseViewController, Floatable {
                         }
                     }
                     self.tokenInfo = newToken
-                    
-                    self.fetchTxList {
-                        self.tableView.reloadData()
-                    }
                     self.detailViewModel.currencyUnit.onNext(.USD)
                     self.currencyPriceLabel.isHidden = true
                     self.fetchBalance()
                     self.setStakeView()
+                    
+                    
+                    self.pageIndex = 1
+                    self.filter = .all
+                    self.fetchTxList {
+                        self.reloadTableView()
+                    }
                     
                 }
                 selectVC.show()
@@ -547,17 +578,9 @@ class DetailViewController: BaseViewController, Floatable {
                 }
         }.disposed(by: disposeBag)
         
-        self.detailViewModel.filter.distinctUntilChanged()
-            .subscribe(onNext: { (filter) in
-                self.filter = filter
-                self.pageIndex = 1
-                self.fetchTxList() {
-                    self.tableView.reloadData()
-                }
-                
-        }).disposed(by: disposeBag)
-        
         tableView.rx.didEndDragging.subscribe { (_) in
+            guard self.filter == .all else { return }
+            
             let height = self.tableView.contentSize.height
             let offset = self.tableView.contentOffset.y
             
@@ -566,7 +589,8 @@ class DetailViewController: BaseViewController, Floatable {
                 self.pageIndex += 1
                 
                 self.fetchTxList(isRefresh: false) {
-                    self.tableView.reloadData()
+                    self.txFilter()
+                    self.reloadTableView()
                 }
             }
 
@@ -581,7 +605,7 @@ extension DetailViewController: UITableViewDataSource {
         case .eth, .erc:
             return self.ethTxList.count
         case .icx, .irc:
-            return self.txList.count
+            return self.filteredTxList.count
         }
     }
     
@@ -608,7 +632,7 @@ extension DetailViewController: UITableViewDataSource {
             
             return cell
         case .icx, .irc:
-            let item = self.txList[indexPath.row]
+            let item = self.filteredTxList[indexPath.row]
             
             let txHash = item.txHash
             let from = item.fromAddr
@@ -618,13 +642,19 @@ extension DetailViewController: UITableViewDataSource {
             
             cell.txHashLabel.size12(text: txHash, color: .gray128, weight: .light)
             
-            //        let status = item.state // 0, 1
+            let status = item.state == 1
             if from == wallet.address {
-                cell.statusLabel.size12(text: "Wallet.Detail.TransferCompleted".localized , color: .gray77, weight: .semibold)
+                let statusString: String = {
+                    return status ? "Wallet.Detail.TransferCompleted".localized : "Wallet.Detail.TransferFailed".localized
+                }()
+                cell.statusLabel.size12(text: statusString , color: .gray77, weight: .semibold)
                 cell.valueLabel.size12(text: "- \(amount)", color: .gray77, weight: .bold, align: .right)
                 cell.symbolLabel.size12(text: symbol ?? "", color: .gray77, weight: .bold, align: .right)
             } else {
-                cell.statusLabel.size12(text: "Wallet.Detail.DepositCompleted".localized , color: .gray77, weight: .semibold)
+                let statusString: String = {
+                    return status ? "Wallet.Detail.DepositCompleted".localized : "Wallet.Detail.DepositFailed".localized
+                }()
+                cell.statusLabel.size12(text: statusString , color: .gray77, weight: .semibold)
                 cell.valueLabel.size12(text: "+ \(amount)", color: .mint1, weight: .bold, align: .right)
                 cell.symbolLabel.size12(text: symbol ?? "", color: .mint1, weight: .bold, align: .right)
             }
@@ -661,7 +691,9 @@ extension DetailViewController: UITableViewDelegate {
         ixSectionHeader.typeLabel.text = description
         
         ixSectionHeader.handler = { newFilter in
-            self.detailViewModel.filter.onNext(newFilter)
+            self.filter = newFilter
+            self.txFilter()
+            self.reloadTableView()
         }
         
         return ixSectionHeader
@@ -676,7 +708,7 @@ extension DetailViewController: UITableViewDelegate {
         
         switch detailType {
         case .icx, .irc:
-            let txHash = self.txList[indexPath.row].txHash
+            let txHash = self.filteredTxList[indexPath.row].txHash
             let provider = tracker.provider
             let txInfo = AlertTxHashInfo(txHash: txHash, trackerURL: "\(provider)/transaction/\(txHash)")
             
