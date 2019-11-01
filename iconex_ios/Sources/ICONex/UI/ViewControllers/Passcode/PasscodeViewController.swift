@@ -335,6 +335,7 @@ class PasscodeViewController: BaseViewController {
                         self.setPassStatus(status: .renewFail)
                         clearBubbleAll()
                         passcode.removeAll()
+                        isChecked = true
                         isConfirm = false
                     }
                 }
