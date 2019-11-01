@@ -72,7 +72,11 @@ class MyVoteViewController: BaseViewController {
     
     private var stack: UIStackView?
     
-    private let toolTip: IXToolTip = IXToolTip()
+    private var tooltip: IndexPath? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,7 +139,7 @@ class MyVoteViewController: BaseViewController {
         headerSecondItem.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.delegate.headerSelected(index: 1)
-                self?.toolTip.dismissLastToolTip()
+                self?.tooltip = nil
             }).disposed(by: disposeBag)
         
         let refresh = UIRefreshControl()
@@ -268,7 +272,7 @@ class MyVoteViewController: BaseViewController {
         resetButton.rx.tap
             .subscribe { [unowned self] (_) in
                 Alert.basic(title: "MyVoteView.Alert.Reset".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
-                    self.toolTip.dismissLastToolTip()
+                    self.tooltip = nil
                     
                     for (index, list) in self.myVoteList.enumerated() {
                         var item = list
@@ -473,6 +477,11 @@ extension MyVoteViewController: UITableViewDataSource {
                 cell.myvotesValueLabel.isHidden = false
             }
             
+            if let tip = self.tooltip {
+                cell.tooltipContainer.isHidden = indexPath != tip
+            } else {
+                cell.tooltipContainer.isHidden = true
+            }
             
             let delegated = Manager.voteList.myVotes?.totalDelegated ?? 0
             let votingPower = Manager.voteList.myVotes?.votingPower ?? 0
@@ -548,10 +557,14 @@ extension MyVoteViewController: UITableViewDataSource {
                 
                 cell.addButton.isSelected = false
                 cell.addButton.rx.tap
-                    .subscribe { (_) in
-                        self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "MyVoteView.ToolTip.Delete".localized, parent: self.tableView)
+                    .subscribe { [unowned self] _ in
+                        Log("\(indexPath)")
+                        self.tooltip = indexPath
                     }.disposed(by: cell.disposeBag)
-                
+                cell.voteTooltipButton.rx.tap
+                    .subscribe { [unowned self] _ in
+                        self.tooltip = nil
+                }.disposed(by: disposeBag)
                 
                 let child = sliderMaxValue.decimalNumber ?? 0.0
                 let parentDecimal = stakedTotalValue.decimalNumber ?? 0.0
@@ -936,7 +949,7 @@ extension MyVoteViewController: UITableViewDelegate {
             } else {
                 selectedIndexPath = indexPath
             }
-            self.toolTip.dismissLastToolTip()
+            self.tooltip = nil
             self.tableView.reloadData()
         } else {
             selectedIndexPath = nil

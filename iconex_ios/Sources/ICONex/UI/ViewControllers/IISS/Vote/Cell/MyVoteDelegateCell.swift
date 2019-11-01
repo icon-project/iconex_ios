@@ -30,6 +30,10 @@ class MyVoteDelegateCell: UITableViewCell {
     @IBOutlet weak var myVotesUnitLabel: UILabel!
     @IBOutlet weak var maxTitleLabel: UILabel!
     @IBOutlet weak var myVotesMax: UILabel!
+    @IBOutlet weak var tooltipContainer: UIView!
+    @IBOutlet weak var voteTooltip: UIView!
+    @IBOutlet weak var voteTooltipLabel: UILabel!
+    @IBOutlet weak var voteTooltipButton: UIButton!
     
     @IBOutlet weak var barContainer: UIView!
     @IBOutlet weak var minBar: UIView!
@@ -54,6 +58,7 @@ class MyVoteDelegateCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        tooltipContainer.isHidden = true
         disposeBag = DisposeBag()
     }
     
@@ -93,6 +98,32 @@ class MyVoteDelegateCell: UITableViewCell {
         addButton.setImage(#imageLiteral(resourceName: "icDeleteList"), for: .selected)
         
         current = 0
+        
+        voteTooltip.corner(8)
+        voteTooltipLabel.setLinespace(spacing: 3.5)
+        voteTooltipLabel.text = "MyVoteView.ToolTip.Delete".localized
+        
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: CGPoint(x: 0, y: 4))
+        bezierPath.addLine(to: CGPoint(x:8, y: 0))
+        bezierPath.addLine(to: CGPoint(x: 8, y: 8))
+        bezierPath.close()
+        
+        let triangle = CAShapeLayer()
+        triangle.path = bezierPath.cgPath
+        triangle.frame = CGRect(x: 0, y: 0, width: 8, height: 8)
+        triangle.fillColor = UIColor(38, 38, 38, 0.9).cgColor
+        
+        let triView = UIView()
+        triView.backgroundColor = .clear
+        triView.translatesAutoresizingMaskIntoConstraints = false
+        triView.layer.addSublayer(triangle)
+        tooltipContainer.addSubview(triView)
+        triView.leadingAnchor.constraint(equalTo: tooltipContainer.leadingAnchor, constant: -8).isActive = true
+        triView.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        triView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+        triView.centerYAnchor.constraint(equalTo: voteTooltip.centerYAnchor).isActive = true
+        tooltipContainer.isHidden = true
         
         // set textfield
         myVotesField.canPaste = false

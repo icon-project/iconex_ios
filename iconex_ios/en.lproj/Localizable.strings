@@ -180,7 +180,7 @@
 
 // MARK: LoadFileViewController
 "LoadFile.File.Header" = "Please select keystore file to enter password.";
-"LoadFile.File.SelectFile" = "select keysore file";
+"LoadFile.File.SelectFile" = "select keystore file";
 "LoadFile.File.Desc" = "・ If Keystore file is saved in different device, please save in this device or this cloud server then select Keystore file.";
 "LoadFile.PrivateKey.Header" = "Enter Private Key.";
 "LoadFile.SelectCoin" = "Select Coin";

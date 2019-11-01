@@ -68,7 +68,11 @@ class PRepsViewController: BaseViewController, Floatable {
     
     private var sectionHeader = PRepSectionHeaderView(frame: CGRect(x: 0, y: 0, width: .max, height: 36))
     
-    private let toolTip: IXToolTip = IXToolTip()
+    private var tooltip: IndexPath? {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,7 +92,7 @@ class PRepsViewController: BaseViewController, Floatable {
         
         firstItem.rx.tap.subscribe(onNext: { [weak self] in
             self?.delegate.headerSelected(index: 0)
-            self?.toolTip.dismissLastToolTip()
+            self?.tooltip = nil
         }).disposed(by: disposeBag)
         
         tableView.tableFooterView = UIView()
@@ -117,7 +121,7 @@ class PRepsViewController: BaseViewController, Floatable {
         }).disposed(by: disposeBag)
         
         sectionHeader.orderButton.rx.tap.asControlEvent().subscribe { [unowned self] (_) in
-            self.toolTip.dismissLastToolTip()
+            self.tooltip = nil
             
             switch self.sortType {
             case .rankDescending:
@@ -242,6 +246,12 @@ extension PRepsViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PRepViewCell", for: indexPath) as! PRepViewCell
         cell.addButton.isHidden = false
         
+        if let tip = self.tooltip {
+            cell.tooltipContainer.isHidden = tip != indexPath
+        } else {
+            cell.tooltipContainer.isHidden = true
+        }
+        
         guard let prepList = preps?.preps else { return cell }
         let prep = prepList[indexPath.row]
         
@@ -276,12 +286,14 @@ extension PRepsViewController: UITableViewDataSource {
         cell.totalVotePercent.size12(text: "(" + String(format: "%.1f", delegatedPercent) + "%)", color: .gray77, weight: .semibold, align: .right)
         cell.active = true
         
+        let editInfo = self.editInfoList![indexPath.row]
+        
         cell.addButton.rx.tap
             .subscribe(onNext: { [unowned self] in
-                let editInfo = self.editInfoList![indexPath.row]
+                
                 if Manager.voteList.contains(address: editInfo.address) || checker > 0 {
-                    self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "PRepView.ToolTip.Exist".localized, parent: self.tableView)
-                    self.tableView.reloadData()
+                    cell.prepTooltipLabel.text = "PRepView.ToolTip.Exist".localized
+                    self.tooltip = indexPath
                 } else {
                     if Manager.voteList.add(prep: editInfo) {
                         let myVoteCount = self.myvoteList?.count ?? 0
@@ -292,13 +304,18 @@ extension PRepsViewController: UITableViewDataSource {
                         
                         self.delegate.voteViewModel.currentAddedList.onNext(Manager.voteList.myAddList)
                     } else {
-                        self.toolTip.show(positionY: cell.frame.origin.y-14-self.view.safeAreaInsets.top, message: "PRepView.ToolTip.Maximum".localized, parent: self.tableView)
+                        cell.prepTooltipLabel.text = "PRepView.ToolTip.Maximum".localized
+                        self.tooltip = indexPath
                     }
                 }
             }).disposed(by: cell.disposeBag)
         
         cell.addButton.isSelected = Manager.voteList.contains(address: prep.address) || checker > 0
         
+        cell.prepTooltipButton.rx.tap
+            .subscribe { [unowned self] _ in
+                self.tooltip = nil
+        }.disposed(by: disposeBag)
         return cell
     }
 }

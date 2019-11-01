@@ -19,6 +19,10 @@ class PRepViewCell: UITableViewCell {
     @IBOutlet weak var totalVoteLabel: UILabel!
     @IBOutlet weak var totalVoteValue: UILabel!
     @IBOutlet weak var totalVotePercent: UILabel!
+    @IBOutlet weak var tooltipContainer: UIView!
+    @IBOutlet weak var prepTooltip: UIView!
+    @IBOutlet weak var prepTooltipLabel: UILabel!
+    @IBOutlet weak var prepTooltipButton: UIButton!
     
     var disposeBag = DisposeBag()
     
@@ -42,6 +46,32 @@ class PRepViewCell: UITableViewCell {
         
         addButton.setImage(#imageLiteral(resourceName: "icAddListEnabled"), for: .normal)
         addButton.setImage(#imageLiteral(resourceName: "icAddListDisabled"), for: .selected)
+        
+        prepTooltip.corner(8)
+        prepTooltipLabel.setLinespace(spacing: 3.5)
+        prepTooltipLabel.text = "PRepView.ToolTip.Exist".localized
+        
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: CGPoint(x: 0, y: 4))
+        bezierPath.addLine(to: CGPoint(x:8, y: 0))
+        bezierPath.addLine(to: CGPoint(x: 8, y: 8))
+        bezierPath.close()
+        
+        let triangle = CAShapeLayer()
+        triangle.path = bezierPath.cgPath
+        triangle.frame = CGRect(x: 0, y: 0, width: 8, height: 8)
+        triangle.fillColor = UIColor(38, 38, 38, 0.9).cgColor
+        
+        let triView = UIView()
+        triView.backgroundColor = .clear
+        triView.translatesAutoresizingMaskIntoConstraints = false
+        triView.layer.addSublayer(triangle)
+        tooltipContainer.addSubview(triView)
+        triView.leadingAnchor.constraint(equalTo: tooltipContainer.leadingAnchor, constant: -8).isActive = true
+        triView.widthAnchor.constraint(equalToConstant: 8).isActive = true
+        triView.heightAnchor.constraint(equalToConstant: 8).isActive = true
+        triView.centerYAnchor.constraint(equalTo: prepTooltip.centerYAnchor).isActive = true
+        tooltipContainer.isHidden = true
     }
     
     override func prepareForReuse() {
@@ -50,6 +80,7 @@ class PRepViewCell: UITableViewCell {
         rankLabel.isHidden = false
         prepTypeLabel.isHidden = false
         totalVotePercent.isHidden = false
+        tooltipContainer.isHidden = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
