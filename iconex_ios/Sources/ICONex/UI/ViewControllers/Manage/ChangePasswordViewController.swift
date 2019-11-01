@@ -75,7 +75,10 @@ class ChangePasswordViewController: BaseViewController {
         }
         
         newBox.set { (password) -> String? in
-            guard !password.isEmpty else { return nil }
+            guard !password.isEmpty else {
+                self.confirmBox.textField.sendActions(for: .editingDidEnd)
+                return nil
+            }
             guard password.count >= 8 else {
                 return "Error.Password.Length".localized
             }
@@ -99,6 +102,8 @@ class ChangePasswordViewController: BaseViewController {
                 guard currentPassword != password else {
                     return "ChangePassword.Password.Error.SamePassword".localized
                 }
+                
+                self.confirmBox.textField.sendActions(for: .editingDidEnd)
                 return nil
                 
             } catch {
@@ -108,7 +113,9 @@ class ChangePasswordViewController: BaseViewController {
         
         confirmBox.set { (password) -> String? in
             guard !password.isEmpty else { return nil }
-            guard password == self.newBox.text else {
+            let newPassword = self.newBox.text
+            guard !newPassword.isEmpty else { return nil }
+            guard password == newPassword else {
                 return "Error.Password.Mismatch".localized
             }
             return nil

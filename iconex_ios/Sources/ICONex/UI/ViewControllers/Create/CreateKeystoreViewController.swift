@@ -60,7 +60,10 @@ class CreateKeystoreViewController: BaseViewController {
         }
         
         passwordInputBox.set { (value) -> String? in
-            guard value.count != 0 else { return nil }
+            guard value.count != 0 else {
+                self.confirmInputBox.textField.sendActions(for: .editingDidEnd)
+                return nil
+            }
             guard value.count >= 8 else {
                 return "Error.Password.Length".localized
             }
@@ -73,11 +76,12 @@ class CreateKeystoreViewController: BaseViewController {
             guard Validator.validateSpecialCharacter(password: value) else {
                 return "Error.Password.Invaild.SpecialCharacter".localized
             }
+            self.confirmInputBox.textField.sendActions(for: .editingDidEnd)
             return nil
         }
         
         confirmInputBox.set { (confirm) -> String? in
-            guard let password = self.passwordInputBox.textField.text else { return nil }
+            guard let password = self.passwordInputBox.textField.text, !password.isEmpty else { return nil }
             guard confirm.count > 0 else { return nil }
             guard password == confirm else {
                 return "Error.Password.Mismatch".localized
@@ -113,7 +117,6 @@ class CreateKeystoreViewController: BaseViewController {
                     return
                 }
                 if password != confirm {
-//                    self.confirmInputBox.setError(message: "Error.Password.Mismatch".localized)
                     self.delegate.invalidated()
                     return
                 }
