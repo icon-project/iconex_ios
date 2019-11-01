@@ -144,7 +144,7 @@ class MainQRCodeViewController: BaseViewController {
         inputBox.set { (value) -> String? in
             guard !value.isEmpty else { return nil }
             let exchangedInfo = "icxusd"
-            return Tool.calculatePrice(decimal: 18, currency: exchangedInfo, balance: Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: false))
+            return "$ " + Tool.calculatePrice(decimal: 18, currency: exchangedInfo, balance: Tool.stringToBigUInt(inputText: value, decimal: 18, fixed: false))
         }
 
         fakeTop.constant = startHeight
