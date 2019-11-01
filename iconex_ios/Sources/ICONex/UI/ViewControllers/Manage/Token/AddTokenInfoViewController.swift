@@ -176,6 +176,7 @@ class AddTokenInfoViewController: BaseViewController {
                 
                 do {
                     try DB.addToken(tokenInfo: newToken)
+                    mainViewModel.reload.onNext(true)
                     self.navigationController?.popToRootViewController(animated: true)
                     
                 } catch {

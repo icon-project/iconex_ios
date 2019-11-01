@@ -57,6 +57,7 @@ class TokenDetailViewController: BaseViewController {
                     try DB.modifyToken(tokenInfo: newToken)
                     self.tokenInfo = newToken
                     self.isEditMode = false
+                    mainViewModel.reload.onNext(true)
                     self.refresh()
                 } catch {
                     
@@ -86,6 +87,7 @@ class TokenDetailViewController: BaseViewController {
                 Alert.basic(title: String(format: NSLocalizedString("TokenDetail.Alert.Delete", comment: ""), token.name),
                             isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                                 try? DB.removeToken(tokenInfo: token)
+                                mainViewModel.reload.onNext(true)
                                 self.navigationController?.popViewController(animated: true)
                                 
                 }).show()
