@@ -584,7 +584,7 @@ class ExchangeManager {
     
     private init () { }
     
-    func getExchangeList() {
+    func getExchangeList(completed: (() -> Void)? = nil) {
         DispatchQueue.global().async {
             var tracker: Tracker {
                 switch Config.host {
@@ -614,6 +614,7 @@ class ExchangeManager {
             } catch {
                 Log("Error - \(error)")
             }
+            completed?()
         }
     }
     

@@ -396,7 +396,6 @@ extension MyVoteViewController {
             if self.isFirstLoad {
                 self.available.onNext(tDelegation?.votingPower ?? 0)
                 self.delegate.voteViewModel.myList.onNext(self.myVoteList)
-                self.delegate.voteViewModel.originalList.onNext(self.myVoteList)
                 
                 self.footerBox.isHidden = self.myVoteList.count == 0
                 self.stack?.isHidden = self.myVoteList.count != 0

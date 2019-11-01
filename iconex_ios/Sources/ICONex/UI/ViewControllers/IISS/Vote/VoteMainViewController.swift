@@ -81,6 +81,7 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
                 self.navigationController?.popViewController(animated: true)
             }
         }
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         
         headerSelected(index: isPreps ? 1: 0)
         
@@ -90,38 +91,19 @@ class VoteMainViewController: BaseViewController, VoteMainDelegate {
         
         voteButton.isEnabled = false
         
-        Observable.combineLatest(voteViewModel.originalList, voteViewModel.myList, voteViewModel.newList).flatMapLatest { [unowned self] (originalList, myList, newList) -> Observable<Bool> in
-            for i in myList {
-                let newPrepChecker = originalList.contains(where: { (list) -> Bool in
-                    return i.address == list.address
-                })
-                
-                guard newPrepChecker else {
-                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-                    return Observable.just(true)
-                }
-            }
-            
-            if originalList.count != myList.count {
-                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-                return Observable.just(true)
-            }
-            
+        Observable.combineLatest(voteViewModel.myList, voteViewModel.newList).flatMapLatest { (myList, newList) -> Observable<Bool> in
             for i in myList {
                 if i.editedDelegate != nil && i.editedDelegate != i.myDelegate {
-                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
                     return Observable.just(true)
                 }
             }
             
             for i in newList {
                 if let edited = i.editedDelegate, edited > BigUInt(0) {
-                    self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
                     return Observable.just(true)
                 }
             }
             
-            self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
             return Observable.just(false)
             
         }.bind(to: self.voteButton.rx.isEnabled).disposed(by: disposeBag)
@@ -217,5 +199,29 @@ extension VoteMainViewController {
         prepContainer.isHidden = index == 0
         myvoteContainer.isHidden = index != 0
         bottomHeight.constant = index == 0 ? 66 : 0 - view.safeAreaInsets.bottom
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard let myList = try? voteViewModel.myList.value(), let newList = try? voteViewModel.newList.value() else { return true }
+        
+        for i in myList {
+            if i.editedDelegate != nil && i.editedDelegate != i.myDelegate {
+                Alert.basic(title: "MyVoteView.Alert.Back".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                    self.navigationController?.popViewController(animated: true)
+                }).show()
+                return false
+            }
+        }
+        
+        for i in newList {
+            if let edited = i.editedDelegate, edited > BigUInt(0) {
+                Alert.basic(title: "MyVoteView.Alert.Back".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                    self.navigationController?.popViewController(animated: true)
+                }).show()
+                return false
+            }
+        }
+        
+        return true
     }
 }

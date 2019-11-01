@@ -180,7 +180,8 @@ class StakeViewController: BaseViewController {
                 self.slider.isEnabled = true
                 
                 self.submitButton.isEnabled = self.modifiedStake != totalStaked
-                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = self.modifiedStake == totalStaked
+//                self.navigationController?.interactivePopGestureRecognizer?.isEnabled = self.modifiedStake == totalStaked
+                self.navigationController?.interactivePopGestureRecognizer?.delegate = self
                 self.stakeProgress.staked = stakeRate.floatValue
                 self.stakeProgress.voted = votedRate.floatValue
                 
@@ -442,7 +443,7 @@ extension StakeViewController {
             Log("Hash - \(hash)")
             Alert.basic(title: String(format: "Stake.Alert.Complete.Message".localized, message), leftButtonTitle: "Common.Confirm".localized, cancelAction: {
                 self.navigationController?.popViewController(animated: true)
-            }).show()
+                }).show()
             
             DispatchQueue.global().async {
 //                let result = Manager.icon.getBalance(address: self.wallet.address)
@@ -455,6 +456,30 @@ extension StakeViewController {
         } catch {
             Log("Error - \(error)")
             Alert.basic(title: "Error.CommonError".localized, leftButtonTitle: "Common.Confirm".localized).show()
+        }
+    }
+    
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let modified = self.modifiedStake, let staked = self.stakedInfo?.stake {
+            Log("Modified - \(modified)")
+            guard modified != staked else {
+                return true
+            }
+            let question: String = {
+                if modified > staked {
+                    return "Stake"
+                } else {
+                    return "Unstake"
+                }
+            }()
+            
+            Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                self.navigationController?.popViewController(animated: true)
+            }).show()
+            
+            return false
+        } else {
+            return true
         }
     }
 }
