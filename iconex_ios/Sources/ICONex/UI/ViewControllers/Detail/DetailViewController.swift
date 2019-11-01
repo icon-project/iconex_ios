@@ -458,7 +458,9 @@ class DetailViewController: BaseViewController, Floatable {
                     }
                     self.tokenInfo = newToken
                     
-                    self.fetchTxList()
+                    self.fetchTxList {
+                        self.tableView.reloadData()
+                    }
                     self.detailViewModel.currencyUnit.onNext(.USD)
                     self.currencyPriceLabel.isHidden = true
                     self.fetchBalance()
@@ -549,7 +551,9 @@ class DetailViewController: BaseViewController, Floatable {
             .subscribe(onNext: { (filter) in
                 self.filter = filter
                 self.pageIndex = 1
-                self.fetchTxList()
+                self.fetchTxList() {
+                    self.tableView.reloadData()
+                }
                 
         }).disposed(by: disposeBag)
         
@@ -561,8 +565,9 @@ class DetailViewController: BaseViewController, Floatable {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
                 self.pageIndex += 1
                 
-                self.fetchTxList(isRefresh: false)
-                
+                self.fetchTxList(isRefresh: false) {
+                    self.tableView.reloadData()
+                }
             }
 
         }.disposed(by: disposeBag)
