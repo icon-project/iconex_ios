@@ -150,6 +150,9 @@ class IntroViewController: BaseViewController {
             if Tool.isPasscode() {
                 app.presentLock({
                     app.toMain()
+                    if !Manager.balance.isWorking {
+                        Manager.balance.getAllBalances()
+                    }
                 })
             } else if !Tool.isPasscode() && Conn.isConnect {
                 app.toConnect()

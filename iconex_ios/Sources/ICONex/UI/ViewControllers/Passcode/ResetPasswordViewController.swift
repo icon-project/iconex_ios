@@ -70,7 +70,11 @@ class ResetPasswordViewController: BaseViewController {
                 Alert.password(wallet: wallet, returnAction: { (_) in
                     let setPassword = self.storyboard?.instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
                     setPassword.lockType = .activate
+                    setPassword.isResetPassword = true
                     setPassword.modalPresentationStyle = .fullScreen
+                    setPassword.completeHandler = {
+                        self.dismiss(animated: true, completion: nil)
+                    }
                     self.present(setPassword, animated: true, completion: nil)
                 }).show()
             }).disposed(by: disposeBag)

@@ -26,6 +26,8 @@ class PasscodeViewController: BaseViewController {
     
     var lockType: LockType = .activate
     
+    var isResetPassword: Bool = false
+    
     var tmpPassword: String = ""
     var passcode: String = ""
     
@@ -44,8 +46,15 @@ class PasscodeViewController: BaseViewController {
             self.navBar.isHidden = false
         }
         
-        navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
-            self.navigationController?.popToRootViewController(animated: true)
+        if isResetPassword {
+            navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarCloseW")) {
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+        } else {
+            navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
+                self.navigationController?.popToRootViewController(animated: true)
+            }
         }
         
         switch self.lockType {
@@ -294,7 +303,6 @@ class PasscodeViewController: BaseViewController {
                         
                     } else { // reset
                         self.dismiss(animated: true) {
-                            mainViewModel.reload.onNext(true)
                             self.completeHandler?()
                         }
                     }

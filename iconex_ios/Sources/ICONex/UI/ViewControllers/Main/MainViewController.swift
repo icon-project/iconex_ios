@@ -247,13 +247,23 @@ class MainViewController: BaseViewController, Floatable {
             mainInfo.pop()
         }
         
-        balanceActivityIndicator.startAnimating()
-        votedActivityIndicator.startAnimating()
-        
         self.walletList = Manager.wallet.walletList
+
+        if let balanceOb = try? mainViewModel.totalExchangedBalance.value(), balanceOb != "-" {
+            balanceActivityIndicator.stopAnimating()
+            self.balanceLabel.alpha = 1
+        } else {
+            balanceActivityIndicator.startAnimating()
+            self.balanceLabel.alpha = 0
+        }
         
-        self.balanceLabel.alpha = 0
-        self.powerLabel.alpha = 0
+        if let votedOb = try? mainViewModel.totalVotedPower.value(), votedOb != "-" {
+            votedActivityIndicator.stopAnimating()
+            self.powerLabel.alpha = 1
+        } else {
+            votedActivityIndicator.startAnimating()
+            self.powerLabel.alpha = 0
+        }
         
         balancePageView.setCurrentPage()
         powerPageView.setNonCurrentPage()
