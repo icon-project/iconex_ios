@@ -26,6 +26,8 @@ class AddTokenInfoViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.scrollView?.keyboardDismissMode = .onDrag
 
         navBar.setLeft(image: #imageLiteral(resourceName: "icAppbarBack")) {
             if !self.addressBox.text.isEmpty || !self.nameBox.text.isEmpty {
@@ -90,7 +92,7 @@ class AddTokenInfoViewController: BaseViewController {
             return nil
         }
         
-        addressBox.textField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit]).subscribe { (_) in
+        addressBox.textField.rx.controlEvent(.editingDidEnd).subscribe { (_) in
             let contract = self.addressBox.text
             if self.walletInfo!.address.hasPrefix("hx") {
                 if Validator.validateIRCAddress(address: contract) {
@@ -151,13 +153,6 @@ class AddTokenInfoViewController: BaseViewController {
                 }
                 self.present(qrVC, animated: true, completion: nil)
         }.disposed(by: disposeBag)
-        
-//        Observable.combineLatest(addressBox.textField.rx.text.orEmpty, nameBox.textField.rx.text.orEmpty, symbolBox.textField.rx.text.orEmpty, decimalBox.textField.rx.text.orEmpty)
-//            .flatMapLatest { (address, name, symbol, decimal) -> Observable<Bool> in
-//                return Observable.just(!address.isEmpty && !name.isEmpty && !symbol.isEmpty && !decimal.isEmpty)
-//
-//            }.bind(to: addButton.rx.isEnabled)
-//            .disposed(by: disposeBag)
         
         addButton.rx.tap
             .subscribe { (_) in

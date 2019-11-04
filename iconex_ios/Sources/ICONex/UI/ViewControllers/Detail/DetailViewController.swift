@@ -417,6 +417,16 @@ class DetailViewController: BaseViewController, Floatable {
                 self.walletInfo = newWallet
                 
                 self.navBar.setTitle(newWallet.name)
+                
+                if let token = self.tokenInfo {
+                    guard let checker = newWallet.tokens?.contains(where: { (info) -> Bool in
+                        return info.contract == token.contract
+                    }) else { return }
+                    
+                    if !checker {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
             }
             
             manageVC.show()

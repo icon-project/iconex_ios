@@ -82,7 +82,7 @@ class TokenDetailViewController: BaseViewController {
             }
         }
         
-        navBar.setRight(title: "Common.Modify".localized) {
+        navBar.setRight(title: "Common.Edit".localized) {
             if self.isEditMode {
                 Alert.basic(title: String(format: NSLocalizedString("TokenDetail.Alert.Delete", comment: ""), token.name),
                             isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {

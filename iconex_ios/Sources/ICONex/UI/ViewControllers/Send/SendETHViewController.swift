@@ -269,7 +269,7 @@ class SendETHViewController: BaseViewController {
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: token.decimal, fixed: true) ?? 0
                     
                     let calculated = currentValue + power
-                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal)
+                    self.amountInputBox.text = calculated.toString(decimal: token.decimal, token.decimal, true)
                 } else {
                     let power = BigUInt(100).convert()
                     let currentValue = Tool.stringToBigUInt(inputText: self.amountInputBox.text, decimal: 18, fixed: true) ?? 0
