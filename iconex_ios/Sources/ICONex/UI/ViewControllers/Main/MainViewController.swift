@@ -146,9 +146,9 @@ class MainViewController: BaseViewController, Floatable {
         mainViewModel.totalVotedPower
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { (power) in
-                self.balancePageView.isHidden = power == "0.0 %"
-                self.powerPageView.isHidden = power == "0.0 %"
-                self.powerView.isHidden = power == "0.0 %"
+                self.balancePageView.isHidden = power == "zero"
+                self.powerPageView.isHidden = power == "zero"
+                self.powerView.isHidden = power == "zero"
                 self.powerLabel.alpha = 1
                 self.votedActivityIndicator.stopAnimating()
                 self.powerLabel.text = power

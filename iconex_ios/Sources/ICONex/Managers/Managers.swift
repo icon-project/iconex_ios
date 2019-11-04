@@ -551,7 +551,12 @@ class PRepManager {
             
             let percentString = String(format: "%.1f", percent) + " %"
             DispatchQueue.main.async {
-                mainViewModel.totalVotedPower.onNext(percentString)
+                if staked > BigUInt.zero {
+                    mainViewModel.totalVotedPower.onNext(percentString)
+                } else {
+                    mainViewModel.totalVotedPower.onNext("zero")
+                }
+                
                 mainViewModel.reload.onNext(true)
             }
         }
