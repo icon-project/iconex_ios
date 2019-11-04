@@ -154,9 +154,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if let date = UserDefaults.standard.object(forKey: "sleep") as? Date {
-            let time = Int(Date().timeIntervalSince1970 - date.timeIntervalSince1970)
+            Log("date - \(date)")
             
-            if time >= 5 * 60 {
+            if date.addingTimeInterval(5 * 60) >= date {
                 presentLock()
             } else {
                 UserDefaults.standard.removeObject(forKey: "sleep")

@@ -14,13 +14,27 @@ import PanModal
 class ConnectDataViewController: BaseViewController {
 
     @IBOutlet weak var navBar: PopableTitleView!
-    @IBOutlet weak var textView: UITextView!
+//    @IBOutlet weak var textView: UITextView!
+    private var textView: UITextView!
+    @IBOutlet weak var closeContainer: UIView!
     @IBOutlet weak var closeButton: UIButton!
     
     var dataString: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tv = UITextView()
+        tv.showsVerticalScrollIndicator = false
+        tv.showsHorizontalScrollIndicator = false
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tv)
+        tv.topAnchor.constraint(equalTo: navBar.bottomAnchor, constant: 20).isActive = true
+        tv.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        tv.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        tv.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -66).isActive = true
+        tv.bottomAnchor.constraint(equalTo: closeContainer.topAnchor).isActive = true
+        self.textView = tv
         
         navBar.set(title: "Tx Data")
         navBar.actionHandler = {

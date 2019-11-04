@@ -27,7 +27,7 @@ func Log<T>(_ object: @autoclosure () -> T, _ category: LogLevel = .debug, _ fil
     let fileURL = URL(fileURLWithPath: file).lastPathComponent
     let queue = "[" + (Thread.isMainThread ? "Main" : "BG") + "]"
     
-    print("\(Date().toString(format: "yyyy-mm-dd hh:MM:ss")) - <\(queue) \(fileURL) \(function) [Line: \(line)]\n" + stringRepresentation)
+    print("\(Date().toString(format: "yyyy-mm-dd HH:mm:ss")) - <\(queue) \(fileURL) \(function) [Line: \(line)]\n" + stringRepresentation)
     #endif
 }
 

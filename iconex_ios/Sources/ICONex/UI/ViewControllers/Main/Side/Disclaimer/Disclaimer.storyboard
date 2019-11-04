@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Bhq-bG-K7N">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Bhq-bG-K7N">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,18 +16,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F0X-Uf-TXH" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F0X-Uf-TXH" customClass="PopableTitleView" customModule="iconex_ios" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="375" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="v4x-q7-wUe">
-                                <rect key="frame" x="30" y="134" width="315" height="578"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nWR-Gq-uLR">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nWR-Gq-uLR">
                                 <rect key="frame" x="0.0" y="712" width="375" height="100"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQn-Gu-gVC">
@@ -60,14 +53,9 @@
                         <constraints>
                             <constraint firstItem="l3d-c0-QQG" firstAttribute="trailing" secondItem="nWR-Gq-uLR" secondAttribute="trailing" id="7Mj-Qg-hpF"/>
                             <constraint firstAttribute="bottom" secondItem="nWR-Gq-uLR" secondAttribute="bottom" id="8c3-u8-5lm"/>
-                            <constraint firstItem="nWR-Gq-uLR" firstAttribute="top" secondItem="v4x-q7-wUe" secondAttribute="bottom" id="ArD-o9-H4O"/>
-                            <constraint firstItem="l3d-c0-QQG" firstAttribute="trailing" secondItem="v4x-q7-wUe" secondAttribute="trailing" constant="30" id="HDe-mO-tWe"/>
                             <constraint firstItem="l3d-c0-QQG" firstAttribute="trailing" secondItem="F0X-Uf-TXH" secondAttribute="trailing" id="Ktx-JL-exx"/>
                             <constraint firstItem="F0X-Uf-TXH" firstAttribute="leading" secondItem="l3d-c0-QQG" secondAttribute="leading" id="P7M-lt-Gnx"/>
-                            <constraint firstItem="l3d-c0-QQG" firstAttribute="bottom" secondItem="v4x-q7-wUe" secondAttribute="bottom" constant="66" id="VLX-Q8-lhh"/>
-                            <constraint firstItem="v4x-q7-wUe" firstAttribute="top" secondItem="F0X-Uf-TXH" secondAttribute="bottom" constant="30" id="dbR-2u-9mz"/>
                             <constraint firstItem="nWR-Gq-uLR" firstAttribute="leading" secondItem="N83-BV-2VG" secondAttribute="leading" id="kPp-35-iQO"/>
-                            <constraint firstItem="v4x-q7-wUe" firstAttribute="leading" secondItem="l3d-c0-QQG" secondAttribute="leading" constant="30" id="x8k-AY-LG8"/>
                             <constraint firstItem="F0X-Uf-TXH" firstAttribute="top" secondItem="l3d-c0-QQG" secondAttribute="top" id="yQV-h6-pkM"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="l3d-c0-QQG"/>
@@ -75,7 +63,6 @@
                     <connections>
                         <outlet property="actionContainer" destination="nWR-Gq-uLR" id="7A2-5x-BC2"/>
                         <outlet property="closeButton" destination="DAs-DJ-3rU" id="qRZ-Ge-bK5"/>
-                        <outlet property="textView" destination="v4x-q7-wUe" id="9Z5-EO-iCX"/>
                         <outlet property="titleContainer" destination="F0X-Uf-TXH" id="Vfr-Lx-6mO"/>
                     </connections>
                 </viewController>

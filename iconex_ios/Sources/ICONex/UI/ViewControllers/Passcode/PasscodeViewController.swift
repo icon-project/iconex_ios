@@ -120,6 +120,7 @@ class PasscodeViewController: BaseViewController {
                     switch state {
                         case .success:
                             self.dismiss(animated: true, completion: {
+                                app.usingLock = false
                                 self.completeHandler?()
                             })
                         

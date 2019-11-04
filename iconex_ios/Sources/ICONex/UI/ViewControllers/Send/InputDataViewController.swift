@@ -16,12 +16,14 @@ enum InputType {
 }
 
 class InputDataViewController: BaseViewController {
+    @IBOutlet weak var titleContainer: UIView!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var confirmButton: UIButton!
     
     @IBOutlet weak var placeholderLabel: UILabel!
-    @IBOutlet weak var textView: UITextView!
+//    @IBOutlet weak var textView: UITextView!
+    private var textView: UITextView!
     
     var type: InputType = .utf8
     var data: String = ""
@@ -37,6 +39,22 @@ class InputDataViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tv = UITextView()
+        tv.showsVerticalScrollIndicator = false
+        tv.showsHorizontalScrollIndicator = false
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tv)
+        tv.topAnchor.constraint(equalTo: titleContainer.bottomAnchor, constant: 29).isActive = true
+        tv.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        tv.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        tv.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+        tv.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        tv.font = .systemFont(ofSize: 14, weight: .regular)
+        self.textView = tv
+        placeholderLabel.leadingAnchor.constraint(equalTo: tv.leadingAnchor, constant: 4).isActive = true
+        placeholderLabel.topAnchor.constraint(equalTo: tv.topAnchor, constant: 8).isActive = true
+        self.view.bringSubviewToFront(placeholderLabel)
         
         toolBar.dataType = self.type
         self.textView.inputAccessoryView = toolBar

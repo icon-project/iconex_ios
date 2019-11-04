@@ -372,6 +372,7 @@ class MainViewController: BaseViewController, Floatable {
         let item = self.collectionView(self.collectionView, numberOfItemsInSection: 0) - 1
         let lastItemIndex = NSIndexPath(item: item, section: 0)
         self.collectionView.scrollToItem(at: lastItemIndex as IndexPath, at: .right, animated: false)
+        self.checkFloater()
     }
 }
 

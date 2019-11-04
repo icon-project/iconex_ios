@@ -74,6 +74,9 @@ class MainQRCodeViewController: BaseViewController {
         
         sendButton.roundGray230()
         sendButton.setTitle("Main.QRCode.Create".localized, for: .normal)
+        sendButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        sendButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        sendButton.titleLabel?.minimumScaleFactor = 0.5
         
         descLabel.size12(text: "Main.QRCode.Description".localized, color: .mint1, weight: .light)
         

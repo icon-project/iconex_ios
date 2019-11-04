@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bmp-q5-kHR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bmp-q5-kHR">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -761,15 +761,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Uym-0p-2Wi">
-                                <rect key="frame" x="20" y="124" width="335" height="588"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vQd-gq-XGG">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vQd-gq-XGG">
                                 <rect key="frame" x="0.0" y="712" width="375" height="100"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zAE-km-10d">
@@ -801,27 +793,21 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="GDA-34-Ltr" firstAttribute="leading" secondItem="qeZ-Kr-ZC9" secondAttribute="leading" id="1dG-6z-NU7"/>
-                            <constraint firstItem="Icp-Du-ILX" firstAttribute="trailing" secondItem="Uym-0p-2Wi" secondAttribute="trailing" constant="20" id="2ZH-9m-C7z"/>
-                            <constraint firstItem="Uym-0p-2Wi" firstAttribute="leading" secondItem="Icp-Du-ILX" secondAttribute="leading" constant="20" id="A1b-Xc-nkI"/>
                             <constraint firstItem="qvL-sK-DXC" firstAttribute="top" secondItem="GDA-34-Ltr" secondAttribute="bottom" id="AdR-fY-xc1"/>
                             <constraint firstItem="Icp-Du-ILX" firstAttribute="trailing" secondItem="qvL-sK-DXC" secondAttribute="trailing" id="LXF-FB-KXG"/>
                             <constraint firstItem="qvL-sK-DXC" firstAttribute="leading" secondItem="Icp-Du-ILX" secondAttribute="leading" id="QVk-Uy-VDY"/>
-                            <constraint firstItem="vQd-gq-XGG" firstAttribute="top" secondItem="Uym-0p-2Wi" secondAttribute="bottom" id="VVD-0Z-b8j"/>
-                            <constraint firstItem="Uym-0p-2Wi" firstAttribute="top" secondItem="qvL-sK-DXC" secondAttribute="bottom" constant="20" id="XOV-y3-IPW"/>
                             <constraint firstAttribute="bottom" secondItem="vQd-gq-XGG" secondAttribute="bottom" id="XsD-9T-rL9"/>
                             <constraint firstItem="vQd-gq-XGG" firstAttribute="leading" secondItem="Icp-Du-ILX" secondAttribute="leading" id="Yhy-5o-Tvw"/>
                             <constraint firstAttribute="trailing" secondItem="GDA-34-Ltr" secondAttribute="trailing" id="m5b-ut-GcI"/>
                             <constraint firstItem="GDA-34-Ltr" firstAttribute="top" secondItem="qeZ-Kr-ZC9" secondAttribute="top" id="t4y-6K-QIB"/>
                             <constraint firstItem="qvL-sK-DXC" firstAttribute="top" secondItem="Icp-Du-ILX" secondAttribute="top" id="uIV-Yg-KTf"/>
                             <constraint firstItem="Icp-Du-ILX" firstAttribute="trailing" secondItem="vQd-gq-XGG" secondAttribute="trailing" id="vq4-PF-v5h"/>
-                            <constraint firstItem="Icp-Du-ILX" firstAttribute="bottom" secondItem="Uym-0p-2Wi" secondAttribute="bottom" constant="66" id="zSH-Gs-pwS"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Icp-Du-ILX"/>
                     </view>
                     <connections>
                         <outlet property="actionContainer" destination="vQd-gq-XGG" id="izu-bP-6rQ"/>
                         <outlet property="closeButton" destination="KIA-LN-xa5" id="sZh-Sz-Snr"/>
-                        <outlet property="textView" destination="Uym-0p-2Wi" id="hb2-Me-21e"/>
                         <outlet property="titleContainer" destination="qvL-sK-DXC" id="aVg-d0-Ztz"/>
                     </connections>
                 </viewController>
@@ -1010,12 +996,6 @@
                                     <constraint firstAttribute="trailing" secondItem="Ht3-El-lmK" secondAttribute="trailing" id="yrh-Uh-RWs"/>
                                 </constraints>
                             </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2et-P2-oDi">
-                                <rect key="frame" x="20" y="129" width="335" height="649"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A4w-dl-h71">
                                 <rect key="frame" x="24.000000000000004" y="137" width="35.333333333333343" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1025,15 +1005,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="0qo-ke-MOl" firstAttribute="trailing" secondItem="2et-P2-oDi" secondAttribute="trailing" constant="20" id="2kn-hZ-doA"/>
-                            <constraint firstItem="0qo-ke-MOl" firstAttribute="bottom" secondItem="2et-P2-oDi" secondAttribute="bottom" id="AjD-5g-fjq"/>
-                            <constraint firstItem="2et-P2-oDi" firstAttribute="leading" secondItem="0qo-ke-MOl" secondAttribute="leading" constant="20" id="I0R-7a-ws7"/>
                             <constraint firstItem="xGk-HT-je0" firstAttribute="leading" secondItem="0qo-ke-MOl" secondAttribute="leading" id="SLC-Jf-c19"/>
                             <constraint firstItem="0qo-ke-MOl" firstAttribute="trailing" secondItem="xGk-HT-je0" secondAttribute="trailing" id="TMi-L8-3Sc"/>
-                            <constraint firstItem="A4w-dl-h71" firstAttribute="leading" secondItem="2et-P2-oDi" secondAttribute="leading" constant="4" id="cdD-WI-d3i"/>
-                            <constraint firstItem="A4w-dl-h71" firstAttribute="top" secondItem="2et-P2-oDi" secondAttribute="top" constant="8" id="edt-e6-vuB"/>
+                            <constraint firstItem="A4w-dl-h71" firstAttribute="leading" secondItem="0qo-ke-MOl" secondAttribute="leading" constant="24" id="ZtE-0B-IaT"/>
                             <constraint firstItem="xGk-HT-je0" firstAttribute="top" secondItem="0qo-ke-MOl" secondAttribute="top" id="jdZ-Qy-XNV"/>
-                            <constraint firstItem="2et-P2-oDi" firstAttribute="top" secondItem="xGk-HT-je0" secondAttribute="bottom" constant="29" id="sKJ-bS-UbZ"/>
+                            <constraint firstItem="A4w-dl-h71" firstAttribute="top" secondItem="xGk-HT-je0" secondAttribute="bottom" constant="37" id="oeq-bA-8wv"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="0qo-ke-MOl"/>
                     </view>
@@ -1041,7 +1017,7 @@
                         <outlet property="closeButton" destination="TPs-Gx-fhJ" id="9QQ-7v-dxa"/>
                         <outlet property="confirmButton" destination="Ht3-El-lmK" id="dUb-0v-eHf"/>
                         <outlet property="placeholderLabel" destination="A4w-dl-h71" id="ntm-UR-uEi"/>
-                        <outlet property="textView" destination="2et-P2-oDi" id="bwt-C7-rHL"/>
+                        <outlet property="titleContainer" destination="xGk-HT-je0" id="6bP-dV-X8v"/>
                         <outlet property="titleLabel" destination="kM1-AS-CFY" id="udq-Sq-iMa"/>
                     </connections>
                 </viewController>

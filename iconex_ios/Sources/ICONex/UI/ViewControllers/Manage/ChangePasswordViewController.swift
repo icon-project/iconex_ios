@@ -107,6 +107,7 @@ class ChangePasswordViewController: BaseViewController {
                 return nil
                 
             } catch {
+                self.confirmBox.textField.sendActions(for: .editingDidEnd)
                 return nil
             }
         }

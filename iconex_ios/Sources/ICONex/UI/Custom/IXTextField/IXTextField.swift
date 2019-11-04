@@ -9,6 +9,18 @@
 import UIKit
 
 class IXTextField: UITextField {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        for subview in subviews {
+            if let label = subview as? UILabel {
+                label.minimumScaleFactor = 0.5
+                label.adjustsFontSizeToFitWidth = true
+            }
+        }
+    }
+    
     var canPaste:Bool = true
     
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {

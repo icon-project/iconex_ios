@@ -11,7 +11,8 @@ import RxSwift
 import RxCocoa
 
 class MainInfoViewController: PopableViewController {
-    @IBOutlet weak var textView: UITextView!
+//    @IBOutlet weak var textView: UITextView!
+    private var textView: UITextView!
     @IBOutlet weak var closeButton: UIButton!
     
     override func viewDidLoad() {
@@ -22,6 +23,18 @@ class MainInfoViewController: PopableViewController {
     
     override func initializeComponents() {
         super.initializeComponents()
+        let tv = UITextView()
+        tv.showsVerticalScrollIndicator = false
+        tv.showsHorizontalScrollIndicator = false
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tv)
+        tv.topAnchor.constraint(equalTo: titleContainer.bottomAnchor, constant: 30).isActive = true
+        tv.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
+        tv.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
+        tv.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -66).isActive = true
+        tv.bottomAnchor.constraint(equalTo: actionContainer.topAnchor).isActive = true
+        self.textView = tv
+        
         let color = UIColor.gray77
         let titleFont = UIFont.systemFont(ofSize: 16, weight: .medium)
         let bodyFont = UIFont.systemFont(ofSize: 14, weight: .light)
