@@ -172,7 +172,7 @@
 
 
 // MARK: LoadSelectViewController
-"LoadSelect.Header" = "Select the methods to import wallet.";
+"LoadSelect.Header" = "Select the method to import wallet.";
 "LoadSelect.Keystore" = "backup file";
 "LoadSelect.PrivateKey" = "Private Key";
 "LoadSelect.Desc1" = "・ Keystore file contains wallet's own information and private key. There is password for Keystore file.";
