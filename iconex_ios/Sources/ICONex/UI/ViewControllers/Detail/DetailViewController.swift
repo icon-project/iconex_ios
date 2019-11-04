@@ -603,11 +603,13 @@ class DetailViewController: BaseViewController, Floatable {
             
             if offset > 0, offset + self.tableView.frame.height >= height + 60 {
                 self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                self.pageIndex += 1
                 
-                self.fetchTxList(isRefresh: false) {
-                    self.txFilter()
-                    self.reloadTableView()
+                if let _ = self.walletInfo as? ICXWallet {
+                    self.pageIndex += 1
+                    self.fetchTxList(isRefresh: false) {
+                        self.txFilter()
+                        self.reloadTableView()
+                    }
                 }
             }
 

@@ -727,16 +727,20 @@ struct Ethereum {
     
     static func requestSendTransaction(privateKey: String, gasPrice: BigUInt, gasLimit: BigUInt, from: String, to: String, value: BigUInt, data: Data? = nil) -> (isSuccess: Bool, reason: Int) {
         let web3 = Ethereum.provider
+        
+        guard let fromAddress = EthereumAddress(from.add0xPrefix()), let toAddress = EthereumAddress(to.add0xPrefix()) else {
+            return (false, -99)
+        }
         var options = TransactionOptions.defaultOptions
         options.gasPrice = .manual(gasPrice)
         options.gasLimit = .manual(gasLimit)
-        options.from = EthereumAddress(from.add0xPrefix())
+        options.from = fromAddress
         
         let keystore = try! EthereumKeystoreV3(privateKey: privateKey.hexToData()!)
         let manager = KeystoreManager([keystore!])
         web3.addKeystoreManager(manager)
         
-        let intermediate = web3.eth.sendETH(to: EthereumAddress(to.add0xPrefix())!, amount: value, extraData: data ?? Data(), transactionOptions: options)
+        let intermediate = web3.eth.sendETH(to: toAddress, amount: value, extraData: data ?? Data(), transactionOptions: options)
         
         if let estimated = try? intermediate!.estimateGas(transactionOptions: nil) {
             Log("estimated: \(estimated), gasLimit: \(gasLimit)")
@@ -753,7 +757,7 @@ struct Ethereum {
             Log("result: \(result)")
             
             if let txHash = result.transaction.txhash {
-                try DB.saveTransaction(from: from, to: to, txHash: txHash, value: value.toString(decimal: 18, 18, true), type: "eth")
+                try DB.saveTransaction(from: from.add0xPrefix(), to: to, txHash: txHash, value: value.toString(decimal: 18, 18, true), type: "eth")
                 return (true, 0)
             } else {
                 return (false, -99)
@@ -852,7 +856,7 @@ struct Ethereum {
             Log("success: \(String(describing: result))")
             if let txHash = result.transaction.txhash {
                 do {
-                    try Transactions.saveTransaction(from: from, to: to, txHash: txHash, value: value.toString(decimal: tokenInfo.decimal, tokenInfo.decimal, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
+                    try Transactions.saveTransaction(from: from.add0xPrefix(), to: to, txHash: txHash, value: value.toString(decimal: tokenInfo.decimal, tokenInfo.decimal, true), type: tokenInfo.parentType.lowercased(), tokenSymbol: tokenInfo.symbol.lowercased())
                     
                 } catch {
                     Log("\(error)")

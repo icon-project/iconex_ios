@@ -185,11 +185,11 @@ class AlertViewController: BaseViewController {
                         if let ethTx = sendInfo.ethTransaction, let pk = sendInfo.ethPrivateKey {
                             // ERC
                             if let token = sendInfo.token {
-                                let sendERC = Ethereum.requestTokenSendTransaction(privateKey: pk, from: ethTx.from, to: ethTx.to, tokenInfo: token, limit: ethTx.gasLimit, price: ethTx.gasPrice, value: ethTx.value)
+                                let sendERC = Ethereum.requestTokenSendTransaction(privateKey: pk, from: ethTx.from.add0xPrefix(), to: ethTx.to, tokenInfo: token, limit: ethTx.gasLimit, price: ethTx.gasPrice, value: ethTx.value)
                                 
                                 self.isSuccess = sendERC.isSuccess
                             } else {
-                                let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from, to: ethTx.to, value: ethTx.value, data: ethTx.data)
+                                let sendETH = Ethereum.requestSendTransaction(privateKey: pk, gasPrice: ethTx.gasPrice, gasLimit: ethTx.gasLimit, from: ethTx.from.add0xPrefix(), to: ethTx.to, value: ethTx.value, data: ethTx.data)
                                 
                                 self.isSuccess = sendETH.isSuccess
                             }
