@@ -95,6 +95,7 @@ class StakeViewController: BaseViewController {
                 }()
                 
                 Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                    self.slider.preventValidation = true
                     self.navigationController?.popViewController(animated: true)
                 }).show()
                 
@@ -474,6 +475,7 @@ extension StakeViewController {
             }()
             
             Alert.basic(title: "Stake.Alert.Discard.Title".localized, subtitle: String(format: "Stake.Alert.Discard.Message".localized, question), hasHeaderTitle: false, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
+                self.slider.preventValidation = true
                 self.navigationController?.popViewController(animated: true)
             }).show()
             

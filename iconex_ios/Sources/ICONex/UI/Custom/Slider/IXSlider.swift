@@ -61,6 +61,8 @@ class IXSlider: UIView {
     var minText: String = "Min"
     var maxText: String = "Max"
     
+    var preventValidation: Bool = false
+    
     private var myStake: BigUInt = 0 {
         willSet {
             guard let totalNum = self.totalValue?.decimalNumber, let votedNum = self.voted?.decimalNumber, let myStakeNum = newValue.decimalNumber, let minDecimal = self.minICX.decimalNumber else { return }
@@ -212,6 +214,7 @@ class IXSlider: UIView {
         
         textField.rx.controlEvent([.editingDidEnd, .editingDidEndOnExit])
             .subscribe(onNext: { [unowned self] in
+                guard !self.preventValidation else { return }
                 if let action = self.fieldAction {
                     action(self.textField.text!)
                 }
