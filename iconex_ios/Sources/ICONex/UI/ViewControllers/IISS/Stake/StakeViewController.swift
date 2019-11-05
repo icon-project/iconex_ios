@@ -242,6 +242,7 @@ class StakeViewController: BaseViewController {
         if refreshControl != nil {
             guard let balance = wallet.balance else {
                 balanceLabel.size14(text: "-")
+                submitButton.isEnabled = false
                 return
             }
             balanceLabel.size14(text: "-", color: .gray77, weight: .regular, align: .right)
@@ -384,6 +385,7 @@ extension StakeViewController {
     func estimatedPeriod() {
         guard let modified = modifiedStake, let stakedInfo = stakedInfo else {
             timeLabel.size14(text: "-", color: .gray77)
+            submitButton.isEnabled = false
             return
         }
         
@@ -394,7 +396,10 @@ extension StakeViewController {
             
         } else if modified < totalStake {
             DispatchQueue.global().async {
-                guard let estimatedUnstakeTime = Manager.icon.estimateUnstakeLockPeriod(from: self.wallet) else { return }
+                guard let estimatedUnstakeTime = Manager.icon.estimateUnstakeLockPeriod(from: self.wallet) else {
+                    self.submitButton.isEnabled = false
+                    return
+                }
                 
                 let estimated: TimeInterval = Double(estimatedUnstakeTime) * 2.0
                 let estimatedDate = Date(timeIntervalSinceNow: estimated)
