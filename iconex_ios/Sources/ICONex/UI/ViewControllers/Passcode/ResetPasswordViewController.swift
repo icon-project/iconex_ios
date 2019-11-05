@@ -72,9 +72,6 @@ class ResetPasswordViewController: BaseViewController {
                     setPassword.lockType = .activate
                     setPassword.isResetPassword = true
                     setPassword.modalPresentationStyle = .fullScreen
-                    setPassword.completeHandler = {
-                        self.dismiss(animated: true, completion: nil)
-                    }
                     self.present(setPassword, animated: true, completion: nil)
                 }).show()
             }).disposed(by: disposeBag)

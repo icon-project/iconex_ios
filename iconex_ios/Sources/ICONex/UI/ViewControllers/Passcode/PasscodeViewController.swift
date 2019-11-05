@@ -302,9 +302,9 @@ class PasscodeViewController: BaseViewController {
                         navigationController.popToRootViewController(animated: true)
                         
                     } else { // reset
-                        self.dismiss(animated: true) {
-                            self.completeHandler?()
-                        }
+                        let lockVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "LockSetting") as! LockSettingViewController
+                        app.toMain()
+                        app.topViewController()?.present(lockVC, animated: false, completion: nil)
                     }
                 } else {
                     self.setPassStatus(status: .renewFail)
