@@ -27,6 +27,8 @@ class SendInfoViewController: PopableViewController {
         super.initializeComponents()
         
         let tv = UITextView()
+        tv.isEditable = false
+        tv.isSelectable = false
         tv.showsVerticalScrollIndicator = false
         tv.showsHorizontalScrollIndicator = false
         tv.translatesAutoresizingMaskIntoConstraints = false
