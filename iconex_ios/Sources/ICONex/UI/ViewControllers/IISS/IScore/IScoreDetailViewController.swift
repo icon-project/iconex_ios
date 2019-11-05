@@ -157,7 +157,7 @@ class IScoreDetailViewController: BaseViewController {
                 if let resp = response {
                     let currentIscore: String = {
                         if resp.iscore > BigUInt(1000) {
-                            return resp.iscore.toString(decimal: 21, 15).currencySeparated()
+                            return resp.iscore.toString(decimal: 18, 15).currencySeparated()
                         } else {
                             return "0"
                         }
@@ -165,7 +165,8 @@ class IScoreDetailViewController: BaseViewController {
                     
                     let iscore: String = {
                         if resp.iscore > BigUInt(1000) {
-                            return resp.iscore.toString(decimal: 18, 8).currencySeparated()
+                            let iscore = resp.iscore / 1000
+                            return iscore.toString(decimal: 18, 8).currencySeparated()
                         } else {
                             return "0"
                         }
