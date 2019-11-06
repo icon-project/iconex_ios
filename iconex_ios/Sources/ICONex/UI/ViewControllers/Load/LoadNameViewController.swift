@@ -222,7 +222,11 @@ extension LoadNameViewController {
             self.delegate.invalidated()
             return text
         }
-        guard DB.canSaveWallet(name: text.removeContinuosSuffix(string: " ")) else {
+        guard Validator.validateBlankString(string: text) else {
+            self.delegate.invalidated()
+            return text
+        }
+        guard DB.canSaveWallet(name: text.removeContinuosCharacter(string: " ")) else {
             self.delegate.invalidated()
             return "Error.Wallet.Duplicated.Name".localized
         }

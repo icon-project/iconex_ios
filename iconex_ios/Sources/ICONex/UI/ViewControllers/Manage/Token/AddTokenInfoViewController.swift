@@ -84,7 +84,7 @@ class AddTokenInfoViewController: BaseViewController {
             guard !name.isEmpty else {
                 self.addButton.isEnabled = self.validateForms()
                 return nil }
-            if !Validator.validateTokenName(name: name) {
+            if !Validator.validateTokenName(name: name.removeContinuosCharacter(string: " ")) {
                 self.addButton.isEnabled = self.validateForms()
                 return "Token.Info.Error.Symbol".localized
             }
@@ -156,7 +156,7 @@ class AddTokenInfoViewController: BaseViewController {
         
         addButton.rx.tap
             .subscribe { (_) in
-                let name = self.nameBox.text
+                let name = self.nameBox.text.removeContinuosCharacter(string: " ")
                 let address = self.addressBox.text
                 let symbol = self.symbolBox.text
                 let decimal = Int(self.decimalBox.text) ?? 0
@@ -196,6 +196,6 @@ class AddTokenInfoViewController: BaseViewController {
     
     private func validateForms() -> Bool {
         return (walletInfo!.address.hasPrefix("hx") ? Validator.validateIRCAddress(address: addressBox.text) : Validator.validateETHAddress(address: addressBox.text)) &&
-            !nameBox.text.isEmpty && !symbolBox.text.isEmpty && !decimalBox.text.isEmpty
+            !nameBox.text.isEmpty && !symbolBox.text.isEmpty && !decimalBox.text.isEmpty && Validator.validateBlankString(string: nameBox.text)
     }
 }

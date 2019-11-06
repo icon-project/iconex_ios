@@ -55,7 +55,7 @@ class CreateKeystoreViewController: BaseViewController {
         
         // validator
         nameInputBox.set { (inputValue) -> String? in
-            guard !DB.canSaveWallet(name: inputValue) else { return nil }
+            guard !DB.canSaveWallet(name: inputValue.removeContinuosCharacter(string: " ")) else { return nil }
             return "Error.Wallet.Duplicated.Name".localized
         }
         
@@ -96,7 +96,11 @@ class CreateKeystoreViewController: BaseViewController {
                     self.delegate.invalidated()
                     return
                 }
-                guard DB.canSaveWallet(name: name) else {
+                guard Validator.validateBlankString(string: name) else {
+                    self.delegate.invalidated()
+                    return
+                }
+                guard DB.canSaveWallet(name: name.removeContinuosCharacter(string: " ")) else {
                     self.delegate.invalidated()
                     return
                 }
@@ -126,7 +130,7 @@ class CreateKeystoreViewController: BaseViewController {
                 self.confirmInputBox.setError(message: nil)
                 self.delegate.validated()
                 
-                self.delegate.walletInfo = WalletInfo(name: name.removeContinuosSuffix(string: " "), password: password)
+                self.delegate.walletInfo = WalletInfo(name: name.removeContinuosCharacter(string: " "), password: password)
             }).disposed(by: disposeBag)
     }
     

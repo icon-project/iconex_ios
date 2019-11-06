@@ -73,8 +73,12 @@ extension String {
 }
 
 extension String {
-    func removeContinuosSuffix(string: String) -> String {
+    func removeContinuosCharacter(string: String) -> String {
         var conv = self as NSString
+        while conv.hasPrefix(string) {
+            conv = conv.substring(from: 1) as NSString
+        }
+        
         while conv.hasSuffix(string) {
             conv = conv.substring(to: conv.length - 1) as NSString
         }

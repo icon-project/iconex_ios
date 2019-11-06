@@ -39,7 +39,7 @@ class TokenDetailViewController: BaseViewController {
         let nameBox = nameInputBox.textField.rx.text.orEmpty.share(replay: 1)
         
         nameBox
-            .map { $0.count > 0 }
+            .map { $0.count > 0 && Validator.validateBlankString(string: $0) }
             .bind(to: modifyCompleteButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
@@ -52,7 +52,7 @@ class TokenDetailViewController: BaseViewController {
         modifyCompleteButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 var newToken = token
-                newToken.name = self.nameInputBox.text
+                newToken.name = self.nameInputBox.text.removeContinuosCharacter(string: " ")
                 do {
                     try DB.modifyToken(tokenInfo: newToken)
                     self.tokenInfo = newToken

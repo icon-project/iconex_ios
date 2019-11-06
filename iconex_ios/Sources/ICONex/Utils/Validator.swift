@@ -61,8 +61,13 @@ struct Validator {
         let exceptSpecial = password.unicodeScalars.filter { charSet.inverted.contains($0) }
         
         let excluded = exceptSpecial.filter { specialSet.inverted.contains($0) }
-        Log("excluded - \(excluded)")
         return excluded.count == 0
+    }
+    
+    static func validateBlankString(string: String) -> Bool {
+        let without = string.filter { $0 != " " }.count
+        
+        return without != 0
     }
     
     static func validateICXAddress(address: String) -> Bool {

@@ -124,7 +124,7 @@ class AlertViewController: BaseViewController {
                     }
                     
                     do {
-                        try DB.changeWalletName(former: formerName, newName: newName.removeContinuosSuffix(string: " "))
+                        try DB.changeWalletName(former: formerName, newName: newName.removeContinuosCharacter(string: " "))
                         self.closer(self.confirmHandler)
                     } catch {
                         sub.inputBoxView.setError(message: "Error.Wallet.Duplicated.Name".localized)
@@ -132,7 +132,7 @@ class AlertViewController: BaseViewController {
                     
                 case .addAddress:
                     let sub = self.contentView.subviews.first as! AddressAlertView
-                    guard let name = sub.addressNameInputBox.textField.text, let address = sub.addressInputBox.textField.text else { return }
+                    guard let name = sub.addressNameInputBox.textField.text?.removeContinuosCharacter(string: " "), let address = sub.addressInputBox.textField.text else { return }
                     
                     guard DB.canSaveAddressBook(name: name) else {
                         sub.addressNameInputBox.setError(message: "Error.Wallet.Duplicated.Name".localized)
@@ -421,7 +421,7 @@ class AlertViewController: BaseViewController {
                 if wallet.name == inputValue {
                     return nil
                 } else {
-                    return DB.canSaveWallet(name: inputValue) ? nil : "Error.Wallet.Duplicated.Name".localized
+                    return DB.canSaveWallet(name: inputValue.removeContinuosCharacter(string: " ")) ? nil : "Error.Wallet.Duplicated.Name".localized
                 }
             }
             
@@ -430,6 +430,10 @@ class AlertViewController: BaseViewController {
             passwordView.inputBoxView.textField.rx.text.orEmpty
                 .scan("") { [unowned self] (previous, new) -> String in
                     if new.count > 0 {
+                        guard Validator.validateBlankString(string: new) else {
+                            self.rightButton.isEnabled = false
+                            return new
+                        }
                         self.rightButton.isEnabled = true
                         if new.utf8.count > 24 {
                             return previous ?? String(new.utf8.prefix(24))!
@@ -460,7 +464,6 @@ class AlertViewController: BaseViewController {
             setButtonUI(isOne: false)
             
             let sendView = SendAlertView()
-            print("sendinfo \(self.sendInfo)")
             sendView.info = self.sendInfo
             
             addSubviewWithConstraint(sendView)
@@ -548,7 +551,7 @@ class AlertViewController: BaseViewController {
             Observable.combineLatest(addressView.addressNameInputBox.textField.rx.text.orEmpty, addressView.addressInputBox.textField.rx.text.orEmpty)
                 .map { name, address in
                     
-                    return name.count > 0 && address.count > 0
+                    return name.count > 0 && address.count > 0 && Validator.validateBlankString(string: name)
                 }.bind(to: self.rightButton.rx.isEnabled)
                 .disposed(by: disposeBag)
             

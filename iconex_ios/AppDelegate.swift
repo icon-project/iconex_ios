@@ -155,20 +155,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if let date = UserDefaults.standard.object(forKey: "sleep") as? Date {
             Log("date - \(date)")
-            
-            if date.addingTimeInterval(5 * 60) >= date {
+            let newDate = Date()
+            Log("new date - \(newDate)")
+            if newDate.timeIntervalSince1970 - date.timeIntervalSince1970 >= 5 * 60 {
                 presentLock()
             } else {
-                UserDefaults.standard.removeObject(forKey: "sleep")
                 if !usingLock && !Tool.isPasscode() && Conn.isConnect {
                     toConnect()
                 }
             }
+            UserDefaults.standard.removeObject(forKey: "sleep")
         } else {
             if !usingLock && !Tool.isPasscode() && Conn.isConnect {
                 toConnect()
             }
-            UserDefaults.standard.removeObject(forKey: "sleep")
         }
     }
 
