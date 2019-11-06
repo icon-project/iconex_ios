@@ -68,7 +68,7 @@ class UnStakeViewController: BaseViewController {
         }
         
         stakeTitleLabel.size16(text: "Stake", color: .gray77, weight: .medium)
-        unstakeTitleLabel.size14(text: "UnStaked", color: .gray77, weight: .light)
+        unstakeTitleLabel.size14(text: "Unstaked", color: .gray77, weight: .light)
         
         percentBoxView.corner(10)
         percentBoxView.clipsToBounds = true
@@ -93,9 +93,9 @@ class UnStakeViewController: BaseViewController {
         
         unstakedPercentLabel.size14(text: String(format: "%.1f", unstakedPercent) + "%", color: .gray77)
         
-        sliderStakedLabel.size14(text: "Staked " + "\(info.stake.toString(decimal: 18, 4).currencySeparated()) ICX " + "(" + String(format: "%.1f", totalStakedPercent) + "%)", color: .mint1)
+        sliderStakedLabel.size14(text: "Staked " + String(format: "%.1f", totalStakedPercent) + "%", color: .mint1)
         
-        sliderUnstakedLabel.size14(text: "┗ " + "Unstake.Request.Percent".localized + " \(info.unstake!.toString(decimal: 18, 4).currencySeparated()) ICX " + "(" + String(format: "%.1f", requestUnstakePercent) + "%)", color: .mint1)
+        sliderUnstakedLabel.size14(text: "┗ " + "Unstake.Request.Percent".localized + " " + String(format: "%.1f", requestUnstakePercent) + "%", color: .mint1)
         
         // bar
         let percentBoxWidth = percentBoxView.frame.width - 4
