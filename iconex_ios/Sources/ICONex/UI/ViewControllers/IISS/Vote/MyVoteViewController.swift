@@ -643,7 +643,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         
                     }).disposed(by: cell.disposeBag)
                 
-                cell.slider.rx.controlEvent(.touchUpInside).subscribe { [unowned self] (_) in
+                cell.slider.rx.controlEvent([.touchUpInside, .touchUpOutside]).subscribe { [unowned self] (_) in
                     self.delegate.voteViewModel.myList.onNext(self.myVoteList)
                 }.disposed(by: cell.disposeBag)
                 
@@ -859,7 +859,7 @@ extension MyVoteViewController: UITableViewDataSource {
                         self.isChanged.onNext(true)
                     }).disposed(by: cell.disposeBag)
                 
-                cell.slider.rx.controlEvent(.touchUpInside).subscribe { [unowned self] (_) in
+                cell.slider.rx.controlEvent([.touchUpInside, .touchUpOutside]).subscribe { [unowned self] (_) in
                     self.delegate.voteViewModel.newList.onNext(self.newList)
                 }.disposed(by: cell.disposeBag)
                 

@@ -208,7 +208,7 @@ class IXSlider: UIView {
             
         }).disposed(by: disposeBag)
         
-        slider.rx.controlEvent(.touchUpInside).subscribe { (_) in
+        slider.rx.controlEvent([.touchUpInside, .touchUpOutside]).subscribe { (_) in
             self.estimateFee.onNext(true)
         }.disposed(by: disposeBag)
         

@@ -398,7 +398,9 @@ extension StakeViewController {
         } else if modified < totalStake {
             DispatchQueue.global().async {
                 guard let estimatedUnstakeTime = Manager.icon.estimateUnstakeLockPeriod(from: self.wallet) else {
-                    self.submitButton.isEnabled = false
+                    DispatchQueue.main.async {
+                        self.submitButton.isEnabled = false
+                    }
                     return
                 }
                 
