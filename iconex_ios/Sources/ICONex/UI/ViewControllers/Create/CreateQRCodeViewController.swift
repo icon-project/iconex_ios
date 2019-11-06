@@ -41,13 +41,6 @@ class CreateQRCodeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    // ???
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        UIView.animate(withDuration: 0.4) {
-            self.view.alpha = 0.0
-        }
-    }
     
     override func initializeComponents() {
         super.initializeComponents()
