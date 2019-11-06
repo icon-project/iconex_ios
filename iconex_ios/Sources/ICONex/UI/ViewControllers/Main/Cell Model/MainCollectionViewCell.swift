@@ -255,7 +255,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     DispatchQueue.global().async {
                         let response = Manager.icon.queryIScore(from: icx)
                         
-                        let iscore = response?.iscore.toString(decimal: 21, 4).currencySeparated()
+                        let iscore = response?.iscore.toString(decimal: 18, 4).currencySeparated()
                         
                         DispatchQueue.main.async {
                             coinCell.iscoreLabel.text = iscore ?? "-"
