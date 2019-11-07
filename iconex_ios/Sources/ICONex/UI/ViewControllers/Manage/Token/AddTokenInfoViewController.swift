@@ -143,12 +143,12 @@ class AddTokenInfoViewController: BaseViewController {
                 if let _ = self.walletInfo as? ICXWallet {
                     qrVC.set(mode: .irc, handler: { contract, _ in
                         self.addressBox.textField.text = contract
-                        self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
+                        self.addressBox.textField.sendActions(for: .editingDidEnd)
                     })
                 } else {
                     qrVC.set(mode: .eth, handler: { contract, _ in
                         self.addressBox.textField.text = contract
-                        self.addressBox.textField.sendActions(for: .editingDidEndOnExit)
+                        self.addressBox.textField.sendActions(for: .editingDidEnd)
                     })
                 }
                 self.present(qrVC, animated: true, completion: nil)
