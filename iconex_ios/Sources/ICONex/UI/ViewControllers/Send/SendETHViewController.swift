@@ -107,13 +107,7 @@ class SendETHViewController: BaseViewController {
                     return
                 }
                 
-                DispatchQueue.global().async {
-                    self.gasLimit = Ethereum.requestETHEstimatedGas(value: value, data: hexData, from: wallet.address, to: address) ?? 0
-                    DispatchQueue.main.async {
-                        self.gasLimitInputBox.textField.text = "\(self.gasLimit)"
-                        self.gasLimitInputBox.textField.sendActions(for: .editingDidEndOnExit)
-                    }
-                }
+                self.estimateGas(value: value, data: hexData, from: wallet.address, to: address)
             }
         }
     }
@@ -378,6 +372,13 @@ class SendETHViewController: BaseViewController {
                     self.usdLabel.isHidden = true
                     return "Send.InputBox.Amount.Error".localized
                 }
+                if let data = self.data {
+                    guard let hexData = data.prefix0xRemoved().hexToData() else { return nil }
+                    guard !self.addressInputBox.text.isEmpty else { return nil }
+                    let toAddress = self.addressInputBox.text
+                    
+                    self.estimateGas(value: amount, data: hexData, from: wallet.address, to: toAddress)
+                }
                 return nil
             }
             
@@ -409,6 +410,12 @@ class SendETHViewController: BaseViewController {
             guard !address.isEmpty else { return nil }
             
             if Validator.validateETHAddress(address: address) {
+                if let data = self.data {
+                    guard let hexData = data.prefix0xRemoved().hexToData() else { return nil }
+                    guard let amount: BigUInt = Tool.stringToBigUInt(inputText: self.amountInputBox.text) else { return nil }
+                    
+                    self.estimateGas(value: amount, data: hexData, from: wallet.address, to: address)
+                }
                 return nil
             } else {
                 return "Send.InputBox.Address.Error.ETH".localized
@@ -575,5 +582,15 @@ class SendETHViewController: BaseViewController {
                 }).show()
                 
         }.disposed(by: disposeBag)
+    }
+    
+    private func estimateGas(value: BigUInt, data: Data, from: String, to: String) {
+        DispatchQueue.global().async {
+            self.gasLimit = Ethereum.requestETHEstimatedGas(value: value, data: data, from: from, to: to) ?? 0
+            DispatchQueue.main.async {
+                self.gasLimitInputBox.textField.text = "\(self.gasLimit)"
+                self.gasLimitInputBox.textField.sendActions(for: .editingDidEndOnExit)
+            }
+        }
     }
 }
