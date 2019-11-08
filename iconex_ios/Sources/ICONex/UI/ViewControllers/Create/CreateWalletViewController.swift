@@ -168,21 +168,22 @@ class CreateWalletViewController: PopableViewController {
         }).disposed(by: disposeBag)
 
         leftButton.rx.tap.subscribe(onNext: { [unowned self] in
-            self.selectVC.refresh()
-            self.keystoreVC.refresh()
             self.backupVC.refresh()
             self.completeVC.refresh()
             
             switch self.scrollIndex {
             case 0:
                 self.dismiss(animated: true, completion: nil)
+                
+            case 1:
+                self.isICX = true
+                self.selectVC.refresh()
 
             case 2:
-                self.keystoreVC.info = nil
+                self.keystoreVC.refresh()
                 self._isBackup = false
                 self._newWallet = nil
                 self._walletInfo = nil
-                self.isICX = true
                 
             default:
                 break

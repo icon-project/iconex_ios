@@ -303,9 +303,11 @@ class PasscodeViewController: BaseViewController {
                         
                     } else { // reset
                         let lockVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "LockSetting") as! LockSettingViewController
-                        lockVC.modalPresentationStyle = .fullScreen
+                        let navRootVC = UINavigationController(rootViewController: lockVC)
+                        navRootVC.isNavigationBarHidden = true
+                        navRootVC.modalPresentationStyle = .fullScreen
                         app.toMain()
-                        app.topViewController()?.present(lockVC, animated: false, completion: nil)
+                        app.topViewController()?.present(navRootVC, animated: false, completion: nil)
                     }
                 } else {
                     self.setPassStatus(status: .renewFail)

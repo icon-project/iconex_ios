@@ -89,6 +89,10 @@ class MainQRCodeViewController: BaseViewController {
             sendButton.isHidden = true
             descLabel.isHidden = true
         }
+        self.view.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.view.layer.shadowColor = UIColor.black.cgColor
+        self.view.layer.shadowOpacity = 0.1
+        self.view.layer.shadowRadius = 1
         
         // copy
         copyButton.rx.tap.asControlEvent()

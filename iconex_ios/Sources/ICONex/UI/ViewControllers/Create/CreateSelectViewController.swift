@@ -19,6 +19,8 @@ class CreateSelectViewController: BaseViewController {
     
     var delegate: createWalletSequence! = nil
     
+    private var _initialized: Bool = false
+    
     private var _isIcx: Bool = true {
         willSet {
             switch newValue {
@@ -42,6 +44,14 @@ class CreateSelectViewController: BaseViewController {
     
     override func initializeComponents() {
         super.initializeComponents()
+        mainDescLabel.size16(text: "CreateSelect.Main".localized, color: .gray77, weight: .medium, align: .center)
+        bottomDescLabel1.size12(text: "CreateSelect.Instruction1".localized, color: .mint1, weight: .light)
+        bottomDescLabel2.size12(text: "CreateSelect.Instruction2".localized, color: .mint1, weight: .light)
+        
+        icxCard.setImage(normal: #imageLiteral(resourceName: "imgLogoIconSel"))
+        icxCard.setTitle(main: "ICX Wallet", sub: "ICON")
+        ethCard.setImage(normal: #imageLiteral(resourceName: "imgLogoEthereumSel"))
+        ethCard.setTitle(main: "ETH Wallet", sub: "Ethereum")
         
         icxCard.button.rx.tap.subscribe(onNext: { [unowned self] in
             self._isIcx = true
@@ -54,15 +64,10 @@ class CreateSelectViewController: BaseViewController {
     
     override func refresh() {
         super.refresh()
-        mainDescLabel.size16(text: "CreateSelect.Main".localized, color: .gray77, weight: .medium, align: .center)
-        bottomDescLabel1.size12(text: "CreateSelect.Instruction1".localized, color: .mint1, weight: .light)
-        bottomDescLabel2.size12(text: "CreateSelect.Instruction2".localized, color: .mint1, weight: .light)
         
-        icxCard.setImage(normal: #imageLiteral(resourceName: "imgLogoIconSel"))
-        icxCard.setTitle(main: "ICX Wallet", sub: "ICON")
-        ethCard.setImage(normal: #imageLiteral(resourceName: "imgLogoEthereumSel"))
-        ethCard.setTitle(main: "ETH Wallet", sub: "Ethereum")
-        
-        _isIcx = true
+        if !_initialized {
+            _initialized = true
+            _isIcx = true
+        }
     }
 }
