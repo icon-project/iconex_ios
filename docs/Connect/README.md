@@ -71,12 +71,6 @@ Base64 encoded ICON JSON-RPC API
 | message | String | Simplified result message | Mendatory |
 | result | String | Selected wallet address | Optional |
 
-#### Result Code
-| Code | Message | Description |
-| ---- | ---- | ---- |
-| -2000 | ICONex has no ICX wallet. | ICONex has no ICX wallet for support. |
-| Etc. | Refer to Common Result Code | - |
-
 #### Example
 
 ```Swift
@@ -114,12 +108,6 @@ Base64 encoded ICON JSON-RPC API
 | code | Int | Result code | Mendatory |
 | message | String | Implified result message | Mendatory |
 | result | String | Received transaction hash after send a transaction | Optional |
-
-#### Result Code
-| Code | Message | Description |
-| --- | --- | --- |
-| -3000 | Not found wallet($walletAddress) | $walletAddress does not exist. |
-| extra | Refer to Common Result Code |
 
 #### Example
 ```Swift

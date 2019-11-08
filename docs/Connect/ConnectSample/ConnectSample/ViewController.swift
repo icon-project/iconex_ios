@@ -88,11 +88,17 @@ class ViewController: UIViewController {
             textField.text = "1"
             textField.keyboardType = .decimalPad
         }
+        alert.addTextField { (textField) in
+            textField.placeholder = "Network id (0x1, 0x2, 0x3)"
+            textField.text = "0x"
+        }
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Send ICX", style: .default, handler: { (action) in
+        alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
             guard let valueString = alert.textFields![1].text, valueString != "" else { return }
+            let nidField = alert.textFields![2]
+            guard let nid = nidField.text, nid != "" else { return }
             
             var bigValue: BigUInt
             
@@ -122,7 +128,7 @@ class ViewController: UIViewController {
                 .from(from)
                 .to(to)
                 .value(bigValue)
-                .nid("0x2")
+                .nid(nid)
                 .nonce("0x1")
             
             guard let txData = try? coinTransfer.toDic() else { return }
@@ -154,10 +160,22 @@ class ViewController: UIViewController {
             textField.text = "cxb1253480720b91a4a7417b0b08d7feb81bd7f0fb"
         }
         alert.addTextField { textField in
+            textField.placeholder = "Network id (0x1, 0x2, 0x3)"
+            textField.text = "0x"
+        }
+        alert.addTextField { textField in
+            textField.placeholder = "Token decimal"
+            textField.keyboardType = .decimalPad
+        }
+        alert.addTextField { textField in
             textField.placeholder = "Token value"
             textField.keyboardType = .decimalPad
             textField.text = "1"
         }
+        alert.addTextField { textField in
+            textField.placeholder = "data (optional)"
+        }
+        
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
             var param = ["redirect": "connect-sample://"] as [String: Any]
@@ -170,35 +188,49 @@ class ViewController: UIViewController {
             let conField = alert.textFields![1]
             guard let contract = conField.text, contract != "" else { return }
             
-            let valueField = alert.textFields!.last!
+            let nidField = alert.textFields![2]
+            guard let nid = nidField.text, nid != "" else { return }
+            
+            let decimalField = alert.textFields![3]
+            guard let decimalString = decimalField.text, decimalString != "", let decimal = Int(decimalString) else { return }
+            
+            let valueField = alert.textFields![4]
             guard let valueString = valueField.text, valueString != "" else { return }
-
+            
+            let power = BigUInt(10).power(decimal)
+            
             var bigValue: BigUInt
 
             if valueString.contains(".") {
                 let value = valueString.split(separator: ".")
 
-                guard let intVal = BigUInt(value[0])?.multiplied(by: 100000000) else { return }
+                guard let intVal = BigUInt(value[0])?.multiplied(by: power) else { return }
                 bigValue = intVal
 
                 let div = value[1].count
                 if div != 0 {
-                    guard let doubleVal = BigUInt(value[1])?.multiplied(by: 100000000) else { return }
+                    guard let doubleVal = BigUInt(value[1])?.multiplied(by: power) else { return }
                     let pow = BigUInt(10).power(div)
                     bigValue += doubleVal / pow
                 }
 
             } else {
-                bigValue = BigUInt(valueString)?.multiplied(by: 100000000) ?? 0
+                bigValue = BigUInt(valueString)?.multiplied(by: power) ?? 0
             }
             let value = "0x" + String(bigValue, radix: 16)
             
             let tokenTransaction = CallTransaction()
                 .from(from)
                 .to(contract)
-                .nid("0x2")
+                .nid(nid)
                 .method("transfer")
-                .params(["_to": to, "_value": value])
+            
+            let dataField = alert.textFields!.last!
+            if let dataString = dataField.text, dataString != "" {
+                tokenTransaction.params(["_to": to, "_value": value, "_data": dataString])
+            } else {
+                tokenTransaction.params(["_to": to, "_value": value])
+            }
             
             guard let txData = try? tokenTransaction.toDic() else { return }
             
@@ -221,6 +253,10 @@ class ViewController: UIViewController {
             textField.placeholder = "to"
             textField.text = "hx2e26d96bd7f1f46aac030725d1e302cf91420458"
         }
+        alert.addTextField { textField in
+            textField.placeholder = "Network id (0x1, 0x2, 0x3)"
+            textField.text = "0x"
+        }
         alert.addTextField { (textField) in
             textField.placeholder = "Input value"
             textField.text = "1"
@@ -240,16 +276,19 @@ class ViewController: UIViewController {
             let toField = alert.textFields!.first!
             guard let to = toField.text, to != "" else { return }
             
+            let nidField = alert.textFields![1]
+            guard let nid = nidField.text, nid != "" else { return }
+            
             let mField = alert.textFields!.last!
             guard let msg = mField.text, msg != "" else { return }
             
             let message = MessageTransaction()
                 .from(from)
                 .to(to)
-                .nid("0x2")
+                .nid(nid)
                 .message(msg)
             
-            if let valueString = alert.textFields![1].text, valueString != "" {
+            if let valueString = alert.textFields![2].text, valueString != "" {
                 var bigValue: BigUInt
                 
                 if valueString.contains(".") {
@@ -293,12 +332,14 @@ class ViewController: UIViewController {
             textField.text = "cx334db6519871cb2bfd154cec0905ced4ea142de1"
         }
         alert.addTextField { textField in
-            textField.placeholder = "Method"
-            textField.text = "reserve"
+            textField.placeholder = "Network id (0x1, 0x2, 0x3)"
+            textField.text = "0x"
         }
         alert.addTextField { textField in
-            textField.placeholder = "Params"
-            textField.text = ""
+            textField.placeholder = "Method"
+        }
+        alert.addTextField { textField in
+            textField.placeholder = "Params (optional)"
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { (action) in
@@ -309,13 +350,16 @@ class ViewController: UIViewController {
             let conField = alert.textFields!.first!
             guard let contract = conField.text, contract != "" else { return }
             
-            let methodField = alert.textFields![1]
+            let nidField = alert.textFields![1]
+            guard let nid = nidField.text, nid != "" else { return }
+            
+            let methodField = alert.textFields![2]
             guard let method = methodField.text, method != "" else { return }
             
             let callTx = CallTransaction()
                 .from(from)
                 .to(contract)
-                .nid("0x1")
+                .nid(nid)
                 .method(method)
             
             let dataField = alert.textFields!.last!
