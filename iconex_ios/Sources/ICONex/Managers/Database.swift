@@ -411,7 +411,7 @@ struct DB {
     static func addToken(tokenInfo: Token) throws {
         let realm = try Realm()
         
-        let exist = realm.objects(TokenModel.self).filter({ $0.dependedAddress == tokenInfo.parent && $0.contractAddress == tokenInfo.contract })
+        let exist = realm.objects(TokenModel.self).filter({ $0.dependedAddress.add0xPrefix().lowercased() == tokenInfo.parent.add0xPrefix().lowercased() && $0.contractAddress.lowercased() == tokenInfo.contract.lowercased() })
         
         for item in exist {
             try realm.write {
@@ -440,7 +440,7 @@ struct DB {
     
     static func canSaveToken(depended: String, contract: String) -> Bool {
         let realm = try! Realm()
-        guard let _ = realm.objects(TokenModel.self).filter({ $0.contractAddress == contract && $0.dependedAddress.add0xPrefix() == depended.add0xPrefix() }).first else {
+        guard let _ = realm.objects(TokenModel.self).filter({ $0.contractAddress.lowercased().add0xPrefix() == contract.lowercased().add0xPrefix() && $0.dependedAddress.add0xPrefix() == depended.add0xPrefix() }).first else {
             return true
         }
         
@@ -450,7 +450,7 @@ struct DB {
     static func addToken(tokenInfo: NewToken) throws {
         let realm = try Realm()
 
-        let exist = realm.objects(TokenModel.self).filter({ $0.dependedAddress == tokenInfo.parent && $0.contractAddress == tokenInfo.contract })
+        let exist = realm.objects(TokenModel.self).filter({ $0.dependedAddress.lowercased().add0xPrefix() == tokenInfo.parent.lowercased().add0xPrefix() && $0.contractAddress.lowercased().add0xPrefix() == tokenInfo.contract.lowercased().add0xPrefix() })
         
         for item in exist {
             try realm.write {
@@ -497,8 +497,7 @@ struct DB {
         
         try realm.write {
             
-            realm.add(token, update: true)
-            
+            realm.add(token, update: .all)
         }
     }
     

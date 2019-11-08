@@ -303,6 +303,7 @@ class PasscodeViewController: BaseViewController {
                         
                     } else { // reset
                         let lockVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "LockSetting") as! LockSettingViewController
+                        lockVC.modalPresentationStyle = .fullScreen
                         app.toMain()
                         app.topViewController()?.present(lockVC, animated: false, completion: nil)
                     }

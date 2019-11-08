@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BigInt
 
 class ManageWalletViewController: BaseViewController {
 
@@ -123,7 +124,13 @@ class ManageWalletViewController: BaseViewController {
         removeButton.rx.tap.asControlEvent()
             .subscribe { (_) in
                 self.beginClose {
-                    if wallet.balance == 0 || wallet.balance == nil {
+                    let tokenBalances: BigUInt = {
+                        guard let tokens = wallet.tokens else { return 0 }
+                        let balances = tokens.compactMap { Manager.balance.getTokenBalance(address: wallet.address, contract: $0.contract) }
+                        
+                        return balances.reduce(0, +)
+                    }()
+                    if (wallet.balance == 0 || wallet.balance == nil) && tokenBalances == 0 {
                         Alert.basic(title: "Manage.Alert.Wallet.Empty".localized, isOnlyOneButton: false, leftButtonTitle: "Common.No".localized, rightButtonTitle: "Common.Yes".localized, confirmAction: {
                             do {
                                 try DB.deleteWallet(wallet: wallet)

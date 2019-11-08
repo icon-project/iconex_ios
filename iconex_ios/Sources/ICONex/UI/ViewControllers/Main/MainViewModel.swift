@@ -66,7 +66,7 @@ class MainViewModel {
             
             guard let totalPrice = tempTotalPrice else { return Observable.just("-") }
             
-            let result = totalPrice.toString(decimal: 18, 4, true).currencySeparated()
+            let result = totalPrice.toString(decimal: 18, unit.symbol.lowercased() == "usd" ? 2 : 4, true).currencySeparated()
             
             return Observable.just(result)
             

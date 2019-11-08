@@ -561,10 +561,11 @@ class DetailViewController: BaseViewController, Floatable {
             let price = BigUInt(currencyPrice*balance)
             
             let result: String = {
+                let unit = try! self.detailViewModel.currencyUnit.value()
                 if let token = self.tokenInfo {
-                    return price.toString(decimal: token.decimal, 4).currencySeparated()
+                    return price.toString(decimal: token.decimal, unit.symbol.lowercased() == "usd" ? 2 : 4).currencySeparated()
                 } else {
-                    return price.toString(decimal: wallet.decimal, 4).currencySeparated()
+                    return price.toString(decimal: wallet.decimal, unit.symbol.lowercased() == "usd" ? 2 : 4).currencySeparated()
                 }
             }()
             

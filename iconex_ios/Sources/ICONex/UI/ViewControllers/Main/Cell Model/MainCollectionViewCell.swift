@@ -193,7 +193,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 coinCell.unitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
                 
                 if let icx = info as? ICXWallet {
-                    let currencySymbol = "icx\(currency.symbol.lowercased())"
+//                    let currencySymbol = "icx\(currency.symbol.lowercased())"
                     coinCell.logoImageView.image = #imageLiteral(resourceName: "imgLogoIconSel")
                     coinCell.symbolLabel.size16(text: CoinType.icx.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.icx.fullName, color: .gray179, weight: .light)
@@ -202,8 +202,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.isLoadingBalance = icx.balance == nil && Manager.balance.isWorking
                     
                     coinCell.balanceLabel.size16(text: icx.balance?.toString(decimal: 18, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold, align: .right)
-                    
-                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: icx.balance)
+                    let symbol = currency.symbol.lowercased()
+                    let price = icx.balance?.exchange(from: "icx", to: symbol)?.toString(decimal: 18, symbol == "usd" ? 2 : 4, false) ?? "-"
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                     
                     // STAKE INFO
@@ -266,7 +266,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     }
                     
                 } else if let eth = info as? ETHWallet {
-                    let currencySymbol = "eth\(currency.symbol.lowercased())"
+//                    let currencySymbol = "eth\(currency.symbol.lowercased())"
                     coinCell.logoImageView.image = #imageLiteral(resourceName: "imgLogoEthereumNor")
                     coinCell.symbolLabel.size16(text: CoinType.eth.symbol, color: .gray77, weight: .semibold)
                     coinCell.fullNameLabel.size12(text: CoinType.eth.fullName, color: .gray179, weight: .light)
@@ -275,14 +275,15 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     coinCell.isLoadingBalance = balance == nil && Manager.balance.isWorking
                     coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
-                    
-                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol, balance: eth.balance)
+                    let symbol = currency.symbol.lowercased()
+                    let price = eth.balance?.exchange(from: "icx", to: symbol)?.toString(decimal: 18, symbol == "usd" ? 2 : 4, false) ?? "-"
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                 }
                 return coinCell
                 
             } else { // total coin token info
-                let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+//                let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+                let currencySymbol = currency.symbol.lowercased()
                 switch symbol {
                 case "icx":
                     coinCell.unitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
@@ -310,7 +311,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
-                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
+                    let price = totalBalance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     
                     return coinCell
@@ -341,7 +342,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     coinCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
-                    let price = Tool.calculatePrice(decimal: 18, currency: currencySymbol , balance: totalBalance)
+                    let price = totalBalance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     
                     return coinCell
@@ -381,7 +382,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     let balance = (totalBalance ?? 0).toString(decimal: decimal, 4).currencySeparated()
                     tokenCell.balanceLabel.size16(text: balance, color: .gray77, weight: .bold, align: .right)
                     
-                    let price = Tool.calculatePrice(decimal: decimal, currency: currencySymbol, balance: totalBalance)
+                    let price = totalBalance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                     tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                     
                     tokenCell.unitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
@@ -395,7 +396,8 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     return lhs.created < rhs.created
                 })[indexPath.row] else { return tokenCell }
                 
-                let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+//                let currencySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+                let currencySymbol = currency.symbol.lowercased()
 
                 tokenCell.symbolNicknameLabel.size16(text: "\(token.name.first?.uppercased() ?? "")" , color: .white, weight: .medium, align: .center)
                 tokenCell.symbolView.backgroundColor = colorList[indexPath.row%12].background
@@ -424,7 +426,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 }
                 
                 
-                let price = Tool.calculatePrice(decimal: token.decimal, currency: currencySymbol, balance: tokenBalance)
+                let price = tokenBalance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                 tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
 
                 tokenCell.unitLabel.size12(text: currency.symbol, color: .gray179, weight: .light, align: .right)
@@ -433,11 +435,12 @@ extension MainCollectionViewCell: UITableViewDataSource {
 
             } else {
                 guard let wallet = self.coinTokens?[indexPath.row] else { return walletCell }
-
+                let currencySymbol = currency.symbol.lowercased()
                 // token
                 if let contractAddress = self.contractAddress, let decimal = self.tokenDecimal {
 
-                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+//                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
+                    
                     walletCell.nicknameLabel.size16(text: wallet.name, color: .gray77, weight: .semibold)
                     walletCell.addressLabel.size12(text: wallet.address, color: .gray179, weight: .light)
 
@@ -460,12 +463,11 @@ extension MainCollectionViewCell: UITableViewDataSource {
                         walletCell.balanceLabel.size16(text: (tokenBalance ?? BigUInt.zero).toString(decimal: decimal, 4).currencySeparated(), color: .gray77, weight: .bold, align: .right)
                     }
 
-                    let price = Tool.calculatePrice(decimal: decimal, currency: currenySymbol, balance: tokenBalance)
+                    let price = tokenBalance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                     walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
 
                 } else { // coin
-                    let currenySymbol = "\(symbol.lowercased())\(currency.symbol.lowercased())"
 
                     walletCell.nicknameLabel.size16(text: wallet.name, color: .gray77, weight: .semibold)
                     walletCell.addressLabel.size12(text: wallet.address, color: .gray179, weight: .light)
@@ -476,7 +478,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     
                     walletCell.balanceLabel.size16(text: balance?.toString(decimal: 18, 4).currencySeparated() ?? "-", color: .gray77, weight: .bold, align: .right)
 
-                    let price = Tool.calculatePrice(decimal: 18, currency: currenySymbol, balance: balance)
+                    let price = balance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                     walletCell.currencyLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
                     walletCell.currencyUnitLabel.size12(text: currency.symbol, color: .gray179, align: .right)
                 }
