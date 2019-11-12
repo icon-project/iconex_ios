@@ -244,6 +244,21 @@ class DetailViewController: BaseViewController, Floatable {
         }
     }
     
+    private func getBalance() {
+        guard let wallet = self.walletInfo else { return }
+        
+        let balance: BigUInt = {
+            if let token = self.tokenInfo {
+                return Manager.balance.getTokenBalance(address: wallet.address, contract: token.contract) ?? BigUInt.zero
+                
+            } else {
+                return Manager.balance.getBalance(wallet: wallet) ?? BigUInt.zero
+            }
+        }()
+        
+        self.detailViewModel.balance.onNext(balance)
+    }
+    
     private func loadData(completion: @escaping(([Tracker.TxList]) -> Void)) {
         var newTxList = [Tracker.TxList]()
         
@@ -507,7 +522,7 @@ class DetailViewController: BaseViewController, Floatable {
                     self.tokenInfo = newToken
                     self.detailViewModel.currencyUnit.onNext(.USD)
                     self.currencyPriceLabel.isHidden = true
-                    self.fetchBalance()
+                    self.getBalance()
                     self.setStakeView()
                     
                     
