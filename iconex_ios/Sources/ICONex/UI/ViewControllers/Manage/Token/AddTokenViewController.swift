@@ -70,10 +70,8 @@ class AddTokenViewController: BaseViewController {
                     .subscribe({ (_) in
                         
                         if self.selectedList[item.address] == nil {
-                            cell.checkButton.isSelected = true
                             self.selectedList[item.address] = NewToken.init(token: item, parent: wallet)
                         } else {
-                            cell.checkButton.isSelected = false
                             self.selectedList.removeValue(forKey: item.address)
                         }
                         
@@ -99,6 +97,8 @@ class AddTokenViewController: BaseViewController {
                 } else {
                     cell.tokenState = .normal
                 }
+                
+                cell.checkButton.isSelected = self.selectedList[item.address] != nil
                 
         }.disposed(by: disposeBag)
         

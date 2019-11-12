@@ -498,13 +498,17 @@ extension BalanceManager {
     }
     
     func updateWalletBalance(address: String, balance: BigUInt) {
-        walletBalances[address.add0xPrefix()] = balance
-        mainViewModel.reload.onNext(true)
+        DispatchQueue.main.async {
+            self.walletBalances[address.add0xPrefix()] = balance
+            mainViewModel.reload.onNext(true)
+        }
     }
     
     func updateTokenBalance(address: String, contract: String, balance: BigUInt) {
-        tokenBalances[address.add0xPrefix()]?.updateValue(balance, forKey: contract.add0xPrefix())
-        mainViewModel.reload.onNext(true)
+        DispatchQueue.main.async {
+            self.tokenBalances[address.add0xPrefix()]?.updateValue(balance, forKey: contract.add0xPrefix())
+            mainViewModel.reload.onNext(true)
+        }
     }
 }
 
