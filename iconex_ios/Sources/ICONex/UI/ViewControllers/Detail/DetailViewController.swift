@@ -413,7 +413,10 @@ class DetailViewController: BaseViewController, Floatable {
             let manageVC = UIStoryboard(name: "ManageWallet", bundle: nil).instantiateViewController(withIdentifier: "Manage") as! ManageWalletViewController
             manageVC.walletInfo = self.walletInfo
             manageVC.handler = {
-                guard let newWallet = Manager.wallet.walletList.filter({ $0.address == wallet.address }).first else { return }
+                guard let newWallet = Manager.wallet.walletList.filter({ $0.address == wallet.address }).first else {
+                    self.navigationController?.popToRootViewController(animated: true)
+                    return
+                }
                 self.walletInfo = newWallet
                 
                 self.navBar.setTitle(newWallet.name)
