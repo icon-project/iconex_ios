@@ -74,7 +74,7 @@ class AddTokenViewController: BaseViewController {
                         } else {
                             self.selectedList.removeValue(forKey: item.address)
                         }
-                        
+                        self.tableView.reloadData()
                         self.addButton.rx.isEnabled.onNext(self.selectedList.count > 0)
                         
                     }).disposed(by: cell.cellBag)
