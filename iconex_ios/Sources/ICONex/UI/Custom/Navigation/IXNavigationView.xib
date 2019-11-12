@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,7 +33,10 @@
                             <state key="normal" image="icAppbarBack"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Pa-Fp-QcJ">
-                            <rect key="frame" x="374" y="0.0" width="30" height="56"/>
+                            <rect key="frame" x="354" y="0.0" width="50" height="56"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="qnF-hG-EfH"/>
+                            </constraints>
                         </button>
                         <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VcW-Zp-4VP">
                             <rect key="frame" x="176.33333333333334" y="18" width="61.666666666666657" height="20"/>
@@ -60,6 +63,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="0Pa-Fp-QcJ" firstAttribute="top" secondItem="tCB-Ab-fdE" secondAttribute="top" id="1PQ-67-fn3"/>
+                        <constraint firstItem="0Pa-Fp-QcJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="VcW-Zp-4VP" secondAttribute="trailing" constant="16" id="5Qh-9L-s4l"/>
                         <constraint firstAttribute="bottom" secondItem="A1d-RW-Z99" secondAttribute="bottom" id="KGP-xP-fAE"/>
                         <constraint firstAttribute="bottom" secondItem="9xy-0t-wCv" secondAttribute="bottom" id="RCR-QS-uN5"/>
                         <constraint firstAttribute="trailing" secondItem="0Pa-Fp-QcJ" secondAttribute="trailing" constant="10" id="Sfv-wS-xkd"/>
@@ -67,6 +71,7 @@
                         <constraint firstItem="9xy-0t-wCv" firstAttribute="leading" secondItem="tCB-Ab-fdE" secondAttribute="leading" constant="10" id="a2f-H9-IJ4"/>
                         <constraint firstItem="VcW-Zp-4VP" firstAttribute="centerY" secondItem="0Pa-Fp-QcJ" secondAttribute="centerY" id="cPT-fx-LCd"/>
                         <constraint firstItem="0Pa-Fp-QcJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="A1d-RW-Z99" secondAttribute="trailing" constant="10" id="dPW-ZI-d4J"/>
+                        <constraint firstItem="VcW-Zp-4VP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9xy-0t-wCv" secondAttribute="trailing" constant="16" id="dnH-Tz-G3p"/>
                         <constraint firstItem="VcW-Zp-4VP" firstAttribute="centerX" secondItem="tCB-Ab-fdE" secondAttribute="centerX" id="neL-Fk-PQr"/>
                         <constraint firstAttribute="bottom" secondItem="0Pa-Fp-QcJ" secondAttribute="bottom" id="oic-BK-n3t"/>
                         <constraint firstItem="A1d-RW-Z99" firstAttribute="trailing" secondItem="VcW-Zp-4VP" secondAttribute="trailing" constant="20" id="quR-YN-abL"/>
