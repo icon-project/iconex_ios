@@ -276,7 +276,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                     coinCell.isLoadingBalance = balance == nil && Manager.balance.isWorking
                     coinCell.balanceLabel.size16(text: balance ?? "-", color: .gray77, weight: .bold, align: .right)
                     let symbol = currency.symbol.lowercased()
-                    let price = eth.balance?.exchange(from: "icx", to: symbol)?.toString(decimal: 18, symbol == "usd" ? 2 : 4, false) ?? "-"
+                    let price = eth.balance?.exchange(from: "eth", to: symbol)?.toString(decimal: 18, symbol == "usd" ? 2 : 4, false) ?? "-"
                     coinCell.unitBalanceLabel.size12(text: price, color: .gray179, align: .right)
                 }
                 return coinCell
