@@ -426,7 +426,7 @@ extension MainCollectionViewCell: UITableViewDataSource {
                 }
                 
                 
-                let price = tokenBalance?.exchange(from: symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
+                let price = tokenBalance?.exchange(from: token.symbol.lowercased(), to: currencySymbol)?.toString(decimal: 18, currencySymbol == "usd" ? 2 : 4, false) ?? "-"
                 tokenCell.unitBalanceLabel.size12(text: price, color: .gray179, weight: .light, align: .right)
 
                 tokenCell.unitLabel.size12(text: currency.symbol, color: .gray179, weight: .light, align: .right)

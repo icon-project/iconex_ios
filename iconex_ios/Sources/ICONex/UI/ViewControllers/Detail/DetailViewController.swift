@@ -574,7 +574,7 @@ class DetailViewController: BaseViewController, Floatable {
         Observable.combineLatest(self.detailViewModel.currencyPrice, self.detailViewModel.balance).flatMapLatest { (currency, bal) -> Observable<String> in
             self.currencyPriceLabel.isHidden = false
             
-            let currencyPrice = Float(currency) ?? 0
+            guard let currencyPrice = Float(currency) else { return Observable.just("-") }
             let balance = Float(bal)
             let price = BigUInt(currencyPrice*balance)
             
