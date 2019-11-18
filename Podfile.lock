@@ -75,7 +75,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ICONKit:
-    :commit: 28fb37a574a037ac48dbb6e6aab7a4e65f4bc9cb
+    :commit: e9c4a4ebda439a4cba11c70cbf2da245c26725c0
     :git: https://github.com/icon-project/ICONKit
   PanModal:
     :commit: 4bd1699f1ef2b40dfef4a9937eb9dc28da2aad59
