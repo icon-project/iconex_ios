@@ -33,7 +33,17 @@ class WalletManager {
     private init() {}
     
     var walletList: [BaseWalletConvertible] {
-        return DB.loadWallets()
+        let wallets = DB.loadWallets()
+        
+        for item in wallets {
+            if let tks = item.tokens {
+                for tk in tks {
+                    Manager.exchange.addToken(tk.symbol)
+                }
+            }
+        }
+        
+        return wallets
     }
     
     var types: [String] {

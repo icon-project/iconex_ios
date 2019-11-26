@@ -19,7 +19,7 @@ func Log<T>(_ object: @autoclosure () -> T, _ category: LogLevel = .debug, _ fil
     #if DEBUG
     let objValue = object()
     var stringRepresentation: String = ""
-    
+//    
     if let value = objValue as? CustomStringConvertible {
         stringRepresentation = value.description
     }

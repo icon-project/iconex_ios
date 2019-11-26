@@ -277,6 +277,7 @@ extension LoadWalletViewController {
                             if let tokensBundle = bundle.tokens {
                                 for tk in tokensBundle {
                                     let token = Token(name: tk.name, parent: address, contract: tk.address, parentType: "icx", symbol: tk.symbol, decimal: tk.decimals, created: tk.createdAt.toDate() ?? Date())
+                                    Manager.exchange.addToken(tk.symbol)
                                     try icx.addToken(token: token)
                                 }
                             }
@@ -292,6 +293,7 @@ extension LoadWalletViewController {
                             if let tokensBundle = bundle.tokens {
                                 for tk in tokensBundle {
                                     let token = Token(name: tk.name, parent: address, contract: tk.address, parentType: "eth", symbol: tk.symbol, decimal: tk.decimals, created: tk.createdAt.toDate() ?? Date())
+                                    Manager.exchange.addToken(tk.symbol)
                                     try eth.addToken(token: token)
                                 }
                             }

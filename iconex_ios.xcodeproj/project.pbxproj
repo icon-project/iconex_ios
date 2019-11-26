@@ -1585,7 +1585,6 @@
 					"$(PROJECT_DIR)/NSHC",
 					"$(PROJECT_DIR)/iconex_ios/NSHC",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "1a0890d8-ae44-4ec0-b5a1-1707ed9d2ccc";
@@ -1630,7 +1629,6 @@
 					"$(PROJECT_DIR)/NSHC",
 					"$(PROJECT_DIR)/iconex_ios/NSHC",
 				);
-				OTHER_SWIFT_FLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = icon.foundation.iconex;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "9206590a-1a5b-408a-8716-9326fa1813b6";
