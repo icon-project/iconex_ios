@@ -111,10 +111,17 @@ class IntroViewController: BaseViewController {
                 return Tracker.euljiro()
             }
         }
+        if(Config.host != .main){
+            //TODO Re-evaluate
+            //Currently test net trackers do not supply this version information
+            app.all = app.appVersion
+            app.necessary = app.appVersion
+            go()
+            return
+        }
         let versionURL = URL(string: tracker.provider)!.appendingPathComponent("app/ios.json")
         let request = URLRequest(url: versionURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
         Alamofire.request(request).responseJSON(queue: DispatchQueue.global(qos: .utility)) { (dataResponse) in
-            
             DispatchQueue.main.async {
                 self.indicator.isHidden = true
                 switch dataResponse.result {
