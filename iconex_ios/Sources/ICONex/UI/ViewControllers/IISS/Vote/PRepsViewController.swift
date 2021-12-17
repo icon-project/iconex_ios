@@ -30,12 +30,10 @@ public struct NewPReps {
     var country: String
     var city: String
     var address: String
-    var stake: BigUInt
     var delegated: BigUInt
     var grade: PRepGrade
     var irep: BigUInt
     var irepUpdateBlockHeight: BigUInt
-    var lastGenerateBlockHeight: BigUInt?
     var totalBlocks: BigUInt
     var validatedBlocks: BigUInt
 }

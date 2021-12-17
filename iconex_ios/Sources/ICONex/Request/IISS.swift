@@ -211,14 +211,12 @@ struct PRepInfoResponse: Decodable {
     var p2pEndpoint: String
     var irep: BigUInt
     var irepUpdateBlockHeight: BigUInt
-    var lastGenerateBlockHeight: BigUInt?
-    var stake: BigUInt
     var delegated: BigUInt
     var totalBlocks: BigUInt
     var validatedBlocks: BigUInt
     
     enum CodingKeys: String, CodingKey {
-        case status, grade, name, country, city, email, website, details, p2pEndpoint, irep, irepUpdateBlockHeight, lastGenerateBlockHeight, stake, delegated, totalBlocks, validatedBlocks
+        case status, grade, name, country, city, email, website, details, p2pEndpoint, irep, irepUpdateBlockHeight, delegated, totalBlocks, validatedBlocks
     }
     
     public init(from decoder: Decoder) throws {
@@ -243,19 +241,6 @@ struct PRepInfoResponse: Decodable {
             throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `irepUpdateBlockHeight` to BigUInt"))
         }
         self.irepUpdateBlockHeight = updateBlock
-        
-        let lastBlockString = try container.decode(String.self, forKey: .lastGenerateBlockHeight)
-        if let lastBlock = lastBlockString.hexToBigUInt() {
-            self.lastGenerateBlockHeight = lastBlock
-        } else {
-            self.lastGenerateBlockHeight = nil
-        }
-        
-        let stakeString = try container.decode(String.self, forKey: .stake)
-        guard let stake = stakeString.hexToBigUInt() else {
-            throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `stake` to BigUInt"))
-        }
-        self.stake = stake
         
         let delegatedString = try container.decode(String.self, forKey: .delegated)
         guard let delegated = delegatedString.hexToBigUInt() else {
@@ -293,17 +278,15 @@ struct PRepListResponse: Decodable {
         var country: String
         var city: String
         var address: String
-        var stake: BigUInt
         var delegated: BigUInt
         var grade: PRepGrade
         var irep: BigUInt
         var irepUpdateBlockHeight: BigUInt
-        var lastGenerateBlockHeight: BigUInt?
         var totalBlocks: BigUInt
         var validatedBlocks: BigUInt
         
         enum CodingKeys: String, CodingKey {
-            case name, country, city, address, stake, delegated, grade, irep, irepUpdateBlockHeight, lastGenerateBlockHeight, totalBlocks, validatedBlocks
+            case name, country, city, address, delegated, grade, irep, irepUpdateBlockHeight, totalBlocks, validatedBlocks
         }
         
         init(from decoder: Decoder) throws {
@@ -312,11 +295,6 @@ struct PRepListResponse: Decodable {
             self.country = try container.decode(String.self, forKey: .country)
             self.city = try container.decode(String.self, forKey: .city)
             self.address = try container.decode(String.self, forKey: .address)
-            let stakeString = try container.decode(String.self, forKey: .stake)
-            guard let stake = stakeString.hexToBigUInt() else {
-                throw DecodingError.dataCorrupted(.init(codingPath: container.codingPath, debugDescription: "Could not convert `stake` to BigUInt"))
-            }
-            self.stake = stake
             
             let delegatedString = try container.decode(String.self, forKey: .delegated)
             guard let delegated = delegatedString.hexToBigUInt() else {
@@ -338,12 +316,6 @@ struct PRepListResponse: Decodable {
             }
             self.irepUpdateBlockHeight = updatedBlockHeight
             
-            let lastBlockString = try container.decode(String.self, forKey: .lastGenerateBlockHeight)
-            if let lastBlock = lastBlockString.hexToBigUInt() {
-                self.lastGenerateBlockHeight = lastBlock
-            } else {
-                self.lastGenerateBlockHeight = nil
-            }
             
             let totalString = try container.decode(String.self, forKey: .totalBlocks)
             guard let totalBlocks = totalString.hexToBigUInt() else {
