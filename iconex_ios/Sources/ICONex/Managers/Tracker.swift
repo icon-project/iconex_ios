@@ -52,7 +52,7 @@ open class Tracker {
     
     public enum TrackerHost: String {
         case main = "https://tracker.icon.foundation"
-        case euljiro = "https://trackerdev.icon.foundation"
+        case euljiro = "https://sejong.tracker.solidwallet.io/"
         case yeouido = "https://bicon.tracker.solidwallet.io"
         case localTest = "http://54.180.29.194"
     }

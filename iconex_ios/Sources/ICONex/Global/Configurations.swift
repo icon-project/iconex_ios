@@ -22,7 +22,7 @@ struct Configuration {
                 return "https://ctz.solidwallet.io/api/v3"
                 
             case .euljiro:
-                return "https://test-ctz.solidwallet.io/api/v3"
+                return "https://sejong.net.solidwallet.io/api/v3"
                 
             case .yeouido:
                 return "https://bicon.net.solidwallet.io/api/v3"
@@ -38,7 +38,7 @@ struct Configuration {
                 return "0x1"
                 
             case .euljiro:
-                return "0x2"
+                return "0x53"
                 
             case .yeouido:
                 return "0x3"
