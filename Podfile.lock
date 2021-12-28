@@ -1,13 +1,14 @@
 PODS:
-  - Alamofire (4.8.2)
+  - AcknowList (1.9.2)
+  - Alamofire (4.9.1)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (1.0.0)
-  - ICONKit (0.4.0):
+  - ICONKit (0.4.3):
     - BigInt
-    - CryptoSwift
+    - CryptoSwift (= 1.0)
     - secp256k1_swift
-  - LicensesViewController (0.7.0)
+  - PanModal (1.2.4)
   - PromiseKit (6.8.4):
     - PromiseKit/CorePromise (= 6.8.4)
     - PromiseKit/Foundation (= 6.8.4)
@@ -17,21 +18,20 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (6.8.4):
     - PromiseKit/CorePromise
-  - Realm (3.11.0):
-    - Realm/Headers (= 3.11.0)
-  - Realm/Headers (3.11.0)
-  - RealmSwift (3.11.0):
-    - Realm (= 3.11.0)
-  - RxCocoa (5.0.0):
+  - Realm (4.1.1):
+    - Realm/Headers (= 4.1.1)
+  - Realm/Headers (4.1.1)
+  - RealmSwift (4.1.1):
+    - Realm (= 4.1.1)
+  - RxCocoa (5.0.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
-  - RxRelay (5.0.0):
+  - RxRelay (5.0.1):
     - RxSwift (~> 5)
-  - RxSwift (5.0.0)
+  - RxSwift (5.0.1)
   - secp256k1_swift (1.0.3)
   - SipHash (1.2.2)
   - Starscream (3.1.0)
-  - Toast-Swift (4.0.1)
   - web3swift (2.1.6):
     - BigInt (= 3.1)
     - CryptoSwift (= 1.0.0)
@@ -40,21 +40,21 @@ PODS:
     - Starscream (= 3.1.0)
 
 DEPENDENCIES:
+  - AcknowList
   - Alamofire
-  - ICONKit (from `https://github.com/icon-project/ICONKit`, branch `develop`)
-  - LicensesViewController
-  - RealmSwift (= 3.11.0)
+  - ICONKit (from `https://github.com/icon-project/ICONKit`)
+  - PanModal (from `https://github.com/a1ahn/PanModal.git`)
+  - RealmSwift
   - RxCocoa
   - RxSwift
-  - Toast-Swift (~> 4.0.0)
   - web3swift
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
+    - AcknowList
     - Alamofire
     - BigInt
     - CryptoSwift
-    - LicensesViewController
     - PromiseKit
     - Realm
     - RealmSwift
@@ -64,37 +64,40 @@ SPEC REPOS:
     - secp256k1_swift
     - SipHash
     - Starscream
-    - Toast-Swift
     - web3swift
 
 EXTERNAL SOURCES:
   ICONKit:
-    :branch: develop
     :git: https://github.com/icon-project/ICONKit
+  PanModal:
+    :git: https://github.com/a1ahn/PanModal.git
 
 CHECKOUT OPTIONS:
   ICONKit:
-    :commit: a0d927196f113236cf338651bd90b8996da18575
+    :commit: b124bb185cfca41add0ddf7cb4de5b1e707926a7
     :git: https://github.com/icon-project/ICONKit
+  PanModal:
+    :commit: 4bd1699f1ef2b40dfef4a9937eb9dc28da2aad59
+    :git: https://github.com/a1ahn/PanModal.git
 
 SPEC CHECKSUMS:
-  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  AcknowList: 164431f4c3da64b0c867f5fcda24558e6283cbcf
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
-  ICONKit: 08650679326508d1e425323f6554b1f34c7a3108
-  LicensesViewController: 2f7bba13b3cec7516d4990e41df297720fdbaaab
+  ICONKit: 09dfa3b24087e24da1b3ed910569b93bf5820289
+  PanModal: 275f6d4d07565ddf4ed16d7be5d9cd275682d80d
   PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
-  Realm: 92f09a102692b96a9a10e9617f214f15c5ab85fc
-  RealmSwift: 5f0481cd658bb751c509314b964a35eaa264d2cf
-  RxCocoa: fcf32050ac00d801f34a7f71d5e8e7f23026dcd8
-  RxRelay: 4f7409406a51a55cd88483f21ed898c234d60f18
-  RxSwift: 8b0671caa829a763bbce7271095859121cbd895f
+  Realm: 25f0a8244cbb1c2271c922963ea8666fc2d8104d
+  RealmSwift: 9e2657b33764f80e4a4dffd6d440e24715782052
+  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
+  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
+  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
   secp256k1_swift: 4fc5c4b2d2c6d21ee8ccb868cdc92da12f38bed9
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
-  Toast-Swift: e42a638589a2f95036b4bb7626cfbdde7daf0393
   web3swift: 6db59e73e2bcb99dde081088d0242382155690c9
 
-PODFILE CHECKSUM: 2e896069fc544054d6f8dd3f2a38d69316285835
+PODFILE CHECKSUM: 3762295beeef454e16e6c00d0bf98ff618367a58
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.10.1

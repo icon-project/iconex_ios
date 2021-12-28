@@ -7,105 +7,39 @@
 
 import Foundation
 
-public enum IXError: Error {
-    case invalidCoinType
-    case needAlias
-    
+enum CryptError: Error, CustomDebugStringConvertible {
     case generateKey
     case convertKey
-    case copyPublicKey
+    case createPublicKey
     case keyMalformed
     case makeAddress
     case sign
     case invalidMessage
-    case decrypt
     case invalidPassword
     
+    var debugDescription: String {
+        return "Fatal error. CryptError(\(self))"
+    }
+}
+
+enum WalletError: Error, CustomDebugStringConvertible {
     case emptyWallet
     case invalidKeystore
+    case noWallet(String)
+    case noToken(String)
     
-    case convertBInt
-    
-    case storeData
-    
+    var debugDescription: String {
+        return "Fatal error. WalletError(\(self))"
+    }
+}
+
+enum CommonError: Error {
     case invalidFiles
     case duplicateAddress
     case duplicateName
     case duplicateToken
-    case invalidTokenInfo
     case emptyPrivateKey
+    case saveData
+    case convertType(String)
     
-    case noAddressInfo
-}
-
-extension IXError: LocalizedError {
-    public var errorDescription: String? {
-        switch self {
-        case .invalidCoinType:
-            return "Invalid coin type"
-            
-        case .needAlias:
-            return "Need alias for new wallet"
-            
-        case .generateKey:
-            return "Failed to generate key pair"
-            
-        case .convertKey:
-            return "Failed to convert key from Data to SecKey"
-            
-        case .copyPublicKey:
-            return "Failed to copy public key"
-            
-        case .keyMalformed:
-            return "Key malformed"
-            
-        case .makeAddress:
-            return "Failed to make address"
-            
-        case .sign:
-            return "Failed to signing"
-            
-        case .invalidMessage:
-            return "Invalid message"
-            
-        case .decrypt:
-            return "Failed to decrypt"
-            
-        case .invalidPassword:
-            return "Invalid password"
-            
-        case .emptyWallet:
-            return "Empty wallet. Please create wallet first."
-            
-        case .invalidKeystore:
-            return "Invalid Keystore data"
-            
-        case .convertBInt:
-            return "Cannot convert string to BInt"
-            
-        case .storeData:
-            return "Error occurred when save data into internal storage."
-            
-        case .invalidFiles:
-            return "Invalid type of file"
-            
-        case .duplicateAddress:
-            return "ICONex already has address."
-            
-        case .duplicateName:
-            return "ICONex Already has name."
-            
-        case .duplicateToken:
-            return "Token has already registered."
-            
-        case .invalidTokenInfo:
-            return "Invalid token information"
-            
-        case .emptyPrivateKey:
-            return "Private Key is missing."
-            
-        case .noAddressInfo:
-            return "Couldn't find any AddressBook Informations"
-        }
-    }
 }

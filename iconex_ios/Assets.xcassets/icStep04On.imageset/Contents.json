@@ -1,14 +1,14 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
       "filename" : "icStep04On.png",
+      "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "idiom" : "universal",
       "filename" : "icStep04On@2x.png",
-      "scale" : "2x"
+      "scale" : "2x",
+      "idiom" : "universal"
     },
     {
       "idiom" : "universal",

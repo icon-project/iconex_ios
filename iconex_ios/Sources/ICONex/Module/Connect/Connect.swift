@@ -201,7 +201,7 @@ class Connect {
     var tokenSymbol: String?
     
     public func setMessage(source: URL) {
-        Log.Debug("Source - \(source)")
+        Log("Source - \(source)")
         self.reset()
         self.source = source
     }
@@ -294,7 +294,7 @@ class Connect {
             let tokenSymbolCall = Call<String>(from: from, to: to, method: "symbol", params: nil)
             let tokenDecimalCall = Call<BigUInt>(from: from, to: to, method: "decimals", params: nil)
             
-            let requestSymbol = WManager.service.call(tokenSymbolCall).execute()
+            let requestSymbol = Manager.icon.service.call(tokenSymbolCall).execute()
             switch requestSymbol {
             case .success(let symbol):
                 Conn.tokenSymbol = symbol
@@ -303,7 +303,7 @@ class Connect {
                 return
             }
             
-            let requestDecimal = WManager.service.call(tokenDecimalCall).execute()
+            let requestDecimal = Manager.icon.service.call(tokenDecimalCall).execute()
             switch requestDecimal {
             case .success(let decimal):
                 Conn.tokenDecimal = Int(decimal)
@@ -361,7 +361,7 @@ class Connect {
         guard Conn.redirect != nil else {
             let app = UIApplication.shared.delegate as! AppDelegate
             app.toMain()
-            Tools.toast(message: error.errorDescription ?? "Unknown Error")
+            Tool.toast(message: error.errorDescription ?? "Unknown Error")
             return
         }
         let response = ConnectResponse(code: error.code, message: error.errorDescription ?? "Unknown Error", result: nil)
@@ -440,7 +440,7 @@ struct ConnectTransaction: Decodable {
 
 class ConnectManager {
     static let shared = ConnectManager()
-    var provider: ICONService = WManager.service
+    var provider: ICONService = Manager.icon.iconService
 }
 
 let ConnManager = ConnectManager.shared

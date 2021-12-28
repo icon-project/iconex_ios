@@ -24,7 +24,7 @@ class BindViewController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var confirmButton: UIButton!
     
-    var walletList: [WalletInfo]?
+    var walletList: [BaseWalletConvertible]?
     
     var selectedIndex: IndexPath? {
         didSet {
@@ -52,11 +52,12 @@ class BindViewController: BaseViewController {
         self.confirmButton.isEnabled = false
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
-            Alert.Confirm(message: "Alert.Connect.Select.Cancel".localized, handler: {
-                self.dismiss(animated: true, completion: nil)
-                Conn.sendError(error: ConnectError.userCancel)
-                
-            }).show(self)
+            #warning("구현 필요")
+//            Alert.Confirm(message: "Alert.Connect.Select.Cancel".localized, handler: {
+//                self.dismiss(animated: true, completion: nil)
+//                Conn.sendError(error: ConnectError.userCancel)
+//
+//            }).show(self)
         }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
@@ -73,7 +74,7 @@ class BindViewController: BaseViewController {
     }
     
     func loadWallet() {
-        self.walletList = WManager.walletInfoList.filter({ $0.type == .icx })
+        self.walletList = Manager.wallet.walletList
     }
 }
 
@@ -95,13 +96,11 @@ extension BindViewController: UITableViewDataSource {
         cell.address.text = "-"
         cell.amount.text = "-"
         
-        let info = self.walletList![indexPath.row]
-        if let wallet = WManager.loadWalletBy(info: info) {
-            cell.name.text = wallet.alias
-            cell.address.text = wallet.address
-            if let balance = wallet.balance {
-                cell.amount.text = Tools.bigToString(value: balance, decimal: wallet.decimal, 4, false).currencySeparated()
-            }
+        let wallet = self.walletList![indexPath.row]
+        cell.name.text = wallet.name
+        cell.address.text = wallet.address
+        if let balance = wallet.balance {
+            cell.amount.text = balance.toString(decimal: wallet.decimal, 4, false).currencySeparated()
         }
         
         cell.radio.isHighlighted = false

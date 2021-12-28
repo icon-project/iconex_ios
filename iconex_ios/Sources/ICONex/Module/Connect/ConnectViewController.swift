@@ -21,8 +21,8 @@ class ConnectViewController: BaseViewController {
 
         // Do any additional setup after loading the view.
         
-        Tools.rotateAnimation(inView: refresh01)
-        Tools.rotateReverseAnimation(inView: refresh02)
+        Tool.rotateAnimation(inView: refresh01)
+        Tool.rotateReverseAnimation(inView: refresh02)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -32,17 +32,17 @@ class ConnectViewController: BaseViewController {
                 try Conn.translate()
                 proceed()
             } catch let e as ConnectError {
-                Log.Debug("ConnectError - \(e)")
+                Log("ConnectError - \(e)")
                 if e.code == ConnectError.activateDeveloper.code {
                     Conn.redirect = nil
                     let app = UIApplication.shared.delegate as! AppDelegate
                     app.toMain()
-                    Tools.toast(message: e.errorDescription!)
+                    Tool.toast(message: e.errorDescription!)
                 } else {
                     Conn.sendError(error: e)
                 }
             } catch {
-                Log.Debug("error - \(error)")
+                Log("error - \(error)")
                 Conn.sendError(error: .invalidRequest)
             }
         }
@@ -58,7 +58,7 @@ class ConnectViewController: BaseViewController {
     
     func prepare() -> Bool {
         if Conn.action == "bind" {
-            guard WManager.walletInfoList.count > 0 else {
+            guard Manager.wallet.walletList.count > 0 else {
                 Conn.sendError(error: .walletEmpty)
                 return false
             }
@@ -77,7 +77,7 @@ class ConnectViewController: BaseViewController {
                 return false
             }
             
-            guard WManager.loadWalletBy(address: from, type: .icx) != nil else {
+            guard let wallet = Manager.wallet.walletBy(address: from, type: "icx") as? ICXWallet else {
                 Conn.sendError(error: .invalidParameter(.address))
                 return false
             }
@@ -92,7 +92,7 @@ class ConnectViewController: BaseViewController {
                 requestedValue = converted
             }
             
-            if let decimal = Conn.tokenDecimal {
+            if Conn.tokenDecimal != nil {
                 guard let data = Conn.received?.payload?.params.data else { return false }
                 
                 switch data {
@@ -110,7 +110,7 @@ class ConnectViewController: BaseViewController {
                 }
                 
                 let call = Call<BigUInt>(from: from, to: to, method: "balanceOf", params: ["_owner": from])
-                let request = WManager.service.call(call).execute()
+                let request = Manager.icon.service.call(call).execute()
                 switch request {
                 case .success(let balance):
                     if balance == 0 || balance < requestedValue {
@@ -122,17 +122,13 @@ class ConnectViewController: BaseViewController {
                     return false
                 }
             } else {
-                let result = WManager.service.getBalance(address: from).execute()
-                
-                switch result {
-                case .success(let balance):
+                if let balance = Manager.icon.getBalance(wallet: wallet) {
                     if balance == 0 || balance < requestedValue {
                         Conn.sendError(error: ConnectError.insufficient(.balance))
                         return false
                     }
-                case .failure(let error):
-                    Log.Debug("Error - \(error)")
-                    Conn.sendError(error: .network(error))
+                } else {
+                    Conn.sendError(error: .network("Could not connect"))
                     return false
                 }
             }
@@ -147,7 +143,7 @@ class ConnectViewController: BaseViewController {
         guard let action = Conn.action else {
             return
         }
-        if (Conn.auth && Tools.isPasscode()) || !Tools.isPasscode() {
+        if (Conn.auth && Tool.isPasscode()) || !Tool.isPasscode() {
             switch action {
             case "bind":
                 let bind = storyboard.instantiateViewController(withIdentifier: "BindView")
@@ -155,7 +151,7 @@ class ConnectViewController: BaseViewController {
                 
             case "JSON-RPC":
                 guard let from = Conn.received?.payload?.params.from else { return }
-                guard let info = WManager.walletInfoList.filter({ $0.address == from }).first else {
+                guard let info = Manager.wallet.walletList.filter({ $0.address == from }).first else {
                     Conn.sendError(error: ConnectError.notFound(.wallet(from)))
                     return
                 }

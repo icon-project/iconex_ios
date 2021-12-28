@@ -9,7 +9,7 @@ import Foundation
 import ICONKit
 import CryptoSwift
 
-public class Keystore: Codable {
+public class ICONKeystore: Codable {
     public var version: Int = 3
     public var id: String = UUID().uuidString
     public var address: String
@@ -82,7 +82,7 @@ public class Keystore: Codable {
     }
 }
 
-extension Keystore {
+extension ICONKeystore {
     
     @discardableResult
     func isValid(password: String) throws -> Bool {
@@ -90,22 +90,17 @@ extension Keystore {
             guard let enc = self.crypto.ciphertext.hexToData(),
                 let iv = self.crypto.cipherparams.iv.hexToData(),
                 let salt = self.crypto.kdfparams.salt.hexToData(),
-                let count = self.crypto.kdfparams.c else { throw IXError.invalidKeystore }
+                let count = self.crypto.kdfparams.c else { throw WalletError.invalidKeystore }
             
-            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw IXError.decrypt }
+            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw CryptError.invalidPassword }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
-            let prvKeyStr = decrypted.decryptText
-            let privateKey = PrivateKey(hex: prvKeyStr.hexToData()!)
             
-            let wallet = Wallet(privateKey: privateKey)
-            let newAddress = wallet.address
-            
-            if newAddress == self.address {
+            if self.crypto.mac == decrypted.mac {
                 return true
             }
             
-            throw IXError.decrypt
+            throw CryptError.invalidPassword
             
         } else if self.crypto.kdf == "scrypt" {
             guard let n = self.crypto.kdfparams.n,
@@ -114,25 +109,20 @@ extension Keystore {
                 let iv = self.crypto.cipherparams.iv.hexToData(),
                 let cipherText = self.crypto.ciphertext.hexToData(),
                 let salt = self.crypto.kdfparams.salt.hexToData()
-                else { throw IXError.keyMalformed }
+                else { throw WalletError.invalidKeystore }
             
-            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: self.crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw IXError.decrypt }
-            let decryptionKey = devKey[0...15]
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
-            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
-            let decrypted = Data(decryptedBytes)
-            let prvKey = PrivateKey(hex: decrypted)
-            let wallet = Wallet(privateKey: prvKey)
-            let newAddress = wallet.address
+            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: self.crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw CryptError.invalidPassword }
             
-            if newAddress == self.address {
+            let decrypted = try Cipher.decrypt(devKey: devKey, enc: cipherText, dkLen: PBE_DKLEN, iv: iv)
+            
+            if self.crypto.mac == decrypted.mac {
                 return true
             }
             
-            throw IXError.invalidPassword
+            throw CryptError.invalidPassword
         }
         
-        throw IXError.invalidKeystore
+        throw WalletError.invalidKeystore
     }
     
     func toString() -> String {
@@ -143,27 +133,23 @@ extension Keystore {
         return String(data: data, encoding: .utf8)!.replacingOccurrences(of: "\\", with: "")
     }
     
-    func extractPrivateKey(password: String) throws -> String {
+    func extractPrivateKey(password: String) throws -> PrivateKey {
         
         if crypto.kdf == "pbkdf2" {
             guard let enc = crypto.ciphertext.hexToData(),
                 let iv = crypto.cipherparams.iv.hexToData(),
                 let salt = crypto.kdfparams.salt.hexToData(),
-                let count = crypto.kdfparams.c else { throw IXError.keyMalformed }
+                let count = crypto.kdfparams.c else { throw CryptError.keyMalformed }
             
-            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw IXError.decrypt }
+            guard let devKey = Cipher.pbkdf2SHA256(password: password, salt: salt, keyByteCount: PBE_DKLEN, round: count) else { throw CryptError.invalidPassword }
             
             let decrypted = try Cipher.decrypt(devKey: devKey, enc: enc, dkLen: PBE_DKLEN, iv: iv)
-            let prvKey = PrivateKey(hex: decrypted.decryptText.hexToData()!)
-            let pubKey = Cipher.createPublicKey(privateKey: prvKey)!
-            let publicKey = PublicKey(hex: pubKey.hexToData()!)
-            let newAddress = Cipher.makeAddress(prvKey, publicKey)
             
-            if newAddress == self.address {
-                return decrypted.decryptText
+            if self.crypto.mac == decrypted.mac {
+                return PrivateKey(hex: Data(hex: decrypted.decryptText))
             }
             
-            throw IXError.keyMalformed
+            throw CryptError.keyMalformed
             
         } else if crypto.kdf == "scrypt" {
             guard let n = crypto.kdfparams.n,
@@ -172,26 +158,19 @@ extension Keystore {
                 let iv = crypto.cipherparams.iv.hexToData(),
                 let cipherText = crypto.ciphertext.hexToData(),
                 let salt = crypto.kdfparams.salt.hexToData()
-                else { throw IXError.keyMalformed }
+                else { throw CryptError.keyMalformed }
             
-            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw IXError.decrypt }
-            let decryptionKey = devKey[0...15]
-            guard let aesCipher = try? AES(key: decryptionKey.bytes, blockMode: CTR(iv: iv.bytes), padding: .noPadding) else { throw IXError.decrypt }
-            guard let decryptedBytes = try? aesCipher.decrypt(cipherText.bytes) else { throw IXError.decrypt }
-            let decrypted = Data(decryptedBytes)
-            let privateKey = PrivateKey(hex: decrypted)
+            guard let devKey = Cipher.scrypt(password: password, saltData: salt, dkLen: crypto.kdfparams.dklen, N: n, R: r, P: p) else { throw CryptError.invalidPassword }
             
-            let pubKey = Cipher.createPublicKey(privateKey: privateKey)
-            let publicKey = PublicKey(hex: pubKey!.hexToData()!)
-            let newAddress = Cipher.makeAddress(privateKey, publicKey)
+            let decrypted = try Cipher.decrypt(devKey: devKey, enc: cipherText, dkLen: PBE_DKLEN, iv: iv)
             
-            if newAddress == self.address {
-                return privateKey.hexEncoded
+            if self.crypto.mac == decrypted.mac {
+                return PrivateKey(hex: Data(hex: decrypted.decryptText))
             }
             
-            throw IXError.keyMalformed
+            throw CryptError.keyMalformed
         }
         
-        throw IXError.keyMalformed
+        throw CryptError.keyMalformed
     }
 }

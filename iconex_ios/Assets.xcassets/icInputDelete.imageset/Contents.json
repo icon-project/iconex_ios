@@ -1,14 +1,14 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
       "filename" : "icInputDelete.png",
-      "scale" : "1x"
+      "scale" : "1x",
+      "idiom" : "universal"
     },
     {
       "idiom" : "universal",
-      "filename" : "icInputDelete@2x.png",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "icInputDelete@2x.png"
     },
     {
       "idiom" : "universal",

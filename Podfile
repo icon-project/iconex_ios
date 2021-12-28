@@ -1,15 +1,17 @@
 # Uncomment the next line to define a global platform for your project
- platform :ios, '10.0'
+ platform :ios, '11.0'
+
+inhibit_all_warnings!
 
 def import_pods
   pod 'RxCocoa'
   pod 'RxSwift'
-  pod 'RealmSwift', '3.11.0'
-  pod 'web3swift'
-  pod 'Toast-Swift', '~> 4.0.0'
+  pod 'RealmSwift'
+  pod 'web3swift', :modular_headers => true
   pod 'Alamofire'
-  pod 'ICONKit'
-  pod 'LicensesViewController'
+  pod 'ICONKit', :git => 'https://github.com/icon-project/ICONKit'
+  pod 'PanModal', :git => 'https://github.com/a1ahn/PanModal.git'
+  pod 'AcknowList'
 end
 
 inhibit_all_warnings!

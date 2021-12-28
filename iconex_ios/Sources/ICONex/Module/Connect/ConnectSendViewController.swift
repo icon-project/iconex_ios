@@ -79,7 +79,7 @@ class ConnectSendViewController: BaseViewController {
     
     private var balance: BigUInt?
     
-    private var provider: ICONService = WManager.service
+    private var provider: ICONService = Manager.icon.service
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,12 +126,13 @@ class ConnectSendViewController: BaseViewController {
         
         transaction = tx
         
-        guard let createdTx = transaction, let estimatedStepCost = stepLimitInputBox.textField.text, let step = BigUInt(estimatedStepCost) else {
-            stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)
-            return
-        }
-        
-        createdTx.stepLimit(step)
+        #warning("수정 필요")
+//        guard let createdTx = transaction, let estimatedStepCost = stepLimitInputBox.textField.text, let step = BigUInt(estimatedStepCost) else {
+//            stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)
+//            return
+//        }
+//
+//        createdTx.stepLimit(step)
     }
 
     func initialize() {
@@ -140,26 +141,28 @@ class ConnectSendViewController: BaseViewController {
         }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: { [unowned self] in
-            Alert.Confirm(message: "Alert.Connect.Send.Cancel".localized, handler: {
-                Conn.sendError(error: ConnectError.userCancel)
-            }).show(self)
+            #warning("Alert 수정")
+//            Alert.Confirm(message: "Alert.Connect.Send.Cancel".localized, handler: {
+//                Conn.sendError(error: ConnectError.userCancel)
+//            }).show(self)
         }).disposed(by: disposeBag)
         
         // developermode choose network button
         chooseNetworkButton.rx.controlEvent(.touchUpInside).subscribe(onNext: {
-            Alert.DeveloperNetworkProvider(source: self, completion: {
-                self.refresh()
-                self.sendButton.isEnabled = self.validateLimit()
-            })
+            #warning("Alert 수정")
+//            Alert.DeveloperNetworkProvider(source: self, completion: {
+//                self.refreshNetwork()
+//                self.sendButton.isEnabled = self.validateLimit()
+//            })
         }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
-            self.stepLimitInputBox.setState(.focus)
-        }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
-            self.sendButton.isEnabled = self.validateLimit()
-            self.stepLimitInputBox.textField.resignFirstResponder()
-        }).disposed(by: disposeBag)
-        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
+//        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
+//            self.stepLimitInputBox.setState(.focus)
+//        }).disposed(by: disposeBag)
+//        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
+//            self.sendButton.isEnabled = self.validateLimit()
+//            self.stepLimitInputBox.textField.resignFirstResponder()
+//        }).disposed(by: disposeBag)
+//        stepLimitInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: { }).disposed(by: disposeBag)
         
         scrollView.rx.didEndScrollingAnimation.subscribe(onNext: {
             self.view.endEditing(true)
@@ -170,7 +173,7 @@ class ConnectSendViewController: BaseViewController {
             let attr2 = NSAttributedString(string: "Transfer.Step.LimitInfo.Second".localized)
             let attr = NSMutableAttributedString(attributedString: attr1)
             attr.append(attr2)
-            Alert.Basic(attributed: attr).show(self)
+//            Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
         stepPriceInfoButton.rx.tap.asControlEvent().subscribe(onNext: { [unowned self] in
@@ -184,11 +187,11 @@ class ConnectSendViewController: BaseViewController {
             attr.append(attr2)
             attr.append(superscript)
             attr.append(attr3)
-            Alert.Basic(attributed: attr).show(self)
+//            Alert.Basic(attributed: attr).show(self)
         }).disposed(by: disposeBag)
         
         estimatedFeeInfoButton.rx.tap.asControlEvent().subscribe(onNext: { (_) in
-            Alert.Basic(message: "Transfer.EstimatedStep".localized).show(self)
+//            Alert.Basic(message: "Transfer.EstimatedStep".localized).show(self)
         }).disposed(by: disposeBag)
         
         viewData.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
@@ -238,9 +241,9 @@ class ConnectSendViewController: BaseViewController {
             // irc
             if let tokenSymbol = Conn.tokenSymbol, let decimals = Conn.tokenDecimal {
                 confirm.feeType = "icx"
-                confirm.fee = Tools.bigToString(value: estimated, decimal: 18, 18, false)
+                confirm.fee = estimated.toString(decimal: 18, 18, false)
                 confirm.address = to
-                confirm.value = Tools.bigToString(value: self.value, decimal: decimals, decimals, false).currencySeparated()
+                confirm.value = self.value.toString(decimal: decimals, decimals, false).currencySeparated()
                 confirm.type = tokenSymbol.uppercased()
 
                 confirm.handler = {
@@ -249,7 +252,7 @@ class ConnectSendViewController: BaseViewController {
                         confirm.dismiss(animated: true, completion: {
                             switch result {
                             case .failure(let error):
-                                Log.Debug("Error - \(error)")
+                                Log("Error - \(error)")
                                 var msg = ""
                                 switch error {
                                 case .error(error: let error):
@@ -259,7 +262,7 @@ class ConnectSendViewController: BaseViewController {
                                     break
                                 }
                                 
-                                Tools.toast(message: "Error.CommonError".localized + msg)
+                                Tool.toast(message: "Error.CommonError".localized + msg)
                             
                             case .success(let hash):
                                 let complete = Alert.Basic(message: "Alert.Connect.Send.Completed".localized)
@@ -277,10 +280,10 @@ class ConnectSendViewController: BaseViewController {
                 confirm.show(self)
             } else {
                 confirm.feeType = "icx"
-                confirm.fee = Tools.bigToString(value: estimated, decimal: 18, 18, false)
+                confirm.fee = estimated.toString(decimal: 18, 18, false)
                 confirm.address = to
 
-                confirm.value = Tools.bigToString(value: self.value, decimal: 18, 18, false).currencySeparated()
+                confirm.value = self.value.toString(decimal: 18, 18, false).currencySeparated()
                 confirm.type = "icx"
                 confirm.handler = {
                     if let signed = try? SignedTransaction(transaction: tx, privateKey: key) {
@@ -288,7 +291,7 @@ class ConnectSendViewController: BaseViewController {
                         confirm.dismiss(animated: true, completion: {
                             switch result {
                             case .failure(let error):
-                                Log.Debug("Error - \(error)")
+                                Log("Error - \(error)")
                                 Conn.sendError(error: .network(error))
                             
                             case .success(let hash):
@@ -309,9 +312,9 @@ class ConnectSendViewController: BaseViewController {
     }
     
     func initializeUI() {
-        guard let from = Conn.received?.payload?.params.from, let toAddress = Conn.received?.payload?.params.to, let wallet = WManager.loadWalletBy(address: from, type: .icx) as? ICXWallet else { return }
+        guard let from = Conn.received?.payload?.params.from, let toAddress = Conn.received?.payload?.params.to, let wallet = Manager.wallet.walletBy(address: from, type: "icx") as? ICXWallet else { return }
         
-        navTitle.text = wallet.alias
+        navTitle.text = wallet.name
         
         // developer mode
         if UserDefaults.standard.bool(forKey: "Developer") {
@@ -366,11 +369,11 @@ class ConnectSendViewController: BaseViewController {
         getStepPrice()
         
         DispatchQueue.global(qos: .utility).async {
-            if let cost = WManager.getStepCosts() {
+            if let cost = Manager.icon.getStepCosts() {
                 self.costs = cost
             }
             
-            if let maxLimit = WManager.getMaxStepLimit() {
+            if let maxLimit = Manager.icon.getMaxStepLimit() {
                 self.maxLimit = maxLimit
             }
             
@@ -400,9 +403,9 @@ class ConnectSendViewController: BaseViewController {
             default: return
             }
             
-            amount.text = Tools.bigToString(value: self.value, decimal: decimal, decimal, false).currencySeparated()
-            if let exchange = Tools.balanceToExchange(self.value, from: symbol.lowercased(), to: "usd", belowDecimal: 2, decimal: decimal) {
-                exchangeAmount.text = exchange + " USD"
+            amount.text = self.value.toString(decimal: decimal, decimal, false).currencySeparated()
+            if let exchange = balance?.exchange(from: symbol.lowercased(), to: "usd", decimal: decimal) {
+                exchangeAmount.text = exchange.toString(decimal: decimal, 2, false) + " USD"
             } else {
                 exchangeAmount.text = "- USD"
             }
@@ -414,9 +417,9 @@ class ConnectSendViewController: BaseViewController {
             }
             self.value = value
             
-            amount.text = Tools.bigToString(value: self.value, decimal: 18, 18, false).currencySeparated()
-            if let exchange = Tools.balanceToExchange(self.value, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
-                exchangeAmount.text = exchange + " USD"
+            amount.text = self.value.toString(decimal: 18, 18, false).currencySeparated()
+            if let exchange = self.value.exchange(from: "icx", to: "usd", decimal: 18) {
+                exchangeAmount.text = exchange.toString(decimal: 18, 2, false) + " USD"
             } else {
                 exchangeAmount.text = "- USD"
             }
@@ -452,16 +455,16 @@ class ConnectSendViewController: BaseViewController {
     
     func getStepPrice() {
         DispatchQueue.global().async {
-            if let stepPrice = WManager.getStepPrice() {
+            if let stepPrice = Manager.icon.getStepPrice() {
                 DispatchQueue.main.async {
                     let powered = stepPrice * BigUInt(10).power(9)
-                    let priceGloop = Tools.bigToString(value: powered, decimal: 18, 18, true).currencySeparated()
-                    let priceICX = Tools.bigToString(value: stepPrice, decimal: 18, 18, true).currencySeparated()
+                    let priceGloop = powered.toString(decimal: 18, 18, true).currencySeparated()
+                    let priceICX = stepPrice.toString(decimal: 18, 18, true).currencySeparated()
                     
                     self.stepPriceLabel.text = priceICX
                     self.stepPriceGloop.text = " ICX" + " (" + priceGloop + " Gloop)"
-                    if let exchangedPrice = Tools.balanceToExchange(stepPrice, from: "icx", to: "usd", belowDecimal: 2, decimal: 18) {
-                        self.exchangeStepPrice.text = exchangedPrice + " USD"
+                    if let exchangedPrice = stepPrice.exchange(from: "icx", to: "usd", decimal: 18) {
+                        self.exchangeStepPrice.text = exchangedPrice.toString(decimal: 18, 2, false) + " USD"
                     } else {
                         self.exchangeStepPrice.text = "- USD"
                     }
@@ -483,10 +486,10 @@ class ConnectSendViewController: BaseViewController {
         guard let limitString = self.stepLimitInputBox.textField.text , limitString != "", let limit = BigUInt(limitString) else {
             if showError { self.stepLimitInputBox.setState(.error, "Error.Transfer.EmptyLimit".localized)}
             let limit = BigUInt(0)
-            self.estimatedFee.text = Tools.bigToString(value: limit, decimal: 18, 18, false).currencySeparated()
-            self.exchangeEstimatedFee.text = Tools.balanceToExchange(limit, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
-            self.remain.text = Tools.bigToString(value: totalBalance, decimal: decimal, decimal, false).currencySeparated()
-            if let exchangedRemain = Tools.balanceToExchange(totalBalance, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) {
+            self.estimatedFee.text = limit.toString(decimal: 18, 18, false).currencySeparated()
+            self.exchangeEstimatedFee.text = limit.exchange(from: "icx", to: "usd", decimal: 18)!.toString(decimal: 18, 2, false) + " USD"
+            self.remain.text = totalBalance.toString(decimal: decimal, decimal, false).currencySeparated()
+            if let exchangedRemain = totalBalance.exchange(from: "icx", to: "usd", decimal: decimal)?.toString(decimal: decimal, 2, false) {
                 self.exchangeRemain.text = exchangedRemain + " USD"
             } else {
                 self.exchangeRemain.text = "- USD"
@@ -504,13 +507,13 @@ class ConnectSendViewController: BaseViewController {
         }
         
         if limit < minLimit {
-            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, Tools.bigToString(value: BigUInt(minLimit), decimal: 0, 0, true).currencySeparated())
+            let message = String(format: "Error.Transfer.Limit.MoreThen".localized, BigUInt(minLimit).toString(decimal: 0, 0, true).currencySeparated())
             if showError { self.stepLimitInputBox.setState(.error, message)}
             return false
         }
         
         if limit > maxLimit {
-            let message = String(format: "Error.Transfer.Limit.LessThen".localized, Tools.bigToString(value: BigUInt(maxLimit), decimal: 0, 0, true).currencySeparated())
+            let message = String(format: "Error.Transfer.Limit.LessThen".localized, BigUInt(maxLimit).toString(decimal: 0, 0, true).currencySeparated())
             if showError { self.stepLimitInputBox.setState(.error, message)}
             return false
         }
@@ -519,8 +522,8 @@ class ConnectSendViewController: BaseViewController {
         
         if let stepPrice = self.stepPrice {
             let estimated = limit * stepPrice
-            self.estimatedFee.text = Tools.bigToString(value: estimated, decimal: 18, 18, false).currencySeparated()
-            self.exchangeEstimatedFee.text = Tools.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
+            self.estimatedFee.text = estimated.toString(decimal: 18, 18, false).currencySeparated()
+            self.exchangeEstimatedFee.text = Tool.balanceToExchange(estimated, from: "icx", to: "usd", belowDecimal: 2, decimal: 18)! + " USD"
             
             if (symbol != "ICX" ? self.value : estimated + self.value) > totalBalance {
                 self.remain.text = ""
@@ -528,12 +531,12 @@ class ConnectSendViewController: BaseViewController {
                 return false
             }
             let remain = symbol != "ICX" ? totalBalance - self.value : totalBalance - (estimated + self.value)
-            Log.Debug("remain 2 - \(remain)")
-            self.remain.text = Tools.bigToString(value: remain, decimal: decimal, decimal, false)
+            Log("remain 2 - \(remain)")
+            self.remain.text = remain.toString(decimal: decimal, decimal, false)
             if symbol != "ICX" {
                 self.exchangeRemain.text = "- USD"
             } else {
-                guard let exchanged = Tools.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) else {
+                guard let exchanged = Tool.balanceToExchange(remain, from: "icx", to: "usd", belowDecimal: 2, decimal: decimal) else {
                     self.exchangeRemain.text = "- USD"
                     return false
                 }
@@ -543,7 +546,7 @@ class ConnectSendViewController: BaseViewController {
         return true
     }
     
-    func refresh() {
+    func refreshNetwork() {
         self.provider = ConnManager.provider
         
         let networkId = self.provider.nid

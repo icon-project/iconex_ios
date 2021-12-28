@@ -14,38 +14,50 @@ import ICONKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
     var connect: ConnectViewController?
+    var appVersion: String {
+        return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
+    }
 
     var all: String?
     var necessary: String?
+    
+    var usingLock: Bool = false
     
     func setRedirect(source: URL) {
         do {
             guard let components = URLComponents(url: source, resolvingAgainstBaseURL: false) else {
                 throw ConnectError.invalidRequest
             }
+//            if let host = components.host {
+//                guard host.lowercased() == "developer" else { return }
+//
+//                Conn.isConnect = true
+//                return
+//            }
+            
             guard let queries = components.queryItems else {
                 throw ConnectError.invalidRequest
             }
             guard let dataQuery = queries.filter({ $0.name == "data" }).first, let dataParam = dataQuery.value else {
                 throw ConnectError.invalidRequest
-                
+
             }
             guard let data = Data(base64Encoded: dataParam) else {
                 throw ConnectError.invalidBase64
             }
-            
+
             guard let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any], let redirect = json["redirect"] as? String else {
                 throw ConnectError.invalidJSON
             }
             guard let conURL = URL(string: redirect) else {
                 throw ConnectError.invalidJSON
             }
-            
+
             Conn.redirect = conURL
+            Conn.isConnect = true
         } catch {
-            
+            Log("Error - \(error)")
         }
         
     }
@@ -60,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Configuration.setDebug()
         
         if let languages = UserDefaults.standard.array(forKey: "AppleLanguages"), let appleLan = languages.first as? String {
-            Log.Debug("languages\n\(languages)")
+            Log("languages\n\(languages)")
             if appleLan != "ko-KR" {
                 Bundle.setLanguage("en")
             } else {
@@ -85,24 +97,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         path = path.appendingPathComponent("ICONex")
         do {
             let contents = try FileManager.default.contentsOfDirectory(atPath: path.path)
-            Log.Debug(contents)
+            Log(contents)
             
             for content in contents {
                 try FileManager.default.removeItem(atPath: path.appendingPathComponent(content).path)
             }
             
             let removed = try FileManager.default.contentsOfDirectory(atPath: path.path)
-            Log.Debug(removed)
+            Log(removed)
         } catch {
-            Log.Debug(error)
+            Log(error)
         }
         
         NSSetUncaughtExceptionHandler { (exception) in
-            Log.Error("CRASH =======================")
-            Log.Error("\(exception)")
-            Log.Error("Stack trace ========================")
-            Log.Error("\(exception.callStackSymbols)")
+            Log("CRASH =======================")
+            Log("\(exception)")
+            Log("Stack trace ========================")
+            Log("\(exception.callStackSymbols)")
         }
+        UserDefaults.standard.removeObject(forKey: "sleep")
+        Manager.wallet.walletList.forEach {
+            Log("Wallet - \($0.address) \($0.name)")
+        }
+        
         return true
     }
 
@@ -114,6 +131,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        if Tool.isPasscode() {
+            Log("Entering background...")
+            UserDefaults.standard.removeObject(forKey: "sleep")
+            UserDefaults.standard.set(Date(), forKey: "sleep")
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -124,17 +146,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
         guard Configuration.systemCheck(), Configuration.integrityCheck(), Configuration.debuggerCheck() else {
-            
-            if let root = window?.rootViewController {
-                
-                let halt = Alert.Basic(message: "Error.SystemCheck.Failed".localized)
-                halt.handler = {
-                    exit(0)
-                }
-                root.present(halt, animated: false, completion: nil)
-                
-            }
+
+            Alert.basic(title: "Error.SystemCheck.Failed".localized, subtitle: nil, hasHeaderTitle: false, isOnlyOneButton: true, leftButtonTitle: nil, rightButtonTitle: "Common.Confirm".localized, cancelAction: nil) {
+                exit(0)
+                }.show()
             return
+        }
+        
+        if let date = UserDefaults.standard.object(forKey: "sleep") as? Date {
+            Log("date - \(date)")
+            let newDate = Date()
+            Log("new date - \(newDate)")
+            if newDate.timeIntervalSince1970 - date.timeIntervalSince1970 >= 5 * 60 {
+                presentLock()
+            } else {
+                if !usingLock && !Tool.isPasscode() && Conn.isConnect {
+                    toConnect()
+                }
+            }
+            UserDefaults.standard.removeObject(forKey: "sleep")
+        } else {
+            if !usingLock && !Tool.isPasscode() && Conn.isConnect {
+                toConnect()
+            }
         }
     }
 
@@ -145,140 +179,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         setRedirect(source: url)
         Conn.setMessage(source: url)
-        if Conn.isConnect && (!Tools.isPasscode() || Conn.auth) {
-            Exchange.getExchangeList()
-            Balance.getWalletsBalance()
+        if Conn.isConnect && (!Tool.isPasscode() || Conn.auth) {
+            Manager.balance.getAllBalances()
             toConnect()
         }
         Conn.isConnect = true
         return true
-    }
-
-    func changeLanguage(language: String) {
-//        UserDefaults.standard.set([language], forKey: "AppleLanguages")
-        UserDefaults.standard.set(language, forKey: "selectedLanguage")
-        UserDefaults.standard.synchronize()
-        Bundle.setLanguage(language)
-        
-        NotificationCenter.default.post(name: NSNotification.Name("kNotificationLanguageDidChanged"), object: nil)
-    }
-
-    func checkVersion(_ completion: (() -> Void)? = nil) {
-        var tracker: Tracker {
-            switch Config.host {
-            case .main:
-                return Tracker.main()
-                
-            case .dev:
-                return Tracker.dev()
-                
-            case .yeouido:
-                return Tracker.local()
-            }
-        }
-        let versionURL = URL(string: tracker.provider)!.appendingPathComponent("app/ios.json")
-        let request = URLRequest(url: versionURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 30)
-        Alamofire.request(request).responseJSON(queue: DispatchQueue.global(qos: .utility)) { (dataResponse) in
-            
-            DispatchQueue.main.async {
-                switch dataResponse.result {
-                case .success:
-                    guard case let json as [String: Any] = dataResponse.result.value, let result = json["result"] as? String else {
-                        
-                        let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
-                        self.window?.rootViewController = retry
-                        return
-                    }
-                    Log.Debug("Version: \(json)")
-                    if result == "OK" {
-                        let data = json["data"] as! [String: String]
-                        self.all = data["all"]
-                        self.necessary = data["necessary"]
-                    }
-                    self.retry()
-                    
-                case .failure(let error):
-                    Log.Debug("Error \(error)")
-                    if let comp = completion {
-                        comp()
-                        return
-                    } else {
-                        let retry = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "RetryView")
-                        self.window?.rootViewController = retry
-                        return
-                    }
-                }
-            }
-        }
-    }
-    
-    private func go() {
-        Exchange.getExchangeList()
-        Balance.getWalletsBalance()
-        
-        let list = WManager.walletInfoList
-        
-        let app = UIApplication.shared.delegate as! AppDelegate
-        
-        if list.count > 0 {
-            if Tools.isPasscode() {
-                let passcode = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "PasscodeView")
-                app.window?.rootViewController = passcode
-            } else if !Tools.isPasscode() && Conn.isConnect {
-                let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController()
-                app.window?.rootViewController = connect
-            } else {
-                let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-                app.window?.rootViewController = main
-            }
-        } else {
-            let welcome = UIStoryboard(name: "Loading", bundle: nil).instantiateViewController(withIdentifier: "WelcomeView")
-            app.window?.rootViewController = welcome
-        }
-    }
-    
-    private func retry() {
-            if let version = self.necessary {
-                let myVersion = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
-                
-                if version > myVersion {
-                    let message = "Version.Message".localized
-                    Alert.Confirm(message: message, cancel: "Common.Cancel".localized, confirm: "Version.Update".localized, handler: {
-                        UIApplication.shared.open(URL(string: "itms-apps://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8")!, options: [:], completionHandler: { _ in
-                            exit(0)
-                        })
-                    }, {
-                        exit(0)
-                    }).show(self.window!.rootViewController!)
-                } else {
-                    
-                    go()
-                    
-                }
-            } else {
-                
-            }
-    }
-    
-    func fileShare(filepath: URL, _ sender: UIView? = nil) {
-        
-        let activity = UIActivityViewController(activityItems: [filepath], applicationActivities: nil)
-        activity.excludedActivityTypes = [.postToFacebook, .postToVimeo, .postToWeibo, .postToFlickr, .postToTwitter, .postToTencentWeibo, .addToReadingList]
-        if let top = topViewController() {
-            DispatchQueue.main.async {
-                
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    activity.popoverPresentationController?.sourceView = sender
-                    activity.popoverPresentationController?.permittedArrowDirections = .up
-                    if let originSource = sender {
-                        activity.popoverPresentationController?.sourceRect = originSource.bounds
-                    }
-                }
-                
-                top.present(activity, animated: true, completion: nil)
-                
-            }
-        }
     }
     
     func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
@@ -300,21 +206,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController?.dismiss(animated: false, completion: {
             self.connect = nil
         })
-        if Conn.isConnect {
-            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-            let app = UIApplication.shared.delegate as! AppDelegate
-            app.window?.rootViewController = main
+        if let nav = self.window?.rootViewController, let _ = nav.children.first as? MainViewController {
+            
+        } else {
+            let main = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()!
+            change(root: main)
         }
     }
     
     func toConnect() {
-        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as? ConnectViewController
-        
+        let connect = UIStoryboard(name: "Connect", bundle: nil).instantiateInitialViewController() as! ConnectViewController
+        connect.modalPresentationStyle = .fullScreen
         self.connect = connect
-        if let top = self.topViewController() {
-            Log.Debug("Present - \(top)")
-            top.present(connect!, animated: true, completion: nil)
-        }
+         app.topViewController()?.present(connect, animated: true, completion: nil)
+    }
+    
+    func change(root: UIViewController) {
+        window?.backgroundColor = .mint1
+        UIView.transition(with: window!, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            self.window?.rootViewController = root
+        }, completion: nil)
+    }
+    
+    func presentLock(_ handler: (() -> Void)? = nil) {
+        guard usingLock == false else { return }
+        let passcodeVC = UIStoryboard(name: "Passcode", bundle: nil).instantiateViewController(withIdentifier: "Passcode") as! PasscodeViewController
+        passcodeVC.lockType = .check
+        passcodeVC.modalPresentationStyle = .fullScreen
+        passcodeVC.completeHandler = handler
+        usingLock = true
+        app.topViewController()?.present(passcodeVC, animated: true, completion: nil)
     }
 }
 
+let app = UIApplication.shared.delegate as! AppDelegate

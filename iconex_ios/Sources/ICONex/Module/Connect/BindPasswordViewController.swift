@@ -30,7 +30,7 @@ class BindPasswordViewController: BaseViewController {
     
     @IBOutlet weak var confirmButton: UIButton!
     
-    var selectedWallet: WalletInfo?
+    var selectedWallet: BaseWalletConvertible!
     
     private var privateKey: PrivateKey?
     
@@ -57,24 +57,26 @@ class BindPasswordViewController: BaseViewController {
             }).disposed(by: disposeBag)
         
         closeButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
-            Alert.Confirm(message: "Alert.Connect.Password.Cancel".localized, handler: {
-                Conn.sendError(error: ConnectError.userCancel)
-            }).show(self)
+            #warning("수정 필요")
+//            Alert.Confirm(message: "Alert.Connect.Password.Cancel".localized, handler: {
+//                Conn.sendError(error: ConnectError.userCancel)
+//            }).show(self)
         }).disposed(by: disposeBag)
         
         scrollView.rx.didEndDecelerating.subscribe(onNext: {
             self.view.endEditing(true)
         }).disposed(by: disposeBag)
         
-        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
-            self.passwordInputBox.setState(.focus, "")
-        }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
-            self.confirmButton.isEnabled = self.validatePassword()
-        }).disposed(by: disposeBag)
-        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
-            
-        }).disposed(by: disposeBag)
+        #warning("수정 필요")
+//        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidBegin).subscribe(onNext: {
+//            self.passwordInputBox.setState(.focus, "")
+//        }).disposed(by: disposeBag)
+//        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEnd).subscribe(onNext: {
+//            self.confirmButton.isEnabled = self.validatePassword()
+//        }).disposed(by: disposeBag)
+//        passwordInputBox.textField.rx.controlEvent(UIControl.Event.editingDidEndOnExit).subscribe(onNext: {
+//
+//        }).disposed(by: disposeBag)
         
         confirmButton.rx.controlEvent(UIControl.Event.touchUpInside).subscribe(onNext: {
             guard Conn.received != nil else { return }
@@ -85,9 +87,10 @@ class BindPasswordViewController: BaseViewController {
     func initializeUI() {
         navTitle.text = "Alert.Wallet.RequestPassword".localized
         
-        passwordInputBox.setType(.password)
-        passwordInputBox.setState(.normal, "")
-        passwordInputBox.textField.placeholder = "Placeholder.InputWalletPassword".localized
+        #warning("수정 필요")
+//        passwordInputBox.setType(.password)
+//        passwordInputBox.setState(.normal, "")
+//        passwordInputBox.textField.placeholder = "Placeholder.InputWalletPassword".localized
         
         confirmButton.setTitle("Common.Confirm".localized, for: .normal)
         confirmButton.styleDark()
@@ -98,25 +101,25 @@ class BindPasswordViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        guard let info = selectedWallet, let wallet = WManager.loadWalletBy(info: info) else {
+        guard let wallet = selectedWallet as? ICXWallet else {
             assertionFailure("Wallet info required")
             return
         }
         
-        self.walletName.text = wallet.alias
+        self.walletName.text = wallet.name
         self.walletAddress.text = wallet.address
         
-        guard let from = wallet.address else { return }
+        let from = wallet.address
         
         if let decimal = Conn.tokenDecimal, let symbol = Conn.tokenSymbol {
             guard let contract = Conn.received?.payload?.params.to else { return }
 
             let call = Call<BigUInt>(from: from, to: contract, method: "balanceOf", params: ["_owner": from])
-            let request = WManager.service.call(call).execute()
+            let request = Manager.icon.iconService.call(call).execute()
 
             switch request {
             case .success(let balance):
-                self.walletAmount.text = Tools.bigToString(value: balance, decimal: decimal, decimal, true).currencySeparated()
+                self.walletAmount.text = balance.toString(decimal: decimal, decimal, true).currencySeparated()
                 self.symbolLabel.text = symbol
             case .failure:
                 return
@@ -124,29 +127,26 @@ class BindPasswordViewController: BaseViewController {
 
 
         } else {
-            let result = WManager.service.getBalance(address: from).execute()
-
-            switch result {
-            case .success(let balance):
-                self.walletAmount.text = Tools.bigToString(value: balance, decimal: 18, 18, true).currencySeparated()
+            if let balance = Manager.icon.getBalance(wallet: wallet) {
+                self.walletAmount.text = balance.toString(decimal: 18, 18, true).currencySeparated()
                 self.symbolLabel.text = "ICX"
-            case .failure: return
             }
         }
     }
     
     @discardableResult
     func validatePassword() -> Bool {
-        guard let info = selectedWallet, let wallet = WManager.loadWalletBy(info: info) as? ICXWallet else { return false }
-        guard let password = passwordInputBox.textField.text, password != "" else { return false }
-        
-        guard let prvKey = try? wallet.extractICXPrivateKey(password: password), let prvKeyData = prvKey.hexToData() else {
-            self.privateKey = nil
-            passwordInputBox.setState(.error, "Error.Password.Wrong".localized)
-            return false
-        }
-        
-        privateKey = PrivateKey(hex: prvKeyData)
+        #warning("수정 필요")
+//        guard let wallet = selectedWallet as? ICXWallet else { return false }
+//        guard let password = passwordInputBox.textField.text, password != "" else { return false }
+//
+//        guard let prvKey = try? wallet.extractICXPrivateKey(password: password), let prvKeyData = prvKey.hexToData() else {
+//            self.privateKey = nil
+//            passwordInputBox.setState(.error, "Error.Password.Wrong".localized)
+//            return false
+//        }
+//
+//        privateKey = PrivateKey(hex: prvKeyData)
         
         return true
     }

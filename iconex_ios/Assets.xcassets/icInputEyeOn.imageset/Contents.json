@@ -2,8 +2,8 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icInputEyeOn.png",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "icInputEyeOn.png"
     },
     {
       "idiom" : "universal",
@@ -11,9 +11,9 @@
       "scale" : "2x"
     },
     {
+      "scale" : "3x",
       "idiom" : "universal",
-      "filename" : "icInputEyeOn@3x.png",
-      "scale" : "3x"
+      "filename" : "icInputEyeOn@3x.png"
     }
   ],
   "info" : {

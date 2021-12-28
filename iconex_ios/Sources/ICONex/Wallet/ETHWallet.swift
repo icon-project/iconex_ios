@@ -9,117 +9,82 @@ import Foundation
 import Web3swift
 import ICONKit
 
-class ETHWallet: BaseWallet {
-    var keystore: Keystore?
+class ETHWallet: BaseWalletConvertible {
+    var name: String
+    var created: Date
+    var keystore: ICONKeystore
     
-    override init() {
-        super.init(type: .eth)
-    }
+    var tokens: [Token]?
     
-    init(alias: String) {
-        super.init(type: .eth)
-        self.alias = alias
-    }
-    
-    convenience init(alias: String, from: Data) {
-        self.init()
-        self.alias = alias
-        
-        let encoder = JSONEncoder()
-        let decoder = JSONDecoder()
-        
-        do {
-            let keystore = try decoder.decode(Keystore.self, from: from)
-            keystore.address = keystore.address.add0xPrefix().lowercased()
-            self.keystore = keystore
-            self.address = keystore.address
-            
-            let encoded = try encoder.encode(keystore)
-            self.__rawData = encoded
-        } catch {
-            
-        }
-    }
-    
-    convenience init(keystore: Keystore) {
-        self.init()
-        
-        let encoder = JSONEncoder()
-        __rawData = try! encoder.encode(keystore)
-        
-        self.address = keystore.address
+    init(name: String, keystore: ICONKeystore, created: Date = Date()) {
+        self.name = name
         self.keystore = keystore
+        self.created = created
     }
     
-    convenience init(keystoreData: Data) {
-        self.init()
+    init?(name: String, rawData: Data, created: Date? = nil) {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        guard let keystore = try? decoder.decode(ICONKeystore.self, from: rawData) else { return nil }
         
-        do {
-            let decoder = JSONDecoder()
-            let encoder = JSONEncoder()
-            
-            let keystore = try decoder.decode(Keystore.self, from: keystoreData)
-            keystore.address = keystore.address.add0xPrefix().lowercased()
-            
-            self.keystore = keystore
-            let rawData = try encoder.encode(keystore)
-            self.__rawData = rawData
-            self.address = keystore.address
-        } catch {
-            
+        self.name = name
+        self.keystore = keystore
+        if let createdData = created {
+            self.created = createdData
+        } else {
+            self.created = Date()
         }
     }
     
-    func loadToken() {
-        
+    init(name: String, keystore: ICONKeystore, tokens: [Token]? = nil, created: Date = Date()) {
+        self.name = name
+        self.keystore = keystore
+        self.created = created
+        self.tokens = tokens
     }
     
-    func canSaveToken(contractAddress: String) -> Bool {
-        guard let tokenList = tokens else { return true }
-        return tokenList.filter { $0.contractAddress.lowercased() == contractAddress.lowercased() }.count == 0
+    init(model: WalletModel) {
+        self.name = model.name
+        self.created = model.createdDate
+        self.keystore = try! JSONDecoder().decode(ICONKeystore.self, from: model.rawData!)
+        self.tokens = try? DB.tokenList(dependedAddress: address)
     }
     
-    func generateETHKeyStore(password: String) throws {
+    static func new(name: String, password: String) throws -> ETHWallet {
+        let keystore = try generateETHKeyStore(password: password)
+        let eth = ETHWallet(name: name, keystore: keystore)
+        return eth
+    }
+    
+    static func generateETHKeyStore(password: String) throws -> ICONKeystore {
         let generator = try EthereumKeystoreV3(password: password, aesMode: "aes-128-ctr")
         
-        self.address = generator?.getAddress()?.address.add0xPrefix().lowercased()
-        let params = generator?.keystoreParams
+        guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
         
         let encoder = JSONEncoder()
-        let encoded = try encoder.encode(params)
-        self.__rawData = encoded
+        let raw = try encoder.encode(params)
         
         let decoder = JSONDecoder()
-        let keystore = try decoder.decode(Keystore.self, from: encoded)
-        self.keystore = keystore
+        let keystore = try decoder.decode(ICONKeystore.self, from: raw)
+        return keystore
     }
     
-    func generateETHKeyStore(privateKey: String, password: String) throws {
-        guard let privateKeyData = privateKey.hexToData() else {
-            throw IXError.convertKey
-        }
+    static func generateETHKeyStore(privateKey: PrivateKey, password: String) throws -> ICONKeystore {
+        let generator = try EthereumKeystoreV3(privateKey: privateKey.data, password: password, aesMode: "aes-128-ctr")
         
-        let generator = try EthereumKeystoreV3(privateKey: privateKeyData, password: password, aesMode: "aes-128-ctr")
-        
-        self.address = generator?.getAddress()?.address.add0xPrefix().lowercased()
-        let params = generator?.keystoreParams
+        guard let params = generator?.keystoreParams else { throw CryptError.generateKey }
         
         let encoder = JSONEncoder()
-        let encoded = try encoder.encode(params)
-        self.__rawData = encoded
+        let raw = try encoder.encode(params)
         
         let decoder = JSONDecoder()
-        let keystore = try decoder.decode(Keystore.self, from: encoded)
-        self.keystore = keystore
+        let keystore = try decoder.decode(ICONKeystore.self, from: raw)
+        return keystore
     }
     
     func changePassword(oldPassword: String, newPassword: String) throws {
-        guard let rawData = self.__rawData else {
-            throw IXError.invalidKeystore
-        }
-        
         guard let generator = EthereumKeystoreV3(rawData) else {
-            throw IXError.invalidKeystore
+            throw WalletError.invalidKeystore
         }
         
         try generator.regenerate(oldPassword: oldPassword, newPassword: newPassword)
@@ -128,32 +93,31 @@ class ETHWallet: BaseWallet {
         let encoder = JSONEncoder()
         
         let encoded = try encoder.encode(params)
-        self.__rawData = encoded
         
         let decoder = JSONDecoder()
-        let keystore = try decoder.decode(Keystore.self, from: encoded)
+        let keystore = try decoder.decode(ICONKeystore.self, from: encoded)
         self.keystore = keystore
     }
     
-    func saveETHWallet() throws {
+    func extractETHPrivateKey(password: String) throws -> String {
+        let encoder = JSONEncoder()
+        let tempData = try encoder.encode(keystore)
         
-        try DB.saveWallet(name: self.alias!, address: self.address!.add0xPrefix().lowercased(), type: "eth", rawData: self.__rawData)
+        guard let generator = EthereumKeystoreV3(tempData) else { throw WalletError.invalidKeystore }
         
-        if let tokens = self.tokens {
-            for tokenInfo in tokens {
-                try DB.addToken(tokenInfo: tokenInfo)
-            }
-        }
+        guard let ethereum = EthereumAddress(keystore.address.add0xPrefix()) else { throw WalletError.invalidKeystore }
+        let privateKeyData = try generator.UNSAFE_getPrivateKeyData(password: password, account: ethereum)
+        
+        return privateKeyData.toHexString()
     }
     
     func getBackupKeystoreFilepath() throws -> URL {
         let encoder = JSONEncoder()
-        guard let keystore = self.keystore else { throw IXError.emptyWallet }
         keystore.address = keystore.address.prefix0xRemoved()
         let encoded = try encoder.encode(keystore)
-        Log.Debug("encoded: " + String(data: encoded, encoding: .utf8)!)
+        Log("encoded: " + String(data: encoded, encoding: .utf8)!)
         
-        let filename = "UTC--" + Date.currentZuluTime + "--" + self.address!
+        let filename = "UTC--" + Date.currentZuluTime + "--" + self.address
         
         let fm = FileManager.default
         
@@ -170,42 +134,18 @@ class ETHWallet: BaseWallet {
         return filePath
     }
     
-    func extractETHPrivateKey(password: String) throws -> String {
-        guard let keystore = self.keystore else {
-            throw IXError.emptyWallet
-        }
-        
-//        if keystore.crypto.kdf == "pbkdf2" {
-//            let pbkdf = ICXWallet(keystore: keystore)
-//            return try pbkdf.extractICXPrivateKey(password: password)
-//        } else if keystore.crypto.kdf == "scrypt" {
-            let encoder = JSONEncoder()
-            let tempData = try encoder.encode(keystore)
-            
-            guard let generator = EthereumKeystoreV3(tempData) else { throw IXError.invalidKeystore }
-            
-            guard let ethereum = EthereumAddress(keystore.address.add0xPrefix()) else { throw IXError.invalidKeystore }
-            let privateKeyData = try generator.UNSAFE_getPrivateKeyData(password: password, account: ethereum)
-            
-            return privateKeyData.toHexString()
-//        }
-        
-//        throw IXError.invalidKeystore
-    }
-    
-    func exportBundle() -> WalletExportBundle {
+    func exportBundle() -> WalletBundle {
         let encoder = JSONEncoder()
-        let keystore = self.keystore!
         keystore.address = keystore.address.prefix0xRemoved()
         let encoded = try! encoder.encode(keystore)
         let priv = String(data: encoded, encoding: .utf8)!
         
-        var export = WalletExportBundle(name: self.alias!, type: "eth", priv: priv, tokens: nil, createdAt: self.createdDate!.millieTimestamp, coinType: nil)
+        var export = WalletBundle(name: self.name, type: "eth", priv: priv, tokens: nil, createdAt: self.created.millieTimestamp, coinType: nil)
         
-        var datas = [TokenExportBundle]()
+        var datas = [TokenBundle]()
         if let tokens = self.tokens {
             for token in tokens {
-                let exportToken = TokenExportBundle(address: token.contractAddress, createdAt: token.createDate.timestampString, decimals: token.decimal, defaultDecimals: token.defaultDecimal, defaultName: token.name, name: token.name, defaultSymbol: token.symbol, symbol: token.symbol)
+                let exportToken = TokenBundle(address: token.contract, createdAt: token.created.timestampString, decimals: token.decimal, name: token.name, symbol: token.symbol)
                 datas.append(exportToken)
             }
         }

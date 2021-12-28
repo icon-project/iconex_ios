@@ -5,11 +5,16 @@ ICONex is a wallet where you can keep not only ICX but also other various crypto
 You can also download from [AppStore](https://itunes.apple.com/app/iconex-icon-wallet/id1368441529?mt=8).
 
 ## Version
-* 1.6.1
+* 1.7.0
+
+### What's new
+- Add a new function for ICX Staking
+- Add a new function for ICX Voting and I-Score (Rewards) Claims
+- Add a new function for P-Rep List of ICON Network
 
 ## Requirements
-* Xcode 10 release
-* Swift 5.0
+* Xcode 11 or higher
+* Swift 5 or higher
 * iOS 11 or higher
 * [Cocoapods](https://cocoapods.org/)
 
@@ -28,18 +33,16 @@ $ sudo gem install cocoapods
 ## Developer mode
 ICONex for iOS supports developer mode since version 1.5.0
 
-### How to
-* 3rd party apps or Web pages required.
-* Using Apple's Custom URL Scheme Inter-App Communication protocol.
-* Call ICONex to activate developer mode with `iconex://developer`
+### How 
+* Developer mode is on the menu named `App Info`.
 * When activated, users can choose ICON Service provider via App Info menu.
 * [ICON Network](https://github.com/icon-project/icon-project.github.io/blob/master/docs/icon_network.md)
-* **It won't be changed until user deactivates mode.**
+* **It won't be changed until user changes network or deactivates mode.**
 
 ## Communication
 * If you **found a bug**, [open an issue](https://github.com/icon-project/iconex_ios/issues/).
 * If you **have a feature request**, [open an issue](https://github.com/icon-project/iconex_ios/issues/).
-* If you **want to contribute**, submit a pull request.
+* If you **want to contribute**, submit a pull request into `develop` branch.
 
 ## Experimental
 * This project contains lots of experimental elements.

@@ -6,14 +6,14 @@
       "scale" : "1x"
     },
     {
-      "idiom" : "universal",
+      "scale" : "2x",
       "filename" : "icWifi@2x.png",
-      "scale" : "2x"
+      "idiom" : "universal"
     },
     {
-      "idiom" : "universal",
       "filename" : "icWifi@3x.png",
-      "scale" : "3x"
+      "scale" : "3x",
+      "idiom" : "universal"
     }
   ],
   "info" : {
